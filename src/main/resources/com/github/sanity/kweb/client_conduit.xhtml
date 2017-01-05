@@ -1,0 +1,21 @@
+<html>
+<head>
+    <script language="JavaScript">
+        function longPoll() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/msg/123461253', true)
+            xhr.onreadystatechange = function () {
+                if (xhr.status == 200) {
+                    console.log("Received: "+xhr.responseText)
+                }
+                if (xhr.status > 0) {
+                    longPoll();
+                }
+            }
+        }
+    </script>
+</head>
+<body onload="javascript:longPoll()">
+
+</body>
+</html>

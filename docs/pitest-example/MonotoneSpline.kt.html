@@ -1,0 +1,2443 @@
+<html>
+<head>
+<style type='text/css'>
+html, body, div, span, p, blockquote, pre {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+body{
+	line-height: 1;
+	color: black;
+	background: white;
+	margin-left: 20px;
+}
+
+.src { 
+	border: 1px solid #dddddd;
+	padding-top: 10px;
+	padding-right: 5px;
+	padding-left: 5px;
+	font-family: Consolas, Courier, monospace;
+}
+
+
+.covered {background-color: #ddffdd}
+.uncovered {background-color: #ffdddd}
+.killed {background-color: #aaffaa}
+.survived {background-color: #ffaaaa}
+.uncertain {background-color: #dde7ef}
+.run_error {background-color: #dde7ef}
+.na {background-color: #eeeeee}
+.timed_out {background-color: #dde7ef}
+.non_viable {background-color: #aaffaa}
+.memory_error {background-color: #dde7ef}
+.not_started {background-color: #dde7ef; color : red}
+.no_coverage {background-color: #ffaaaa}
+
+
+.pop {outline:none; }
+.pop strong {line-height:30px;}
+.pop {text-decoration:none;}
+.pop span { z-index:10;display:none; padding:14px 20px; margin-top:-30px; margin-left:28px; width:800px; line-height:16px; word-wrap:break-word; }
+.pop:hover span{ display:inline; position:absolute; color:#111; border:1px solid #DCA; background:#fffAF0;}
+
+.pop span { border-radius:4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; -moz-box-shadow: 5px 5px 8px #CCC; -webkit-box-shadow: 5px 5px 8px #CCC; box-shadow: 5px 5px 8px #CCC; }
+</style>
+
+</head>
+<body>
+
+
+<h1>MonotoneSpline.kt</h1>
+
+<table class="src">
+
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_1'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package com.github.sanity.pav</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_2'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_3'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Performs spline interpolation given a set of control points.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_4'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_5'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * This implementation converted from java from https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/util/MonotoneSpline.java</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_6'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_7'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Includes a fix for the following bug: https://code.google.com/p/android/issues/detail?id=222470</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_8'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_9'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>class MonotoneSpline(private val controlXPoints: DoubleArray, private val controlYPoints: DoubleArray) {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_10'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_11'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private val tangents: DoubleArray</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_12'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_13'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    init {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_14'/>
+14
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_14'>3</a>
+<span>
+1. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+2. <init> : negated conditional &rarr; KILLED<br/>
+3. <init> : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (controlXPoints.size != controlYPoints.size || controlXPoints.size &#60; 2) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_15'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>            throw IllegalArgumentException(&#34;There must be at least two control points and the arrays must be of equal length.&#34;)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_16'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_17'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        val pointsCount = controlXPoints.size</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_18'/>
+18
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_18'>1</a>
+<span>
+1. <init> : Replaced integer subtraction with addition &rarr; SURVIVED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        val d = DoubleArray(pointsCount - 1) // could optimize this out</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_19'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        tangents = DoubleArray(pointsCount)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_20'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Compute slopes of secant lines between successive points.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_21'/>
+21
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_21'>6</a>
+<span>
+1. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+2. <init> : negated conditional &rarr; SURVIVED<br/>
+3. <init> : negated conditional &rarr; SURVIVED<br/>
+4. <init> : Changed increment from 1 to -1 &rarr; KILLED<br/>
+5. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+6. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        for (i in 0..pointsCount - 1 - 1) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_22'/>
+22
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_22'>2</a>
+<span>
+1. <init> : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+2. <init> : Replaced integer addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            val h = controlXPoints[i + 1] - controlXPoints[i]</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_23'/>
+23
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_23'>2</a>
+<span>
+1. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+2. <init> : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (h &#60;= 0f) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_24'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>                throw IllegalArgumentException(&#34;The control points must all have strictly increasing X values.&#34;)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_25'/>
+25
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_25'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_26'/>
+26
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_26'>3</a>
+<span>
+1. <init> : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+2. <init> : Replaced double division with multiplication &rarr; SURVIVED<br/>
+3. <init> : Replaced integer addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            d[i] = (controlYPoints[i + 1] - controlYPoints[i]) / h</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_27'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_28'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Initialize the tangents as the average of the secants.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_29'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        tangents[0] = d[0]</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_30'/>
+30
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_30'>6</a>
+<span>
+1. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+2. <init> : negated conditional &rarr; SURVIVED<br/>
+3. <init> : negated conditional &rarr; SURVIVED<br/>
+4. <init> : Changed increment from 1 to -1 &rarr; KILLED<br/>
+5. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+6. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        for (i in 1..pointsCount - 1 - 1) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_31'/>
+31
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_31'>3</a>
+<span>
+1. <init> : Replaced double multiplication with division &rarr; SURVIVED<br/>
+2. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+3. <init> : Replaced double addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            tangents[i] = (d[i - 1] + d[i]) * 0.5f</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_32'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_33'/>
+33
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_33'>2</a>
+<span>
+1. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+2. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        tangents[pointsCount - 1] = d[pointsCount - 2]</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_34'/>
+34
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_34'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Update the tangents to preserve monotonicity.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_35'/>
+35
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_35'>6</a>
+<span>
+1. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+2. <init> : negated conditional &rarr; SURVIVED<br/>
+3. <init> : negated conditional &rarr; SURVIVED<br/>
+4. <init> : Changed increment from 1 to -1 &rarr; KILLED<br/>
+5. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+6. <init> : Replaced integer subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        for (i in 0..pointsCount - 1 - 1) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_36'/>
+36
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_36'>1</a>
+<span>
+1. <init> : negated conditional &rarr; SURVIVED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (d[i] == 0.0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_37'/>
+37
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_37'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                // successive Y values are equal</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_38'/>
+38
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_38'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>                tangents[i] = 0.0</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_39'/>
+39
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_39'>1</a>
+<span>
+1. <init> : Replaced integer addition with subtraction &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                tangents[i + 1] = 0.0</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_40'/>
+40
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_40'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            } else {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_41'/>
+41
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_41'>1</a>
+<span>
+1. <init> : Replaced double division with multiplication &rarr; SURVIVED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                val a = tangents[i] / d[i]</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_42'/>
+42
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_42'>2</a>
+<span>
+1. <init> : Replaced double division with multiplication &rarr; SURVIVED<br/>
+2. <init> : Replaced integer addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                val b = tangents[i + 1] / d[i]</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_43'/>
+43
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_43'>4</a>
+<span>
+1. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+2. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+3. <init> : negated conditional &rarr; KILLED<br/>
+4. <init> : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (a &#60; 0.0 || b &#60; 0.0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_44'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>                    throw IllegalArgumentException(&#34;The control points must have monotonic Y values.&#34;)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_45'/>
+45
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_45'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_46'/>
+46
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_46'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                val h = Math.hypot(a.toDouble(), b.toDouble()).toFloat()</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_47'/>
+47
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_47'>2</a>
+<span>
+1. <init> : changed conditional boundary &rarr; SURVIVED<br/>
+2. <init> : negated conditional &rarr; SURVIVED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                if (h &#62; 3.0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_48'/>
+48
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_48'>1</a>
+<span>
+1. <init> : Replaced double division with multiplication &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                    val t = 3.0 / h</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_49'/>
+49
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_49'>2</a>
+<span>
+1. <init> : Replaced double multiplication with division &rarr; NO_COVERAGE<br/>
+2. <init> : Replaced double multiplication with division &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                    tangents[i] = t * a * d[i]</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_50'/>
+50
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_50'>3</a>
+<span>
+1. <init> : Replaced integer addition with subtraction &rarr; NO_COVERAGE<br/>
+2. <init> : Replaced double multiplication with division &rarr; NO_COVERAGE<br/>
+3. <init> : Replaced double multiplication with division &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                    tangents[i + 1] = t * b * d[i]</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_51'/>
+51
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_51'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_52'/>
+52
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_52'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_53'/>
+53
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_53'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_54'/>
+54
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_54'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_55'/>
+55
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_55'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_56'/>
+56
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_56'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_57'/>
+57
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_57'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Interpolates the response of Y = f(X) for given X.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_58'/>
+58
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_58'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Clamps X to the domain of the spline.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_59'/>
+59
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_59'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_60'/>
+60
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_60'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @param x The X response.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_61'/>
+61
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_61'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_62'/>
+62
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_62'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * @return The interpolated Y = f(X) response.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_63'/>
+63
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_63'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_64'/>
+64
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_64'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    fun interpolate(x: Double): Double {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_65'/>
+65
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_65'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Handle the boundary cases.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_66'/>
+66
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_66'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        val n = controlXPoints.size</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_67'/>
+67
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_67'>1</a>
+<span>
+1. interpolate : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (x.isNaN()) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_68'/>
+68
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_68'>1</a>
+<span>
+1. interpolate : replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            return x</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_69'/>
+69
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_69'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_70'/>
+70
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_70'>2</a>
+<span>
+1. interpolate : changed conditional boundary &rarr; SURVIVED<br/>
+2. interpolate : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        if (x &#60;= controlXPoints[0]) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_71'/>
+71
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_71'>1</a>
+<span>
+1. interpolate : replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            return controlYPoints[0]</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_72'/>
+72
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_72'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_73'/>
+73
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_73'>3</a>
+<span>
+1. interpolate : changed conditional boundary &rarr; KILLED<br/>
+2. interpolate : Replaced integer subtraction with addition &rarr; KILLED<br/>
+3. interpolate : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (x &#62;= controlXPoints[n - 1]) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_74'/>
+74
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_74'>2</a>
+<span>
+1. interpolate : Replaced integer subtraction with addition &rarr; KILLED<br/>
+2. interpolate : replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            return controlYPoints[n - 1]</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_75'/>
+75
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_75'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_76'/>
+76
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_76'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Find the index &#39;i&#39; of the last point with smaller X.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_77'/>
+77
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_77'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // We know this will be within the spline due to the boundary tests.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_78'/>
+78
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_78'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        var i = 0</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_79'/>
+79
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_79'>3</a>
+<span>
+1. interpolate : changed conditional boundary &rarr; KILLED<br/>
+2. interpolate : Replaced integer addition with subtraction &rarr; KILLED<br/>
+3. interpolate : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        while (x &#62;= controlXPoints[i + 1]) {</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_80'/>
+80
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_80'>1</a>
+<span>
+1. interpolate : Replaced integer addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            i += 1</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_81'/>
+81
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_81'>1</a>
+<span>
+1. interpolate : negated conditional &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (x == controlYPoints[i]) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_82'/>
+82
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_82'>1</a>
+<span>
+1. interpolate : replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>                return controlYPoints[i]</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_83'/>
+83
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_83'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_84'/>
+84
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_84'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_85'/>
+85
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_85'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        // Perform cubic Hermite spline interpolation.</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_86'/>
+86
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_86'>2</a>
+<span>
+1. interpolate : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+2. interpolate : Replaced integer addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        val h = controlXPoints[i + 1] - controlXPoints[i]</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_87'/>
+87
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_87'>2</a>
+<span>
+1. interpolate : Replaced double division with multiplication &rarr; SURVIVED<br/>
+2. interpolate : Replaced double subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        val t = (x - controlXPoints[i]) / h</span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_88'/>
+88
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_88'>23</a>
+<span>
+1. interpolate : Replaced double addition with subtraction &rarr; SURVIVED<br/>
+2. interpolate : Replaced double multiplication with division &rarr; SURVIVED<br/>
+3. interpolate : Replaced double multiplication with division &rarr; SURVIVED<br/>
+4. interpolate : Replaced double addition with subtraction &rarr; SURVIVED<br/>
+5. interpolate : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+6. interpolate : Replaced double multiplication with division &rarr; SURVIVED<br/>
+7. interpolate : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+8. interpolate : Replaced double multiplication with division &rarr; SURVIVED<br/>
+9. interpolate : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+10. interpolate : Replaced double multiplication with division &rarr; SURVIVED<br/>
+11. interpolate : Replaced double multiplication with division &rarr; SURVIVED<br/>
+12. interpolate : Replaced double subtraction with addition &rarr; SURVIVED<br/>
+13. interpolate : Replaced double multiplication with division &rarr; SURVIVED<br/>
+14. interpolate : Replaced double addition with subtraction &rarr; SURVIVED<br/>
+15. interpolate : Replaced double addition with subtraction &rarr; SURVIVED<br/>
+16. interpolate : Replaced double multiplication with division &rarr; KILLED<br/>
+17. interpolate : Replaced double multiplication with division &rarr; KILLED<br/>
+18. interpolate : Replaced integer addition with subtraction &rarr; KILLED<br/>
+19. interpolate : Replaced double multiplication with division &rarr; KILLED<br/>
+20. interpolate : Replaced integer addition with subtraction &rarr; KILLED<br/>
+21. interpolate : Replaced double multiplication with division &rarr; KILLED<br/>
+22. interpolate : Replaced double multiplication with division &rarr; KILLED<br/>
+23. interpolate : replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; KILLED<br/>
+
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        return (controlYPoints[i] * (1 + 2 * t) + h * tangents[i] * t) * (1 - t) * (1 - t) + (tangents[i + 1] * (3 - 2 * t) + h * tangents[i + 1] * (t - 1)) * t * t</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_89'/>
+89
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_89'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_90'/>
+90
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_90'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_91'/>
+91
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_91'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    // For debugging.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_92'/>
+92
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_92'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    override fun toString(): String {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_93'/>
+93
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_93'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>        val str = StringBuilder()</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_94'/>
+94
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_94'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>        val n = controlXPoints.size</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_95'/>
+95
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_95'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>        str.append(&#34;[&#34;)</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_96'/>
+96
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_96'>5</a>
+<span>
+1. toString : changed conditional boundary &rarr; NO_COVERAGE<br/>
+2. toString : Changed increment from 1 to -1 &rarr; NO_COVERAGE<br/>
+3. toString : Replaced integer subtraction with addition &rarr; NO_COVERAGE<br/>
+4. toString : negated conditional &rarr; NO_COVERAGE<br/>
+5. toString : negated conditional &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        for (i in 0..n - 1) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_97'/>
+97
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_97'>1</a>
+<span>
+1. toString : negated conditional &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>            if (i != 0) {</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_98'/>
+98
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_98'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>                str.append(&#34;, &#34;)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_99'/>
+99
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_99'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_100'/>
+100
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_100'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>            str.append(&#34;(&#34;).append(controlXPoints[i])</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_101'/>
+101
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_101'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>            str.append(&#34;, &#34;).append(controlYPoints[i])</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_102'/>
+102
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_102'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>            str.append(&#34;: &#34;).append(tangents[i]).append(&#34;)&#34;)</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_103'/>
+103
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_103'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_104'/>
+104
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_104'></a>
+<span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>        str.append(&#34;]&#34;)</span></pre></td></tr>
+
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_105'/>
+105
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_105'>2</a>
+<span>
+1. toString : mutated return of Object response for com/github/sanity/pav/MonotoneSpline::toString to ( if (x != null) null else throw new RuntimeException ) &rarr; NO_COVERAGE<br/>
+2. toString : removed call to kotlin/jvm/internal/Intrinsics::checkExpressionValueIsNotNull &rarr; NO_COVERAGE<br/>
+
+</span>
+</td>
+<td class='uncovered'><pre><span  class='survived'>        return str.toString()</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_106'/>
+106
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_106'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_107'/>
+107
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_107'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_108'/>
+108
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_108'></a>
+<span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    companion object {</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_109'/>
+109
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_109'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        /**</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_110'/>
+110
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_110'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * Creates a monotone cubic spline from a given set of control points.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_111'/>
+111
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_111'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_112'/>
+112
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_112'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * The spline is guaranteed to pass through each control point exactly.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_113'/>
+113
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_113'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * Moreover, assuming the control points are monotonic (Y is non-decreasing or</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_114'/>
+114
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_114'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * non-increasing) then the interpolated values will also be monotonic.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_115'/>
+115
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_115'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_116'/>
+116
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_116'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * This function uses the Fritsch-Carlson method for computing the spline parameters.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_117'/>
+117
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_117'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * http://en.wikipedia.org/wiki/Monotone_cubic_interpolation</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_118'/>
+118
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_118'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_119'/>
+119
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_119'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * @param x The X component of the control points, strictly increasing.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_120'/>
+120
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_120'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_121'/>
+121
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_121'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * @param y The Y component of the control points, monotonic.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_122'/>
+122
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_122'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_123'/>
+123
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_123'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * @return</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_124'/>
+124
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_124'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_125'/>
+125
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_125'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_126'/>
+126
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_126'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * @throws IllegalArgumentException if the X or Y arrays are null, have</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_127'/>
+127
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_127'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * * different lengths or have fewer than 2 values.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_128'/>
+128
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_128'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * *</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_129'/>
+129
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_129'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * @throws IllegalArgumentException if the control points are not monotonic.</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_130'/>
+130
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_130'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         */</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_131'/>
+131
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_131'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_132'/>
+132
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_132'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@687ef2e0_133'/>
+133
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_133'></a>
+<span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_14'>14</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_14'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_18'>18</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_18'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced integer subtraction with addition &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_21'>21</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_21'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Changed increment from 1 to -1 &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>6.<span><b>6</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_22'>22</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_22'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_23'>23</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_23'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_26'>26</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_26'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double division with multiplication &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_30'>30</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_30'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Changed increment from 1 to -1 &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>6.<span><b>6</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_31'>31</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_31'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced double addition with subtraction &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_33'>33</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_33'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_35'>35</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_35'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Changed increment from 1 to -1 &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>6.<span><b>6</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_36'>36</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_36'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_39'>39</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_39'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced integer addition with subtraction &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_41'>41</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_41'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double division with multiplication &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_42'>42</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_42'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double division with multiplication &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_43'>43</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_43'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p> <p class='KILLED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b><init><br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_47'>47</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_47'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_48'>48</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_48'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double division with multiplication &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_49'>49</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_49'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_50'>50</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_50'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced integer addition with subtraction &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b><init><br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_67'>67</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_67'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_68'>68</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_68'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; NO_COVERAGE</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_70'>70</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_70'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_71'>71</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_71'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_73'>73</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_73'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> changed conditional boundary &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_74'>74</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_74'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer subtraction with addition &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_79'>79</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_79'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> changed conditional boundary &rarr; KILLED</p> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_80'>80</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_80'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_81'>81</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_81'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> negated conditional &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_82'>82</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_82'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; NO_COVERAGE</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_86'>86</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_86'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_87'>87</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_87'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced double subtraction with addition &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double division with multiplication &rarr; SURVIVED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_88'>88</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_88'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double addition with subtraction &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>6.<span><b>6</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double addition with subtraction &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>7.<span><b>7</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>8.<span><b>8</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>9.<span><b>9</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>10.<span><b>10</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>11.<span><b>11</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='KILLED'><span class='pop'>12.<span><b>12</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>13.<span><b>13</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>14.<span><b>14</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>15.<span><b>15</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced integer addition with subtraction &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>16.<span><b>16</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>17.<span><b>17</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double subtraction with addition &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>18.<span><b>18</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double multiplication with division &rarr; SURVIVED</p> <p class='SURVIVED'><span class='pop'>19.<span><b>19</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double addition with subtraction &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>20.<span><b>20</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='KILLED'><span class='pop'>21.<span><b>21</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> Replaced double multiplication with division &rarr; KILLED</p> <p class='SURVIVED'><span class='pop'>22.<span><b>22</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>none</span></span> Replaced double addition with subtraction &rarr; SURVIVED</p> <p class='KILLED'><span class='pop'>23.<span><b>23</b><br/><b>Location : </b>interpolate<br/><b>Killed by : </b>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec</span></span> replaced return of double response with -(x + 1) for com/github/sanity/pav/MonotoneSpline::interpolate &rarr; KILLED</p>
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_96'>96</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_96'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> changed conditional boundary &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> Changed increment from 1 to -1 &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> Replaced integer subtraction with addition &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> negated conditional &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>5.<span><b>5</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> negated conditional &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_97'>97</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_97'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> negated conditional &rarr; NO_COVERAGE</p> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@687ef2e0_105'>105</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@687ef2e0_105'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> mutated return of Object response for com/github/sanity/pav/MonotoneSpline::toString to ( if (x != null) null else throw new RuntimeException ) &rarr; NO_COVERAGE</p> <p class='NO_COVERAGE'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>none</span></span> removed call to kotlin/jvm/internal/Intrinsics::checkExpressionValueIsNotNull &rarr; NO_COVERAGE</p>
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>INCREMENTS_MUTATOR</li>
+<li class='mutator'>VOID_METHOD_CALL_MUTATOR</li>
+<li class='mutator'>RETURN_VALS_MUTATOR</li>
+<li class='mutator'>MATH_MUTATOR</li>
+<li class='mutator'>NEGATE_CONDITIONALS_MUTATOR</li>
+<li class='mutator'>INVERT_NEGS_MUTATOR</li>
+<li class='mutator'>CONDITIONALS_BOUNDARY_MUTATOR</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>com.github.sanity.pav.PairAdjacentViolatorsSpec.com.github.sanity.pav.PairAdjacentViolatorsSpec (51 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='http://pitest.org'>PIT</a> 1.1.10
+
+</body>
+</html>

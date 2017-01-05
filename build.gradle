@@ -1,0 +1,101 @@
+group 'com.github.sanity'
+version '0.0.1'
+
+buildscript {
+    ext.kotlin_version = '1.1-M04'
+    ext.dokka_version = '0.9.9'
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap-1.1"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'maven'
+apply plugin: 'org.jetbrains.dokka'
+apply plugin: "info.solidsoft.pitest"
+
+sourceCompatibility = 1.6
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://dl.bintray.com/kotlin/kotlin-eap-1.1"
+    }
+    maven {
+        url "http://dl.bintray.com/kotlin/kotlinx.coroutines"
+    }
+    maven {
+        url "https://dl.bintray.com/wasabifx/wasabifx"
+    }
+    maven {
+        url "http://dl.bintray.com/cy6ergn0m/maven"
+    }
+    jcenter()
+}
+
+dependencies {
+    def kotlinx_html_version = "0.5.11"
+
+    compile 'org.wasabifx:wasabi:0.3.120'
+    //compile 'org.jetbrains.kotlinx:vertx3-lang-kotlin:0.0.+'
+    compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-async:0.2-beta'
+
+    testCompile 'io.kotlintest:kotlintest:1.3.4'
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'html'
+    outputDirectory = javadoc.destinationDir
+    inputs.dir 'src/main/kotlin'
+}
+
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+pitest {
+    targetClasses = ['com.github.sanity.pav.*']  //by default "${project.group}.*"
+    threads = 8
+    outputFormats = ['HTML', 'XML']
+    jvmArgs = ['-Xmx1024m']
+}
+
+artifacts {
+    archives javadocJar
+}
+
+/*
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    //Fill this in with the version of kotlinx in use in your project
+    def kotlinx_html_version = "your_version_here"
+
+    // include for server side
+    compile "org.jetbrains.kotlinx:kotlinx.html.jvm:${kotlinx_html_version}"
+
+    // include for client-side
+    compileClient "org.jetbrains.kotlinx:kotlinx.html.js:${kotlinx_html_version}"
+}
+ */
