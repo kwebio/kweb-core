@@ -36,20 +36,12 @@ class CCReceiver(private val clientId: String, private val cc: ClientConduit, va
         cc.evaluate(clientId, js, { rh.invoke(CCReceiver(clientId, cc, it)) })
     }
 
-    fun doc() = Document(this)
+    val doc = Document(this)
 }
 
-abstract class AbstractEvaluator<O, R>(processor : (js : String, outputMapper : (String) -> O) -> R) {
-    abstract fun evaluate(js : String) : R
-}
+class Element(private val receiver: CCReceiver, private val jsExpression: String) {
 
-class ClientEvaluator<O>(private val receiver: CCReceiver, processor: (js: String, outputMapper: (String) -> O)) : AbstractEvaluator<O, CompletableFuture<O>>(processor) {
-
-}
-
-class RElement(private val receiver: CCReceiver, private val jsExpression: String) {
-
-    fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
+    private fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
         return receiver.evaluate(js).thenApply(outputMapper)
     }
 
@@ -89,9 +81,9 @@ class RElement(private val receiver: CCReceiver, private val jsExpression: Strin
 class ReadableElement(val tag: String, val attributes: Map<String, Object>)
 
 class Document(private val receiver: CCReceiver) {
-    fun getElementById(id: String) = RElement(receiver, "document.getElementById(\"$id\")")
+    fun getElementById(id: String) = Element(receiver, "document.getElementById(\"$id\")")
 
-    fun body() = RElement(receiver, "document.body")
+    val body = Element(receiver, "document.body")
 }
 
 private fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)

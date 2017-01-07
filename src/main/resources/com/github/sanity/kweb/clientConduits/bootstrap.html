@@ -1,0 +1,41 @@
+<html>
+<head>
+    <script language="JavaScript">
+        function toWSUrl(s) {
+            var l = window.location;
+            return ((l.protocol === "https:") ? "wss://" : "ws://") + l.host + l.pathname + s;
+        }
+
+        var kwebClientId = 0;
+        function connectWs() {
+            var socket = new WebSocket(toWSUrl("ws"));
+            socket.onopen = function() {
+                socket.send(JSON.stringify({"hello" : true}))
+            };
+            socket.onmessage = function(event) {
+                var msg = JSON.parse(event.data);
+                if (kwebClientId == 0) {
+                    kwebClientId = msg["yourId"]
+                } else if (kwebClientId != msg["yourId"]) {
+                    console.error("Received message with incorrect clientId, was "+msg["yourId"]+", should be "+kwebClientId)
+                }
+                var execute = msg["execute"];
+                if (execute !== undefined) {
+                    eval(execute["js"])
+                }
+                var evaluate = msg["evaluate"];
+                if (evaluate !== undefined) {
+                    var result = eval(evaluate["js"])
+                    var sendResult = {"responseId" : evaluate["responseId"], "result" : result}
+                    var message = {"id" : kwebClientId, "sendResult" : sendResult}
+                    socket.send(JSON.stringify(message))
+                }
+            }
+
+        }
+    </script>
+</head>
+<body onload="connectWs()">
+
+</body>
+</html>
