@@ -10,91 +10,88 @@ import java.util.concurrent.CompletableFuture
 val gson = Gson()
 
 abstract class ClientConduit(open val rh: CCReceiver.() -> Boolean) {
-    abstract fun send(clientId: Long, message: ClientMessage)
-    abstract fun send(clientId: Long, messages: List<ClientMessage>)
+    abstract fun execute(clientId: String, message: String)
 
-    class ClientMessage(val msg: String, val responseHandler: ((String) -> Boolean)?)
+    abstract fun evaluate(clientId: String, expression: String, handler: (String) -> Boolean)
+
 }
 
-class CCReceiver(private val clientId: Long, private val cc: ClientConduit, val response: String? = null) {
+class CCReceiver(private val clientId: String, private val cc: ClientConduit, val response: String? = null) {
     fun execute(js: String) {
-        cc.send(clientId, ClientConduit.ClientMessage(js, null))
+        cc.execute(clientId, js)
     }
 
-    fun execute(js: String, rh: CCReceiver.() -> Boolean) {
-        cc.send(clientId, ClientConduit.ClientMessage(js, { rh.invoke(CCReceiver(clientId, cc, it)) }))
-    }
 
-    fun executeWithFuture(js: String): CompletableFuture<String> {
+    fun evaluate(js: String): CompletableFuture<String> {
         val cf = CompletableFuture<String>()
-        execute(js) {
+        evaluateWithCallback(js) {
             cf.complete(response)
             false
         }
         return cf
     }
 
+
+    fun evaluateWithCallback(js: String, rh: CCReceiver.() -> Boolean) {
+        cc.evaluate(clientId, js, { rh.invoke(CCReceiver(clientId, cc, it)) })
+    }
+
     fun doc() = Document(this)
 }
 
-class Element(private val receiver: CCReceiver, private val jsExpression: String) {
+abstract class AbstractEvaluator<O, R>(processor : (js : String, outputMapper : (String) -> O) -> R) {
+    abstract fun evaluate(js : String) : R
+}
 
-    fun setAttribute(name: String, value : Any) {
-        receiver.execute("""
-            $jsExpression.setAttribute("${name.escapeEcma()}", ${if (value is String) value.escapeEcma() else value});
-        """)
+class ClientEvaluator<O>(private val receiver: CCReceiver, processor: (js: String, outputMapper: (String) -> O)) : AbstractEvaluator<O, CompletableFuture<O>>(processor) {
+
+}
+
+class RElement(private val receiver: CCReceiver, private val jsExpression: String) {
+
+    fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
+        return receiver.evaluate(js).thenApply(outputMapper)
     }
 
-    fun setInnerHTML(value : String) {
+    fun setAttribute(name: String, value: Any) {
+        receiver.execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${if (value is String) value.escapeEcma() else value});")
+    }
+
+    fun setInnerHTML(value: String) {
         receiver.execute("""
             $jsExpression.innerHTML="${value.escapeEcma()}";
         """)
     }
 
-    fun readAttribute(name : String) : CompletableFuture<String> {
-        val cf = CompletableFuture<String>()
-        receiver.execute(
-                "%respond%($jsExpression.getAttribute(\"${name.escapeEcma()}\"));") {
-            cf.complete(response)
-            true
-        }
-        return cf
+    fun readAttribute(name: String): CompletableFuture<String> {
+        return receiver.evaluate("($jsExpression.getAttribute(\"${name.escapeEcma()}\"));")
     }
 
-    fun readInnerHtml() : CompletableFuture<String> {
-        val cf = CompletableFuture<String>()
-        receiver.execute(
-                "%respond%($jsExpression.innerHTML);") {
-            cf.complete(response)
-            true
-        }
-        return cf
+    fun readInnerHtml(): CompletableFuture<String> {
+        return receiver.evaluate("($jsExpression.innerHTML);")
+
     }
 
     fun read(): CompletableFuture<ReadableElement> {
+        data class JsonResponse(val tagName: String, val attributes: Map<String, Object>)
+
         val cf = CompletableFuture<ReadableElement>()
-        receiver.execute(
-                """
-                {
-                    var element=$jsExpression;
-                    %respond%({"tagName":element.tagName, "attributes":element.attributes});
-                }
-            """) {
-            data class JsonResponse(val tagName: String, val attributes: Map<String, Object>)
-            val jsonObj = gson.fromJson(response, JsonResponse::class.java)
-            cf.complete(ReadableElement(jsonObj.tagName, jsonObj.attributes))
-            true
+        val response = receiver.evaluate(
+                "({\"tagName\":$jsExpression.tagName, \"attributes\":$jsExpression.attributes})")
+        return response.thenApply { json ->
+            val jr = gson.fromJson(json, JsonResponse::class.java)
+            ReadableElement(jr.tagName, jr.attributes)
         }
-        return cf
+
     }
 }
 
 class ReadableElement(val tag: String, val attributes: Map<String, Object>)
 
 class Document(private val receiver: CCReceiver) {
-    fun getElementById(id: String) = Element(receiver, "document.getElementById(\"$id\")")
+    fun getElementById(id: String) = RElement(receiver, "document.getElementById(\"$id\")")
 
-    fun body() = Element(receiver, "document.body")
+    fun body() = RElement(receiver, "document.body")
 }
 
 private fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)
