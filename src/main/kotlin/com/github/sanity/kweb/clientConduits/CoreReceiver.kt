@@ -1,6 +1,5 @@
 package com.github.sanity.kweb.clientConduits
 
-import com.github.sanity.kweb.dom.Document
 import java.util.concurrent.CompletableFuture
 
 class CoreReceiver(private val clientId: String, private val cc: ClientConduit, val response: String? = null) {

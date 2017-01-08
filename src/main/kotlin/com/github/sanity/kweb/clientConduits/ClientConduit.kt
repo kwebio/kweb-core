@@ -1,5 +1,7 @@
 package com.github.sanity.kweb.clientConduits
 
+import com.github.sanity.kweb.dom.Element
+
 /**
  * Created by ian on 1/1/17.
  */
@@ -13,3 +15,10 @@ abstract class ClientConduit() {
 
 }
 
+class ReadableElement(val tag: String, val attributes: Map<String, Object>)
+
+class Document(private val receiver: CoreReceiver) {
+    fun getElementById(id: String) = Element(receiver, "document.getElementById(\"$id\")")
+
+    val body = Element(receiver, "document.body")
+}
