@@ -62,8 +62,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 
 fun main(args: Array<String>) {
+    // Starts a web server listening on port 8091
     WebsocketsClientConduit(8091) {
-        // Starts a web server listening on port 8091
         doc.body.apply {
             // Add a header element to the body, along with some simple instructions.
             h1("Simple KWeb demo - a to-do list")
