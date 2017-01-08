@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
         thread {
             async {
                 var clicks = 0
-                val heading = doc.body.appendChild("h1")
+                val heading = doc.body.new("h1")
                 heading.setInnerHTML("0 clicks")
                 heading.addEventListener("click") {
                     clicks++

@@ -9,31 +9,33 @@ import com.github.sanity.kweb.random
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-
-class Element(private val receiver: CoreReceiver, private val jsExpression: String) {
+open class Element(val receiver: CoreReceiver, val jsExpression: String) {
 
     private fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
         return receiver.evaluate(js).thenApply(outputMapper)
     }
 
-    fun setAttribute(name: String, value: Any) {
+    fun setAttribute(name: String, value: Any): Element {
         receiver.execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${if (value is String) value.escapeEcma().quote() else value});")
+        return this
     }
 
-    fun setInnerHTML(value: String) {
+    fun setInnerHTML(value: String): Element {
         receiver.execute(" $jsExpression.innerHTML=\"${value.escapeEcma()}\";")
+        return this
     }
 
-    fun appendText(value: String) {
+    fun text(value: String): HTMLReceiver {
         receiver.execute("""
                 {
                     var ntn=document.createTextNode("${value.escapeEcma()}");
                     $jsExpression.appendChild(ntn);
                 }
         """)
+        return HTMLReceiver(this)
     }
 
-    fun appendChild(tag: String, attributes: Map<String, String> = Collections.emptyMap()): Element {
+    fun createElement(tag: String, attributes: Map<String, String> = Collections.emptyMap()): Element {
         val id = attributes["id"] ?: Math.abs(random.nextInt()).toString()
         val javaScript = StringBuilder()
         with(javaScript) {
@@ -52,7 +54,7 @@ class Element(private val receiver: CoreReceiver, private val jsExpression: Stri
         return Element(receiver, "document.getElementById(\"$id\")")
     }
 
-    fun addEventListener(eventName: String, rh: CoreReceiver.() -> Boolean) {
+    fun addEventListener(eventName: String, rh: CoreReceiver.() -> Boolean): Element {
         val callbackId = Math.abs(random.nextInt())
         val js = jsExpression + """
             .addEventListener(${eventName.quote()}, function() {
@@ -62,9 +64,22 @@ class Element(private val receiver: CoreReceiver, private val jsExpression: Stri
         receiver.executeWithCallback(js, callbackId) {
             rh.invoke(receiver)
         }
+        return this
     }
 
     val read: ElementReader get() = ElementReader(receiver, jsExpression)
+
+    /*
+     * HTMLReceiver helpers
+     *
+     * NOTE: Beware the fact that receivers cascade up if they can't
+     *       match something in the inner-most block
+     */
+
+    fun html(receiver: HTMLReceiver.() -> Unit) {
+        receiver.invoke(HTMLReceiver(this))
+    }
+
 }
 
 class ElementReader(private val receiver: CoreReceiver, private val jsExpression: String) {
@@ -82,4 +97,5 @@ class ElementReader(private val receiver: CoreReceiver, private val jsExpression
         })
     }
     val innerHtml: CompletableFuture<String> get() = receiver.evaluate("($jsExpression.innerHTML);")
+
 }

@@ -19,15 +19,19 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class WebsocketsClientConduit(val port: Int, val addToHeader: String = "", override open val rh: CoreReceiver.() -> Boolean) : ClientConduit(rh) {
+class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead : String = "", override open val rh: CoreReceiver.() -> Boolean) : ClientConduit(rh) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
+
+    class PreWritingClientConduit : ClientConduit()
 
     init {
         //TODO: Need to do housekeeping to delete old client data
         clients = ConcurrentHashMap<String, WSClientData>()
 
-        val bootstrapHtml = String(Files.readAllBytes(Paths.get(javaClass.getResource("bootstrap.html").toURI())), StandardCharsets.UTF_8).replace("<!-- HEADER PLACEHOLDER -->", addToHeader)
+        val bootstrapHtml = String(Files.readAllBytes(Paths.get(javaClass.getResource("bootstrap.html").toURI())), StandardCharsets.UTF_8)
+                .replace("<!-- START HEADER PLACEHOLDER -->", startHead)
+                .replace("<!-- END HEADER PLACEHOLDER -->", endHead)
 
         server.get("/", {
             response.send(bootstrapHtml)
