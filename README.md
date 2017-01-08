@@ -10,16 +10,24 @@ It also incorporates a simple DSL for manipulating the browser's DOM.
 
 ### Why
 Building rich webapps normally requires navigating the
-[awful Javascript ecosystem](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.dvybqadhr)),
-choosing between a vast multitude of tools, transpilers, minifiers, state maintainers, and so on.  As most people who
-have tried it will tell you, it's a nightmare.  
+[awful Javascript ecosystem](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.dvybqadhr),
+choosing between a vast multitude of tools, transpilers, minifiers, state maintainers, and so on, most of which will
+be obsolete in 6 months.  Then you're faced with handling interaction between client and server which is a whole other world of pain.
 
-### Quick intro
-The idea behind KWeb is to treat the web browser as a fairly dumb robot, keeping most of the intelligence server-side,
-relaying instructions to the client via a websocket, and receiving responses from the client.  
+KWeb intends to solve this.
 
-In this regard it is similar to [Vaadin](https://vaadin.com/home), although unlike Vaadin it doesn't incorporate
+### How does it work?
+KWeb treats the web browser as a fairly dumb robot, keeping most of the intelligence server-side,
+relaying instructions to the client via a websocket, and receiving responses from the client.  Instructions to the server
+are simple JavaScript snippets which the browser immediately executes, (optionally) returning the result to the server if requested.
+
+In this regard it is somewhat similar to [Vaadin](https://vaadin.com/home), although unlike Vaadin it doesn't incorporate
 a large widget library, and it's much simpler to integrate into a project (just add the dependency).
+
+There is also a similar mechanism in [Apache Wicket](https://wicket.apache.org/), although Wicket is mostly focussed on
+transparently keeping server and client state in sync, motivated largely by the desire to have a graceful fallback
+to HTML in the event that the browser doesn't support JavaScript.  This requirement is a lot less relevant today than it
+was a decade ago.
 
 Uniquely, KWeb takes advantage of the new coroutines functionality in the upcoming Kotlin 1.1 to handle 
 asynchronously waiting for responses from the client in a way that's almost transparent to the user of KWeb.
