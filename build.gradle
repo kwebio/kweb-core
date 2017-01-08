@@ -71,31 +71,6 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     from javadoc.destinationDir
 }
 
-pitest {
-    targetClasses = ['com.github.sanity.pav.*']  //by default "${project.group}.*"
-    threads = 8
-    outputFormats = ['HTML', 'XML']
-    jvmArgs = ['-Xmx1024m']
-}
-
 artifacts {
     archives javadocJar
 }
-
-/*
-
-repositories {
-    jcenter()
-}
-
-dependencies {
-    //Fill this in with the version of kotlinx in use in your project
-    def kotlinx_html_version = "your_version_here"
-
-    // include for server side
-    compile "org.jetbrains.kotlinx:kotlinx.html.jvm:${kotlinx_html_version}"
-
-    // include for client-side
-    compileClient "org.jetbrains.kotlinx:kotlinx.html.js:${kotlinx_html_version}"
-}
- */

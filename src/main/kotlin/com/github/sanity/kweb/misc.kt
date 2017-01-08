@@ -1,5 +1,7 @@
 package com.github.sanity.kweb
 
+import com.google.gson.Gson
+import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 
 /**
@@ -8,3 +10,9 @@ import java.util.*
 
 
 val random = Random()
+
+val gson = Gson()
+
+fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)
+
+fun String.quote() = "\"$this\""
