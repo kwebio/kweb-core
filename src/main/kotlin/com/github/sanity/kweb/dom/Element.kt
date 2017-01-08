@@ -90,6 +90,10 @@ open class Element(open val receiver: CoreReceiver, open val jsExpression: Strin
         return createElement("h1", attributes).text(text)
     }
 
+    fun p(text: String, attributes: Map<String, String> = Collections.emptyMap()): HTMLReceiver {
+        return createElement("p", attributes).text(text)
+    }
+
     fun ul(attributes: Map<String, String> = Collections.emptyMap()): ULElement {
         val e = createElement("ul", attributes)
         return ULElement(HTMLReceiver(e))
