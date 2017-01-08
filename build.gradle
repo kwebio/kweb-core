@@ -1,5 +1,5 @@
 group 'com.github.sanity'
-version '0.0.2'
+version '0.0.3'
 
 buildscript {
     ext.kotlin_version = '1.1-M04'
@@ -27,7 +27,7 @@ apply plugin: 'maven'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: "info.solidsoft.pitest"
 
-sourceCompatibility = 1.6
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
