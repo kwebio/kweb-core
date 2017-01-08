@@ -1,11 +1,18 @@
 ## KWeb
 
-KWeb is an experimental Kotlin framework for building rich interactive web applications in pure Kotlin (it normally 
-requires navigating the
-[awful Javascript ecosystem](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.dvybqadhr)).  
+KWeb is an experimental Kotlin library for building rich interactive web applications in pure Kotlin in a way
+that makes the distinction between web browser and server largely invisible to the programmer.
 
 In particular, it can use the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in 
 upcoming Kotlin 1.1 to elegantly avoid [callback hell](http://callbackhell.com/).
+
+It also incorporates a simple DSL for manipulating the browser's DOM.
+
+### Why
+Building rich webapps normally requires navigating the
+[awful Javascript ecosystem](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.dvybqadhr)),
+choosing between a vast multitude of tools, transpilers, minifiers, state maintainers, and so on.  As most people who
+have tried it will tell you, it's a nightmare.  
 
 ### Quick intro
 The idea behind KWeb is to treat the web browser as a fairly dumb robot, keeping most of the intelligence server-side,
@@ -20,6 +27,9 @@ asynchronously waiting for responses from the client in a way that's almost tran
 #### Status - 2017-01-08
 KWeb is currently very experimental, at this stage more of a proof-of-concept and playground for ideas than anything
 even close to being useful in production.
+
+The DOM DSL only covers a tiny subset of its eventual functionality, just barely more than is required for the TODO 
+demo below.
 
 #### Getting started
 1. Ensure you are using the "Early Access Preview 1.1" Kotlin plugin in IDEA, see "How to Try It" section at the 
