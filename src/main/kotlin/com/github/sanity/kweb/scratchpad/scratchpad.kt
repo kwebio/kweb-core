@@ -4,10 +4,6 @@ import com.github.sanity.kweb.clientConduits.WebsocketsClientConduit
 import kotlinx.coroutines.async
 import kotlin.concurrent.thread
 
-/**
- * Created by ian on 11/6/16.
- */
-
 fun main(args: Array<String>) {
     WebsocketsClientConduit(8091) {
         thread {
