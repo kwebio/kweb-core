@@ -19,33 +19,38 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead : String = "", override open val rh: CoreReceiver.() -> Boolean) : ClientConduit(rh) {
+class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead: String = "", open val rh: CoreReceiver.() -> Boolean) : ClientConduit() {
     private val server = AppServer(AppConfiguration(port = port))
-    private val clients: MutableMap<String, WSClientData>
-
-    class PreWritingClientConduit : ClientConduit()
+    private val clients: MutableMap<String, ClientConnection>
 
     init {
         //TODO: Need to do housekeeping to delete old client data
-        clients = ConcurrentHashMap<String, WSClientData>()
+        clients = ConcurrentHashMap<String, ClientConnection>()
 
         val bootstrapHtml = String(Files.readAllBytes(Paths.get(javaClass.getResource("bootstrap.html").toURI())), StandardCharsets.UTF_8)
                 .replace("<!-- START HEADER PLACEHOLDER -->", startHead)
                 .replace("<!-- END HEADER PLACEHOLDER -->", endHead)
 
         server.get("/", {
-            response.send(bootstrapHtml)
+            val newClientId = Math.abs(random.nextLong()).toString(16)
+            val clientConnection = PreSetupClientConnection(newClientId)
+            clients.put(newClientId, clientConnection)
+            clientConnection.send(S2CWebsocketMessage(newClientId))
+            rh.invoke(CoreReceiver(newClientId, this@WebsocketsClientConduit))
+            response.send(bootstrapHtml.replace("<!-- INITIAL SCRIPT PLACEHOLDER -->", clientConnection.getPreMessages()))
         })
 
         server.channel("/ws") {
             if (frame is TextWebSocketFrame) {
+                // TODO: This may be vulnerable to concurrency issues.  For example, what if
+                // TODO: two incoming frames from a client are processed in parallel?
                 val message = gson.fromJson((frame as TextWebSocketFrame).text(), C2SWebsocketMessage::class.java)
                 if (message.hello != null) {
-                    val newClientId = Math.abs(random.nextLong()).toString(16)
-                    val wsClientData = WSClientData(id = newClientId, clientChannel = ctx!!.channel())
-                    clients.put(newClientId, wsClientData)
-                    wsClientData.send(S2CWebsocketMessage(newClientId))
-                    rh.invoke(CoreReceiver(newClientId, this@WebsocketsClientConduit))
+                    val existingClientData = clients.get(message.id) ?: throw RuntimeException("No client connection found for id ${message.id}")
+                    if (existingClientData is PreSetupClientConnection) {
+                        val clientData = WSClientConnection(id = message.id, clientChannel = ctx!!.channel(), handlers = existingClientData.handlers)
+                        clients.put(message.id, clientData)
+                    }
                 } else {
                     val clientId = message.id ?: throw RuntimeException("Message has no id but is not hello")
                     val clientData = clients[clientId] ?: throw RuntimeException("No handler found for client $clientId")
@@ -68,29 +73,55 @@ class WebsocketsClientConduit(val port: Int, val startHead: String = "", val end
 
     override fun execute(clientId: String, js: String) {
         //println("execute($js)")
-        val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
+        val clientConnection = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        clientConnection.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
     }
 
     override fun executeWithCallback(clientId: String, js: String, callbackId: Int, handler: (String) -> Boolean) {
-        val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
+        val clientConnection = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        clientConnection.handlers.put(callbackId, handler)
+        clientConnection.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
     }
 
     override fun evaluate(clientId: String, expression: String, handler: (String) -> Boolean) {
-        val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        val clientConnection = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val callbackId = Math.abs(random.nextInt())
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(clientId, evaluate = Evaluate(expression, callbackId)))
+        clientConnection.handlers.put(callbackId, handler)
+        clientConnection.send(S2CWebsocketMessage(clientId, evaluate = Evaluate(expression, callbackId)))
     }
 
 }
 
 
-private data class WSClientData(val id: String, var clientChannel: Channel, val handlers: MutableMap<Int, (String) -> OneTime> = HashMap()) {
-    fun send(message: S2CWebsocketMessage) {
+abstract class ClientConnection(open val id: String,
+                                open val handlers: MutableMap<Int, (String) -> OneTime> = HashMap()) {
+    abstract fun send(message: S2CWebsocketMessage)
+}
+
+private data class WSClientConnection(override val id: String,
+                                      val clientChannel: Channel,
+                                      override val handlers: MutableMap<Int, (String) -> OneTime> = HashMap())
+    : ClientConnection(id, handlers) {
+    override fun send(message: S2CWebsocketMessage) {
         respond(clientChannel, TextWebSocketFrame(gson.toJson(message)))
+    }
+}
+
+private data class PreSetupClientConnection(override val id: String, override val handlers: MutableMap<Int, (String) -> OneTime> = HashMap()) : ClientConnection(id, handlers) {
+    private @Volatile var active = true
+
+    val toSend: StringBuffer = StringBuffer()
+
+    override fun send(message: S2CWebsocketMessage) {
+        if (!active) {
+            throw IllegalStateException("PreSetupClientConnection should not be used after getPreMessages has been called")
+        }
+        toSend.appendln("handleMessage(${gson.toJson(message)});")
+    }
+
+    fun getPreMessages(): String {
+        active = false
+        return toSend.toString()
     }
 }
 
@@ -105,7 +136,7 @@ data class Execute(val js: String)
 data class Evaluate(val js: String, val responseId: Int)
 
 data class C2SWebsocketMessage(
-        val id: String?,
+        val id: String,
         val hello: Boolean? = true,
         val callback: C2SCallback?
 )
