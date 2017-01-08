@@ -34,7 +34,10 @@ demo below.
 #### Getting started
 1. Ensure you are using the "Early Access Preview 1.1" Kotlin plugin in IDEA, see "How to Try It" section at the 
 bottom of JetBrain's [announcement](https://blog.jetbrains.com/kotlin/2016/12/kotlin-1-1-m04-is-here/).
-2. Clone the repository and open as a Gradle project in IntelliJ IDEA: `git@github.com:sanity/kweb.git`
+2. Two options:
+    * Clone the repository and open as a Gradle project in IntelliJ IDEA: `git@github.com:sanity/kweb.git`
+    * Add as a dependency to your own Kotlin project, just be sure you're set up to use the
+very latest Kotlin 1.1 release along with the plugin.  Dependency info here: [![](https://jitpack.io/v/sanity/kweb.svg)](https://jitpack.io/#sanity/kweb)
 
 #### A simple example:
 
