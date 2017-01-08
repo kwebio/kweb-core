@@ -14,7 +14,7 @@ abstract class ClientConduit(open val rh: CoreReceiver.() -> Unit) {
     abstract fun executeWithCallback(clientId: String, js: String, callbackId: Int, handler: (String) -> Unit)
 }
 
-class ReadableElement(val tag: String, val attributes: Map<String, Object>)
+class ReadableElement(val tag: String, val attributes: Map<String, Any>)
 
 class Document(private val receiver: CoreReceiver) {
     fun getElementById(id: String) = Element(receiver, "document.getElementById(\"$id\")")

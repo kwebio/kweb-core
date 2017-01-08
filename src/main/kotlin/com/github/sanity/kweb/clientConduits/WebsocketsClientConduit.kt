@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead: String = "", override open val rh: CoreReceiver.() -> Unit) : ClientConduit(rh) {
+class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead: String = "", override val rh: CoreReceiver.() -> Unit) : ClientConduit(rh) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
 
@@ -61,10 +61,10 @@ class WebsocketsClientConduit(val port: Int, val startHead: String = "", val end
     }
 
 
-    override fun execute(clientId: String, js: String) {
+    override fun execute(clientId: String, message: String) {
         //println("execute($js)")
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(message)))
     }
 
     override fun executeWithCallback(clientId: String, js: String, callbackId: Int, handler: (String) -> Unit) {
