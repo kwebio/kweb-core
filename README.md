@@ -1,14 +1,21 @@
 ## KWeb
 
-KWeb is an experimental Kotlin framework for building rich interactive web applications in pure Kotlin.  It can use
-the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in the upcoming Kotlin 1.1 to elegantly 
-avoid [callback hell](http://callbackhell.com/).
+KWeb is an experimental Kotlin framework for building rich interactive web applications in pure Kotlin (it normally 
+requires navigating the
+[awful Javascript ecosystem](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.dvybqadhr)).  
+
+In particular, it can use the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in 
+upcoming Kotlin 1.1 to elegantly avoid [callback hell](http://callbackhell.com/).
 
 ### Quick intro
 The idea behind KWeb is to treat the web browser as a fairly dumb robot, keeping most of the intelligence server-side,
-relaying instructions to the client via a websocket, and receiving responses from the client.  KWeb takes advantage
-of the new coroutines functionality in the upcoming Kotlin 1.1 to handle asynchronously waiting for responses
-from the client in a way that's almost transparent to the user of KWeb.
+relaying instructions to the client via a websocket, and receiving responses from the client.  
+
+In this regard it is similar to [Vaadin](https://vaadin.com/home), although unlike Vaadin it doesn't incorporate
+a large widget library, and it's much simpler to integrate into a project (just add the dependency).
+
+Uniquely, KWeb takes advantage of the new coroutines functionality in the upcoming Kotlin 1.1 to handle 
+asynchronously waiting for responses from the client in a way that's almost transparent to the user of KWeb.
 
 #### Status - 2017-01-08
 KWeb is currently very experimental, at this stage more of a proof-of-concept and playground for ideas than anything
