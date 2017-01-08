@@ -15,4 +15,6 @@ val gson = Gson()
 
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)
 
-fun String.quote() = "\"$this\""
+//fun String.quote() = "\"$this\""
+
+fun Any.toJson(): String = gson.toJson(this)

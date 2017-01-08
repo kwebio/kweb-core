@@ -2,32 +2,33 @@ package com.github.sanity.kweb.scratchpad
 
 import com.github.sanity.kweb.clientConduits.WebsocketsClientConduit
 import com.github.sanity.kweb.dom.Element
+import com.github.sanity.kweb.dom.Element.InputType.text
 import kotlinx.coroutines.async
+import kotlinx.coroutines.await
 import kotlin.concurrent.thread
 
 fun main(args: Array<String>) {
-    WebsocketsClientConduit(8091) { // TODO: This JavaScript should be sent down with the page
+    WebsocketsClientConduit(8091) {
         thread {
-            async {
-                with(doc.body) {
-                    html {
-                        h1("Simple KWeb demo")
-                        with(ul()) {
-                            val todoItems = ArrayList<Element>()
-                            todoItems += li().text("one")
-                            todoItems += li().text("two")
-                                    .on.click {
-                                println("Two was clicked")
-                                false // TODO: Remove requirement for this in callbacks, handle removing callback for future somewhere else
-                            }
-                            todoItems += li().text("three")
+            val body = doc.body.apply {
+                h1("Simple KWeb demo")
+                fun newListItem(ul: Element.ULElement, text: String) {
+                    val li = ul.li()
+                    li.text(text)
+                            .on.click { li.delete() }
+                }
 
-                            on.click {
-                                println("List was clicked")
-                                false
-                            }
-                        }
-
+                val ul = ul().apply {
+                    for (text in listOf("one", "two", "three")) {
+                        newListItem(this, text)
+                    }
+                }
+                val input = input(type = text, size = 20)
+                button().text("Add Item")
+                        .on.click {
+                    async {
+                        newListItem(ul, input.getValue().await())
+                        input.setValue("")
                     }
                 }
             }
@@ -36,3 +37,4 @@ fun main(args: Array<String>) {
     }
     Thread.sleep(10000)
 }
+

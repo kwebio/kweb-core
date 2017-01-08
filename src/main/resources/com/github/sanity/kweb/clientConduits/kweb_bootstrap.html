@@ -1,5 +1,6 @@
 <html>
 <head>
+    <!-- START HEADER PLACEHOLDER -->
     <script language="JavaScript">
         function toWSUrl(s) {
             var l = window.location;
@@ -29,7 +30,7 @@
                     var evaluate = msg["evaluate"];
                     if (evaluate !== undefined) {
                         var data = eval(evaluate["js"])
-                        var callback = {"callbackId": evaluate["callbackId"], "data": result}
+                        var callback = {"callbackId": evaluate["callbackId"], "data": data}
                         var message = {"id": kwebClientId, "callback": callback}
                         socket.send(JSON.stringify(message))
                     }
@@ -41,7 +42,7 @@
             socket.send(JSON.stringify({"id": kwebClientId, "callback": {"callbackId" : callbackId, "data" : data}}))
         }
     </script>
-    <!-- HEADER PLACEHOLDER -->
+    <!-- END HEADER PLACEHOLDER -->
 </head>
 <body onload="connectWs()">
 

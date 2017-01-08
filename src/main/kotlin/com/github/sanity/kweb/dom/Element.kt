@@ -1,22 +1,28 @@
 package com.github.sanity.kweb.dom
 
 import com.github.salomonbrys.kotson.fromJson
+import com.github.salomonbrys.kotson.toJson
 import com.github.sanity.kweb.clientConduits.CoreReceiver
+import com.github.sanity.kweb.dom.Element.ButtonType.button
 import com.github.sanity.kweb.escapeEcma
 import com.github.sanity.kweb.gson
-import com.github.sanity.kweb.quote
 import com.github.sanity.kweb.random
+import com.github.sanity.kweb.toJson
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-open class Element(val receiver: CoreReceiver, val jsExpression: String) {
+open class Element(open val receiver: CoreReceiver, open val jsExpression: String) {
 
     private fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
         return receiver.evaluate(js).thenApply(outputMapper)
     }
 
+    // TODO: Explicit support for global attributes from http://www.w3schools.com/tags/ref_standardattributes.asp
+    // TODO: These should probably be accessed via a field like element.attr[GlobalAttributes.hidden], possibly
+    // TODO: using generics to ensure the correct return-type
+
     fun setAttribute(name: String, value: Any): Element {
-        receiver.execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${if (value is String) value.escapeEcma().quote() else value});")
+        receiver.execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
         return this
     }
 
@@ -35,7 +41,7 @@ open class Element(val receiver: CoreReceiver, val jsExpression: String) {
         return HTMLReceiver(this)
     }
 
-    fun createElement(tag: String, attributes: Map<String, String> = Collections.emptyMap()): Element {
+    fun createElement(tag: String, attributes: Map<String, Any> = Collections.emptyMap()): Element {
         val id = attributes["id"] ?: Math.abs(random.nextInt()).toString()
         val javaScript = StringBuilder()
         with(javaScript) {
@@ -45,7 +51,7 @@ open class Element(val receiver: CoreReceiver, val jsExpression: String) {
                 appendln("newEl.setAttribute(\"id\", \"$id\");")
             }
             for ((name, value) in attributes) {
-                appendln("newEl.setAttribute(\"$name\", \"$value\");")
+                appendln("newEl.setAttribute(\"$name\", ${value.toJson()});")
             }
             appendln("$jsExpression.appendChild(newEl);")
             appendln("}")
@@ -54,10 +60,14 @@ open class Element(val receiver: CoreReceiver, val jsExpression: String) {
         return Element(receiver, "document.getElementById(\"$id\")")
     }
 
-    fun addEventListener(eventName: String, rh: CoreReceiver.() -> Boolean): Element {
+    fun delete() {
+        receiver.execute("$jsExpression.parentNode.removeChild($jsExpression)")
+    }
+
+    fun addEventListener(eventName: String, rh: CoreReceiver.() -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
         val js = jsExpression + """
-            .addEventListener(${eventName.quote()}, function() {
+            .addEventListener(${eventName.toJson()}, function() {
                 callbackWs($callbackId, false)
             });
         """
@@ -70,14 +80,56 @@ open class Element(val receiver: CoreReceiver, val jsExpression: String) {
     val read: ElementReader get() = ElementReader(receiver, jsExpression)
 
     /*
-     * HTMLReceiver helpers
+     * HTML helpers
      *
      * NOTE: Beware the fact that receivers cascade up if they can't
      *       match something in the inner-most block
      */
 
-    fun html(receiver: HTMLReceiver.() -> Unit) {
-        receiver.invoke(HTMLReceiver(this))
+    fun h1(text: String, attributes: Map<String, String> = Collections.emptyMap()): HTMLReceiver {
+        return createElement("h1", attributes).text(text)
+    }
+
+    fun ul(attributes: Map<String, String> = Collections.emptyMap()): ULElement {
+        val e = createElement("ul", attributes)
+        return ULElement(HTMLReceiver(e))
+    }
+
+    class ULElement(parent: Element) : HTMLReceiver(parent) {
+        fun li(attributes: Map<String, String> = Collections.emptyMap()) = createElement("li", attributes)
+    }
+
+    val on: ONReceiver get() = ONReceiver(this)
+
+    fun input(type: InputType, name: String? = null, initialValue: String? = null, size: Int? = null): InputElement {
+        val attributes = HashMap<String, Any>()
+        attributes.put("type", type.name)
+        if (name != null) attributes.put("name", name)
+        if (initialValue != null) attributes.put("value", initialValue)
+        if (size != null) attributes.put("size", size)
+        return InputElement(createElement("input", attributes))
+    }
+
+    class InputElement(val element: Element) : Element(element.receiver, element.jsExpression) {
+        fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value", { s: String -> s }) ?: throw RuntimeException("Not sure why .evaluate() would return null")
+        fun setValue(newValue: String) = element.receiver.execute("$jsExpression.value=${newValue.toJson()}")
+    }
+
+
+    enum class InputType {
+        button, checkbox, color, date, datetime, email, file, hidden, image, month, number, password, radio, range, reset, search, submit, tel, text, time, url, week
+    }
+
+    fun button(type : ButtonType = button, autofocus : Boolean? = null, disabled : Boolean? = null) : Element {
+        val attributes = HashMap<String, Any>()
+        attributes.put("type", type.name)
+        if (autofocus != null) attributes.put("autofocus", autofocus)
+        if (disabled != null) attributes.put("disabled", disabled)
+        return createElement("button", attributes)
+    }
+
+    enum class ButtonType {
+        button, reset, submit
     }
 
 }

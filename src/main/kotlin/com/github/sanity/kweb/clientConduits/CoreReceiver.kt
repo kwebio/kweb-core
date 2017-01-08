@@ -7,7 +7,7 @@ class CoreReceiver(private val clientId: String, private val cc: ClientConduit, 
         cc.execute(clientId, js)
     }
 
-    fun executeWithCallback(js: String, callbackId: Int, callback: (String) -> Boolean) {
+    fun executeWithCallback(js: String, callbackId: Int, callback: (String) -> Unit) {
         cc.executeWithCallback(clientId, js, callbackId, callback)
     }
 

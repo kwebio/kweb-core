@@ -19,17 +19,15 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead : String = "", override open val rh: CoreReceiver.() -> Boolean) : ClientConduit(rh) {
+class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead: String = "", override open val rh: CoreReceiver.() -> Unit) : ClientConduit(rh) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
-
-    class PreWritingClientConduit : ClientConduit()
 
     init {
         //TODO: Need to do housekeeping to delete old client data
         clients = ConcurrentHashMap<String, WSClientData>()
 
-        val bootstrapHtml = String(Files.readAllBytes(Paths.get(javaClass.getResource("bootstrap.html").toURI())), StandardCharsets.UTF_8)
+        val bootstrapHtml = String(Files.readAllBytes(Paths.get(javaClass.getResource("kweb_bootstrap.html").toURI())), StandardCharsets.UTF_8)
                 .replace("<!-- START HEADER PLACEHOLDER -->", startHead)
                 .replace("<!-- END HEADER PLACEHOLDER -->", endHead)
 
@@ -53,10 +51,7 @@ class WebsocketsClientConduit(val port: Int, val startHead: String = "", val end
                         message.callback != null -> {
                             val (resultId, result) = message.callback
                             val resultHandler = clientData.handlers[resultId] ?: throw RuntimeException("No data handler for $resultId for client $clientId")
-                            val oneTime = resultHandler(result)
-                            if (oneTime) {
-                                clientData.handlers.remove(resultId)
-                            }
+                            resultHandler(result)
                         }
                     }
                 }
@@ -72,13 +67,13 @@ class WebsocketsClientConduit(val port: Int, val startHead: String = "", val end
         wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
     }
 
-    override fun executeWithCallback(clientId: String, js: String, callbackId: Int, handler: (String) -> Boolean) {
+    override fun executeWithCallback(clientId: String, js: String, callbackId: Int, handler: (String) -> Unit) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         wsClientData.handlers.put(callbackId, handler)
         wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
     }
 
-    override fun evaluate(clientId: String, expression: String, handler: (String) -> Boolean) {
+    override fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
@@ -88,7 +83,7 @@ class WebsocketsClientConduit(val port: Int, val startHead: String = "", val end
 }
 
 
-private data class WSClientData(val id: String, var clientChannel: Channel, val handlers: MutableMap<Int, (String) -> OneTime> = HashMap()) {
+private data class WSClientData(val id: String, var clientChannel: Channel, val handlers: MutableMap<Int, (String) -> Unit> = HashMap()) {
     fun send(message: S2CWebsocketMessage) {
         respond(clientChannel, TextWebSocketFrame(gson.toJson(message)))
     }
@@ -102,7 +97,7 @@ data class S2CWebsocketMessage(
 
 data class Execute(val js: String)
 
-data class Evaluate(val js: String, val responseId: Int)
+data class Evaluate(val js: String, val callbackId: Int)
 
 data class C2SWebsocketMessage(
         val id: String?,
