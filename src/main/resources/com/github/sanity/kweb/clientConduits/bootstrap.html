@@ -1,6 +1,5 @@
 <html>
 <head>
-    <!-- START HEADER PLACEHOLDER -->
     <script language="JavaScript">
         function toWSUrl(s) {
             var l = window.location;
@@ -9,47 +8,40 @@
 
         var kwebClientId = 0;
         var socket = new WebSocket(toWSUrl("ws"));
-
-        function handleMessage(msg) {
-            if (kwebClientId == 0) {
-                kwebClientId = msg["yourId"]
-            } else if (kwebClientId != msg["yourId"]) {
-                console.error("Received message with incorrect clientId, was " + msg["yourId"] + ", should be " + kwebClientId)
-            }
-            var execute = msg["execute"];
-            if (execute !== undefined) {
-                eval(execute["js"])
-            }
-            var evaluate = msg["evaluate"];
-            if (evaluate !== undefined) {
-                var data = eval(evaluate["js"])
-                var callback = {"callbackId": evaluate["callbackId"], "data": result}
-                var message = {"id": kwebClientId, "callback": callback}
-                socket.send(JSON.stringify(message))
-            }
-        }
-
         function connectWs() {
             if (window.WebSocket === undefined) {
                 document.body.innerHTML = "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>"
             } else {
                 socket.onopen = function () {
-                    socket.send(JSON.stringify({"id" : kwebClientId, "hello": true}))
+                    socket.send(JSON.stringify({"hello": true}))
                 };
                 socket.onmessage = function (event) {
                     var msg = JSON.parse(event.data);
-                    handleMessage(msg)
+                    if (kwebClientId == 0) {
+                        kwebClientId = msg["yourId"]
+                    } else if (kwebClientId != msg["yourId"]) {
+                        console.error("Received message with incorrect clientId, was " + msg["yourId"] + ", should be " + kwebClientId)
+                    }
+                    var execute = msg["execute"];
+                    if (execute !== undefined) {
+                        eval(execute["js"])
+                    }
+                    var evaluate = msg["evaluate"];
+                    if (evaluate !== undefined) {
+                        var data = eval(evaluate["js"])
+                        var callback = {"callbackId": evaluate["callbackId"], "data": result}
+                        var message = {"id": kwebClientId, "callback": callback}
+                        socket.send(JSON.stringify(message))
+                    }
                 }
             }
-
-            <!-- INITIAL SCRIPT PLACEHOLDER -->
         }
 
         function callbackWs(callbackId, data) {
             socket.send(JSON.stringify({"id": kwebClientId, "callback": {"callbackId" : callbackId, "data" : data}}))
         }
     </script>
-    <!-- END HEADER PLACEHOLDER -->
+    <!-- HEADER PLACEHOLDER -->
 </head>
 <body onload="connectWs()">
 
