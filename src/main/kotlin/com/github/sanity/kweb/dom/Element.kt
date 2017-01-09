@@ -2,18 +2,24 @@ package com.github.sanity.kweb.dom
 
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.toJson
-import com.github.sanity.kweb.CoreReceiver
+import com.github.sanity.kweb.*
 import com.github.sanity.kweb.dom.Element.ButtonType.button
-import com.github.sanity.kweb.escapeEcma
-import com.github.sanity.kweb.gson
-import com.github.sanity.kweb.random
-import com.github.sanity.kweb.toJson
+import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import kotlin.reflect.KClass
 
 open class Element(open val receiver: CoreReceiver, open val jsExpression: String) {
+    internal val plugins: Set<KClass<in KWebPlugin>> by lazy {
+        receiver.cc.plugins.map { it::class }.toSet()
+    }
 
-    private fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
+    fun execute(js: String) {
+        receiver.execute(js)
+    }
+
+
+    fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
         return receiver.evaluate(js).thenApply(outputMapper)
     }
 
@@ -22,17 +28,17 @@ open class Element(open val receiver: CoreReceiver, open val jsExpression: Strin
     // TODO: using generics to ensure the correct return-type
 
     fun setAttribute(name: String, value: Any): Element {
-        receiver.execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+        execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
         return this
     }
 
     fun setInnerHTML(value: String): Element {
-        receiver.execute(" $jsExpression.innerHTML=\"${value.escapeEcma()}\";")
+        execute(" $jsExpression.innerHTML=\"${value.escapeEcma()}\";")
         return this
     }
 
     fun text(value: String): HTMLReceiver {
-        receiver.execute("""
+        execute("""
                 {
                     var ntn=document.createTextNode("${value.escapeEcma()}");
                     $jsExpression.appendChild(ntn);
@@ -56,12 +62,12 @@ open class Element(open val receiver: CoreReceiver, open val jsExpression: Strin
             appendln("$jsExpression.appendChild(newEl);")
             appendln("}")
         }
-        receiver.execute(javaScript.toString())
+        execute(javaScript.toString())
         return Element(receiver, "document.getElementById(\"$id\")")
     }
 
     fun delete() {
-        receiver.execute("$jsExpression.parentNode.removeChild($jsExpression)")
+        execute("$jsExpression.parentNode.removeChild($jsExpression)")
     }
 
     fun addEventListener(eventName: String, rh: CoreReceiver.() -> Unit): Element {

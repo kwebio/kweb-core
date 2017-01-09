@@ -2,7 +2,7 @@ package com.github.sanity.kweb
 
 import java.util.concurrent.CompletableFuture
 
-class CoreReceiver(private val clientId: String, private val cc: ClientConduit, val response: String? = null) {
+class CoreReceiver(private val clientId: String, internal val cc: ClientConduit, val response: String? = null) {
     fun execute(js: String) {
         cc.execute(clientId, js)
     }

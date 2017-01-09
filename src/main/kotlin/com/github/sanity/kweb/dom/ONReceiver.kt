@@ -2,6 +2,7 @@ package com.github.sanity.kweb.dom
 
 import com.github.sanity.kweb.CoreReceiver
 
+// TODO: Should this subclass Element?
 class ONReceiver(private val parent: Element) : Element(parent.receiver, parent.jsExpression) {
     fun event(eventName: String, rh: CoreReceiver.() -> Unit): ONReceiver {
         parent.addEventListener(eventName, rh)

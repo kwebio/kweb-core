@@ -1,5 +1,6 @@
 package com.github.sanity.kweb
 
+import com.github.sanity.kweb.plugins.KWebPlugin
 import io.netty.channel.Channel
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
 import org.wasabifx.wasabi.app.AppConfiguration
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class KWeb(val port: Int, val startHead: String = "", val endHead: String = "", override val createPage: CoreReceiver.() -> Unit) : ClientConduit(createPage) {
+class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), override val createPage: CoreReceiver.() -> Unit) : ClientConduit(createPage, plugins) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
 
@@ -25,9 +26,15 @@ class KWeb(val port: Int, val startHead: String = "", val endHead: String = "", 
         //TODO: Need to do housekeeping to delete old client data
         clients = ConcurrentHashMap<String, WSClientData>()
 
+        val startHeadBuilder = StringBuilder()
+        val endHeadBuilder = StringBuilder()
+        for (plugin in plugins) {
+            plugin.decorate(startHeadBuilder, endHeadBuilder)
+        }
+
         val bootstrapHtml = String(Files.readAllBytes(Paths.get(javaClass.getResource("kweb_bootstrap.html").toURI())), StandardCharsets.UTF_8)
-                .replace("<!-- START HEADER PLACEHOLDER -->", startHead)
-                .replace("<!-- END HEADER PLACEHOLDER -->", endHead)
+                .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
+                .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 
         server.get("/", {
             response.send(bootstrapHtml)
@@ -104,3 +111,4 @@ data class C2SWebsocketMessage(
 )
 
 data class C2SCallback(val callbackId: Int, val data: String)
+
