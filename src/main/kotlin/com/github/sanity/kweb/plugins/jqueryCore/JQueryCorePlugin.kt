@@ -9,6 +9,7 @@ import com.github.sanity.kweb.toJson
  */
 class JQueryCorePlugin : KWebPlugin {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
+        // Include the plugin, this is straight from the JQuery documentation
         startHead.appendln("""
         <script
                 src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -18,13 +19,17 @@ class JQueryCorePlugin : KWebPlugin {
     }
 }
 
+// A convenience value
 val jqueryCore = JQueryCorePlugin()
 
+// Support for $(...), since Kotlin doesn't allow methods called '$' (which is probably a good thing)
+// I just use jquery()
 fun Element.jquery(selector: String): JQueryReceiver {
     require(JQueryCorePlugin::class)
     return JQueryReceiver(this, "$(${selector.toJson()})")
 }
 
+// And here we can implement all of the useful JQuery functions
 class JQueryReceiver(private val parent : Element, private val js : String) {
     fun remove() {
         parent.execute(js+".remove();")
