@@ -8,10 +8,21 @@ import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
+import kotlin.reflect.jvm.jvmName
 
 open class Element(open val receiver: CoreReceiver, open val jsExpression: String) {
-    internal val plugins: Set<KClass<in KWebPlugin>> by lazy {
+    private val plugins: Set<KClass<in KWebPlugin>> by lazy {
         receiver.cc.plugins.map { it::class }.toSet()
+    }
+
+    internal fun require(vararg plugins: KClass<out KWebPlugin>) {
+        val missing = HashSet<String>()
+        for (requiredPlugin in plugins) {
+            if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
+        }
+        if (missing.isNotEmpty()) {
+            throw RuntimeException("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to KWeb constructor")
+        }
     }
 
     fun execute(js: String) {

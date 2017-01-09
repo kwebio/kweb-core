@@ -20,7 +20,10 @@ class JQueryCorePlugin : KWebPlugin {
 
 val jqueryCore = JQueryCorePlugin()
 
-fun Element.jquery(selector: String) = JQueryReceiver(this, "$(${selector.toJson()})")
+fun Element.jquery(selector: String): JQueryReceiver {
+    require(JQueryCorePlugin::class)
+    return JQueryReceiver(this, "$(${selector.toJson()})")
+}
 
 class JQueryReceiver(private val parent : Element, private val js : String) {
     fun remove() {
