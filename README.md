@@ -8,7 +8,7 @@ upcoming Kotlin 1.1 to elegantly avoid [callback hell](http://callbackhell.com/)
 
 It also incorporates a simple DSL for manipulating the browser's DOM.
 
-### Why
+### Why?
 Building rich webapps normally requires navigating the
 [awful Javascript ecosystem](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f#.dvybqadhr),
 choosing between a vast multitude of tools, transpilers, minifiers, state maintainers, and so on, most of which will
@@ -30,7 +30,7 @@ to HTML in the event that the browser doesn't support JavaScript.  This requirem
 was a decade ago.
 
 Uniquely, KWeb takes advantage of the new coroutines functionality in the upcoming Kotlin 1.1 to handle 
-asynchronously waiting for responses from the client in a way that's almost transparent to the user of KWeb.
+asynchronously waiting for responses from the client in a way that's almost transparent to the user of KWeb, without tying up threads (a definite no-no if you plan on having more than a handful of people visiting your website at a time).
 
 #### Status - 2017-01-08
 KWeb is currently very experimental, at this stage more of a proof-of-concept and playground for ideas than anything
