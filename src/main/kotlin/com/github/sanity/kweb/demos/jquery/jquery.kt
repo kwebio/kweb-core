@@ -10,7 +10,7 @@ import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
  */
 
 fun main(args: Array<String>) {
-    KWeb(8091, plugins = listOf(jqueryCore)) {
+    KWeb(port = 8091, plugins = listOf(jqueryCore)) {
         doc.body.apply {
             h1("Simple Demo of JQuery plugin")
             Thread.sleep(5000)

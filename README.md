@@ -44,6 +44,9 @@ Have questions, ideas, or otherwise want to contribute?
 
 Join our Slack channel [#kweb on kotlinlang](https://kotlinlang.slack.com/messages/kweb/)!  You may need to [sign up for kotlinlang](http://kotlinslackin.herokuapp.com/) first.
 
+Take a look at our [open issues](https://github.com/sanity/kweb/issues), some of them should be quite easy to tackle, even
+for someone new to KWeb.
+
 #### Getting started
 1. Ensure you are using the "Early Access Preview 1.1" Kotlin plugin in IDEA, see "How to Try It" section at the 
 bottom of JetBrain's [announcement](https://blog.jetbrains.com/kotlin/2016/12/kotlin-1-1-m04-is-here/).
