@@ -40,7 +40,9 @@ The DOM DSL only covers a tiny subset of its eventual functionality, just barely
 demo below.
 
 #### Get involved
-Join our Slack channel [#kweb on kotlinlang](https://kotlinlang.slack.com/messages/kweb/).  You may need to [sign up here](http://kotlinslackin.herokuapp.com/) first.
+Have questions, ideas, or otherwise want to contribute?
+
+Join our Slack channel [#kweb on kotlinlang](https://kotlinlang.slack.com/messages/kweb/)!  You may need to [sign up for kotlinlang](http://kotlinslackin.herokuapp.com/) first.
 
 #### Getting started
 1. Ensure you are using the "Early Access Preview 1.1" Kotlin plugin in IDEA, see "How to Try It" section at the 
