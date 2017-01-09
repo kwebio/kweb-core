@@ -1,14 +1,14 @@
 package com.github.sanity.kweb.demos.todo
 
-import com.github.sanity.kweb.clientConduits.WebsocketsClientConduit
+import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.Element
 import com.github.sanity.kweb.dom.Element.InputType.text
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 
 fun main(args: Array<String>) {
-    WebsocketsClientConduit(8091) {
-        // Starts a web server listening on port 8091
+    // Starts a web server listening on port 8091
+    KWeb(8091) {
         doc.body.apply {
             // Add a header element to the body, along with some simple instructions.
             h1("Simple KWeb demo - a to-do list")

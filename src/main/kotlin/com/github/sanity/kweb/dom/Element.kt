@@ -2,7 +2,7 @@ package com.github.sanity.kweb.dom
 
 import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.toJson
-import com.github.sanity.kweb.clientConduits.CoreReceiver
+import com.github.sanity.kweb.CoreReceiver
 import com.github.sanity.kweb.dom.Element.ButtonType.button
 import com.github.sanity.kweb.escapeEcma
 import com.github.sanity.kweb.gson

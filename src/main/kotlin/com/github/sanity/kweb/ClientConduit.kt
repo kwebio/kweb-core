@@ -1,4 +1,4 @@
-package com.github.sanity.kweb.clientConduits
+package com.github.sanity.kweb
 
 import com.github.sanity.kweb.dom.Element
 

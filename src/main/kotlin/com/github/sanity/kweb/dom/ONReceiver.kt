@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.dom
 
-import com.github.sanity.kweb.clientConduits.CoreReceiver
+import com.github.sanity.kweb.CoreReceiver
 
 class ONReceiver(private val parent: Element) : Element(parent.receiver, parent.jsExpression) {
     fun event(eventName: String, rh: CoreReceiver.() -> Unit): ONReceiver {

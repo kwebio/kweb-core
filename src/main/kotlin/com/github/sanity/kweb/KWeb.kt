@@ -1,7 +1,5 @@
-package com.github.sanity.kweb.clientConduits
+package com.github.sanity.kweb
 
-import com.github.sanity.kweb.gson
-import com.github.sanity.kweb.random
 import io.netty.channel.Channel
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
 import org.wasabifx.wasabi.app.AppConfiguration
@@ -19,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class WebsocketsClientConduit(val port: Int, val startHead: String = "", val endHead: String = "", override val rh: CoreReceiver.() -> Unit) : ClientConduit(rh) {
+class KWeb(val port: Int, val startHead: String = "", val endHead: String = "", override val rh: CoreReceiver.() -> Unit) : ClientConduit(rh) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
 
@@ -43,7 +41,7 @@ class WebsocketsClientConduit(val port: Int, val startHead: String = "", val end
                     val wsClientData = WSClientData(id = newClientId, clientChannel = ctx!!.channel())
                     clients.put(newClientId, wsClientData)
                     wsClientData.send(S2CWebsocketMessage(newClientId))
-                    rh.invoke(CoreReceiver(newClientId, this@WebsocketsClientConduit))
+                    rh.invoke(CoreReceiver(newClientId, this@KWeb))
                 } else {
                     val clientId = message.id ?: throw RuntimeException("Message has no id but is not hello")
                     val clientData = clients[clientId] ?: throw RuntimeException("No handler found for client $clientId")

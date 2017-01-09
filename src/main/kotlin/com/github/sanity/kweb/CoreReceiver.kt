@@ -1,4 +1,4 @@
-package com.github.sanity.kweb.clientConduits
+package com.github.sanity.kweb
 
 import java.util.concurrent.CompletableFuture
 

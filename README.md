@@ -60,7 +60,7 @@ This is way longer than it needs to be due to the extensive comments, it may als
 [here](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/demos/todo/todo.kt).
 
 ```kotlin
-import com.github.sanity.kweb.clientConduits.WebsocketsClientConduit
+import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.Element
 import com.github.sanity.kweb.dom.Element.InputType.text
 import kotlinx.coroutines.async
@@ -68,7 +68,7 @@ import kotlinx.coroutines.await
 
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
-    WebsocketsClientConduit(8091) {
+    KWeb(8091) {
         doc.body.apply {
             // Add a header element to the body, along with some simple instructions.
             h1("Simple KWeb demo - a to-do list")
@@ -129,7 +129,6 @@ fun Element.ULElement.newListItem(text: String) {
         on.click { delete() }
     }
 }
-
 ```
 
 ##### Try it
