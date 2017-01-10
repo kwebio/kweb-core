@@ -1,6 +1,6 @@
 ## KWeb
 
-KWeb is an experimental Kotlin library for building rich interactive web applications in pure Kotlin in a way
+KWeb is an experimental [Kotlin](http://kotlinlang.org/) library for building rich interactive web applications in pure Kotlin in a way
 that makes the distinction between web browser and server largely invisible to the programmer.
 
 In particular, it can use the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in 
