@@ -4,11 +4,8 @@ import com.github.salomonbrys.kotson.fromJson
 import com.github.salomonbrys.kotson.toJson
 import com.github.sanity.kweb.*
 import com.github.sanity.kweb.dom.Element.ButtonType.button
-import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.*
 import java.util.concurrent.CompletableFuture
-import kotlin.reflect.KClass
-import kotlin.reflect.jvm.jvmName
 
 open class Element(open val receiver: RootReceiver, open val jsExpression: String) {
 
@@ -33,6 +30,15 @@ open class Element(open val receiver: RootReceiver, open val jsExpression: Strin
     fun setInnerHTML(value: String): Element {
         execute(" $jsExpression.innerHTML=\"${value.escapeEcma()}\";")
         return this
+    }
+
+    fun class_(value: String): Element {
+        setAttribute("class", value)
+        return this
+    }
+
+    fun class_(classes: List<String>): Element {
+        return class_(classes.joinToString(separator = " "))
     }
 
     fun text(value: String): Element {
@@ -146,6 +152,7 @@ class ElementReader(private val receiver: RootReceiver, private val jsExpression
     val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName")
     val attributes: CompletableFuture<Map<String, String>> get() = receiver.evaluate("$jsExpression.attributes").thenApply { gson.fromJson<Map<String, String>>(it) }
     fun attribute(name: String): CompletableFuture<String> = receiver.evaluate("($jsExpression.getAttribute(\"${name.escapeEcma()}\"));")
+
     val children: CompletableFuture<ArrayList<Element>> get() {
         return receiver.evaluate("$jsExpression.children.length").thenApply({ numChildrenR ->
             val numChildren = numChildrenR.toInt()
@@ -156,6 +163,10 @@ class ElementReader(private val receiver: RootReceiver, private val jsExpression
             childList
         })
     }
+
+    val class_ = attribute("class")
+    val classList = class_.thenApply { it.split(' ') }
+
     val innerHtml: CompletableFuture<String> get() = receiver.evaluate("($jsExpression.innerHTML);")
 
 }
