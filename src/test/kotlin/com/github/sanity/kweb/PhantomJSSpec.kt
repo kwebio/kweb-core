@@ -18,6 +18,7 @@ class PhantomJSSpec : FreeSpec() {
                         async {
                             val h1 = h1("testing").class_("testclass")
                             println("Read class: ${h1.read.class_.await()}")
+                            execute("console.log('Kweb works');")
                         }.get()
                     }
                 }
@@ -29,9 +30,15 @@ var page = require('webpage').create();
 page.open('http://127.0.0.1:7324', function(status) {
   console.log("Status: " + status);
   if(status === "success") {
-    page.render('example.png');
+    waitFor(function() {
+        return page.evaluate(function() {
+            return $(".testclass").is(":visible");
+        });
+    }, function() {
+        console.log("<h1> rendered");
+        phantom.exit();
+    });
   }
-  phantom.exit();
 });
                 """.trimIndent()
             PhantomJS.exec(script.byteInputStream())
