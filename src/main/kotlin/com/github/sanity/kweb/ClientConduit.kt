@@ -7,7 +7,7 @@ import com.github.sanity.kweb.plugins.KWebPlugin
  * Created by ian on 1/1/17.
  */
 
-abstract class ClientConduit(open val createPage: CoreReceiver.() -> Unit, internal val plugins: List<KWebPlugin>) {
+abstract class ClientConduit(open val createPage: RootReceiver.() -> Unit, internal val plugins: List<KWebPlugin>) {
 
     abstract fun execute(clientId: String, message: String)
 
@@ -18,7 +18,7 @@ abstract class ClientConduit(open val createPage: CoreReceiver.() -> Unit, inter
 
 class ReadableElement(val tag: String, val attributes: Map<String, Any>)
 
-class Document(private val receiver: CoreReceiver) {
+class Document(private val receiver: RootReceiver) {
     fun getElementById(id: String) = Element(receiver, "document.getElementById(\"$id\")")
 
     val body = Element(receiver, "document.body")

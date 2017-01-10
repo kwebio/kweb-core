@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), override val createPage: CoreReceiver.() -> Unit) : ClientConduit(createPage, plugins) {
+class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), override val createPage: RootReceiver.() -> Unit) : ClientConduit(createPage, plugins) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
 
@@ -48,7 +48,7 @@ class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), o
                     val wsClientData = WSClientData(id = newClientId, clientChannel = ctx!!.channel())
                     clients.put(newClientId, wsClientData)
                     wsClientData.send(S2CWebsocketMessage(newClientId))
-                    createPage.invoke(CoreReceiver(newClientId, this@KWeb))
+                    createPage.invoke(RootReceiver(newClientId, this@KWeb))
                 } else {
                     val clientId = message.id ?: throw RuntimeException("Message has no id but is not hello")
                     val clientData = clients[clientId] ?: throw RuntimeException("No handler found for client $clientId")

@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.plugins.jqueryCore
 
-import com.github.sanity.kweb.dom.Element
+import com.github.sanity.kweb.RootReceiver
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.toJson
 
@@ -24,14 +24,14 @@ val jqueryCore = JQueryCorePlugin()
 
 // Support for $(...), since Kotlin doesn't allow methods called '$' (which is probably a good thing)
 // I just use jquery()
-fun Element.jquery(selector: String): JQueryReceiver {
+fun RootReceiver.jquery(selector: String): JQueryReceiver {
     require(JQueryCorePlugin::class)
     return JQueryReceiver(this, "$(${selector.toJson()})")
 }
 
 // And here we can implement all of the useful JQuery functions
-class JQueryReceiver(private val parent : Element, private val js : String) {
+class JQueryReceiver(private val rootReceiver : RootReceiver, private val js : String) {
     fun remove() {
-        parent.execute(js+".remove();")
+        rootReceiver.execute(js+".remove();")
     }
 }

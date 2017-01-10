@@ -10,20 +10,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-open class Element(open val receiver: CoreReceiver, open val jsExpression: String) {
-    private val plugins: Set<KClass<in KWebPlugin>> by lazy {
-        receiver.cc.plugins.map { it::class }.toSet()
-    }
-
-    internal fun require(vararg plugins: KClass<out KWebPlugin>) {
-        val missing = HashSet<String>()
-        for (requiredPlugin in plugins) {
-            if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
-        }
-        if (missing.isNotEmpty()) {
-            throw RuntimeException("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to KWeb constructor")
-        }
-    }
+open class Element(open val receiver: RootReceiver, open val jsExpression: String) {
 
     fun execute(js: String) {
         receiver.execute(js)
@@ -48,14 +35,14 @@ open class Element(open val receiver: CoreReceiver, open val jsExpression: Strin
         return this
     }
 
-    fun text(value: String): HTMLReceiver {
+    fun text(value: String): Element {
         execute("""
                 {
                     var ntn=document.createTextNode("${value.escapeEcma()}");
                     $jsExpression.appendChild(ntn);
                 }
         """)
-        return HTMLReceiver(this)
+        return this
     }
 
     fun createElement(tag: String, attributes: Map<String, Any> = Collections.emptyMap()): Element {
@@ -81,7 +68,7 @@ open class Element(open val receiver: CoreReceiver, open val jsExpression: Strin
         execute("$jsExpression.parentNode.removeChild($jsExpression)")
     }
 
-    fun addEventListener(eventName: String, rh: CoreReceiver.() -> Unit): Element {
+    fun addEventListener(eventName: String, rh: RootReceiver.() -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
         val js = jsExpression + """
             .addEventListener(${eventName.toJson()}, function() {
@@ -103,20 +90,20 @@ open class Element(open val receiver: CoreReceiver, open val jsExpression: Strin
      *       match something in the inner-most block
      */
 
-    fun h1(text: String, attributes: Map<String, String> = Collections.emptyMap()): HTMLReceiver {
+    fun h1(text: String, attributes: Map<String, String> = Collections.emptyMap()): Element {
         return createElement("h1", attributes).text(text)
     }
 
-    fun p(text: String, attributes: Map<String, String> = Collections.emptyMap()): HTMLReceiver {
+    fun p(text: String, attributes: Map<String, String> = Collections.emptyMap()): Element {
         return createElement("p", attributes).text(text)
     }
 
     fun ul(attributes: Map<String, String> = Collections.emptyMap()): ULElement {
         val e = createElement("ul", attributes)
-        return ULElement(HTMLReceiver(e))
+        return ULElement(e)
     }
 
-    class ULElement(parent: Element) : HTMLReceiver(parent) {
+    class ULElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
         fun li(attributes: Map<String, String> = Collections.emptyMap()) = createElement("li", attributes)
     }
 
@@ -155,7 +142,7 @@ open class Element(open val receiver: CoreReceiver, open val jsExpression: Strin
 
 }
 
-class ElementReader(private val receiver: CoreReceiver, private val jsExpression: String) {
+class ElementReader(private val receiver: RootReceiver, private val jsExpression: String) {
     val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName")
     val attributes: CompletableFuture<Map<String, String>> get() = receiver.evaluate("$jsExpression.attributes").thenApply { gson.fromJson<Map<String, String>>(it) }
     fun attribute(name: String): CompletableFuture<String> = receiver.evaluate("($jsExpression.getAttribute(\"${name.escapeEcma()}\"));")
