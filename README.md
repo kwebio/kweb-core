@@ -32,7 +32,13 @@ was a decade ago.
 Uniquely, KWeb takes advantage of the new coroutines functionality in the upcoming Kotlin 1.1 to handle 
 asynchronously waiting for responses from the client in a way that's almost transparent to the user of KWeb, without tying up threads (a definite no-no if you plan on having more than a handful of people visiting your website at a time).
 
-#### Status - 2017-01-08
+#### News
+##### 2017-01-09: Plugins
+KWeb now has a simple but flexible plugin mechanism, allowing the addition of flexible support for 3rd party JavaScript libraries.
+
+As an example, here is a [demo](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/demos/jquery/jquery.kt) of a rudimentary JQuery plugin being used, and [here](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/plugins/jqueryCore/JQueryCorePlugin.kt) you can see its implementation.  Currently it only supports .remove() - but you should get a feel for how easy it will be to flesh out other functionality.
+
+##### 2017-01-08: Initial announcement
 KWeb is currently very experimental, at this stage more of a proof-of-concept and playground for ideas than anything
 even close to being useful in production.
 
