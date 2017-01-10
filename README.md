@@ -34,7 +34,7 @@ asynchronously waiting for responses from the client in a way that's almost tran
 
 #### News
 ##### 2017-01-09: Plugins
-KWeb now has a simple but flexible plugin mechanism, allowing the addition of flexible support for 3rd party JavaScript libraries.
+KWeb now has a simple but flexible plugin mechanism, allowing the addition of support for 3rd party JavaScript libraries.
 
 As an example, here is a [demo](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/demos/jquery/jquery.kt) of a rudimentary JQuery plugin being used, and [here](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/plugins/jqueryCore/JQueryCorePlugin.kt) you can see its implementation.  Currently it only supports .remove() - but you should get a feel for how easy it will be to flesh out other functionality.
 
