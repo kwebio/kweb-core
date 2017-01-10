@@ -48,8 +48,6 @@ repositories {
 }
 
 dependencies {
-    def kotlinx_html_version = "0.5.11"
-
     compile 'org.wasabifx:wasabi:0.3.120'
     //compile 'org.jetbrains.kotlinx:vertx3-lang-kotlin:0.0.+'
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
@@ -59,6 +57,10 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-async:0.2-beta'
 
     testCompile 'io.kotlintest:kotlintest:1.3.4'
+    testCompile 'com.moodysalem:phantomjs-wrapper:3.0.0'
+    testCompile 'com.moodysalem:phantomjs-wrapper-windows-binary:3.0.0'
+    testCompile 'com.moodysalem:phantomjs-wrapper-linux-binary:3.0.0'
+    testCompile 'com.moodysalem:phantomjs-wrapper-macosx-binary:3.0.0'
 }
 /*
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
