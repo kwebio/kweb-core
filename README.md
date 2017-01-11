@@ -19,7 +19,7 @@ KWeb intends to solve this.
 ### How does it work?
 KWeb treats the web browser as a fairly dumb robot, keeping most of the intelligence server-side,
 relaying instructions to the client via a websocket, and receiving responses from the client.  Instructions to the server
-are simple JavaScript snippets which the browser immediately executes, (optionally) returning the result to the server if requested.
+are simple JavaScript snippets which the browser immediately executes, returning the result to the server if requested.
 
 In this regard it is somewhat similar to [Vaadin](https://vaadin.com/home), although unlike Vaadin it doesn't incorporate
 a large widget library, and it's much simpler to integrate into a project (just add the dependency).
