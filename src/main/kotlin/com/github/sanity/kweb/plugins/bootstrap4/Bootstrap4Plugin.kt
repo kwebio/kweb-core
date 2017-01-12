@@ -1,12 +1,15 @@
 package com.github.sanity.kweb.plugins.bootstrap4
 
 import com.github.sanity.kweb.plugins.KWebPlugin
+import com.github.sanity.kweb.plugins.jqueryCore.JQueryCorePlugin
+import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
+import com.github.sanity.kweb.toJson
 
 /**
  * Created by ian on 1/10/17.
  */
 
-class Bootstrap4Plugin : KWebPlugin {
+class Bootstrap4Plugin : KWebPlugin(setOf(jqueryCore)) {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         // From https://v4-alpha.getbootstrap.com/getting-started/download/#source-files
         startHead.appendln("""
