@@ -1,6 +1,6 @@
 ## KWeb
 
-KWeb is an experimental Kotlin library for building rich interactive web applications in pure Kotlin in a way
+KWeb is an experimental [Kotlin](http://kotlinlang.org/) library for building rich interactive web applications in pure Kotlin in a way
 that makes the distinction between web browser and server largely invisible to the programmer.
 
 In particular, it can use the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in 
@@ -19,7 +19,7 @@ KWeb intends to solve this.
 ### How does it work?
 KWeb treats the web browser as a fairly dumb robot, keeping most of the intelligence server-side,
 relaying instructions to the client via a websocket, and receiving responses from the client.  Instructions to the server
-are simple JavaScript snippets which the browser immediately executes, (optionally) returning the result to the server if requested.
+are simple JavaScript snippets which the browser immediately executes, returning the result to the server if requested.
 
 In this regard it is somewhat similar to [Vaadin](https://vaadin.com/home), although unlike Vaadin it doesn't incorporate
 a large widget library, and it's much simpler to integrate into a project (just add the dependency).
@@ -51,7 +51,7 @@ Have questions, ideas, or otherwise want to contribute?
 Join our Slack channel [#kweb on kotlinlang](https://kotlinlang.slack.com/messages/kweb/)!  You may need to [sign up for kotlinlang](http://kotlinslackin.herokuapp.com/) first.
 
 Take a look at our [open issues](https://github.com/sanity/kweb/issues), some of them should be quite easy to tackle, even
-for someone new to KWeb.
+for someone new to KWeb.  I will do my best to review and merge any suitable pull requests promptly.
 
 #### Getting started
 1. Ensure you are using the "Early Access Preview 1.1" Kotlin plugin in IDEA, see "How to Try It" section at the 
