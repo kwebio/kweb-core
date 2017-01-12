@@ -9,6 +9,11 @@
 
         var kwebClientId = 0;
         var socket = new WebSocket(toWSUrl("ws"));
+
+        function callbackWs(callbackId, data) {
+            socket.send(JSON.stringify({"id": kwebClientId, "callback": {"callbackId" : callbackId, "data" : data}}))
+        }
+
         function connectWs() {
             if (window.WebSocket === undefined) {
                 document.body.innerHTML = "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>"
@@ -17,7 +22,6 @@
                     socket.send(JSON.stringify({"hello": true}))
                 };
                 socket.onmessage = function (event) {
-                    console.log("Received message: "+event.data)
                     var msg = JSON.parse(event.data);
                     if (kwebClientId == 0) {
                         kwebClientId = msg["yourId"]
@@ -39,9 +43,6 @@
             }
         }
 
-        function callbackWs(callbackId, data) {
-            socket.send(JSON.stringify({"id": kwebClientId, "callback": {"callbackId" : callbackId, "data" : data}}))
-        }
     </script>
     <!-- END HEADER PLACEHOLDER -->
 </head>
