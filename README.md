@@ -30,7 +30,7 @@ to HTML in the event that the browser doesn't support JavaScript.  This requirem
 was a decade ago.
 
 Uniquely, KWeb takes advantage of the new coroutines functionality in the upcoming Kotlin 1.1 to handle 
-asynchronously waiting for responses from the client in a way that's almost transparent to the user of KWeb, without tying up threads (a definite no-no if you plan on having more than a handful of people visiting your website at a time).
+asynchronously waiting for responses from the client in a way that's almost transparent to the user of KWeb, without tying up threads (a definite no-no if you plan on having more than a handful of people visiting your website at a delay).
 
 #### News
 ##### 2017-01-09: Plugins
@@ -112,7 +112,7 @@ fun main(args: Array<String>) {
                 // We start an async block, which will allow us to use `await` within the block
                 async {
                     // This is where async comes in.  inputElement.getValue() sends a message to the browser
-                    // asking for the `value` of inputElement.  This will take time so
+                    // asking for the `value` of inputElement.  This will take delay so
                     // inputElement.getValue() actually returns a future.  `await()` then uses coroutines
                     // to effectively wait until the future comes back, but crucially, without
                     // tying up a thread (which would get very inefficient very quickly).

@@ -63,7 +63,7 @@ class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), o
                 }
             }
         }
-        server.start()
+        server.start(wait = false)
     }
 
     private fun applyPlugin(plugin: KWebPlugin, appliedPlugins: MutableSet<KWebPlugin>, endHeadBuilder: java.lang.StringBuilder, startHeadBuilder: java.lang.StringBuilder) {
