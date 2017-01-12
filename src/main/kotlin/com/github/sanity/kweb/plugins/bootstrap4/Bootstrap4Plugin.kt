@@ -19,3 +19,6 @@ class Bootstrap4Plugin : KWebPlugin {
         )
     }
 }
+
+// A convenience value
+val bootstrap4 = Bootstrap4Plugin()
