@@ -7,7 +7,7 @@ import com.github.sanity.kweb.dom.Element.ButtonType.button
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-open class Element(open val receiver: RootReceiver, open val jsExpression: String) {
+open class Element(open val receiver: RootReceiver, open var jsExpression: String) {
 
     fun execute(js: String) {
         receiver.execute(js)
@@ -24,6 +24,9 @@ open class Element(open val receiver: RootReceiver, open val jsExpression: Strin
 
     fun setAttribute(name: String, value: Any): Element {
         execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+        if (name == "id") {
+            jsExpression = "document.getElementById(${value.toJson()})"
+        }
         return this
     }
 
@@ -164,8 +167,8 @@ class ElementReader(private val receiver: RootReceiver, private val jsExpression
         })
     }
 
-    val class_ = attribute("class")
-    val classList = class_.thenApply { it.split(' ') }
+    fun class_() = attribute("class")
+    fun classList() = class_().thenApply { it.split(' ') }
 
     val innerHtml: CompletableFuture<String> get() = receiver.evaluate("($jsExpression.innerHTML);")
 

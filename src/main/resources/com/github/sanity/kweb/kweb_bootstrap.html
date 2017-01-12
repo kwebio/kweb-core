@@ -17,6 +17,7 @@
                     socket.send(JSON.stringify({"hello": true}))
                 };
                 socket.onmessage = function (event) {
+                    console.log("Received message: "+event.data)
                     var msg = JSON.parse(event.data);
                     if (kwebClientId == 0) {
                         kwebClientId = msg["yourId"]

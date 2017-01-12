@@ -56,7 +56,7 @@ class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), o
                         message.callback != null -> {
                             val (resultId, result) = message.callback
                             val resultHandler = clientData.handlers[resultId] ?: throw RuntimeException("No data handler for $resultId for client $clientId")
-                            resultHandler(result)
+                            resultHandler(result ?: "")
                         }
                     }
                 }
@@ -110,5 +110,5 @@ data class C2SWebsocketMessage(
         val callback: C2SCallback?
 )
 
-data class C2SCallback(val callbackId: Int, val data: String)
+data class C2SCallback(val callbackId: Int, val data: String?)
 
