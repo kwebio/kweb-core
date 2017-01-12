@@ -7,7 +7,7 @@ import com.github.sanity.kweb.toJson
 /**
  * Created by ian on 1/9/17.
  */
-class JQueryCorePlugin : KWebPlugin {
+class JQueryCorePlugin : KWebPlugin() {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         // Include the plugin, this is straight from the JQuery documentation
         startHead.appendln("""
