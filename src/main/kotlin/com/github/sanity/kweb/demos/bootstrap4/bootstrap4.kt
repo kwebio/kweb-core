@@ -38,7 +38,7 @@ fun main(args: Array<String>) {
                 addClasses("bd-pageheader", "text-center", "text-sm-left")
 
                 div().apply {
-                    setClasses("container")
+                    addClasses("container")
 
                     h1("KWeb Bootstrap4 demo")
 
