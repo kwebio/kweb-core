@@ -1,5 +1,8 @@
 package com.github.sanity.kweb
 
+import com.github.sanity.kweb.dom.element.creation.h1
+import com.github.sanity.kweb.dom.element.modification.setAttribute
+import com.github.sanity.kweb.dom.element.read.read
 import com.moodysalem.phantomjs.wrapper.PhantomJS
 import io.kotlintest.specs.FreeSpec
 import kotlinx.coroutines.async
