@@ -144,3 +144,6 @@ fun Element.ULElement.newListItem(text: String) {
 1. Go to `src/main/kotlin/com/github/sanity/kweb/demos/todo/todo.kt` in IDEA
 2. Run it
 3. Visit [http://127.0.0.1:8091/](http://127.0.0.1:8091/) in your browser.
+
+### Development
+[![Build Status](https://travis-ci.org/sanity/kweb.svg?branch=master)](https://travis-ci.org/sanity/kweb)
