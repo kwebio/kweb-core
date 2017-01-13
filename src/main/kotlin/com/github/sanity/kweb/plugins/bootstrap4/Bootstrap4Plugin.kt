@@ -1,7 +1,6 @@
 package com.github.sanity.kweb.plugins.bootstrap4
 
 import com.github.sanity.kweb.dom.Element
-import com.github.sanity.kweb.dom.Element.DIVElement
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 
@@ -27,12 +26,7 @@ class Bootstrap4Plugin : KWebPlugin(setOf(jqueryCore)) {
 val bootstrap4 = Bootstrap4Plugin()
 
 // The bootstrap DSL
-fun DIVElement.bootstrap4(): BootstrapReceiver = BootstrapReceiver(this)
-
-class BootstrapReceiver(private val element: Element) {
-    // Should the DSL create BS elements, or just modify them as this does?
-    fun container(): BootstrapReceiver {
-        element.addClasses("container")
-        return this
-    }
+fun Element.container(tag: String = "div", fluid: Boolean = false): Element {
+    val fluidClassModifier = if (fluid) "-fluid" else ""
+    return createElement(tag, attributes = mapOf("class" to "container$fluidClassModifier"))
 }

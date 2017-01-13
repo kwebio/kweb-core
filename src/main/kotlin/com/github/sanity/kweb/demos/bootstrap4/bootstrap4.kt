@@ -3,6 +3,7 @@ package com.github.sanity.kweb.demos.bootstrap4
 import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.Element.InputType.text
 import com.github.sanity.kweb.plugins.bootstrap4.bootstrap4
+import com.github.sanity.kweb.plugins.bootstrap4.container
 
 /*
 From http://v4-alpha.getbootstrap.com/components/forms/#textual-inputs
@@ -35,18 +36,15 @@ fun main(args: Array<String>) {
     KWeb(port = 8091, plugins = listOf(bootstrap4)) {
         doc.body.apply {
             div().apply {
-                addClasses("bd-pageheader", "text-center", "text-sm-left")
-
-                div().apply {
-                    bootstrap4().container()
+                container().apply {
                     h1("KWeb Bootstrap4 demo")
 
                     p("The following is a simple text field which does nothing")
                 }
             }
 
-            div().apply {
-                addClasses("container", "bd-content")
+            container().apply {
+                addClasses("bd-content")
 
                 div().apply {
                     addClasses("form-group", "row")
