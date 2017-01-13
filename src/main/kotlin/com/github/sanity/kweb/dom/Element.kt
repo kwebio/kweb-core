@@ -36,13 +36,9 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         return this
     }
 
-    fun class_(value: String): Element {
-        setAttribute("class", value)
+    fun class_(vararg value: String): Element {
+        setAttribute("class", value.joinToString(separator = " "))
         return this
-    }
-
-    fun class_(classes: List<String>): Element {
-        return class_(classes.joinToString(separator = " "))
     }
 
     fun text(value: String): Element {
@@ -73,6 +69,8 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         execute(javaScript.toString())
         return Element(receiver, "document.getElementById(\"$id\")")
     }
+
+    fun div(attributes: Map<String, Any> = Collections.emptyMap()): Element = createElement("div", attributes)
 
     fun delete() {
         execute("$jsExpression.parentNode.removeChild($jsExpression)")
@@ -119,9 +117,9 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
 
     val on: ONReceiver get() = ONReceiver(this)
 
-    fun input(type: InputType, name: String? = null, initialValue: String? = null, size: Int? = null): InputElement {
+    fun input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null): InputElement {
         val attributes = HashMap<String, Any>()
-        attributes.put("type", type.name)
+        if (type != null) attributes.put("type", type.name)
         if (name != null) attributes.put("name", name)
         if (initialValue != null) attributes.put("value", initialValue)
         if (size != null) attributes.put("size", size)

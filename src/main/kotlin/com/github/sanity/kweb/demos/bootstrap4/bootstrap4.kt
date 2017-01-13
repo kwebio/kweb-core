@@ -1,6 +1,7 @@
 package com.github.sanity.kweb.demos.bootstrap4
 
 import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.dom.Element.InputType.text
 import com.github.sanity.kweb.plugins.bootstrap4.bootstrap4
 
 /*
@@ -33,11 +34,11 @@ fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     KWeb(port = 8091, plugins = listOf(bootstrap4)) {
         doc.body.apply {
-            createElement("div").apply {
-                setAttribute("class", "bd-pageheader text-center text-sm-left")
+            div().apply {
+                class_("bd-pageheader", "text-center", "text-sm-left")
 
-                createElement("div").apply {
-                    setAttribute("class", "container")
+                div().apply {
+                    class_("container")
 
                     h1("KWeb Bootstrap4 demo")
 
@@ -45,24 +46,24 @@ fun main(args: Array<String>) {
                 }
             }
 
-            createElement("div").apply {
-                setAttribute("class", "container bd-content")
+            div().apply {
+                class_("container bd-content")
 
-                createElement("div").apply {
-                    setAttribute("class", "form-group row")
+                div().apply {
+                    class_("form-group row")
 
                     val pairId = "example-text-input"
                     createElement("label").apply {
                         setAttribute("for", pairId)
-                        setAttribute("class", "col-2 col-form-label")
+                        class_("col-2 col-form-label")
                         text("Text")
                     }
 
-                    createElement("div").apply {
-                        setAttribute("class", "col-10")
+                    div().apply {
+                        class_("col-10")
 
-                        createElement("input").apply {
-                            setAttribute("class", "form-control")
+                        input(type = text, initialValue = "Artisanal kale").apply {
+                            class_("form-control")
                             setAttribute("type", "text")
                             setAttribute("value", "Artisanal kale")
                             setAttribute("id", pairId)
