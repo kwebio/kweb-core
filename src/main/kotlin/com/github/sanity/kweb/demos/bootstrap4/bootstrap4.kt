@@ -38,8 +38,7 @@ fun main(args: Array<String>) {
                 addClasses("bd-pageheader", "text-center", "text-sm-left")
 
                 div().apply {
-                    addClasses("container")
-
+                    bootstrap4().container()
                     h1("KWeb Bootstrap4 demo")
 
                     p("The following is a simple text field which does nothing")

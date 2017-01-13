@@ -1,5 +1,6 @@
 package com.github.sanity.kweb.plugins.bootstrap4
 
+import com.github.sanity.kweb.dom.Element.DIVElement
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 
@@ -23,3 +24,14 @@ class Bootstrap4Plugin : KWebPlugin(setOf(jqueryCore)) {
 
 // A convenience value
 val bootstrap4 = Bootstrap4Plugin()
+
+// The bootstrap DSL
+fun DIVElement.bootstrap4(): BootstrapReceiver = BootstrapReceiver(this)
+
+class BootstrapReceiver(private val element: DIVElement) {
+    fun container(): BootstrapReceiver {
+        element.addClasses("container")
+        return this
+    }
+
+}

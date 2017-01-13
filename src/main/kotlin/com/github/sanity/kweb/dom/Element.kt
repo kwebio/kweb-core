@@ -80,7 +80,10 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         return Element(receiver, "document.getElementById(\"$id\")")
     }
 
-    fun div(attributes: Map<String, Any> = Collections.emptyMap()): Element = createElement("div", attributes)
+    fun div(attributes: Map<String, Any> = Collections.emptyMap()) = DIVElement(createElement("div", attributes))
+
+    class DIVElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+    }
 
     fun delete() {
         execute("$jsExpression.parentNode.removeChild($jsExpression)")
