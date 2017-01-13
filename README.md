@@ -70,8 +70,8 @@ This is way longer than it needs to be due to the extensive comments, it may als
 
 ```kotlin
 import com.github.sanity.kweb.KWeb
-import com.github.sanity.kweb.dom.Element
-import com.github.sanity.kweb.dom.Element.InputType.text
+import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.element.Element.InputType.setText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 
@@ -81,7 +81,7 @@ fun main(args: Array<String>) {
         doc.body.apply {
             // Add a header element to the body, along with some simple instructions.
             h1("Simple KWeb demo - a to-do list")
-            p("Edit the text box below and click the button to add the item.  Click an item to remove it.")
+            p("Edit the setText box below and click the button to add the item.  Click an item to remove it.")
 
             // If you're unfamiliar with the `apply` function, read this:
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
@@ -90,17 +90,17 @@ fun main(args: Array<String>) {
             val ul = ul().apply {
 
                 // Add some initial items to the list
-                for (text in listOf("one", "two", "three")) {
+                for (setText in listOf("one", "two", "three")) {
                     // We define this below
-                    newListItem(text)
+                    newListItem(setText)
                 }
             }
 
             // Next create an input element
-            val inputElement = input(type = text, size = 20)
+            val inputElement = input(type = setText, size = 20)
 
             // And a button to add a new item
-            button().text("Add Item")
+            button().setText("Add Item")
                     // Here we register a callback, the code block will be called when the
                     // user clicks this button.
                     .on.click {
@@ -132,9 +132,9 @@ fun main(args: Array<String>) {
 
 // Here we use an extension event which can be used on any <UL> element to add a list item which will
 // delete itself when clicked.
-fun Element.ULElement.newListItem(text: String) {
+fun Element.ULElement.newListItem(setText: String) {
     li().apply {
-        text(text)
+        setText(setText)
         on.click { delete() }
     }
 }

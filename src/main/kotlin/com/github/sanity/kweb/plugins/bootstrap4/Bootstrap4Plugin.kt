@@ -1,6 +1,7 @@
 package com.github.sanity.kweb.plugins.bootstrap4
 
-import com.github.sanity.kweb.dom.Element
+import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.element.creation.createElement
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 

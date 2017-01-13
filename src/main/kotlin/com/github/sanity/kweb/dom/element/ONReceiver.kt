@@ -1,6 +1,8 @@
-package com.github.sanity.kweb.dom
+package com.github.sanity.kweb.dom.element
 
 import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.element.modification.addEventListener
 
 // TODO: Should this subclass Element?
 class ONReceiver(private val parent: Element) : Element(parent.receiver, parent.jsExpression) {

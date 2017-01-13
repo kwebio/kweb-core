@@ -1,6 +1,6 @@
 package com.github.sanity.kweb
 
-import com.github.sanity.kweb.dom.Element
+import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.plugins.KWebPlugin
 
 /**

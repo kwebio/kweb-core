@@ -1,7 +1,10 @@
 package com.github.sanity.kweb.demos.bootstrap4
 
 import com.github.sanity.kweb.KWeb
-import com.github.sanity.kweb.dom.Element.InputType.text
+import com.github.sanity.kweb.dom.element.creation.*
+import com.github.sanity.kweb.dom.element.modification.addClasses
+import com.github.sanity.kweb.dom.element.modification.setAttribute
+import com.github.sanity.kweb.dom.element.modification.setText
 import com.github.sanity.kweb.plugins.bootstrap4.bootstrap4
 import com.github.sanity.kweb.plugins.bootstrap4.container
 
@@ -9,13 +12,13 @@ import com.github.sanity.kweb.plugins.bootstrap4.container
 From http://v4-alpha.getbootstrap.com/components/forms/#textual-inputs
 
 <div class="form-group row">
-  <label for="example-text-input" class="col-2 col-form-label">Text</label>
+  <label for="example-setText-input" class="col-2 col-form-label">Text</label>
   <div class="col-10">
-    <input class="form-control" type="text" value="Artisanal kale" id="example-text-input">
+    <input class="form-control" type="setText" value="Artisanal kale" id="example-setText-input">
   </div>
 </div>
 
-<div class="bd-pageheader text-center text-sm-left">
+<div class="bd-pageheader setText-center setText-sm-left">
   <div class="container">
     <h1>{{ page.title }}</h1>
     <p class="lead">
@@ -39,7 +42,7 @@ fun main(args: Array<String>) {
                 container().apply {
                     h1("KWeb Bootstrap4 demo")
 
-                    p("The following is a simple text field which does nothing")
+                    p("The following is a simple setText field which does nothing")
                 }
             }
 
@@ -49,19 +52,19 @@ fun main(args: Array<String>) {
                 div().apply {
                     addClasses("form-group", "row")
 
-                    val pairId = "example-text-input"
+                    val pairId = "example-setText-input"
                     createElement("label").apply {
                         setAttribute("for", pairId)
                         addClasses("col-2", "col-form-label")
-                        text("Text")
+                        setText("Text")
                     }
 
                     div().apply {
                         addClasses("col-10")
 
-                        input(type = text, initialValue = "Artisanal kale").apply {
+                        input(type = InputType.text, initialValue = "Artisanal kale").apply {
                             addClasses("form-control")
-                            setAttribute("type", "text")
+                            setAttribute("type", "setText")
                             setAttribute("value", "Artisanal kale")
                             setAttribute("id", pairId)
                         }

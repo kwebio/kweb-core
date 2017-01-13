@@ -1,6 +1,8 @@
 package com.github.sanity.kweb.demos.jquery
 
 import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.dom.element.creation.h1
+import com.github.sanity.kweb.dom.element.modification.setClasses
 import com.github.sanity.kweb.plugins.jqueryCore.jquery
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 

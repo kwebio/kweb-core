@@ -1,8 +1,8 @@
 package com.github.sanity.kweb.demos.todo
 
 import com.github.sanity.kweb.KWeb
-import com.github.sanity.kweb.dom.Element
-import com.github.sanity.kweb.dom.Element.InputType.text
+import com.github.sanity.kweb.dom.element.creation.*
+import com.github.sanity.kweb.dom.element.modification.setText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 
@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
         doc.body.apply {
             // Add a header element to the body, along with some simple instructions.
             h1("Simple KWeb demo - a to-do list")
-            p("Edit the text box below and click the button to add the item.  Click an item to remove it.")
+            p("Edit the setText box below and click the button to add the item.  Click an item to remove it.")
 
             // If you're unfamiliar with the `apply` function, read this:
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
@@ -28,10 +28,10 @@ fun main(args: Array<String>) {
             }
 
             // Next create an input element
-            val inputElement = input(type = text, size = 20)
+            val inputElement = input(type = InputType.text, size = 20)
 
             // And a button to add a new item
-            button().text("Add Item")
+            button().setText("Add Item")
                     // Here we register a callback, the code block will be called when the
                     // user clicks this button.
                     .on.click {
@@ -63,9 +63,9 @@ fun main(args: Array<String>) {
 
 // Here we use an extension method which can be used on any <UL> element to add a list item which will
 // delete itself when clicked.
-fun Element.ULElement.newListItem(text: String) {
+fun ULElement.newListItem(text: String) {
     li().apply {
-        text(text)
+        setText(text)
         on.click { delete() }
     }
 }
