@@ -7,6 +7,7 @@ import com.github.sanity.kweb.dom.Element.ButtonType.button
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
+
 open class Element(open val receiver: RootReceiver, open var jsExpression: String) {
 
     fun execute(js: String) {
@@ -31,17 +32,23 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
     }
 
     fun setInnerHTML(value: String): Element {
-        execute(" $jsExpression.innerHTML=\"${value.escapeEcma()}\";")
+        execute("$jsExpression.innerHTML=\"${value.escapeEcma()}\";")
         return this
     }
 
-    fun class_(value: String): Element {
-        setAttribute("class", value)
+    fun setClasses(vararg value: String): Element {
+        setAttribute("class", value.joinToString(separator = " ").toJson())
         return this
     }
 
-    fun class_(classes: List<String>): Element {
-        return class_(classes.joinToString(separator = " "))
+    fun addClasses(vararg classes: String): Element {
+        for (class_ in classes) {
+            if (class_.contains(' ')) {
+                throw RuntimeException("Class names must not contain spaces")
+            }
+            execute("addClass($jsExpression, ${class_.toJson()});")
+        }
+        return this
     }
 
     fun text(value: String): Element {
@@ -73,6 +80,11 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         return Element(receiver, "document.getElementById(\"$id\")")
     }
 
+    fun div(attributes: Map<String, Any> = Collections.emptyMap()) = DIVElement(createElement("div", attributes))
+
+    class DIVElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+    }
+
     fun delete() {
         execute("$jsExpression.parentNode.removeChild($jsExpression)")
     }
@@ -81,7 +93,7 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         val callbackId = Math.abs(random.nextInt())
         val js = jsExpression + """
             .addEventListener(${eventName.toJson()}, function() {
-                callbackWs($callbackId, false)
+                callbackWs($callbackId, false);
             });
         """
         receiver.executeWithCallback(js, callbackId) {
@@ -118,9 +130,9 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
 
     val on: ONReceiver get() = ONReceiver(this)
 
-    fun input(type: InputType, name: String? = null, initialValue: String? = null, size: Int? = null): InputElement {
+    fun input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null): InputElement {
         val attributes = HashMap<String, Any>()
-        attributes.put("type", type.name)
+        if (type != null) attributes.put("type", type.name)
         if (name != null) attributes.put("name", name)
         if (initialValue != null) attributes.put("value", initialValue)
         if (size != null) attributes.put("size", size)

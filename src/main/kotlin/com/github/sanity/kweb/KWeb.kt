@@ -49,7 +49,11 @@ class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), o
                     val wsClientData = WSClientData(id = newClientId, clientChannel = ctx!!.channel())
                     clients.put(newClientId, wsClientData)
                     wsClientData.send(S2CWebsocketMessage(newClientId))
-                    createPage.invoke(RootReceiver(newClientId, this@KWeb))
+                    try {
+                        createPage.invoke(RootReceiver(newClientId, this@KWeb))
+                    } catch (e : Throwable) {
+                        e.printStackTrace()
+                    }
                 } else {
                     val clientId = message.id ?: throw RuntimeException("Message has no id but is not hello")
                     val clientData = clients[clientId] ?: throw RuntimeException("No handler found for client $clientId")

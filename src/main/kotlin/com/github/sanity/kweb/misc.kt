@@ -22,6 +22,4 @@ fun wait(delay: Long, unit : TimeUnit, toRun : () -> Unit): ScheduledFuture<*> =
 
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)
 
-//fun String.quote() = "\"$this\""
-
 fun Any.toJson(): String = gson.toJson(this)
