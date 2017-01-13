@@ -32,12 +32,22 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
     }
 
     fun setInnerHTML(value: String): Element {
-        execute(" $jsExpression.innerHTML=\"${value.escapeEcma()}\";")
+        execute("$jsExpression.innerHTML=\"${value.escapeEcma()}\";")
         return this
     }
 
-    fun class_(vararg value: String): Element {
-        setAttribute("class", value.joinToString(separator = " "))
+    fun setClasses(vararg value: String): Element {
+        setAttribute("class", value.joinToString(separator = " ").toJson())
+        return this
+    }
+
+    fun addClasses(vararg classes: String): Element {
+        for (class_ in classes) {
+            if (class_.contains(' ')) {
+                throw RuntimeException("Class names must not contain spaces")
+            }
+            execute("addClass($jsExpression, ${class_.toJson()});")
+        }
         return this
     }
 

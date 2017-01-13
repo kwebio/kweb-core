@@ -35,10 +35,10 @@ fun main(args: Array<String>) {
     KWeb(port = 8091, plugins = listOf(bootstrap4)) {
         doc.body.apply {
             div().apply {
-                class_("bd-pageheader", "text-center", "text-sm-left")
+                addClasses("bd-pageheader", "text-center", "text-sm-left")
 
                 div().apply {
-                    class_("container")
+                    setClasses("container")
 
                     h1("KWeb Bootstrap4 demo")
 
@@ -47,23 +47,23 @@ fun main(args: Array<String>) {
             }
 
             div().apply {
-                class_("container bd-content")
+                addClasses("container", "bd-content")
 
                 div().apply {
-                    class_("form-group row")
+                    addClasses("form-group", "row")
 
                     val pairId = "example-text-input"
                     createElement("label").apply {
                         setAttribute("for", pairId)
-                        class_("col-2 col-form-label")
+                        addClasses("col-2", "col-form-label")
                         text("Text")
                     }
 
                     div().apply {
-                        class_("col-10")
+                        addClasses("col-10")
 
                         input(type = text, initialValue = "Artisanal kale").apply {
-                            class_("form-control")
+                            addClasses("form-control")
                             setAttribute("type", "text")
                             setAttribute("value", "Artisanal kale")
                             setAttribute("id", pairId)
