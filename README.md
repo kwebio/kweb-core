@@ -130,7 +130,7 @@ fun main(args: Array<String>) {
     Thread.sleep(10000)
 }
 
-// Here we use an extension method which can be used on any <UL> element to add a list item which will
+// Here we use an extension event which can be used on any <UL> element to add a list item which will
 // delete itself when clicked.
 fun Element.ULElement.newListItem(text: String) {
     li().apply {

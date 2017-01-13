@@ -7,6 +7,7 @@ import com.github.sanity.kweb.dom.Element.ButtonType.button
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
+
 open class Element(open val receiver: RootReceiver, open var jsExpression: String) {
 
     fun execute(js: String) {
@@ -81,7 +82,7 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         val callbackId = Math.abs(random.nextInt())
         val js = jsExpression + """
             .addEventListener(${eventName.toJson()}, function() {
-                callbackWs($callbackId, false)
+                callbackWs($callbackId, false);
             });
         """
         receiver.executeWithCallback(js, callbackId) {
