@@ -144,6 +144,13 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         fun setValue(newValue: String) = element.receiver.execute("$jsExpression.value=${newValue.toJson()}")
     }
 
+    fun nav(attributes: Map<String, String> = Collections.emptyMap()): NavElement {
+        return NavElement(createElement("nav", attributes))
+    }
+
+    class NavElement(val element: Element) : Element(element.receiver, element.jsExpression) {
+
+    }
 
     enum class InputType {
         button, checkbox, color, date, datetime, email, file, hidden, image, month, number, password, radio, range, reset, search, submit, tel, text, time, url, week
