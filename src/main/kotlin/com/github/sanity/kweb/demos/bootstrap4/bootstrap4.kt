@@ -19,23 +19,27 @@ fun main(args: Array<String>) {
     KWeb(port = 8091, plugins = listOf(bootstrap4)) {
         doc.body.apply {
             createElement("div").apply {
-                setAttribute("class", "form-group row")
-
-                val pairId = "example-text-input"
-                createElement("label").apply {
-                    setAttribute("for", pairId)
-                    setAttribute("class", "col-2 col-form-label")
-                    text("Text")
-                }
+                setAttribute("class", "container")
 
                 createElement("div").apply {
-                    setAttribute("class", "col-10")
+                    setAttribute("class", "form-group row")
 
-                    createElement("input").apply {
-                        setAttribute("class", "form-control")
-                        setAttribute("type", "text")
-                        setAttribute("value", "Artisanal kale")
-                        setAttribute("id", pairId)
+                    val pairId = "example-text-input"
+                    createElement("label").apply {
+                        setAttribute("for", pairId)
+                        setAttribute("class", "col-2 col-form-label")
+                        text("Text")
+                    }
+
+                    createElement("div").apply {
+                        setAttribute("class", "col-10")
+
+                        createElement("input").apply {
+                            setAttribute("class", "form-control")
+                            setAttribute("type", "text")
+                            setAttribute("value", "Artisanal kale")
+                            setAttribute("id", pairId)
+                        }
                     }
                 }
             }
