@@ -27,12 +27,5 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
     fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
         return receiver.evaluate(js).thenApply(outputMapper)
     }
-
-    val on: ONReceiver get() = ONReceiver(this)
-
-    fun delete() {
-        execute("$jsExpression.parentNode.removeChild($jsExpression)")
-    }
-
 }
 

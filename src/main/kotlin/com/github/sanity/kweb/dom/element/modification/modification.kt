@@ -74,3 +74,8 @@ fun Element.addEventListener(eventName: String, rh: RootReceiver.() -> Unit): El
     }
     return this
 }
+
+
+fun Element.delete() {
+    execute("$jsExpression.parentNode.removeChild($jsExpression)")
+}

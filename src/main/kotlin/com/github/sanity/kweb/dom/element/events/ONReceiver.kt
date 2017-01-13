@@ -1,4 +1,4 @@
-package com.github.sanity.kweb.dom.element
+package com.github.sanity.kweb.dom.element.events
 
 import com.github.sanity.kweb.RootReceiver
 import com.github.sanity.kweb.dom.element.Element
