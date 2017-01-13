@@ -2,6 +2,8 @@ package com.github.sanity.kweb.demos.todo
 
 import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.element.creation.*
+import com.github.sanity.kweb.dom.element.events.on
+import com.github.sanity.kweb.dom.element.modification.delete
 import com.github.sanity.kweb.dom.element.modification.setText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
