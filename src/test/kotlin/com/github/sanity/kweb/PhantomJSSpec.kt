@@ -26,6 +26,10 @@ class PhantomJSSpec : FreeSpec() {
                         async {
                             val h1 = h1("testing").setAttribute("data-test", "abacus")
                             h1.read.attribute("data-test").await() shouldBe "abacus"
+                            doc.cookie.set("testcookie", "hello")
+                            doc.cookie.get("testcookie").await() shouldBe "hello"
+                            doc.cookie.remove("testcookie")
+                            doc.cookie.get("testcookie").await() shouldBe null
                             exceptionFuture.complete(Unit)
                         }.exceptionally { exceptionFuture.completeExceptionally(it) }
                     }

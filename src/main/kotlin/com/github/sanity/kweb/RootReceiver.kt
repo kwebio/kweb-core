@@ -1,5 +1,6 @@
 package com.github.sanity.kweb
 
+import com.github.sanity.kweb.dom.Document
 import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass

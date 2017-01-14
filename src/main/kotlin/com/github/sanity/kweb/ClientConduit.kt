@@ -1,6 +1,5 @@
 package com.github.sanity.kweb
 
-import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.plugins.KWebPlugin
 
 /**
@@ -18,8 +17,3 @@ abstract class ClientConduit(open val createPage: RootReceiver.() -> Unit, inter
 
 class ReadableElement(val tag: String, val attributes: Map<String, Any>)
 
-class Document(private val receiver: RootReceiver) {
-    fun getElementById(id: String) = Element(receiver, "document.getElementById(\"$id\")")
-
-    val body = Element(receiver, "document.body")
-}
