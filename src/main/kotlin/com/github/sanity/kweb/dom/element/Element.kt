@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture
 
 
 open class Element(open val receiver: RootReceiver, open var jsExpression: String) {
-
+    constructor(element: Element) : this(element.receiver, element.jsExpression)
     /*********
      ********* Low level methods
      *********/
@@ -28,4 +28,3 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
         return receiver.evaluate(js).thenApply(outputMapper)
     }
 }
-

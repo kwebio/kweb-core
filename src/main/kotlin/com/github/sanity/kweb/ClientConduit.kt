@@ -6,7 +6,7 @@ import com.github.sanity.kweb.plugins.KWebPlugin
  * Created by ian on 1/1/17.
  */
 
-abstract class ClientConduit(open val createPage: RootReceiver.() -> Unit, internal val plugins: List<KWebPlugin>) {
+abstract class ClientConduit(open val createPage: RootReceiver.() -> Unit, internal open val plugins: List<KWebPlugin>) {
 
     abstract fun execute(clientId: String, message: String)
 

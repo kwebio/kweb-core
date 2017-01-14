@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), override val createPage: RootReceiver.() -> Unit) : ClientConduit(createPage, plugins) {
+class KWeb(val port: Int, override val plugins: List<KWebPlugin> = Collections.emptyList(), override val createPage: RootReceiver.() -> Unit) : ClientConduit(createPage, plugins) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
 
@@ -51,6 +51,9 @@ class KWeb(val port: Int, plugins: List<KWebPlugin> = Collections.emptyList(), o
                     wsClientData.send(S2CWebsocketMessage(newClientId))
                     try {
                         createPage.invoke(RootReceiver(newClientId, this@KWeb))
+                        for (plugin in plugins) {
+                            execute(newClientId, plugin.executeAfterPageCreation())
+                        }
                     } catch (e : Throwable) {
                         e.printStackTrace()
                     }

@@ -40,9 +40,9 @@ fun main(args: Array<String>) {
         doc.body.apply {
             div().apply {
                 container().apply {
-                    h1("KWeb Bootstrap4 demo")
+                    h1().setText("KWeb Bootstrap4 demo")
 
-                    p("The following is a simple setText field which does nothing")
+                    p().setText("The following is a simple setText field which does nothing")
                 }
             }
 

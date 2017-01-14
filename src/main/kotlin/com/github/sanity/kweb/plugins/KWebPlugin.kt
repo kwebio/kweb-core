@@ -8,4 +8,6 @@ abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet(
     // TODO: worry about getting the order right.
 
     abstract fun decorate(startHead: StringBuilder, endHead: StringBuilder)
+
+    open fun executeAfterPageCreation() = ""
 }

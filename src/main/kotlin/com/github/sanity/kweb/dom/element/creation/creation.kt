@@ -2,7 +2,6 @@ package com.github.sanity.kweb.dom.element.creation
 
 import com.github.salomonbrys.kotson.toJson
 import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.modification.setText
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
 import java.util.*
@@ -21,7 +20,7 @@ import java.util.concurrent.CompletableFuture
  ********* will typically be just the tag of the element like "div" or "input".
  *********/
 
-fun Element.createElement(tag: String, attributes: Map<String, Any> = Collections.emptyMap()): Element {
+fun Element.createElement(tag: String, attributes: Map<String, Any> = HashMap()): Element {
     val id = attributes["id"] ?: Math.abs(random.nextInt()).toString()
     val javaScript = StringBuilder()
     with(javaScript) {
@@ -40,26 +39,44 @@ fun Element.createElement(tag: String, attributes: Map<String, Any> = Collection
     return Element(receiver, "document.getElementById(\"$id\")")
 }
 
-fun Element.div(attributes: Map<String, Any> = Collections.emptyMap()) = DIVElement(createElement("div", attributes))
+fun Element.div(attributes: Map<String, Any> = HashMap()) = DIVElement(createElement("div", attributes))
 
-class DIVElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+open class DIVElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+    // These are useful to attach extension functions to
 }
 
-fun Element.h1(text: String, attributes: Map<String, String> = Collections.emptyMap()): Element {
-    return createElement("h1", attributes).setText(text)
+
+fun Element.span(attributes: Map<String, Any> = HashMap()) = SpanElement(createElement("span", attributes))
+
+open class SpanElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+    // These are useful to attach extension functions to
 }
 
-fun Element.p(text: String, attributes: Map<String, String> = Collections.emptyMap()): Element {
-    return createElement("p", attributes).setText(text)
+fun Element.main(attributes: Map<String, Any> = HashMap()) = MainElement(createElement("main", attributes))
+
+open class MainElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+    // These are useful to attach extension functions to
 }
 
-fun Element.ul(attributes: Map<String, String> = Collections.emptyMap()): ULElement {
+fun Element.h1(attributes: Map<String, Any> = HashMap()): Element {
+    return createElement("h1", attributes)
+}
+
+fun Element.a(href : String? = null, attributes: Map<String, Any> = HashMap()): Element {
+    return createElement("a", attributes.set("href", href))
+}
+
+fun Element.p(attributes: Map<String, Any> = HashMap()): Element {
+    return createElement("p", attributes)
+}
+
+fun Element.ul(attributes: Map<String, Any> = HashMap()): ULElement {
     val e = createElement("ul", attributes)
     return ULElement(e)
 }
 
 class ULElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
-    fun li(attributes: Map<String, String> = Collections.emptyMap()) = createElement("li", attributes)
+    fun li(attributes: Map<String, Any> = HashMap()) = createElement("li", attributes)
 }
 
 fun Element.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null): InputElement {
@@ -71,7 +88,7 @@ fun Element.input(type: InputType? = null, name: String? = null, initialValue: S
     return InputElement(createElement("input", attributes))
 }
 
-class InputElement(val element: Element) : Element(element.receiver, element.jsExpression) {
+class InputElement(val element: Element) : Element(element) {
     fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value", { s: String -> s }) ?: throw RuntimeException("Not sure why .evaluate() would return null")
     fun setValue(newValue: String) = element.receiver.execute("$jsExpression.value=${newValue.toJson()}")
 }
@@ -96,10 +113,10 @@ enum class ButtonType {
     button, reset, submit
 }
 
-fun Element.nav(attributes: Map<String, String> = Collections.emptyMap()): NavElement {
+fun Element.nav(attributes: Map<String, Any> = HashMap()): NavElement {
     return NavElement(createElement("nav", attributes))
 }
 
-class NavElement(element: Element) : Element(element.receiver, element.jsExpression) {
+class NavElement(element: Element) : Element(element) {
 
 }
