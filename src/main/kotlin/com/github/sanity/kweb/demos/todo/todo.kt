@@ -48,7 +48,7 @@ fun main(args: Array<String>) {
                     // asking for the `value` of inputElement.  This will take time so
                     // inputElement.getValue() actually returns a future.  `await()` then uses coroutines
                     // to effectively wait until the future comes back, but crucially, without
-                    // tying up a thread (which would get very inefficient very quickly).
+                    // tying up a thread (which would getString very inefficient very quickly).
                     val newItemText = inputElement.getValue().await()
 
                     // And now we add the new item using our custom function

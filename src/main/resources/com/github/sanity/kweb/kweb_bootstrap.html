@@ -77,7 +77,7 @@
                 return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
             },
             /**
-             * docCookies.setItem(sKey, sValue, vEnd, sPath, sDomain, bSecure)
+             * docCookies.setString(sKey, sValue, vEnd, sPath, sDomain, bSecure)
              *
              * @argument sKey (String): the name of the cookie;
              * @argument sValue (String): the value of the cookie;

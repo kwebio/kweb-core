@@ -16,7 +16,7 @@ import com.github.sanity.kweb.toJson
  ********* Element modification functions.
  *********
  ********* These allow modification of an element.  They are distinguished from
- ********* element creation functions because they begin with a verb like "set"
+ ********* element creation functions because they begin with a verb like "setString"
  ********* or "add".
  *********/
 

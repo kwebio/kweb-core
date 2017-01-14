@@ -36,7 +36,7 @@ asynchronously waiting for responses from the client in a way that's almost tran
 ##### 2017-01-09: Plugins
 KWeb now has a simple but flexible plugin mechanism, allowing the addition of support for 3rd party JavaScript libraries.
 
-As an example, here is a [demo](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/demos/jquery/jquery.kt) of a rudimentary JQuery plugin being used, and [here](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/plugins/jqueryCore/JQueryCorePlugin.kt) you can see its implementation.  Currently it only supports .remove() - but you should get a feel for how easy it will be to flesh out other functionality.
+As an example, here is a [demo](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/demos/jquery/jquery.kt) of a rudimentary JQuery plugin being used, and [here](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/plugins/jqueryCore/JQueryCorePlugin.kt) you can see its implementation.  Currently it only supports .remove() - but you should getString a feel for how easy it will be to flesh out other functionality.
 
 ##### 2017-01-08: Initial announcement
 KWeb is currently very experimental, at this stage more of a proof-of-concept and playground for ideas than anything
@@ -58,7 +58,7 @@ for someone new to KWeb.  I will do my best to review and merge any suitable pul
 bottom of JetBrain's [announcement](https://blog.jetbrains.com/kotlin/2016/12/kotlin-1-1-m04-is-here/).
 2. Two options:
     * Clone the repository and open as a Gradle project in IntelliJ IDEA: `git@github.com:sanity/kweb.git`
-    * Add as a dependency to your own Kotlin project, just be sure you're set up to use the
+    * Add as a dependency to your own Kotlin project, just be sure you're setString up to use the
 very latest Kotlin 1.1 release along with the plugin.  Dependency info here: [![](https://jitpack.io/v/sanity/kweb.svg)](https://jitpack.io/#sanity/kweb)
 
 #### A simple example:
@@ -115,7 +115,7 @@ fun main(args: Array<String>) {
                     // asking for the `value` of inputElement.  This will take delay so
                     // inputElement.getValue() actually returns a future.  `await()` then uses coroutines
                     // to effectively wait until the future comes back, but crucially, without
-                    // tying up a thread (which would get very inefficient very quickly).
+                    // tying up a thread (which would getString very inefficient very quickly).
                     val newItemText = inputElement.getValue().await()
 
                     // And now we add the new item using our custom function

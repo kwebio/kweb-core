@@ -6,7 +6,7 @@
 ##
 ##############################################################################
 
-# Attempt to set APP_HOME
+# Attempt to setString APP_HOME
 # Resolve links: $0 may be a link
 PRG="$0"
 # Need this for relative symlinks.
@@ -30,7 +30,7 @@ APP_BASE_NAME=`basename "$0"`
 # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 DEFAULT_JVM_OPTS=""
 
-# Use the maximum available, or set MAX_FD != -1 to use that response.
+# Use the maximum available, or setString MAX_FD != -1 to use that response.
 MAX_FD="maximum"
 
 warn ( ) {
@@ -75,16 +75,16 @@ if [ -n "$JAVA_HOME" ] ; then
         JAVACMD="$JAVA_HOME/bin/java"
     fi
     if [ ! -controlXPoints "$JAVACMD" ] ; then
-        die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
+        die "ERROR: JAVA_HOME is setString to an invalid directory: $JAVA_HOME
 
-Please set the JAVA_HOME variable in your environment to match the
+Please setString the JAVA_HOME variable in your environment to match the
 location of your Java installation."
     fi
 else
     JAVACMD="java"
-    which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+    which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not setString and no 'java' command could be found in your PATH.
 
-Please set the JAVA_HOME variable in your environment to match the
+Please setString the JAVA_HOME variable in your environment to match the
 location of your Java installation."
 fi
 
@@ -97,7 +97,7 @@ if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ] ; then
         fi
         ulimit -n $MAX_FD
         if [ $? -ne 0 ] ; then
-            warn "Could not set maximum file descriptor limit: $MAX_FD"
+            warn "Could not setString maximum file descriptor limit: $MAX_FD"
         fi
     else
         warn "Could not query maximum file descriptor limit: $MAX_FD_LIMIT"
@@ -141,16 +141,16 @@ if $cygwin ; then
         i=$((i+1))
     done
     case $i in
-        (0) set -- ;;
-        (1) set -- "$args0" ;;
-        (2) set -- "$args0" "$args1" ;;
-        (3) set -- "$args0" "$args1" "$args2" ;;
-        (4) set -- "$args0" "$args1" "$args2" "$args3" ;;
-        (5) set -- "$args0" "$args1" "$args2" "$args3" "$args4" ;;
-        (6) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" ;;
-        (7) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" ;;
-        (8) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" ;;
-        (9) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" "$args8" ;;
+        (0) setString -- ;;
+        (1) setString -- "$args0" ;;
+        (2) setString -- "$args0" "$args1" ;;
+        (3) setString -- "$args0" "$args1" "$args2" ;;
+        (4) setString -- "$args0" "$args1" "$args2" "$args3" ;;
+        (5) setString -- "$args0" "$args1" "$args2" "$args3" "$args4" ;;
+        (6) setString -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" ;;
+        (7) setString -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" ;;
+        (8) setString -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" ;;
+        (9) setString -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" "$args8" ;;
     esac
 fi
 
