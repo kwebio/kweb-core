@@ -1,7 +1,9 @@
 package com.github.sanity.kweb
 
+import com.github.sanity.kweb.dom.element.creation.attr
+import com.github.sanity.kweb.dom.element.creation.classes
 import com.github.sanity.kweb.dom.element.creation.h1
-import com.github.sanity.kweb.dom.element.modification.setAttribute
+import com.github.sanity.kweb.dom.element.creation.set
 import com.github.sanity.kweb.dom.element.read.read
 import com.moodysalem.phantomjs.wrapper.PhantomJS
 import io.kotlintest.specs.FreeSpec
@@ -43,7 +45,7 @@ class PhantomJSSpec : FreeSpec() {
             KWeb(7324) {
                     with(doc.body) {
                         async {
-                            val h1 = h1("testing").setAttribute("data-test", "abacus")
+                            val h1 = h1(attributes = attr.classes("testing").set("data-test", "abacus"))
                             h1.read.attribute("data-test").await() shouldBe "abacus"
 
                             doc.cookie.setString("testcookie", "hello")
