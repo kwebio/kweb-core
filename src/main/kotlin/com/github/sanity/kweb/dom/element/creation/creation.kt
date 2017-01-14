@@ -2,7 +2,6 @@ package com.github.sanity.kweb.dom.element.creation
 
 import com.github.salomonbrys.kotson.toJson
 import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.read.ElementReader
 import com.github.sanity.kweb.dom.element.modification.setText
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
@@ -81,12 +80,16 @@ enum class InputType {
     button, checkbox, color, date, datetime, email, file, hidden, image, month, number, password, radio, range, reset, search, submit, tel, text, time, url, week
 }
 
-fun Element.button(type: ButtonType = ButtonType.button, autofocus: Boolean? = null, disabled: Boolean? = null): Element {
+fun Element.button(type: ButtonType = ButtonType.button, autofocus: Boolean? = null, disabled: Boolean? = null): ButtonElement {
     val attributes = HashMap<String, Any>()
     attributes.put("type", type.name)
     if (autofocus != null) attributes.put("autofocus", autofocus)
     if (disabled != null) attributes.put("disabled", disabled)
-    return createElement("button", attributes)
+    return ButtonElement(createElement("button", attributes))
+}
+
+class ButtonElement(val wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+
 }
 
 enum class ButtonType {
