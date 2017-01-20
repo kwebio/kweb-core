@@ -36,7 +36,7 @@ asynchronously waiting for responses from the client in a way that's almost tran
 ##### 2017-01-09: Plugins
 KWeb now has a simple but flexible plugin mechanism, allowing the addition of support for 3rd party JavaScript libraries.
 
-As an example, here is a [demo](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/demos/jquery/jquery.kt) of a rudimentary JQuery plugin being used, and [here](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/plugins/jqueryCore/JQueryCorePlugin.kt) you can see its implementation.  Currently it only supports .remove() - but you should getString a feel for how easy it will be to flesh out other functionality.
+As an example, here is a [demo](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/demos/jquery/jquery.kt) of a rudimentary JQuery plugin being used, and [here](https://github.com/sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/plugins/jqueryCore/JQueryCorePlugin.kt) you can see its implementation.  Currently it only supports .remove() - but you should get a feel for how easy it will be to flesh out other functionality.
 
 ##### 2017-01-08: Initial announcement
 KWeb is currently very experimental, at this stage more of a proof-of-concept and playground for ideas than anything
@@ -115,7 +115,7 @@ fun main(args: Array<String>) {
                     // asking for the `value` of inputElement.  This will take delay so
                     // inputElement.getValue() actually returns a future.  `await()` then uses coroutines
                     // to effectively wait until the future comes back, but crucially, without
-                    // tying up a thread (which would getString very inefficient very quickly).
+                    // tying up a thread (which would get very inefficient very quickly).
                     val newItemText = inputElement.getValue().await()
 
                     // And now we add the new item using our custom function
