@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
 class RootReceiver(private val clientId: String, internal val cc: ClientConduit, val response: String? = null) {
-    private val plugins: Set<KClass<KWebPlugin>> by lazy {
+    private val plugins: Set<KClass<out KWebPlugin>> by lazy {
         cc.plugins.map { it::class }.toSet()
     }
 
