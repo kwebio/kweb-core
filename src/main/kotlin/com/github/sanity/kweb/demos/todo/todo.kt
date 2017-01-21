@@ -37,7 +37,6 @@ fun main(args: Array<String>) {
                     // Here we register a callback, the code block will be called when the
                     // user clicks this button.
                     .on.click {
-
                 // This looks simple, but it is deceptively cool, and in more complex applications is the key to
                 // hiding the client/server divide in a fairly efficient matter.  It uses Kotlin 1.1's new coroutines
                 // functionality, see https://github.com/Kotlin/kotlinx.coroutines

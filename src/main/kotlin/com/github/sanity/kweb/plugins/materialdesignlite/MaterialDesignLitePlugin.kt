@@ -56,8 +56,7 @@ val materialDesignLite = com.github.sanity.kweb.plugins.materialdesignlite.Mater
 val Element.mdl get() = MDLElement(this)
 
 class MDLElement(val element: Element) : Element(element) {
-
-    fun drawerLayout(): MDLDrawerLayoutElement = MDLDrawerLayoutElement(element.div(attr.classes("mdl-layout", "mdl-js-layout", "mdl-layout--fixed-drawer")))
+    fun drawerLayout(): MDLDrawerLayoutElement = MDLDrawerLayoutElement(element.div().div(attr.classes("mdl-layout", "mdl-js-layout", "mdl-layout--fixed-drawer")))
 
 }
 
