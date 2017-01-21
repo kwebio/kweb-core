@@ -17,12 +17,20 @@ class MaterialDesignLitePlugin(private val colorScheme: ColorScheme = ColorSchem
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.${colorScheme.one}-${colorScheme.two}.min.css">
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+
+<!-- -->
+<link href="//cdn.bootcss.com/dialog-polyfill/0.4.5/dialog-polyfill.css" rel="stylesheet">
+<script src="//cdn.bootcss.com/dialog-polyfill/0.4.5/dialog-polyfill.js"></script>
+<link href="//cdn.bootcss.com/dialog-polyfill/0.4.5/dialog-polyfill.min.css" rel="stylesheet">
+<script src="//cdn.bootcss.com/dialog-polyfill/0.4.5/dialog-polyfill.min.js"></script>
         """.trimIndent()
         )
     }
 
     override fun executeAfterPageCreation(): String {
-        return "componentHandler.upgradeDom();"
+        return """
+componentHandler.upgradeDom();
+"""
     }
 
     data class ColorScheme(val one: MDLColor, val two: MDLColor) {

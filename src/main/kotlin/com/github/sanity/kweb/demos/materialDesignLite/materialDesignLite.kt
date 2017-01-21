@@ -6,7 +6,7 @@ import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.plugins.materialdesignlite.layout.drawerLayout
 import com.github.sanity.kweb.plugins.materialdesignlite.materialDesignLite
 import com.github.sanity.kweb.plugins.materialdesignlite.mdl
-import com.github.sanity.kweb.plugins.materialdesignlite.textFields.textField
+import com.github.sanity.kweb.plugins.materialdesignlite.testField.textField
 
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")

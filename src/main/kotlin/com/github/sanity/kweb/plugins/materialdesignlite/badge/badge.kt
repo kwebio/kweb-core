@@ -1,4 +1,4 @@
-package com.github.sanity.kweb.plugins.materialdesignlite.badges
+package com.github.sanity.kweb.plugins.materialdesignlite.badge
 
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.modification.addClasses

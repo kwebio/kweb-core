@@ -39,4 +39,6 @@ fun Map<String, Any>.classes(classes: Iterable<String>, condition: Boolean = tru
     }
 }
 
+val Map<String, Any>.disabled get() = this.set("disabled", true)
+
 fun Map<String, Any>.classes(vararg classes: String, onlyIf: Boolean = true): Map<String, Any> = classes(classes.asIterable(), onlyIf)

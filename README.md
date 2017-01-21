@@ -97,7 +97,7 @@ fun main(args: Array<String>) {
             }
 
             // Next create an input element
-            val inputElement = input(type = setText, size = 20)
+            val inputElement = input(displayEffect = setText, size = 20)
 
             // And a button to add a new item
             button().setText("Add Item")

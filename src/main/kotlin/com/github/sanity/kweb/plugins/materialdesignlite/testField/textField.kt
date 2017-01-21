@@ -1,4 +1,4 @@
-package com.github.sanity.kweb.plugins.materialdesignlite.textFields
+package com.github.sanity.kweb.plugins.materialdesignlite.testField
 
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.*

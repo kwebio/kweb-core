@@ -81,12 +81,11 @@ class ULElement(wrapped: Element) : Element(wrapped) {
     fun li(attributes: Map<String, Any> = HashMap()) = createElement("li", attributes)
 }
 
-fun Element.button(type: ButtonType = ButtonType.button, autofocus: Boolean? = null, disabled: Boolean? = null): ButtonElement {
-    val attributes = HashMap<String, Any>()
-    attributes.put("type", type.name)
-    if (autofocus != null) attributes.put("autofocus", autofocus)
-    if (disabled != null) attributes.put("disabled", disabled)
-    return ButtonElement(createElement("button", attributes))
+fun Element.button(type: ButtonType? = ButtonType.button, autofocus: Boolean? = null, attributes: Map<String, Any> = attr): ButtonElement {
+    return ButtonElement(createElement("button", attributes
+            .set("type", type?.name)
+            .set("autofocus", autofocus)
+    ))
 }
 
 class ButtonElement(val wrapped: Element) : Element(wrapped) {
