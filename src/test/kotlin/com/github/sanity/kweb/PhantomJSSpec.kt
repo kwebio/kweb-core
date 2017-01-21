@@ -7,8 +7,8 @@ import com.github.sanity.kweb.dom.element.creation.set
 import com.github.sanity.kweb.dom.element.read.read
 import com.moodysalem.phantomjs.wrapper.PhantomJS
 import io.kotlintest.specs.FreeSpec
-import kotlinx.coroutines.async
-import kotlinx.coroutines.await
+import kotlinx.coroutines.experimental.future.await
+import kotlinx.coroutines.experimental.future.future
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -44,7 +44,7 @@ class PhantomJSSpec : FreeSpec() {
         "test various server-browser interactions" {
             KWeb(7324) {
                     with(doc.body) {
-                        async {
+                        future {
                             val h1 = h1(attributes = attr.classes("testing").set("data-test", "abacus"))
                             h1.read.attribute("data-test").await() shouldBe "abacus"
 
