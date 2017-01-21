@@ -16,6 +16,8 @@ class ONReceiver(private val parent: Element) : Element(parent.receiver, parent.
     fun mouseover(rh: RootReceiver.() -> Unit) = event("mouseover", rh)
     fun mouseout(rh: RootReceiver.() -> Unit) = event("mouseout", rh)
     fun keydown(rh: RootReceiver.() -> Unit) = event("keydown", rh)
+    fun keypress(rh: RootReceiver.() -> Unit) = event("keypress", rh)
+    fun keyup(rh: RootReceiver.() -> Unit) = event("keyup", rh)
     fun load(rh: RootReceiver.() -> Unit) = event("load", rh)
     // TODO: Add the rest http://www.w3schools.com/jsref/dom_obj_event.asp
 

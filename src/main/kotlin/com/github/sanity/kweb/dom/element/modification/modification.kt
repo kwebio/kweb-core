@@ -24,10 +24,12 @@ import com.github.sanity.kweb.toJson
 // TODO: These should probably be accessed via a field like element.attr[GlobalAttributes.hidden], possibly
 // TODO: using generics to ensure the correct return-type
 
-fun Element.setAttribute(name: String, value: Any): Element {
-    execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
-    if (name == "id") {
-        jsExpression = "document.getElementById(${value.toJson()})"
+fun Element.setAttribute(name: String, value: Any?): Element {
+    if (value != null) {
+        execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+        if (name == "id") {
+            jsExpression = "document.getElementById(${value.toJson()})"
+        }
     }
     return this
 }
@@ -42,17 +44,34 @@ fun Element.setClasses(vararg value: String): Element {
     return this
 }
 
-fun Element.addClasses(vararg classes: String): Element {
-    for (class_ in classes) {
-        if (class_.contains(' ')) {
-            throw RuntimeException("Class names must not contain spaces")
+fun Element.addClasses(vararg classes: String, onlyIf : Boolean = true): Element {
+    if (onlyIf) {
+        for (class_ in classes) {
+            if (class_.contains(' ')) {
+                throw RuntimeException("Class names must not contain spaces")
+            }
+            execute("addClass($jsExpression, ${class_.toJson()});")
         }
-        execute("addClass($jsExpression, ${class_.toJson()});")
     }
     return this
 }
 
+fun Element.removeChildren(): Element {
+    execute("""
+        while ($jsExpression.firstChild) {
+            $jsExpression.removeChild($jsExpression.firstChild);
+        }
+     """.trimIndent())
+    return this
+}
+
 fun Element.setText(value: String): Element {
+    removeChildren()
+    addText(value)
+    return this
+}
+
+fun Element.addText(value: String): Element {
     execute("""
                 {
                     var ntn=document.createTextNode("${value.escapeEcma()}");

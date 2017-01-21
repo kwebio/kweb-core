@@ -1,11 +1,9 @@
 package com.github.sanity.kweb.dom.element.creation
 
-import com.github.salomonbrys.kotson.toJson
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
 import java.util.*
-import java.util.concurrent.CompletableFuture
 
 /**
  * Created by ian on 1/13/17.
@@ -21,7 +19,7 @@ import java.util.concurrent.CompletableFuture
  *********/
 
 fun Element.createElement(tag: String, attributes: Map<String, Any> = HashMap()): Element {
-    val id = attributes["id"] ?: Math.abs(random.nextInt()).toString()
+    val id: String = (attributes["id"] ?: Math.abs(random.nextInt())).toString()
     val javaScript = StringBuilder()
     with(javaScript) {
         appendln("{")
@@ -36,25 +34,25 @@ fun Element.createElement(tag: String, attributes: Map<String, Any> = HashMap())
         appendln("}")
     }
     execute(javaScript.toString())
-    return Element(receiver, "document.getElementById(\"$id\")")
+    return Element(receiver, jsExpression = "document.getElementById(\"$id\")", id = id)
 }
 
 fun Element.div(attributes: Map<String, Any> = HashMap()) = DIVElement(createElement("div", attributes))
 
-open class DIVElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+open class DIVElement(wrapped: Element) : Element(wrapped) {
     // These are useful to attach extension functions to
 }
 
 
 fun Element.span(attributes: Map<String, Any> = HashMap()) = SpanElement(createElement("span", attributes))
 
-open class SpanElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+open class SpanElement(wrapped: Element) : Element(wrapped) {
     // These are useful to attach extension functions to
 }
 
 fun Element.main(attributes: Map<String, Any> = HashMap()) = MainElement(createElement("main", attributes))
 
-open class MainElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+open class MainElement(wrapped: Element) : Element(wrapped) {
     // These are useful to attach extension functions to
 }
 
@@ -75,26 +73,12 @@ fun Element.ul(attributes: Map<String, Any> = HashMap()): ULElement {
     return ULElement(e)
 }
 
-class ULElement(wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+fun Element.form(action: String? = null, attributes: Map<String, Any> = HashMap()): Element {
+    return createElement("form", attributes.set("action", action))
+}
+
+class ULElement(wrapped: Element) : Element(wrapped) {
     fun li(attributes: Map<String, Any> = HashMap()) = createElement("li", attributes)
-}
-
-fun Element.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null): InputElement {
-    val attributes = HashMap<String, Any>()
-    if (type != null) attributes.put("type", type.name)
-    if (name != null) attributes.put("name", name)
-    if (initialValue != null) attributes.put("value", initialValue)
-    if (size != null) attributes.put("size", size)
-    return InputElement(createElement("input", attributes))
-}
-
-class InputElement(val element: Element) : Element(element) {
-    fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value", { s: String -> s }) ?: throw RuntimeException("Not sure why .evaluate() would return null")
-    fun setValue(newValue: String) = element.receiver.execute("$jsExpression.value=${newValue.toJson()}")
-}
-
-enum class InputType {
-    button, checkbox, color, date, datetime, email, file, hidden, image, month, number, password, radio, range, reset, search, submit, tel, text, time, url, week
 }
 
 fun Element.button(type: ButtonType = ButtonType.button, autofocus: Boolean? = null, disabled: Boolean? = null): ButtonElement {
@@ -105,7 +89,7 @@ fun Element.button(type: ButtonType = ButtonType.button, autofocus: Boolean? = n
     return ButtonElement(createElement("button", attributes))
 }
 
-class ButtonElement(val wrapped: Element) : Element(wrapped.receiver, wrapped.jsExpression) {
+class ButtonElement(val wrapped: Element) : Element(wrapped) {
 
 }
 

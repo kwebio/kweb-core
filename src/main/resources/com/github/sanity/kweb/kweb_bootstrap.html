@@ -30,6 +30,7 @@
                     }
                     var execute = msg["execute"];
                     if (execute !== undefined) {
+                        console.log("Executing: " + execute["js"])
                         eval(execute["js"])
                     }
                     var evaluate = msg["evaluate"];

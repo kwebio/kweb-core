@@ -1,11 +1,8 @@
 package com.github.sanity.kweb.plugins.materialdesignlite
 
 import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.dom.element.modification.addClasses
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.materialdesignlite.MaterialDesignLitePlugin.MDLColor.*
-import java.util.*
 
 /**
  * Created by ian on 1/13/17.
@@ -56,31 +53,5 @@ val materialDesignLite = com.github.sanity.kweb.plugins.materialdesignlite.Mater
 val Element.mdl get() = MDLElement(this)
 
 class MDLElement(val element: Element) : Element(element) {
-    fun drawerLayout(): MDLDrawerLayoutElement = MDLDrawerLayoutElement(element.div().div(attr.classes("mdl-layout", "mdl-js-layout", "mdl-layout--fixed-drawer")))
 
-}
-
-class MDLDrawerLayoutElement(val element: DIVElement) : DIVElement(element) {
-    fun drawer(attributes: Map<String, Any> = HashMap()) = MDLDrawerElement(element.div(attributes.classes("mdl-layout__drawer")))
-
-    fun content(attributes: Map<String, Any> = HashMap()) = element.main(attributes.classes("mdl-layout__content")).div(attr.classes("page-content"))
-}
-
-class MDLDrawerElement(val element: Element) : Element(element) {
-    fun title(): Element = element.span(attr.classes("mdl-layout-title"))
-
-    fun nav(): MDLNavElement = MDLNavElement(element.nav(attr.classes("mdl-navigation")))
-}
-
-class MDLNavElement(val element: Element) : Element(element) {
-    fun link(href: String? = null, attributes: Map<String, Any> = Collections.emptyMap()) = element.a(href, attributes = attributes.classes("mdl-navigation__link"))
-}
-
-fun Element.typography(style: TypographyStyles): Element {
-    addClasses("mdl-typography--" + style.classSubstring)
-    return this
-}
-
-enum class TypographyStyles(val classSubstring: String) {
-    display3("display-3")
 }

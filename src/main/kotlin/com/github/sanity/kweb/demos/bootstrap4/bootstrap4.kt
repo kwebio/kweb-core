@@ -4,7 +4,7 @@ import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.element.creation.*
 import com.github.sanity.kweb.dom.element.modification.addClasses
 import com.github.sanity.kweb.dom.element.modification.setAttribute
-import com.github.sanity.kweb.dom.element.modification.setText
+import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.plugins.bootstrap4.bootstrap4
 import com.github.sanity.kweb.plugins.bootstrap4.container
 
@@ -40,9 +40,9 @@ fun main(args: Array<String>) {
         doc.body.apply {
             div().apply {
                 container().apply {
-                    h1().setText("KWeb Bootstrap4 demo")
+                    h1().addText("KWeb Bootstrap4 demo")
 
-                    p().setText("The following is a simple setText field which does nothing")
+                    p().addText("The following is a simple setText field which does nothing")
                 }
             }
 
@@ -56,7 +56,7 @@ fun main(args: Array<String>) {
                     createElement("label").apply {
                         setAttribute("for", pairId)
                         addClasses("col-2", "col-form-label")
-                        setText("Text")
+                        addText("Text")
                     }
 
                     div().apply {

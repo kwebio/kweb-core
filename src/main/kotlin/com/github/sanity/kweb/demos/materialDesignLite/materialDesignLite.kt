@@ -1,12 +1,12 @@
 package com.github.sanity.kweb.demos.materialDesignLite
 
 import com.github.sanity.kweb.KWeb
-import com.github.sanity.kweb.dom.element.creation.h1
-import com.github.sanity.kweb.dom.element.modification.setText
-import com.github.sanity.kweb.plugins.materialdesignlite.TypographyStyles.display3
+import com.github.sanity.kweb.dom.element.creation.InputType.text
+import com.github.sanity.kweb.dom.element.modification.addText
+import com.github.sanity.kweb.plugins.materialdesignlite.layout.drawerLayout
 import com.github.sanity.kweb.plugins.materialdesignlite.materialDesignLite
 import com.github.sanity.kweb.plugins.materialdesignlite.mdl
-import com.github.sanity.kweb.plugins.materialdesignlite.typography
+import com.github.sanity.kweb.plugins.materialdesignlite.textFields.textField
 
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
@@ -14,15 +14,23 @@ fun main(args: Array<String>) {
         doc.body.apply {
             mdl.drawerLayout().apply {
                 drawer().apply {
-                    title().setText("KWeb")
+                    title().addText("KWeb")
                     nav().apply {
-                        link().setText("One")
-                        link().setText("Two")
-                        link().setText("Three")
+                        link().addText("One")
+                        link().addText("Two")
+                        link().addText("Three")
                     }
                 }
                 content().apply {
-                    h1().typography(display3).setText("This is the page content")
+                    mdl.textField(floatingLabel = true).apply {
+                        val nameInput = input(text)
+                        label(forInput = nameInput).addText("Name")
+                    }
+                    mdl.textField().apply {
+                        val phoneInput = input(text, pattern = "[0-9]*")
+                        label(forInput = phoneInput).addText("Phone")
+                        error().addText("Digits only")
+                    }
                 }
             }
         }

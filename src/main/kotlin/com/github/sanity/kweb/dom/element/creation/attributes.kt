@@ -24,11 +24,19 @@ fun Map<String, Any>.set(key : String, value : Any?) : Map<String, Any> {
     }
 }
 
-fun Map<String, Any>.classes(vararg classes: String): Map<String, Any> {
-    val classAttributeValue = get("class")
-    val existing: List<String> = when (classAttributeValue) {
-        is String -> classAttributeValue.split(' ')
-        else -> listOf()
+fun Map<String, Any>.id(id: String): Map<String, Any> = set("id", id)
+
+fun Map<String, Any>.classes(classes: Iterable<String>, condition: Boolean = true): Map<String, Any> {
+    if (condition) {
+        val classAttributeValue = get("class")
+        val existing: List<String> = when (classAttributeValue) {
+            is String -> classAttributeValue.split(' ')
+            else -> listOf()
+        }
+        return set("class", (existing + classes).joinToString(separator = " "))
+    } else {
+        return this
     }
-    return set("class", (existing + classes).joinToString(separator = " "))
 }
+
+fun Map<String, Any>.classes(vararg classes: String, onlyIf: Boolean = true): Map<String, Any> = classes(classes.asIterable(), onlyIf)

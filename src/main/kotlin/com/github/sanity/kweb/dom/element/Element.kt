@@ -1,11 +1,13 @@
 package com.github.sanity.kweb.dom.element
 
 import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.concurrent.CompletableFuture
+import kotlin.reflect.KClass
 
 
-open class Element(open val receiver: RootReceiver, open var jsExpression: String) {
-    constructor(element: Element) : this(element.receiver, element.jsExpression)
+open class Element(open val receiver: RootReceiver, open var jsExpression: String, val id: String? = null) {
+    constructor(element: Element) : this(element.receiver, element.jsExpression, element.id)
     /*********
      ********* Low level methods
      *********/
@@ -27,4 +29,6 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
     fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
         return receiver.evaluate(js).thenApply(outputMapper)
     }
+
+    fun require(requiredPlugins: KClass<out KWebPlugin>) = receiver.require(requiredPlugins)
 }
