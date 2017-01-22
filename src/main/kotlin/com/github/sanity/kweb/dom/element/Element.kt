@@ -6,8 +6,8 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 
-open class Element(open val receiver: RootReceiver, open var jsExpression: String, val id: String? = null) {
-    constructor(element: Element) : this(element.receiver, element.jsExpression, element.id)
+open class Element(open val receiver: RootReceiver, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
+    constructor(element: Element) : this(element.receiver, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
      *********/

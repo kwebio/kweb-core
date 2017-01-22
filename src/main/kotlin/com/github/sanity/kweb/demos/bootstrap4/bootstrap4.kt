@@ -2,6 +2,10 @@ package com.github.sanity.kweb.demos.bootstrap4
 
 import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.element.creation.*
+import com.github.sanity.kweb.dom.element.creation.createElement
+import com.github.sanity.kweb.dom.element.creation.div
+import com.github.sanity.kweb.dom.element.creation.h1
+import com.github.sanity.kweb.dom.element.creation.p
 import com.github.sanity.kweb.dom.element.modification.addClasses
 import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.modification.addText

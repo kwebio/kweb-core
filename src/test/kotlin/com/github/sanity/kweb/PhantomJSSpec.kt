@@ -1,9 +1,9 @@
 package com.github.sanity.kweb
 
-import com.github.sanity.kweb.dom.element.creation.attr
-import com.github.sanity.kweb.dom.element.creation.classes
+import com.github.sanity.kweb.dom.attributes.attr
+import com.github.sanity.kweb.dom.attributes.classes
+import com.github.sanity.kweb.dom.attributes.set
 import com.github.sanity.kweb.dom.element.creation.h1
-import com.github.sanity.kweb.dom.element.creation.set
 import com.github.sanity.kweb.dom.element.read.read
 import com.moodysalem.phantomjs.wrapper.PhantomJS
 import io.kotlintest.specs.FreeSpec

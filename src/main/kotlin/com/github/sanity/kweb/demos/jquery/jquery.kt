@@ -1,8 +1,8 @@
 package com.github.sanity.kweb.demos.jquery
 
 import com.github.sanity.kweb.KWeb
-import com.github.sanity.kweb.dom.element.creation.attr
-import com.github.sanity.kweb.dom.element.creation.classes
+import com.github.sanity.kweb.dom.attributes.attr
+import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.creation.h1
 import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.plugins.jqueryCore.jquery

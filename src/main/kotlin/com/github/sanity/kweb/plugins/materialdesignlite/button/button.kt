@@ -1,8 +1,8 @@
 package com.github.sanity.kweb.plugins.materialdesignlite.button
 
-import com.github.sanity.kweb.dom.element.creation.attr
+import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.element.creation.button
-import com.github.sanity.kweb.dom.element.creation.classes
+import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
 
 /**

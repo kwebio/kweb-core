@@ -1,5 +1,8 @@
-package com.github.sanity.kweb.plugins.materialdesignlite.testField
+package com.github.sanity.kweb.plugins.materialdesignlite.textField
 
+import com.github.sanity.kweb.dom.attributes.attr
+import com.github.sanity.kweb.dom.attributes.classes
+import com.github.sanity.kweb.dom.attributes.set
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.*
 import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement

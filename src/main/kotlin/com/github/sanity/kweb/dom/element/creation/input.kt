@@ -1,7 +1,9 @@
 package com.github.sanity.kweb.dom.element.creation
 
 import com.github.salomonbrys.kotson.toJson
+import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.attributes.set
 import java.util.concurrent.CompletableFuture
 
 fun Element.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null, attributes: Map<String, Any> = attr): InputElement {
