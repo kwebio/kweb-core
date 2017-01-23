@@ -7,7 +7,6 @@ import com.github.sanity.kweb.dom.element.creation.*
 import com.github.sanity.kweb.dom.element.modification.setText
 import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
 import kotlin.reflect.KProperty1
-import kotlin.reflect.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 
 /**
@@ -28,9 +27,10 @@ class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrap
         kotlin.require(objects.isNotEmpty(), { "Object list must contain at least one object" })
         val firstObjectClass = objects.first()::class
         kotlin.require(objects.all { it::class == firstObjectClass }, { "All objects must be of the same type" })
+        val properties = propertyOrder ?: firstObjectClass.memberProperties
         thead().apply {
             tr().apply {
-                for (property in propertyOrder ?: firstObjectClass.memberProperties) {
+                for (property in properties) {
                     val annotations = property.annotations
                     val annotation = annotations.find { it is MDLTableHeaderName }
                     val headerName = if (annotation == null) {
@@ -45,7 +45,7 @@ class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrap
         tbody().apply {
             for (obj in objects) {
                 tr().apply {
-                    for (property in firstObjectClass.declaredMemberProperties) {
+                    for (property in properties) {
                         val value = property.call(obj)
                         td().setText(value.toString())
                     }
