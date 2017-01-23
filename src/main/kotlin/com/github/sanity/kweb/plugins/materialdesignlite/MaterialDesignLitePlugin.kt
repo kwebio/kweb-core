@@ -60,6 +60,6 @@ val materialDesignLite = com.github.sanity.kweb.plugins.materialdesignlite.Mater
 
 val Element.mdl get() = MDLElement(this)
 
-class MDLElement(val element: Element) : Element(element) {
+open class MDLElement(val element: Element) : Element(element) {
 
 }

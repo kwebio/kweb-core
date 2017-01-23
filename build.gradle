@@ -54,6 +54,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+   // complie "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.3-beta'
 
     testCompile 'io.kotlintest:kotlintest:1.3.4'
@@ -62,6 +63,18 @@ dependencies {
     testCompile 'com.moodysalem:phantomjs-wrapper-linux-binary:3.0.0'
     testCompile 'com.moodysalem:phantomjs-wrapper-macosx-binary:3.0.0'
 }
+
+// Needed because there's something messy with kotlin version numbers and dependencies
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.jetbrains.kotlin') {
+                details.useVersion "$kotlin_version"
+            }
+        }
+    }
+}
+
 /*
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'html'

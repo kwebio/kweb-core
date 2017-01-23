@@ -29,17 +29,17 @@ class TabsElement(wrapped: DivElement, tabBarAttributes: Map<String, Any>) : Div
             isActive: Boolean = false,
             attributes: Map<String, Any> = attr,
             tabAttributes: Map<String, Any> = attr
-    ): DivElement {
+    ): MDLElement {
         // TODO: Validate id string
         tabBar.a(href = "#$id", attributes = tabAttributes
                 .classes("mdl-tabs__tab")
                 .classes("is-active", onlyIf = isActive))
                 .setText(text)
-        return div(attributes
+        return MDLElement(div(attributes
                 .id(id)
                 .classes("mdl-tabs__panel")
                 .classes("is-active", onlyIf = isActive)
-        )
+        ))
     }
 }
 
