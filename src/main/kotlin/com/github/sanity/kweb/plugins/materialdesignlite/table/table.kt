@@ -23,7 +23,7 @@ class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrap
     var theadUsed = false
     var tbodyUsed = false
 
-    fun fromDataObjectList(objects: List<Any>, propertyOrder: Collection<KProperty1<*, *>>? = null) {
+    fun <T : Any> fromDataObjectList(objects: List<T>, propertyOrder: Collection<KProperty1<*, *>>? = null, tdModifier: (T, MDLTdElement) -> Unit = { _, _ -> }) {
         kotlin.require(objects.isNotEmpty(), { "Object list must contain at least one object" })
         val firstObjectClass = objects.first()::class
         kotlin.require(objects.all { it::class == firstObjectClass }, { "All objects must be of the same type" })
@@ -47,7 +47,9 @@ class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrap
                 tr().apply {
                     for (property in properties) {
                         val value = property.call(obj)
-                        td().setText(value.toString())
+                        val tdElement = td()
+                        tdElement.setText(value.toString())
+                        tdModifier(obj, tdElement)
                     }
                 }
             }
@@ -95,7 +97,7 @@ class MDLTrBodyElement(wrapped: Element) : TrBodyElement(wrapped) {
             sort: TableSortOrder = TableSortOrder.none,
             nonNumeric: Boolean = false,
             attributes: Map<String, Any>
-    ): MDLThElement = MDLThElement(super.td(attributes
+    ): MDLTdElement = MDLTdElement(super.td(attributes
             .classes("mdl-data-table__header--sorted-ascending", onlyIf = sort == TableSortOrder.ascending)
             .classes("mdl-data-table__header--sorted-descending", onlyIf = sort == TableSortOrder.descending)
             .classes("mdl-data-table__cell--non-numeric", onlyIf = nonNumeric)

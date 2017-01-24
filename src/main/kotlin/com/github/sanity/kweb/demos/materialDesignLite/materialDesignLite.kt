@@ -25,20 +25,20 @@ fun main(args: Array<String>) {
                         title().setText("Title")
                         spacer()
                         navigation().apply {
-                            navLink().setText("Link")
-                            navLink().setText("Link")
-                            navLink().setText("Link")
-                            navLink().setText("Link")
+                            navLink().setText("First header link")
+                            navLink().setText("Second header link")
+                            navLink().setText("Third header link")
+                            navLink().setText("Fourth header link")
                         }
                     }
                 }
                 drawer().apply {
                     title().setText("Title")
                     navigation().apply {
-                        navLink().setText("Link")
-                        navLink().setText("Link")
-                        navLink().setText("Link")
-                        navLink().setText("Link")
+                        navLink().setText("First drawer link")
+                        navLink().setText("Second drawer link")
+                        navLink().setText("Third drawer link")
+                        navLink().setText("Fourth drawer link")
                     }
                 }
                 content().apply {
@@ -71,7 +71,11 @@ fun main(args: Array<String>) {
                                 data class Row(@MDLTableHeaderName("First Name") val firstName: String, val address: String)
 
                                 val data = listOf(Row("Ian", "Austin"), Row("Fred", "Houston"))
-                                fromDataObjectList(data, propertyOrder = listOf(Row::firstName, Row::address))
+                                fromDataObjectList(data, propertyOrder = listOf(Row::firstName, Row::address)) {obj, td ->
+                                    td.on.click {
+                                        println(obj.firstName)
+                                    }
+                                }
                             }
                         }
                         panel("Three").apply {
