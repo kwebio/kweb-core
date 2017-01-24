@@ -133,7 +133,7 @@ fun main(args: Array<String>) {
 // Here we use an extension event which can be used on any <UL> element to add a list item which will
 // delete itself when clicked.
 fun Element.ULElement.newListItem(setText: String) {
-    li().apply {
+    item().apply {
         setText(setText)
         on.click { delete() }
     }

@@ -73,6 +73,10 @@ fun Element.ul(attributes: Map<String, Any> = attr): ULElement {
     return ULElement(e)
 }
 
+fun Element.i(attributes: Map<String, Any> = attr) = IElement(createElement("i", attributes))
+
+open class IElement(wrapped : Element) : Element(wrapped)
+
 fun Element.form(action: String? = null, attributes: Map<String, Any> = attr): Element {
     return createElement("form", attributes.set("action", action))
 }
@@ -88,7 +92,11 @@ fun Element.footer(attributes: Map<String, Any> = attr) = FooterElement(createEl
 open class FooterElement(wrapped: Element) : Element(wrapped)
 
 open class ULElement(wrapped: Element) : Element(wrapped) {
-    fun li(attributes: Map<String, Any> = attr) = createElement("li", attributes)
+    open fun li(attributes: Map<String, Any> = attr) = LIElement(createElement("item", attributes))
+}
+
+open class LIElement(wrapped : Element) : Element(wrapped) {
+
 }
 
 fun Element.nav(attributes: Map<String, Any> = attr): NavElement {
