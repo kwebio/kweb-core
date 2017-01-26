@@ -73,12 +73,12 @@ private fun LayoutElement.addContent() {
 
 private fun TabsElement.addListPanel() {
     panel("List").apply {
-        list().apply {
-            val name = "Bryan Cranston"
-            val bio = "Bryan Cranston played the role of Walter in Breaking Bad. He is also known for playing Hal in Malcom in the Middle."
-            addActorItem(name, bio)
-            addActorItem("Aaron Paul", "Aaron Paul played the role of Jesse in Breaking Bad. He also featured in the \"Need For Speed\" Movie.")
-            addActorItem("Bob Odenkirk", "Bob Odinkrik played the role of Saul in Breaking Bad. Due to public fondness for the character, Bob stars in his own show now, called \"Better Call Saul\".")
+        grid().div(offsetBefore = 2, width = 8).apply {
+            list().apply {
+                addActorItem("Bryan Cranston", "Bryan Cranston played the role of Walter in Breaking Bad. He is also known for playing Hal in Malcom in the Middle.")
+                addActorItem("Aaron Paul", "Aaron Paul played the role of Jesse in Breaking Bad. He also featured in the \"Need For Speed\" Movie.")
+                addActorItem("Bob Odenkirk", "Bob Odinkrik played the role of Saul in Breaking Bad. Due to public fondness for the character, Bob stars in his own show now, called \"Better Call Saul\".")
+            }
         }
     }
 }
@@ -98,24 +98,26 @@ private fun MDLUlElement.addActorItem(name: String, bio: String) {
 
 private fun TabsElement.addManualTablePanel() {
     panel("Manual table").apply {
-        table().apply {
-            thead().apply {
-                tr().apply {
-                    th().setText("First")
-                    th().setText("Second")
-                    th().setText("Third")
+        grid().div(offsetBefore = 5, width = 2).apply {
+            table().apply {
+                thead().apply {
+                    tr().apply {
+                        th().setText("First")
+                        th().setText("Second")
+                        th().setText("Third")
+                    }
                 }
-            }
-            tbody().apply {
-                tr().apply {
-                    td().setText("dog")
-                    td().setText("cat")
-                    td().setText("mouse")
-                }
-                tr().apply {
-                    td().setText("egg")
-                    td().setText("hen")
-                    td().setText("cat")
+                tbody().apply {
+                    tr().apply {
+                        td().setText("dog")
+                        td().setText("cat")
+                        td().setText("mouse")
+                    }
+                    tr().apply {
+                        td().setText("egg")
+                        td().setText("hen")
+                        td().setText("cat")
+                    }
                 }
             }
         }
@@ -151,13 +153,15 @@ private fun LayoutElement.addHeader() {
 
 private fun TabsElement.addTableFromObjectsPanel() {
     panel("Table from Objects", isActive = true).apply {
-        table().apply {
-            data class Row(@MDLTableHeaderName("First Name") val firstName: String, val address: String)
+        grid().div(offsetBefore = 5, width = 2).apply {
+            table().apply {
+                data class Row(@MDLTableHeaderName("First Name") val firstName: String, val address: String)
 
-            val data = listOf(Row("Ian", "Austin"), Row("Fred", "Houston"))
-            fromDataObjectList(data, propertyOrder = listOf(Row::firstName, Row::address)) { obj, td ->
-                td.on.click {
-                    println(obj.firstName)
+                val data = listOf(Row("Ian", "Austin"), Row("Fred", "Houston"))
+                fromDataObjectList(data, propertyOrder = listOf(Row::firstName, Row::address)) { obj, td ->
+                    td.on.click {
+                        println(obj.firstName)
+                    }
                 }
             }
         }

@@ -79,8 +79,9 @@ class LayoutDrawerElement(wrapped: DivElement) : AbstractSubLayout(wrapped) {
 
 }
 
+fun Element.spacer(attributes: Map<String, Any> = attr) = div(attributes.classes("mdl-layout-spacer"))
+
 class RowElement(wrapped: DivElement) : AbstractSubLayout(wrapped) {
-    fun spacer(attributes: Map<String, Any> = attr) = div(attributes.classes("mdl-layout-spacer"))
 }
 
 

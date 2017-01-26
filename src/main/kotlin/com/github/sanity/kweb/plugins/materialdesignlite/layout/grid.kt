@@ -18,7 +18,7 @@ fun MDLElement.grid(
         .classes("mdl-grid--no-spacing", onlyIf = noSpacing)
 ))
 
-class GridElement(wrapped: DivElement) : DivElement(wrapped) {
+class GridElement(wrapped: DivElement) : MDLElement(wrapped) {
     // TODO: Include a check to verify that total width doesn't exceed 12
     fun div(
             width: Int,
@@ -44,31 +44,29 @@ class GridElement(wrapped: DivElement) : DivElement(wrapped) {
 
             align: CellVerticalAlignment? = null,
 
-            attributes: Map<String, Any> = attr): DivElement {
-        return div(attributes
-                .classes("mdl-cell", "mdl-cell--$width-col")
-                .classes(onlyIf = desktopWidth != null, classes = "mdl-cell--$desktopWidth-desktop")
-                .classes(onlyIf = tabletWidth != null, classes = "mdl-cell--$tabletWidth-tablet")
-                .classes(onlyIf = phoneWidth != null, classes = "mdl-cell--$phoneWidth-phone")
+            attributes: Map<String, Any> = attr): MDLElement = MDLElement(div(attributes
+                    .classes("mdl-cell", "mdl-cell--$width-col")
+                    .classes(onlyIf = desktopWidth != null, classes = "mdl-cell--$desktopWidth-desktop")
+                    .classes(onlyIf = tabletWidth != null, classes = "mdl-cell--$tabletWidth-tablet")
+                    .classes(onlyIf = phoneWidth != null, classes = "mdl-cell--$phoneWidth-phone")
 
-                .classes(onlyIf = offsetBefore != null, classes = "mdl-cell--$offsetBefore-offset")
-                .classes(onlyIf = desktopOffsetBefore != null, classes = "mdl-cell--$desktopOffsetBefore-offset-desktop")
-                .classes(onlyIf = tabletOffsetBefore != null, classes = "mdl-cell--$tabletOffsetBefore-offset-tablet")
-                .classes(onlyIf = phoneOffsetBefore != null, classes = "mdl-cell--$phoneOffsetBefore-offset-phone")
+                    .classes(onlyIf = offsetBefore != null, classes = "mdl-cell--$offsetBefore-offset")
+                    .classes(onlyIf = desktopOffsetBefore != null, classes = "mdl-cell--$desktopOffsetBefore-offset-desktop")
+                    .classes(onlyIf = tabletOffsetBefore != null, classes = "mdl-cell--$tabletOffsetBefore-offset-tablet")
+                    .classes(onlyIf = phoneOffsetBefore != null, classes = "mdl-cell--$phoneOffsetBefore-offset-phone")
 
 
-                .classes(onlyIf = order != null, classes = "mdl-cell--order-$order")
-                .classes(onlyIf = desktopOrder != null, classes = "mdl-cell--order-$desktopOrder-desktop")
-                .classes(onlyIf = tabletOrder != null, classes = "mdl-cell--order-$tabletOrder-tablet")
-                .classes(onlyIf = phoneOrder != null, classes = "mdl-cell--order-$phoneOrder-phone")
+                    .classes(onlyIf = order != null, classes = "mdl-cell--order-$order")
+                    .classes(onlyIf = desktopOrder != null, classes = "mdl-cell--order-$desktopOrder-desktop")
+                    .classes(onlyIf = tabletOrder != null, classes = "mdl-cell--order-$tabletOrder-tablet")
+                    .classes(onlyIf = phoneOrder != null, classes = "mdl-cell--order-$phoneOrder-phone")
 
-                .classes(onlyIf = hideDesktop, classes = "mdl-cell--hide-desktop")
-                .classes(onlyIf = hideTablet, classes = "mdl-cell--hide-tablet")
-                .classes(onlyIf = hidePhone, classes = "mdl-cell--hide-phone")
+                    .classes(onlyIf = hideDesktop, classes = "mdl-cell--hide-desktop")
+                    .classes(onlyIf = hideTablet, classes = "mdl-cell--hide-tablet")
+                    .classes(onlyIf = hidePhone, classes = "mdl-cell--hide-phone")
 
-                .classes(onlyIf = align != null, classes = "mdl-cell--$align")
-        )
-    }
+                    .classes(onlyIf = align != null, classes = "mdl-cell--$align")
+            ))
 }
 
 enum class CellVerticalAlignment {

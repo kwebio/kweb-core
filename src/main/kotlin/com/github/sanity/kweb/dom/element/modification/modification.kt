@@ -56,6 +56,38 @@ fun Element.addClasses(vararg classes: String, onlyIf : Boolean = true): Element
     return this
 }
 
+fun Element.removeClasses(vararg classes: String, onlyIf: Boolean = true): Element {
+    if (onlyIf) {
+        for (class_ in classes) {
+            if (class_.contains(' ')) {
+                throw RuntimeException("Class names must not contain spaces")
+            }
+            execute("removeClass($jsExpression, ${class_.toJson()});")
+        }
+    }
+    return this
+}
+
+fun Element.activate(): Element {
+    addClasses("is-active")
+    return this
+}
+
+fun Element.deactivate(): Element {
+    removeClasses("is-active")
+    return this
+}
+
+fun Element.disable(): Element {
+    addClasses("disabled")
+    return this
+}
+
+fun Element.enable(): Element {
+    removeClasses("disabled")
+    return this
+}
+
 fun Element.removeChildren(): Element {
     execute("""
         while ($jsExpression.firstChild) {

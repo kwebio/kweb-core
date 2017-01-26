@@ -18,11 +18,26 @@ import java.util.concurrent.ConcurrentHashMap
 
 typealias OneTime = Boolean
 
-class KWeb(val port: Int, override val plugins: List<KWebPlugin> = Collections.emptyList(), override val createPage: RootReceiver.() -> Unit) : ClientConduit(createPage, plugins) {
+/*
+TODO: Hi Ian, pushed a change to wasabi, if your interested you should be able to create a
+subclass of wasabi's AppServer and override init and set routeLocator to something that
+implements wasabi's RouteLocator interface, only caveat atm is autooptions/cors support
+wont be happy. But I thought for your use case it would enable you to move things along
+at your end till its properly configurable
+ */
+
+class KWeb(val port: Int,
+           override val plugins: List<KWebPlugin> = Collections.emptyList(),
+           val appServerConfigurator: (AppServer) -> Unit = {},
+           override val createPage: RootReceiver.() -> Unit
+)
+    : ClientConduit(createPage, plugins) {
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
 
     init {
+        appServerConfigurator.invoke(server)
+
         //TODO: Need to do housekeeping to delete old client data
         clients = ConcurrentHashMap<String, WSClientData>()
 
