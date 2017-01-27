@@ -77,8 +77,11 @@ fun Element.i(attributes: Map<String, Any> = attr) = IElement(createElement("i",
 
 open class IElement(wrapped : Element) : Element(wrapped)
 
-fun Element.form(action: String? = null, attributes: Map<String, Any> = attr): Element {
-    return createElement("form", attributes.set("action", action))
+fun Element.form(action: String? = null, method: String? = null, attributes: Map<String, Any> = attr): Element {
+    return createElement("form", attributes
+            .set("action", action)
+            .set("method", method)
+    )
 }
 
 open class FormElement(wrapped: Element) : Element(wrapped)
