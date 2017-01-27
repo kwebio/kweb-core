@@ -16,16 +16,17 @@ import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 fun main(args: Array<String>) {
     KWeb(port = 8091, plugins = listOf(jqueryCore)) {
         doc.body.apply {
-            h1(attr.classes("test")).addText("Simple Demo of JQuery plugin")
-            jquery(".test").apply {
-                click {
-                    println("Clicked!")
-                }
-                mouseenter {
-                    println("Mouse enter!")
-                }
-                mouseleave {
-                    println("Mouse leave!")
+            h1(attr.classes("test")).addText("Simple Demo of JQuery plugin").apply {
+                jquery(".test").apply {
+                    click {
+                        println("Clicked!")
+                    }
+                    mouseenter {
+                        println("Mouse enter!")
+                    }
+                    mouseleave {
+                        println("Mouse leave!")
+                    }
                 }
             }
         }

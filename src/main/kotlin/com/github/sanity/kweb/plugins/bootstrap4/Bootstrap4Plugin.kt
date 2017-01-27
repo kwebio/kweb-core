@@ -28,6 +28,7 @@ val bootstrap4 = Bootstrap4Plugin()
 
 // The bootstrap DSL
 fun Element.container(tag: String = "div", fluid: Boolean = false): Element {
+    require(Bootstrap4Plugin::class)
     val fluidClassModifier = if (fluid) "-fluid" else ""
     return createElement(tag, attributes = mapOf("class" to "container$fluidClassModifier"))
 }

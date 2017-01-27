@@ -1,6 +1,8 @@
 package com.github.sanity.kweb.plugins.jqueryCore
 
 import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
@@ -25,12 +27,13 @@ val jqueryCore = JQueryCorePlugin()
 
 // Support for $(...), since Kotlin doesn't allow methods called '$' (which is probably a good thing)
 // I just use jquery()
-fun RootReceiver.jquery(selector: String): JQueryReceiver {
+fun Element.jquery(selector: String): JQueryReceiver {
     require(JQueryCorePlugin::class)
-    return JQueryReceiver(this, "$(${selector.toJson()})")
+    return JQueryReceiver(this.rootReceiver, "$(${selector.toJson()})")
 }
 
 // And here we can implement all of the useful JQuery functions
+@KWebDSL
 class JQueryReceiver(private val rootReceiver : RootReceiver, private val js : String) {
     // TODO: Support querying the event eg. to determine what key was pressed
     fun on(event: String, rh: RootReceiver.() -> Unit) : JQueryReceiver {

@@ -9,8 +9,8 @@ import kotlin.reflect.KClass
 annotation class KWebDSL
 
 @KWebDSL
-open class Element(open val receiver: RootReceiver, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
-    constructor(element: Element) : this(element.receiver, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
+open class Element(open val rootReceiver: RootReceiver, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
+    constructor(element: Element) : this(element.rootReceiver, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
      *********/
@@ -21,7 +21,7 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
      * are based.
      */
     fun execute(js: String) {
-        receiver.execute(js)
+        rootReceiver.execute(js)
     }
 
     /**
@@ -30,8 +30,8 @@ open class Element(open val receiver: RootReceiver, open var jsExpression: Strin
      * are based.
      */
     fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
-        return receiver.evaluate(js).thenApply(outputMapper)
+        return rootReceiver.evaluate(js).thenApply(outputMapper)
     }
 
-    fun require(requiredPlugins: KClass<out KWebPlugin>) = receiver.require(requiredPlugins)
+    fun require(requiredPlugins: KClass<out KWebPlugin>) = rootReceiver.require(requiredPlugins)
 }

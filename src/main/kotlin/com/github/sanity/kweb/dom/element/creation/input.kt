@@ -18,7 +18,7 @@ fun Element.input(type: InputType? = null, name: String? = null, initialValue: S
 
 open class InputElement(val element: Element) : Element(element) {
     fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value", { s: String -> s }) ?: throw RuntimeException("Not sure why .evaluate() would return null")
-    fun setValue(newValue: String) = element.receiver.execute("$jsExpression.value=${newValue.toJson()}")
+    fun setValue(newValue: String) = element.rootReceiver.execute("$jsExpression.value=${newValue.toJson()}")
 }
 
 enum class InputType {

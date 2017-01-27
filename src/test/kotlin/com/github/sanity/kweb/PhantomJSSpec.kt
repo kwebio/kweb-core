@@ -43,20 +43,22 @@ class PhantomJSSpec : FreeSpec() {
          */
         "test various server-browser interactions" {
             KWeb(7324) {
+                    val cookie = doc.cookie
+                    val localStorage = doc.localStorage
                     with(doc.body) {
                         future {
                             val h1 = h1(attributes = attr.classes("testing").set("data-test", "abacus"))
                             h1.read.attribute("data-test").await() shouldBe "abacus"
 
-                            doc.cookie.setString("testcookie", "hello")
-                            doc.cookie.getString("testcookie").await() shouldBe "hello"
-                            doc.cookie.remove("testcookie")
-                            doc.cookie.getString("testcookie").await() shouldBe null
+                            cookie.setString("testcookie", "hello")
+                            cookie.getString("testcookie").await() shouldBe "hello"
+                            cookie.remove("testcookie")
+                            cookie.getString("testcookie").await() shouldBe null
 
-                            doc.localStorage.set("objtest", 123)
-                            doc.localStorage.get<Int>("objtest").await() shouldBe 123
-                            doc.localStorage.remove("objtest")
-                            doc.localStorage.getString("objtest").await() shouldBe null
+                            localStorage.set("objtest", 123)
+                            localStorage.get<Int>("objtest").await() shouldBe 123
+                            localStorage.remove("objtest")
+                            localStorage.getString("objtest").await() shouldBe null
 
                             exceptionFuture.complete(Unit)
                         }.exceptionally { exceptionFuture.completeExceptionally(it) }

@@ -1,24 +1,25 @@
 package com.github.sanity.kweb.dom.element.events
 
-import com.github.sanity.kweb.RootReceiver
 import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.dom.element.modification.addEventListener
 
 // TODO: Should this subclass Element?
-class ONReceiver(private val parent: Element) : Element(parent.receiver, parent.jsExpression) {
-    fun event(eventName: String, rh: RootReceiver.() -> Unit): ONReceiver {
-        parent.addEventListener(eventName, rh)
-        return this
+@KWebDSL
+class ONReceiver(private val parent: Element) : Element(parent) {
+    fun event(eventName: String, callback: Element.() -> Unit): Element {
+        parent.addEventListener(eventName, callback)
+        return parent
     }
 
-    fun click(rh: RootReceiver.() -> Unit) = event("click", rh)
-    fun change(rh: RootReceiver.() -> Unit) = event("change", rh)
-    fun mouseover(rh: RootReceiver.() -> Unit) = event("mouseover", rh)
-    fun mouseout(rh: RootReceiver.() -> Unit) = event("mouseout", rh)
-    fun keydown(rh: RootReceiver.() -> Unit) = event("keydown", rh)
-    fun keypress(rh: RootReceiver.() -> Unit) = event("keypress", rh)
-    fun keyup(rh: RootReceiver.() -> Unit) = event("keyup", rh)
-    fun load(rh: RootReceiver.() -> Unit) = event("load", rh)
+    fun click(callback: Element.() -> Unit) = event("click", callback)
+    fun change(callback: Element.() -> Unit) = event("change", callback)
+    fun mouseover(callback: Element.() -> Unit) = event("mouseover", callback)
+    fun mouseout(callback: Element.() -> Unit) = event("mouseout", callback)
+    fun keydown(callback: Element.() -> Unit) = event("keydown", callback)
+    fun keypress(callback: Element.() -> Unit) = event("keypress", callback)
+    fun keyup(callback: Element.() -> Unit) = event("keyup", callback)
+    fun load(callback: Element.() -> Unit) = event("load", callback)
     // TODO: Add the rest http://www.w3schools.com/jsref/dom_obj_event.asp
 
 }

@@ -2,12 +2,14 @@ package com.github.sanity.kweb.dom.cookies
 
 import com.github.salomonbrys.kotson.fromJson
 import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.gson
 import com.github.sanity.kweb.toJson
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
+@KWebDSL
 class CookieReceiver(val receiver: RootReceiver) {
     fun set(name: String, value: Any, expires: Duration? = null, path: String? = null, domain: String? = null) {
         setString(name, value.toJson(), expires, path, domain)

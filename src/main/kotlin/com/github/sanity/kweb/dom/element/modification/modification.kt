@@ -1,7 +1,6 @@
 package com.github.sanity.kweb.dom.element.modification
 
 import com.github.salomonbrys.kotson.toJson
-import com.github.sanity.kweb.RootReceiver
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.escapeEcma
 import com.github.sanity.kweb.random
@@ -113,15 +112,15 @@ fun Element.addText(value: String): Element {
     return this
 }
 
-fun Element.addEventListener(eventName: String, rh: RootReceiver.() -> Unit): Element {
+fun Element.addEventListener(eventName: String, callback: Element.() -> Unit): Element {
     val callbackId = Math.abs(random.nextInt())
     val js = jsExpression + """
             .addEventListener(${eventName.toJson()}, function() {
                 callbackWs($callbackId, false);
             });
         """
-    receiver.executeWithCallback(js, callbackId) {
-        rh.invoke(receiver)
+    rootReceiver.executeWithCallback(js, callbackId) {
+        callback.invoke(this)
     }
     return this
 }

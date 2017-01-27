@@ -35,7 +35,7 @@ fun Element.createElement(tag: String, attributes: Map<String, Any> = attr): Ele
         appendln("}")
     }
     execute(javaScript.toString())
-    return Element(receiver, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+    return Element(rootReceiver, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
 }
 
 fun Element.div(attributes: Map<String, Any> = attr) = DivElement(createElement("div", attributes))

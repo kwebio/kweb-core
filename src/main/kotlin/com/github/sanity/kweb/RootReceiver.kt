@@ -1,11 +1,13 @@
 package com.github.sanity.kweb
 
 import com.github.sanity.kweb.dom.Document
+import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
+@KWebDSL
 class RootReceiver(private val clientId: String, internal val cc: ClientConduit, val response: String? = null) {
     private val plugins: Set<KClass<out KWebPlugin>> by lazy {
         cc.plugins.map { it::class }.toSet()

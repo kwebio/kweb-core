@@ -7,4 +7,4 @@ import com.github.sanity.kweb.dom.element.Element
  */
 
 
-val Element.read: ElementReader get() = ElementReader(receiver, jsExpression)
+val Element.read: ElementReader get() = ElementReader(rootReceiver, jsExpression)

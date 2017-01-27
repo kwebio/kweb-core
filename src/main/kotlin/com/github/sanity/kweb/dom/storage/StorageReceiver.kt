@@ -2,6 +2,7 @@ package com.github.sanity.kweb.dom.storage
 
 import com.github.salomonbrys.kotson.fromJson
 import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.gson
 import com.github.sanity.kweb.toJson
 import java.util.concurrent.CompletableFuture
@@ -9,6 +10,7 @@ import java.util.concurrent.CompletableFuture
 /**
  * Created by ian on 1/14/17.
  */
+@KWebDSL
 class StorageReceiver(val receiver: RootReceiver, val type: StorageType) {
     private val obj = "${type.name}Storage"
 

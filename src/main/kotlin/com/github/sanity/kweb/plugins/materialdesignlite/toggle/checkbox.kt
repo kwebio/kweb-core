@@ -2,6 +2,7 @@ package com.github.sanity.kweb.plugins.materialdesignlite.toggle
 
 import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
+import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.dom.element.creation.InputElement
 import com.github.sanity.kweb.dom.element.creation.LabelElement
 import com.github.sanity.kweb.dom.element.creation.input
@@ -17,6 +18,7 @@ fun MDLElement.checkbox(rippleEffect: Boolean = false, attributes: Map<String, A
         .classes("mdl-js-ripple-effect", onlyIf = rippleEffect)
 ))
 
+@KWebDSL
 class CheckboxReceiver(val wrapped: LabelElement) {
     fun input(attributes: Map<String, Any> = attr)
             = MDLInputElement(wrapped.input(attributes = attributes
