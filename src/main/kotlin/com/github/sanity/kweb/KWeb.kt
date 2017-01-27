@@ -3,12 +3,10 @@ package com.github.sanity.kweb
 import com.github.sanity.kweb.plugins.KWebPlugin
 import io.netty.channel.Channel
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
+import org.apache.commons.io.IOUtils
 import org.wasabifx.wasabi.app.AppConfiguration
 import org.wasabifx.wasabi.app.AppServer
 import org.wasabifx.wasabi.protocol.websocket.respond
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -48,7 +46,7 @@ class KWeb(val port: Int,
             applyPlugin(plugin, appliedPlugins, endHeadBuilder, startHeadBuilder)
         }
 
-        val bootstrapHtml = String(Files.readAllBytes(Paths.get(javaClass.getResource("kweb_bootstrap.html").toURI())), StandardCharsets.UTF_8)
+        val bootstrapHtml = IOUtils.toString(javaClass.getResourceAsStream("kweb_bootstrap.html"), Charsets.UTF_8)
                 .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
                 .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 

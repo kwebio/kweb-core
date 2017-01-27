@@ -52,7 +52,8 @@ dependencies {
     //compile 'org.jetbrains.kotlinx:vertx3-lang-kotlin:0.0.+'
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
    // complie "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.3-beta'
