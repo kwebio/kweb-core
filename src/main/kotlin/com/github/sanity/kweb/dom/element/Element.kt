@@ -5,7 +5,10 @@ import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
+@DslMarker
+annotation class KWebDSL
 
+@KWebDSL
 open class Element(open val receiver: RootReceiver, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
     constructor(element: Element) : this(element.receiver, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
