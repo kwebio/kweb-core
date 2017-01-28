@@ -88,7 +88,7 @@ fun Element.disable(): Element {
 }
 
 fun Element.enable(): Element {
-    setAttribute("disabled", false)
+    removeAttribute("disabled")
     return this
 }
 
