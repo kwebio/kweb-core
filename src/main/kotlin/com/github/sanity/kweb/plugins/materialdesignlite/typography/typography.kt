@@ -5,7 +5,7 @@ import com.github.sanity.kweb.dom.element.modification.addClasses
 import com.github.sanity.kweb.plugins.materialdesignlite.materialDesignLite
 
 /**
- * Created by ian on 1/21/17.
+ * See https://material.io/guidelines/style/typography.html#typography-styles
  */
 
 fun Element.typography(style: TypographyStyles): Element {

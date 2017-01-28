@@ -78,12 +78,12 @@ fun Element.deactivate(): Element {
 }
 
 fun Element.disable(): Element {
-    addClasses("disabled")
+    setAttribute("disabled", true)
     return this
 }
 
 fun Element.enable(): Element {
-    removeClasses("disabled")
+    setAttribute("disabled", false)
     return this
 }
 
