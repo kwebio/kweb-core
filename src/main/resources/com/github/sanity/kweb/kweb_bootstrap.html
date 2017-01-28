@@ -45,7 +45,7 @@
         }
 
         function callbackWs(callbackId, data) {
-            socket.send(JSON.stringify({"id": kwebClientId, "callback": {"callbackId" : callbackId, "data" : data}}))
+            socket.send(JSON.stringify({"id": kwebClientId, "callback": {"callbackId" : callbackId, "data" : JSON.stringify(data)}}))
         }
 
         /*

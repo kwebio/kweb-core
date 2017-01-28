@@ -33,10 +33,11 @@ fun main(args: Array<String>) {
             val inputElement = input(type = InputType.text, size = 20)
 
             // And a button to add a new item
-            button().addText("Add Item")
-                    // Here we register a callback, the code block will be called when the
-                    // user clicks this button.
-                    .on.click {
+            val button = button()
+            button.addText("Add Item")
+            // Here we register a callback, the code block will be called when the
+            // user clicks this button.
+            button.on.click {
                 // This looks simple, but it is deceptively cool, and in more complex applications is the key to
                 // hiding the client/server divide in a fairly efficient matter.  It uses Kotlin 1.1's new coroutines
                 // functionality, see https://github.com/Kotlin/kotlinx.coroutines
@@ -67,6 +68,7 @@ fun main(args: Array<String>) {
 fun ULElement.newListItem(text: String) {
     li().apply {
         addText(text)
-        on.click { delete() }
+        on.click { event ->
+            delete() }
     }
 }

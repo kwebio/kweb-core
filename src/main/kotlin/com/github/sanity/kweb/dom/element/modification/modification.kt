@@ -5,6 +5,7 @@ import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.escapeEcma
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
+import java.util.*
 
 /**
  * Created by ian on 1/13/17.
@@ -117,15 +118,16 @@ fun Element.addText(value: String): Element {
     return this
 }
 
-fun Element.addEventListener(eventName: String, callback: Element.() -> Unit): Element {
+fun Element.addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), callback: Element.(String) -> Unit): Element {
     val callbackId = Math.abs(random.nextInt())
+    val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+"}"
     val js = jsExpression + """
-            .addEventListener(${eventName.toJson()}, function() {
-                callbackWs($callbackId, false);
+            .addEventListener(${eventName.toJson()}, function(event) {
+                callbackWs($callbackId, $eventObject);
             });
         """
-    rootReceiver.executeWithCallback(js, callbackId) {
-        callback.invoke(this)
+    rootReceiver.executeWithCallback(js, callbackId) { payload ->
+        callback.invoke(this, payload)
     }
     return this
 }
