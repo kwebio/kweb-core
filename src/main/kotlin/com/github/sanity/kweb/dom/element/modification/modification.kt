@@ -33,6 +33,11 @@ fun Element.setAttribute(name: String, value: Any?): Element {
     return this
 }
 
+fun Element.removeAttribute(name: String): Element {
+    execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+    return this
+}
+
 fun Element.setInnerHTML(value: String): Element {
     execute("$jsExpression.innerHTML=\"${value.escapeEcma()}\";")
     return this
