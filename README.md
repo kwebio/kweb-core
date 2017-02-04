@@ -6,7 +6,7 @@ that makes the distinction between web browser and server largely invisible to t
 In particular, it can use the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in 
 upcoming Kotlin 1.1 to elegantly avoid [callback hell](http://callbackhell.com/).
 
-It also incorporates a simple DSL for manipulating the browser's DOM.
+It also incorporates a simple DSL for manipulating the browser's DOM, and plugins to allow you to use popular JavaScript frameworks like JQuery and Material Design Light.  It's also surprisingly easy to add your own plugin for your favorite library or tool.
 
 ### Why?
 Building rich webapps normally requires navigating the
