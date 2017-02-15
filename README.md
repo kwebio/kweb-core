@@ -1,12 +1,15 @@
 ## KWeb
 
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges) [![](https://jitpack.io/v/sanity/kweb.svg)](https://jitpack.io/#sanity/kweb) [![Build Status](https://travis-ci.org/sanity/kweb.svg?branch=master)](https://travis-ci.org/sanity/kweb)
+
+
 KWeb is an experimental [Kotlin](http://kotlinlang.org/) library for building rich interactive web applications in pure Kotlin in a way
 that makes the distinction between web browser and server largely invisible to the programmer.
 
 In particular, it can use the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in 
 upcoming Kotlin 1.1 to elegantly avoid [callback hell](http://callbackhell.com/).
 
-It also incorporates a simple DSL for manipulating the browser's DOM.
+It also incorporates a simple DSL for manipulating the browser's DOM, and plugins to allow you to use popular JavaScript frameworks like JQuery and Material Design Light.  It's also surprisingly easy to add your own plugin for your favorite library or tool.
 
 ### Why?
 Building rich webapps normally requires navigating the
@@ -145,5 +148,3 @@ fun Element.ULElement.newListItem(setText: String) {
 2. Run it
 3. Visit [http://127.0.0.1:8091/](http://127.0.0.1:8091/) in your browser.
 
-### Development
-[![Build Status](https://travis-ci.org/sanity/kweb.svg?branch=master)](https://travis-ci.org/sanity/kweb)
