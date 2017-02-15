@@ -5,6 +5,7 @@ import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.attributes.set
 import com.github.sanity.kweb.dom.element.creation.h1
 import com.github.sanity.kweb.dom.element.read.read
+import com.github.sanity.kweb.dom.element.storage.localStorage
 import com.moodysalem.phantomjs.wrapper.PhantomJS
 import io.kotlintest.specs.FreeSpec
 import kotlinx.coroutines.experimental.future.await
@@ -44,8 +45,8 @@ class PhantomJSSpec : FreeSpec() {
         "test various server-browser interactions" {
             KWeb(7324) {
                     val cookie = doc.cookie
-                    val localStorage = doc.localStorage
                     with(doc.body) {
+                        val localStorage = localStorage
                         future {
                             val h1 = h1(attributes = attr.classes("testing").set("data-test", "abacus"))
                             h1.read.attribute("data-test").await() shouldBe "abacus"
