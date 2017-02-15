@@ -70,8 +70,8 @@ This is way longer than it needs to be due to the extensive comments, it may als
 
 ```kotlin
 import com.github.sanity.kweb.KWeb
-import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.Element.InputType.setText
+import com.github.sanity.kweb.dom.to.Element
+import com.github.sanity.kweb.dom.to.Element.InputType.setText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.await
 
@@ -79,14 +79,14 @@ fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
     KWeb(8091) {
         doc.body.apply {
-            // Add a header element to the body, along with some simple instructions.
+            // Add a header to to the body, along with some simple instructions.
             h1("Simple KWeb demo - a to-do list")
             p("Edit the setText box below and click the button to add the item.  Click an item to remove it.")
 
             // If you're unfamiliar with the `apply` function, read this:
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
 
-            // We create a <ul> element, and then use apply() to add things to it
+            // We create a <ul> to, and then use apply() to add things to it
             val ul = ul().apply {
 
                 // Add some initial items to the list
@@ -96,7 +96,7 @@ fun main(args: Array<String>) {
                 }
             }
 
-            // Next create an input element
+            // Next create an input to
             val inputElement = input(displayEffect = setText, size = 20)
 
             // And a button to add a new item
@@ -121,7 +121,7 @@ fun main(args: Array<String>) {
                     // And now we add the new item using our custom function
                     ul.newListItem(newItemText)
 
-                    // And finally reset the value of the inputElement element.
+                    // And finally reset the value of the inputElement to.
                     inputElement.setValue("")
                 }
             }
@@ -130,7 +130,7 @@ fun main(args: Array<String>) {
     Thread.sleep(10000)
 }
 
-// Here we use an extension event which can be used on any <UL> element to add a list item which will
+// Here we use an extension event which can be used on any <UL> to to add a list item which will
 // delete itself when clicked.
 fun Element.ULElement.newListItem(setText: String) {
     item().apply {

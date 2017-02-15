@@ -3,6 +3,8 @@ package com.github.sanity.kweb.dom.element.events
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.dom.element.modification.addEventListener
+import kotlin.reflect.KClass
+import kotlin.reflect.full.declaredMemberProperties
 
 // TODO: Should this subclass Element?
 @KWebDSL
@@ -25,7 +27,7 @@ class ONReceiver(private val parent: Element) : Element(parent) {
 
 /* TODO: Get event data back from the client, using returnEventFields in Element.addEventListener
  (was having issues getting kotson to work, which blocked this)
-
+*/
     data class KeyboardEvent(
             val code : String, val ctrlKey : Boolean, val key : String,
             val location : Int, val metaKey : Boolean, val repeat : Boolean,
@@ -33,5 +35,3 @@ class ONReceiver(private val parent: Element) : Element(parent) {
 
 private fun getPropertySet(cls : KClass<*>) : Set<String> = cls.declaredMemberProperties.map {it.name}.toSet()
 
-
-        */

@@ -1,8 +1,10 @@
 package com.github.sanity.kweb.dom.element.creation
 
+import com.github.salomonbrys.kotson.toJson
 import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.set
 import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
 
@@ -85,6 +87,23 @@ fun Element.form(action: String? = null, method: String? = null, attributes: Map
 }
 
 open class FormElement(wrapped: Element) : Element(wrapped)
+
+fun Element.select(attributes: Map<String, Any> = attr) : SelectElement {
+    return SelectElement(createElement("select", attributes))
+}
+
+open class SelectElement(wrapped : Element) : Element(wrapped) {
+    fun option(value : String, attributes: Map<String, Any> = attr)
+            = createElement("option").setAttribute("value", value.toJson())
+
+    fun optgroup(label : String, attributes: Map<String, Any> = attr)
+        = OptGroup(createElement("optgroup").setAttribute("label", label.toJson()))
+}
+
+open class OptGroup(wrapped: Element) : Element(wrapped) {
+    fun option(value : String, attributes: Map<String, Any> = attr)
+            = createElement("option").setAttribute("value", value.toJson())
+}
 
 fun Element.header(attributes: Map<String, Any> = attr) = HeaderElement(createElement("header", attributes))
 

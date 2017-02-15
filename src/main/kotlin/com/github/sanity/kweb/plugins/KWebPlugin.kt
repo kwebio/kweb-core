@@ -1,5 +1,6 @@
 package com.github.sanity.kweb.plugins
 
+import org.wasabifx.wasabi.app.AppServer
 import java.util.*
 
 abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet()) {
@@ -10,4 +11,8 @@ abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet(
     abstract fun decorate(startHead: StringBuilder, endHead: StringBuilder)
 
     open fun executeAfterPageCreation() = ""
+
+    open fun appServerConfigurator(appServer : AppServer) {
+
+    }
 }

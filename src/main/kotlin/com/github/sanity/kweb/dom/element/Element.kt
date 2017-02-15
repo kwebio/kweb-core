@@ -33,5 +33,7 @@ open class Element(open val rootReceiver: RootReceiver, open var jsExpression: S
         return rootReceiver.evaluate(js).thenApply(outputMapper)
     }
 
-    fun require(requiredPlugins: KClass<out KWebPlugin>) = rootReceiver.require(requiredPlugins)
+    fun require(vararg plugins: KClass<out KWebPlugin>) = rootReceiver.require(*plugins)
+
+    fun <P : KWebPlugin> plugin(plugin: KClass<P>) = rootReceiver.plugin(plugin)
 }

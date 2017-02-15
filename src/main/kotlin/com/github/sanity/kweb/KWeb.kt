@@ -43,7 +43,7 @@ class KWeb(val port: Int,
         val endHeadBuilder = StringBuilder()
         val appliedPlugins = HashSet<KWebPlugin>()
         for (plugin in plugins) {
-            applyPlugin(plugin, appliedPlugins, endHeadBuilder, startHeadBuilder)
+            applyPlugin(plugin, appliedPlugins, endHeadBuilder, startHeadBuilder, server)
         }
 
         val bootstrapHtml = IOUtils.toString(javaClass.getResourceAsStream("kweb_bootstrap.html"), Charsets.UTF_8)
@@ -86,15 +86,20 @@ class KWeb(val port: Int,
         server.start(wait = false)
     }
 
-    private fun applyPlugin(plugin: KWebPlugin, appliedPlugins: MutableSet<KWebPlugin>, endHeadBuilder: java.lang.StringBuilder, startHeadBuilder: java.lang.StringBuilder) {
+    private fun applyPlugin(plugin: KWebPlugin,
+                            appliedPlugins: MutableSet<KWebPlugin>,
+                            endHeadBuilder: java.lang.StringBuilder,
+                            startHeadBuilder: java.lang.StringBuilder,
+                            appServer : AppServer) {
         for (dependantPlugin in plugin.dependsOn) {
             if (!appliedPlugins.contains(dependantPlugin)) {
-                applyPlugin(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder)
+                applyPlugin(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder, appServer)
                 appliedPlugins.add(dependantPlugin)
             }
         }
         if (!appliedPlugins.contains(plugin)) {
             plugin.decorate(startHeadBuilder, endHeadBuilder)
+            plugin.appServerConfigurator(appServer)
             appliedPlugins.add(plugin)
         }
     }
