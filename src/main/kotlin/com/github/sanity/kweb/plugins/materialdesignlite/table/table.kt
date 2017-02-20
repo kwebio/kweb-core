@@ -5,7 +5,7 @@ import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.*
 import com.github.sanity.kweb.dom.element.modification.setText
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
@@ -13,8 +13,8 @@ import kotlin.reflect.full.memberProperties
  * Created by ian on 1/23/17.
  */
 
-fun MDLElement.table(selectable: Boolean = false, attributes: Map<String, Any> = attr): MDLTableElement
-        = MDLTableElement(table(attr
+fun MDLReceiver.table(selectable: Boolean = false, attributes: Map<String, Any> = attr): MDLTableElement
+        = MDLTableElement(parent.table(attributes
         .classes("mdl-data-table", "mdl-js-data-table")
         .classes("mdl-data-table--selectable", onlyIf = selectable)
 ))

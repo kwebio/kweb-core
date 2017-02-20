@@ -7,14 +7,14 @@ import com.github.sanity.kweb.dom.element.creation.DivElement
 import com.github.sanity.kweb.dom.element.creation.a
 import com.github.sanity.kweb.dom.element.creation.div
 import com.github.sanity.kweb.dom.element.modification.setText
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 
 /**
  * See https://getmdl.io/components/index.html#layout-section/tabs
  */
 
-fun MDLElement.tabs(rippleEffect: Boolean = false, attributes: Map<String, Any> = attr, tabBarAttributes: Map<String, Any> = attr)
-        = TabsElement(div(attributes
+fun MDLReceiver.tabs(rippleEffect: Boolean = false, attributes: Map<String, Any> = attr, tabBarAttributes: Map<String, Any> = attr)
+        = TabsElement(parent.div(attributes
         .classes("mdl-tabs", "mdl-js-tabs")
         .classes("mdl-js-ripple-effect", onlyIf = rippleEffect)),
         tabBarAttributes
@@ -29,13 +29,13 @@ class TabsElement(wrapped: DivElement, tabBarAttributes: Map<String, Any>) : Div
             isActive: Boolean = false,
             attributes: Map<String, Any> = attr,
             tabAttributes: Map<String, Any> = attr
-    ): MDLElement {
+    ): MDLReceiver {
         // TODO: Validate id string
         tabBar.a(href = "#$id", attributes = tabAttributes
                 .classes("mdl-tabs__tab")
                 .classes("is-active", onlyIf = isActive))
                 .setText(text)
-        return MDLElement(div(attributes
+        return MDLReceiver(div(attributes
                 .id(id)
                 .classes("mdl-tabs__panel")
                 .classes("is-active", onlyIf = isActive)

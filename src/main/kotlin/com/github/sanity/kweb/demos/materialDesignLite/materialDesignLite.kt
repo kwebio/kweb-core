@@ -67,7 +67,7 @@ private fun LayoutElement.addContent() {
 
 private fun TabsElement.addTableFromObjectsPanel() {
     panel("Table from Objects", isActive = true).apply {
-        grid().div(offsetBefore = 5, width = 2).apply {
+        grid().cell(offsetBefore = 5, width = 2).apply {
             table().apply {
                 data class Row(@MDLTableHeaderName("First Name") val firstName: String, val address: String)
 
@@ -84,7 +84,7 @@ private fun TabsElement.addTableFromObjectsPanel() {
 
 private fun TabsElement.addManualTablePanel() {
     panel("Manual table").apply {
-        grid().div(offsetBefore = 5, width = 2).apply {
+        grid().cell(offsetBefore = 5, width = 2).apply {
             table().apply {
                 thead().apply {
                     tr().apply {
@@ -112,7 +112,7 @@ private fun TabsElement.addManualTablePanel() {
 
 private fun TabsElement.addListPanel() {
     panel("List").apply {
-        grid().div(offsetBefore = 2, width = 8).apply {
+        grid().cell(offsetBefore = 2, width = 8).apply {
             list().apply {
                 addActorItem("Bryan Cranston", "Bryan Cranston played the role of Walter in Breaking Bad. He is also known for playing Hal in Malcom in the Middle.")
                 addActorItem("Aaron Paul", "Aaron Paul played the role of Jesse in Breaking Bad. He also featured in the \"Need For Speed\" Movie.")

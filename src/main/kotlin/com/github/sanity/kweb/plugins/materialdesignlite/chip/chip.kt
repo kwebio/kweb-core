@@ -1,11 +1,5 @@
 package com.github.sanity.kweb.plugins.materialdesignlite.chip
 
-import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.creation.ButtonElement
-import com.github.sanity.kweb.dom.element.modification.addClasses
-import com.github.sanity.kweb.dom.element.modification.setAttribute
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
-
 /**
  * Created by ian on 1/21/17.
  */

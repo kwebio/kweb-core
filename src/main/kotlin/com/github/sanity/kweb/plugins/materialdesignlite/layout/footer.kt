@@ -3,7 +3,7 @@ package com.github.sanity.kweb.plugins.materialdesignlite.layout
 import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 
 /**
  * See https://getmdl.io/components/index.html#layout-section/footer
@@ -11,7 +11,7 @@ import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
 
 // TODO: megaFooter
 
-fun MDLElement.miniFooter(attributes: Map<String, Any> = attr) = MiniFooterElement(footer(attributes.classes("mdl-mini-footer")))
+fun MDLReceiver.miniFooter(attributes: Map<String, Any> = attr) = MiniFooterElement(parent.footer(attributes.classes("mdl-mini-footer")))
 
 class MiniFooterElement(wrapped: FooterElement) : FooterElement(wrapped) {
     fun leftSection(attributes: Map<String, Any> = attr) = MiniFooterSection(div(attributes.classes("mdl-mini-footer__left-section")))

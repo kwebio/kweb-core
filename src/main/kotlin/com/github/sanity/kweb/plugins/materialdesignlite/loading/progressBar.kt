@@ -5,15 +5,15 @@ import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.creation.DivElement
 import com.github.sanity.kweb.dom.element.creation.div
 import com.github.sanity.kweb.dom.element.events.on
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 import com.github.sanity.kweb.plugins.materialdesignlite.events.mdlComponentUpgraded
 
 /**
  * See https://getmdl.io/components/index.html#loading-section/progress
  */
 
-fun MDLElement.progressBar(initialProgress : Int = 0, indeterminate : Boolean = false, attributes : Map<String, Any> = attr): ProgressBarDiv {
-    val progressDiv = ProgressBarDiv(div(attributes
+fun MDLReceiver.progressBar(initialProgress : Int = 0, indeterminate : Boolean = false, attributes : Map<String, Any> = attr): ProgressBarDiv {
+    val progressDiv = ProgressBarDiv(parent.div(attributes
             .classes("mdl-progress", "mdl-js-progress")
             .classes("mdl-progress--indeterminate", onlyIf = indeterminate)
     ))

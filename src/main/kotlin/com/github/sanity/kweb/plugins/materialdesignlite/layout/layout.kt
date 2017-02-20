@@ -4,13 +4,13 @@ import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 
 /**
  * See [here](https://getmdl.io/components/index.html#layout-section)
  */
 
-fun MDLElement.layout(
+fun MDLReceiver.layout(
         fixedDrawer: Boolean = false,
         fixedHeader: Boolean = false,
         fixedTabs: Boolean = false,
@@ -18,7 +18,7 @@ fun MDLElement.layout(
         noDesktopDrawerButton: Boolean = false,
         outerDivAttributes: Map<String, Any> = attr,
         layoutDivAttributes: Map<String, Any> = attr): LayoutElement {
-    val outerDiv = div(outerDivAttributes
+    val outerDiv = parent.div(outerDivAttributes
             .classes("mdl-layout--fixed-drawer", onlyIf = fixedDrawer)
             .classes("mdl-layout--fixed-header", onlyIf = fixedHeader)
             .classes("mdl-layout--fixed-tabs", onlyIf = fixedTabs)
@@ -51,7 +51,7 @@ class LayoutElement(e: Element) : Element(e) {
 
     fun drawer(attributes: Map<String, Any> = attr): LayoutDrawerElement = LayoutDrawerElement(div(attributes.classes("mdl-layout__drawer")))
 
-    fun content(attributes: Map<String, Any> = attr) = MDLElement(createElement("main", attributes.classes("mdl-layout__content")))
+    fun content(attributes: Map<String, Any> = attr) = MDLReceiver(createElement("main", attributes.classes("mdl-layout__content")))
 }
 
 enum class WaterfallEffects() {
@@ -59,7 +59,7 @@ enum class WaterfallEffects() {
 }
 
 open class AbstractSubLayout(wrapped: DivElement) : DivElement(wrapped) {
-    fun title(attributes: Map<String, Any> = attr) = MDLElement(span(attributes.classes("mdl-layout__title")))
+    fun title(attributes: Map<String, Any> = attr) = span(attributes.classes("mdl-layout__title"))
     fun navigation(attributes: Map<String, Any> = attr) = NavigationElement(nav(attributes.classes("mdl-navigation")))
 }
 

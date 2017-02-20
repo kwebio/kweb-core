@@ -16,9 +16,9 @@ import com.github.sanity.kweb.toJson
 /*********
  ********* Element creation functions.
  *********
- ********* These allow creation of element types as children of the current element.
+ ********* These allow creation of parent types as children of the current parent.
  ********* With the exception of createElement(), they do not begin with verbs, and
- ********* will typically be just the tag of the element like "div" or "input".
+ ********* will typically be just the tag of the parent like "div" or "input".
  *********/
 
 fun Element.createElement(tag: String, attributes: Map<String, Any> = attr): Element {

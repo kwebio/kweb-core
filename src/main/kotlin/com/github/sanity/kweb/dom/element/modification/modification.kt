@@ -15,13 +15,13 @@ import java.util.*
 /*********
  ********* Element modification functions.
  *********
- ********* These allow modification of an element.  They are distinguished from
- ********* element creation functions because they begin with a verb like "setString"
+ ********* These allow modification of an parent.  They are distinguished from
+ ********* parent creation functions because they begin with a verb like "setString"
  ********* or "add".
  *********/
 
 // TODO: Explicit support for global attributes from http://www.w3schools.com/tags/ref_standardattributes.asp
-// TODO: These should probably be accessed via a field like element.attr[GlobalAttributes.hidden], possibly
+// TODO: These should probably be accessed via a field like parent.attr[GlobalAttributes.hidden], possibly
 // TODO: using generics to ensure the correct return-type
 
 fun Element.setAttribute(name: String, value: Any?): Element {
@@ -41,6 +41,11 @@ fun Element.removeAttribute(name: String): Element {
 
 fun Element.setInnerHTML(value: String): Element {
     execute("$jsExpression.innerHTML=\"${value.escapeEcma()}\";")
+    return this
+}
+
+fun Element.focus() : Element {
+    execute("$jsExpression.focus();")
     return this
 }
 

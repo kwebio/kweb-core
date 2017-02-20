@@ -7,13 +7,13 @@ import com.github.sanity.kweb.dom.element.creation.InputElement
 import com.github.sanity.kweb.dom.element.creation.LabelElement
 import com.github.sanity.kweb.dom.element.creation.input
 import com.github.sanity.kweb.dom.element.creation.label
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 
 /**
  * See https://getmdl.io/components/index.html#toggle-section/checkbox
  */
-fun MDLElement.checkbox(rippleEffect: Boolean = false, attributes: Map<String, Any> = attr)
-        = CheckboxReceiver(label(attributes
+fun MDLReceiver.checkbox(rippleEffect: Boolean = false, attributes: Map<String, Any> = attr)
+        = CheckboxReceiver(parent.label(attributes
         .classes("mdl-checkbox", "mdl-js-checkbox")
         .classes("mdl-js-ripple-effect", onlyIf = rippleEffect)
 ))

@@ -58,8 +58,8 @@ componentHandler.upgradeDom();
 // A convenience value
 val materialDesignLite = com.github.sanity.kweb.plugins.materialdesignlite.MaterialDesignLitePlugin()
 
-val Element.mdl get() = MDLElement(this)
+val Element.mdl get() = MDLReceiver(this)
 
-open class MDLElement(val element: Element) : Element(element) {
+open class MDLReceiver(val parent: Element) {
 
 }

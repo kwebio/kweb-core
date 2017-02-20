@@ -4,15 +4,15 @@ import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLElement
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 
 /**
  * Created by ian on 1/24/17.
  */
 
-fun MDLElement.list(attributes: Map<String, Any> = attr) = MDLUlElement(ul(attributes.classes("mdl-list")))
+fun MDLReceiver.list(attributes: Map<String, Any> = attr) = MDLUlElement(parent.ul(attributes.classes("mdl-list")))
 
-class MDLUlElement(wrapped: ULElement) : MDLElement(wrapped) {
+class MDLUlElement(wrapped: ULElement) : ULElement(wrapped) {
     fun item(attributes: Map<String, Any> = attr, type: ListItemType = ListItemType.oneLine)
             = MDLItemElement(createElement("li", attributes
             .classes("mdl-list__item")
@@ -25,7 +25,7 @@ enum class ListItemType {
     oneLine, twoLine, threeLine
 }
 
-class MDLItemElement(wrapped: Element, val type: ListItemType) : MDLElement(wrapped) {
+class MDLItemElement(wrapped: Element, val type: ListItemType) : Element(wrapped) {
     fun primaryContent(attributes: Map<String, Any> = attr) = MDLItemElement(span(attributes.classes("mdl-list__item-primary-content")), type)
     fun avatar(attributes: Map<String, Any> = attr) = MDLItemElement(i(attributes.classes("mdl-list__item-avatar")), type)
     fun icon(attributes: Map<String, Any> = attr) = MDLItemElement(i(attributes.classes("material-icons", "mdl-list__item-icon")), type)
