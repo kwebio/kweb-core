@@ -123,7 +123,7 @@ fun Element.addText(value: String): Element {
     return this
 }
 
-fun Element.addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), callback: Element.(String) -> Unit): Element {
+fun Element.addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), callback: (String) -> Unit): Element {
     val callbackId = Math.abs(random.nextInt())
     val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+"}"
     val js = jsExpression + """
@@ -132,7 +132,7 @@ fun Element.addEventListener(eventName: String, returnEventFields : Set<String> 
             });
         """
     rootReceiver.executeWithCallback(js, callbackId) { payload ->
-        callback.invoke(this, payload)
+        callback.invoke(payload)
     }
     return this
 }

@@ -7,6 +7,7 @@ import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
+import java.util.concurrent.CompletableFuture
 
 /**
  * Created by ian on 1/13/17.
@@ -98,6 +99,9 @@ open class SelectElement(wrapped : Element) : Element(wrapped) {
 
     fun optgroup(label : String, attributes: Map<String, Any> = attr)
         = OptGroup(createElement("optgroup").setAttribute("label", label.toJson()))
+
+    fun getValue(): CompletableFuture<String>? = evaluate("$jsExpression.value", {it})
+    fun  setValue(value: String) = execute("$jsExpression.value = ${value.toJson()};")
 }
 
 open class OptGroup(wrapped: Element) : Element(wrapped) {

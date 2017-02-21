@@ -11,6 +11,8 @@ import java.util.concurrent.CompletableFuture
 
 @KWebDSL
 class ElementReader(private val receiver: RootReceiver, private val jsExpression: String) {
+    constructor(element : Element) : this(element.rootReceiver, element.jsExpression)
+
     val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName")
     val attributes: CompletableFuture<Map<String, String>> get() = receiver.evaluate("$jsExpression.attributes").thenApply { gson.fromJson<Map<String, String>>(it) }
     fun attribute(name: String): CompletableFuture<String> = receiver.evaluate("($jsExpression.getAttribute(\"${name.escapeEcma()}\"));")
