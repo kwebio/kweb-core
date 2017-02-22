@@ -1,6 +1,5 @@
 package com.github.sanity.kweb.plugins.select2
 
-import com.github.sanity.kweb.dom.element.creation.SelectElement
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 import com.github.sanity.kweb.random
@@ -55,41 +54,3 @@ data class Suggestions(val results : List<Result>, val more : Boolean? = null)
 data class Result(val id : String, val text : String)
 
 val select2 = Select2Plugin()
-
-fun SelectElement.select2(
-        placeholder : String? = null,
-        allowClear : Boolean? = null,
-        minimumInputLength : Int? = null,
-        suggestions : ((String) -> Suggestions)? = null
-) {
-    val plugin = plugin(Select2Plugin::class)
-    val configMap = HashMap<String, String>()
-    configMap.apply {
-        jsPut("placeholder", placeholder)
-        jsPut("allowClear", allowClear)
-        jsPut("minimumInputLength", minimumInputLength)
-    }
-    if (suggestions != null) {
-        configMap.put("ajax", plugin.suggestionsAjaxBlock(suggestions).toJs())
-    }
-
-    val configString = configMap
-    this.execute("$(\"#${this.id}\").select2(${configMap.toJs()});")
-}
-
-data class Select2Config(
-        val placeholder : String? = null,
-        val allowClear : Boolean? = null,
-        val tags : Boolean? = null,
-        val ajax : String? = null
-)
-
-private fun MutableMap<String, String>.jsPut(key : String, value : Any?) {
-    if (value != null) {
-        put(key, value.toJson())
-    }
-}
-
-private fun Map<String, String>.toJs() : String {
-    return "{"+this.entries.map {"${it.key} : ${it.value}"}.joinToString(separator = ", ")+"}"
-}

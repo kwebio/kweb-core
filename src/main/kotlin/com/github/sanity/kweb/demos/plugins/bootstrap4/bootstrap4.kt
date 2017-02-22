@@ -1,4 +1,4 @@
-package com.github.sanity.kweb.demos.bootstrap4
+package com.github.sanity.kweb.demos.plugins.bootstrap4
 
 import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.element.creation.*

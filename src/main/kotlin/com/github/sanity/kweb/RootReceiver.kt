@@ -8,7 +8,7 @@ import kotlin.reflect.jvm.jvmName
 
 class RootReceiver(private val clientId: String, internal val cc: ClientConduit, val response: String? = null) {
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
-        cc.plugins.map { it::class to it }.toMap()
+        cc.appliedPlugins.map { it::class to it }.toMap()
     }
 
     @Suppress("UNCHECKED_CAST")

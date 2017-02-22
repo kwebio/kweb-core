@@ -10,7 +10,7 @@ import kotlin.reflect.full.memberProperties
 
 // TODO: Should this subclass Element?
 @KWebDSL
-class ONReceiver(private val parent: Element) : Element(parent) {
+open class ONReceiver(private val parent: Element) : Element(parent) {
     open class Event(open val type : String)
 
     open class UIEvent(
@@ -40,7 +40,7 @@ class ONReceiver(private val parent: Element) : Element(parent) {
 
     inline fun <reified T : Any> event(eventName : String, eventType : KClass<T>, crossinline callback : (T)-> Unit) : Element {
         // TODO: Should probably cache this rather than do the reflection every time
-        val eventPropertyNames = KeyboardEvent::class.memberProperties.map {it.name}.toSet()
+        val eventPropertyNames = T::class.memberProperties.map {it.name}.toSet()
         return event(eventName, eventPropertyNames, {propertiesAsString ->
             val props : T = gson.fromJson(propertiesAsString)
             callback(props)

@@ -1,4 +1,4 @@
-package com.github.sanity.kweb.demos.jquery
+package com.github.sanity.kweb.demos.plugins.jquery
 
 import com.github.sanity.kweb.KWeb
 import com.github.sanity.kweb.dom.attributes.attr
@@ -18,13 +18,13 @@ fun main(args: Array<String>) {
         doc.body.apply {
             h1(attr.classes("test")).addText("Simple Demo of JQuery plugin").apply {
                 jquery(".test").apply {
-                    click {
+                    on.click {
                         println("Clicked!")
                     }
-                    mouseenter {
+                    on.mouseenter {
                         println("Mouse enter!")
                     }
-                    mouseleave {
+                    on.mouseleave {
                         println("Mouse leave!")
                     }
                 }

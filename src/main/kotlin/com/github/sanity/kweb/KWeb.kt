@@ -41,7 +41,7 @@ class KWeb(val port: Int,
 
         val startHeadBuilder = StringBuilder()
         val endHeadBuilder = StringBuilder()
-        val appliedPlugins = HashSet<KWebPlugin>()
+
         for (plugin in plugins) {
             applyPlugin(plugin, appliedPlugins, endHeadBuilder, startHeadBuilder, server)
         }
