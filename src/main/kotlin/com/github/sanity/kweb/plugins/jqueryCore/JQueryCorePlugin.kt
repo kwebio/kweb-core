@@ -1,10 +1,6 @@
 package com.github.sanity.kweb.plugins.jqueryCore
 
-import com.github.sanity.kweb.RootReceiver
-import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.plugins.KWebPlugin
-import com.github.sanity.kweb.toJson
 
 /**
  * Created by ian on 1/9/17.

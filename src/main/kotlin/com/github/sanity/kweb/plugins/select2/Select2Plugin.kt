@@ -49,8 +49,8 @@ class Select2Plugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
     }
 }
 
-data class Suggestions(val results : List<Result>, val more : Boolean? = null)
+data class Suggestions(val results : List<Item>, val more : Boolean? = null)
 
-data class Result(val id : String, val text : String)
+data class Item(val id : String, val text : String)
 
 val select2 = Select2Plugin()

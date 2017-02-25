@@ -106,7 +106,7 @@ class KWeb(val port: Int,
 
 
     override fun execute(clientId: String, message: String) {
-        //println("execute($js)")
+        //println("execute($selectorExpression)")
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(message)))
     }

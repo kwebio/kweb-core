@@ -33,7 +33,7 @@ class MDLTextFieldElement internal constructor(val e: Element) : Element(e) {
     fun error(attributes: MutableMap<String, Any> = attr) = span(attributes.classes("mdl-textfield__error"))
 
     /**
-     * See [MDL Source](https://github.com/google/material-design-lite/blob/mdl-1.x/src/textfield/textfield.js#L216)
+     * See [MDL Source](https://github.com/google/material-design-lite/blob/mdl-1.x/src/textfield/textfield.selectorExpression#L216)
      */
     fun change(newValue : String) {
         this.execute("$jsExpression.MaterialTextfield.change(${newValue.toJson()});")

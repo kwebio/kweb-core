@@ -11,7 +11,10 @@ fun SelectElement.select2(
         placeholder : String? = null,
         allowClear : Boolean? = null,
         minimumInputLength : Int? = null,
-        suggestions : ((String) -> Suggestions)? = null
+        tokenSeparators : List<String>? = null,
+        data : List<Item>? = null,
+        suggestions : ((String) -> Suggestions)? = null,
+        tags : Boolean? = null
 ) : Select2Element {
     val plugin = plugin(Select2Plugin::class)
     val configMap = HashMap<String, String>()
@@ -19,12 +22,18 @@ fun SelectElement.select2(
         jsPut("placeholder", placeholder)
         jsPut("allowClear", allowClear)
         jsPut("minimumInputLength", minimumInputLength)
+        jsPut("tokenSeparators", tokenSeparators)
+        jsPut("tags", tags)
+        if (data != null) {
+            jsPut("data", data)
+        }
     }
     if (suggestions != null) {
         configMap.put("ajax", plugin.suggestionsAjaxBlock(suggestions).toJs())
     }
 
     val configString = configMap
-    this.execute("$(\"#${this.id}\").select2(${configMap.toJs()});")
+    val configMapJS = configMap.toJs()
+    this.execute("$(\"#${this.id}\").select2($configMapJS);")
     return Select2Element(this)
 }

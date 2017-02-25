@@ -12,6 +12,7 @@ internal fun MutableMap<String, String>.jsPut(key : String, value : Any?) {
     }
 }
 
-internal fun Map<String, String>.toJs() : String {
+internal fun Map<String, Any>.toJs() : String {
+    //return this.toJson()
     return "{"+this.entries.map {"${it.key} : ${it.value}"}.joinToString(separator = ", ")+"}"
 }

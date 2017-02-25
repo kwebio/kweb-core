@@ -19,10 +19,18 @@ fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
 
 // And here we can implement all of the useful JQuery functions
 @KWebDSL
-class JQueryReceiver(internal val rootReceiver : RootReceiver, internal val js : String) {
+class JQueryReceiver(internal val rootReceiver : RootReceiver, internal val selectorExpression: String) {
     val on : JQueryOnReceiver get() = JQueryOnReceiver(this)
 
+    fun execute(js : String) {
+        rootReceiver.execute("$selectorExpression.$js;")
+    }
+
+    fun focus() {
+        execute("focus()")
+    }
+
     fun remove() {
-        rootReceiver.execute(js+".remove();")
+        execute("remove()")
     }
 }

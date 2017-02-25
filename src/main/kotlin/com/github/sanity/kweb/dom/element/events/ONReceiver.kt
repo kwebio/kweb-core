@@ -13,25 +13,20 @@ import kotlin.reflect.full.memberProperties
 open class ONReceiver(private val parent: Element) : Element(parent) {
     open class Event(open val type : String)
 
-    open class UIEvent(
-            override val type : String,
-            open val detail : Long
-    ) : Event(type)
-
-    data class MouseEvent(override val type : String, override val detail : Long,
+    data class MouseEvent(val type : String, val detail : Long,
                           val altKey : Boolean, val button : Int, val buttons : Int,
                           val clientX : Int, val clientY : Int, val ctrlKey : Boolean,
                           val metaKey : Boolean, val movementX : Int, val movementY : Int,
                           val region : String, val screenX : Int, val screenY : Int,
                           val shiftKey : Boolean, val x : Int = clientX, val y : Int = clientY
-                             ) : UIEvent(type, detail)
+                             )
 
-    data class KeyboardEvent(override val type : String, override val detail : Long,
+    data class KeyboardEvent(val type : String,  val detail : Long,
                              val key : String, val altKey : Boolean,
                              val ctrlKey : Boolean, val code : String,
                              val location : Int, val metaKey : Boolean,
                              val shiftKey : Boolean, val locale : String,
-                             val isComposing : Boolean) : UIEvent(type, detail)
+                             val isComposing : Boolean)
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (String) -> Unit): Element {
         parent.addEventListener(eventName, returnEventFields = returnEventFields, callback = callback)

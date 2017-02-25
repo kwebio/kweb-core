@@ -10,7 +10,11 @@ val Element.style get() = StyleReceiver(this)
 
 class StyleReceiver(private val parent : Element) {
     fun setDisplay(value : DisplayValues) {
-        parent.execute("${parent.jsExpression}.style.display=\"$value\"")
+        parent.execute("${parent.jsExpression}.style.display=\"$value\";")
+    }
+
+    fun setWidth(value : String) {
+        parent.execute("${parent.jsExpression}.style.width=\"$value\";")
     }
 
     enum class DisplayValues{
