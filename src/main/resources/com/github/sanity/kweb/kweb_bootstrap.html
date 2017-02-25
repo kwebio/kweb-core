@@ -9,6 +9,8 @@
         }
 
         var kwebClientId = 0;
+        var websocketEstablished = false;
+        var preWSMsgQueue = [];
         var socket;
         function connectWs() {
             var wsURL = toWSUrl("ws");
@@ -18,8 +20,11 @@
                 document.body.innerHTML = "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>"
             } else {
                 socket.onopen = function () {
-                    console.log("WebSocket opened, sending 'hello'")
+                    websocketEstablished = true
                     socket.send(JSON.stringify({"hello": true}))
+                    while (preWSMsgQueue.length > 0) {
+                        socket.send(preWSMsgQueue.shift())
+                    }
                 };
                 socket.onmessage = function (event) {
                     var msg = JSON.parse(event.data);
@@ -45,7 +50,15 @@
         }
 
         function callbackWs(callbackId, data) {
-            socket.send(JSON.stringify({"id": kwebClientId, "callback": {"callbackId" : callbackId, "data" : JSON.stringify(data)}}))
+            var msg = JSON.stringify({
+                "id": kwebClientId,
+                "callback": {"callbackId": callbackId, "data": JSON.stringify(data)}
+            });
+            if (websocketEstablished) {
+                socket.send(msg)
+            } else {
+                preWSMsgQueue.push(msg)
+            }
         }
 
         /*
