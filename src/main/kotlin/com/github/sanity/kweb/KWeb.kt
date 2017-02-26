@@ -1,6 +1,7 @@
 package com.github.sanity.kweb
 
 import com.github.sanity.kweb.browserConnection.OutboundChannel
+import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.plugins.KWebPlugin
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
@@ -9,6 +10,7 @@ import org.wasabifx.wasabi.app.AppConfiguration
 import org.wasabifx.wasabi.app.AppServer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.reflect.jvm.jvmName
 
 /**
  * Created by ian on 12/31/16.
@@ -25,6 +27,7 @@ at your end till its properly configurable
  */
 
 class KWeb(val port: Int,
+           val debug: Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
            val appServerConfigurator: (AppServer) -> Unit = {},
            val buildPage: RootReceiver.() -> Unit
@@ -78,8 +81,17 @@ class KWeb(val port: Int,
     }
 
     private fun handleInboundMessage(ctx: ChannelHandlerContext, message: C2SWebsocketMessage) {
-        if (message.hello != null) {
-            val wsClientData = clients[message.id] ?: throw RuntimeException("Message with id ${message.id} received, but id is unknown")
+        val wsClientData = clients[message.id] ?: throw RuntimeException("Message with id ${message.id} received, but id is unknown")
+        if (message.error != null) {
+            val debugInfo = wsClientData.debugTokens[message.error.debugToken] ?: throw RuntimeException("DebugInfo error not found")
+            // TODO: This should be handled via a proper logging framework like SLF4J
+            System.err.println("JavaScript error: '${message.error.error.message}'")
+            System.err.println("Caused by ${debugInfo.action}: '${debugInfo.js}':")
+            val disregardClassPrefixes = listOf(KWeb::class.jvmName, RootReceiver::class.jvmName, Element::class.jvmName, "org.wasabifx", "io.netty", "java.lang")
+            debugInfo.throwable.stackTrace.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
+                System.err.println("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
+            }
+        } else if (message.hello != null) {
             val tempQueue = wsClientData.outboundChannel as OutboundChannel.TemporarilyStoringChannel
             wsClientData.outboundChannel = OutboundChannel.WSChannel(ctx.channel())
             tempQueue.read().forEach { wsClientData.outboundChannel.send(it) }
@@ -115,47 +127,69 @@ class KWeb(val port: Int,
     }
 
 
-    fun execute(clientId: String, message: String) {
+    fun execute(clientId: String, javascript: String) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(message)))
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
+            dt
+        }
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
     }
 
-    fun executeWithCallback(clientId: String, js: String, callbackId: Int, handler: (String) -> Unit) {
+    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing with callback", Throwable()))
+            dt
+        }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = Execute(js)))
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = S2CWebsocketMessage.Execute(javascript)))
     }
 
     fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(expression, "evaluating", Throwable()))
+            dt
+        }
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(clientId, evaluate = Evaluate(expression, callbackId)))
+        wsClientData.send(S2CWebsocketMessage(clientId, evaluate = S2CWebsocketMessage.Evaluate(expression, callbackId)))
     }
 
 }
 
-private data class WSClientData(val id: String, @Volatile var outboundChannel: OutboundChannel, val handlers: MutableMap<Int, (String) -> Unit> = HashMap()) {
+private data class WSClientData(val id: String, @Volatile var outboundChannel: OutboundChannel, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap()) {
     fun send(message: S2CWebsocketMessage) {
         outboundChannel.send(gson.toJson(message))
     }
 }
 
+data class DebugInfo(val js: String, val action : String, val throwable: Throwable)
+
 data class S2CWebsocketMessage(
         val yourId: String,
+        val debugToken: String? = null,
         val execute: Execute? = null,
         val evaluate: Evaluate? = null
-)
-
-data class Execute(val js: String)
-
-data class Evaluate(val js: String, val callbackId: Int)
+) {
+    data class Execute(val js: String)
+    data class Evaluate(val js: String, val callbackId: Int)
+}
 
 data class C2SWebsocketMessage(
         val id: String,
         val hello: Boolean? = true,
+        val error: ErrorMessage? = null,
         val callback: C2SCallback?
-)
+) {
+    data class ErrorMessage(val debugToken: String, val error: Error) {
+        data class Error(val name: String, val message: String)
+    }
 
-data class C2SCallback(val callbackId: Int, val data: String?)
+    data class C2SCallback(val callbackId: Int, val data: String?)
+}
 

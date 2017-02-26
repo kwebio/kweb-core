@@ -14,22 +14,43 @@
         var socket;
         function handleInboundMessage(msg) {
             var yourId = msg["yourId"];
-            if (kwebClientId == 0) {
-                kwebClientId == yourId;
-            } else if (kwebClientId != yourId) {
+            var debugToken = msg["debugToken"];
+            if (kwebClientId != yourId) {
                 console.error("Received message with incorrect clientId, was " + yourId + ", should be " + kwebClientId)
             }
             var execute = msg["execute"];
             if (execute !== undefined) {
                 console.log("Executing: " + execute["js"])
-                eval(execute["js"])
+                try {
+                    eval(execute["js"])
+                } catch (err) {
+                    if (debugToken != undefined) {
+                        console.error("Error evaluating `" + execute["js"] + "`: " + err)
+                        var error = {"debugToken": debugToken, "error": {"name": err.name, "message": err.message}}
+                        var message = {"id": kwebClientId, "error": error}
+                        sendMessage(JSON.stringify(message))
+                    } else {
+                        throw err
+                    }
+                }
             }
             var evaluate = msg["evaluate"];
             if (evaluate !== undefined) {
-                var data = eval(evaluate["js"])
-                var callback = {"callbackId": evaluate["callbackId"], "data": data}
-                var message = {"id": kwebClientId, "callback": callback}
-                socket.send(JSON.stringify(message))
+                try {
+                    var data = eval(evaluate["js"])
+                    var callback = {"callbackId": evaluate["callbackId"], "data": data}
+                    var message = {"id": kwebClientId, "callback": callback}
+                    sendMessage(JSON.stringify(message))
+                } catch (err) {
+                    if (debugToken != undefined) {
+                        console.error("Error evaluating `" + execute["js"] + "`: " + err)
+                        var error = {"debugToken": debugToken, "error": {"name": err.name, "message": err.message}}
+                        var message = {"id": kwebClientId, "error": error}
+                        sendMessage(JSON.stringify(message))
+                    } else {
+                        throw err
+                    }
+                }
             }
         }
         function connectWs() {
@@ -41,9 +62,9 @@
             } else {
                 socket.onopen = function () {
                     websocketEstablished = true
-                    socket.send(JSON.stringify({"id" : kwebClientId, "hello": true}))
+                    sendMessage(JSON.stringify({"id" : kwebClientId, "hello": true}))
                     while (preWSMsgQueue.length > 0) {
-                        socket.send(preWSMsgQueue.shift())
+                        sendMessage(preWSMsgQueue.shift())
                     }
                 };
                 socket.onmessage = function (event) {
@@ -53,16 +74,19 @@
             }
         }
 
-        function callbackWs(callbackId, data) {
-            var msg = JSON.stringify({
-                "id": kwebClientId,
-                "callback": {"callbackId": callbackId, "data": JSON.stringify(data)}
-            });
+        function sendMessage(msg) {
             if (websocketEstablished) {
                 socket.send(msg)
             } else {
                 preWSMsgQueue.push(msg)
             }
+        }
+
+        function callbackWs(callbackId, data) {
+            var msg = JSON.stringify({
+                "id": kwebClientId,
+                "callback": {"callbackId": callbackId, "data": JSON.stringify(data)}
+            });
         }
 
         /*
