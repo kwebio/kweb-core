@@ -1,20 +1,7 @@
 package com.github.sanity.kweb
 
-import com.github.sanity.kweb.dom.attributes.attr
-import com.github.sanity.kweb.dom.attributes.classes
-import com.github.sanity.kweb.dom.attributes.set
-import com.github.sanity.kweb.dom.element.creation.h1
-import com.github.sanity.kweb.dom.element.read.read
-import com.github.sanity.kweb.dom.element.storage.localStorage
-import com.moodysalem.phantomjs.wrapper.PhantomJS
 import io.kotlintest.specs.FreeSpec
-import kotlinx.coroutines.experimental.future.await
-import kotlinx.coroutines.experimental.future.future
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.concurrent.CompletableFuture
-import kotlin.concurrent.thread
 
 /**
  * This works, but is very limited and clunky.  Really need a way to test all of the JavaScript stuff.
@@ -42,6 +29,7 @@ class PhantomJSSpec : FreeSpec() {
             [2:48]
             You need to define some helper function for tests that starts a separate thread with your engine and waits until its done. Or don't launch a separate thread at all, but do everything in the main test thread.
          */
+        /*
         "test various server-browser interactions" {
             KWeb(7324) {
                     val cookie = doc.cookie
@@ -72,6 +60,7 @@ class PhantomJSSpec : FreeSpec() {
             }
             exceptionFuture.get()
         }
+        */
 
     }
 }
