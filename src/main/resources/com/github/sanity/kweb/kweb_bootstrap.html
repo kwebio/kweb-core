@@ -8,10 +8,30 @@
             return ((l.protocol === "https:") ? "wss://" : "ws://") + l.host + l.pathname + s;
         }
 
-        var kwebClientId = 0;
+        var kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
         var websocketEstablished = false;
         var preWSMsgQueue = [];
         var socket;
+        function handleInboundMessage(msg) {
+            var yourId = msg["yourId"];
+            if (kwebClientId == 0) {
+                kwebClientId == yourId;
+            } else if (kwebClientId != yourId) {
+                console.error("Received message with incorrect clientId, was " + yourId + ", should be " + kwebClientId)
+            }
+            var execute = msg["execute"];
+            if (execute !== undefined) {
+                console.log("Executing: " + execute["js"])
+                eval(execute["js"])
+            }
+            var evaluate = msg["evaluate"];
+            if (evaluate !== undefined) {
+                var data = eval(evaluate["js"])
+                var callback = {"callbackId": evaluate["callbackId"], "data": data}
+                var message = {"id": kwebClientId, "callback": callback}
+                socket.send(JSON.stringify(message))
+            }
+        }
         function connectWs() {
             var wsURL = toWSUrl("ws");
             console.log("Connecting to "+wsURL);
@@ -21,30 +41,14 @@
             } else {
                 socket.onopen = function () {
                     websocketEstablished = true
-                    socket.send(JSON.stringify({"hello": true}))
+                    socket.send(JSON.stringify({"id" : kwebClientId, "hello": true}))
                     while (preWSMsgQueue.length > 0) {
                         socket.send(preWSMsgQueue.shift())
                     }
                 };
                 socket.onmessage = function (event) {
                     var msg = JSON.parse(event.data);
-                    if (kwebClientId == 0) {
-                        kwebClientId = msg["yourId"]
-                    } else if (kwebClientId != msg["yourId"]) {
-                        console.error("Received message with incorrect clientId, was " + msg["yourId"] + ", should be " + kwebClientId)
-                    }
-                    var execute = msg["execute"];
-                    if (execute !== undefined) {
-                        console.log("Executing: " + execute["js"])
-                        eval(execute["js"])
-                    }
-                    var evaluate = msg["evaluate"];
-                    if (evaluate !== undefined) {
-                        var data = eval(evaluate["js"])
-                        var callback = {"callbackId": evaluate["callbackId"], "data": data}
-                        var message = {"id": kwebClientId, "callback": callback}
-                        socket.send(JSON.stringify(message))
-                    }
+                    handleInboundMessage(msg);
                 }
             }
         }
@@ -123,11 +127,16 @@
             },
             hasItem: function (sKey) { return (new RegExp("(?:^|;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie); }
         };
+
+        function buildPage() {
+            <!-- BUILD PAGE PAYLOAD PLACEHOLDER -->
+            connectWs();
+        }
     </script>
 
     <!-- END HEADER PLACEHOLDER -->
 </head>
-<body onload="connectWs()">
+<body onload="buildPage()">
 
 </body>
 </html>

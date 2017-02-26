@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-class RootReceiver(private val clientId: String, internal val cc: ClientConduit, val response: String? = null) {
+class RootReceiver(private val clientId: String, internal val cc: KWeb, val response: String? = null) {
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         cc.appliedPlugins.map { it::class to it }.toMap()
     }

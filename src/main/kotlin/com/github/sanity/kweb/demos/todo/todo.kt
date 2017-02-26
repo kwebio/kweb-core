@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
         doc.body.apply {
             // Add a header parent to the body, along with some simple instructions.
             h1().addText("Simple KWeb demo - a to-do list")
-            p().addText("Edit the setText box below and click the button to add the item.  Click an item to remove it.")
+            p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
 
             // If you're unfamiliar with the `apply` function, read this:
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
