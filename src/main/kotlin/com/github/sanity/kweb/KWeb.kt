@@ -5,6 +5,7 @@ import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.plugins.KWebPlugin
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
+import mu.KLogging
 import org.apache.commons.io.IOUtils
 import org.wasabifx.wasabi.app.AppConfiguration
 import org.wasabifx.wasabi.app.AppServer
@@ -32,6 +33,8 @@ class KWeb(val port: Int,
            val appServerConfigurator: (AppServer) -> Unit = {},
            val buildPage: RootReceiver.() -> Unit
 ) {
+    companion object: KLogging()
+
     private val server = AppServer(AppConfiguration(port = port))
     private val clients: MutableMap<String, WSClientData>
     private val mutableAppliedPlugins: MutableSet<KWebPlugin> = HashSet()
@@ -78,19 +81,22 @@ class KWeb(val port: Int,
             }
         }
         server.start(wait = false)
+        logger.info {"KWeb is listening on port $port"}
     }
 
     private fun handleInboundMessage(ctx: ChannelHandlerContext, message: C2SWebsocketMessage) {
         val wsClientData = clients[message.id] ?: throw RuntimeException("Message with id ${message.id} received, but id is unknown")
+        logger.debug { "Message received from client id ${wsClientData.id}" }
         if (message.error != null) {
             val debugInfo = wsClientData.debugTokens[message.error.debugToken] ?: throw RuntimeException("DebugInfo error not found")
-            // TODO: This should be handled via a proper logging framework like SLF4J
-            System.err.println("JavaScript error: '${message.error.error.message}'")
-            System.err.println("Caused by ${debugInfo.action}: '${debugInfo.js}':")
+            val logStatementBuilder = StringBuilder()
+            logStatementBuilder.appendln("JavaScript error: '${message.error.error.message}'")
+            logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
             val disregardClassPrefixes = listOf(KWeb::class.jvmName, RootReceiver::class.jvmName, Element::class.jvmName, "org.wasabifx", "io.netty", "java.lang")
             debugInfo.throwable.stackTrace.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
-                System.err.println("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
+                logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
             }
+            logger.error(logStatementBuilder.toString())
         } else if (message.hello != null) {
             val tempQueue = wsClientData.outboundChannel as OutboundChannel.TemporarilyStoringChannel
             wsClientData.outboundChannel = OutboundChannel.WSChannel(ctx.channel())

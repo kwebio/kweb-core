@@ -12,6 +12,8 @@ fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
     KWeb(8091, debug = true) {
         doc.body.apply {
+            execute("1++2")
+
             // Add a header parent to the body, along with some simple instructions.
             h1().addText("Simple KWeb demo - a to-do list")
             p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")

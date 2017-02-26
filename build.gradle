@@ -58,6 +58,8 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.10-rc'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.10-rc'
 
+    compile 'io.github.microutils:kotlin-logging:1.4.2'
+
     testCompile 'io.kotlintest:kotlintest:1.3.4'
     testCompile 'com.moodysalem:phantomjs-wrapper:3.0.0'
     testCompile 'com.moodysalem:phantomjs-wrapper-windows-binary:3.0.0'
