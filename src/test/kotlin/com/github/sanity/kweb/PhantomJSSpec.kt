@@ -10,6 +10,8 @@ class PhantomJSSpec : FreeSpec() {
     init {
         val exceptionFuture = CompletableFuture<Unit>()
 
+        // TODO: Just execute all demos and make sure there are no javascript errors
+
         /* TODO: Find a way to split this up
          * Roman Elizarov [JB] [2:42 AM]
             @ianclarke To simplify this things I'll introduce `blockingRun { ... }` primitive that starts coroutine, but blocks until it returns.

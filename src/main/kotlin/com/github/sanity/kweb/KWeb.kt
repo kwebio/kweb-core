@@ -18,6 +18,8 @@ import kotlin.reflect.jvm.jvmName
  */
 
 typealias OneTime = Boolean
+typealias LogError = Boolean
+typealias JavaScriptError = String
 
 /*
 TODO: Hi Ian, pushed a change to wasabi, if your interested you should be able to create a
@@ -31,6 +33,7 @@ class KWeb(val port: Int,
            val debug: Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
            val appServerConfigurator: (AppServer) -> Unit = {},
+           val onError : ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ ->  true},
            val buildPage: RootReceiver.() -> Unit
 ) {
     companion object: KLogging()
@@ -88,19 +91,9 @@ class KWeb(val port: Int,
         val wsClientData = clients[message.id] ?: throw RuntimeException("Message with id ${message.id} received, but id is unknown")
         logger.debug { "Message received from client id ${wsClientData.id}" }
         if (message.error != null) {
-            val debugInfo = wsClientData.debugTokens[message.error.debugToken] ?: throw RuntimeException("DebugInfo error not found")
-            val logStatementBuilder = StringBuilder()
-            logStatementBuilder.appendln("JavaScript error: '${message.error.error.message}'")
-            logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
-            val disregardClassPrefixes = listOf(KWeb::class.jvmName, RootReceiver::class.jvmName, Element::class.jvmName, "org.wasabifx", "io.netty", "java.lang")
-            debugInfo.throwable.stackTrace.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
-                logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
-            }
-            logger.error(logStatementBuilder.toString())
+            handleError(message.error, wsClientData)
         } else if (message.hello != null) {
-            val tempQueue = wsClientData.outboundChannel as OutboundChannel.TemporarilyStoringChannel
-            wsClientData.outboundChannel = OutboundChannel.WSChannel(ctx.channel())
-            tempQueue.read().forEach { wsClientData.outboundChannel.send(it) }
+            handleHello(ctx, wsClientData)
         } else {
             val clientId = message.id
             val clientData = clients[clientId] ?: throw RuntimeException("No handler found for client $clientId")
@@ -111,6 +104,28 @@ class KWeb(val port: Int,
                     resultHandler(result ?: "")
                 }
             }
+        }
+    }
+
+    private fun handleHello(ctx: ChannelHandlerContext, wsClientData: WSClientData) {
+        val tempQueue = wsClientData.outboundChannel as OutboundChannel.TemporarilyStoringChannel
+        wsClientData.outboundChannel = OutboundChannel.WSChannel(ctx.channel())
+        tempQueue.read().forEach { wsClientData.outboundChannel.send(it) }
+    }
+
+    private fun handleError(error: C2SWebsocketMessage.ErrorMessage, wsClientData: WSClientData) {
+        val debugInfo = wsClientData.debugTokens[error.debugToken] ?: throw RuntimeException("DebugInfo error not found")
+        val logStatementBuilder = StringBuilder()
+        logStatementBuilder.appendln("JavaScript error: '${error.error.message}'")
+        logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
+        // TODO: Filtering the stacktrace like this seems a bit kludgy, although I can't think
+        // TODO: of a specific reason why it would be bad.
+        val disregardClassPrefixes = listOf(KWeb::class.jvmName, RootReceiver::class.jvmName, Element::class.jvmName, "org.wasabifx", "io.netty", "java.lang")
+        debugInfo.throwable.stackTrace.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
+            logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
+        }
+        if (onError(debugInfo.throwable.stackTrace.toList(), error.error.message)) {
+            logger.error(logStatementBuilder.toString())
         }
     }
 
