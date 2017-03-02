@@ -7,7 +7,7 @@ KWeb is an experimental [Kotlin](http://kotlinlang.org/) library for building ri
 that makes the distinction between web browser and server largely invisible to the programmer.
 
 In particular, it can use the new [coroutines](https://github.com/Kotlin/kotlinx.coroutines) mechanism in 
-upcoming Kotlin 1.1 to elegantly avoid [callback hell](http://callbackhell.com/).
+ Kotlin 1.1 to elegantly avoid [callback hell](http://callbackhell.com/).
 
 It also incorporates a simple DSL for manipulating the browser's DOM, and plugins to allow you to use popular JavaScript frameworks like JQuery and Material Design Light.  It's also surprisingly easy to add your own plugin for your favorite library or tool.
 
