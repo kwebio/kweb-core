@@ -1,6 +1,7 @@
 package com.github.sanity.kweb
 
 import com.github.sanity.kweb.browserConnection.OutboundChannel
+import com.github.sanity.kweb.dev.hotswap.KwebHotswapPlugin
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.plugins.KWebPlugin
 import io.netty.channel.ChannelHandlerContext
@@ -31,6 +32,7 @@ at your end till its properly configurable
 
 class KWeb(val port: Int,
            val debug: Boolean = false,
+           val refreshPageOnHotswap : Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
            val appServerConfigurator: (AppServer) -> Unit = {},
            val onError : ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ ->  true},
@@ -54,6 +56,10 @@ class KWeb(val port: Int,
 
         for (plugin in plugins) {
             applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, appServer = server)
+        }
+
+        if (refreshPageOnHotswap) {
+            KwebHotswapPlugin.addHotswapReloadListener({refreshAllPages()})
         }
 
         val bootstrapHtmlTemplate = IOUtils.toString(javaClass.getResourceAsStream("kweb_bootstrap.html"), Charsets.UTF_8)
@@ -147,6 +153,14 @@ class KWeb(val port: Int,
         }
     }
 
+    private fun refreshAllPages() {
+        for (client in clients.values) {
+            val message = S2CWebsocketMessage(
+                    yourId = client.id,
+                    execute = S2CWebsocketMessage.Execute("window.location.reload(true);"))
+            client.outboundChannel.send(message.toJson())
+        }
+    }
 
     fun execute(clientId: String, javascript: String) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")

@@ -31,7 +31,7 @@ class PhantomJSSpec : FreeSpec() {
             [2:48]
             You need to define some helper function for tests that starts a separate thread with your engine and waits until its done. Or don't launch a separate thread at all, but do everything in the main test thread.
          */
-        /*
+/*
         "test various server-browser interactions" {
             KWeb(7324) {
                     val cookie = doc.cookie
@@ -62,8 +62,7 @@ class PhantomJSSpec : FreeSpec() {
             }
             exceptionFuture.get()
         }
-        */
-
+*/
     }
 }
 

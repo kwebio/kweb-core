@@ -1,8 +1,8 @@
 group 'com.github.sanity'
-version '0.0.26'
+version '0.0.27'
 
 buildscript {
-    ext.kotlin_version = '1.1.0-rc-91'
+    ext.kotlin_version = '1.1.0'
     ext.dokka_version = '0.9.9'
 
     repositories {
@@ -44,11 +44,26 @@ repositories {
     maven {
         url "http://dl.bintray.com/cy6ergn0m/maven"
     }
+    maven { url 'https://jitpack.io' }
     jcenter()
 }
 
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
+
 dependencies {
-    compile 'org.wasabifx:wasabi:0.3.120'
+    compile('org.wasabifx:wasabi:0.3.120') {
+        exclude module: "slf4j-simple"
+    }
     //compile 'org.jetbrains.kotlinx:vertx3-lang-kotlin:0.0.+'
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
@@ -65,6 +80,9 @@ dependencies {
     testCompile 'com.moodysalem:phantomjs-wrapper-windows-binary:3.0.0'
     testCompile 'com.moodysalem:phantomjs-wrapper-linux-binary:3.0.0'
     testCompile 'com.moodysalem:phantomjs-wrapper-macosx-binary:3.0.0'
+
+    compileOnly 'com.github.HotswapProjects.HotswapAgent:hotswap-agent-core:1.1.0-SNAPSHOT'
+
 }
 
 // Needed because there's something messy with kotlin version numbers and dependencies
