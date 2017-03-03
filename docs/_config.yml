@@ -54,3 +54,5 @@ redcarpet:
         'tables',
         'hardwrap'
     ]
+
+# gems: [jekyll_github_sample]
