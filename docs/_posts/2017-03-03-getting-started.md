@@ -7,14 +7,18 @@ js:
 - deps/mavenrepo.js
 ---
 
-### What do you need to know?
+# What do you need to know?
 
 KWeb is built on [Kotlin 1.1](http://kotlinlang.org/), you should have some familiarity with Kotlin
 and the Java ecosystem on which it's built.
 
-### Adding a KWeb dependency
+## Adding a KWeb dependency
 
-#### Maven
+The KWeb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
+easily to any Maven-compatible project.
+
+### Maven
+For Maven users, add this to the repositories section of your `pom.xml`:
 ```xml
 <repository>
   <id>jitpack.io</id>
@@ -22,6 +26,7 @@ and the Java ecosystem on which it's built.
 </repository>
 ```
 
+Then add this to the dependencies section of your `pom.xml`:
 ```xml
 <dependency>
   <groupId>com.github.sanity</groupId>
@@ -30,7 +35,8 @@ and the Java ecosystem on which it's built.
 </dependency>  
 ```
 
-#### Gradle
+### Gradle
+For Gradle users, add this to the repositories section of your `build.gradle`:
 ```groovy
   repositories {
     // ...
@@ -38,6 +44,7 @@ and the Java ecosystem on which it's built.
     }
 ```
 
+Then add this to the dependencies section of your `build.gradle`:
 ```groovy
 dependencies {
   // ...
