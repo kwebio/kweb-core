@@ -3,8 +3,8 @@ layout: page
 title: "Getting Started"
 category: use
 date: 2017-03-03 09:26:50
-jsarr:
-- js/mavenrepo.js
+js:
+- deps/mavenrepo.js
 ---
 
 ### What do you need to know?
@@ -23,6 +23,24 @@ and the Java ecosystem on which it's built.
 ```
 
 ```xml
-{% include deps/maven.html}
+<dependency>
+  <groupId>com.github.sanity</groupId>
+  <artifactId>kweb</artifactId>
+  <version>MAVEN_VERSION_PLACEHOLDER</version>
+</dependency>  
 ```
+
 #### Gradle
+```groovy
+  repositories {
+    // ...
+    maven { url 'https://jitpack.io' }
+    }
+```
+
+```groovy
+dependencies {
+  // ...
+  compile 'com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER'
+}
+```

@@ -9,11 +9,14 @@ xmlhttp.onreadystatechange = function() {
         populateRelease(myArr);
     }
 }
-xmlhttp.open("GET", "https://api.github.com/repos/sanity/quickml/releases", true);
+xmlhttp.open("GET", "https://api.github.com/repos/sanity/kweb/releases", true);
 xmlhttp.send();
 
 function populateRelease(arr) {
     var release = arr[0].tag_name;
-    $("span.current_release").text(release);
+    $("pre.highlight").html(function(index, oldhtml) {
+        var newhtml = oldhtml.replace('MAVEN_VERSION_PLACEHOLDER', release);
+        return newhtml;
+    })
     $("a.jdoclink").attr("href", "https://jitpack.io/com/github/sanity/kweb/"+release+"/javadoc/index.html");
 }

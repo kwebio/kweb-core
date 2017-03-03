@@ -12,6 +12,11 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <link rel="stylesheet" href="{{ site.baseurl }}/css/syntax.css">
         <link rel="stylesheet" href="{{ site.baseurl }}/css/main.css">
+        {% for js in page.js %}
+        <script type="text/javascript">
+            {% include {{ js }} %}
+        </script>
+        {% endfor %}
     </head>
     <body>
 
