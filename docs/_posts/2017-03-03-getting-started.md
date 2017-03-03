@@ -69,7 +69,7 @@ fun main(args: Array<String>) {
 
 Run the file and visit [http://localhost:7823/](http://localhost:7823/) in your web browser, ta-da!
 
-### A slightly more ambitious example
+### A more ambitious example
 
 Let's edit the file to do something more interesting:
 
