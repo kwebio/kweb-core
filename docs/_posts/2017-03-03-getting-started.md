@@ -59,4 +59,6 @@ dependencies {
 
 Add a file like the following to your project:
 
-
+```kotlin
+{% github_sample sanity/kweb/blob/master/src/main/kotlin/com/github/sanity/kweb/samples/helloWorld.kt tag:HW %}
+```
