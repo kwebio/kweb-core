@@ -27,6 +27,18 @@ For Maven users, add this to the repositories section of your `pom.xml`:
   <id>jitpack.io</id>
   <url>https://jitpack.io</url>
 </repository>
+<repository>
+    <snapshots>
+        <enabled>false</enabled>
+    </snapshots>
+    <id>dl</id>
+    <name>bintray</name>
+    <url>http://dl.bintray.com/kotlin/kotlin-eap-1.1</url>
+</repository>
+<repository>
+  <id>wasabifx</id>
+  <url>https://dl.bintray.com/wasabifx/wasabifx/</url>
+</repository>
 ```
 
 Then add this to the dependencies section of your `pom.xml`:
@@ -44,6 +56,8 @@ For Gradle users, add this to the repositories section of your `build.gradle`:
   repositories {
     // ...
     maven { url 'https://jitpack.io' }
+    maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+    maven { url "https://dl.bintray.com/wasabifx/wasabifx" }
     }
 ```
 
