@@ -1,5 +1,5 @@
 group 'com.github.sanity'
-version '0.0.30'
+version '0.0.31'
 
 buildscript {
     ext.kotlin_version = '1.1.0'
@@ -67,6 +67,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.12'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.12'
 
