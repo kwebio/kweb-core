@@ -23,22 +23,13 @@ easily to almost any Java project:
 #### Maven
 For Maven users, add this to the repositories section of your `pom.xml`:
 ```xml
-<repository>
-  <id>jitpack.io</id>
-  <url>https://jitpack.io</url>
+<repositories>
+<repository><id>jitpack.io</id><url>https://jitpack.io</url></repository>
+<repository><snapshots><enabled>false</enabled></snapshots>
+    <id>dl</id><name>bintray</name><url>http://dl.bintray.com/kotlin/kotlin-eap-1.1</url>
 </repository>
-<repository>
-    <snapshots>
-        <enabled>false</enabled>
-    </snapshots>
-    <id>dl</id>
-    <name>bintray</name>
-    <url>http://dl.bintray.com/kotlin/kotlin-eap-1.1</url>
-</repository>
-<repository>
-  <id>wasabifx</id>
-  <url>https://dl.bintray.com/wasabifx/wasabifx/</url>
-</repository>
+<repository><id>wasabifx</id><url>https://dl.bintray.com/wasabifx/wasabifx/</url></repository>
+</repositories>
 ```
 
 Then add this to the dependencies section of your `pom.xml`:
