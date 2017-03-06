@@ -52,13 +52,13 @@ dependencies {
     // ...
   }
 ```
+
+```kotlin
   dependencies {
     // ...
     compile("com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER")
     // ...
   }
-```kotlin
-
 ```
 
 #### [Maven](https://maven.apache.org/)
