@@ -20,8 +20,8 @@ and the Java ecosystem on which it's built.
 The KWeb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
 easily to almost any Java project:
 
-#### [Gradle](https://gradle.org/)
-For Gradle users, add this to the repositories section of your `build.gradle`:
+#### Gradle 
+For [Gradle](http://www.gradle.org/) users, add this to the repositories section of your `build.gradle`:
 ```groovy
   repositories {
     // ...
@@ -39,7 +39,9 @@ dependencies {
 }
 ```
 
-#### [Kobalt](http://beust.com/kobalt/)
+#### Kobalt
+
+For [Kobalt](http://beust.com/kobalt/) users, add this to your `Built.kt` file:
 
 ```kotlin
   buildScript {
@@ -61,8 +63,8 @@ dependencies {
   }
 ```
 
-#### [Maven](https://maven.apache.org/)
-For Maven users, add this to the repositories section of your `pom.xml`:
+#### Maven
+For [Maven](https://maven.apache.org/) users, add this to the repositories section of your `pom.xml`:
 ```xml
 <repositories>
 <repository><id>jitpack.io</id><url>https://jitpack.io</url></repository>
