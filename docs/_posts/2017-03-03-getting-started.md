@@ -20,7 +20,48 @@ and the Java ecosystem on which it's built.
 The KWeb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
 easily to almost any Java project:
 
-#### Maven
+#### [Gradle](https://gradle.org/)
+For Gradle users, add this to the repositories section of your `build.gradle`:
+```groovy
+  repositories {
+    // ...
+    maven { url 'https://jitpack.io' }
+    maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+    maven { url "https://dl.bintray.com/wasabifx/wasabifx" }
+    }
+```
+
+Then add this to the dependencies section of your `build.gradle`:
+```groovy
+dependencies {
+  // ...
+  compile 'com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER'
+}
+```
+
+#### [Kobalt](http://beust.com/kobalt/)
+
+```kotlin
+  buildScript {
+    // ...
+    repos(
+        "https://jitpack.io", 
+        "http://dl.bintray.com/kotlin/kotlin-eap-1.1", 
+        "https://dl.bintray.com/wasabifx/wasabifx"
+        )
+    // ...
+  }
+```
+  dependencies {
+    // ...
+    compile("com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER")
+    // ...
+  }
+```kotlin
+
+```
+
+#### [Maven](https://maven.apache.org/)
 For Maven users, add this to the repositories section of your `pom.xml`:
 ```xml
 <repositories>
@@ -39,25 +80,6 @@ Then add this to the dependencies section of your `pom.xml`:
   <artifactId>kweb</artifactId>
   <version>MAVEN_VERSION_PLACEHOLDER</version>
 </dependency>  
-```
-
-#### Gradle
-For Gradle users, add this to the repositories section of your `build.gradle`:
-```groovy
-  repositories {
-    // ...
-    maven { url 'https://jitpack.io' }
-    maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
-    maven { url "https://dl.bintray.com/wasabifx/wasabifx" }
-    }
-```
-
-Then add this to the dependencies section of your `build.gradle`:
-```groovy
-dependencies {
-  // ...
-  compile 'com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER'
-}
 ```
 
 ### Your first KWeb page
