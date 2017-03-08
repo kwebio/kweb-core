@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Jekyll Docs Template"
+title: "A Kotlin interface to remote web browsers"
 ---
 
 1. TOC
