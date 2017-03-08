@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "A Kotlin interface to remote web browsers"
+title: "Introduction to Kweb"
 ---
 
 1. TOC
