@@ -26,8 +26,7 @@ asynchronicity largely invisible to the programmer.
 
 #### What does it look like?
 
-Here we create a simple "todo" list app, note this is heavily commented, excluding comments it is
-fewer than 40 lines of code.
+Here we create a simple "todo" list app:
 
 ```kotlin
 fun main(args: Array<String>) {
