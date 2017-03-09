@@ -6,20 +6,20 @@ subtitle: 'A Kotlin interface to one or more remote web-browsers'
 disqus_shortname: ''
 
 # if you use google analytics, add your tracking id here
-google_analytics_id: ''
+google_analytics_id: 'UA-354970-31'
 
 # Enable/show navigation. There are there options:
 #   0 - always hide
 #   1 - always show
 #   2 - show only if posts are present
-navigation: 2
+navigation: 1
 
 # URL to source code, used in _includes/footer.html
 codeurl: 'https://github.com/sanity/kweb'
 
 # Default categories (in order) to appear in the navigation
 sections: [
-    ['Features', 'features'],
+    ['features', 'Features'],
     ['use', 'Use'],
     ['improve', 'Improve'],
     ['history', 'History'],
@@ -39,7 +39,7 @@ highlighter: rouge
 future: true
 
 # Exclude non-site files
-exclude: ['bin', 'README.md']
+exclude: ['bin']
 
 # Use the kramdown Markdown renderer
 markdown: kramdown
