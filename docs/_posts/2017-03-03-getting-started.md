@@ -84,3 +84,7 @@ Then add this to the dependencies section of your `pom.xml`:
   <version>MAVEN_VERSION_PLACEHOLDER</version>
 </dependency>  
 ```
+
+-----------
+
+**Next: [Your First Kwebsite]({{ site.baseurl }}{% post_url 2017-03-08-your-first-kwebsite %}) >>>>**
