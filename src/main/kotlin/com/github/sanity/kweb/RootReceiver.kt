@@ -2,6 +2,8 @@ package com.github.sanity.kweb
 
 import com.github.sanity.kweb.dom.Document
 import com.github.sanity.kweb.plugins.KWebPlugin
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
@@ -26,11 +28,11 @@ class RootReceiver(private val clientId: String, internal val cc: KWeb, val resp
         }
     }
 
-    fun execute(js: String) {
+    fun execute(js: String) = async(CommonPool){
         cc.execute(clientId, js)
     }
 
-    fun executeWithCallback(js: String, callbackId: Int, callback: (String) -> Unit) {
+    fun executeWithCallback(js: String, callbackId: Int, callback: (String) -> Unit) = async(CommonPool){
         cc.executeWithCallback(clientId, js, callbackId, callback)
     }
 
@@ -44,7 +46,7 @@ class RootReceiver(private val clientId: String, internal val cc: KWeb, val resp
     }
 
 
-    fun evaluateWithCallback(js: String, rh: RootReceiver.() -> Boolean) {
+    fun evaluateWithCallback(js: String, rh: RootReceiver.() -> Boolean) = async(CommonPool){
         cc.evaluate(clientId, js, { rh.invoke(RootReceiver(clientId, cc, it)) })
     }
 

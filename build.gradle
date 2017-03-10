@@ -36,12 +36,14 @@ repositories {
         url "http://dl.bintray.com/kotlin/kotlin-eap-1.1"
     }
     maven {
-        url "https://dl.bintray.com/wasabifx/wasabifx"
+        url "http://dl.bintray.com/kotlin/ktor"
     }
     maven {
         url "http://dl.bintray.com/cy6ergn0m/maven"
     }
-    maven { url 'https://jitpack.io' }
+    maven {
+        url 'https://jitpack.io' 
+    }
     jcenter()
 }
 
@@ -58,9 +60,6 @@ sourceSets {
 
 
 dependencies {
-    compile('org.wasabifx:wasabi:0.3.120') {
-        exclude module: "slf4j-simple"
-    }
     //compile 'org.jetbrains.kotlinx:vertx3-lang-kotlin:0.0.+'
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
@@ -70,6 +69,10 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.12'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.12'
+
+    compile 'org.jetbrains.ktor:ktor-core:0.3.0'
+    compile 'org.jetbrains.ktor:ktor-netty:0.3.0'
+    compile 'org.jetbrains.ktor:ktor-websockets:0.3.0'
 
     compile 'io.github.microutils:kotlin-logging:1.4.2'
 

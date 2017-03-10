@@ -8,8 +8,17 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
 import mu.KLogging
 import org.apache.commons.io.IOUtils
-import org.wasabifx.wasabi.app.AppConfiguration
-import org.wasabifx.wasabi.app.AppServer
+import org.jetbrains.ktor.application.call
+import org.jetbrains.ktor.application.install
+import org.jetbrains.ktor.features.DefaultHeaders
+import org.jetbrains.ktor.http.HttpHeaders.ContentType
+import org.jetbrains.ktor.netty.NettyApplicationHost
+import org.jetbrains.ktor.netty.embeddedNettyServer
+import org.jetbrains.ktor.response.respondText
+import org.jetbrains.ktor.routing.Routing
+import org.jetbrains.ktor.routing.Routing.Feature.install
+import org.jetbrains.ktor.routing.get
+import org.jetbrains.ktor.websocket.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.jvm.jvmName
@@ -34,19 +43,20 @@ class KWeb(val port: Int,
            val debug: Boolean = false,
            val refreshPageOnHotswap : Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
-           val appServerConfigurator: (AppServer) -> Unit = {},
+           // val appServerConfigurator: (AppServer) -> Unit = {},
            val onError : ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ ->  true},
            val buildPage: RootReceiver.() -> Unit
 ) {
     companion object: KLogging()
 
-    private val server = AppServer(AppConfiguration(port = port))
+    private var server: NettyApplicationHost? = null
     private val clients: MutableMap<String, WSClientData>
     private val mutableAppliedPlugins: MutableSet<KWebPlugin> = HashSet()
     val appliedPlugins: Set<KWebPlugin> get() = mutableAppliedPlugins
 
     init {
-        appServerConfigurator.invoke(server)
+        // TODO How is this used?
+        // appServerConfigurator.invoke(server)
 
         //TODO: Need to do housekeeping to delete old client data
         clients = ConcurrentHashMap<String, WSClientData>()
@@ -58,48 +68,54 @@ class KWeb(val port: Int,
             applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, appServer = server)
         }
 
-        if (refreshPageOnHotswap) {
+/*        if (refreshPageOnHotswap) {
             KwebHotswapPlugin.addHotswapReloadListener({refreshAllPages()})
-        }
+        }*/
 
         val bootstrapHtmlTemplate = IOUtils.toString(javaClass.getResourceAsStream("kweb_bootstrap.html"), Charsets.UTF_8)
                 .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
                 .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 
-        server.get("/", {
-            val newClientId = Math.abs(random.nextLong()).toString(16)
-            val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
-            val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
-            clients.put(newClientId, wsClientData)
-            buildPage(RootReceiver(newClientId, this@KWeb))
-            for (plugin in plugins) {
-                execute(newClientId, plugin.executeAfterPageCreation())
-            }
-            wsClientData.outboundChannel = OutboundChannel.TemporarilyStoringChannel()
+        server = embeddedNettyServer(port) {
+            install(DefaultHeaders)
+            install(Routing) {
+                get("/") {
+                    val newClientId = Math.abs(random.nextLong()).toString(16)
+                    val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
+                    val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
+                    clients.put(newClientId, wsClientData)
+                    buildPage(RootReceiver(newClientId, this@KWeb))
+                    for (plugin in plugins) {
+                        execute(newClientId, plugin.executeAfterPageCreation())
+                    }
+                    wsClientData.outboundChannel = OutboundChannel.TemporarilyStoringChannel()
 
-            val bootstrapHtml = bootstrapHtmlTemplate
-                    .replace("--CLIENT-ID-PLACEHOLDER--", newClientId)
-                    .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", outboundBuffer.read().map {"handleInboundMessage($it);"} . joinToString(separator = "\n"))
-            response.send(bootstrapHtml)
-        })
-
-        server.channel("/ws") {
-            if (frame is TextWebSocketFrame) {
-                val message = gson.fromJson((frame as TextWebSocketFrame).text(), C2SWebsocketMessage::class.java)
-                handleInboundMessage(ctx!!, message)
+                    val bootstrapHtml = bootstrapHtmlTemplate
+                            .replace("--CLIENT-ID-PLACEHOLDER--", newClientId)
+                            .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", outboundBuffer.read().map {"handleInboundMessage($it);"} . joinToString(separator = "\n"))
+                    call.respondText(bootstrapHtml)
+                }
+                webSocket("/ws") {
+                    handle { frame ->
+                        if (frame is Frame.Text) {
+                            val message = gson.fromJson(frame.readText(), C2SWebsocketMessage::class.java)
+                            handleInboundMessage(this, message)
+                        }
+                    }
+                }
             }
         }
-        server.start(wait = false)
+        server!!.start()
         logger.info {"KWeb is listening on port $port"}
     }
 
-    private fun handleInboundMessage(ctx: ChannelHandlerContext, message: C2SWebsocketMessage) {
+    private suspend fun handleInboundMessage(socket: WebSocket, message: C2SWebsocketMessage) {
         val wsClientData = clients[message.id] ?: throw RuntimeException("Message with id ${message.id} received, but id is unknown")
         logger.debug { "Message received from client id ${wsClientData.id}" }
         if (message.error != null) {
             handleError(message.error, wsClientData)
         } else if (message.hello != null) {
-            handleHello(ctx, wsClientData)
+            handleHello(socket, wsClientData)
         } else {
             val clientId = message.id
             val clientData = clients[clientId] ?: throw RuntimeException("No handler found for client $clientId")
@@ -113,9 +129,9 @@ class KWeb(val port: Int,
         }
     }
 
-    private fun handleHello(ctx: ChannelHandlerContext, wsClientData: WSClientData) {
+    private suspend fun handleHello(socket: WebSocket, wsClientData: WSClientData) {
         val tempQueue = wsClientData.outboundChannel as OutboundChannel.TemporarilyStoringChannel
-        wsClientData.outboundChannel = OutboundChannel.WSChannel(ctx.channel())
+        wsClientData.outboundChannel = OutboundChannel.WSChannel(socket)
         tempQueue.read().forEach { wsClientData.outboundChannel.send(it) }
     }
 
@@ -139,7 +155,7 @@ class KWeb(val port: Int,
                             appliedPlugins: MutableSet<KWebPlugin>,
                             endHeadBuilder: java.lang.StringBuilder,
                             startHeadBuilder: java.lang.StringBuilder,
-                            appServer : AppServer) {
+                            appServer : NettyApplicationHost?) {
         for (dependantPlugin in plugin.dependsOn) {
             if (!appliedPlugins.contains(dependantPlugin)) {
                 applyPlugin(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder, appServer)
@@ -148,12 +164,12 @@ class KWeb(val port: Int,
         }
         if (!appliedPlugins.contains(plugin)) {
             plugin.decorate(startHeadBuilder, endHeadBuilder)
-            plugin.appServerConfigurator(appServer)
+            // plugin.appServerConfigurator(appServer)
             appliedPlugins.add(plugin)
         }
     }
 
-    private fun refreshAllPages() {
+    private suspend fun refreshAllPages() {
         for (client in clients.values) {
             val message = S2CWebsocketMessage(
                     yourId = client.id,
@@ -162,7 +178,7 @@ class KWeb(val port: Int,
         }
     }
 
-    fun execute(clientId: String, javascript: String) {
+    suspend fun execute(clientId: String, javascript: String) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
@@ -172,7 +188,7 @@ class KWeb(val port: Int,
         wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
     }
 
-    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
+    suspend fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
@@ -183,7 +199,7 @@ class KWeb(val port: Int,
         wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = S2CWebsocketMessage.Execute(javascript)))
     }
 
-    fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
+    suspend fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
@@ -198,7 +214,7 @@ class KWeb(val port: Int,
 }
 
 private data class WSClientData(val id: String, @Volatile var outboundChannel: OutboundChannel, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap()) {
-    fun send(message: S2CWebsocketMessage) {
+    suspend fun send(message: S2CWebsocketMessage) {
         outboundChannel.send(gson.toJson(message))
     }
 }
