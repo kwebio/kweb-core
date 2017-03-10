@@ -21,7 +21,7 @@ codeurl: 'https://github.com/sanity/kweb'
 sections: [
     ['features', 'Features'],
     ['use', 'Use'],
-    ['plugins', 'Plugins']
+    ['plugins', 'Plugins'],
     ['contribute', 'Contribute'],
     ['history', 'History'],
 ]
