@@ -51,6 +51,8 @@ class RootReceiver(private val clientId: String, val httpRequestInfo: HttpReques
     val doc = Document(this)
 }
 
+// TODO: Not sure if this should be a separate property of RootReceiver, or passed in
+// TODO: some other way.
 data class HttpRequestInfo(val visitedUrl : String, val headers : Map<String, String>) {
     val referer : String? get() = headers["Referer"]
 }

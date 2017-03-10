@@ -72,6 +72,10 @@ class KWeb(val port: Int,
             val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
             clients.put(newClientId, wsClientData)
             val httpRequestInfo = HttpRequestInfo(request.uri, request.rawHeaders)
+
+            // TODO: In debug mode kweb should warn the user if the following line takes a non-trivial amount of time
+            // TODO: as this would indicate a blocking-operation has occurred within buildPage().  Extra points if it
+            // TODO: obtains a stacktrace from this thread to see where it is blocking (not sure if possible)
             buildPage(RootReceiver(newClientId, httpRequestInfo, this@KWeb))
             for (plugin in plugins) {
                 execute(newClientId, plugin.executeAfterPageCreation())
