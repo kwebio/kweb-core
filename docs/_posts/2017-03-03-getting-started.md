@@ -37,6 +37,7 @@ Then add this to the dependencies section of your `build.gradle`:
 dependencies {
   // ...
   compile 'com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER'
+  compile 'org.slf4j:slf4j-simple:1.6.1' // <-- or your favorite SLF4J logger binding 
 }
 ```
 
@@ -60,6 +61,7 @@ For [Kobalt](http://beust.com/kobalt/) users, add this to your `Built.kt` file:
   dependencies {
     // ...
     compile("com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER")
+    compile("org.slf4j:slf4j-simple:1.6.1") // <-- or your favorite SLF4J logger binding 
     // ...
   }
 ```
@@ -83,9 +85,15 @@ Then add this to the dependencies section of your `pom.xml`:
   <artifactId>kweb</artifactId>
   <version>MAVEN_VERSION_PLACEHOLDER</version>
 </dependency>  
+<!-- Optionally replace the following with your favorite SLF4J logging implementation -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId>
+    <version>1.6.1</version>
+</dependency>
 ```
 
-### Logging
+### Gotcha warning: Logging
 Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  If you see an error like the following:
 ```
 SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
@@ -95,13 +103,6 @@ SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further detail
 
 ...it means that you have not provided an SLF4J logging implementation.  This is undesirable because
 Kweb provides some useful warnings that you won't see without this.
-
-To provide a logging implementation you should add something like this to the dependencies section of
-your `build.gradle`:
-
-```groovy
-compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
-```
 
 -----------
 
