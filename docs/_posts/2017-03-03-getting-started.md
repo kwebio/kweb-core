@@ -19,7 +19,7 @@ and the Java ecosystem on which it's built.
 ### Adding a KWeb dependency
 
 The KWeb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
-easily to almost any Java project:
+easily to any Kotlin project:
 
 #### Gradle 
 For [Gradle](http://www.gradle.org/) users, add this to the repositories section of your `build.gradle`:
