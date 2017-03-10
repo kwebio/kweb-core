@@ -2,7 +2,6 @@ package com.github.sanity.kweb
 
 import com.github.sanity.kweb.browserConnection.OutboundChannel
 import com.github.sanity.kweb.dev.hotswap.KwebHotswapPlugin
-import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.plugins.KWebPlugin
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
@@ -12,7 +11,6 @@ import org.wasabifx.wasabi.app.AppConfiguration
 import org.wasabifx.wasabi.app.AppServer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.reflect.jvm.jvmName
 
 /**
  * Created by ian on 12/31/16.
@@ -31,11 +29,12 @@ at your end till its properly configurable
  */
 
 class KWeb(val port: Int,
-           val debug: Boolean = false,
+           val debug: Boolean = true,
            val refreshPageOnHotswap : Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
            val appServerConfigurator: (AppServer) -> Unit = {},
            val onError : ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ ->  true},
+           val maxPageBuildTimeMS : Long = 200,
            val buildPage: RootReceiver.() -> Unit
 ) {
     companion object: KLogging()
@@ -73,10 +72,19 @@ class KWeb(val port: Int,
             clients.put(newClientId, wsClientData)
             val httpRequestInfo = HttpRequestInfo(request.uri, request.rawHeaders)
 
-            // TODO: In debug mode kweb should warn the user if the following line takes a non-trivial amount of time
-            // TODO: as this would indicate a blocking-operation has occurred within buildPage().  Extra points if it
-            // TODO: obtains a stacktrace from this thread to see where it is blocking (not sure if possible)
-            buildPage(RootReceiver(newClientId, httpRequestInfo, this@KWeb))
+            if (debug) {
+                warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
+                    val logStatementBuilder = StringBuilder()
+                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
+                    thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
+                    val logStatement = logStatementBuilder.toString()
+                    logger.warn { logStatement }
+                }) {
+                    buildPage(RootReceiver(newClientId, httpRequestInfo, this@KWeb))
+                }
+            } else {
+                buildPage(RootReceiver(newClientId, httpRequestInfo, this@KWeb))
+            }
             for (plugin in plugins) {
                 execute(newClientId, plugin.executeAfterPageCreation())
             }
@@ -131,10 +139,7 @@ class KWeb(val port: Int,
         logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
         // TODO: Filtering the stacktrace like this seems a bit kludgy, although I can't think
         // TODO: of a specific reason why it would be bad.
-        val disregardClassPrefixes = listOf(KWeb::class.jvmName, RootReceiver::class.jvmName, Element::class.jvmName, "org.wasabifx", "io.netty", "java.lang")
-        debugInfo.throwable.stackTrace.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
-            logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
-        }
+        debugInfo.throwable.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
         if (onError(debugInfo.throwable.stackTrace.toList(), error.error.message)) {
             logger.error(logStatementBuilder.toString())
         }
