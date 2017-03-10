@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-class RootReceiver(private val clientId: String, internal val cc: KWeb, val response: String? = null) {
+class RootReceiver(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: KWeb, val response: String? = null) {
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         cc.appliedPlugins.map { it::class to it }.toMap()
     }
@@ -45,8 +45,10 @@ class RootReceiver(private val clientId: String, internal val cc: KWeb, val resp
 
 
     fun evaluateWithCallback(js: String, rh: RootReceiver.() -> Boolean) {
-        cc.evaluate(clientId, js, { rh.invoke(RootReceiver(clientId, cc, it)) })
+        cc.evaluate(clientId, js, { rh.invoke(RootReceiver(clientId, httpRequestInfo, cc, it)) })
     }
 
     val doc = Document(this)
 }
+
+data class HttpRequestInfo(val visitedUrl : String, val referrerUrl : String?, val userAgent : String)
