@@ -51,4 +51,6 @@ class RootReceiver(private val clientId: String, val httpRequestInfo: HttpReques
     val doc = Document(this)
 }
 
-data class HttpRequestInfo(val visitedUrl : String, val referrerUrl : String?, val userAgent : String)
+data class HttpRequestInfo(val visitedUrl : String, val headers : Map<String, String>) {
+    val referer : String? get() = headers["Referer"]
+}

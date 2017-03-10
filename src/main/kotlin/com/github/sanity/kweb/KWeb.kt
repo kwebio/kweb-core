@@ -71,7 +71,7 @@ class KWeb(val port: Int,
             val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
             val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
             clients.put(newClientId, wsClientData)
-            val httpRequestInfo = HttpRequestInfo(request.uri, request.rawHeaders["Referer"], request.userAgent)
+            val httpRequestInfo = HttpRequestInfo(request.uri, request.rawHeaders)
             buildPage(RootReceiver(newClientId, httpRequestInfo, this@KWeb))
             for (plugin in plugins) {
                 execute(newClientId, plugin.executeAfterPageCreation())
