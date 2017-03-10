@@ -156,11 +156,11 @@ open class ONReceiver(private val parent: Element) : Element(parent) {
 
     // Animation Events
     /** The event occurs when a CSS animation has completed **/
-    fun animationend(callback: (AnimationEvent) -> Unit) = event("animationend", callback = callback)
+    fun animationend(callback: (AnimationEvent) -> Unit) = event("animationend", eventType = AnimationEvent::class, callback = callback)
     /** The event occurs when a CSS animation is repeated **/
-    fun animationiteration(callback: (AnimationEvent) -> Unit) = event("animationiteration", callback = callback)
+    fun animationiteration(callback: (AnimationEvent) -> Unit) = event("animationiteration", eventType = AnimationEvent::class, callback = callback)
     /** The event occurs when a CSS animation has started **/
-    fun animationstart(callback: (AnimationEvent) -> Unit) = event("animationstart", callback = callback)
+    fun animationstart(callback: (AnimationEvent) -> Unit) = event("animationstart", eventType = AnimationEvent::class, callback = callback)
 
     // Transition Events
     /** The event occurs when a CSS transition has completed **/
