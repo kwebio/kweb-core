@@ -85,16 +85,22 @@ Then add this to the dependencies section of your `pom.xml`:
   <artifactId>kweb</artifactId>
   <version>MAVEN_VERSION_PLACEHOLDER</version>
 </dependency>  
-<!-- Optionally replace the following with your favorite SLF4J logging implementation -->
+
 <dependency>
     <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-simple</artifactId>
+    <artifactId>slf4j-simple</artifactId> <!-- or your favorite SLF4J logger binding -->
     <version>1.6.1</version>
 </dependency>
 ```
 
 ### Gotcha warning: Logging
-Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  If you see an error like the following:
+Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  This is a "logging facade", the purpose
+of which is to allow libraries to log to the library user's preferred logging framework.
+The instructions above include the "simple" SLF4J logger binding, but you can replace this with
+a number of others, depending on your needs or preferences, learn more 
+[here](http://saltnlight5.blogspot.com/2013/08/how-to-configure-slf4j-with-different.html).
+
+If you see an error like the following:
 ```
 SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
 SLF4J: Defaulting to no-operation (NOP) logger implementation
