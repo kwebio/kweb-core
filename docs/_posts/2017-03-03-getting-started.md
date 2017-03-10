@@ -93,11 +93,11 @@ Then add this to the dependencies section of your `pom.xml`:
 </dependency>
 ```
 
-### Gotcha warning: Logging
-Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  This is a "logging facade", the purpose
-of which is to allow libraries to log to the library user's preferred logging framework.
-The instructions above include the "simple" SLF4J logger binding, but you can replace this with
-a number of others, depending on your needs or preferences, learn more 
+### Logging
+Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  This is a "logging facade", it allows
+libraries to log to the library user's preferred logging framework.  The instructions above 
+include the "simple" SLF4J logger binding, but you can replace this with a number of others, 
+depending on your needs or preferences, learn more 
 [here](http://saltnlight5.blogspot.com/2013/08/how-to-configure-slf4j-with-different.html).
 
 If you see an error like the following:

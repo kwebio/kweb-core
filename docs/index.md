@@ -12,12 +12,12 @@ KWeb is a library for building rich web applications in the [Kotlin](http://kotl
 programming language.
 
 #### Features
-* Build rich websites in the awesome Kotlin programming language
-* Makes the barrier between web browser and web server largely invisible
-* Avoid the complexities of the javascript ecosystem
-* Seamlessly integrates with powerful tools like JQuery, MDL, and Bootstrap
-* Works with [HotSwapAgent](http://hotswapagent.org/) to update your web browser instantly in 
-  response to code changes
+* Build websites in pure Kotlin
+* Interact with the user just like powerful but complex JavaScript frameworks
+  like React or Angular
+* Makes the barrier between web-browser and web-server largely invisible
+* Seamlessly integrates with powerful JavaScript libraries like JQuery, MDL, and Bootstrap
+* Update your web browser instantly in response to code changes
 
 #### How does it work?
 KWeb keeps all of the logic server-side, and uses websockets to communicate with web browsers.
@@ -65,3 +65,4 @@ fun ULElement.newListItem(text: String) {
     }
 }
 ```
+**Next: [Setting Up]({{ site.baseurl }}{% post_url 2017-03-03-setting-up %}) >>>>**
