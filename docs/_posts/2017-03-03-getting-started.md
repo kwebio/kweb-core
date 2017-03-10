@@ -85,6 +85,24 @@ Then add this to the dependencies section of your `pom.xml`:
 </dependency>  
 ```
 
+### Logging
+Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  If you see an error like the following:
+```
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+```
+
+...it means that you have not provided an SLF4J logging implementation.  This is undesirable because
+Kweb provides some useful warnings that you won't see without this.
+
+To provide a logging implementation you should add something like this to the dependencies section of
+your `build.gradle`:
+
+```groovy
+compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+```
+
 -----------
 
 **Next: [Your First Kwebsite]({{ site.baseurl }}{% post_url 2017-03-08-your-first-kwebsite %}) >>>>**
