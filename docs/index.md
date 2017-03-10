@@ -65,4 +65,4 @@ fun ULElement.newListItem(text: String) {
     }
 }
 ```
-**Next: [Setting Up]({{ site.baseurl }}{% post_url 2017-03-03-setting-up %}) >>>>**
+**Next: [Setting Up]({{ site.baseurl }}{% post_url 2017-03-03-getting-started %}) >>>>**
