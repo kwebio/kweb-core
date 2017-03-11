@@ -6,6 +6,9 @@ order: 3
 date: 2017-03-09 10:04:11
 ---
 
+1. TOC
+{:toc}
+
 Wouldn't it be great if, when building a website, you could modify your code and immediately see the change reflected
 in your web browser?  Great news, Kweb can do this!
 
