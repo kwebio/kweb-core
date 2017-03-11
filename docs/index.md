@@ -12,8 +12,8 @@ Kweb is a library for building rich web applications in the [Kotlin](http://kotl
 programming language.  You can think of it as a powerful Kotlin DSL that allows you to remote-control
 web browsers from a web server.
 
-Kweb allows you to interact with the browser DOM directly, for example here we create a `<p>` element
-and set its text:
+Even though your code runs on the server, Kweb allows you to interact with the browser DOM directly, for example here 
+we create a `<p>` element and set its text:
 
 ```kotlin
 doc.body.p().setText("this is an example HTML paragraph")
@@ -28,7 +28,8 @@ doc.body.execute("console.log((new Date()).getDay());")
 You can even query JavaScript and do something with the result:
 
 ```kotlin
-val day = doc.body.evaluate("(new Date()).getDay()")
+val day = doc.body.evaluate("$('#day').text()")
+database.update(BOOK).set(BOOK.DAY, day).execute()
 ```
 
 But Kweb's real power is what's built on top of this low-level framework.  Through its plugin mechanism
