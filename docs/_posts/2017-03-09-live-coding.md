@@ -80,3 +80,6 @@ the change.
 
 Note that HotSwapAgent doesn't work with every code modification, for example if you make a change to the configuration
 of your Kweb object it will not pick this up.
+
+----------
+**Next: [More examples]({{ site.baseurl }}{% post_url 2017-03-11-more-examples %}) >>>>**

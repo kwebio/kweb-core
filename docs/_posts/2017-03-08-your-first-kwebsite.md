@@ -47,3 +47,6 @@ Kill Kweb if it is still running, and run this new version.  Try clicking on the
 **Troubleshooting**: If you get an error like `Exception in thread "main" java.net.BindException: Address already in use` it means 
 that the previous version is still running and therefore the new version is unable to listen on port 7823, make
 sure you've killed it.
+
+-----------
+**Next: [Live coding]({{ site.baseurl }}{% post_url 2017-03-09-live-coding %}) >>>>**
