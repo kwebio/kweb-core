@@ -63,7 +63,9 @@ supports.
 * Makes the barrier between web-browser and web-server largely invisible
 * Seamlessly integrates with powerful JavaScript libraries like JQuery, MDL, and Bootstrap
 * Update your web browser instantly in response to code changes
-
+* Easy to add to an existing project, Kweb is just a library, it doesn't seek to tell you how your project should
+  be organized
+  
 #### How does it work?
 KWeb keeps all of the logic server-side, and uses websockets to communicate with web browsers.
 We also take advantage of Kotlin's powerful new coroutines mechanism to efficiently handle
