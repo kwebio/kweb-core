@@ -20,14 +20,23 @@ typealias OneTime = Boolean
 typealias LogError = Boolean
 typealias JavaScriptError = String
 
-/*
-TODO: Hi Ian, pushed a change to wasabi, if your interested you should be able to create a
-subclass of wasabi's AppServer and override init and set routeLocator to something that
-implements wasabi's RouteLocator interface, only caveat atm is autooptions/cors support
-wont be happy. But I thought for your use case it would enable you to move things along
-at your end till its properly configurable
+/**
+ * The core kwebserver, and the starting point for almost any Kweb app.  This will create a HTTP server and respond
+ * with a javascript page which will establish a websocket connection to retrieve and send instructions and data
+ * between browser and server.
+ *
+ * @property port  The TCP port on which the HTTP server should listen
+ * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
+ *                 but false during production because it is inefficient at scale
+ * @property refreshPageOnHotswap Detects code-reloads by [HotSwapAgent](http://hotswapagent.org/) and refreshes
+ *                                any connected webpage if this is detected
+ * @property plugins A list of Kweb plugins to be loaded by Kweb
+ * @property onError A handler for JavaScript errors (only detected if `debug == true`)
+ * @property maxPageBuildTimeMS If `debug == true` this is the maximum time permitted to build a page before a
+ *                              warning is logged
+ * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
+ *                     go
  */
-
 class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap : Boolean = false,
