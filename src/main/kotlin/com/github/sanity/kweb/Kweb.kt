@@ -28,7 +28,7 @@ wont be happy. But I thought for your use case it would enable you to move thing
 at your end till its properly configurable
  */
 
-class KWeb(val port: Int,
+class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap : Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
@@ -80,10 +80,10 @@ class KWeb(val port: Int,
                     val logStatement = logStatementBuilder.toString()
                     logger.warn { logStatement }
                 }) {
-                    buildPage(RootReceiver(newClientId, httpRequestInfo, this@KWeb))
+                    buildPage(RootReceiver(newClientId, httpRequestInfo, this@Kweb))
                 }
             } else {
-                buildPage(RootReceiver(newClientId, httpRequestInfo, this@KWeb))
+                buildPage(RootReceiver(newClientId, httpRequestInfo, this@Kweb))
             }
             for (plugin in plugins) {
                 execute(newClientId, plugin.executeAfterPageCreation())
@@ -103,7 +103,7 @@ class KWeb(val port: Int,
             }
         }
         server.start(wait = false)
-        logger.info {"KWeb is listening on port $port"}
+        logger.info {"Kweb is listening on port $port"}
     }
 
     private fun handleInboundMessage(ctx: ChannelHandlerContext, message: C2SWebsocketMessage) {

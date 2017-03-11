@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.demos.todo
 
-import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.*
 import com.github.sanity.kweb.dom.element.events.on
 import com.github.sanity.kweb.dom.element.modification.addText
@@ -10,10 +10,10 @@ import kotlinx.coroutines.experimental.future.future
 
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
-    KWeb(8091, debug = true) {
+    Kweb(8091, debug = true) {
         doc.body.apply {
             // Add a header parent to the body, along with some simple instructions.
-            h1().addText("Simple KWeb demo - a to-do list")
+            h1().addText("Simple Kweb demo - a to-do list")
             p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
 
             // If you're unfamiliar with the `apply` function, read this:

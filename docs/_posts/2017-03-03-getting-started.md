@@ -13,12 +13,12 @@ js:
 
 ### What you should know
 
-KWeb is built on [Kotlin 1.1](http://kotlinlang.org/), you should have some familiarity with Kotlin
+Kweb is built on [Kotlin 1.1](http://kotlinlang.org/), you should have some familiarity with Kotlin
 and the Java ecosystem on which it's built.
 
-### Adding a KWeb dependency
+### Adding a Kweb dependency
 
-The KWeb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
+The Kweb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
 easily to any Kotlin project:
 
 #### Gradle 

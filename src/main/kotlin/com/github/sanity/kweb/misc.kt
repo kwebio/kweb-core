@@ -45,7 +45,7 @@ fun <T> warnIfBlocking(maxTimeMs: Long, onBlock : (Thread) -> Unit, f : () -> T)
  * trace.  This is a little ugly but seems to work well, there may be a better approach.
  */
 fun Array<StackTraceElement>.pruneAndDumpStackTo(logStatementBuilder: StringBuilder) {
-    val disregardClassPrefixes = listOf(KWeb::class.jvmName, RootReceiver::class.jvmName, Element::class.jvmName, "org.wasabifx", "io.netty", "java.lang")
+    val disregardClassPrefixes = listOf(Kweb::class.jvmName, RootReceiver::class.jvmName, Element::class.jvmName, "org.wasabifx", "io.netty", "java.lang")
     this.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
         logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
     }

@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.demos.async
 
-import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.createElement
 import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.modification.addText
@@ -13,7 +13,7 @@ import kotlinx.coroutines.experimental.future.future
  */
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
-    KWeb(8091) {
+    Kweb(8091) {
         doc.body.apply {
             val p1 = createElement("p").setAttribute("id", 1).addText("one")
             val p2 = createElement("p").setAttribute("id", 2).addText("two")

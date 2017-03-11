@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-class RootReceiver(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: KWeb, val response: String? = null) {
+class RootReceiver(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: Kweb, val response: String? = null) {
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         cc.appliedPlugins.map { it::class to it }.toMap()
     }
@@ -22,7 +22,7 @@ class RootReceiver(private val clientId: String, val httpRequestInfo: HttpReques
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
         if (missing.isNotEmpty()) {
-            throw RuntimeException("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to KWeb constructor")
+            throw RuntimeException("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to Kweb constructor")
         }
     }
 

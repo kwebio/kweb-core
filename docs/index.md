@@ -6,7 +6,7 @@ title: "Introduction to Kweb"
 1. TOC
 {:toc}
 
-#### What is KWeb?
+#### What is Kweb?
 
 Kweb is a library for building rich web applications in the [Kotlin](http://kotlinlang.org/)
 programming language.  You can think of it as a powerful Kotlin DSL that allows you to remote-control
@@ -69,7 +69,7 @@ supports.
   be organized
   
 #### How does it work?
-KWeb keeps all of the logic server-side, and uses websockets to communicate with web browsers.
+Kweb keeps all of the logic server-side, and uses websockets to communicate with web browsers.
 We also take advantage of Kotlin's powerful new coroutines mechanism to efficiently handle
 asynchronicity largely invisible to the programmer.
 
@@ -79,9 +79,9 @@ Here we create a simple "todo" list app:
 
 ```kotlin
 fun main(args: Array<String>) {
-    KWeb(8091, debug = true) {
+    Kweb(8091, debug = true) {
         doc.body.apply {
-            h1().addText("Simple KWeb demo - a to-do list")
+            h1().addText("Simple Kweb demo - a to-do list")
             p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
 
             val ul = ul().apply {

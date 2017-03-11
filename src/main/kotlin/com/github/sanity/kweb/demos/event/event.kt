@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.demos.event
 
-import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.input
 import com.github.sanity.kweb.dom.element.events.on
 
@@ -9,7 +9,7 @@ import com.github.sanity.kweb.dom.element.events.on
  */
 
 fun main(args: Array<String>) {
-    KWeb(4682) {
+    Kweb(4682) {
         doc.body.apply {
             input().on.keydown { e ->
                 println("Received: '${e}'")

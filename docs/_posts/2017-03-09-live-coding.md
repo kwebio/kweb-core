@@ -51,10 +51,10 @@ error, but this bug in HotSwapAgent has been reported and may be fixed by now.
 
 #### Step 4 : Configure Kweb to refresh webpages automatically
 
-Set the `refreshPageOnHotswap` KWeb constructor parameter to `true`:
+Set the `refreshPageOnHotswap` Kweb constructor parameter to `true`:
 
 ```kotlin
-    KWeb(port = 1234, refreshPageOnHotswap = true) {
+    Kweb(port = 1234, refreshPageOnHotswap = true) {
 ```
 
 #### Step 5 : Run your code
@@ -63,13 +63,13 @@ Now run your project in debug mode (the button with the green bug), you should s
 
 ```
 HOTSWAP AGENT: 19:01:57.851 INFO (org.hotswap.agent.HotswapAgent) - Loading Hotswap agent {1.1.0-SNAPSHOT} - unlimited runtime class redefinition.
-HOTSWAP AGENT: 19:01:58.178 INFO (org.hotswap.agent.config.PluginRegistry) - Discovered plugins: [KWebHotswapPlugin]
+HOTSWAP AGENT: 19:01:58.178 INFO (org.hotswap.agent.config.PluginRegistry) - Discovered plugins: [KwebHotswapPlugin]
 HOTSWAP AGENT: 19:01:59.145 INFO (org.hotswap.agent.config.PluginRegistry) - Discovered plugins: [Hotswapper, WatchResources, ClassInitPlugin, Hibernate, Hibernate3JPA, Hibernate3, Spring, Jersey1, Jersey2, Jetty, Tomcat, ZK, Logback, Log4j2, MyFaces, Mojarra, Seam, ELResolver, WildFlyELResolver, OsgiEquinox, Owb, Proxy, WebObjects, Weld, JBossModules, ResteasyRegistry, Deltaspike, JavaBeans]
 HOTSWAP AGENT: 19:01:59.231 INFO (org.hotswap.agent.config.PluginRegistry) - Discovered plugins: []
 HOTSWAP AGENT: 19:02:00.009 INFO (org.hotswap.agent.config.PluginRegistry) - Plugin 'org.hotswap.agent.plugin.logback.LogbackPlugin' initialized in ClassLoader 'sun.misc.Launcher$AppClassLoader@18b4aac2'.
 ```
 
-This indicates that HotSwapAgent is working, and in particular look out for `Discovered plugins: [KWebHotswapPlugin]` as this will indicate 
+This indicates that HotSwapAgent is working, and in particular look out for `Discovered plugins: [KwebHotswapPlugin]` as this will indicate 
 that Kweb is aware of HotSwapAgent (this is necessary for the automatic refresh).
 
 #### Step 6 : Try it!
@@ -79,4 +79,4 @@ modified (Shift+Command+F9 on a Mac), in a few seconds the browser window should
 the change.
 
 Note that HotSwapAgent doesn't work with every code modification, for example if you make a change to the configuration
-of your KWeb object it will not pick this up.
+of your Kweb object it will not pick this up.

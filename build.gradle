@@ -1,5 +1,5 @@
 group 'com.github.sanity'
-version '0.0.33'
+version '0.0.34'
 
 buildscript {
     ext.kotlin_version = '1.1.0'
@@ -61,7 +61,6 @@ dependencies {
     compile('org.wasabifx:wasabi:0.3.120') {
         exclude module: "slf4j-simple"
     }
-    //compile 'org.jetbrains.kotlinx:vertx3-lang-kotlin:0.0.+'
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
