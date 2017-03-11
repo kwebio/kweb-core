@@ -9,7 +9,7 @@ import com.github.sanity.kweb.dom.element.modification.setText
  */
 
 fun main(args: Array<String>) {
-    KWeb(port = 7823) {
+    KWeb(port = 7823, refreshPageOnHotswap = true) {
         doc.body.h1().setText("Hello World!")
     }
 }
