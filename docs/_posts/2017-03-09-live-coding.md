@@ -6,12 +6,10 @@ order: 3
 date: 2017-03-09 10:04:11
 ---
 
-### What is live coding?
-
 Wouldn't it be great if, when building a website, you could modify your code and immediately see the change reflected
 in your web browser?  Great news, Kweb can do this!
 
-### Step 1 : Install Dynamic Code Evolution VM (DCEVM) Java patch
+#### Step 1 : Install Dynamic Code Evolution VM (DCEVM) Java patch
 
 Go to [https://github.com/dcevm/dcevm/releases](https://github.com/dcevm/dcevm/releases) and download the latest
 DCEVM light installer 
@@ -30,5 +28,5 @@ Click **Install DCEVM as altjvm**.
 
 You can now quit the DCEVM installer.
 
-### Step 2 : Download HotSwapAgent
+#### Step 2 : Download HotSwapAgent
 
