@@ -43,10 +43,11 @@ header().apply {
      title().setText("Title")
      spacer()
      navigation().apply {
-       navLink().setText("First header link")
-       navLink().setText("Second header link")
-       navLink().setText("Third header link")
-       navLink().setText("Fourth header link")
+       navLink().setText("Delete").on.click {
+            database.delete().where(ID.eq(oId)).execute()
+       }
+       navLink().setText("Create")
+       navLink().setText("Modify")
      }
    }
 }
