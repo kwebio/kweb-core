@@ -26,7 +26,7 @@ for example on a Mac it may be `/Library/Java/JavaVirtualMachines/jdk1.7.0_121.j
 
 Click **Install DCEVM as altjvm**.
 
-You can now quit the DCEVM installer.
+When the installation is complete you can quit the DCEVM installer.
 
 #### Step 2 : Download HotSwapAgent
 
