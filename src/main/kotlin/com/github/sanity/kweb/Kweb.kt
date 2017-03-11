@@ -36,6 +36,8 @@ typealias JavaScriptError = String
  *                              warning is logged
  * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
  *                     go
+ *
+ * @sample com.github.sanity.kweb.samples.main
  */
 class Kweb(val port: Int,
            val debug: Boolean = true,
