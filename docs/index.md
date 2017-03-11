@@ -69,9 +69,9 @@ supports.
   be organized
   
 #### How does it work?
-Kweb keeps all of the logic server-side, and uses websockets to communicate with web browsers.
-We also take advantage of Kotlin's powerful new coroutines mechanism to efficiently handle
-asynchronicity largely invisible to the programmer.
+Kweb keeps all of the logic server-side, and uses efficient websockets to communicate with web 
+browsers. We also take advantage of Kotlin's powerful new coroutines mechanism to efficiently handle
+asynchronicity, largly invisibly to the programmer.
 
 #### What does it look like?
 
