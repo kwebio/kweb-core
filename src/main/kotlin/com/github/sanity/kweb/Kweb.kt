@@ -5,6 +5,8 @@ import com.github.sanity.kweb.dev.hotswap.KwebHotswapPlugin
 import com.github.sanity.kweb.plugins.KWebPlugin
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import mu.KLogging
 import org.apache.commons.io.IOUtils
 import org.jetbrains.ktor.application.call
@@ -13,6 +15,7 @@ import org.jetbrains.ktor.features.DefaultHeaders
 import org.jetbrains.ktor.http.HttpHeaders.ContentType
 import org.jetbrains.ktor.netty.NettyApplicationHost
 import org.jetbrains.ktor.netty.embeddedNettyServer
+import org.jetbrains.ktor.request.uri
 import org.jetbrains.ktor.response.respondText
 import org.jetbrains.ktor.routing.Routing
 import org.jetbrains.ktor.routing.Routing.Feature.install
@@ -52,7 +55,7 @@ class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap : Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
-           val appServerConfigurator: (AppServer) -> Unit = {},
+           val appServerConfigurator: (NettyApplicationHost?) -> Unit = {},
            val onError : ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ ->  true},
            val maxPageBuildTimeMS : Long = 200,
            val buildPage: RootReceiver.() -> Unit
@@ -92,7 +95,7 @@ class Kweb(val port: Int,
             val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
             val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
             clients.put(newClientId, wsClientData)
-            val httpRequestInfo = HttpRequestInfo(request.uri, request.rawHeaders)
+            val httpRequestInfo = HttpRequestInfo(call.request.uri, call.request.headers)
 
             if (debug) {
                 warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
@@ -150,7 +153,7 @@ class Kweb(val port: Int,
         }
     }
 
-    private fun handleHello(socket: WebSocket, wsClientData: WSClientData) {
+    private fun handleHello(socket: WebSocket, wsClientData: WSClientData) = async(CommonPool) {
         val tempQueue = wsClientData.outboundChannel as OutboundChannel.TemporarilyStoringChannel
         wsClientData.outboundChannel = OutboundChannel.WSChannel(socket)
         tempQueue.read().forEach { wsClientData.outboundChannel.send(it) }
@@ -187,7 +190,7 @@ class Kweb(val port: Int,
         }
     }
 
-    private fun refreshAllPages() {
+    private fun refreshAllPages() = async(CommonPool) {
         for (client in clients.values) {
             val message = S2CWebsocketMessage(
                     yourId = client.id,
@@ -232,7 +235,7 @@ class Kweb(val port: Int,
 }
 
 private data class WSClientData(val id: String, @Volatile var outboundChannel: OutboundChannel, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap()) {
-    fun send(message: S2CWebsocketMessage) {
+    fun send(message: S2CWebsocketMessage) = async(CommonPool){
         outboundChannel.send(gson.toJson(message))
     }
 }

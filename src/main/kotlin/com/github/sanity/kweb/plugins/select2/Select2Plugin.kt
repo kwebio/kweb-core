@@ -4,6 +4,7 @@ import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
+import org.jetbrains.ktor.netty.NettyApplicationHost
 import java.util.*
 import java.util.Collections.emptyList
 
@@ -24,7 +25,7 @@ class Select2Plugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
 """.trimIndent())
     }
 
-/*    override fun appServerConfigurator(appServer: AppServer) {
+/*    override fun appServerConfigurator(appServer: NettyApplicationHost?) {
         appServer.get(postPath+"/:handlerid", {
             val handlerid = request.routeParams["handlerid"]
             val handler = suggestionHandlers[handlerid] ?: throw RuntimeException("Unknown handlerid $handlerid")

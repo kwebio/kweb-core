@@ -4,6 +4,7 @@ import com.github.sanity.kweb.dom.Document
 import com.github.sanity.kweb.plugins.KWebPlugin
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
+import org.jetbrains.ktor.util.ValuesMap
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
@@ -55,6 +56,6 @@ class RootReceiver(private val clientId: String, val httpRequestInfo: HttpReques
 
 // TODO: Not sure if this should be a separate property of RootReceiver, or passed in
 // TODO: some other way.
-data class HttpRequestInfo(val visitedUrl : String, val headers : Map<String, String>) {
+data class HttpRequestInfo(val visitedUrl : String, val headers : ValuesMap) {
     val referer : String? get() = headers["Referer"]
 }
