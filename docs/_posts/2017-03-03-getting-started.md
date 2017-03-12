@@ -13,13 +13,13 @@ js:
 
 ### What you should know
 
-KWeb is built on [Kotlin 1.1](http://kotlinlang.org/), you should have some familiarity with Kotlin
+Kweb is built on [Kotlin 1.1](http://kotlinlang.org/), you should have some familiarity with Kotlin
 and the Java ecosystem on which it's built.
 
-### Adding a KWeb dependency
+### Adding a Kweb dependency
 
-The KWeb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
-easily to almost any Java project:
+The Kweb library is distributed via [JitPack](https://jitpack.io/#sanity/kweb), it can be added
+easily to any Kotlin project:
 
 #### Gradle 
 For [Gradle](http://www.gradle.org/) users, add this to the repositories section of your `build.gradle`:
@@ -37,6 +37,7 @@ Then add this to the dependencies section of your `build.gradle`:
 dependencies {
   // ...
   compile 'com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER'
+  compile 'org.slf4j:slf4j-simple:1.6.1' // <-- or your favorite SLF4J logger binding 
 }
 ```
 
@@ -60,6 +61,7 @@ For [Kobalt](http://beust.com/kobalt/) users, add this to your `Built.kt` file:
   dependencies {
     // ...
     compile("com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER")
+    compile("org.slf4j:slf4j-simple:1.6.1") // <-- or your favorite SLF4J logger binding 
     // ...
   }
 ```
@@ -83,7 +85,30 @@ Then add this to the dependencies section of your `pom.xml`:
   <artifactId>kweb</artifactId>
   <version>MAVEN_VERSION_PLACEHOLDER</version>
 </dependency>  
+
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-simple</artifactId> <!-- or your favorite SLF4J logger binding -->
+    <version>1.6.1</version>
+</dependency>
 ```
+
+### Logging
+Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  This is a "logging facade", it allows
+libraries to log to the library user's preferred logging framework.  The instructions above 
+include the "simple" SLF4J logger binding, but you can replace this with a number of others, 
+depending on your needs or preferences, learn more 
+[here](http://saltnlight5.blogspot.com/2013/08/how-to-configure-slf4j-with-different.html).
+
+If you see an error like the following:
+```
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+```
+
+...it means that you have not provided an SLF4J logging implementation.  This is undesirable because
+Kweb provides some useful warnings that you won't see without this.
 
 -----------
 

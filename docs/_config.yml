@@ -1,5 +1,5 @@
 # Site title and subtitle. This is used in _includes/header.html
-title: 'KWeb'
+title: 'Kweb'
 subtitle: 'A Kotlin interface to one or more remote web-browsers'
 
 # if you wish to integrate disqus on pages set your shortname here
@@ -21,7 +21,7 @@ codeurl: 'https://github.com/sanity/kweb'
 sections: [
     ['features', 'Features'],
     ['use', 'Use'],
-    ['plugins', 'Plugins']
+    ['plugins', 'Plugins'],
     ['contribute', 'Contribute'],
     ['history', 'History'],
 ]

@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.demos.plugins.bootstrap4
 
-import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.*
 import com.github.sanity.kweb.dom.element.creation.createElement
 import com.github.sanity.kweb.dom.element.creation.div
@@ -40,11 +40,11 @@ From http://v4-alpha.getbootstrap.com/components/forms/#textual-inputs
 
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
-    KWeb(port = 8091, plugins = listOf(bootstrap4)) {
+    Kweb(port = 8091, plugins = listOf(bootstrap4)) {
         doc.body.apply {
             div().apply {
                 container().apply {
-                    h1().addText("KWeb Bootstrap4 demo")
+                    h1().addText("Kweb Bootstrap4 demo")
 
                     p().addText("The following is a simple setText field which does nothing")
                 }

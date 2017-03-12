@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.samples
 
-import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.h1
 import com.github.sanity.kweb.dom.element.modification.setText
 
@@ -9,7 +9,7 @@ import com.github.sanity.kweb.dom.element.modification.setText
  */
 
 fun main(args: Array<String>) {
-    KWeb(port = 7823) {
+    Kweb(port = 7823, refreshPageOnHotswap = true) {
         doc.body.h1().setText("Hello World!")
     }
 }

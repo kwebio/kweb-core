@@ -1,5 +1,5 @@
 group 'com.github.sanity'
-version '0.0.31'
+version '0.0.35'
 
 buildscript {
     ext.kotlin_version = '1.1.0'
@@ -42,7 +42,7 @@ repositories {
         url "http://dl.bintray.com/cy6ergn0m/maven"
     }
     maven {
-        url 'https://jitpack.io' 
+        url 'https://jitpack.io'
     }
     jcenter()
 }
@@ -97,7 +97,6 @@ configurations.all {
     }
 }
 
-/*
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'html'
     outputDirectory = javadoc.destinationDir
@@ -112,4 +111,4 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
 artifacts {
     archives javadocJar
 }
-*/
+

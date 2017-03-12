@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.demos.plugins.jquery
 
-import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.creation.h1
@@ -14,7 +14,7 @@ import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
  */
 
 fun main(args: Array<String>) {
-    KWeb(port = 8091, plugins = listOf(jqueryCore)) {
+    Kweb(port = 8091, plugins = listOf(jqueryCore)) {
         doc.body.apply {
             h1(attr.classes("test")).addText("Simple Demo of JQuery plugin").apply {
                 jquery(".test").apply {

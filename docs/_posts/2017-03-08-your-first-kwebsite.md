@@ -10,7 +10,7 @@ Add a file like the following to your project:
 
 ```kotlin
 fun main(args: Array<String>) {
-    KWeb(port = 7823) {
+    Kweb(port = 7823) {
         doc.body.h1().setText("Hello World!")
     }
 }
@@ -24,7 +24,7 @@ Let's edit the file to do something more interesting:
 
 ```kotlin
 fun main(args: Array<String>) {
-    KWeb(port = 7823) {
+    Kweb(port = 7823) {
         var counter = 0
         val h1 = doc.body.h1()
         h1.setText("Hello World!")
@@ -42,8 +42,11 @@ we've assigned the header element to a variable called `h1`, and then we use the
 Next we create a click event listener on the header element, once clicked we set the text of the element to the value
 of the variable `counter`, and increase the value of `counter`.
 
-Kill KWeb if it is still running, and run this new version.  Try clicking on the text.
+Kill Kweb if it is still running, and run this new version.  Try clicking on the text.
 
 **Troubleshooting**: If you get an error like `Exception in thread "main" java.net.BindException: Address already in use` it means 
 that the previous version is still running and therefore the new version is unable to listen on port 7823, make
 sure you've killed it.
+
+-----------
+**Next: [Live coding]({{ site.baseurl }}{% post_url 2017-03-09-live-coding %}) >>>>**

@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.demos.materialDesignLite
 
-import com.github.sanity.kweb.KWeb
+import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.a
 import com.github.sanity.kweb.dom.element.creation.span
 import com.github.sanity.kweb.dom.element.events.on
@@ -16,7 +16,7 @@ import com.github.sanity.kweb.plugins.materialdesignlite.table.table
 
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
-    KWeb(port = 8091, plugins = listOf(materialDesignLite)) {
+    Kweb(port = 8091, plugins = listOf(materialDesignLite)) {
         doc.body.apply {
             mdl.layout(fixedHeader = true).apply {
                 addHeader()

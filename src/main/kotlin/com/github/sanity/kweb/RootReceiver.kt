@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-class RootReceiver(private val clientId: String, internal val cc: KWeb, val response: String? = null) {
+class RootReceiver(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: Kweb, val response: String? = null) {
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         cc.appliedPlugins.map { it::class to it }.toMap()
     }
@@ -24,7 +24,7 @@ class RootReceiver(private val clientId: String, internal val cc: KWeb, val resp
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
         if (missing.isNotEmpty()) {
-            throw RuntimeException("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to KWeb constructor")
+            throw RuntimeException("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to Kweb constructor")
         }
     }
 
@@ -47,8 +47,14 @@ class RootReceiver(private val clientId: String, internal val cc: KWeb, val resp
 
 
     fun evaluateWithCallback(js: String, rh: RootReceiver.() -> Boolean) = async(CommonPool){
-        cc.evaluate(clientId, js, { rh.invoke(RootReceiver(clientId, cc, it)) })
+        cc.evaluate(clientId, js, { rh.invoke(RootReceiver(clientId, httpRequestInfo, cc, it)) })
     }
 
     val doc = Document(this)
+}
+
+// TODO: Not sure if this should be a separate property of RootReceiver, or passed in
+// TODO: some other way.
+data class HttpRequestInfo(val visitedUrl : String, val headers : Map<String, String>) {
+    val referer : String? get() = headers["Referer"]
 }
