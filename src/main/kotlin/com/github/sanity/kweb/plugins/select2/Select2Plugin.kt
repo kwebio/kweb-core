@@ -4,7 +4,7 @@ import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
-import org.wasabifx.wasabi.app.AppServer
+import org.jetbrains.ktor.netty.NettyApplicationHost
 import java.util.*
 import java.util.Collections.emptyList
 
@@ -25,7 +25,7 @@ class Select2Plugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
 """.trimIndent())
     }
 
-    override fun appServerConfigurator(appServer: AppServer) {
+/*    override fun appServerConfigurator(appServer: NettyApplicationHost?) {
         appServer.get(postPath+"/:handlerid", {
             val handlerid = request.routeParams["handlerid"]
             val handler = suggestionHandlers[handlerid] ?: throw RuntimeException("Unknown handlerid $handlerid")
@@ -33,7 +33,7 @@ class Select2Plugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
             val suggestions = if (searchTerms != null) handler.invoke(searchTerms) else Suggestions(results = emptyList())
             response.send(suggestions.toJson(), "application/json")
         })
-    }
+    }*/
 
     internal fun suggestionsAjaxBlock(handler: (String) -> Suggestions, delay : Int = 250, cache : Boolean = true) : Map<String, String> {
         val suggestionHandlerId = random.nextInt(Int.MAX_VALUE).toString(16)

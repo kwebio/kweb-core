@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.plugins
 
-import org.wasabifx.wasabi.app.AppServer
+import org.jetbrains.ktor.netty.NettyApplicationHost
 import java.util.*
 
 abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet()) {
@@ -12,7 +12,7 @@ abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet(
 
     open fun executeAfterPageCreation() = ""
 
-    open fun appServerConfigurator(appServer : AppServer) {
+    open fun appServerConfigurator(appServer : NettyApplicationHost?) {
 
     }
 }
