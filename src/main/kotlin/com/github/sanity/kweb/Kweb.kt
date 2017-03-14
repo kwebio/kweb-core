@@ -16,6 +16,7 @@ import org.jetbrains.ktor.http.HttpHeaders.ContentType
 import org.jetbrains.ktor.netty.NettyApplicationHost
 import org.jetbrains.ktor.netty.embeddedNettyServer
 import org.jetbrains.ktor.request.uri
+import org.jetbrains.ktor.response.contentType
 import org.jetbrains.ktor.response.respondText
 import org.jetbrains.ktor.routing.Routing
 import org.jetbrains.ktor.routing.Routing.Feature.install
@@ -62,23 +63,18 @@ class Kweb(val port: Int,
 ) {
     companion object: KLogging()
 
-    private var server: NettyApplicationHost? = null
+    private var server: NettyApplicationHost?
     private val clients: MutableMap<String, WSClientData>
     private val mutableAppliedPlugins: MutableSet<KWebPlugin> = HashSet()
     val appliedPlugins: Set<KWebPlugin> get() = mutableAppliedPlugins
 
     init {
-        appServerConfigurator.invoke(server)
 
         //TODO: Need to do housekeeping to delete old client data
         clients = ConcurrentHashMap<String, WSClientData>()
 
         val startHeadBuilder = StringBuilder()
         val endHeadBuilder = StringBuilder()
-
-        for (plugin in plugins) {
-            applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, appServer = server)
-        }
 
         if (refreshPageOnHotswap) {
             KwebHotswapPlugin.addHotswapReloadListener({refreshAllPages()})
@@ -90,34 +86,38 @@ class Kweb(val port: Int,
 
         server= embeddedNettyServer(port) {
             install(DefaultHeaders)
-            install(Routing) {get("/") {
-            val newClientId = Math.abs(random.nextLong()).toString(16)
-            val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
-            val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
-            clients.put(newClientId, wsClientData)
-            val httpRequestInfo = HttpRequestInfo(call.request.uri, call.request.headers)
+            install(Routing) {
+                get("/") {
+                    val newClientId = Math.abs(random.nextLong()).toString(16)
+                    val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
+                    val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
+                    clients.put(newClientId, wsClientData)
+                    val httpRequestInfo = HttpRequestInfo(call.request.uri, call.request.headers)
 
-            if (debug) {
-                warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
-                    val logStatementBuilder = StringBuilder()
-                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
-                    thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
-                    val logStatement = logStatementBuilder.toString()
-                    logger.warn { logStatement }
-                }) {buildPage(RootReceiver(newClientId, httpRequestInfo,this@Kweb))
-                }
-            } else {
-                buildPage(RootReceiver(newClientId, httpRequestInfo, this@Kweb))
-            }
-            for (plugin in plugins) {
-                execute(newClientId, plugin.executeAfterPageCreation())
-            }
-            wsClientData.outboundChannel = OutboundChannel.TemporarilyStoringChannel()
+                    if (debug) {
+                        warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
+                            val logStatementBuilder = StringBuilder()
+                            logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
+                            thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
+                            val logStatement = logStatementBuilder.toString()
+                            logger.warn { logStatement }
+                        }) {buildPage(RootReceiver(newClientId, httpRequestInfo,this@Kweb))
+                        }
+                    } else {
+                        buildPage(RootReceiver(newClientId, httpRequestInfo, this@Kweb))
+                    }
+                    for (plugin in plugins) {
+                        execute(newClientId, plugin.executeAfterPageCreation())
+                    }
+                    wsClientData.outboundChannel = OutboundChannel.TemporarilyStoringChannel()
 
                     val bootstrapHtml = bootstrapHtmlTemplate
                             .replace("--CLIENT-ID-PLACEHOLDER--", newClientId)
                             .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", outboundBuffer.read().map {"handleInboundMessage($it);"} . joinToString(separator = "\n"))
-                    call.respondText(bootstrapHtml)
+
+                    // TODO replace with ktor type.
+                    call.response.contentType("text/html")
+                    call.respond(bootstrapHtml)
                 }
                 webSocket("/ws") {
                     handle { frame ->
@@ -128,6 +128,10 @@ class Kweb(val port: Int,
                     }
                 }
             }
+        }
+        appServerConfigurator.invoke(server)
+        for (plugin in plugins) {
+            applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, appServer = server)
         }
         server!!.start()
         logger.info {"KWeb is listening on port $port"}
