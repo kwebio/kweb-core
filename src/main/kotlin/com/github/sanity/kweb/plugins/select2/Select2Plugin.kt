@@ -4,7 +4,10 @@ import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
-import org.wasabifx.wasabi.app.AppServer
+import org.jetbrains.ktor.application.call
+import org.jetbrains.ktor.response.contentType
+import org.jetbrains.ktor.routing.Routing
+import org.jetbrains.ktor.routing.get
 import java.util.*
 import java.util.Collections.emptyList
 
@@ -25,13 +28,14 @@ class Select2Plugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
 """.trimIndent())
     }
 
-    override fun appServerConfigurator(appServer: AppServer) {
-        appServer.get(postPath+"/:handlerid", {
-            val handlerid = request.routeParams["handlerid"]
+    override fun appServerConfigurator(routeHandler: Routing) {
+        routeHandler.get(postPath+"/{handlerid}", {
+            val handlerid = call.parameters["handlerid"]
             val handler = suggestionHandlers[handlerid] ?: throw RuntimeException("Unknown handlerid $handlerid")
-            val searchTerms = request.queryParams["q"]
+            val searchTerms = call.request.queryParameters["q"]
             val suggestions = if (searchTerms != null) handler.invoke(searchTerms) else Suggestions(results = emptyList())
-            response.send(suggestions.toJson(), "application/json")
+            call.response.contentType("application/json")
+            call.respond(suggestions.toJson())
         })
     }
 
