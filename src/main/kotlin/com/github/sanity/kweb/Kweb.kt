@@ -110,10 +110,13 @@ class Kweb(val port: Int,
                             thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
                             val logStatement = logStatementBuilder.toString()
                             logger.warn { logStatement }
-                        }) {buildPage(RootReceiver(newClientId, httpRequestInfo,this@Kweb))
+                        }) {
+                            buildPage(RootReceiver(newClientId, httpRequestInfo,this@Kweb))
+                            logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}"}
                         }
                     } else {
                         buildPage(RootReceiver(newClientId, httpRequestInfo, this@Kweb))
+                        logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}"}
                     }
                     for (plugin in plugins) {
                         execute(newClientId, plugin.executeAfterPageCreation())

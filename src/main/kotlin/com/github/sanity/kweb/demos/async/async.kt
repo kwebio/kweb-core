@@ -2,15 +2,18 @@ package com.github.sanity.kweb.demos.async
 
 import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.createElement
-import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.modification.addText
+import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.read.read
 import kotlinx.coroutines.experimental.future.await
 import kotlinx.coroutines.experimental.future.future
+import mu.KotlinLogging
 
 /**
  * Created by ian on 1/11/17.
  */
+
+private val logger = KotlinLogging.logger {}
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     Kweb(8091) {

@@ -1,7 +1,5 @@
 package com.github.sanity.kweb.browserConnection
 
-import io.netty.channel.Channel
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
 import org.jetbrains.ktor.websocket.Frame
 import org.jetbrains.ktor.websocket.WebSocket
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -28,5 +26,7 @@ sealed class OutboundChannel {
             queue = null
             return r
         }
+
+        fun queueSize() = queue?.size
     }
 }
