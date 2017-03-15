@@ -28,7 +28,7 @@ For [Gradle](http://www.gradle.org/) users, add this to the repositories section
     // ...
     maven { url 'https://jitpack.io' }
     maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
-    maven { url "https://dl.bintray.com/wasabifx/wasabifx" }
+    maven {url "http://dl.bintray.com/kotlin/ktor"}
     }
 ```
 
@@ -51,7 +51,7 @@ For [Kobalt](http://beust.com/kobalt/) users, add this to your `Built.kt` file:
     repos(
         "https://jitpack.io", 
         "http://dl.bintray.com/kotlin/kotlin-eap-1.1", 
-        "https://dl.bintray.com/wasabifx/wasabifx"
+        "http://dl.bintray.com/kotlin/ktor"
         )
     // ...
   }
@@ -74,7 +74,7 @@ For [Maven](https://maven.apache.org/) users, add this to the repositories secti
 <repository><snapshots><enabled>false</enabled></snapshots>
     <id>dl</id><name>bintray</name><url>http://dl.bintray.com/kotlin/kotlin-eap-1.1</url>
 </repository>
-<repository><id>wasabifx</id><url>https://dl.bintray.com/wasabifx/wasabifx/</url></repository>
+<repository><id>ktor</id><url>"http://dl.bintray.com/kotlin/ktor"</url></repository>
 </repositories>
 ```
 
