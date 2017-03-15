@@ -3,8 +3,6 @@ package com.github.sanity.kweb
 import com.github.sanity.kweb.browserConnection.OutboundChannel
 import com.github.sanity.kweb.dev.hotswap.KwebHotswapPlugin
 import com.github.sanity.kweb.plugins.KWebPlugin
-import io.netty.channel.ChannelHandlerContext
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import mu.KLogging
@@ -12,16 +10,16 @@ import org.apache.commons.io.IOUtils
 import org.jetbrains.ktor.application.call
 import org.jetbrains.ktor.application.install
 import org.jetbrains.ktor.features.DefaultHeaders
-import org.jetbrains.ktor.http.HttpHeaders.ContentType
 import org.jetbrains.ktor.netty.NettyApplicationHost
 import org.jetbrains.ktor.netty.embeddedNettyServer
 import org.jetbrains.ktor.request.uri
 import org.jetbrains.ktor.response.contentType
-import org.jetbrains.ktor.response.respondText
 import org.jetbrains.ktor.routing.Routing
-import org.jetbrains.ktor.routing.Routing.Feature.install
 import org.jetbrains.ktor.routing.get
-import org.jetbrains.ktor.websocket.*
+import org.jetbrains.ktor.websocket.Frame
+import org.jetbrains.ktor.websocket.WebSocket
+import org.jetbrains.ktor.websocket.readText
+import org.jetbrains.ktor.websocket.webSocket
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -56,7 +54,7 @@ class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap : Boolean = false,
            val plugins: List<KWebPlugin> = Collections.emptyList(),
-           val appServerConfigurator: (NettyApplicationHost?) -> Unit = {},
+           val appServerConfigurator: (Routing) -> Unit = {},
            val onError : ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ ->  true},
            val maxPageBuildTimeMS : Long = 200,
            val buildPage: RootReceiver.() -> Unit
@@ -87,6 +85,17 @@ class Kweb(val port: Int,
         server= embeddedNettyServer(port) {
             install(DefaultHeaders)
             install(Routing) {
+
+                // Register custom routes.
+                appServerConfigurator.invoke(this)
+
+                // TODO this is pretty awful but don't see an alternative....
+                // Register plugins and allow plugin specific routing to be added.
+                for (plugin in plugins) {
+                    applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
+                }
+
+                // Setup default KWeb routing.
                 get("/") {
                     val newClientId = Math.abs(random.nextLong()).toString(16)
                     val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
@@ -129,10 +138,7 @@ class Kweb(val port: Int,
                 }
             }
         }
-        appServerConfigurator.invoke(server)
-        for (plugin in plugins) {
-            applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, appServer = server)
-        }
+
         server!!.start()
         logger.info {"KWeb is listening on port $port"}
     }
@@ -180,16 +186,16 @@ class Kweb(val port: Int,
                             appliedPlugins: MutableSet<KWebPlugin>,
                             endHeadBuilder: java.lang.StringBuilder,
                             startHeadBuilder: java.lang.StringBuilder,
-                            appServer : NettyApplicationHost?) {
+                            routeHandler : Routing) {
         for (dependantPlugin in plugin.dependsOn) {
             if (!appliedPlugins.contains(dependantPlugin)) {
-                applyPlugin(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder, appServer)
+                applyPlugin(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder, routeHandler)
                 appliedPlugins.add(dependantPlugin)
             }
         }
         if (!appliedPlugins.contains(plugin)) {
             plugin.decorate(startHeadBuilder, endHeadBuilder)
-            plugin.appServerConfigurator(appServer)
+            plugin.appServerConfigurator(routeHandler)
             appliedPlugins.add(plugin)
         }
     }
