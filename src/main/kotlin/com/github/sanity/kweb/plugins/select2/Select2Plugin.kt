@@ -29,7 +29,7 @@ class Select2Plugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
     }
 
     override fun appServerConfigurator(routeHandler: Routing) {
-        routeHandler.get(postPath+"/:handlerid", {
+        routeHandler.get(postPath+"/{handlerid}", {
             val handlerid = call.parameters["handlerid"]
             val handler = suggestionHandlers[handlerid] ?: throw RuntimeException("Unknown handlerid $handlerid")
             val searchTerms = call.request.queryParameters["q"]
