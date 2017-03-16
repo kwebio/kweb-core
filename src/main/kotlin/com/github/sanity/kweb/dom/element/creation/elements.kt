@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture
  ********* will typically be just the tag of the parent like "div" or "input".
  *********/
 
-fun Element.createElement(tag: String, attributes: Map<String, Any> = attr): Element {
+fun Element.createElement(tag: String, attributes: Map<String, Any> = attr, position: Int? = null): Element {
     val id: String = (attributes["id"] ?: Math.abs(random.nextInt())).toString()
     val javaScript = StringBuilder()
     with(javaScript) {
@@ -34,63 +34,67 @@ fun Element.createElement(tag: String, attributes: Map<String, Any> = attr): Ele
         for ((name, value) in attributes) {
             appendln("newEl.setAttribute(\"$name\", ${value.toJson()});")
         }
-        appendln("$jsExpression.appendChild(newEl);")
+        if (position == null) {
+            appendln("$jsExpression.appendChild(newEl);")
+        } else {
+            appendln("$jsExpression.insertBefore(newEl, $jsExpression.childNodes[$position]);")
+        }
         appendln("}")
     }
     execute(javaScript.toString())
     return Element(rootReceiver, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
 }
 
-fun Element.div(attributes: Map<String, Any> = attr) = DivElement(createElement("div", attributes))
+fun Element.div(attributes: Map<String, Any> = attr, position : Int? = null) = DivElement(createElement("div", attributes, position))
 
 open class DivElement(wrapped: Element) : Element(wrapped) {
     // These are useful to attach extension functions to
 }
 
 
-fun Element.span(attributes: Map<String, Any> = attr) = SpanElement(createElement("span", attributes))
+fun Element.span(attributes: Map<String, Any> = attr, position : Int? = null) = SpanElement(createElement("span", attributes, position))
 
 open class SpanElement(wrapped: Element) : Element(wrapped) {
 }
 
-fun Element.main(attributes: Map<String, Any> = attr) = MainElement(createElement("main", attributes))
+fun Element.main(attributes: Map<String, Any> = attr, position : Int? = null) = MainElement(createElement("main", attributes, position))
 
 open class MainElement(wrapped: Element) : Element(wrapped) {
     // These are useful to attach extension functions to
 }
 
-fun Element.h1(attributes: Map<String, Any> = attr): Element {
-    return createElement("h1", attributes)
+fun Element.h1(attributes: Map<String, Any> = attr, position : Int? = null): Element {
+    return createElement("h1", attributes, position)
 }
 
-fun Element.a(href: String? = null, attributes: Map<String, Any> = attr): Element {
-    return createElement("a", attributes.set("href", href))
+fun Element.a(href: String? = null, attributes: Map<String, Any> = attr, position : Int? = null): Element {
+    return createElement("a", attributes.set("href", href), position)
 }
 
-fun Element.p(attributes: Map<String, Any> = attr): Element {
-    return createElement("p", attributes)
+fun Element.p(attributes: Map<String, Any> = attr, position : Int? = null): Element {
+    return createElement("p", attributes, position)
 }
 
-fun Element.ul(attributes: Map<String, Any> = attr): ULElement {
-    val e = createElement("ul", attributes)
+fun Element.ul(attributes: Map<String, Any> = attr, position : Int? = null): ULElement {
+    val e = createElement("ul", attributes, position)
     return ULElement(e)
 }
 
-fun Element.i(attributes: Map<String, Any> = attr) = IElement(createElement("i", attributes))
+fun Element.i(attributes: Map<String, Any> = attr, position : Int? = null) = IElement(createElement("i", attributes, position))
 
 open class IElement(wrapped : Element) : Element(wrapped)
 
-fun Element.form(action: String? = null, method: String? = null, attributes: Map<String, Any> = attr): Element {
+fun Element.form(position : Int? = null, action: String? = null, method: String? = null, attributes: Map<String, Any> = attr): Element {
     return createElement("form", attributes
             .set("action", action)
-            .set("method", method)
+            .set("method", method), position
     )
 }
 
 open class FormElement(wrapped: Element) : Element(wrapped)
 
-fun Element.select(attributes: Map<String, Any> = attr) : SelectElement {
-    return SelectElement(createElement("select", attributes))
+fun Element.select(attributes: Map<String, Any> = attr, position : Int? = null) : SelectElement {
+    return SelectElement(createElement("select", attributes, position))
 }
 
 open class SelectElement(wrapped : Element) : Element(wrapped) {
@@ -109,24 +113,24 @@ open class OptGroup(wrapped: Element) : Element(wrapped) {
             = createElement("option").setAttribute("value", value.toJson())
 }
 
-fun Element.header(attributes: Map<String, Any> = attr) = HeaderElement(createElement("header", attributes))
+fun Element.header(attributes: Map<String, Any> = attr, position : Int? = null) = HeaderElement(createElement("header", attributes, position))
 
 open class HeaderElement(wrapped: Element) : Element(wrapped)
 
-fun Element.footer(attributes: Map<String, Any> = attr) = FooterElement(createElement("footer", attributes))
+fun Element.footer(attributes: Map<String, Any> = attr, position : Int? = null) = FooterElement(createElement("footer", attributes, position))
 
 open class FooterElement(wrapped: Element) : Element(wrapped)
 
 open class ULElement(wrapped: Element) : Element(wrapped) {
-    open fun li(attributes: Map<String, Any> = attr) = LIElement(createElement("item", attributes))
+    open fun li(attributes: Map<String, Any> = attr, position : Int? = null) = LIElement(createElement("item", attributes, position))
 }
 
 open class LIElement(wrapped : Element) : Element(wrapped) {
 
 }
 
-fun Element.nav(attributes: Map<String, Any> = attr): NavElement {
-    return NavElement(createElement("nav", attributes))
+fun Element.nav(attributes: Map<String, Any> = attr, position : Int? = null): NavElement {
+    return NavElement(createElement("nav", attributes, position))
 }
 
 open class NavElement(element: Element) : Element(element) {

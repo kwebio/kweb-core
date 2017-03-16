@@ -107,6 +107,11 @@ fun Element.removeChildren(): Element {
     return this
 }
 
+fun Element.removeChildAt(position : Int) : Element {
+    execute("$jsExpression.removeChild($jsExpression.childNodes[$position]);".trimIndent())
+    return this
+}
+
 fun Element.setText(value: String): Element {
     removeChildren()
     addText(value)

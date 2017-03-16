@@ -13,7 +13,7 @@ import com.github.sanity.kweb.dom.element.creation.createElement
 fun MDLReceiver.tooltip(tag: TooltipTag = TooltipTag.div,
                         large: Boolean = false, position: TooltipPosition? = null): Element {
     kotlin.require(parent.id != null) { "id must be specified to add a tooltip to an element" }
-    return parent.createElement(tag.name, attr
+    return parent.createElement(tag.name,  attr
             .classes("mdl-tooltip")
             .classes(onlyIf = large, classes = "mdl-tooltip--large")
             .classes(onlyIf = position != null, classes = "mdl-tooltip--${position!!}")

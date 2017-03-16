@@ -16,7 +16,7 @@ import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 fun main(args: Array<String>) {
     Kweb(port = 8091, plugins = listOf(jqueryCore)) {
         doc.body.apply {
-            h1(attr.classes("test")).addText("Simple Demo of JQuery plugin").apply {
+            h1(attributes = attr.classes("test")).addText("Simple Demo of JQuery plugin").apply {
                 jquery(".test").apply {
                     on.click {
                         println("Clicked!")
