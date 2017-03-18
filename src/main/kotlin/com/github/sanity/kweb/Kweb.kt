@@ -78,10 +78,6 @@ class Kweb(val port: Int,
             KwebHotswapPlugin.addHotswapReloadListener({refreshAllPages()})
         }
 
-        val bootstrapHtmlTemplate = IOUtils.toString(javaClass.getResourceAsStream("kweb_bootstrap.html"), Charsets.UTF_8)
-                .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
-                .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
-
         server= embeddedNettyServer(port) {
             install(DefaultHeaders)
             install(Routing) {
@@ -94,6 +90,10 @@ class Kweb(val port: Int,
                 for (plugin in plugins) {
                     applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
                 }
+                       
+                val bootstrapHtmlTemplate = IOUtils.toString(javaClass.getResourceAsStream("kweb_bootstrap.html"), Charsets.UTF_8)
+                    .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
+                    .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 
                 // Setup default KWeb routing.
                 get("/") {
