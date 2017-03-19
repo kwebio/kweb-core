@@ -74,7 +74,7 @@ For [Maven](https://maven.apache.org/) users, add this to the repositories secti
 <repository><snapshots><enabled>false</enabled></snapshots>
     <id>dl</id><name>bintray</name><url>http://dl.bintray.com/kotlin/kotlin-eap-1.1</url>
 </repository>
-<repository><id>ktor</id><url>"http://dl.bintray.com/kotlin/ktor"</url></repository>
+<repository><id>ktor</id><url>http://dl.bintray.com/kotlin/ktor</url></repository>
 </repositories>
 ```
 
