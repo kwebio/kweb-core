@@ -5,4 +5,4 @@
 Kweb is a library for building rich web applications in the Kotlin programming language. You can think of it as a 
 powerful Kotlin DSL that allows you to remote-control web browsers from a web server.
 
-For more information please visit our main website at [kweb.io](https://kweb.io/).
+For more information please visit our main website at [kweb.io](http://kweb.io/).
