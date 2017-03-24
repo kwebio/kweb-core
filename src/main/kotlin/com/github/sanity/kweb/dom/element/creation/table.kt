@@ -8,38 +8,38 @@ import com.github.sanity.kweb.dom.element.Element
  */
 
 
-fun Element.table(attributes: Map<String, Any> = attr): TableElement {
-    return TableElement(createElement("table", attributes))
+fun ElementCreator.table(attributes: Map<String, Any> = attr): TableCreator {
+    return TableCreator(element("table", attributes))
 }
 
-open class TableElement(wrapped: Element) : Element(wrapped) {
-    open fun thead(attributes: Map<String, Any> = attr) = TheadElement(createElement("thead", attributes))
+open class TableCreator(parent: Element) : ElementCreator(parent) {
+    open fun thead(attributes: Map<String, Any> = attr) = TheadCreator(element("thead", attributes))
 
-    open fun tbody(attributes: Map<String, Any> = attr) = TbodyElement(createElement("tbody", attributes))
-
-}
-
-open class TheadElement(wrapped: Element) : Element(wrapped) {
-    open fun tr(attributes: Map<String, Any> = attr) = TrHeadElement(createElement("tr", attributes))
-}
-
-open class TrHeadElement(wrapped: Element) : Element(wrapped) {
-    open fun th(attributes: Map<String, Any> = attr) = ThElement(createElement("th", attributes))
-}
-
-
-open class TbodyElement(wrapped: Element)  : Element(wrapped) {
-    open fun tr(attributes: Map<String, Any> = attr) = TrBodyElement(createElement("tr", attributes))
+    open fun tbody(attributes: Map<String, Any> = attr) = TbodyCreator(element("tbody", attributes))
 
 }
 
-open class TrBodyElement(wrapped: Element) : Element(wrapped) {
-    open fun td(attributes: Map<String, Any> = attr) = TdElement(createElement("td", attributes))
+open class TheadCreator(parent: Element) : ElementCreator(parent) {
+    open fun tr(attributes: Map<String, Any> = attr) = TrHeadCreator(element("tr", attributes))
+}
+
+open class TrHeadCreator(parent: Element) : ElementCreator(parent) {
+    open fun th(attributes: Map<String, Any> = attr) = ThCreator(element("th", attributes))
 }
 
 
-open class ThElement(wrapped: Element) : Element(wrapped) {
+open class TbodyCreator(parent: Element)  : ElementCreator(parent) {
+    open fun tr(attributes: Map<String, Any> = attr) = TrBodyCreator(element("tr", attributes))
+
 }
 
-open class TdElement(wrapped: Element) : Element(wrapped) {
+open class TrBodyCreator(parent: Element) : ElementCreator(parent) {
+    open fun td(attributes: Map<String, Any> = attr) = TdElement(element("td", attributes))
+}
+
+
+open class ThCreator(parent: Element) : ElementCreator(parent) {
+}
+
+open class TdElement(parent: Element) : ElementCreator(parent) {
 }

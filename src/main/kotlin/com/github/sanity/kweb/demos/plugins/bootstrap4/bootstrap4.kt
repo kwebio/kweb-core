@@ -2,10 +2,6 @@ package com.github.sanity.kweb.demos.plugins.bootstrap4
 
 import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.dom.element.creation.createElement
-import com.github.sanity.kweb.dom.element.creation.div
-import com.github.sanity.kweb.dom.element.creation.h1
-import com.github.sanity.kweb.dom.element.creation.p
 import com.github.sanity.kweb.dom.element.modification.addClasses
 import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.modification.addText
@@ -41,7 +37,7 @@ From http://v4-alpha.getbootstrap.com/components/forms/#textual-inputs
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     Kweb(port = 8091, plugins = listOf(bootstrap4)) {
-        doc.body.apply {
+        doc.body.insert().apply {
             div().apply {
                 container().apply {
                     h1().addText("Kweb Bootstrap4 demo")
@@ -57,7 +53,7 @@ fun main(args: Array<String>) {
                     addClasses("form-group", "row")
 
                     val pairId = "example-setText-input"
-                    createElement("label").apply {
+                    insert().element("label").apply {
                         setAttribute("for", pairId)
                         addClasses("col-2", "col-form-label")
                         addText("Text")

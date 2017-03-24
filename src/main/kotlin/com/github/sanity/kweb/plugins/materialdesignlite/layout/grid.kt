@@ -3,23 +3,23 @@ package com.github.sanity.kweb.plugins.materialdesignlite.layout
 import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.creation.DivElement
-import com.github.sanity.kweb.dom.element.creation.div
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
+import com.github.sanity.kweb.dom.element.creation.DivCreator
+import com.github.sanity.kweb.dom.element.creation.insert
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
 
 /**
  * Created by ian on 1/22/17.
  */
 
-fun MDLReceiver.grid(
+fun MDLCreator.grid(
         noSpacing: Boolean = false,
         attributes: Map<String, Any> = attr
-): GridElement = GridElement(parent.div(attributes
+): GridElement = GridElement(parent.insert().div(attributes
         .classes("mdl-grid")
         .classes("mdl-grid--no-spacing", onlyIf = noSpacing)
 ))
 
-class GridElement(wrapped: DivElement) : Element(wrapped) {
+class GridElement(wrapped: DivCreator) : Element(wrapped) {
     // TODO: Include a check to verify that total width doesn't exceed 12
     fun cell(
             width: Int,
@@ -45,7 +45,7 @@ class GridElement(wrapped: DivElement) : Element(wrapped) {
 
             align: CellVerticalAlignment? = null,
 
-            attributes: Map<String, Any> = attr): DivElement = div(attributes
+            attributes: Map<String, Any> = attr): DivCreator = insert().div(attributes
                     .classes("mdl-cell", "mdl-cell--$width-col")
                     .classes(onlyIf = desktopWidth != null, classes = "mdl-cell--$desktopWidth-desktop")
                     .classes(onlyIf = tabletWidth != null, classes = "mdl-cell--$tabletWidth-tablet")

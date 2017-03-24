@@ -36,10 +36,10 @@ fun main(args: Array<String>) {
 }
 ```
 
-Here we create a header-1 element as before, and set its text to "Hello World!" as before also.  In this example
+Here we element a header-1 element as before, and set its text to "Hello World!" as before also.  In this example
 we've assigned the header element to a variable called `h1`, and then we use the variable to set the text.
 
-Next we create a click event listener on the header element, once clicked we set the text of the element to the value
+Next we element a click event listener on the header element, once clicked we set the text of the element to the value
 of the variable `counter`, and increase the value of `counter`.
 
 Kill Kweb if it is still running, and run this new version.  Try clicking on the text.

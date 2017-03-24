@@ -2,28 +2,27 @@ package com.github.sanity.kweb.plugins.materialdesignlite.layout
 
 import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
-import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
 
 /**
  * See [here](https://getmdl.io/components/index.html#layout-section)
  */
 
-fun MDLReceiver.layout(
+fun MDLCreator.layout(
         fixedDrawer: Boolean = false,
         fixedHeader: Boolean = false,
         fixedTabs: Boolean = false,
         noDrawerButton: Boolean = false,
         noDesktopDrawerButton: Boolean = false,
         outerDivAttributes: Map<String, Any> = attr,
-        layoutDivAttributes: Map<String, Any> = attr): LayoutElement {
-    val outerDiv = parent.div(outerDivAttributes
+        layoutDivAttributes: Map<String, Any> = attr): LayoutCreator {
+    val outerDiv = parent.insert().div(outerDivAttributes
             .classes("mdl-layout--fixed-drawer", onlyIf = fixedDrawer)
             .classes("mdl-layout--fixed-header", onlyIf = fixedHeader)
             .classes("mdl-layout--fixed-tabs", onlyIf = fixedTabs)
     )
-    return LayoutElement(outerDiv.div(
+    return LayoutCreator(parent.insert().div(
             layoutDivAttributes
                     .classes("mdl-layout", "mdl-js-layout")
                     .classes("mdl-layout--no-drawer-button", onlyIf = noDrawerButton)
@@ -31,16 +30,16 @@ fun MDLReceiver.layout(
     ))
 }
 
-class LayoutElement(e: Element) : Element(e) {
+class LayoutCreator(val e: ElementCreator) {
     fun header(
             scroll: Boolean = false,
             waterfall: WaterfallEffects = WaterfallEffects.none,
             transparent: Boolean = false,
             seamed: Boolean = false,
             attributes: Map<String, Any> = attr
-    ): LayoutHeaderElement
-            = LayoutHeaderElement(header(
-            attributes
+    ): LayoutHeaderCreator
+            = LayoutHeaderCreator(e.header(
+            attributes = attributes
                     .classes("mdl-layout__header")
                     .classes("mdl-layout__header--waterfall", onlyIf = waterfall == WaterfallEffects.normal)
                     .classes("mdl-layout__header--waterfall-hide-top", onlyIf = waterfall == WaterfallEffects.hideTop)
@@ -49,24 +48,24 @@ class LayoutElement(e: Element) : Element(e) {
                     .classes("mdl-layout__header--scroll", onlyIf = scroll)
     ))
 
-    fun drawer(attributes: Map<String, Any> = attr): LayoutDrawerElement = LayoutDrawerElement(div(attributes.classes("mdl-layout__drawer")))
+    fun drawer(attributes: Map<String, Any> = attr): LayoutDrawerCreator = LayoutDrawerCreator(e.div(attributes.classes("mdl-layout__drawer")))
 
-    fun content(attributes: Map<String, Any> = attr) = MDLReceiver(createElement("main", attributes.classes("mdl-layout__content")))
+    fun content(attributes: Map<String, Any> = attr) = e.element("main", attributes.classes("mdl-layout__content"))
 }
 
 enum class WaterfallEffects() {
     none, normal, hideTop
 }
 
-open class AbstractSubLayout(wrapped: DivElement) : DivElement(wrapped) {
+open class AbstractSubLayoutCreator(element: DivCreator) : DivCreator(element.parent) {
     fun title(attributes: Map<String, Any> = attr) = span(attributes.classes("mdl-layout__title"))
     fun navigation(attributes: Map<String, Any> = attr) = NavigationElement(nav(attributes.classes("mdl-navigation")))
 }
 
-class LayoutHeaderElement(wrapped: HeaderElement) : HeaderElement(wrapped) {
+class LayoutHeaderCreator(wrapped: HeaderCreator) : HeaderCreator(wrapped.parent) {
     fun icon(attributes: Map<String, Any> = attr) = div(attributes.classes("mdl-layout-icon"))
 
-    fun row(attributes: Map<String, Any> = attr) = RowElement(div(attributes.classes("mdl-layout__header-row")))
+    fun row(attributes: Map<String, Any> = attr) = RowCreator(div(attributes.classes("mdl-layout__header-row")))
 
     fun tabBar(manualSwitch: Boolean = false, attributes: Map<String, Any> = attr)
             = TabElement(div(attributes
@@ -75,23 +74,23 @@ class LayoutHeaderElement(wrapped: HeaderElement) : HeaderElement(wrapped) {
     ))
 }
 
-class LayoutDrawerElement(wrapped: DivElement) : AbstractSubLayout(wrapped) {
+class LayoutDrawerCreator(wrapped: DivCreator) : AbstractSubLayoutCreator(wrapped) {
 
 }
 
-fun Element.spacer(attributes: Map<String, Any> = attr) = div(attributes.classes("mdl-layout-spacer"))
+fun RowCreator.spacer(attributes: Map<String, Any> = attr) = div(attributes.classes("mdl-layout-spacer"))
 
-class RowElement(wrapped: DivElement) : AbstractSubLayout(wrapped) {
+class RowCreator(wrapped: DivCreator) : AbstractSubLayoutCreator(wrapped) {
 }
 
 
-class NavigationElement(wrapped: NavElement) : NavElement(wrapped) {
+class NavigationElement(wrapped: NavCreator) : NavCreator(wrapped.parent) {
     fun navLink(href: String? = "#", attributes: Map<String, Any> = attr) = a(href, attributes.classes("mdl-navigation__link"))
 }
 
 fun Map<String, Any>.mdlLayoutLargeScreenOnly(): Map<String, Any> = classes("mdl-layout--large-screen-only")
 fun Map<String, Any>.mdlLayoutSmallScreenOnly(): Map<String, Any> = classes("mdl-layout--small-screen-only")
 
-class TabElement(wrapped: DivElement) : DivElement(wrapped) {
-    fun tab(href: String, isActive: Boolean = false, attributes: Map<String, Any> = attr) = a(href, attributes.classes("mdl-layout__tab").classes("is-active", onlyIf = isActive))
+class TabElement(wrapped: DivCreator) : DivCreator(wrapped.parent) {
+    fun tab(href: String, isActive: Boolean = false, attributes: Map<String, Any> = attr) =a(href, attributes.classes("mdl-layout__tab").classes("is-active", onlyIf = isActive))
 }

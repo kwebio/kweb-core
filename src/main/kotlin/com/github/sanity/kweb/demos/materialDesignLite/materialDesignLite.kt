@@ -1,10 +1,8 @@
 package com.github.sanity.kweb.demos.materialDesignLite
 
 import com.github.sanity.kweb.Kweb
-import com.github.sanity.kweb.dom.element.creation.a
-import com.github.sanity.kweb.dom.element.creation.span
+import com.github.sanity.kweb.dom.element.creation.insert
 import com.github.sanity.kweb.dom.element.events.on
-import com.github.sanity.kweb.dom.element.modification.setText
 import com.github.sanity.kweb.plugins.materialdesignlite.layout.*
 import com.github.sanity.kweb.plugins.materialdesignlite.list.ListItemType
 import com.github.sanity.kweb.plugins.materialdesignlite.list.MDLUlElement
@@ -18,7 +16,7 @@ fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     Kweb(port = 8091, plugins = listOf(materialDesignLite)) {
         doc.body.apply {
-            mdl.layout(fixedHeader = true).apply {
+            insert().mdl.layout(fixedHeader = true).apply {
                 addHeader()
                 addDrawer()
                 addContent()
@@ -28,35 +26,35 @@ fun main(args: Array<String>) {
     }
 }
 
-private fun LayoutElement.addHeader() {
+private fun LayoutCreator.addHeader() {
     header().apply {
         row().apply {
-            title().setText("Title")
+            title().text("Title")
             spacer()
             navigation().apply {
-                navLink().setText("First header link")
-                navLink().setText("Second header link")
-                navLink().setText("Third header link")
-                navLink().setText("Fourth header link")
+                navLink().text("First header link")
+                navLink().text("Second header link")
+                navLink().text("Third header link")
+                navLink().text("Fourth header link")
             }
         }
     }
 }
 
-private fun LayoutElement.addDrawer() {
+private fun LayoutCreator.addDrawer() {
     drawer().apply {
-        title().setText("Title")
+        title().text("Title")
         navigation().apply {
-            navLink().setText("First drawer link")
-            navLink().setText("Second drawer link")
-            navLink().setText("Third drawer link")
-            navLink().setText("Fourth drawer link")
+            navLink().text("First drawer link")
+            navLink().text("Second drawer link")
+            navLink().text("Third drawer link")
+            navLink().text("Fourth drawer link")
         }
     }
 }
 
-private fun LayoutElement.addContent() {
-    content().apply {
+private fun LayoutCreator.addContent() {
+    content().insert().mdl.apply {
         tabs().apply {
             addTableFromObjectsPanel()
             addManualTablePanel()
@@ -88,21 +86,21 @@ private fun TabsElement.addManualTablePanel() {
             table().apply {
                 thead().apply {
                     tr().apply {
-                        th().setText("First")
-                        th().setText("Second")
-                        th().setText("Third")
+                        th().text("First")
+                        th().text("Second")
+                        th().text("Third")
                     }
                 }
                 tbody().apply {
                     tr().apply {
-                        td().setText("dog")
-                        td().setText("cat")
-                        td().setText("mouse")
+                        td().text("dog")
+                        td().text("cat")
+                        td().text("mouse")
                     }
                     tr().apply {
-                        td().setText("egg")
-                        td().setText("hen")
-                        td().setText("cat")
+                        td().text("egg")
+                        td().text("hen")
+                        td().text("cat")
                     }
                 }
             }
@@ -125,45 +123,45 @@ private fun TabsElement.addListPanel() {
 private fun MDLUlElement.addActorItem(name: String, bio: String) {
     item(type = ListItemType.threeLine).apply {
         primaryContent().apply {
-            avatar().setText("person")
-            span().setText(name)
-            body().setText(bio)
+            avatar().text("person")
+            span().text(name)
+            body().text(bio)
         }
         secondaryContent().apply {
-            secondaryAction().icon().setText("star")
+            secondaryAction().icon().text("star")
         }
     }
 }
 
-private fun LayoutElement.addFooter() {
-    mdl.miniFooter().apply {
+private fun LayoutCreator.addFooter() {
+    miniFooter().apply {
         addLeftSection()
         addRightSection()
     }
 }
 
-private fun MiniFooterElement.addLeftSection() {
+private fun MiniFooterCreator.addLeftSection() {
     leftSection().apply {
         logo()
         linkList().apply {
-            li().a().setText("Footer link")
+            li().a().text("Footer link")
                     .on.click {
                 println("Footer link clicked")
             }
-            li().a().setText("Footer link")
-            li().a().setText("Footer link")
-            li().a().setText("Footer link")
+            li().a().text("Footer link")
+            li().a().text("Footer link")
+            li().a().text("Footer link")
         }
     }
 }
 
-private fun MiniFooterElement.addRightSection() {
+private fun MiniFooterCreator.addRightSection() {
     rightSection().apply {
         linkList().apply {
-            li().a().setText("Footer link")
-            li().a().setText("Footer link")
-            li().a().setText("Footer link")
-            li().a().setText("Footer link")
+            li().a().text("Footer link")
+            li().a().text("Footer link")
+            li().a().text("Footer link")
+            li().a().text("Footer link")
         }
     }
 }

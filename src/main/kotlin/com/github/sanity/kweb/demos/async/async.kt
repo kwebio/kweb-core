@@ -1,7 +1,7 @@
 package com.github.sanity.kweb.demos.async
 
 import com.github.sanity.kweb.Kweb
-import com.github.sanity.kweb.dom.element.creation.createElement
+import com.github.sanity.kweb.dom.element.creation.insert
 import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.read.read
@@ -17,10 +17,10 @@ private val logger = KotlinLogging.logger {}
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     Kweb(8091) {
-        doc.body.apply {
-            val p1 = createElement("p").setAttribute("id", 1).addText("one")
-            val p2 = createElement("p").setAttribute("id", 2).addText("two")
-            val p3 = createElement("p").setAttribute("id", 3).addText("three")
+        doc.body.insert().apply {
+            val p1 = element("p").setAttribute("id", 1).addText("one")
+            val p2 = p().setAttribute("id", 2).addText("two")
+            val p3 = p().setAttribute("id", 3).addText("three")
             future {
                 println("Synchronous retrieve")
                 val syncStartTime = System.nanoTime()

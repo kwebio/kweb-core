@@ -6,8 +6,8 @@ import com.github.sanity.kweb.dom.attributes.set
 import com.github.sanity.kweb.dom.element.Element
 import java.util.concurrent.CompletableFuture
 
-fun Element.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null, attributes: Map<String, Any> = attr): InputElement {
-    return InputElement(createElement("input", attributes = attributes
+fun ElementCreator.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null, attributes: Map<String, Any> = attr): InputElement {
+    return InputElement(element("input", attributes = attributes
             .set("type", type?.name)
             .set("name", name)
             .set("value", initialValue)
@@ -25,6 +25,6 @@ enum class InputType {
     button, checkbox, color, date, datetime, email, file, hidden, image, month, number, password, radio, range, reset, search, submit, tel, text, time, url, week
 }
 
-fun Element.label(attributes: Map<String, Any> = attr, position : Int? = null) = LabelElement(createElement("label", attributes = attributes, position = position))
+fun ElementCreator.label(attributes: Map<String, Any> = attr) = LabelElement(element("label", attributes = attributes))
 
 open class LabelElement(wrapped: Element) : Element(wrapped)

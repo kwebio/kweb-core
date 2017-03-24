@@ -32,7 +32,7 @@ typealias LogError = Boolean
 typealias JavaScriptError = String
 
 /**
- * The core kwebserver, and the starting point for almost any Kweb app.  This will create a HTTP server and respond
+ * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
  * with a javascript page which will establish a websocket connection to retrieve and send instructions and data
  * between browser and server.
  *

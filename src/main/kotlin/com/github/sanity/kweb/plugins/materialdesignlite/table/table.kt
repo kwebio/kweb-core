@@ -4,8 +4,7 @@ import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.dom.element.modification.setText
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
+import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
@@ -13,13 +12,13 @@ import kotlin.reflect.full.memberProperties
  * Created by ian on 1/23/17.
  */
 
-fun MDLReceiver.table(selectable: Boolean = false, attributes: Map<String, Any> = attr): MDLTableElement
-        = MDLTableElement(parent.table(attributes
+fun MDLCreator.table(selectable: Boolean = false, attributes: Map<String, Any> = attr): MDLTableElement
+        = MDLTableElement(parent.insert().table(attributes
         .classes("mdl-data-table", "mdl-js-data-table")
         .classes("mdl-data-table--selectable", onlyIf = selectable)
-))
+).parent)
 
-class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrapped) {
+class MDLTableElement internal constructor(wrapped: Element) : TableCreator(wrapped) {
     var theadUsed = false
     var tbodyUsed = false
 
@@ -38,7 +37,7 @@ class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrap
                     } else {
                         (annotation as MDLTableHeaderName).name
                     }
-                    th().setText(headerName)
+                    th().text(headerName)
                 }
             }
         }
@@ -48,7 +47,7 @@ class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrap
                     for (property in properties) {
                         val value = property.call(obj)
                         val tdElement = td()
-                        tdElement.setText(value.toString())
+                        tdElement.text(value.toString())
                         tdModifier(obj, tdElement)
                     }
                 }
@@ -56,27 +55,27 @@ class MDLTableElement internal constructor(wrapped: Element) : TableElement(wrap
         }
     }
 
-    override fun thead(attributes: Map<String, Any>): MDLTHeadElement {
+    override fun thead(attributes: Map<String, Any>): MDLTHeadCreator {
         if (theadUsed) throw IllegalStateException("A table may only have one header, but thead() has been called already")
         theadUsed = true
-        return MDLTHeadElement(super.thead(attributes))
+        return MDLTHeadCreator(thead(attributes))
     }
 
-    override fun tbody(attributes: Map<String, Any>): MDLTBodyElement {
+    override fun tbody(attributes: Map<String, Any>): MDLTBodyCreator {
         tbodyUsed = true
-        return MDLTBodyElement(super.tbody(attributes))
+        return MDLTBodyCreator(super.tbody(attributes).parent)
     }
 }
 
-class MDLTHeadElement(wrapped: Element) : TheadElement(wrapped) {
-    override fun tr(attributes: Map<String, Any>): MDLTrHeadElement = MDLTrHeadElement(super.tr(attributes))
+class MDLTHeadCreator(wrapped: TheadCreator) : TheadCreator(wrapped.parent) {
+    override fun tr(attributes: Map<String, Any>): MDLTrHeadElement = MDLTrHeadElement(tr(attributes).parent)
 }
 
-class MDLTBodyElement(wrapped: Element) : TbodyElement(wrapped) {
-    override fun tr(attributes: Map<String, Any>): MDLTrBodyElement = MDLTrBodyElement(super.tr(attributes))
+class MDLTBodyCreator(wrapped: Element) : TbodyCreator(wrapped) {
+    override fun tr(attributes: Map<String, Any>): MDLTrBodyElement = MDLTrBodyElement(tr(attributes).parent)
 }
 
-class MDLTrHeadElement(wrapped: Element) : TrHeadElement(wrapped) {
+class MDLTrHeadElement(wrapped: Element) : TrHeadCreator(wrapped) {
     fun th(
             sort: TableSortOrder = TableSortOrder.none,
             nonNumeric: Boolean = false,
@@ -85,14 +84,14 @@ class MDLTrHeadElement(wrapped: Element) : TrHeadElement(wrapped) {
             .classes("mdl-data-table__header--sorted-ascending", onlyIf = sort == TableSortOrder.ascending)
             .classes("mdl-data-table__header--sorted-descending", onlyIf = sort == TableSortOrder.descending)
             .classes("mdl-data-table__cell--non-numeric", onlyIf = nonNumeric)
-    ))
+    ).parent)
 
     override fun th(attributes: Map<String, Any>): MDLThElement {
-        return MDLThElement(super.th(attributes))
+        return MDLThElement(super.th(attributes).parent)
     }
 }
 
-class MDLTrBodyElement(wrapped: Element) : TrBodyElement(wrapped) {
+class MDLTrBodyElement(wrapped: Element) : TrBodyCreator(wrapped) {
     fun td(
             sort: TableSortOrder = TableSortOrder.none,
             nonNumeric: Boolean = false,
@@ -101,10 +100,10 @@ class MDLTrBodyElement(wrapped: Element) : TrBodyElement(wrapped) {
             .classes("mdl-data-table__header--sorted-ascending", onlyIf = sort == TableSortOrder.ascending)
             .classes("mdl-data-table__header--sorted-descending", onlyIf = sort == TableSortOrder.descending)
             .classes("mdl-data-table__cell--non-numeric", onlyIf = nonNumeric)
-    ))
+    ).parent)
 
     override fun td(attributes: Map<String, Any>): MDLTdElement {
-        return MDLTdElement(super.td(attributes))
+        return MDLTdElement(super.td(attributes).parent)
     }
 }
 
@@ -112,7 +111,7 @@ enum class TableSortOrder {
     ascending, descending, none
 }
 
-class MDLThElement(wrapped: Element) : ThElement(wrapped) {
+class MDLThElement(wrapped: Element) : ThCreator(wrapped) {
 
 }
 

@@ -1,13 +1,13 @@
 package com.github.sanity.kweb.plugins.select2
 
-import com.github.sanity.kweb.dom.element.creation.SelectElement
+import com.github.sanity.kweb.dom.element.creation.SelectCreator
 import java.util.*
 
 /**
  * Created by ian on 2/22/17.
  */
 
-fun SelectElement.select2(
+fun SelectCreator.select2(
         placeholder : String? = null,
         allowClear : Boolean? = null,
         minimumInputLength : Int? = null,

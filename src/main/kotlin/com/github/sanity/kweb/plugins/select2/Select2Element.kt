@@ -1,10 +1,10 @@
 package com.github.sanity.kweb.plugins.select2
 
-import com.github.sanity.kweb.dom.element.creation.SelectElement
+import com.github.sanity.kweb.dom.element.creation.SelectCreator
 import com.github.sanity.kweb.plugins.jqueryCore.jquery
 import com.github.sanity.kweb.toJson
 
-class Select2Element(val wrapped : SelectElement) {
+class Select2Element(val wrapped : SelectCreator) {
     val on : Select2OnReceiver get() = Select2OnReceiver(wrapped)
 
     fun open() {

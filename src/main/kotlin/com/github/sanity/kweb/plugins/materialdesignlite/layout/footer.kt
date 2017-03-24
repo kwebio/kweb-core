@@ -2,8 +2,9 @@ package com.github.sanity.kweb.plugins.materialdesignlite.layout
 
 import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
-import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
+import com.github.sanity.kweb.dom.element.creation.DivCreator
+import com.github.sanity.kweb.dom.element.creation.ElementCreator
+import com.github.sanity.kweb.dom.element.creation.button
 
 /**
  * See https://getmdl.io/components/index.html#layout-section/footer
@@ -11,15 +12,15 @@ import com.github.sanity.kweb.plugins.materialdesignlite.MDLReceiver
 
 // TODO: megaFooter
 
-fun MDLReceiver.miniFooter(attributes: Map<String, Any> = attr) = MiniFooterElement(parent.footer(attributes.classes("mdl-mini-footer")))
+fun LayoutCreator.miniFooter(attributes: Map<String, Any> = attr) = MiniFooterCreator(e.footer(attributes.classes("mdl-mini-footer")))
 
-class MiniFooterElement(wrapped: FooterElement) : FooterElement(wrapped) {
+class MiniFooterCreator(wrapped: ElementCreator) : ElementCreator(wrapped.parent) {
     fun leftSection(attributes: Map<String, Any> = attr) = MiniFooterSection(div(attributes.classes("mdl-mini-footer__left-section")))
 
     fun rightSection(attributes: Map<String, Any> = attr) = MiniFooterSection(div(attributes.classes("mdl-mini-footer__right-section")))
 }
 
-class MiniFooterSection(wrapped: DivElement) : DivElement(wrapped) {
+class MiniFooterSection(wrapped: DivCreator) : DivCreator(wrapped.parent) {
     fun logo(attributes: Map<String, Any> = attr) = div(attributes.classes("mdl-logo"))
 
     fun linkList(attributes: Map<String, Any> = attr) = ul(attributes.classes("mdl-mini-footer__link-list"))

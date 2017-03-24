@@ -1,7 +1,7 @@
 package com.github.sanity.kweb.plugins.bootstrap4
 
 import com.github.sanity.kweb.dom.element.Element
-import com.github.sanity.kweb.dom.element.creation.createElement
+import com.github.sanity.kweb.dom.element.creation.ElementCreator
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.jqueryCore.jqueryCore
 
@@ -27,8 +27,8 @@ class Bootstrap4Plugin : KWebPlugin(setOf(jqueryCore)) {
 val bootstrap4 = Bootstrap4Plugin()
 
 // The bootstrap DSL
-fun Element.container(tag: String = "div", fluid: Boolean = false): Element {
+fun ElementCreator.container(tag: String = "div", fluid: Boolean = false): Element {
     require(Bootstrap4Plugin::class)
     val fluidClassModifier = if (fluid) "-fluid" else ""
-    return createElement(tag, attributes = mapOf("class" to "container$fluidClassModifier"))
+    return element(tag, attributes = mapOf("class" to "container$fluidClassModifier"))
 }
