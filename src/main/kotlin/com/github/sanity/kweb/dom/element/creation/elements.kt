@@ -18,17 +18,12 @@ import kotlin.reflect.KClass
  */
 
 
-/*********
- ********* Element creation functions.
- *********
- ********* These allow creation of parent types as children of the current parent.
- ********* With the exception of element(), they do not begin with verbs, and
- ********* will typically be just the tag of the parent like "div" or "input".
- *********/
+// these should return Element, not ElementCreators.  If they want to create more
+// within a dsl let them type element.create().ul()...
 
-fun Element.insert(position : Int? = null) = ElementCreator(this, position)
 
-open class ElementCreator(val parent : Element, val position : Int? = null) {
+open class ElementCreator<out PARENT_TYPE : Element>(val parent: PARENT_TYPE, val position : Int? = null) {
+
     companion object: KLogging()
 
     var elementCreationCount = 0
@@ -68,26 +63,29 @@ open class ElementCreator(val parent : Element, val position : Int? = null) {
 
     fun require(vararg plugins: KClass<out KWebPlugin>) = parent.rootReceiver.require(*plugins)
 
-    fun div(attributes: Map<String, Any> = attr, position : Int? = null) = DivCreator(element("div", attributes))
+    fun div(attributes: Map<String, Any> = attr, position : Int? = null) = element("div", attributes)
 
-    fun span(attributes: Map<String, Any> = attr, position : Int? = null) = SpanCreator(element("span", attributes))
-
-    fun main(attributes: Map<String, Any> = attr, position : Int? = null) = MainCreator(element("main", attributes))
-
-    fun h1(attributes: Map<String, Any> = attr): Element = element("h1", attributes)
-
-    fun a(href: String? = null, attributes: Map<String, Any> = attr): ACreator = ACreator(element("a", attributes.set("href", href)))
-
-    fun p(attributes: Map<String, Any> = attr): Element = element("p", attributes)
-
-    fun ul(attributes: Map<String, Any> = attr): ULCreator {
-        val e = element("ul", attributes)
-        return ULCreator(e)
+    class DivElement(val element : Element) : Element(element) {
+        override fun create(position : Int?) = ElementCreator<DivElement>(this)
     }
 
-    fun text(text : String) : ElementCreator {
+    fun span(attributes: Map<String, Any> = attr, position : Int? = null) = SpanElement(element("span", attributes))
+
+    open class SpanElement(element: Element) : Element(element) {
+        override fun create(position: Int?) = ElementCreator(this)
+    }
+
+    fun main(attributes: Map<String, Any> = attr, position : Int? = null) = element("main", attributes)
+
+    fun h1(attributes: Map<String, Any> = attr) = element("h1", attributes)
+
+    fun a(href: String? = null, attributes: Map<String, Any> = attr) = element("a", attributes.set("href", href))
+
+    fun p(attributes: Map<String, Any> = attr) = element("p", attributes)
+    fun ul(attributes: Map<String, Any> = attr) = ULElement(element("ul", attributes))
+
+    fun text(text : String) {
         parent.setText(text)
-        return this
     }
 
     fun i(attributes: Map<String, Any> = attr, position : Int? = null) = ICreator(element("i", attributes))
@@ -100,28 +98,30 @@ open class ElementCreator(val parent : Element, val position : Int? = null) {
         )
     }
 
-    fun select(attributes: Map<String, Any> = attr) = SelectCreator(element("select", attributes))
+    fun select(attributes: Map<String, Any> = attr) = SelectElement(element("select", attributes))
 
-    fun header(attributes: Map<String, Any> = attr, position : Int? = null) = HeaderCreator(element("header", attributes))
+    class SelectElement(val parent : Element) : Element(parent) {
+        override fun create(position: Int?): SelectCreator {
+            return SelectCreator(parent.create(position))
+        }
+    }
 
-    fun footer(attributes: Map<String, Any> = attr) = ElementCreator(element("footer", attributes))
+    fun header(attributes: Map<String, Any> = attr, position : Int? = null) = (element("header", attributes))
 
-    fun nav(attributes: Map<String, Any> = attr): NavCreator {
-        return NavCreator(element("nav", attributes))
+    fun footer(attributes: Map<String, Any> = attr) = element("footer", attributes)
+
+    fun nav(attributes: Map<String, Any> = attr) = element("nav", attributes)
     }
 
 }
 
-open class ACreator(parent : Element) : ElementCreator(parent)
-open class HeaderCreator(parent: Element) : ElementCreator(parent)
-open class DivCreator(parent: Element) : ElementCreator(parent)
-open class SpanCreator(parent: Element) : ElementCreator(parent)
-open class MainCreator(parent: Element) : ElementCreator(parent)
-open class ULCreator(parent: Element) : ElementCreator(parent) {
-    open fun li(attributes: Map<String, Any> = attr, position : Int? = null) = LICreator(parent.insert().element("item", attributes))
-}
-open class LICreator(wrapped : Element) : ElementCreator(wrapped)
-open class SelectCreator(val wrapped : Element) : ElementCreator(wrapped) {
+
+open class ULElement(parent: Element) : Element(parent)
+fun ElementCreator<ULElement>.li(attributes: Map<String, Any> = attr, position : Int? = null) = LIElement(parent.create().element("item", attributes))
+
+open class LIElement(parent : Element) : Element(parent)
+
+open class SelectCreator(val wrapped : ElementCreator) : ElementCreator(wrapped) {
     fun option(value : String, attributes: Map<String, Any> = attr)
             = element("option").setAttribute("value", value.toJson())
 
@@ -131,12 +131,12 @@ open class SelectCreator(val wrapped : Element) : ElementCreator(wrapped) {
     fun getValue(): CompletableFuture<String>? = wrapped.evaluate("${wrapped.jsExpression}.value", {it})
     fun  setValue(value: String) = wrapped.execute("${wrapped.jsExpression}.value = ${value.toJson()};")
 }
-open class FormElement(wrapped: Element) : Element(wrapped)
-open class OptGroup(wrapped: Element) : Element(wrapped) {
+open class FormElement(wrapped: ElementCreator) : Element(wrapped)
+open class OptGroup(wrapped: ElementCreator) : Element(wrapped) {
     fun option(value : String, attributes: Map<String, Any> = attr)
-            = insert().element("option").setAttribute("value", value.toJson())
+            = create().element("option").setAttribute("value", value.toJson())
 }
-open class NavCreator(element: Element) : ElementCreator(element)
+open class NavElement(element: ElementCreator) : ElementCreator(element)
 
 
 

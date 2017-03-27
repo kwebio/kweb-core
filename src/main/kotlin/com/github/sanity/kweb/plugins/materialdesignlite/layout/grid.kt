@@ -14,7 +14,7 @@ import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
 fun MDLCreator.grid(
         noSpacing: Boolean = false,
         attributes: Map<String, Any> = attr
-): GridElement = GridElement(parent.insert().div(attributes
+): GridElement = GridElement(element.create().div(attributes
         .classes("mdl-grid")
         .classes("mdl-grid--no-spacing", onlyIf = noSpacing)
 ))
@@ -45,7 +45,7 @@ class GridElement(wrapped: DivCreator) : Element(wrapped) {
 
             align: CellVerticalAlignment? = null,
 
-            attributes: Map<String, Any> = attr): DivCreator = insert().div(attributes
+            attributes: Map<String, Any> = attr): DivCreator = create().div(attributes
                     .classes("mdl-cell", "mdl-cell--$width-col")
                     .classes(onlyIf = desktopWidth != null, classes = "mdl-cell--$desktopWidth-desktop")
                     .classes(onlyIf = tabletWidth != null, classes = "mdl-cell--$tabletWidth-tablet")

@@ -18,10 +18,10 @@ fun MDLCreator.checkbox(rippleEffect: Boolean = false, attributes: Map<String, A
 @KWebDSL
 class CheckboxReceiver(val wrapped: LabelElement) {
     fun input(attributes: Map<String, Any> = attr)
-            = MDLInputElement(wrapped.insert().input(attributes = attributes
+            = MDLInputElement(wrapped.create().input(attributes = attributes
             .classes("mdl-checkbox__input")))
 
-    fun label(attributes: Map<String, Any> = attr) = MDLLabelElement(wrapped.insert().label(attributes
+    fun label(attributes: Map<String, Any> = attr) = MDLLabelElement(wrapped.create().label(attributes
             .classes("mdl-checkbox__label")))
 
 }

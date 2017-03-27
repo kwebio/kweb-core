@@ -14,13 +14,13 @@ import com.github.sanity.kweb.dom.element.creation.button
 
 fun LayoutCreator.miniFooter(attributes: Map<String, Any> = attr) = MiniFooterCreator(e.footer(attributes.classes("mdl-mini-footer")))
 
-class MiniFooterCreator(wrapped: ElementCreator) : ElementCreator(wrapped.parent) {
+class MiniFooterCreator(wrapped: ElementCreator) : ElementCreator(wrapped.element) {
     fun leftSection(attributes: Map<String, Any> = attr) = MiniFooterSection(div(attributes.classes("mdl-mini-footer__left-section")))
 
     fun rightSection(attributes: Map<String, Any> = attr) = MiniFooterSection(div(attributes.classes("mdl-mini-footer__right-section")))
 }
 
-class MiniFooterSection(wrapped: DivCreator) : DivCreator(wrapped.parent) {
+class MiniFooterSection(wrapped: DivCreator) : DivCreator(wrapped.element) {
     fun logo(attributes: Map<String, Any> = attr) = div(attributes.classes("mdl-logo"))
 
     fun linkList(attributes: Map<String, Any> = attr) = ul(attributes.classes("mdl-mini-footer__link-list"))

@@ -11,12 +11,12 @@ import com.github.sanity.kweb.dom.element.Element
 
 fun MDLCreator.tooltip(tag: TooltipTag = TooltipTag.div,
                        large: Boolean = false, position: TooltipPosition? = null): Element {
-    kotlin.require(parent.id != null) { "id must be specified to add a tooltip to an element" }
+    kotlin.require(element.id != null) { "id must be specified to add a tooltip to an element" }
     return element(tag.name,  attr
             .classes("mdl-tooltip")
             .classes(onlyIf = large, classes = "mdl-tooltip--large")
             .classes(onlyIf = position != null, classes = "mdl-tooltip--${position!!}")
-            .set("data-mdl-for", parent.id))
+            .set("data-mdl-for", element.id))
 }
 
 enum class TooltipPosition {

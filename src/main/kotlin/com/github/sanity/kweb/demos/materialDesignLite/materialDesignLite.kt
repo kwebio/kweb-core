@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     Kweb(port = 8091, plugins = listOf(materialDesignLite)) {
         doc.body.apply {
-            insert().mdl.layout(fixedHeader = true).apply {
+            create().mdl.layout(fixedHeader = true).apply {
                 addHeader()
                 addDrawer()
                 addContent()
@@ -54,7 +54,7 @@ private fun LayoutCreator.addDrawer() {
 }
 
 private fun LayoutCreator.addContent() {
-    content().insert().mdl.apply {
+    content().create().mdl.apply {
         tabs().apply {
             addTableFromObjectsPanel()
             addManualTablePanel()

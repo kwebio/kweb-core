@@ -8,4 +8,4 @@ import com.github.sanity.kweb.dom.element.creation.ElementCreator
  */
 
 
-val ElementCreator.on: ONReceiver get() = ONReceiver(this.parent)
+val ElementCreator.on: ONReceiver get() = ONReceiver(this.element)

@@ -10,6 +10,6 @@ import com.github.sanity.kweb.dom.element.modification.setText
 
 fun main(args: Array<String>) {
     Kweb(port = 7823, refreshPageOnHotswap = true) {
-        doc.body.insert().h1().setText("Hello World!")
+        doc.body.create().h1().setText("Hello World!")
     }
 }

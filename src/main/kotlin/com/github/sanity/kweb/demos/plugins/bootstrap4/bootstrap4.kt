@@ -37,7 +37,7 @@ From http://v4-alpha.getbootstrap.com/components/forms/#textual-inputs
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     Kweb(port = 8091, plugins = listOf(bootstrap4)) {
-        doc.body.insert().apply {
+        doc.body.create().apply {
             div().apply {
                 container().apply {
                     h1().addText("Kweb Bootstrap4 demo")
@@ -53,7 +53,7 @@ fun main(args: Array<String>) {
                     addClasses("form-group", "row")
 
                     val pairId = "example-setText-input"
-                    insert().element("label").apply {
+                    create().element("label").apply {
                         setAttribute("for", pairId)
                         addClasses("col-2", "col-form-label")
                         addText("Text")

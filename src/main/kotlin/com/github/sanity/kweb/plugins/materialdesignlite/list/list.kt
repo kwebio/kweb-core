@@ -12,7 +12,7 @@ import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
  * Created by ian on 1/24/17.
  */
 
-fun MDLCreator.list(attributes: Map<String, Any> = attr) = MDLUlElement(parent.insert().ul(attributes.classes("mdl-list")))
+fun MDLCreator.list(attributes: Map<String, Any> = attr) = MDLUlElement(element.create().ul(attributes.classes("mdl-list")))
 
 class MDLUlElement(wrapped: ULCreator) : ULCreator(wrapped.wrapped) {
     fun item(attributes: Map<String, Any> = attr, type: ListItemType = ListItemType.oneLine)

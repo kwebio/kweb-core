@@ -38,9 +38,9 @@ a Kotlin DSL that mirrors the library's API, but with the benefits of Kotlin's D
 its type safety:
 
 ```kotlin
-header().apply {
+header().create().apply {
   row().apply {
-     title().setText("Title")
+     title().text("Title")
      spacer()
      navigation().apply {
        navLink().setText("Delete").on.click {

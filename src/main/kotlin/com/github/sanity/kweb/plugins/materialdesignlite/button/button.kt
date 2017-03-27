@@ -11,7 +11,7 @@ import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
  */
 
 fun MDLCreator.button(displayEffect: DisplayEffect? = null, rippleEffect: Boolean = false)
-        = parent.insert().button(attributes = attr
+        = element.create().button(attributes = attr
         .classes("mdl-button", "mdl-js-button")
         .classes("mdl-button--${displayEffect}", onlyIf = displayEffect != null)
         .classes("mdl-js-rippleEffect-effect", onlyIf = rippleEffect)

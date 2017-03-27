@@ -13,7 +13,7 @@ import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
  */
 
 fun MDLCreator.tabs(rippleEffect: Boolean = false, attributes: Map<String, Any> = attr, tabBarAttributes: Map<String, Any> = attr)
-        = TabsElement(parent.insert().div(attributes
+        = TabsElement(element.create().div(attributes
         .classes("mdl-tabs", "mdl-js-tabs")
         .classes("mdl-js-ripple-effect", onlyIf = rippleEffect)),
         tabBarAttributes

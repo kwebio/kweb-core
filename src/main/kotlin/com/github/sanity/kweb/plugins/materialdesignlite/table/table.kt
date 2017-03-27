@@ -13,10 +13,10 @@ import kotlin.reflect.full.memberProperties
  */
 
 fun MDLCreator.table(selectable: Boolean = false, attributes: Map<String, Any> = attr): MDLTableElement
-        = MDLTableElement(parent.insert().table(attributes
+        = MDLTableElement(element.create().table(attributes
         .classes("mdl-data-table", "mdl-js-data-table")
         .classes("mdl-data-table--selectable", onlyIf = selectable)
-).parent)
+).element)
 
 class MDLTableElement internal constructor(wrapped: Element) : TableCreator(wrapped) {
     var theadUsed = false
@@ -63,16 +63,16 @@ class MDLTableElement internal constructor(wrapped: Element) : TableCreator(wrap
 
     override fun tbody(attributes: Map<String, Any>): MDLTBodyCreator {
         tbodyUsed = true
-        return MDLTBodyCreator(super.tbody(attributes).parent)
+        return MDLTBodyCreator(super.tbody(attributes).element)
     }
 }
 
-class MDLTHeadCreator(wrapped: TheadCreator) : TheadCreator(wrapped.parent) {
-    override fun tr(attributes: Map<String, Any>): MDLTrHeadElement = MDLTrHeadElement(tr(attributes).parent)
+class MDLTHeadCreator(wrapped: TheadCreator) : TheadCreator(wrapped.element) {
+    override fun tr(attributes: Map<String, Any>): MDLTrHeadElement = MDLTrHeadElement(tr(attributes).element)
 }
 
 class MDLTBodyCreator(wrapped: Element) : TbodyCreator(wrapped) {
-    override fun tr(attributes: Map<String, Any>): MDLTrBodyElement = MDLTrBodyElement(tr(attributes).parent)
+    override fun tr(attributes: Map<String, Any>): MDLTrBodyElement = MDLTrBodyElement(tr(attributes).element)
 }
 
 class MDLTrHeadElement(wrapped: Element) : TrHeadCreator(wrapped) {
@@ -84,10 +84,10 @@ class MDLTrHeadElement(wrapped: Element) : TrHeadCreator(wrapped) {
             .classes("mdl-data-table__header--sorted-ascending", onlyIf = sort == TableSortOrder.ascending)
             .classes("mdl-data-table__header--sorted-descending", onlyIf = sort == TableSortOrder.descending)
             .classes("mdl-data-table__cell--non-numeric", onlyIf = nonNumeric)
-    ).parent)
+    ).element)
 
     override fun th(attributes: Map<String, Any>): MDLThElement {
-        return MDLThElement(super.th(attributes).parent)
+        return MDLThElement(super.th(attributes).element)
     }
 }
 
@@ -100,10 +100,10 @@ class MDLTrBodyElement(wrapped: Element) : TrBodyCreator(wrapped) {
             .classes("mdl-data-table__header--sorted-ascending", onlyIf = sort == TableSortOrder.ascending)
             .classes("mdl-data-table__header--sorted-descending", onlyIf = sort == TableSortOrder.descending)
             .classes("mdl-data-table__cell--non-numeric", onlyIf = nonNumeric)
-    ).parent)
+    ).element)
 
     override fun td(attributes: Map<String, Any>): MDLTdElement {
-        return MDLTdElement(super.td(attributes).parent)
+        return MDLTdElement(super.td(attributes).element)
     }
 }
 

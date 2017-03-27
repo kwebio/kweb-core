@@ -12,7 +12,7 @@ import com.github.sanity.kweb.dom.element.events.on
 fun main(args: Array<String>) {
     Kweb(4682) {
         doc.body.apply {
-            insert().input().on.keydown { e ->
+            create().input().on.keydown { e ->
                 println("Received: '${e}'")
             }
         }

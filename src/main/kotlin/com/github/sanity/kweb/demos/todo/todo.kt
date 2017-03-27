@@ -11,15 +11,15 @@ import kotlinx.coroutines.experimental.future.future
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
     Kweb(8091, debug = true) {
-        doc.body.insert().apply {
-            // Add a header parent to the body, along with some simple instructions.
+        doc.body.create().apply {
+            // Add a header element to the body, along with some simple instructions.
             h1().addText("Simple Kweb demo - a to-do list")
             p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
 
             // If you're unfamiliar with the `apply` function, read this:
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
 
-            // We element a <ul> parent, and then use apply() to add things to it
+            // We element a <ul> element, and then use apply() to add things to it
             val ul = ul().apply {
 
                 // Add some initial items to the list
@@ -29,7 +29,7 @@ fun main(args: Array<String>) {
                 }
             }
 
-            // Next element an input parent
+            // Next element an input element
             val inputElement = input(type = InputType.text, size = 20)
 
             // And a button to add a new item
@@ -54,7 +54,7 @@ fun main(args: Array<String>) {
                     // And now we add the new item using our custom function
                     ul.newListItem(newItemText)
 
-                    // And finally reset the value of the inputElement parent.
+                    // And finally reset the value of the inputElement element.
                     inputElement.setValue("")
                 }
             }
@@ -63,7 +63,7 @@ fun main(args: Array<String>) {
     Thread.sleep(10000)
 }
 
-// Here we use an extension method which can be used on any <UL> parent to add a list item which will
+// Here we use an extension method which can be used on any <UL> element to add a list item which will
 // delete itself when clicked.
 fun ULCreator.newListItem(text: String) {
     li().apply {

@@ -12,7 +12,7 @@ import com.github.sanity.kweb.plugins.select2.select2
 
 fun main(args: Array<String>) {
     Kweb(5461, plugins = listOf(select2)) {
-        doc.body.insert().apply {
+        doc.body.create().apply {
             val select = select()
             select.select2(suggestions = { Suggestions(results = listOf(Item("1", "One"), Item("2", "Two"))) }).on.select {
                 println("Event: $it")
