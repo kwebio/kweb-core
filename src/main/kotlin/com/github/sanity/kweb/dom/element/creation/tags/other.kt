@@ -15,7 +15,7 @@ open class ButtonElement(val wrapped: Element) : Element(wrapped)
 enum class ButtonType {
     button, reset, submit
 }
-fun ElementCreator<ButtonElement>.button(type: ButtonType? = ButtonType.button, autofocus: Boolean? = null, attributes: Map<String, Any> = attr): ButtonElement {
+fun ElementCreator<Element>.button(type: ButtonType? = ButtonType.button, autofocus: Boolean? = null, attributes: Map<String, Any> = attr): ButtonElement {
     return ButtonElement(element("button", attributes
             .set("type", type?.name)
             .set("autofocus", autofocus)
@@ -38,3 +38,12 @@ fun ElementCreator<Element>.a(href : String? = null, attributes: Map<String, Any
 
 open class TextAreaElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.textArea(rows : Int? = null, attributes: Map<String, Any> = attr) = TextAreaElement(element("textarea", attributes.set("rows", rows?.toString()).set("type", "text")))
+
+open class SelectElement(parent: Element) : Element(parent)
+fun ElementCreator<Element>.select(attributes: Map<String, Any> = attr) = SelectElement(element("select", attributes))
+
+open class H1Element(parent: Element) : Element(parent)
+fun ElementCreator<Element>.h1(attributes: Map<String, Any> = attr) = H1Element(element("h1", attributes))
+
+open class PElement(parent: Element) : Element(parent)
+fun ElementCreator<Element>.p(attributes: Map<String, Any> = attr) = PElement(element("p", attributes))

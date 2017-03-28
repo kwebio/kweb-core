@@ -207,7 +207,7 @@ class Kweb(val port: Int,
         for (client in clients.values) {
             val message = S2CWebsocketMessage(
                     yourId = client.id,
-                    execute = S2CWebsocketMessage.Execute("window.location.reload(true);"))
+                    execute = S2CWebsocketMessage.Execute("window.location.reload(true);"), debugToken = null)
             client.outboundChannel.send(message.toJson())
         }
     }
@@ -230,7 +230,7 @@ class Kweb(val port: Int,
             dt
         }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = S2CWebsocketMessage.Execute(javascript)))
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = S2CWebsocketMessage.Execute(javascript), debugToken = debugToken))
     }
 
     fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
@@ -242,7 +242,7 @@ class Kweb(val port: Int,
         }
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(clientId, evaluate = S2CWebsocketMessage.Evaluate(expression, callbackId)))
+        wsClientData.send(S2CWebsocketMessage(clientId, evaluate = S2CWebsocketMessage.Evaluate(expression, callbackId), debugToken = debugToken))
     }
 
 }
@@ -257,7 +257,7 @@ data class DebugInfo(val js: String, val action : String, val throwable: Throwab
 
 data class S2CWebsocketMessage(
         val yourId: String,
-        val debugToken: String? = null,
+        val debugToken: String?,
         val execute: Execute? = null,
         val evaluate: Evaluate? = null
 ) {

@@ -1,18 +1,18 @@
 package com.github.sanity.kweb
 
 import io.kotlintest.specs.FreeSpec
-import java.util.concurrent.CompletableFuture
 
 /**
  * This works, but is very limited and clunky.  Really need a way to test all of the JavaScript stuff.
  */
 class PhantomJSSpec : FreeSpec() {
     init {
+        /*
         val exceptionFuture = CompletableFuture<Unit>()
 
         // TODO: Just execute all demos and make sure there are no javascript errors
 
-        /* TODO: Find a way to split this up
+         TODO: Find a way to split this up
          * Roman Elizarov [JB] [2:42 AM]
             @ianclarke To simplify this things I'll introduce `blockingRun { ... }` primitive that starts coroutine, but blocks until it returns.
 
@@ -30,8 +30,7 @@ class PhantomJSSpec : FreeSpec() {
 
             [2:48]
             You need to define some helper function for tests that starts a separate thread with your engine and waits until its done. Or don't launch a separate thread at all, but do everything in the main test thread.
-         */
-/*
+
         "test various server-browser interactions" {
             KWeb(7324) {
                     val cookie = doc.cookie

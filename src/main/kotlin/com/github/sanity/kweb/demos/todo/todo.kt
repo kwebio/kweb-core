@@ -1,20 +1,19 @@
 package com.github.sanity.kweb.demos.todo
 
 import com.github.sanity.kweb.Kweb
-import com.github.sanity.kweb.dom.element.creation.*
-import com.github.sanity.kweb.dom.element.creation.tags.InputType
-import com.github.sanity.kweb.dom.element.creation.tags.button
-import com.github.sanity.kweb.dom.element.creation.tags.ul
+import com.github.sanity.kweb.dom.element.creation.ElementCreator
+import com.github.sanity.kweb.dom.element.creation.tags.*
 import com.github.sanity.kweb.dom.element.events.on
 import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.dom.element.modification.delete
+import com.github.sanity.kweb.dom.element.new
 import kotlinx.coroutines.experimental.future.await
 import kotlinx.coroutines.experimental.future.future
 
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
     Kweb(8091, debug = true) {
-        doc.body.create().apply {
+        doc.body.new {
             // Add a header element to the body, along with some simple instructions.
             h1().addText("Simple Kweb demo - a to-do list")
             p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
@@ -23,7 +22,7 @@ fun main(args: Array<String>) {
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
 
             // We element a <ul> element, and then use apply() to add things to it
-            val ul = ul().apply {
+            val ul = ul().new {
 
                 // Add some initial items to the list
                 for (text in listOf("one", "two", "three")) {
@@ -55,7 +54,7 @@ fun main(args: Array<String>) {
                     val newItemText = inputElement.getValue().await()
 
                     // And now we add the new item using our custom function
-                    ul.newListItem(newItemText)
+                    ul.new().newListItem(newItemText)
 
                     // And finally reset the value of the inputElement element.
                     inputElement.setValue("")
@@ -68,10 +67,11 @@ fun main(args: Array<String>) {
 
 // Here we use an extension method which can be used on any <UL> element to add a list item which will
 // delete itself when clicked.
-fun ULCreator.newListItem(text: String) {
+fun ElementCreator<ULElement>.newListItem(text: String) {
     li().apply {
         addText(text)
-        on.click { event ->
-            delete() }
+        on.click {
+            delete()
+        }
     }
 }

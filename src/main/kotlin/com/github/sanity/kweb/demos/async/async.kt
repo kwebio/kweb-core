@@ -1,8 +1,10 @@
 package com.github.sanity.kweb.demos.async
 
 import com.github.sanity.kweb.Kweb
+import com.github.sanity.kweb.dom.element.creation.tags.p
 import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.dom.element.modification.setAttribute
+import com.github.sanity.kweb.dom.element.new
 import com.github.sanity.kweb.dom.element.read.read
 import kotlinx.coroutines.experimental.future.await
 import kotlinx.coroutines.experimental.future.future
@@ -16,7 +18,7 @@ private val logger = KotlinLogging.logger {}
 fun main(args: Array<String>) {
     println("Visit http://127.0.0.1:8091/ in your browser...")
     Kweb(8091) {
-        doc.body.create().apply {
+        doc.body.new().apply {
             val p1 = element("p").setAttribute("id", 1).addText("one")
             val p2 = p().setAttribute("id", 2).addText("two")
             val p3 = p().setAttribute("id", 3).addText("three")

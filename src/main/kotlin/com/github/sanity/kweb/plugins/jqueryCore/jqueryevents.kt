@@ -6,7 +6,6 @@ import com.github.sanity.kweb.gson
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
 import java.util.*
-import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
 /**
@@ -23,7 +22,7 @@ open class JQueryOnReceiver(val parent : JQueryReceiver) {
         return parent
     }
 
-    inline fun <reified T : Any> event(eventName : String, eventType : KClass<T>, crossinline callback : (T)-> Unit) : JQueryReceiver {
+    inline fun <reified T : Any> event(eventName : String, crossinline callback : (T)-> Unit) : JQueryReceiver {
         // TODO: Should probably cache this rather than do the reflection every time
         val eventPropertyNames = T::class.memberProperties.map {it.name}.toSet()
         event(eventName, eventPropertyNames, { propertiesAsString ->
@@ -34,16 +33,16 @@ open class JQueryOnReceiver(val parent : JQueryReceiver) {
     }
 
     // From http://www.w3schools.com/jquery/jquery_ref_events.asp, incomplete
-    fun blur(callback: (ONReceiver.MouseEvent) -> Unit) = event("blur", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun click(callback: (ONReceiver.MouseEvent) -> Unit) = event("click", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun dblclick(callback: (ONReceiver.MouseEvent) -> Unit) = event("dblclick", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun focus(callback: (ONReceiver.MouseEvent) -> Unit) = event("focus", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun focusin(callback: (ONReceiver.MouseEvent) -> Unit) = event("focusin", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun focusout(callback: (ONReceiver.MouseEvent) -> Unit) = event("focusout", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun hover(callback: (ONReceiver.MouseEvent) -> Unit) = event("hover", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun mouseup(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseup", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun mousedown(callback: (ONReceiver.MouseEvent) -> Unit) = event("mousedown", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun mouseenter(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseenter", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun mouseleave(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseleave", eventType = ONReceiver.MouseEvent::class, callback = callback)
-    fun mousemove(callback: (ONReceiver.MouseEvent) -> Unit) = event("mousemove", eventType = ONReceiver.MouseEvent::class, callback = callback)
+    fun blur(callback: (ONReceiver.MouseEvent) -> Unit) = event("blur", callback = callback)
+    fun click(callback: (ONReceiver.MouseEvent) -> Unit) = event("click", callback = callback)
+    fun dblclick(callback: (ONReceiver.MouseEvent) -> Unit) = event("dblclick", callback = callback)
+    fun focus(callback: (ONReceiver.MouseEvent) -> Unit) = event("focus", callback = callback)
+    fun focusin(callback: (ONReceiver.MouseEvent) -> Unit) = event("focusin", callback = callback)
+    fun focusout(callback: (ONReceiver.MouseEvent) -> Unit) = event("focusout", callback = callback)
+    fun hover(callback: (ONReceiver.MouseEvent) -> Unit) = event("hover", callback = callback)
+    fun mouseup(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseup", callback = callback)
+    fun mousedown(callback: (ONReceiver.MouseEvent) -> Unit) = event("mousedown", callback = callback)
+    fun mouseenter(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseenter", callback = callback)
+    fun mouseleave(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseleave", callback = callback)
+    fun mousemove(callback: (ONReceiver.MouseEvent) -> Unit) = event("mousemove", callback = callback)
 }

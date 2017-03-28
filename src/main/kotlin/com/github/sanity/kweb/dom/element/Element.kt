@@ -50,8 +50,9 @@ open class Element (open val rootReceiver: RootReceiver, open var jsExpression: 
 }
 
 fun <T : Element> T.new(position : Int? = null) = ElementCreator(this, position)
-fun <T : Element> T.new(receiver: ElementCreator<T>.() -> Unit) {
+fun <T : Element> T.new(receiver: ElementCreator<T>.() -> Unit) : T {
     receiver(new())
+    return this
 }
 
 // Element Attribute modifiers
