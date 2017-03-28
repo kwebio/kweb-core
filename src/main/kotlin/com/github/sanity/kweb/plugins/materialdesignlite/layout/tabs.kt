@@ -5,7 +5,7 @@ import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.attributes.id
 import com.github.sanity.kweb.dom.element.creation.DivCreator
 import com.github.sanity.kweb.dom.element.creation.insert
-import com.github.sanity.kweb.dom.element.modification.setText
+import com.github.sanity.kweb.dom.element.modification.text
 import com.github.sanity.kweb.plugins.materialdesignlite.MDLCreator
 
 /**

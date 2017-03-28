@@ -2,6 +2,7 @@ package com.github.sanity.kweb.dom.element
 
 import com.github.sanity.kweb.RootReceiver
 import com.github.sanity.kweb.dom.element.creation.ElementCreator
+import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
@@ -43,9 +44,16 @@ open class Element (open val rootReceiver: RootReceiver, open var jsExpression: 
      ********* will typically be just the tag of the element like "div" or "input".
      *********/
 
-    open fun create(position : Int? = null) = ElementCreator<Element>(this, position)
-
     fun require(vararg plugins: KClass<out KWebPlugin>) = rootReceiver.require(*plugins)
 
     fun <P : KWebPlugin> plugin(plugin: KClass<P>) = rootReceiver.plugin(plugin)
 }
+
+fun <T : Element> T.new(position : Int? = null) = ElementCreator(this, position)
+fun <T : Element> T.new(receiver: ElementCreator<T>.() -> Unit) {
+    receiver(new())
+}
+
+// Element Attribute modifiers
+
+fun Element.spellcheck(spellcheck : Boolean = true) = setAttribute("spellcheck", spellcheck)

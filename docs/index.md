@@ -16,7 +16,7 @@ Even though your code runs on the server, Kweb allows you to interact with the b
 we element a `<p>` element and set its text:
 
 ```kotlin
-doc.body.p().setText("this is an example HTML paragraph")
+doc.body.p().text("this is an example HTML paragraph")
 ```
 
 You can also interact with JavaScript directly, although you should rarely need to do this:
@@ -43,11 +43,11 @@ header().create().apply {
      title().text("Title")
      spacer()
      navigation().apply {
-       navLink().setText("Delete").on.click {
+       navLink().text("Delete").on.click {
             database.delete().where(ID.eq(oId)).execute()
        }
-       navLink().setText("Create")
-       navLink().setText("Modify")
+       navLink().text("Create")
+       navLink().text("Modify")
      }
    }
 }

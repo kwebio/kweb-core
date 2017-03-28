@@ -1,5 +1,6 @@
 package com.github.sanity.kweb.plugins.materialdesignlite
 
+import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.ElementCreator
 import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.plugins.materialdesignlite.MaterialDesignLitePlugin.MDLColor.*
@@ -58,8 +59,6 @@ componentHandler.upgradeDom();
 // A convenience value
 val materialDesignLite = com.github.sanity.kweb.plugins.materialdesignlite.MaterialDesignLitePlugin()
 
-val ElementCreator.mdl get() = MDLCreator(this)
+val ElementCreator<Element>.mdl get() = MDLReceiver(this.parent)
 
-open class MDLCreator(ei: ElementCreator) : ElementCreator(ei.element){
-
-}
+class MDLReceiver(val parent : Element)

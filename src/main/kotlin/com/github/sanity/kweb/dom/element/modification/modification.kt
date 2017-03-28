@@ -112,7 +112,7 @@ fun Element.removeChildAt(position : Int) : Element {
     return this
 }
 
-fun Element.setText(value: String): Element {
+fun Element.text(value: String): Element {
     removeChildren()
     addText(value)
     return this

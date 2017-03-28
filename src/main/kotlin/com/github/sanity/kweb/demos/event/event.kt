@@ -2,7 +2,7 @@ package com.github.sanity.kweb.demos.event
 
 import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.insert
-import com.github.sanity.kweb.dom.element.creation.input
+import com.github.sanity.kweb.dom.element.creation.tags.input
 import com.github.sanity.kweb.dom.element.events.on
 
 /**

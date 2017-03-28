@@ -31,6 +31,8 @@ class ElementReader(private val receiver: RootReceiver, private val jsExpression
     fun class_() = attribute("class")
     fun classList() = class_().thenApply { it.split(' ') }
 
-    val innerHtml: CompletableFuture<String> get() = receiver.evaluate("($jsExpression.innerHTML);")
+    fun innerHtml(): CompletableFuture<String> = receiver.evaluate("($jsExpression.innerHTML);")
+    fun text(): CompletableFuture<String> = receiver.evaluate("($jsExpression.innerText);")
+
 
 }

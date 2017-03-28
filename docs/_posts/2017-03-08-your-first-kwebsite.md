@@ -11,7 +11,7 @@ Add a file like the following to your project:
 ```kotlin
 fun main(args: Array<String>) {
     Kweb(port = 7823) {
-        doc.body.h1().setText("Hello World!")
+        doc.body.h1().text("Hello World!")
     }
 }
 ```
@@ -27,9 +27,9 @@ fun main(args: Array<String>) {
     Kweb(port = 7823) {
         var counter = 0
         val h1 = doc.body.h1()
-        h1.setText("Hello World!")
+        h1.text("Hello World!")
         h1.on.click {
-            h1.setText(counter.toString())
+            h1.text(counter.toString())
             counter++
         }
     }

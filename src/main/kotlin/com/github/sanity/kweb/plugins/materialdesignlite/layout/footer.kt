@@ -4,7 +4,7 @@ import com.github.sanity.kweb.dom.attributes.attr
 import com.github.sanity.kweb.dom.attributes.classes
 import com.github.sanity.kweb.dom.element.creation.DivCreator
 import com.github.sanity.kweb.dom.element.creation.ElementCreator
-import com.github.sanity.kweb.dom.element.creation.button
+import com.github.sanity.kweb.dom.element.creation.tags.button
 
 /**
  * See https://getmdl.io/components/index.html#layout-section/footer

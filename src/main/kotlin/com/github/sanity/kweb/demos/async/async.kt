@@ -1,7 +1,6 @@
 package com.github.sanity.kweb.demos.async
 
 import com.github.sanity.kweb.Kweb
-import com.github.sanity.kweb.dom.element.creation.insert
 import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.read.read

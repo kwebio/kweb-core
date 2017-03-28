@@ -2,6 +2,9 @@ package com.github.sanity.kweb.demos.todo
 
 import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.dom.element.creation.*
+import com.github.sanity.kweb.dom.element.creation.tags.InputType
+import com.github.sanity.kweb.dom.element.creation.tags.button
+import com.github.sanity.kweb.dom.element.creation.tags.ul
 import com.github.sanity.kweb.dom.element.events.on
 import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.dom.element.modification.delete

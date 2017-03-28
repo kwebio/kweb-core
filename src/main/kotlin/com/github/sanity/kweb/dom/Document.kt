@@ -9,6 +9,7 @@ class Document(private val receiver: RootReceiver) {
 
     val cookie = CookieReceiver(receiver)
 
-    val body = Element(receiver, "document.body")
+    val body = BodyElement(receiver)
 }
 
+class BodyElement(rootReceiver: RootReceiver, id: String? = null) : Element(rootReceiver, "document.body", "body", id)
