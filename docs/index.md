@@ -86,7 +86,7 @@ fun main(args: Array<String>) {
 
 fun ElementCreator<ULElement>.newListItem(text: String) {
     li().apply {
-        addText(text)
+        text(text)
         on.click {
             delete()
         }
