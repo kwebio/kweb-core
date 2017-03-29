@@ -16,28 +16,41 @@ import com.github.sanity.kweb.plugins.foundation.foundation
  * Created by ian on 3/28/17.
  */
 
-open class FoundationTopBarElement(parent: DivElement) : FoundationElement<DivElement>(parent)
-fun ElementCreator<FoundationElement<Element>>.topBar(attributes: Map<String, Any> = attr) = FoundationTopBarElement(div(attributes.classes("top-bar")))
+open class FoundationTopBarElement(parent: NavElement) : NavElement(parent)
+fun ElementCreator<FoundationElement<Element>>.topBar(attributes: Map<String, Any> = attr)
+        = FoundationTopBarElement(nav(attributes
+        .classes("top-bar")
+        .set("data-topbar", true)
+        .set("role", "navigation")))
 
-open class FoundationTopBarLeftElement(parent: DivElement) : FoundationElement<DivElement>(parent)
-fun ElementCreator<FoundationElement<FoundationTopBarElement>>.topBarLeft(attributes: Map<String, Any> = attr) = FoundationTopBarLeftElement(div(attributes.classes("top-bar-left")))
+open class FoundationTitleAreaElement(parent: ULElement) : ULElement(parent)
+fun ElementCreator<FoundationTopBarElement>.titleArea(attributes: Map<String, Any> = attr) = FoundationTitleAreaElement(ul(attributes.classes("title-area")))
 
-open class FoundationMenuElement(parent: ULElement) : ULElement(parent)
-fun ElementCreator<FoundationElement<Element>>.menu(dropdown : Boolean? = null, attributes: Map<String, Any> = attr)
-        = FoundationMenuElement(ul(attributes.classes("menu").classes("dropdown", onlyIf = dropdown ?: false).set("data-drop-down", dropdown)))
+open class FoundationNameElement(parent: LIElement) : LIElement(parent)
+fun ElementCreator<FoundationTitleAreaElement>.name(attributes: Map<String, Any> = attr) = FoundationNameElement(this.li(attributes.classes("name")))
+
+open class FoundationTopBarSectionElement(parent: Element) : Element(parent)
+fun ElementCreator<FoundationTopBarElement>.topBarSection(attributes: Map<String, Any> = attr)
+        = FoundationTopBarSectionElement(section(attributes.classes("top-bar-section")))
+
+open class FoundationLeftElement(parent: Element) : Element(parent)
+fun ElementCreator<FoundationTopBarSectionElement>.left(attributes: Map<String, Any> = attr)
+        = FoundationRightElement(ul(attributes.classes("left")))
+
+open class FoundationRightElement(parent: Element) : Element(parent)
+fun ElementCreator<FoundationTopBarSectionElement>.right(attributes: Map<String, Any> = attr)
+        = FoundationRightElement(ul(attributes.classes("right")))
+
 
 fun main(args: Array<String>) {
     foundation_menu_sample()
 }
 
 private fun foundation_menu_sample() {
-    Kweb(port = 1234, plugins = listOf(foundation)) {
+    Kweb(port = 1234, plugins = listOf(foundation), refreshPageOnHotswap = true) {
         doc.body.new {
-            foundation.menu().new {
-                li().new().a(href = "#").text("Item 1")
-                li().new().a(href = "#").text("Item 2")
-                li().new().a(href = "#").text("Item 3")
-                li().new().a(href = "#").text("Item 4")
+            foundation.topBar().new {
+                titleArea().new().name().new().a(href="#").text("My Site")
             }
         }
     }

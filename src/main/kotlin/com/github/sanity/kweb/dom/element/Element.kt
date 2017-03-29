@@ -58,6 +58,7 @@ open class Element (open val webBrowser: WebBrowser, open var jsExpression: Stri
  *
  * @receiver This will be the parent element of any elements created with the returned
  *           [ElementCreator]
+ * @Param position What position among the parent's children should the new element have?
  *
  * @sample new_sample_1
  */
@@ -66,10 +67,12 @@ fun <T : Element> T.new(position : Int? = null) = ElementCreator(this, position)
 /**
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
  *
+* @Param position What position among the parent's children should the new element have?
+ *
  * @sample new_sample_2
  */
-fun <T : Element> T.new(receiver: ElementCreator<T>.() -> Unit) : T {
-    receiver(new())
+fun <T : Element> T.new(position : Int? = null, receiver: ElementCreator<T>.() -> Unit) : T {
+    receiver(new(position))
     return this
 }
 

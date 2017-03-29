@@ -22,7 +22,6 @@ class KwebHotswapPlugin {
 
         @OnClassLoadEvent(classNameRegexp = ".*", events = arrayOf(LoadEvent.REDEFINE))
         @JvmStatic fun onAnyReload() {
-            println("Reload detected")
             logger.debug { "Hotswap load event detected, calling listeners" }
             listeners.forEach { it.invoke() }
         }

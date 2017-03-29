@@ -248,7 +248,7 @@ class Kweb(val port: Int,
 }
 
 private data class WSClientData(val id: String, @Volatile var outboundChannel: OutboundChannel, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap()) {
-    fun send(message: S2CWebsocketMessage) = async(CommonPool){
+    fun send(message: S2CWebsocketMessage) {
         outboundChannel.send(gson.toJson(message))
     }
 }

@@ -47,3 +47,9 @@ fun ElementCreator<Element>.h1(attributes: Map<String, Any> = attr) = H1Element(
 
 open class PElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.p(attributes: Map<String, Any> = attr) = PElement(element("p", attributes))
+
+open class NavElement(parent: Element) : Element(parent)
+fun ElementCreator<Element>.nav(attributes: Map<String, Any> = attr) = NavElement(element("nav", attributes))
+
+open class SectionElement(parent: Element) : Element(parent)
+fun ElementCreator<Element>.section(attributes: Map<String, Any> = attr) = SectionElement(element("section", attributes))
