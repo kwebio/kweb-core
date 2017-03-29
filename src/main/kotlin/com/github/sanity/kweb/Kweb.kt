@@ -89,8 +89,9 @@ class Kweb(val port: Int,
                 for (plugin in plugins) {
                     applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
                 }
-                       
-                val bootstrapHtmlTemplate = IOUtils.toString(javaClass.getResourceAsStream("kweb_bootstrap.html"), Charsets.UTF_8)
+
+                val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.html")
+                val bootstrapHtmlTemplate = IOUtils.toString(resourceStream, Charsets.UTF_8)
                     .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
                     .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 

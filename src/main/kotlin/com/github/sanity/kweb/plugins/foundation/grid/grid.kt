@@ -6,25 +6,15 @@ import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.creation.ElementCreator
 import com.github.sanity.kweb.dom.element.creation.tags.DivElement
 import com.github.sanity.kweb.dom.element.creation.tags.div
+import com.github.sanity.kweb.plugins.foundation.FoundationElement
 
-/**
- * Created by ian on 3/24/17.
- */
+open class FRowElement(parent: DivElement) : DivElement(parent)
 
-val Element.foundation : FoundationElement get() {
-    require(com.github.sanity.kweb.plugins.foundation.foundation::class)
-    return FoundationElement(this)
-}
-
-open class FoundationElement(parent : Element) : Element(parent)
-
-open class FRowElement(parent: DivElement) : FoundationElement(parent)
-
-fun ElementCreator<FoundationElement>.row(expanded : Boolean = false, attributes: Map<String, Any> = attr)
+fun ElementCreator<FoundationElement<Element>>.row(expanded : Boolean = false, attributes: Map<String, Any> = attr)
         = FRowElement(div(attributes = attributes.classes("row").classes("expanded", onlyIf = expanded)))
 
 
-open class FColumnElement(parent: DivElement) : FoundationElement(parent)
+open class FColumnElement(parent: DivElement) : DivElement(parent)
 
     fun ElementCreator<FRowElement>.column(small : Int? = null, medium : Int? = null, large : Int? = null) : FColumnElement {
         assert(small != null || medium != null || large != null)

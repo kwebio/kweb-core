@@ -1,5 +1,7 @@
 package com.github.sanity.kweb.plugins.foundation
 
+import com.github.sanity.kweb.dom.element.Element
+import com.github.sanity.kweb.dom.element.creation.ElementCreator
 import com.github.sanity.kweb.plugins.KWebPlugin
 
 /**
@@ -14,3 +16,10 @@ class FoundationPlugin : KWebPlugin() {
         endHead.appendln("""<link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css">""")
     }
 }
+
+val <ET : Element> ElementCreator<ET>.foundation : ElementCreator<FoundationElement<ET>> get() {
+    require(FoundationPlugin::class)
+    return ElementCreator(FoundationElement<ET>(this.parent))
+}
+
+open class FoundationElement<out PARENT_TYPE : Element>(val parent : PARENT_TYPE) : Element(parent)
