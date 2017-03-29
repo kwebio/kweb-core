@@ -1,7 +1,7 @@
 package com.github.sanity.kweb.dom.element.read
 
 import com.github.salomonbrys.kotson.fromJson
-import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.WebBrowser
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.escapeEcma
@@ -10,8 +10,8 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 
 @KWebDSL
-class ElementReader(private val receiver: RootReceiver, private val jsExpression: String) {
-    constructor(element : Element) : this(element.rootReceiver, element.jsExpression)
+class ElementReader(private val receiver: WebBrowser, private val jsExpression: String) {
+    constructor(element : Element) : this(element.webBrowser, element.jsExpression)
 
     val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName")
     val attributes: CompletableFuture<Map<String, String>> get() = receiver.evaluate("$jsExpression.attributes").thenApply { gson.fromJson<Map<String, String>>(it) }

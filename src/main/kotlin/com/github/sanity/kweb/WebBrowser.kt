@@ -2,12 +2,15 @@ package com.github.sanity.kweb
 
 import com.github.sanity.kweb.dom.Document
 import com.github.sanity.kweb.plugins.KWebPlugin
-import org.jetbrains.ktor.util.ValuesMap
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-class RootReceiver(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: Kweb, val response: String? = null) {
+/**
+ * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
+ * expressions and retrieve the result.
+ */
+class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: Kweb, val response: String? = null) {
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         cc.appliedPlugins.map { it::class to it }.toMap()
     }
@@ -45,15 +48,9 @@ class RootReceiver(private val clientId: String, val httpRequestInfo: HttpReques
     }
 
 
-    fun evaluateWithCallback(js: String, rh: RootReceiver.() -> Boolean) {
-        cc.evaluate(clientId, js, { rh.invoke(RootReceiver(clientId, httpRequestInfo, cc, it)) })
+    fun evaluateWithCallback(js: String, rh: WebBrowser.() -> Boolean) {
+        cc.evaluate(clientId, js, { rh.invoke(WebBrowser(clientId, httpRequestInfo, cc, it)) })
     }
 
     val doc = Document(this)
-}
-
-// TODO: Not sure if this should be a separate property of RootReceiver, or passed in
-// TODO: some other way.
-data class HttpRequestInfo(val visitedUrl : String, val headers : ValuesMap) {
-    val referer : String? get() = headers["Referer"]
 }

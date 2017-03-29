@@ -16,6 +16,7 @@ import org.jetbrains.ktor.request.uri
 import org.jetbrains.ktor.response.contentType
 import org.jetbrains.ktor.routing.Routing
 import org.jetbrains.ktor.routing.get
+import org.jetbrains.ktor.util.ValuesMap
 import org.jetbrains.ktor.websocket.Frame
 import org.jetbrains.ktor.websocket.WebSocket
 import org.jetbrains.ktor.websocket.readText
@@ -47,8 +48,6 @@ typealias JavaScriptError = String
  *                              warning is logged
  * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
  *                     go
- *
- * @sample com.github.sanity.kweb.samples.main
  */
 class Kweb(val port: Int,
            val debug: Boolean = true,
@@ -57,7 +56,7 @@ class Kweb(val port: Int,
            val appServerConfigurator: (Routing) -> Unit = {},
            val onError : ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ ->  true},
            val maxPageBuildTimeMS : Long = 200,
-           val buildPage: RootReceiver.() -> Unit
+           val buildPage: WebBrowser.() -> Unit
 ) {
     companion object: KLogging()
 
@@ -111,11 +110,11 @@ class Kweb(val port: Int,
                             val logStatement = logStatementBuilder.toString()
                             logger.warn { logStatement }
                         }) {
-                            buildPage(RootReceiver(newClientId, httpRequestInfo,this@Kweb))
+                            buildPage(WebBrowser(newClientId, httpRequestInfo,this@Kweb))
                             logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}"}
                         }
                     } else {
-                        buildPage(RootReceiver(newClientId, httpRequestInfo, this@Kweb))
+                        buildPage(WebBrowser(newClientId, httpRequestInfo, this@Kweb))
                         logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}"}
                     }
                     for (plugin in plugins) {
@@ -251,6 +250,10 @@ private data class WSClientData(val id: String, @Volatile var outboundChannel: O
     fun send(message: S2CWebsocketMessage) = async(CommonPool){
         outboundChannel.send(gson.toJson(message))
     }
+}
+
+data class HttpRequestInfo(val visitedUrl : String, val headers : ValuesMap) {
+    val referer : String? get() = headers["Referer"]
 }
 
 data class DebugInfo(val js: String, val action : String, val throwable: Throwable)

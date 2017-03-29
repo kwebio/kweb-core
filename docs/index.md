@@ -32,30 +32,9 @@ val day = doc.body.evaluate("$('#day').text()")
 database.update(BOOK).set(BOOK.DAY, day).execute()
 ```
 
-But Kweb's real power is what's built on top of this low-level framework.  Through its plugin mechanism
-Kotlin lets you use powerful JavaScript libraries like [Material Design Lite](https://getmdl.io/) through
-a Kotlin DSL that mirrors the library's API, but with the benefits of Kotlin's DSL-friendly syntax and
-its type safety:
-
-```kotlin
-header().create().apply {
-  row().apply {
-     title().text("Title")
-     spacer()
-     navigation().apply {
-       navLink().text("Delete").on.click {
-            database.delete().where(ID.eq(oId)).execute()
-       }
-       navLink().text("Create")
-       navLink().text("Modify")
-     }
-   }
-}
-```
-
-Aside from Material, Kotlin has plugins for JavaScript libraries like [JQuery](https://jquery.com/),
-[select2](https://select2.github.io/), and [others](https://github.com/sanity/kweb/tree/master/src/main/kotlin/com/github/sanity/kweb/plugins).
-It's also surprisingly easy to build your own plugins for other JavaScript libraries, or extend those Kweb already
+Kotlin has plugins for JavaScript libraries like [JQuery](https://jquery.com/) and 
+[others](https://github.com/sanity/kweb/tree/master/src/main/kotlin/com/github/sanity/kweb/plugins).  It's also 
+surprisingly easy to build your own plugins for other JavaScript libraries, or extend those Kweb already
 supports.
 
 #### Features
@@ -80,37 +59,36 @@ Here we element a simple "todo" list app:
 ```kotlin
 fun main(args: Array<String>) {
     Kweb(8091, debug = true) {
-        doc.body.apply {
+        doc.body.new {
             h1().addText("Simple Kweb demo - a to-do list")
             p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
 
-            val ul = ul().apply {
+            val ul = ul().new {
                 for (text in listOf("one", "two", "three")) {
                     newListItem(text)
                 }
             }
 
             val inputElement = input(type = InputType.text, size = 20)
-
             val button = button()
             button.addText("Add Item")
             button.on.click {
                 future {
                     val newItemText = inputElement.getValue().await()
-                    ul.newListItem(newItemText)
+                    ul.new().newListItem(newItemText)
                     inputElement.setValue("")
                 }
             }
         }
     }
-    Thread.sleep(10000)
 }
 
-fun ULElement.newListItem(text: String) {
+fun ElementCreator<ULElement>.newListItem(text: String) {
     li().apply {
         addText(text)
-        on.click { event ->
-            delete() }
+        on.click {
+            delete()
+        }
     }
 }
 ```

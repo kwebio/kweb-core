@@ -1,8 +1,11 @@
 package com.github.sanity.kweb.dom.element
 
-import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.Kweb
+import com.github.sanity.kweb.WebBrowser
 import com.github.sanity.kweb.dom.element.creation.ElementCreator
+import com.github.sanity.kweb.dom.element.creation.tags.h1
 import com.github.sanity.kweb.dom.element.modification.setAttribute
+import com.github.sanity.kweb.dom.element.modification.text
 import com.github.sanity.kweb.plugins.KWebPlugin
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
@@ -12,8 +15,8 @@ annotation class KWebDSL
 
 
 @KWebDSL
-open class Element (open val rootReceiver: RootReceiver, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
-    constructor(element: Element) : this(element.rootReceiver, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
+open class Element (open val webBrowser: WebBrowser, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
+    constructor(element: Element) : this(element.webBrowser, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
      *********/
@@ -24,7 +27,7 @@ open class Element (open val rootReceiver: RootReceiver, open var jsExpression: 
      * are based.
      */
     fun execute(js: String) {
-        rootReceiver.execute(js)
+        webBrowser.execute(js)
     }
 
     /**
@@ -33,7 +36,7 @@ open class Element (open val rootReceiver: RootReceiver, open var jsExpression: 
      * are based.
      */
     fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
-        return rootReceiver.evaluate(js).thenApply(outputMapper)
+        return webBrowser.evaluate(js).thenApply(outputMapper)
     }
 
     /*********
@@ -44,12 +47,27 @@ open class Element (open val rootReceiver: RootReceiver, open var jsExpression: 
      ********* will typically be just the tag of the element like "div" or "input".
      *********/
 
-    fun require(vararg plugins: KClass<out KWebPlugin>) = rootReceiver.require(*plugins)
+    fun require(vararg plugins: KClass<out KWebPlugin>) = webBrowser.require(*plugins)
 
-    fun <P : KWebPlugin> plugin(plugin: KClass<P>) = rootReceiver.plugin(plugin)
+    fun <P : KWebPlugin> plugin(plugin: KClass<P>) = webBrowser.plugin(plugin)
 }
 
+/**
+ * Returns an [ElementCreator] which can be used to create new elements and add them
+ * as children of the receiver element.
+ *
+ * @receiver This will be the parent element of any elements created with the returned
+ *           [ElementCreator]
+ *
+ * @sample new_sample_1
+ */
 fun <T : Element> T.new(position : Int? = null) = ElementCreator(this, position)
+
+/**
+ * A convenience wrapper around [new] which allows a nested DSL-style syntax
+ *
+ * @sample new_sample_2
+ */
 fun <T : Element> T.new(receiver: ElementCreator<T>.() -> Unit) : T {
     receiver(new())
     return this
@@ -58,3 +76,18 @@ fun <T : Element> T.new(receiver: ElementCreator<T>.() -> Unit) : T {
 // Element Attribute modifiers
 
 fun Element.spellcheck(spellcheck : Boolean = true) = setAttribute("spellcheck", spellcheck)
+
+private fun new_sample_1() {
+    Kweb(port = 1234) {
+        doc.body.new().h1().text("Hello World!")
+    }
+}
+
+private fun new_sample_2() {
+    Kweb(port = 1234) {
+        doc.body.new {
+            h1().text("Hello World!")
+        }
+    }
+}
+

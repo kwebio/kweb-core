@@ -1,7 +1,7 @@
-package com.github.sanity.kweb.dom.storage
+package com.github.sanity.kweb.dom.element.storage
 
 import com.github.salomonbrys.kotson.fromJson
-import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.WebBrowser
 import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.gson
 import com.github.sanity.kweb.toJson
@@ -11,10 +11,10 @@ import java.util.concurrent.CompletableFuture
  * Created by ian on 1/14/17.
  */
 @KWebDSL
-class StorageReceiver(val receiver: RootReceiver, val type: StorageType) {
+class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     private val obj = "${type.name}Storage"
 
-    fun set(name: String, value: Any) {
+    operator fun set(name: String, value: Any) {
         setString(name, value.toJson())
     }
 
@@ -25,7 +25,7 @@ class StorageReceiver(val receiver: RootReceiver, val type: StorageType) {
         receiver.execute("$obj.setItem(${key.toJson()}, ${value.toJson()});")
     }
 
-    inline fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
+    operator inline fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
         when (it) {
             null -> null
             else -> gson.fromJson<V>(it)

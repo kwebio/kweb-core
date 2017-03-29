@@ -38,7 +38,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(val parent: PARENT_TYPE, va
         val javaScript = StringBuilder()
         with(javaScript) {
             appendln("{")
-            appendln("var newEl = document.element(\"$tag\");")
+            appendln("var newEl = document.createElement(\"$tag\");")
             if (!attributes.containsKey("id")) {
                 appendln("newEl.setAttribute(\"id\", \"$id\");")
             }
@@ -53,9 +53,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(val parent: PARENT_TYPE, va
             appendln("}")
         }
         parent.execute(javaScript.toString())
-        return Element(parent.rootReceiver, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+        return Element(parent.webBrowser, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
     }
 
-    fun require(vararg plugins: KClass<out KWebPlugin>) = parent.rootReceiver.require(*plugins)
+    fun require(vararg plugins: KClass<out KWebPlugin>) = parent.webBrowser.require(*plugins)
 
 }

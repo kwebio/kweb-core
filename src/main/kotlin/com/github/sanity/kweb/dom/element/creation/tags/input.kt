@@ -25,7 +25,7 @@ fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null,
 open class InputElement(val element: Element) : Element(element) {
     fun checked(checked : Boolean = false)  = setAttribute("checked", checked)
     fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value", { s: String -> s }) ?: throw RuntimeException("Not sure why .evaluate() would return null")
-    fun setValue(newValue: String) = element.rootReceiver.execute("$jsExpression.value=${newValue.toJson()}")
+    fun setValue(newValue: String) = element.webBrowser.execute("$jsExpression.value=${newValue.toJson()}")
 }
 
 enum class InputType {

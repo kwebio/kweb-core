@@ -1,6 +1,6 @@
 package com.github.sanity.kweb.plugins.jqueryCore
 
-import com.github.sanity.kweb.RootReceiver
+import com.github.sanity.kweb.WebBrowser
 import com.github.sanity.kweb.dom.element.Element
 import com.github.sanity.kweb.dom.element.KWebDSL
 import com.github.sanity.kweb.toJson
@@ -14,16 +14,16 @@ import com.github.sanity.kweb.toJson
 // I just use jquery()
 fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
     require(JQueryCorePlugin::class)
-    return JQueryReceiver(this.rootReceiver, "$(${selector.toJson()})")
+    return JQueryReceiver(this.webBrowser, "$(${selector.toJson()})")
 }
 
 // And here we can implement all of the useful JQuery functions
 @KWebDSL
-class JQueryReceiver(internal val rootReceiver : RootReceiver, internal val selectorExpression: String) {
+class JQueryReceiver(internal val webBrowser: WebBrowser, internal val selectorExpression: String) {
     val on : JQueryOnReceiver get() = JQueryOnReceiver(this)
 
     fun execute(js : String) {
-        rootReceiver.execute("$selectorExpression.$js;")
+        webBrowser.execute("$selectorExpression.$js;")
     }
 
     fun focus() {

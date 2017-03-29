@@ -136,7 +136,7 @@ fun Element.addEventListener(eventName: String, returnEventFields : Set<String> 
                 callbackWs($callbackId, $eventObject);
             });
         """
-    rootReceiver.executeWithCallback(js, callbackId) { payload ->
+    webBrowser.executeWithCallback(js, callbackId) { payload ->
         callback.invoke(payload)
     }
     return this
