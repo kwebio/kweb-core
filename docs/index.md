@@ -60,8 +60,8 @@ Here we element a simple "todo" list app:
 fun main(args: Array<String>) {
     Kweb(8091, debug = true) {
         doc.body.new {
-            h1().addText("Simple Kweb demo - a to-do list")
-            p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
+            h1().text("Simple Kweb demo - a to-do list")
+            p().text("Edit the text box below and click the button to add the item.  Click an item to remove it.")
 
             val ul = ul().new {
                 for (text in listOf("one", "two", "three")) {
