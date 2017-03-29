@@ -70,13 +70,14 @@ fun main(args: Array<String>) {
             }
 
             val inputElement = input(type = InputType.text, size = 20)
-            val button = button()
-            button.addText("Add Item")
-            button.on.click {
-                future {
-                    val newItemText = inputElement.getValue().await()
-                    ul.new().newListItem(newItemText)
-                    inputElement.setValue("")
+            button().apply {
+                text("Add Item")
+                on.click {
+                    future {
+                        val newItemText = inputElement.getValue().await()
+                        ul.new().newListItem(newItemText)
+                        inputElement.setValue("")
+                    }
                 }
             }
         }

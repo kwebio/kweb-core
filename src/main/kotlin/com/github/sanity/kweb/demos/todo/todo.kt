@@ -6,6 +6,7 @@ import com.github.sanity.kweb.dom.element.creation.tags.*
 import com.github.sanity.kweb.dom.element.events.on
 import com.github.sanity.kweb.dom.element.modification.addText
 import com.github.sanity.kweb.dom.element.modification.delete
+import com.github.sanity.kweb.dom.element.modification.text
 import com.github.sanity.kweb.dom.element.new
 import kotlinx.coroutines.experimental.future.await
 import kotlinx.coroutines.experimental.future.future
@@ -36,7 +37,7 @@ fun main(args: Array<String>) {
 
             // And a button to add a new item
             val button = button()
-            button.addText("Add Item")
+            button.text("Add Item")
             // Here we register a callback, the code block will be called when the
             // user clicks this button.
             button.on.click {
