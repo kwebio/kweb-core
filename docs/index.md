@@ -13,7 +13,7 @@ programming language.  You can think of it as a powerful Kotlin DSL that allows 
 web browsers from a web server.
 
 Even though your code runs on the server, Kweb allows you to interact with the browser DOM directly, for example here 
-we element a `<p>` element and set its text:
+we create a `<p>` element and set its text:
 
 ```kotlin
 doc.body.p().text("this is an example HTML paragraph")
@@ -54,7 +54,7 @@ asynchronicity, largly invisibly to the programmer.
 
 #### What does it look like?
 
-Here we element a simple "todo" list app:
+Here we create a simple "todo" list app:
 
 ```kotlin
 fun main(args: Array<String>) {
