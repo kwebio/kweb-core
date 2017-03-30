@@ -50,7 +50,11 @@ private fun foundation_menu_sample() {
     Kweb(port = 1234, plugins = listOf(foundation), refreshPageOnHotswap = true) {
         doc.body.new {
             foundation.topBar().new {
-                titleArea().new().name().new().a(href="#").text("My Site")
+                titleArea().new()
+                        .name().new()
+                        .h1().new()
+                        .a(href="#")
+                        .text("My Site")
             }
         }
     }
