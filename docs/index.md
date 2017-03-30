@@ -33,7 +33,7 @@ database.update(BOOK).set(BOOK.DAY, day).execute()
 ```
 
 Kotlin has plugins for JavaScript libraries like [JQuery](https://jquery.com/) and 
-[others](https://github.com/sanity/kweb/tree/master/src/main/kotlin/com/github/sanity/kweb/plugins).  It's also 
+[others](https://github.com/sanity/kweb/tree/master/src/main/kotlin/com/github/kwebio/kweb/plugins).  It's also 
 surprisingly easy to build your own plugins for other JavaScript libraries, or extend those Kweb already
 supports.
 
