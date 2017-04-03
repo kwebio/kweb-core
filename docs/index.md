@@ -8,7 +8,7 @@ title: "Introduction to Kweb"
 
 #### What is Kweb?
 
-Kweb is a library for building rich web applications in the [Kotlin](http://kotlinlang.org/)
+Kweb is a library for building single-page web applications in the [Kotlin](http://kotlinlang.org/)
 programming language.  You can think of it as a powerful Kotlin DSL that allows you to remote-control
 web browsers from a web server.
 
