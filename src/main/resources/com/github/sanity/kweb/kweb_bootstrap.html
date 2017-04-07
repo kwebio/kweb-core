@@ -5,7 +5,7 @@
     <script language="JavaScript">
         function toWSUrl(s) {
             var l = window.location;
-            return ((l.protocol === "https:") ? "wss://" : "ws://") + l.host + l.pathname + s;
+            return ((l.protocol === "https:") ? "wss://" : "ws://") + l.host + "/" + s;
         }
 
         var kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
@@ -16,7 +16,7 @@
             var yourId = msg["yourId"];
             var debugToken = msg["debugToken"];
             if (kwebClientId != yourId) {
-                console.error("Received message with incorrect clientId, was " + yourId + ", should be " + kwebClientId)
+                console.error("Received message from incorrect clientId, was " + yourId + ", should be " + kwebClientId)
             }
             var execute = msg["execute"];
             if (execute !== undefined) {
@@ -97,7 +97,7 @@
             if (el.classList)
                 return el.classList.contains(className)
             else
-                return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
+                return !!el.className.render(new RegExp('(\\s|^)' + className + '(\\s|$)'))
         }
 
         function addClass(el, className) {

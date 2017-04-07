@@ -2,6 +2,9 @@ package com.github.sanity.kweb
 
 import com.github.sanity.kweb.dom.Document
 import com.github.sanity.kweb.plugins.KWebPlugin
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
+import mu.KLogging
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
@@ -11,6 +14,8 @@ import kotlin.reflect.jvm.jvmName
  * expressions and retrieve the result.
  */
 class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: Kweb, val response: String? = null) {
+    companion object: KLogging()
+
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         cc.appliedPlugins.map { it::class to it }.toMap()
     }
@@ -53,4 +58,16 @@ class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestI
     }
 
     val doc = Document(this)
+
+    fun async(doWork: suspend () -> Unit) {
+        launch(CommonPool) {
+            try {
+                doWork()
+            } catch (t: Throwable) {
+                val sb = StringBuilder()
+                t.stackTrace.pruneAndDumpStackTo(sb)
+                logger.error(sb.toString())
+            }
+        }
+    }
 }

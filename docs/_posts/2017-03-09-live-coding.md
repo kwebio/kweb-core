@@ -59,7 +59,7 @@ Set the `refreshPageOnHotswap` Kweb constructor parameter to `true`:
 
 #### Step 5 : Run your code
 
-Now run your project in debug mode (the button with the green bug), you should see something like this:
+Now run your project in debug mode (the button from the green bug), you should see something like this:
 
 ```
 HOTSWAP AGENT: 19:01:57.851 INFO (org.hotswap.agent.HotswapAgent) - Loading Hotswap agent {1.1.0-SNAPSHOT} - unlimited runtime class redefinition.
@@ -78,7 +78,7 @@ Launch a web browser and point it at your Kweb instance.  Now make a change to y
 modified (Shift+Command+F9 on a Mac), in a few seconds the browser window should automatically refresh to reflect
 the change.
 
-Note that HotSwapAgent doesn't work with every code modification, for example if you make a change to the configuration
+Note that HotSwapAgent doesn't work from every code modification, for example if you make a change to the configuration
 of your Kweb object it will not pick this up.
 
 ----------

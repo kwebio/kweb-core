@@ -4,10 +4,16 @@ import com.github.sanity.kweb.Kweb
 import com.github.sanity.kweb.WebBrowser
 import com.github.sanity.kweb.dom.element.creation.ElementCreator
 import com.github.sanity.kweb.dom.element.creation.tags.h1
+import com.github.sanity.kweb.dom.element.modification.removeChildAt
 import com.github.sanity.kweb.dom.element.modification.setAttribute
 import com.github.sanity.kweb.dom.element.modification.text
+import com.github.sanity.kweb.dom.element.read.read
 import com.github.sanity.kweb.plugins.KWebPlugin
+import kotlinx.coroutines.experimental.future.await
+import kotlinx.coroutines.experimental.future.future
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
 @DslMarker
@@ -62,7 +68,7 @@ open class Element (open val webBrowser: WebBrowser, open var jsExpression: Stri
  *
  * @sample new_sample_1
  */
-fun <T : Element> T.new(position : Int? = null) = ElementCreator(this, position)
+fun <T : Element> T.new(position : Int? = null): ElementCreator<T> = ElementCreator(this, position)
 
 /**
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
@@ -71,7 +77,7 @@ fun <T : Element> T.new(position : Int? = null) = ElementCreator(this, position)
  *
  * @sample new_sample_2
  */
-fun <T : Element> T.new(position : Int? = null, receiver: ElementCreator<T>.() -> Unit) : T {
+fun <T : Element> T.new(position : Int? = null, receiver: ElementCreator<T>.() -> Unit) : Element {
     receiver(new(position))
     return this
 }

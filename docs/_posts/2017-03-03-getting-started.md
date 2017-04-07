@@ -13,7 +13,7 @@ js:
 
 ### What you should know
 
-Kweb is built on [Kotlin 1.1](http://kotlinlang.org/), you should have some familiarity with Kotlin
+Kweb is built on [Kotlin 1.1](http://kotlinlang.org/), you should have some familiarity from Kotlin
 and the Java ecosystem on which it's built.
 
 ### Adding a Kweb dependency
@@ -96,9 +96,9 @@ Then add this to the dependencies section of your `pom.xml`:
 ### Logging
 Kweb uses [SLF4J](https://www.slf4j.org/) for logging.  This is a "logging facade", it allows
 libraries to log to the library user's preferred logging framework.  The instructions above 
-include the "simple" SLF4J logger binding, but you can replace this with a number of others, 
+include the "simple" SLF4J logger binding, but you can replace this from a number of others, 
 depending on your needs or preferences, learn more 
-[here](http://saltnlight5.blogspot.com/2013/08/how-to-configure-slf4j-with-different.html).
+[here](http://saltnlight5.blogspot.com/2013/08/how-to-configure-slf4j-from-different.html).
 
 If you see an error like the following:
 ```

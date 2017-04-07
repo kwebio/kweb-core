@@ -55,7 +55,7 @@ fun main(args: Array<String>) {
                     val newItemText = inputElement.getValue().await()
 
                     // And now we add the new item using our custom function
-                    ul.new().newListItem(newItemText)
+                    ul().new().newListItem(newItemText)
 
                     // And finally reset the value of the inputElement element.
                     inputElement.setValue("")

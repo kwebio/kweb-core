@@ -6,7 +6,7 @@ package com.github.sanity.kweb.dom.attributes
 
 val attr: MutableMap<String, Any> get() = AttributeBuilder()
 
-private class AttributeBuilder : MutableMap<String, Any> by LinkedHashMap()
+open class AttributeBuilder : MutableMap<String, Any> by LinkedHashMap()
 
 fun Map<String, Any>.set(key : String, value : Any?) : Map<String, Any> {
     if (value != null) {
@@ -33,6 +33,7 @@ fun Map<String, Any>.classes(classes: Iterable<String>, condition: Boolean = tru
             is String -> classAttributeValue.split(' ')
             else -> listOf()
         }
+        // TODO: This is inefficient when classes() is called multiple times
         return set("class", (existing + classes).joinToString(separator = " "))
     } else {
         return this

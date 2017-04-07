@@ -29,6 +29,9 @@ fun ElementCreator<Element>.span(attributes: Map<String, Any> = attr) = SpanElem
 open class DivElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.div(attributes: Map<String, Any> = attr) = DivElement(element("div", attributes))
 
+open class IElement(parent: Element) : Element(parent)
+fun ElementCreator<Element>.i(attributes: Map<String, Any> = attr) = IElement(element("i", attributes))
+
 open class FormElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.form(attributes: Map<String, Any> = attr) = FormElement(element("form", attributes))
 
@@ -44,6 +47,18 @@ fun ElementCreator<Element>.select(attributes: Map<String, Any> = attr) = Select
 
 open class H1Element(parent: Element) : Element(parent)
 fun ElementCreator<Element>.h1(attributes: Map<String, Any> = attr) = H1Element(element("h1", attributes))
+
+open class H2Element(parent: Element) : Element(parent)
+fun ElementCreator<Element>.h2(attributes: Map<String, Any> = attr) = H2Element(element("h2", attributes))
+
+open class H3Element(parent: Element) : Element(parent)
+fun ElementCreator<Element>.h3(attributes: Map<String, Any> = attr) = H3Element(element("h3", attributes))
+
+open class H4Element(parent: Element) : Element(parent)
+fun ElementCreator<Element>.h4(attributes: Map<String, Any> = attr) = H4Element(element("h4", attributes))
+
+open class H5Element(parent: Element) : Element(parent)
+fun ElementCreator<Element>.h5(attributes: Map<String, Any> = attr) = H5Element(element("h5", attributes))
 
 open class PElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.p(attributes: Map<String, Any> = attr) = PElement(element("p", attributes))

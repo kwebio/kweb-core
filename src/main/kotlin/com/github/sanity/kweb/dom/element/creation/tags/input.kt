@@ -12,11 +12,12 @@ import java.util.concurrent.CompletableFuture
  *
  */
 
-fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null, attributes: Map<String, Any> = attr): InputElement {
+fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null, placeholder : String? = null, attributes: Map<String, Any> = attr): InputElement {
     return InputElement(element("input", attributes = attributes
             .set("type", type?.name)
             .set("name", name)
             .set("value", initialValue)
+            .set("placeholder", placeholder)
             .set("size", size)
     ))
 }

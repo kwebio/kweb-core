@@ -72,7 +72,7 @@
                     section,
                     header,
                     sections = [],
-                    lists = {},
+                    plists = {},
                     headers = {};
 
                 var navUl = document.querySelectorAll('#navigation ul')[0],
@@ -90,17 +90,17 @@
                         continue;
                     }
 
-                    if (!lists[section]) {
-                        lists[section] = [];
+                    if (!plists[section]) {
+                        plists[section] = [];
                     }
 
                     order = parseFloat(li.getAttribute('data-order'))
-                    lists[section].push([order, li]);
+                    plists[section].push([order, li]);
                 }
 
                 for (var i = 0; i < sections.length; i++) {
                     section = sections[i];
-                    list = lists[section].sort(function(a, b) {
+                    list = plists[section].sort(function(a, b) {
                         return a[0] - b[0];
                     });
 

@@ -6,6 +6,7 @@ import com.github.sanity.kweb.plugins.KWebPlugin
 import com.github.sanity.kweb.random
 import com.github.sanity.kweb.toJson
 import mu.KLogging
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 /**
@@ -53,9 +54,20 @@ open class ElementCreator<out PARENT_TYPE : Element>(val parent: PARENT_TYPE, va
             appendln("}")
         }
         parent.execute(javaScript.toString())
-        return Element(parent.webBrowser, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+        val newElement = Element(parent.webBrowser, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+        newChildListeners.values.forEach({it(newElement)})
+        return newElement
     }
 
     fun require(vararg plugins: KClass<out KWebPlugin>) = parent.webBrowser.require(*plugins)
 
+    private val newChildListeners = ConcurrentHashMap<Long, (Element) -> Unit>()
+    fun addNewChildListener(listener : (Element) -> Unit) : Long {
+        val handle = random.nextLong()
+        newChildListeners[handle] = listener
+        return handle
+    }
+    fun removeNewChildListener(handle : Long) {
+        newChildListeners.remove(handle)
+    }
 }

@@ -3,20 +3,27 @@ package com.github.sanity.kweb
 import com.github.sanity.kweb.browserConnection.OutboundChannel
 import com.github.sanity.kweb.dev.hotswap.KwebHotswapPlugin
 import com.github.sanity.kweb.plugins.KWebPlugin
+import io.mola.galimatias.URL
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import mu.KLogging
 import org.apache.commons.io.IOUtils
+import org.hotswap.agent.javassist.NotFoundException
+import org.jetbrains.ktor.application.ApplicationRequest
 import org.jetbrains.ktor.application.call
 import org.jetbrains.ktor.application.install
 import org.jetbrains.ktor.features.DefaultHeaders
+import org.jetbrains.ktor.features.origin
+import org.jetbrains.ktor.http.ContentType
+import org.jetbrains.ktor.http.HttpStatusCode
 import org.jetbrains.ktor.netty.NettyApplicationHost
 import org.jetbrains.ktor.netty.embeddedNettyServer
 import org.jetbrains.ktor.request.uri
 import org.jetbrains.ktor.response.contentType
+import org.jetbrains.ktor.response.respondText
 import org.jetbrains.ktor.routing.Routing
 import org.jetbrains.ktor.routing.get
-import org.jetbrains.ktor.util.ValuesMap
+import org.jetbrains.ktor.routing.routing
 import org.jetbrains.ktor.websocket.Frame
 import org.jetbrains.ktor.websocket.WebSocket
 import org.jetbrains.ktor.websocket.readText
@@ -79,9 +86,9 @@ class Kweb(val port: Int,
 
         server= embeddedNettyServer(port) {
             install(DefaultHeaders)
-            install(Routing) {
+            routing {
 
-                // Register custom routes.
+                // Register custom state.
                 appServerConfigurator.invoke(this)
 
                 // TODO this is pretty awful but don't see an alternative....
@@ -96,40 +103,59 @@ class Kweb(val port: Int,
                     .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 
                 // Setup default KWeb routing.
-                get("/") {
+                get("/favicon.ico") {
+                    call.response.status(HttpStatusCode.NotFound)
+                    call.respondText("favicons not currently supported by kweb")
+                }
+
+                get("/{visitedUrl...}") {
                     val newClientId = Math.abs(random.nextLong()).toString(16)
                     val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
                     val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
                     clients.put(newClientId, wsClientData)
-                    val httpRequestInfo = HttpRequestInfo(call.request.uri, call.request.headers)
+                    val httpRequestInfo = HttpRequestInfo(call.request)
 
-                    if (debug) {
-                        warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
-                            val logStatementBuilder = StringBuilder()
-                            logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
-                            thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
-                            val logStatement = logStatementBuilder.toString()
-                            logger.warn { logStatement }
-                        }) {
-                            buildPage(WebBrowser(newClientId, httpRequestInfo,this@Kweb))
-                            logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}"}
+                    try {
+                        if (debug) {
+                            warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
+                                val logStatementBuilder = StringBuilder()
+                                logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
+                                thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
+                                val logStatement = logStatementBuilder.toString()
+                                logger.warn { logStatement }
+                            }) {
+                                buildPage(WebBrowser(newClientId, httpRequestInfo, this@Kweb))
+                                logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}" }
+                            }
+                        } else {
+                            buildPage(WebBrowser(newClientId, httpRequestInfo, this@Kweb))
+                            logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}" }
                         }
-                    } else {
-                        buildPage(WebBrowser(newClientId, httpRequestInfo, this@Kweb))
-                        logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}"}
-                    }
-                    for (plugin in plugins) {
-                        execute(newClientId, plugin.executeAfterPageCreation())
-                    }
-                    wsClientData.outboundChannel = OutboundChannel.TemporarilyStoringChannel()
+                        for (plugin in plugins) {
+                            execute(newClientId, plugin.executeAfterPageCreation())
+                        }
+                        wsClientData.outboundChannel = OutboundChannel.TemporarilyStoringChannel()
 
-                    val bootstrapHtml = bootstrapHtmlTemplate
-                            .replace("--CLIENT-ID-PLACEHOLDER--", newClientId)
-                            .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", outboundBuffer.read().map {"handleInboundMessage($it);"} . joinToString(separator = "\n"))
+                        val bootstrapHtml = bootstrapHtmlTemplate
+                                .replace("--CLIENT-ID-PLACEHOLDER--", newClientId)
+                                .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", outboundBuffer.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
 
-                    // TODO replace with ktor type.
-                    call.response.contentType("text/html")
-                    call.respond(bootstrapHtml)
+                        // TODO replace with ktor type.
+                        call.response.contentType("text/html")
+                        call.respond(bootstrapHtml)
+                    } catch (nfe : NotFoundException) {
+                        call.response.status(HttpStatusCode.NotFound)
+                        call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
+                    } catch (e : Exception) {
+                        call.response.status(HttpStatusCode.InternalServerError)
+                        val logToken = random.nextLong().toString(16)
+                        call.respondText("""
+                        Internal Server Error.
+
+                        Please include code $logToken in any error report to help us track it down.
+""".trimIndent())
+                        logger.error(e) {"Exception thrown while rendering page, code $logToken" }
+                    }
                 }
                 webSocket("/ws") {
                     handle { frame ->
@@ -253,8 +279,24 @@ private data class WSClientData(val id: String, @Volatile var outboundChannel: O
     }
 }
 
-data class HttpRequestInfo(val visitedUrl : String, val headers : ValuesMap) {
-    val referer : String? get() = headers["Referer"]
+/**
+ * @param request This is the raw ApplicationRequest object from [Ktor](https://github.com/Kotlin/ktor), the HTTP
+ *                library used by Kweb.  It can be used to read various information about the inbound HTTP request,
+ *                however you should use properties of [HttpRequestInfo] directly instead if possible.
+ */
+data class HttpRequestInfo(val request: ApplicationRequest) {
+    val requestedUrl : URL by lazy {
+        val urlAsString = with(request.origin) {
+            "$scheme://$host:$port$uri"
+        }
+        URL.parse(urlAsString)
+    }
+
+    val cookies = request.cookies
+
+    val remoteHost = request.origin.remoteHost
+
+    val userAgent = request.headers["User-Agent"]
 }
 
 data class DebugInfo(val js: String, val action : String, val throwable: Throwable)
@@ -281,4 +323,3 @@ data class C2SWebsocketMessage(
 
     data class C2SCallback(val callbackId: Int, val data: String?)
 }
-
