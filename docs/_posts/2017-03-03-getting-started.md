@@ -36,7 +36,7 @@ Then add this to the dependencies section of your `build.gradle`:
 ```groovy
 dependencies {
   // ...
-  compile 'com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER'
+  compile 'com.github.kwebio:kweb:MAVEN_VERSION_PLACEHOLDER'
   compile 'org.slf4j:slf4j-simple:1.6.1' // <-- or your favorite SLF4J logger binding 
 }
 ```
@@ -60,7 +60,7 @@ For [Kobalt](http://beust.com/kobalt/) users, add this to your `Built.kt` file:
 ```kotlin
   dependencies {
     // ...
-    compile("com.github.sanity:kweb:MAVEN_VERSION_PLACEHOLDER")
+    compile("com.github.kwebio:kweb:MAVEN_VERSION_PLACEHOLDER")
     compile("org.slf4j:slf4j-simple:1.6.1") // <-- or your favorite SLF4J logger binding 
     // ...
   }
@@ -81,7 +81,7 @@ For [Maven](https://maven.apache.org/) users, add this to the repositories secti
 Then add this to the dependencies section of your `pom.xml`:
 ```xml
 <dependency>
-  <groupId>com.github.sanity</groupId>
+  <groupId>com.github.kwebio</groupId>
   <artifactId>kweb</artifactId>
   <version>MAVEN_VERSION_PLACEHOLDER</version>
 </dependency>  
