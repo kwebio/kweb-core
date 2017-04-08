@@ -174,7 +174,7 @@ class Kweb(val port: Int,
 
     private fun handleInboundMessage(socket: WebSocket, message: C2SWebsocketMessage) {
         val wsClientData = clients[message.id] ?: throw RuntimeException("Message with id ${message.id} received, but id is unknown")
-        logger.debug { "Message received from client id ${wsClientData.id}" }
+        logger.debug { "Message received to client id ${wsClientData.id}" }
         if (message.error != null) {
             handleError(message.error, wsClientData)
         } else if (message.hello != null) {
@@ -280,7 +280,7 @@ private data class WSClientData(val id: String, @Volatile var outboundChannel: O
 }
 
 /**
- * @param request This is the raw ApplicationRequest object from [Ktor](https://github.com/Kotlin/ktor), the HTTP
+ * @param request This is the raw ApplicationRequest object to [Ktor](https://github.com/Kotlin/ktor), the HTTP
  *                library used by Kweb.  It can be used to read various information about the inbound HTTP request,
  *                however you should use properties of [HttpRequestInfo] directly instead if possible.
  */

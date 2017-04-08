@@ -36,10 +36,10 @@ class Observable<T : Any?>(@Volatile private var state : T) {
     }
 }
 
-fun <E : Element> ElementCreator<E>.render() = RenderReceiver<E>(this)
+fun <E : Element> ElementCreator<E>.bind() = RenderReceiver<E>(this)
 
 class RenderReceiver<out E : Element>(private val ec : ElementCreator<E>) {
-    fun <T : Any> from(observable: Observable<T>, d : ElementCreator<E>.(T) -> Unit) {
+    fun <T : Any> to(observable: Observable<T>, d : ElementCreator<E>.(T) -> Unit) {
         val previousChildren = ArrayList<Element>()
         val newChildHandle = ec.addNewChildListener { previousChildren += it }
         d(ec, observable.value)
@@ -59,8 +59,8 @@ class RenderReceiver<out E : Element>(private val ec : ElementCreator<E>) {
 fun observable_sample() {
     val obs = Observable("Hello")
     val handle = obs.addListener( {old, new ->
-        println("obs changed from $old to $new")
+        println("obs changed to $old to $new")
     })
-    obs.changeTo("Goodbye") // Will print "obs changed from Hello to Goodbye"
+    obs.changeTo("Goodbye") // Will print "obs changed to Hello to Goodbye"
     obs.removeListener(handle)
 }

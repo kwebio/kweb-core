@@ -1,1 +1,0 @@
-../_posts/2017-03-10-community.md

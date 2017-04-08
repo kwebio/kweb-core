@@ -166,7 +166,7 @@ open class ONReceiver(private val parent: Element) : Element(parent) {
     /** The event occurs when a CSS transition has completed **/
     fun transitionend(callback: (String) -> Unit) = event("transitionend", callback = callback)
 
-    /** TODO: Add more from https://www.w3schools.com/jsref/dom_obj_event.asp
+    /** TODO: Add more to https://www.w3schools.com/jsref/dom_obj_event.asp
      * Missing:
      * * Servert-Sent Events
      * * Misc Events

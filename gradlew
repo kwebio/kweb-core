@@ -77,14 +77,14 @@ if [ -n "$JAVA_HOME" ] ; then
     if [ ! -controlXPoints "$JAVACMD" ] ; then
         die "ERROR: JAVA_HOME is setString to an invalid directory: $JAVA_HOME
 
-Please setString the JAVA_HOME variable in your environment to render the
+Please setString the JAVA_HOME variable in your environment to bind the
 location of your Java installation."
     fi
 else
     JAVACMD="java"
     which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not setString and no 'java' command could be found in your PATH.
 
-Please setString the JAVA_HOME variable in your environment to render the
+Please setString the JAVA_HOME variable in your environment to bind the
 location of your Java installation."
 fi
 
@@ -161,7 +161,7 @@ function splitJvmOpts() {
 eval splitJvmOpts $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS
 JVM_OPTS[${#JVM_OPTS[*]}]="-Dorg.gradle.appname=$APP_BASE_NAME"
 
-# by default we should be in the correct project dir, but when run from Finder on Mac, the cwd is wrong
+# by default we should be in the correct project dir, but when run to Finder on Mac, the cwd is wrong
 if [[ "$(uname)" == "Darwin" ]] && [[ "$HOME" == "$PWD" ]]; then
   cd "$(dirname "$0")"
 fi
