@@ -106,17 +106,20 @@ class UrlPathParser(val contextProvider: (KClass<*>)-> Set<KClass<out Any>>) {
     }
 }
 
-inline fun <reified T : Any> UrlPathParser.parse(url: String): T? {
+inline fun <reified T : Any> UrlPathParser.parse(url: String): T {
     val parts = url.trim('/').split('/').filter { it.isNotEmpty() }
 
     return buildEntity(parts, T::class) { kClass, entityName ->
         val realEntityName = entityName ?: "root"
         val name = kClass.simpleName?.toLowerCase()
         name == realEntityName
+    }.let { entity ->
+        entity ?: throw UrlParseException("Unable to parse the URL")
     }
 }
 
-data class UrlParseException(val reason : String) : Exception()
+class UrlParseException(reason: String) : Exception(reason)
+
 
 // TODO This is not optimal because a child of a sealed class no longer need to be nested
 fun <T : Any> KClass<T>.meAndNested() = setOf(this, *nestedClasses.toTypedArray())
