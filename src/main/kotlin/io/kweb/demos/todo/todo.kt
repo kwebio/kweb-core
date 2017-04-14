@@ -13,7 +13,7 @@ import kotlinx.coroutines.experimental.future.future
 
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
-    Kweb(8091, debug = true) {
+    Kweb(port = 8091, debug = false) {
         doc.body.new {
             // Add a header element to the body, along with some simple instructions.
             h1().addText("Simple Kweb demo - a to-do list")
