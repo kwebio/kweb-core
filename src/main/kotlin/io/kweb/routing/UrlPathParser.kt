@@ -143,3 +143,20 @@ internal sealed class ParsingResult {
     data class ValueExtracted(val parameter: KParameter, val value: Any?) : ParsingResult()
     object NoValue : ParsingResult()
 }
+
+fun Any.toPath(): String {
+    val entityPath = javaClass.simpleName.toLowerCase().takeUnless { it == "root" }?.let { "/$it" } ?: ""
+    val members = javaClass.kotlin.members
+    val params = javaClass.kotlin.primaryConstructor?.parameters?.joinToString(separator = "") { parameter ->
+        val value = members.find { it.name == parameter.name }?.call(this)
+        val convertedValue = when (parameter.type.javaType) {
+            Int::class.java,
+            Long::class.java,
+            Boolean::class.java,
+            String::class.java -> value
+            else -> value?.toPath()
+        }
+        "/${convertedValue ?: ""}"
+    } ?: throw IllegalArgumentException("No primary constructor found")
+    return "$entityPath$params"
+}

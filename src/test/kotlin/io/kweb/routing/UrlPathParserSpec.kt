@@ -40,7 +40,7 @@ class UrlPathParserSpec : FreeSpec() {
         // val contextProvider = KClass<*>::meAndNested
         val urlPathParser = UrlPathParser(ClasspathScanner("io.kweb.routing")::getContext)
 
-        "should parse URLs" {
+        "test URL path parsing" - {
             val parseableUrls = table(
                     headers("url", "parsedUrl"),
                     row<String, Entity>("/", Entity.Root()),
@@ -52,7 +52,25 @@ class UrlPathParserSpec : FreeSpec() {
                     row<String, Entity>("/users/152/friend/51", Entity.Users(152, UserEntity.Friend(51)))
                     )
             forAll(parseableUrls) { url, parsedUrl ->
-                urlPathParser.parse<Entity>(url) shouldEqual parsedUrl
+                "verify that $url is parsed correctly" {
+                    urlPathParser.parse<Entity>(url) shouldEqual parsedUrl
+                }
+            }
+        }
+
+        "test URL path generation" - {
+            val parseableUrls = table(
+                    headers("url", "parsedUrl"),
+                    row<String, Entity>("/", Entity.Root()),
+                    row<String, Entity>("/users/152", Entity.Users(152, UserEntity.Root())),
+                    row<String, Entity>("/squares/152/22/44", Entity.Squares(152, 22, 44)),
+                    row<String, Entity>("/squares/142/23", Entity.Squares(142, 23)),
+                    row<String, Entity>("/users/152/friend/51", Entity.Users(152, UserEntity.Friend(51)))
+            )
+            forAll(parseableUrls) { url, parsedUrl ->
+                "verify that $parsedUrl is translated back to $url correctly" {
+                    parsedUrl.toPath() shouldEqual url
+                }
             }
         }
 
