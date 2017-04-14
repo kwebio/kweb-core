@@ -1,7 +1,7 @@
 package io.kweb.routing
 
 /**
- * Created by ian on 4/13/17.
+ * Created by @jmdesprez, modified by @sanity
  */
 import io.kweb.routing.ParsingResult.NoValue
 import io.kweb.routing.ParsingResult.ValueExtracted
