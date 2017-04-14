@@ -16,7 +16,7 @@ import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.javaType
 
-class UrlPathParser(val contextProvider: (KClass<*>) -> Set<KClass<out Any>>) {
+class UrlPathParser(val contextProvider: (KClass<*>)-> Set<KClass<out Any>>) {
 
     /**
      * Build the an Entity using the given data list. Rules are:
@@ -28,8 +28,8 @@ class UrlPathParser(val contextProvider: (KClass<*>) -> Set<KClass<out Any>>) {
     // TODO make sure the cast is actually really really safe
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> buildEntity(dataList: List<String>,
-                              entityClass: KClass<T>,
-                              isEntityNameMatch: (candidateClass: KClass<*>, entityName: String?) -> Boolean): T? {
+                                            entityClass: KClass<T>,
+                                            isEntityNameMatch: (candidateClass: KClass<*>, entityName: String?) -> Boolean): T? {
 
         val entityName = if (dataList.isNotEmpty()) dataList[0] else null
 
@@ -56,7 +56,7 @@ class UrlPathParser(val contextProvider: (KClass<*>) -> Set<KClass<out Any>>) {
                     val value = when (param.type.javaType) {
                         Int::class.java -> currentURLPart?.toInt()
                         Long::class.java -> currentURLPart?.toLong()
-                        Boolean::class.java -> when (currentURLPart?.toLowerCase()) {
+                        Boolean::class.java -> when(currentURLPart?.toLowerCase()) {
                             in setOf("true", "yes") -> true
                             in setOf("false", "no") -> false
                             else -> null
