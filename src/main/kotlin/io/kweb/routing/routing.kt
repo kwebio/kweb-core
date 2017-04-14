@@ -4,7 +4,7 @@ import io.kweb.WebBrowser
 import io.kweb.state.Observable
 
 /**
- * Created by ian on 4/5/17.
+ * Created by @@jmdesprez, some modifications by @sanity
  */
 
 // TODO: Handle window.onpopstate so that handle
