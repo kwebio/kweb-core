@@ -34,11 +34,11 @@ sealed class UserEntity {
     class Settings : UserEntity()
 }
 
-class UrlParserSpec : FreeSpec() {
+class UrlPathParserSpec : FreeSpec() {
     init {
         // TODO choose one solution
         // val contextProvider = KClass<*>::meAndNested
-        val contextProvider = ClasspathScanner("io.kweb.routing")::getContext
+        val urlPathParser = UrlPathParser(ClasspathScanner("io.kweb.routing")::getContext)
 
         "should parse URLs" {
             val parseableUrls = table(
@@ -52,12 +52,12 @@ class UrlParserSpec : FreeSpec() {
                     row<String, Entity>("/users/152/friend/51", Entity.Users(152, UserEntity.Friend(51)))
                     )
             forAll(parseableUrls) { url, parsedUrl ->
-                parse<Entity>(url, contextProvider) shouldEqual parsedUrl
+                urlPathParser.parse<Entity>(url) shouldEqual parsedUrl
             }
         }
 
         "should handle null value when property has no default" {
-            parse<Nullables>("/nullables/42", contextProvider) shouldBe Nullables(42, null)
+            urlPathParser.parse<Nullables>("/nullables/42") shouldBe Nullables(42, null)
         }
 
         "should throw an exception for malformed URLs" {
@@ -69,7 +69,7 @@ class UrlParserSpec : FreeSpec() {
             )
             forAll(parseableUrls) { url ->
                 shouldThrow<UrlParseException> {
-                    parse<Entity>(url, contextProvider)
+                    urlPathParser.parse<Entity>(url)
                     Unit
                 }
             }
