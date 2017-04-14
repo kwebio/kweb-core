@@ -16,7 +16,6 @@ sealed class Entity {
         // Necessary for tests, shouldn't be necessary if the user is using when/is construct, but perhaps
         // should recommend it anyway
         override fun equals(other: Any?) = other is Root
-
         override fun hashCode() = this::class.hashCode()
     }
 }
@@ -25,8 +24,9 @@ data class Project(val id: Int) : UserEntity()
 
 sealed class UserEntity {
     class Root : UserEntity() {
+        // Necessary for tests, shouldn't be necessary if the user is using when/is construct, but perhaps
+        // should recommend it anyway
         override fun equals(other: Any?) = other is UserEntity.Root
-
         override fun hashCode() = this::class.hashCode()
     }
 
