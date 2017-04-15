@@ -36,9 +36,7 @@ sealed class UserEntity {
 
 class UrlPathParserSpec : FreeSpec() {
     init {
-        // TODO choose one solution
-        // val contextProvider = KClass<*>::meAndNested
-        val urlPathParser = UrlPathParser(ClasspathScanner("io.kweb.routing")::getContext)
+        val urlPathParser = UrlPathTranslator()
 
         "test URL path parsing" - {
             val parseableUrls = table(
@@ -64,13 +62,15 @@ class UrlPathParserSpec : FreeSpec() {
                     row<String, Entity>("/", Entity.Root()),
                     row<String, Entity>("/users/152", Entity.Users(152, UserEntity.Root())),
                     row<String, Entity>("/squares/152/22/44", Entity.Squares(152, 22, 44)),
-                    row<String, Entity>("/squares/142/23", Entity.Squares(142, 23)),
                     row<String, Entity>("/users/152/friend/51", Entity.Users(152, UserEntity.Friend(51)))
             )
             forAll(parseableUrls) { url, parsedUrl ->
                 "verify that $parsedUrl is translated back to $url correctly" {
-                    parsedUrl.toPath() shouldEqual url
+                    urlPathParser.toPath(parsedUrl) shouldEqual url
                 }
+            }
+            "verify that a default value is specified explicity" {
+                urlPathParser.toPath(Entity.Squares(512, 11)) shouldEqual "/squares/512/11/42"
             }
         }
 

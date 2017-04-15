@@ -3,6 +3,7 @@ package io.kweb.routing
 /**
  * Created by @jmdesprez, modified by @sanity
  */
+import io.kweb.pkg
 import io.kweb.routing.ParsingResult.NoValue
 import io.kweb.routing.ParsingResult.ValueExtracted
 import org.reflections.Reflections
@@ -12,11 +13,20 @@ import org.reflections.util.ConfigurationBuilder
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KVisibility.PUBLIC
+import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.isSuperclassOf
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.javaType
 
-class UrlPathParser(val contextProvider: (KClass<*>)-> Set<KClass<out Any>>) {
+/**
+ * Translates between URL paths and objects.
+ */
+
+
+
+class UrlPathTranslator(val contextProvider: ((KClass<*>) -> Set<KClass<out Any>>)?) {
+
+    constructor(vararg pathObjectPackage: String) : this(if (pathObjectPackage.isEmpty()) null else ClasspathScanner(*pathObjectPackage)::getContext)
 
     /**
      * Build the an Entity using the given data list. Rules are:
@@ -33,7 +43,13 @@ class UrlPathParser(val contextProvider: (KClass<*>)-> Set<KClass<out Any>>) {
 
         val entityName = if (dataList.isNotEmpty()) dataList[0] else null
 
-        val candidates = this.contextProvider(entityClass)
+        val candidates = contextProvider.let {
+            if (it != null) {
+                it(entityClass)
+            } else {
+                ClasspathScanner(entityClass.pkg).getContext(entityClass)
+            }
+        }
 
         return candidates.filter { candidateClass ->
             entityClass.isSuperclassOf(candidateClass) && isEntityNameMatch(candidateClass, entityName)
@@ -46,7 +62,6 @@ class UrlPathParser(val contextProvider: (KClass<*>)-> Set<KClass<out Any>>) {
                 constructor!! // safe because the visibility test will fail if the method is null
             }
         }.map { constructor ->
-            try {
                 val values = constructor.parameters.map { param ->
 
                     // dataList[0] is the entity name so add one to the index
@@ -81,7 +96,7 @@ class UrlPathParser(val contextProvider: (KClass<*>)-> Set<KClass<out Any>>) {
                         // Else, if it's nullable then set to null
                             param.type.isMarkedNullable -> ValueExtracted(param, null)
                         // Else, there nothing we can decide here, throw to someone else
-                            else -> throw IllegalArgumentException("Unable to build the entity, null value for $param")
+                            else -> throw UrlParseException("Unable to parse url part $dataList because no value can be found for $param")
                         }
                     } else {
                         ValueExtracted(param, value)
@@ -97,16 +112,36 @@ class UrlPathParser(val contextProvider: (KClass<*>)-> Set<KClass<out Any>>) {
                 val args = mapOf(*values.toTypedArray())
                 constructor.callBy(args)
 
-            } catch(e: Exception) {
-                // TODO better exception handling
-                e.printStackTrace()
-                null
+        }.firstOrNull() as T?
+    }
+
+    fun toPath(obj: Any): String = "/" + toPathList(obj).joinToString(separator = "/")
+
+    fun toPathList(obj: Any): List<String> {
+        val entityPathElement = obj::class.simpleName!!.toLowerCase().let {
+            if (it == "root") {
+                emptyList()
+            } else {
+                listOf(it)
             }
-        }.filter { it != null }.firstOrNull() as T?
+        }
+        val declaredMemberProperties = obj::class.declaredMemberProperties
+        val params = declaredMemberProperties.map { property ->
+            val parameterValue = property.call(obj)
+            val parameterValueAsPathElements: List<String> = when (parameterValue) {
+                is Int -> listOf<String>(parameterValue.toString())
+                is Long -> listOf<String>(parameterValue.toString())
+                is Boolean -> listOf<String>(parameterValue.toString())
+                is String -> listOf<String>(parameterValue.toString())
+                else -> if (parameterValue != null) toPathList(parameterValue) else emptyList<String>()
+            }
+            parameterValueAsPathElements
+        }.flatMap { it }
+        return entityPathElement + params
     }
 }
 
-inline fun <reified T : Any> UrlPathParser.parse(url: String): T {
+inline fun <reified T : Any> UrlPathTranslator.parse(url: String): T {
     val parts = url.trim('/').split('/').filter { it.isNotEmpty() }
 
     return buildEntity(parts, T::class) { kClass, entityName ->
@@ -114,7 +149,7 @@ inline fun <reified T : Any> UrlPathParser.parse(url: String): T {
         val name = kClass.simpleName?.toLowerCase()
         name == realEntityName
     }.let { entity ->
-        entity ?: throw UrlParseException("Unable to parse the URL")
+        entity ?: throw UrlParseException("Unable to parse URL path `$url`")
     }
 }
 
@@ -142,21 +177,4 @@ class ClasspathScanner(vararg val packages: String) {
 internal sealed class ParsingResult {
     data class ValueExtracted(val parameter: KParameter, val value: Any?) : ParsingResult()
     object NoValue : ParsingResult()
-}
-
-fun Any.toPath(): String {
-    val entityPath = javaClass.simpleName.toLowerCase().takeUnless { it == "root" }?.let { "/$it" } ?: "/"
-    val members = javaClass.kotlin.members
-    val params = javaClass.kotlin.primaryConstructor?.parameters?.joinToString(separator = "") { parameter ->
-        val value = members.find { it.name == parameter.name }?.call(this)
-        val convertedValue = when (parameter.type.javaType) {
-            Int::class.java,
-            Long::class.java,
-            Boolean::class.java,
-            String::class.java -> value
-            else -> value?.toPath()
-        }
-        "/${convertedValue ?: ""}"
-    } ?: throw IllegalArgumentException("No primary constructor found")
-gi    return "$entityPath$params"
 }

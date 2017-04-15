@@ -8,6 +8,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
 /**
@@ -48,5 +49,16 @@ fun Array<StackTraceElement>.pruneAndDumpStackTo(logStatementBuilder: StringBuil
     val disregardClassPrefixes = listOf(Kweb::class.jvmName, WebBrowser::class.jvmName, Element::class.jvmName, "org.jetbrains.ktor", "io.netty", "java.lang", "kotlin.coroutines", "kotlinx.coroutines")
     this.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
         logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
+    }
+}
+
+val <T : Any> KClass<T>.pkg : String get() {
+    val packageName = qualifiedName
+    val className = simpleName
+    return if (packageName != null && className != null) {
+        val endIndex = packageName.length - className.length - 1
+        packageName.substring(0, endIndex)
+    } else {
+        throw RuntimeException("Cannot determine package for $this because it may be local or an anonymous object literal")
     }
 }
