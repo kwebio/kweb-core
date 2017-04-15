@@ -145,7 +145,7 @@ internal sealed class ParsingResult {
 }
 
 fun Any.toPath(): String {
-    val entityPath = javaClass.simpleName.toLowerCase().takeUnless { it == "root" }?.let { "/$it" } ?: ""
+    val entityPath = javaClass.simpleName.toLowerCase().takeUnless { it == "root" }?.let { "/$it" } ?: "/"
     val members = javaClass.kotlin.members
     val params = javaClass.kotlin.primaryConstructor?.parameters?.joinToString(separator = "") { parameter ->
         val value = members.find { it.name == parameter.name }?.call(this)
@@ -158,5 +158,5 @@ fun Any.toPath(): String {
         }
         "/${convertedValue ?: ""}"
     } ?: throw IllegalArgumentException("No primary constructor found")
-    return "$entityPath$params"
+gi    return "$entityPath$params"
 }
