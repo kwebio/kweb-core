@@ -31,8 +31,21 @@ class Observable<T : Any?>(@Volatile private var state : T) {
     val value get() = state
 
     @Synchronized fun changeTo(newVal : T) {
-        listeners.values.forEach {it(state, newVal)}
-        state = newVal
+        if (newVal != state) {
+            listeners.values.forEach { it(state, newVal) }
+            state = newVal
+        }
+    }
+
+    fun <O> view(mapper : (T) -> O, unmapper : (T, O) -> T) : Observable<O> {
+        val oobs = Observable(mapper(value))
+        addListener { old, new ->
+            oobs.changeTo(mapper(new))
+        }
+        oobs.addListener({old, new ->
+            changeTo(unmapper(value, new))
+        })
+        return oobs
     }
 }
 
