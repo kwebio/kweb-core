@@ -56,6 +56,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(val parent: PARENT_TYPE, va
         parent.execute(javaScript.toString())
         val newElement = Element(parent.webBrowser, this, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
         onCleanup(withParent = false) {
+            logger.info("Deleting element ${newElement.id}")
             newElement.delete()
         }
         return newElement

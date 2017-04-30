@@ -6,6 +6,7 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.modification.text
 import io.kweb.random
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedDeque
 import kotlin.properties.Delegates.notNull
 
 /**
@@ -67,20 +68,21 @@ class RenderReceiver<out E : Element>(private val ec : ElementCreator<E>) {
         // TODO: until after the call to addListener()
         // TODO: This is ugly, perhaps listenerId should be passed as param to listener
         var listenerId by notNull<Long>()
+        val lastRenderCleaners = ConcurrentLinkedDeque<Cleaner>()
         listenerId = observable.addListener({ oldState, newState ->
             if (oldState != newState) {
+                while (!lastRenderCleaners.isEmpty()) {
+                    lastRenderCleaners.poll().invoke()
+                }
                 ec.onCleanup(true) {
                     observable.removeListener(listenerId)
                 }
-                val cleanupListeners = ArrayList<Cleaner>()
-                ec.withCleanupListener({cleanupListeners.add(it)}) {
+                ec.withCleanupListener({lastRenderCleaners.add(it)}) {
                     d(ec, newState)
                 }
             }
         })
-
-        val cleanupListeners = ArrayList<Cleaner>()
-        ec.withCleanupListener({cleanupListeners.add(it)}) {
+        ec.withCleanupListener({lastRenderCleaners.add(it)}) {
             d(ec, observable.value)
         }
     }

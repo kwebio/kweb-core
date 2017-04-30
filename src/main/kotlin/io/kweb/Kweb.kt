@@ -244,6 +244,7 @@ class Kweb(val port: Int,
     }
 
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
+        // TODO: Should return handlem which can be used for cleanup of event listeners
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
