@@ -5,7 +5,6 @@ import io.kweb.dom.element.creation.tags.p
 import io.kweb.dom.element.modification.addText
 import io.kweb.dom.element.modification.setAttribute
 import io.kweb.dom.element.new
-import io.kweb.dom.element.read.read
 import kotlinx.coroutines.experimental.future.await
 import kotlinx.coroutines.experimental.future.future
 import mu.KotlinLogging

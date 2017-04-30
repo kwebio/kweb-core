@@ -10,7 +10,7 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 
 @KWebDSL
-class ElementReader(private val receiver: WebBrowser, private val jsExpression: String) {
+open class ElementReader(protected val receiver: WebBrowser, internal val jsExpression: String) {
     constructor(element : Element) : this(element.webBrowser, element.jsExpression)
 
     val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName")
@@ -22,7 +22,7 @@ class ElementReader(private val receiver: WebBrowser, private val jsExpression: 
             val numChildren = numChildrenR.toInt()
             val childList = ArrayList<Element>()
             for (ix in 0..numChildren) {
-                childList.add(Element(receiver, "$jsExpression.children[$ix]"))
+                childList.add(Element(receiver, null, "$jsExpression.children[$ix]"))
             }
             childList
         })

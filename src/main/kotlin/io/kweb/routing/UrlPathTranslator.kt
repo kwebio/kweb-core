@@ -169,6 +169,7 @@ class ClasspathScanner(vararg val packages: String) {
     val reflections = Reflections(config)
 
     fun getContext(entityClass: KClass<*>): Set<KClass<out Any>> {
+        // TODO: I think we need to cache this, it is very slow
         val subClasses = reflections.getSubTypesOf(entityClass.java).map { it.kotlin }
         return setOf(entityClass, *subClasses.toTypedArray())
     }

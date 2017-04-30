@@ -144,5 +144,9 @@ fun Element.addEventListener(eventName: String, returnEventFields : Set<String> 
 
 
 fun Element.delete() {
-    execute("$jsExpression.parentNode.removeChild($jsExpression)")
+    execute("$jsExpression.parentNode.removeChild($jsExpression);")
+}
+
+fun Element.deleteIfExists() {
+    execute("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
 }

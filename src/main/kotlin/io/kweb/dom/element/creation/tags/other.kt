@@ -4,6 +4,7 @@ import io.kweb.dom.attributes.attr
 import io.kweb.dom.attributes.set
 import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.ElementCreator
+import io.kweb.dom.element.read.ElementReader
 
 open class ULElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.ul(attributes: Map<String, Any> = attr) = ULElement(element("ul", attributes))
@@ -39,7 +40,13 @@ open class AElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.a(href : String? = null, attributes: Map<String, Any> = attr) = AElement(element("a",
         attributes.set("href", href)))
 
-open class TextAreaElement(parent: Element) : Element(parent)
+open class TextAreaElement(parent: Element) : Element(parent) {
+    override val read get() = TextAreaElementReader(this)
+}
+open class TextAreaElementReader(element : TextAreaElement) : ElementReader(element) {
+    val value get() = receiver.evaluate("($jsExpression.innerText);")
+}
+
 fun ElementCreator<Element>.textArea(rows : Int? = null, attributes: Map<String, Any> = attr) = TextAreaElement(element("textarea", attributes.set("rows", rows?.toString()).set("type", "text")))
 
 open class SelectElement(parent: Element) : Element(parent)

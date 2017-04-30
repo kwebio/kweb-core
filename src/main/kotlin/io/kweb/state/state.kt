@@ -1,11 +1,12 @@
 package io.kweb.state
 
 import io.kweb.dom.element.Element
+import io.kweb.dom.element.creation.Cleaner
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.dom.element.modification.delete
+import io.kweb.dom.element.modification.text
 import io.kweb.random
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.properties.Delegates.notNull
 
 /**
  * Created by ian on 4/3/17.
@@ -37,35 +38,51 @@ class Observable<T : Any?>(@Volatile private var state : T) {
         }
     }
 
-    fun <O> view(mapper : (T) -> O, unmapper : (T, O) -> T) : Observable<O> {
+    fun <O> view(mapper : (T) -> O, unmapper : ((T, O) -> T)? = null) : Observable<O> {
         val oobs = Observable(mapper(value))
         addListener { old, new ->
             oobs.changeTo(mapper(new))
         }
-        oobs.addListener({old, new ->
-            changeTo(unmapper(value, new))
-        })
+        if (unmapper != null) {
+            oobs.addListener({ old, new ->
+                changeTo(unmapper(value, new))
+            })
+        }
         return oobs
     }
 }
 
-fun <E : Element> ElementCreator<E>.bind() = RenderReceiver<E>(this)
+fun Element.text(oText : Observable<String>) {
+    text(oText.value)
+    oText.addListener{ old, new ->
+        text(new)
+    }
+}
+
+val <E : Element> ElementCreator<E>.bind get() = RenderReceiver<E>(this)
 
 class RenderReceiver<out E : Element>(private val ec : ElementCreator<E>) {
     fun <T : Any> to(observable: Observable<T>, d : ElementCreator<E>.(T) -> Unit) {
-        val previousChildren = ArrayList<Element>()
-        val newChildHandle = ec.addNewChildListener { previousChildren += it }
-        d(ec, observable.value)
-        ec.removeNewChildListener(newChildHandle)
-        observable.addListener({ oldState, newState ->
+        // TODO: We have to use the notNull() delegate because listenerId isn't known
+        // TODO: until after the call to addListener()
+        // TODO: This is ugly, perhaps listenerId should be passed as param to listener
+        var listenerId by notNull<Long>()
+        listenerId = observable.addListener({ oldState, newState ->
             if (oldState != newState) {
-                previousChildren.forEach({it.delete()})
-                previousChildren.clear()
-                val newChildHandle = ec.addNewChildListener { previousChildren += it }
-                d(ec, newState)
-                ec.removeNewChildListener(newChildHandle)
+                ec.onCleanup(true) {
+                    observable.removeListener(listenerId)
+                }
+                val cleanupListeners = ArrayList<Cleaner>()
+                ec.withCleanupListener({cleanupListeners.add(it)}) {
+                    d(ec, newState)
+                }
             }
         })
+
+        val cleanupListeners = ArrayList<Cleaner>()
+        ec.withCleanupListener({cleanupListeners.add(it)}) {
+            d(ec, observable.value)
+        }
     }
 }
 

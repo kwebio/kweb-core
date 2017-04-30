@@ -7,7 +7,6 @@ import io.mola.galimatias.URL
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import org.apache.commons.io.IOUtils
-import org.hotswap.agent.javassist.NotFoundException
 import org.jetbrains.ktor.application.ApplicationRequest
 import org.jetbrains.ktor.application.call
 import org.jetbrains.ktor.application.install
@@ -70,7 +69,7 @@ class Kweb(val port: Int,
 
     init {
 
-        //TODO: Need to do housekeeping to delete old client data
+        //TODO: Need to do housekeeping to deleteIfExists old client data
         clients = java.util.concurrent.ConcurrentHashMap<String, WSClientData>()
 
         val startHeadBuilder = StringBuilder()
@@ -148,7 +147,7 @@ class Kweb(val port: Int,
                         call.respondText("""
                         Internal Server Error.
 
-                        Please include code $logToken in any error report to help us track it down.
+                        Please include code $logToken in any message report to help us track it down.
 """.trimIndent())
                         logger.error(e) { "Exception thrown while rendering page, code $logToken" }
                     }
@@ -195,9 +194,9 @@ class Kweb(val port: Int,
     }
 
     private fun handleError(error: C2SWebsocketMessage.ErrorMessage, wsClientData: WSClientData) {
-        val debugInfo = wsClientData.debugTokens[error.debugToken] ?: throw RuntimeException("DebugInfo error not found")
+        val debugInfo = wsClientData.debugTokens[error.debugToken] ?: throw RuntimeException("DebugInfo message not found")
         val logStatementBuilder = StringBuilder()
-        logStatementBuilder.appendln("JavaScript error: '${error.error.message}'")
+        logStatementBuilder.appendln("JavaScript message: '${error.error.message}'")
         logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
         // TODO: Filtering the stacktrace like this seems a bit kludgy, although I can't think
         // TODO: of a specific reason why it would be bad.

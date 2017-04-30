@@ -67,6 +67,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val cards : SemanticUIClasses get() {
+        classes("cards")
+        return this
+    }
+
     val celled : SemanticUIClasses get() {
         classes("celled")
         return this
@@ -232,6 +237,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val info : SemanticUIClasses get() {
+        classes("info")
+        return this
+    }
+
     val input : SemanticUIClasses get() {
         classes("input")
         return this
@@ -283,6 +293,16 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val message : SemanticUIClasses get() {
+        classes("message")
+        return this
+    }
+
+    val negative : SemanticUIClasses get() {
+        classes("negative")
+        return this
+    }
+
     val nine : SemanticUIClasses get() {
         classes("nine")
         return this
@@ -327,6 +347,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val right : SemanticUIClasses get() {
         classes("right")
+        return this
+    }
+
+    val success : SemanticUIClasses get() {
+        classes("success")
         return this
     }
 
@@ -388,6 +413,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val small : SemanticUIClasses get() {
         classes("small")
+        return this
+    }
+
+    val submit : SemanticUIClasses get() {
+        classes("submit")
         return this
     }
 

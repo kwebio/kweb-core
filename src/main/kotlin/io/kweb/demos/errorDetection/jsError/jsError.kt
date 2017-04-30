@@ -8,6 +8,6 @@ import io.kweb.Kweb
 
 fun main(args: Array<String>) {
     Kweb(port = 4124, debug = true) {
-        doc.body.execute("deliberate error;")
+        doc.body.execute("deliberate message;")
     }
 }

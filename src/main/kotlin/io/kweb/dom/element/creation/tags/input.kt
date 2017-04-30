@@ -35,6 +35,6 @@ enum class InputType {
 
 fun ElementCreator<Element>.label(forId: String?, attributes: Map<String, Any> = attr) = LabelElement(element("label", attributes = attributes.set("for", forId)))
 
-fun ElementCreator<Element>.label(for_: Element?, attributes: Map<String, Any> = attr) = LabelElement(element("label", attributes = attributes.set("for", for_?.id)))
+fun ElementCreator<Element>.label(for_: Element? = null, attributes: Map<String, Any> = attr) = LabelElement(element("label", attributes = attributes.set("for", for_?.id)))
 
 open class LabelElement(wrapped: Element) : Element(wrapped)

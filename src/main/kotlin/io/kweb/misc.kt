@@ -4,10 +4,7 @@ import com.google.gson.Gson
 import io.kweb.dom.element.Element
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
@@ -62,3 +59,12 @@ val <T : Any> KClass<T>.pkg : String get() {
         throw RuntimeException("Cannot determine package for $this because it may be local or an anonymous object literal")
     }
 }
+
+class CacheResult<in I, out O>(val f : (I) -> O) {
+    private val cache = ConcurrentHashMap<I, O>()
+    operator fun get(i : I) {
+
+    }
+}
+
+data class NotFoundException(override val message: String) : Exception(message)

@@ -65,6 +65,7 @@ class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestI
                 doWork()
             } catch (t: Throwable) {
                 val sb = StringBuilder()
+                sb.appendln("Exception thrown in Kweb async {} block:\n$t")
                 t.stackTrace.pruneAndDumpStackTo(sb)
                 logger.error(sb.toString())
             }

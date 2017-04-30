@@ -5,7 +5,7 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.modification.addText
-import io.kweb.dom.element.modification.delete
+import io.kweb.dom.element.modification.deleteIfExists
 import io.kweb.dom.element.modification.text
 import io.kweb.dom.element.new
 import kotlinx.coroutines.experimental.future.await
@@ -67,12 +67,12 @@ fun main(args: Array<String>) {
 }
 
 // Here we use an extension method which can be used on any <UL> element to add a list item which will
-// delete itself when clicked.
+// deleteIfExists itself when clicked.
 fun ElementCreator<ULElement>.newListItem(text: String) {
     li().apply {
         addText(text)
         on.click {
-            delete()
+            deleteIfExists()
         }
     }
 }

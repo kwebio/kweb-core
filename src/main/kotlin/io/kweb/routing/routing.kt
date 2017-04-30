@@ -27,8 +27,7 @@ fun WebBrowser.pushState(path: String) {
 
 inline fun <reified T : Any> WebBrowser.route(receiver: (RequestURL<T>).() -> Unit) {
     val requestUrl = with(httpRequestInfo.requestedUrl) {
-        this.query()
-        RequestURL<T>(scheme = Scheme.valueOf(scheme()), host = host().toHumanString(), port = port(), path = Observable(urlPathTranslator.parse(path())), query = Observable(query()), rawUrl = this)
+        RequestURL<T>(scheme = Scheme.valueOf(scheme()), host = host().toHumanString(), port = port(), path = Observable(urlPathTranslator.parse(path())), query = Observable(query() ?: ""), rawUrl = this)
     }
     requestUrl.path.addListener { _, new ->
         pushState(urlPathTranslator.toPath(new) + requestUrl.query.value)

@@ -17,7 +17,7 @@ import io.kweb.dom.element.new
  * @sample document_sample
  */
 class Document(val receiver: WebBrowser) {
-    fun getElementById(id: String) = Element(receiver, "document.getElementById(\"$id\")")
+    fun getElementById(id: String) = Element(receiver, null, "document.getElementById(\"$id\")")
 
     val cookie = CookieReceiver(receiver)
 
@@ -30,7 +30,7 @@ class Document(val receiver: WebBrowser) {
  *
  * @sample document_sample
  */
-class BodyElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, "document.body", "body", id)
+class BodyElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, null, "document.body", "body", id)
 
 private fun document_sample() {
     Kweb(port = 1234) {

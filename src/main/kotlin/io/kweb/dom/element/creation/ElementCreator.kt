@@ -2,25 +2,25 @@ package io.kweb.dom.element.creation
 
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.element.Element
+import io.kweb.dom.element.modification.delete
 import io.kweb.plugins.KWebPlugin
 import io.kweb.random
 import io.kweb.toJson
 import mu.KLogging
-import java.util.concurrent.ConcurrentHashMap
+import java.util.*
 import kotlin.reflect.KClass
 
 /**
  * Created by ian on 1/13/17.
  */
 
-
-// these should return Element, not ElementCreators.  If they want to create more
-// within a dsl let them type element.create().ul()...
-
+typealias Cleaner = () -> Unit
 
 open class ElementCreator<out PARENT_TYPE : Element>(val parent: PARENT_TYPE, val position : Int? = null) {
 
     companion object: KLogging()
+
+    private val cleanupListeners = LinkedList<(Cleaner) -> Unit>()
 
     var elementCreationCount = 0
 
@@ -54,20 +54,34 @@ open class ElementCreator<out PARENT_TYPE : Element>(val parent: PARENT_TYPE, va
             appendln("}")
         }
         parent.execute(javaScript.toString())
-        val newElement = Element(parent.webBrowser, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
-        newChildListeners.values.forEach({it(newElement)})
+        val newElement = Element(parent.webBrowser, this, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+        onCleanup(withParent = false) {
+            newElement.delete()
+        }
         return newElement
     }
 
     fun require(vararg plugins: KClass<out KWebPlugin>) = parent.webBrowser.require(*plugins)
 
-    private val newChildListeners = ConcurrentHashMap<Long, (Element) -> Unit>()
-    fun addNewChildListener(listener : (Element) -> Unit) : Long {
-        val handle = random.nextLong()
-        newChildListeners[handle] = listener
-        return handle
+    fun onCleanup(withParent : Boolean, f : Cleaner) {
+        if (withParent) {
+            parent.creator?.onCleanup(true, f)
+        }
+        cleanupListeners.firstOrNull()?.invoke(f)
     }
-    fun removeNewChildListener(handle : Long) {
-        newChildListeners.remove(handle)
+
+    fun <R> withCleanupListener(listener : (Cleaner) -> Unit, receiver: ElementCreator<PARENT_TYPE>.() -> R) : R {
+        this.pushCleanupListener(listener)
+        val r = receiver.invoke(this)
+        this.popCleanupListener()
+        return r
+    }
+
+    private fun pushCleanupListener(listener : (Cleaner) -> Unit) {
+        cleanupListeners.addFirst(listener)
+    }
+
+    private fun popCleanupListener() {
+        cleanupListeners.removeFirst()
     }
 }

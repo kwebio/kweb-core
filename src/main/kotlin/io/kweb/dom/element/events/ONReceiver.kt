@@ -5,6 +5,7 @@ import io.kweb.dom.element.Element
 import io.kweb.dom.element.KWebDSL
 import io.kweb.dom.element.modification.addEventListener
 import io.kweb.gson
+import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
@@ -12,6 +13,8 @@ import kotlin.reflect.full.memberProperties
 // TODO: Should this subclass Element?
 @KWebDSL
 open class ONReceiver(private val parent: Element) : Element(parent) {
+    val logger = KotlinLogging.logger {}
+
     open class Event(open val type : String)
 
     data class MouseEvent(val type : String, val detail : Long,
@@ -42,7 +45,11 @@ open class ONReceiver(private val parent: Element) : Element(parent) {
         val eventPropertyNames = Companion.memberProperties(eventType)
         return event(eventName, eventPropertyNames, {propertiesAsString ->
             val props : T = gson.fromJson(propertiesAsString)
-            callback(props)
+            try {
+                callback(props)
+            } catch (e : Exception) {
+                logger.error(e, {"Exception thrown by callback in response to $eventName event"})
+            }
         })
     }
 
@@ -66,7 +73,7 @@ open class ONReceiver(private val parent: Element) : Element(parent) {
     // Frame / Object Events TODO: define eventtype
     fun abort(callback: (String) -> Unit) = event("abort", callback = callback)
     fun beforeunload(callback: (String) -> Unit) = event("beforeunload", callback = callback)
-    fun error(callback: (String) -> Unit) = event("error", callback = callback)
+    fun error(callback: (String) -> Unit) = event("message", callback = callback)
     fun hashchange(callback: (String) -> Unit) = event("hashchange", callback = callback)
     fun load(callback: (String) -> Unit) = event("load", callback = callback)
     fun pageshow(callback: (String) -> Unit) = event("pageshow", callback = callback)
@@ -120,8 +127,8 @@ open class ONReceiver(private val parent: Element) : Element(parent) {
     fun emptied(callback: (String) -> Unit) = event("emptied", callback = callback)
     /** The event occurs when the media has reach the end (useful for messages like "thanks for listening") **/
     fun ended(callback: (String) -> Unit) = event("ended", callback = callback)
-    /** The event occurs when an error occurred during the loading of a media file **/
-    fun error(callback: (String) -> Unit) = event("error", callback = callback)
+    /** The event occurs when an message occurred during the loading of a media file **/
+    fun message(callback: (String) -> Unit) = event("message", callback = callback)
     /** The event occurs when media data is loaded **/
     fun loadeddata(callback: (String) -> Unit) = event("loadeddata", callback = callback)
     /** The event occurs when meta data (like dimensions and duration) are loaded **/

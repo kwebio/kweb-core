@@ -114,6 +114,13 @@
                 el.className = el.className.replace(reg, ' ')
             }
         }
+
+        function removeElementByIdIfExists(id) {
+            var e = document.getElementById(id)
+            if (e) {
+                e.parentNode.removeChild(e)
+            }
+        }
         var docCookies = {
             getItem: function (sKey) {
                 if (!sKey || !this.hasItem(sKey)) { return "__COOKIE_NOT_FOUND_TOKEN__"; }

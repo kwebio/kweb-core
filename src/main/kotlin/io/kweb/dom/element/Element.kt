@@ -4,16 +4,11 @@ import io.kweb.Kweb
 import io.kweb.WebBrowser
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.modification.removeChildAt
 import io.kweb.dom.element.modification.setAttribute
 import io.kweb.dom.element.modification.text
-import io.kweb.dom.element.read.read
+import io.kweb.dom.element.read.ElementReader
 import io.kweb.plugins.KWebPlugin
-import kotlinx.coroutines.experimental.future.await
-import kotlinx.coroutines.experimental.future.future
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
 @DslMarker
@@ -21,8 +16,8 @@ annotation class KWebDSL
 
 
 @KWebDSL
-open class Element (open val webBrowser: WebBrowser, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
-    constructor(element: Element) : this(element.webBrowser, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
+open class Element (open val webBrowser: WebBrowser, internal val creator : ElementCreator<*>?, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
+    constructor(element: Element) : this(element.webBrowser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
      *********/
@@ -56,6 +51,8 @@ open class Element (open val webBrowser: WebBrowser, open var jsExpression: Stri
     fun require(vararg plugins: KClass<out KWebPlugin>) = webBrowser.require(*plugins)
 
     fun <P : KWebPlugin> plugin(plugin: KClass<P>) = webBrowser.plugin(plugin)
+
+    open val read: ElementReader get() = ElementReader(this)
 }
 
 /**
@@ -77,10 +74,11 @@ fun <T : Element> T.new(position : Int? = null): ElementCreator<T> = ElementCrea
  *
  * @sample new_sample_2
  */
-fun <T : Element> T.new(position : Int? = null, receiver: ElementCreator<T>.() -> Unit) : Element {
-    receiver(new(position))
-    return this
+fun <T : Element, R : Any> T.new(position : Int? = null, receiver: ElementCreator<T>.() -> R) : R {
+    val r = receiver(new(position))
+    return r
 }
+
 
 // Element Attribute modifiers
 
