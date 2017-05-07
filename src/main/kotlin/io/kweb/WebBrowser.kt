@@ -13,11 +13,11 @@ import kotlin.reflect.jvm.jvmName
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
  * expressions and retrieve the result.
  */
-class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val cc: Kweb, val response: String? = null) {
+class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb, val response: String? = null) {
     companion object: KLogging()
 
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
-        cc.appliedPlugins.map { it::class to it }.toMap()
+        kweb.appliedPlugins.map { it::class to it }.toMap()
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -36,11 +36,11 @@ class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestI
     }
 
     fun execute(js: String) {
-        cc.execute(clientId, js)
+        kweb.execute(clientId, js)
     }
 
     fun executeWithCallback(js: String, callbackId: Int, callback: (String) -> Unit) {
-        cc.executeWithCallback(clientId, js, callbackId, callback)
+        kweb.executeWithCallback(clientId, js, callbackId, callback)
     }
 
     fun evaluate(js: String): CompletableFuture<String> {
@@ -54,7 +54,7 @@ class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestI
 
 
     fun evaluateWithCallback(js: String, rh: WebBrowser.() -> Boolean) {
-        cc.evaluate(clientId, js, { rh.invoke(WebBrowser(clientId, httpRequestInfo, cc, it)) })
+        kweb.evaluate(clientId, js, { rh.invoke(WebBrowser(clientId, httpRequestInfo, kweb, it)) })
     }
 
     val doc = Document(this)

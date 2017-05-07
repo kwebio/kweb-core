@@ -20,7 +20,6 @@
             }
             var execute = msg["execute"];
             if (execute !== undefined) {
-                console.log("Executing: " + execute["js"])
                 try {
                     eval(execute["js"])
                 } catch (err) {
@@ -55,7 +54,6 @@
         }
         function connectWs() {
             var wsURL = toWSUrl("ws");
-            console.log("Connecting to "+wsURL);
             socket = new WebSocket(wsURL);
             if (window.WebSocket === undefined) {
                 document.body.innerHTML = "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>"

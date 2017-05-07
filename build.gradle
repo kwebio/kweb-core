@@ -86,16 +86,12 @@ dependencies {
     compile('io.mola.galimatias:galimatias:0.2.0')
 
     compile 'io.github.microutils:kotlin-logging:1.4.2'
-    // Libraries shouldn't include logger implementations
-    // compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
-
     compile("org.reflections:reflections:0.9.11")
 
-    testCompile 'io.kotlintest:kotlintest:1.3.4'
-    testCompile 'com.moodysalem:phantomjs-wrapper:3.0.0'
-    testCompile 'com.moodysalem:phantomjs-wrapper-windows-binary:3.0.0'
-    testCompile 'com.moodysalem:phantomjs-wrapper-linux-binary:3.0.0'
-    testCompile 'com.moodysalem:phantomjs-wrapper-macosx-binary:3.0.0'
+    testCompile 'net.sourceforge.htmlunit:htmlunit:2.26'
+    testCompile 'io.kotlintest:kotlintest:2.0.1'
+    testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
 
     // Should be compileOnly
     compileOnly 'com.github.HotswapProjects.HotswapAgent:hotswap-agent-core:1.1.0-SNAPSHOT'

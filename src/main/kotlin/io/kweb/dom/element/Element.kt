@@ -16,7 +16,7 @@ annotation class KWebDSL
 
 
 @KWebDSL
-open class Element (open val webBrowser: WebBrowser, internal val creator : ElementCreator<*>?, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
+open class Element (open val webBrowser: WebBrowser, val creator : ElementCreator<*>?, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
     constructor(element: Element) : this(element.webBrowser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods

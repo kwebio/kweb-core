@@ -1,5 +1,6 @@
 package io.kweb
 
+import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.FreeSpec
 
 /**
