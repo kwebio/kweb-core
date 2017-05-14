@@ -24,6 +24,7 @@ import org.jetbrains.ktor.websocket.Frame
 import org.jetbrains.ktor.websocket.WebSocket
 import org.jetbrains.ktor.websocket.readText
 import org.jetbrains.ktor.websocket.webSocket
+import java.io.Closeable
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -60,7 +61,7 @@ class Kweb(val port: Int,
            val onError : ((List<StackTraceElement>, io.kweb.JavaScriptError) -> io.kweb.LogError) = { _, _ ->  true},
            val maxPageBuildTimeMS : Long = 200,
            val buildPage: WebBrowser.() -> Unit
-) : AutoCloseable {
+) : Closeable {
     companion object: mu.KLogging()
 
     private val server: org.jetbrains.ktor.netty.NettyApplicationHost
