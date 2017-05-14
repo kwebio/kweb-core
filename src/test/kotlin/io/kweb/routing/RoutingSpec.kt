@@ -44,7 +44,7 @@ class RoutingSpec : FreeSpec() {
             Kweb(port = 4235) {
                 route<FooPath> {
                     doc.body.new {
-                        bind.to(path) {
+                        bind.to(obsPath) {
                             when (it) {
                                 is FooPath.Root -> {
                                     h1().text("Root")
@@ -54,7 +54,7 @@ class RoutingSpec : FreeSpec() {
                                 }
                                 is FooPath.Cats -> {
                                     h1(attributes = attr.id("clickableHeader")).text("${it.k1}-${it.k2}").on.click {
-                                        path.changeTo(FooPath.Dogs("doggie"))
+                                        obsPath.changeTo(FooPath.Dogs("doggie"))
                                     }
                                 }
                             }
@@ -107,20 +107,20 @@ class RoutingSpec : FreeSpec() {
 }
 
 val Duration.millis get() = this.timeUnit.toMillis(amount)
-
 fun <T> pollFor(maximumTime: io.kotlintest.Duration, pollEvery : Duration = 100.milliseconds, f: () -> T): T {
     val end = System.nanoTime() + maximumTime.nanoseconds
     var times = 0
+    var lastException : Exception? = null
     while (System.nanoTime() < end) {
         try {
             return f()
         } catch (e: Exception) {
-            // This space intentionally left blank
+            lastException = e
         }
         Thread.sleep(pollEvery.millis)
         times++
     }
-    throw AssertionError("Test failed after ${maximumTime.amount} ${maximumTime.timeUnit}; attempted $times times")
+    throw AssertionError("Test failed after ${maximumTime.amount} ${maximumTime.timeUnit}; attempted $times times", lastException!!)
 }
 
 sealed class FooPath {

@@ -25,6 +25,7 @@ import org.jetbrains.ktor.websocket.WebSocket
 import org.jetbrains.ktor.websocket.readText
 import org.jetbrains.ktor.websocket.webSocket
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by ian on 12/31/16.
@@ -59,10 +60,10 @@ class Kweb(val port: Int,
            val onError : ((List<StackTraceElement>, io.kweb.JavaScriptError) -> io.kweb.LogError) = { _, _ ->  true},
            val maxPageBuildTimeMS : Long = 200,
            val buildPage: WebBrowser.() -> Unit
-) {
+) : AutoCloseable {
     companion object: mu.KLogging()
 
-    private var server: org.jetbrains.ktor.netty.NettyApplicationHost?
+    private val server: org.jetbrains.ktor.netty.NettyApplicationHost
     private val clients: MutableMap<String, io.kweb.WSClientData>
     private val mutableAppliedPlugins: MutableSet<io.kweb.plugins.KWebPlugin> = java.util.HashSet()
     val appliedPlugins: Set<io.kweb.plugins.KWebPlugin> get() = mutableAppliedPlugins
@@ -265,6 +266,10 @@ class Kweb(val port: Int,
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
         wsClientData.send(S2CWebsocketMessage(clientId, evaluate = S2CWebsocketMessage.Evaluate(expression, callbackId), debugToken = debugToken))
+    }
+
+    override fun close() {
+        server.stop(0, 0, TimeUnit.SECONDS)
     }
 
 }

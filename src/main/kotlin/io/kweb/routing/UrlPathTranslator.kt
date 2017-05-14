@@ -1,8 +1,5 @@
 package io.kweb.routing
 
-/**
- * Created by @jmdesprez, modified by @sanity
- */
 import io.kweb.pkg
 import io.kweb.routing.ParsingResult.NoValue
 import io.kweb.routing.ParsingResult.ValueExtracted
@@ -19,21 +16,25 @@ import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.javaType
 
 /**
- * Translates between URL paths and objects.
- */
-
-
-
+ * Uses reflection to convert between a Kotlin data object and a
+ * [URL obsPath](https://url.spec.whatwg.org/#concept-url-obsPath), and back again.
+ *
+ * @author [Desprez Jean-Marc](https://github.com/jmdesprez, modifications)
+ * @author [Ian Clarke](https://github.com/sanity)
+ **/
 class UrlPathTranslator(val contextProvider: ((KClass<*>) -> Set<KClass<out Any>>)?) {
 
+    /**
+     * @param pathObjectPackage The name of the package in which the obsPath data class and any
+     *                          related classes are defined.
+     */
     constructor(vararg pathObjectPackage: String) : this(if (pathObjectPackage.isEmpty()) null else ClasspathScanner(*pathObjectPackage)::getContext)
 
     /**
-     * Build the an Entity using the given data list. Rules are:
+     * Build the an Entity using the given data list.  For internal use only, but must
+     * be public because [UrlPathTranslator.parse] calls it and is public.
      *
-     * - the first element of the list is the name of the root entity
-     * TODO complete doc
-     *
+     * @suppress
      */
     // TODO make sure the cast is actually really really safe
     @Suppress("UNCHECKED_CAST")
@@ -115,9 +116,21 @@ class UrlPathTranslator(val contextProvider: ((KClass<*>) -> Set<KClass<out Any>
         }.firstOrNull() as T?
     }
 
+    /**
+     * Convert an object to a obsPath
+     *
+     * @sample toPath_sample
+     */
     fun toPath(obj: Any): String = "/" + toPathList(obj).joinToString(separator = "/")
 
-    fun toPathList(obj: Any): List<String> {
+    internal fun toPath_sample() {
+        data class Users(val userId : Int)
+        val urlPathTranslator = UrlPathTranslator("io.kweb.routing")
+        val pathAsString = urlPathTranslator.toPath(Users(152))
+        assert(pathAsString == "/users/152")
+    }
+
+    private fun toPathList(obj: Any): List<String> {
         val entityPathElement = obj::class.simpleName!!.toLowerCase().let {
             if (it == "root") {
                 emptyList()
@@ -141,6 +154,12 @@ class UrlPathTranslator(val contextProvider: ((KClass<*>) -> Set<KClass<out Any>
     }
 }
 
+/**
+ * Convert a obsPath to an object.
+ *
+ * @sample parse_sample
+ */
+
 inline fun <reified T : Any> UrlPathTranslator.parse(url: String): T {
     val parts = url.trim('/').split('/').filter { it.isNotEmpty() }
 
@@ -149,15 +168,23 @@ inline fun <reified T : Any> UrlPathTranslator.parse(url: String): T {
         val name = kClass.simpleName?.toLowerCase()
         name == realEntityName
     }.let { entity ->
-        entity ?: throw UrlParseException("Unable to parse URL path `$url`")
+        entity ?: throw UrlParseException("Unable to parse URL obsPath `$url`")
     }
+}
+
+internal fun parse_sample() {
+    data class Items(val itemId : Int)
+    data class Users(val userId : Int, val item: Items)
+    val urlPathTranslator = UrlPathTranslator("io.kweb.routing")
+    val pathAsObject = urlPathTranslator.parse<Users>("/users/152/items/12")
+    assert(pathAsObject == Users(userId = 152, item = Items(itemId = 12)))
 }
 
 class UrlParseException(reason: String) : Exception(reason)
 
 
 // TODO This is not optimal because a child of a sealed class no longer need to be nested
-fun <T : Any> KClass<T>.meAndNested() = setOf(this, *nestedClasses.toTypedArray())
+private fun <T : Any> KClass<T>.meAndNested() = setOf(this, *nestedClasses.toTypedArray())
 
 class ClasspathScanner(vararg val packages: String) {
     val config = ConfigurationBuilder().apply {
@@ -169,7 +196,7 @@ class ClasspathScanner(vararg val packages: String) {
     val reflections = Reflections(config)
 
     fun getContext(entityClass: KClass<*>): Set<KClass<out Any>> {
-        // TODO: I think we need to cache this, it is very slow
+        // TODO: I think we need to cache this, it is very slow - ian
         val subClasses = reflections.getSubTypesOf(entityClass.java).map { it.kotlin }
         return setOf(entityClass, *subClasses.toTypedArray())
     }

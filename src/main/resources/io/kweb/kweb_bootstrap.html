@@ -120,7 +120,7 @@
             }
         }
         var docCookies = {
-            getItem: function (sKey) {
+            getItems: function (sKey) {
                 if (!sKey || !this.hasItem(sKey)) { return "__COOKIE_NOT_FOUND_TOKEN__"; }
                 return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
             },
@@ -131,7 +131,7 @@
              * @argument sValue (String): the value of the cookie;
              * @optional argument vEnd (Number, String, Date Object or null): the max-age in seconds (e.g., 31536e3 for a year) or the
              *  expires date in GMTString format or in Date Object format; if not specified it will expire at the end of session;
-             * @optional argument sPath (String or null): e.g., "/", "/mydir"; if not specified, defaults to the current path of the current document location;
+             * @optional argument sPath (String or null): e.g., "/", "/mydir"; if not specified, defaults to the current obsPath of the current document location;
              * @optional argument sDomain (String or null): e.g., "example.com", ".example.com" (includes all subdomains) or "subdomain.example.com"; if not
              * specified, defaults to the host portion of the current document location;
              * @optional argument bSecure (Boolean or null): cookie will be transmitted only over secure protocol as https;

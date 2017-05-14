@@ -45,7 +45,7 @@ class UrlPathParserSpec : FreeSpec() {
     init {
         val urlPathParser = UrlPathTranslator()
 
-        "test URL path parsing" - {
+        "test URL obsPath parsing" - {
             val parseableUrls = table(
                     headers("url", "parsedUrl"),
                     row<String, Entity>("/", Entity.Root()),
@@ -63,7 +63,7 @@ class UrlPathParserSpec : FreeSpec() {
             }
         }
 
-        "test URL path generation" - {
+        "test URL obsPath generation" - {
             val parseableUrls = table(
                     headers("url", "parsedUrl"),
                     row<String, Entity>("/", Entity.Root()),
