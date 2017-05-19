@@ -43,6 +43,10 @@ class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestI
         kweb.executeWithCallback(clientId, js, callbackId, callback)
     }
 
+    fun removeCallback(callbackId: Int) {
+        kweb.removeCallback(clientId, callbackId)
+    }
+
     fun evaluate(js: String): CompletableFuture<String> {
         val cf = CompletableFuture<String>()
         evaluateWithCallback(js) {

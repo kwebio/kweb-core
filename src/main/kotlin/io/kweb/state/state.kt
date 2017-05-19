@@ -7,6 +7,7 @@ import io.kweb.dom.element.modification.text
 import io.kweb.random
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
+import kotlin.properties.Delegates
 import kotlin.properties.Delegates.notNull
 
 /**
@@ -19,7 +20,7 @@ import kotlin.properties.Delegates.notNull
  *
  * @sample observable_sample
  */
-class Observable<T : Any?>(@Volatile private var state : T) {
+class Observable<T : Any?>(@Volatile private var _value: T) {
     private val listeners = ConcurrentHashMap<Long, (T, T) -> Unit>()
 
     fun addListener(listener : (T, T) -> Unit) : Long {
@@ -28,35 +29,34 @@ class Observable<T : Any?>(@Volatile private var state : T) {
         return handle
     }
 
-    fun removeListener(handle : Long) = listeners.remove(handle)
+    var value : T by Delegates.observable(_value) {
+        prop, old, new -> listeners.values.forEach { it(old, new) }
 
-    val value get() = state
-
-    @Synchronized fun changeTo(newVal : T) {
-        if (newVal != state) {
-            listeners.values.forEach { it(state, newVal) }
-            state = newVal
-        }
     }
 
+    fun removeListener(handle : Long) = listeners.remove(handle)
+
     fun <O> view(mapper : (T) -> O, unmapper : ((T, O) -> T)? = null) : Observable<O> {
-        val oobs = Observable(mapper(value))
+        val viewObservable = Observable(mapper(value))
         addListener { old, new ->
-            oobs.changeTo(mapper(new))
+            viewObservable.value = mapper(new)
         }
         if (unmapper != null) {
-            oobs.addListener({ old, new ->
-                changeTo(unmapper(value, new))
+            viewObservable.addListener({ old, new ->
+                value = unmapper(value, new)
             })
         }
-        return oobs
+        return viewObservable
     }
 }
 
 fun Element.text(oText : Observable<String>) {
     text(oText.value)
-    oText.addListener{ old, new ->
+    val handle = oText.addListener{ old, new ->
         text(new)
+    }
+    this.creator?.onCleanup(true) {
+        oText.removeListener(handle)
     }
 }
 
@@ -93,6 +93,6 @@ fun observable_sample() {
     val handle = obs.addListener( {old, new ->
         println("obs changed to $old to $new")
     })
-    obs.changeTo("Goodbye") // Will print "obs changed to Hello to Goodbye"
+    obs.value = "Goodbye" // Will print "obs changed to Hello to Goodbye"
     obs.removeListener(handle)
 }

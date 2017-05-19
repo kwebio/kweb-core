@@ -54,7 +54,7 @@ class RoutingSpec : FreeSpec() {
                                 }
                                 is FooPath.Cats -> {
                                     h1(attributes = attr.id("clickableHeader")).text("${it.k1}-${it.k2}").on.click {
-                                        obsPath.changeTo(FooPath.Dogs("doggie"))
+                                        obsPath.value = FooPath.Dogs("doggie")
                                     }
                                 }
                             }

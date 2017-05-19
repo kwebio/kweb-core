@@ -139,6 +139,9 @@ fun Element.addEventListener(eventName: String, returnEventFields : Set<String> 
     webBrowser.executeWithCallback(js, callbackId) { payload ->
         callback.invoke(payload)
     }
+    this.creator?.onCleanup(true) {
+        webBrowser.removeCallback(callbackId)
+    }
     return this
 }
 

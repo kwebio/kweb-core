@@ -36,10 +36,7 @@ open class ONReceiver(private val parent: Element) : Element(parent) {
                              val animationName : String, val elapsedTime : Int)
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (String) -> Unit): Element {
-        val listenerId = parent.addEventListener(eventName, returnEventFields = returnEventFields, callback = callback)
-        parent.creator?.onCleanup(true) {
-
-        }
+        parent.addEventListener(eventName, returnEventFields = returnEventFields, callback = callback)
         return parent
     }
 

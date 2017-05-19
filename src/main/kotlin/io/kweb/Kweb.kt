@@ -246,7 +246,7 @@ class Kweb(val port: Int,
     }
 
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
-        // TODO: Should return handlem which can be used for cleanup of event listeners
+        // TODO: Should return handle which can be used for cleanup of event listeners
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
@@ -255,6 +255,10 @@ class Kweb(val port: Int,
         }
         wsClientData.handlers.put(callbackId, handler)
         wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = S2CWebsocketMessage.Execute(javascript), debugToken = debugToken))
+    }
+
+    fun removeCallback(clientId: String, callbackId: Int) {
+        clients.get(clientId)?.handlers?.remove(callbackId)
     }
 
     fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
