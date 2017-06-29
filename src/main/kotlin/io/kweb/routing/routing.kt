@@ -4,7 +4,7 @@ import io.kweb.Kweb
 import io.kweb.WebBrowser
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
-import io.kweb.state.Watchable
+import io.kweb.state.Bindable
 import io.mola.galimatias.URL
 import java.net.URLDecoder
 
@@ -34,8 +34,8 @@ inline fun <reified T : Any> WebBrowser.route(receiver: (RequestURL<T>).() -> Un
                 scheme = Scheme.valueOf(scheme()),
                 host = host().toHumanString(),
                 port = port(),
-                obsPath = Watchable(urlPathTranslator.parse(path())),
-                query = Watchable(query() ?: ""),
+                obsPath = Bindable(urlPathTranslator.parse(path())),
+                query = Bindable(query() ?: ""),
                 rawUrl = this
         )
     }
@@ -48,7 +48,7 @@ inline fun <reified T : Any> WebBrowser.route(receiver: (RequestURL<T>).() -> Un
     receiver(requestUrl)
 }
 
-data class RequestURL<T : Any>(val scheme: Scheme, val host: String, val port: Int = 80, val obsPath: Watchable<T>, val query: Watchable<String>, val rawUrl: URL) {
+data class RequestURL<T : Any>(val scheme: Scheme, val host: String, val port: Int = 80, val obsPath: Bindable<T>, val query: Bindable<String>, val rawUrl: URL) {
     private fun queryToQueryMap(query: String): Map<String, String> {
         val pairs = query.split("&".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         val queryMap = HashMap<String, String>()

@@ -6,15 +6,15 @@ import io.kotlintest.specs.FreeSpec
 /**
  * Created by ian on 6/18/17.
  */
-class WatchableSpec : FreeSpec() {
+class BindableSpec : FreeSpec() {
     init {
-        "A Watchable should initialize correctly" {
-            val sw = ReadOnlyWatchable("Test")
+        "A Bindable should initialize correctly" {
+            val sw = ReadOnlyBindable("Test")
             sw.value shouldBe "Test"
         }
 
-        "A Watchable should notify a listener of a change" {
-            val sw = Watchable("Foo")
+        "A Bindable should notify a listener of a change" {
+            val sw = Bindable("Foo")
             var old : String? = null
             var new : String? = null
             sw.addListener { o, n ->
@@ -28,7 +28,7 @@ class WatchableSpec : FreeSpec() {
             new shouldBe "Bar"
         }
         "A removed listener shouldn't be called" {
-            val sw = Watchable("Foo")
+            val sw = Bindable("Foo")
             var old : String? = null
             var new : String? = null
             val listenerHandler = sw.addListener { o, n ->
@@ -44,7 +44,7 @@ class WatchableSpec : FreeSpec() {
         }
 
         "A read-only mapped watcher should work" {
-            val sw = Watchable("Foo")
+            val sw = Bindable("Foo")
             val mapped = sw.map {it -> it.length}
             mapped.value shouldBe 3
             sw.value = "Hello"
@@ -53,7 +53,7 @@ class WatchableSpec : FreeSpec() {
 
         "A bi-directional mapped watcher should work" {
             data class Foo(var bar : Int)
-            val sw = Watchable(Foo(12))
+            val sw = Bindable(Foo(12))
             val mapped = sw.map({it.bar.toString()}, {n, o -> n.copy(bar = o.toInt())})
             sw.value shouldBe Foo(12)
             mapped.value = "143"

@@ -13,10 +13,10 @@ import kotlin.properties.Delegates
  * Stores a value which can change, and allows listeners to be attached which will be called if/when the
  * value changes.
  *
- * @sample watchable_sample
+ * @sample bindable_sample
  */
 
-open class ReadOnlyWatchable<T : Any>(initialValue: T) {
+open class ReadOnlyBindable<T : Any>(initialValue: T) {
     private @Volatile var isClosed = false
 
     protected val listeners = ConcurrentHashMap<Long, (T, T) -> Unit>()
@@ -41,16 +41,18 @@ open class ReadOnlyWatchable<T : Any>(initialValue: T) {
         listeners.remove(handle)
     }
 
-    fun <O : Any> map(mapper: (T) -> O): ReadOnlyWatchable<O> {
+    fun <O : Any> map(mapper: (T) -> O): ReadOnlyBindable<O> {
         assertNotClosed()
-        val newObservable = ReadOnlyWatchable(mapper(value_))
-        addListener { old, new ->
+        val newObservable = ReadOnlyBindable(mapper(value_))
+        val handle = addListener { old, new ->
             if (new != value_) {
                 val mappedValue = mapper(new)
                 newObservable.value_ = mappedValue
                 newObservable.listeners.values.forEach { it(mapper(old), mappedValue) }
             }
         }
+        newObservable.onClose { removeListener(handle) }
+        this.onClose { newObservable.close() }
         return newObservable
     }
 
@@ -70,35 +72,36 @@ open class ReadOnlyWatchable<T : Any>(initialValue: T) {
 
     internal fun assertNotClosed() {
         if (isClosed) {
-            throw RuntimeException("Not permitted after Watchable is closed()")
+            throw RuntimeException("Not permitted after Bindable is closed()")
         }
     }
 }
 
-class Watchable<T : Any>(initialValue: T) : ReadOnlyWatchable<T>(initialValue) {
-    override var value: T by Delegates.observable(initialValue) { prop, old, new ->
+class Bindable<T : Any>(initialValue: T) : ReadOnlyBindable<T>(initialValue) {
+    override var value: T by Delegates.observable(initialValue) { _, old, new ->
         assertNotClosed()
         if (old != new) {
             listeners.values.forEach { it(old, new) }
         }
     }
 
-    fun <O : Any> map(mapper: (T) -> O, unmapper: ((T, O) -> T)): Watchable<O> {
+    fun <O : Any> map(mapper: (T) -> O, unmapper: ((T, O) -> T)): Bindable<O> {
         assertNotClosed()
-        val mappedObservable = Watchable(mapper(value))
-        // TODO: Should these be cleaned up somehow, or will JVM garbage collection take care of it?
-        addListener { old, new ->
+        val mappedObservable = Bindable(mapper(value))
+        val myChangeHandle = addListener { _, new ->
             mappedObservable.value = mapper(new)
         }
-        mappedObservable.addListener({ old, new ->
+        onClose { removeListener(myChangeHandle) }
+        val origChangeHandle = mappedObservable.addListener({ old, new ->
             value = unmapper(value, new)
         })
+        onClose { mappedObservable.removeListener(origChangeHandle)}
         return mappedObservable
     }
 }
 
-fun watchable_sample() {
-    val obs = Watchable("Hello")
+fun bindable_sample() {
+    val obs = Bindable("Hello")
     val handle = obs.addListener( {old, new ->
         println("obs changed to $old to $new")
     })

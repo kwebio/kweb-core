@@ -26,7 +26,7 @@ if "%ERRORLEVEL%" == "0" goto init
 echo.
 echo ERROR: JAVA_HOME is not setString and no 'java' command could be found in your PATH.
 echo.
-echo Please setString the JAVA_HOME variable in your environment to bind the
+echo Please setString the JAVA_HOME variable in your environment to asBindable the
 echo location of your Java installation.
 
 goto fail
@@ -40,7 +40,7 @@ if exist "%JAVA_EXE%" goto init
 echo.
 echo ERROR: JAVA_HOME is setString to an invalid directory: %JAVA_HOME%
 echo.
-echo Please setString the JAVA_HOME variable in your environment to bind the
+echo Please setString the JAVA_HOME variable in your environment to asBindable the
 echo location of your Java installation.
 
 goto fail

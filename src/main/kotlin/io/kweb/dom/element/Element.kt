@@ -7,7 +7,7 @@ import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.modification.StyleReceiver
 import io.kweb.dom.element.read.ElementReader
 import io.kweb.plugins.KWebPlugin
-import io.kweb.state.ReadOnlyWatchable
+import io.kweb.state.ReadOnlyBindable
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
@@ -87,7 +87,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
         return this
     }
 
-    fun setAttribute(name : String, oValue : ReadOnlyWatchable<Any>) : Element {
+    fun setAttribute(name : String, oValue : ReadOnlyBindable<Any>) : Element {
         setAttribute(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
             setAttribute(name, newValue)
@@ -187,16 +187,16 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
     }
 
     /**
-     * Set the text of this element to an [ReadOnlyWatchable] value.  If the text in the ReadOnlyWatchable
+     * Set the text of this element to an [ReadOnlyBindable] value.  If the text in the ReadOnlyBindable
      * changes the text of this element will update automatically.
      */
-    fun text(oText : ReadOnlyWatchable<String>) {
-        text(oText.value)
-        val handle = oText.addListener{ old, new ->
+    fun text(text: ReadOnlyBindable<String>) {
+        this.text(text.value)
+        val handle = text.addListener{ old, new ->
             text(new)
         }
         this.creator?.onCleanup(true) {
-            oText.removeListener(handle)
+            text.removeListener(handle)
         }
     }
 
@@ -250,7 +250,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
  *
  * @sample new_sample_1
  */
-fun <T : Element> T.new(position : Int? = null): ElementCreator<T> = ElementCreator(this, position)
+fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position : Int? = null): ElementCreator<ELEMENT_TYPE> = ElementCreator(addToElement = this, position = position)
 
 /**
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
@@ -259,7 +259,10 @@ fun <T : Element> T.new(position : Int? = null): ElementCreator<T> = ElementCrea
  *
  * @sample new_sample_2
  */
-fun <T : Element, R : Any> T.new(position : Int? = null, receiver: ElementCreator<T>.() -> R) : R {
+fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE : Any> ELEMENT_TYPE.new(
+        position : Int? = null,
+        receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE)
+        : RETURN_VALUE_TYPE {
     val r = receiver(new(position))
     return r
 }

@@ -77,14 +77,14 @@ if [ -n "$JAVA_HOME" ] ; then
     if [ ! -controlXPoints "$JAVACMD" ] ; then
         die "ERROR: JAVA_HOME is setString to an invalid directory: $JAVA_HOME
 
-Please setString the JAVA_HOME variable in your environment to bind the
+Please setString the JAVA_HOME variable in your environment to asBindable the
 location of your Java installation."
     fi
 else
     JAVACMD="java"
     which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not setString and no 'java' command could be found in your PATH.
 
-Please setString the JAVA_HOME variable in your environment to bind the
+Please setString the JAVA_HOME variable in your environment to asBindable the
 location of your Java installation."
 fi
 

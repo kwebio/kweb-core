@@ -9,16 +9,16 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.div
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
-import io.kweb.state.Watchable
+import io.kweb.state.Bindable
 import java.util.*
 
 /**
  * Created by ian on 6/18/17.
  */
 
-fun <T : Any> ElementCreator<*>.watch(shoebox: Shoebox<T>, key: String): Watchable<T> {
+fun <T : Any> ElementCreator<*>.asBindable(shoebox: Shoebox<T>, key: String): Bindable<T> {
     val value = shoebox[key] ?: throw RuntimeException("Key $key not found")
-    val w = Watchable(value)
+    val w = Bindable(value)
     w.addListener { _, n -> shoebox[key] = n }
     val changeHandle = shoebox.onChange(key) { _, n, _ -> w.value = n }
     w.onClose { shoebox.deleteChangeListener(key, changeHandle) }
@@ -28,42 +28,41 @@ fun <T : Any> ElementCreator<*>.watch(shoebox: Shoebox<T>, key: String): Watchab
     return w
 }
 
-private data class ItemInfo<ITEM : Any>(val creator : ElementCreator<Element>, val watchable : Watchable<ITEM>)
+private data class ItemInfo<ITEM : Any>(val creator : ElementCreator<Element>, val bindable: Bindable<ITEM>)
 
 /**
  *
  *
  * @sample ordered_view_set_sample
  */
-fun <ITEM : Any> ElementCreator<*>.watch(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<Element>.(Watchable<ITEM>) -> Unit) {
+fun <ITEM : Any> ElementCreator<*>.bindEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<Element>.(Bindable<ITEM>) -> Unit) {
     val items = ArrayList<ItemInfo<ITEM>>()
     for (keyValue in orderedViewSet.keyValueEntries) {
-        items += newItem(this, orderedViewSet, keyValue, renderer, insertAtPosition = null)
+        items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
     }
 
     val onInsertHandler = orderedViewSet.onInsert{ index, inserted ->
-        items.add(index, newItem(this, orderedViewSet, inserted, renderer, index))
+        items.add(index, createItem( orderedViewSet, inserted, renderer, index))
     }
     this.onCleanup(true) { orderedViewSet.deleteInsertListener(onInsertHandler) }
 
     val onRemoveHandler = orderedViewSet.onRemove { index, removedValue ->
         val removed = items.removeAt(index)
         removed.creator.cleanup()
-        removed.watchable.close()
+        removed.bindable.close()
     }
 
     this.onCleanup(true) { orderedViewSet.deleteRemoveListener(onRemoveHandler) }
 }
 
-private fun <ITEM : Any> newItem(
-        parentEC : ElementCreator<*>,
+private fun <ITEM : Any> ElementCreator<*>.createItem(
         orderedViewSet: OrderedViewSet<ITEM>,
         keyValue : KeyValue<ITEM>,
-        renderer : ElementCreator<Element>.(Watchable<ITEM>) -> Unit,
+        renderer : ElementCreator<Element>.(Bindable<ITEM>) -> Unit,
         insertAtPosition: Int?)
         : ItemInfo<ITEM> {
-    val itemElementCreator = ElementCreator(parentEC.addToElement, parentEC, insertAtPosition)
-    val itemWatchable = itemElementCreator.watch(orderedViewSet.view.viewOf, keyValue.key)
+    val itemElementCreator = ElementCreator(this.addToElement, this, insertAtPosition)
+    val itemWatchable = itemElementCreator.asBindable(orderedViewSet.view.viewOf, keyValue.key)
     renderer.invoke(itemElementCreator, itemWatchable)
     if (itemElementCreator.elementsCreatedCount != 1) {
         /*
@@ -89,9 +88,9 @@ fun ordered_view_set_sample() {
     val catColorView = cats.view("catColors", Cat::color)
     Kweb(port = 1234) {
         doc.body.new {
-            watch(catColorView.orderedSet("brown")) {
+            bindEach(catColorView.orderedSet("brown")) { brownCat ->
                 div().new {
-                    h1().text(it.map(Cat::name))
+                    h1().text(brownCat.map(Cat::name))
                 }
             }
         }
