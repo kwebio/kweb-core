@@ -13,7 +13,7 @@ import io.kweb.toJson
 // Support for $(...), since Kotlin doesn't allow methods called '$' (which is probably a good thing)
 // I just use jquery()
 fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
-    require(JQueryCorePlugin::class)
+    assertPluginLoaded(JQueryCorePlugin::class)
     return JQueryReceiver(this.webBrowser, "$(${selector.toJson()})")
 }
 

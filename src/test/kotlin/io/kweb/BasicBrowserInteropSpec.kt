@@ -8,7 +8,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.FreeSpec
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.modification.text
 import io.kweb.dom.element.new
 import java.io.Closeable
 

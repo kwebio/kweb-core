@@ -3,10 +3,8 @@ package io.kweb.routing
 import io.kweb.Kweb
 import io.kweb.WebBrowser
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.modification.text
 import io.kweb.dom.element.new
-import io.kweb.state.Observable
-import io.kweb.state.bind
+import io.kweb.state.Watchable
 import io.mola.galimatias.URL
 import java.net.URLDecoder
 
@@ -32,7 +30,14 @@ fun WebBrowser.pushState(path: String) {
 
 inline fun <reified T : Any> WebBrowser.route(receiver: (RequestURL<T>).() -> Unit) {
     val requestUrl = with(httpRequestInfo.requestedUrl) {
-        RequestURL<T>(scheme = Scheme.valueOf(scheme()), host = host().toHumanString(), port = port(), obsPath = Observable(urlPathTranslator.parse(path())), query = Observable(query() ?: ""), rawUrl = this)
+        RequestURL<T>(
+                scheme = Scheme.valueOf(scheme()),
+                host = host().toHumanString(),
+                port = port(),
+                obsPath = Watchable(urlPathTranslator.parse(path())),
+                query = Watchable(query() ?: ""),
+                rawUrl = this
+        )
     }
     requestUrl.obsPath.addListener { _, new ->
         pushState(urlPathTranslator.toPath(new) + requestUrl.query.value)
@@ -43,7 +48,7 @@ inline fun <reified T : Any> WebBrowser.route(receiver: (RequestURL<T>).() -> Un
     receiver(requestUrl)
 }
 
-data class RequestURL<T : Any>(val scheme: Scheme, val host: String, val port: Int = 80, val obsPath: Observable<T>, val query: Observable<String>, val rawUrl: URL) {
+data class RequestURL<T : Any>(val scheme: Scheme, val host: String, val port: Int = 80, val obsPath: Watchable<T>, val query: Watchable<String>, val rawUrl: URL) {
     private fun queryToQueryMap(query: String): Map<String, String> {
         val pairs = query.split("&".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         val queryMap = HashMap<String, String>()

@@ -88,6 +88,8 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.4.2'
     compile("org.reflections:reflections:0.9.11")
 
+    compile 'com.github.kwebio:shoebox:0.2.9'
+
     testCompile 'net.sourceforge.htmlunit:htmlunit:2.26'
     testCompile 'io.kotlintest:kotlintest:2.0.1'
     testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'

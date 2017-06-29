@@ -4,9 +4,6 @@ import io.kweb.Kweb
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.events.on
-import io.kweb.dom.element.modification.addText
-import io.kweb.dom.element.modification.deleteIfExists
-import io.kweb.dom.element.modification.text
 import io.kweb.dom.element.new
 import kotlinx.coroutines.experimental.future.await
 import kotlinx.coroutines.experimental.future.future
@@ -37,7 +34,7 @@ fun main(args: Array<String>) {
 
             // And a button to add a new item
             val button = button()
-            button.text("Add Item")
+            button.text("Add ItemInfo")
             // Here we register a callback, the code block will be called when the
             // user clicks this button.
             button.on.click {

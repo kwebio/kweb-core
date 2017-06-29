@@ -4,7 +4,6 @@ import io.kweb.Kweb
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.dom.element.modification.text
 import io.kweb.dom.element.new
 
 /**

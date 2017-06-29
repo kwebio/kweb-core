@@ -38,7 +38,7 @@ class FoundationPlugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
 
 val <ET : Element> ElementCreator<ET>.foundation : ElementCreator<FoundationElement<ET>> get() {
     require(FoundationPlugin::class)
-    return ElementCreator(FoundationElement<ET>(this.parent))
+    return ElementCreator(FoundationElement<ET>(this.addToElement))
 }
 
 open class FoundationElement<out PARENT_TYPE : Element>(val parent : PARENT_TYPE) : Element(parent)

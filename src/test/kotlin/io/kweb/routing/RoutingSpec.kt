@@ -16,9 +16,7 @@ import io.kweb.dom.attributes.attr
 import io.kweb.dom.attributes.id
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.events.on
-import io.kweb.dom.element.modification.text
 import io.kweb.dom.element.new
-import io.kweb.state.bind
 import org.apache.commons.logging.LogFactory
 import java.util.logging.Level
 

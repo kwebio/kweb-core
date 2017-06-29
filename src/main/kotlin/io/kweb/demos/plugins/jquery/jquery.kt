@@ -4,7 +4,6 @@ import io.kweb.Kweb
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.attributes.classes
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.modification.addText
 import io.kweb.dom.element.new
 import io.kweb.plugins.jqueryCore.jquery
 import io.kweb.plugins.jqueryCore.jqueryCore

@@ -1,18 +1,24 @@
 package io.kweb.dom.element
 
-import io.kweb.Kweb
-import io.kweb.WebBrowser
+import com.github.salomonbrys.kotson.toJson
+import io.kweb.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.modification.setAttribute
-import io.kweb.dom.element.modification.text
+import io.kweb.dom.element.modification.StyleReceiver
 import io.kweb.dom.element.read.ElementReader
 import io.kweb.plugins.KWebPlugin
+import io.kweb.state.ReadOnlyWatchable
+import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
 
 @DslMarker
 annotation class KWebDSL
+
+
+// TODO: Explicit support for global attributes from http://www.w3schools.com/tags/ref_standardattributes.asp
+// TODO: These should probably be accessed via a field like element.attr[GlobalAttributes.hidden], possibly
+// TODO: using generics to ensure the correct return-type
 
 
 @KWebDSL
@@ -41,27 +47,206 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
     }
 
     /*********
-     ********* Element creation functions.
-     *********
-     ********* These allow creation of element types as children of the current element.
-     ********* With the exception of element(), they do not begin with verbs, and
-     ********* will typically be just the tag of the element like "div" or "input".
+     ********* Utilities for plugin creators
      *********/
+    /**
+     * Requires that a specific plugin or plugins be loaded by listing them
+     * in the `plugins` parameter of the [Kweb] constructor.
+     *
+     * This should be called by any function that requires a particular plugin or
+     * plugins be present.
+     */
+    fun assertPluginLoaded(vararg plugins: KClass<out KWebPlugin>) = webBrowser.require(*plugins)
 
-    fun require(vararg plugins: KClass<out KWebPlugin>) = webBrowser.require(*plugins)
-
+    /**
+     * Obtain the instance of a plugin by its [KClass].
+     */
     fun <P : KWebPlugin> plugin(plugin: KClass<P>) = webBrowser.plugin(plugin)
 
+
+    /**
+     * Obtain an [ElementReader] that can be used to read various properties of this element.
+     */
     open val read: ElementReader get() = ElementReader(this)
+
+    /*********
+     ********* Utilities for modifying this element
+     *********/
+
+    /**
+     * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
+     * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
+     */
+    fun setAttribute(name: String, value: Any?): Element {
+        if (value != null) {
+            execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+            if (name == "id") {
+                jsExpression = "document.getElementById(${value.toJson()})"
+            }
+        }
+        return this
+    }
+
+    fun setAttribute(name : String, oValue : ReadOnlyWatchable<Any>) : Element {
+        setAttribute(name, oValue.value)
+        val handle = oValue.addListener { _, newValue ->
+            setAttribute(name, newValue)
+        }
+        this.creator?.onCleanup(true) {
+            oValue.removeListener(handle)
+        }
+        return this
+    }
+
+    fun removeAttribute(name: String): Element {
+        execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+        return this
+    }
+
+    fun setInnerHTML(value: String): Element {
+        execute("$jsExpression.innerHTML=\"${value.escapeEcma()}\";")
+        return this
+    }
+
+    fun focus() : Element {
+        execute("$jsExpression.focus();")
+        return this
+    }
+
+    fun setClasses(vararg value: String): Element {
+        setAttribute("class", value.joinToString(separator = " ").toJson())
+        return this
+    }
+
+    fun addClasses(vararg classes: String, onlyIf : Boolean = true): Element {
+        if (onlyIf) {
+            for (class_ in classes) {
+                if (class_.contains(' ')) {
+                    throw RuntimeException("Class names must not contain spaces")
+                }
+                execute("addClass($jsExpression, ${class_.toJson()});")
+            }
+        }
+        return this
+    }
+
+    fun removeClasses(vararg classes: String, onlyIf: Boolean = true): Element {
+        if (onlyIf) {
+            for (class_ in classes) {
+                if (class_.contains(' ')) {
+                    throw RuntimeException("Class names must not contain spaces")
+                }
+                execute("removeClass($jsExpression, ${class_.toJson()});")
+            }
+        }
+        return this
+    }
+
+    fun activate(): Element {
+        addClasses("is-active")
+        return this
+    }
+
+    fun deactivate(): Element {
+        removeClasses("is-active")
+        return this
+    }
+
+    fun disable(): Element {
+        setAttribute("disabled", true)
+        return this
+    }
+
+    fun enable(): Element {
+        removeAttribute("disabled")
+        return this
+    }
+
+    fun removeChildren(): Element {
+        execute("""
+        while ($jsExpression.firstChild) {
+            $jsExpression.removeChild($jsExpression.firstChild);
+        }
+     """.trimIndent())
+        return this
+    }
+
+    fun removeChildAt(position : Int) : Element {
+        execute("$jsExpression.removeChild($jsExpression.childNodes[$position]);".trimIndent())
+        return this
+    }
+
+    /**
+     * Set the text of this element to `value`.  Eg. `h1().text("Hello World")` will create
+     * a `h1` element and set its text as follows: `<h1>Hello World</h1>`.
+     */
+    fun text(value: String): Element {
+        removeChildren()
+        addText(value)
+        return this
+    }
+
+    /**
+     * Set the text of this element to an [ReadOnlyWatchable] value.  If the text in the ReadOnlyWatchable
+     * changes the text of this element will update automatically.
+     */
+    fun text(oText : ReadOnlyWatchable<String>) {
+        text(oText.value)
+        val handle = oText.addListener{ old, new ->
+            text(new)
+        }
+        this.creator?.onCleanup(true) {
+            oText.removeListener(handle)
+        }
+    }
+
+    fun addText(value: String): Element {
+        execute("""
+                {
+                    var ntn=document.createTextNode("${value.escapeEcma()}");
+                    $jsExpression.appendChild(ntn);
+                }
+        """)
+        return this
+    }
+
+    fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), callback: (String) -> Unit): Element {
+        val callbackId = Math.abs(random.nextInt())
+        val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+"}"
+        val js = jsExpression + """
+            .addEventListener(${eventName.toJson()}, function(event) {
+                callbackWs($callbackId, $eventObject);
+            });
+        """
+        webBrowser.executeWithCallback(js, callbackId) { payload ->
+            callback.invoke(payload)
+        }
+        this.creator?.onCleanup(true) {
+            webBrowser.removeCallback(callbackId)
+        }
+        return this
+    }
+
+    fun delete() {
+        execute("$jsExpression.parentNode.removeChild($jsExpression);")
+    }
+
+    fun deleteIfExists() {
+        execute("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
+    }
+
+    fun spellcheck(spellcheck : Boolean = true) = setAttribute("spellcheck", spellcheck)
+
+    val Element.style get() = StyleReceiver(this)
 }
 
 /**
  * Returns an [ElementCreator] which can be used to create new elements and add them
  * as children of the receiver element.
  *
- * @receiver This will be the parent element of any elements created with the returned
+ * @receiver This will be the addToElement element of any elements created with the returned
  *           [ElementCreator]
- * @Param position What position among the parent's children should the new element have?
+ * @Param position What position among the addToElement's children should the new element have?
  *
  * @sample new_sample_1
  */
@@ -70,7 +255,7 @@ fun <T : Element> T.new(position : Int? = null): ElementCreator<T> = ElementCrea
 /**
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
  *
-* @Param position What position among the parent's children should the new element have?
+* @Param position What position among the addToElement's children should the new element have?
  *
  * @sample new_sample_2
  */
@@ -80,10 +265,7 @@ fun <T : Element, R : Any> T.new(position : Int? = null, receiver: ElementCreato
 }
 
 
-// Element Attribute modifiers
-
-fun Element.spellcheck(spellcheck : Boolean = true) = setAttribute("spellcheck", spellcheck)
-
+// Element Attribute modifier
 private fun new_sample_1() {
     Kweb(port = 1234) {
         doc.body.new().h1().text("Hello World!")

@@ -5,7 +5,6 @@ import io.kweb.WebBrowser
 import io.kweb.dom.cookies.CookieReceiver
 import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.modification.text
 import io.kweb.dom.element.new
 
 /**
