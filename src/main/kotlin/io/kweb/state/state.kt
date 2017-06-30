@@ -1,6 +1,7 @@
 package io.kweb.state
 
 import io.kweb.random
+import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque
 import kotlin.properties.Delegates
@@ -15,6 +16,8 @@ import kotlin.properties.Delegates
  *
  * @sample bindable_sample
  */
+
+private val logger = KotlinLogging.logger {}
 
 open class ReadOnlyBindable<T : Any>(initialValue: T) {
     private @Volatile var isClosed = false
@@ -58,7 +61,7 @@ open class ReadOnlyBindable<T : Any>(initialValue: T) {
 
     fun close() {
         if (isClosed) {
-            throw RuntimeException("Attempted to close but was already closed")
+            logger.warn("Attempted to close but was already closed")
         } else {
             isClosed = true
         }
@@ -72,7 +75,7 @@ open class ReadOnlyBindable<T : Any>(initialValue: T) {
 
     internal fun assertNotClosed() {
         if (isClosed) {
-            throw RuntimeException("Not permitted after Bindable is closed()")
+            logger.warn("Shouldn't be called after Bindable is closed()")
         }
     }
 }

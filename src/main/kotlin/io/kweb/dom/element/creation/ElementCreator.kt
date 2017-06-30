@@ -2,6 +2,7 @@ package io.kweb.dom.element.creation
 
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.element.Element
+import io.kweb.dom.element.KWebDSL
 import io.kweb.plugins.KWebPlugin
 import io.kweb.random
 import io.kweb.toJson
@@ -14,8 +15,10 @@ import kotlin.reflect.KClass
  */
 
 typealias Cleaner = () -> Unit
-
-open class ElementCreator<out PARENT_TYPE : Element>(val addToElement: PARENT_TYPE, val parentCreator : ElementCreator<*>? = addToElement.creator, val position : Int? = null) {
+@KWebDSL open class ElementCreator<out PARENT_TYPE : Element>(
+        val addToElement: PARENT_TYPE,
+        val parentCreator : ElementCreator<*>? = addToElement.creator,
+        val position : Int? = null) {
 
     companion object: KLogging()
 
@@ -23,7 +26,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(val addToElement: PARENT_TY
     private val cleanupListeners = LinkedList<Cleaner>()
     private @Volatile var isCleanedUp = false
 
-    var elementsCreatedCount = 0
+    val elementsCreated : Int get() = elementsCreatedCount
+
+    private @Volatile var elementsCreatedCount = 0
 
     fun element(tag: String, attributes: Map<String, Any> = attr): Element {
         elementsCreatedCount++

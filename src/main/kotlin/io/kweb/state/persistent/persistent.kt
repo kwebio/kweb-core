@@ -45,7 +45,7 @@ private data class ItemInfo<ITEM : Any>(val creator : ElementCreator<Element>, v
  *
  * @sample ordered_view_set_sample
  */
-fun <ITEM : Any> ElementCreator<*>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<Element>.(Bindable<ITEM>) -> Unit) {
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<EL>.(Bindable<ITEM>) -> Unit) {
     val items = ArrayList<ItemInfo<ITEM>>()
     for (keyValue in orderedViewSet.keyValueEntries) {
         items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
@@ -65,16 +65,16 @@ fun <ITEM : Any> ElementCreator<*>.renderEach(orderedViewSet: OrderedViewSet<ITE
     this.onCleanup(true) { orderedViewSet.deleteRemoveListener(onRemoveHandler) }
 }
 
-private fun <ITEM : Any> ElementCreator<*>.createItem(
+private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
         orderedViewSet: OrderedViewSet<ITEM>,
         keyValue : KeyValue<ITEM>,
-        renderer : ElementCreator<Element>.(Bindable<ITEM>) -> Unit,
+        renderer : ElementCreator<EL>.(Bindable<ITEM>) -> Unit,
         insertAtPosition: Int?)
         : ItemInfo<ITEM> {
     val itemElementCreator = ElementCreator(this.addToElement, this, insertAtPosition)
-    val itemWatchable = itemElementCreator.asBindable(orderedViewSet.view.viewOf, keyValue.key)
-    renderer.invoke(itemElementCreator, itemWatchable)
-    if (itemElementCreator.elementsCreatedCount != 1) {
+    val bindableItem = itemElementCreator.asBindable(orderedViewSet.view.viewOf, keyValue.key)
+    renderer(itemElementCreator, bindableItem)
+    if (itemElementCreator.elementsCreated != 1) {
         /*
          * Only one element may be created per-item because otherwise it would be much more complicated to figure
          * out where new items should be inserted by the onInsert handler below.  onRemove would be easier because
@@ -84,12 +84,12 @@ private fun <ITEM : Any> ElementCreator<*>.createItem(
           * root <ol> or <ul> per item.  If it does turn out to be a problem we'll need to find another approach.
          */
         throw RuntimeException("""
-            Only one element may be created per item but ${itemElementCreator.elementsCreatedCount} were created for
+            Only one element may be created per item but ${itemElementCreator.elementsCreated} were created for
             item key ${keyValue.key}.  Note that this element may have as many children as you like, so you may just need
             to wrap the elements in a <DIV> or other element type.
 """.trimIndent())
     }
-    return ItemInfo(itemElementCreator, itemWatchable)
+    return ItemInfo(itemElementCreator, bindableItem)
 }
 
 fun ordered_view_set_sample() {

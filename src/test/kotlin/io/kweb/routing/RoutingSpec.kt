@@ -1,8 +1,6 @@
 package io.kweb.routing
 
-import com.gargoylesoftware.htmlunit.AjaxController
 import com.gargoylesoftware.htmlunit.WebClient
-import com.gargoylesoftware.htmlunit.WebRequest
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import io.kotlintest.Duration
 import io.kotlintest.matchers.shouldBe
@@ -17,9 +15,8 @@ import io.kweb.dom.attributes.id
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
+import io.kweb.htmlUnitInit
 import io.kweb.state.persistent.render
-import org.apache.commons.logging.LogFactory
-import java.util.logging.Level
 
 
 /**
@@ -29,15 +26,7 @@ class RoutingSpec : FreeSpec() {
     val webClient: WebClient = autoClose(ACWebClient())
 
     init {
-        webClient.ajaxController = object : AjaxController() {
-            override fun processSynchron(page: HtmlPage?, request: WebRequest?, async: Boolean): Boolean {
-                return true
-            }
-        }
-
-        LogFactory.getFactory().setAttribute("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
-        java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
+        htmlUnitInit(webClient)
 
         "Given a Kweb instance serving a simple website" - {
             Kweb(port = 4235) {
@@ -92,8 +81,8 @@ class RoutingSpec : FreeSpec() {
                     }
                 }
                 "should should return the appropriate text for a click" {
-                    val initialPage = webClient.getPage<HtmlPage>("http://127.0.0.1:4235/cats/145/12")
-                    initialPage.getElementById("clickableHeader").let { headerElement ->
+                    val page = webClient.getPage<HtmlPage>("http://127.0.0.1:4235/cats/145/12")
+                    page.getElementById("clickableHeader").let { headerElement ->
                         val afterClickPage = headerElement.click<HtmlPage>()
                         pollFor(5.seconds) {
                             afterClickPage.getElementById("dogHeader").textContent shouldEqual "doggie"
@@ -103,17 +92,19 @@ class RoutingSpec : FreeSpec() {
             }
         }
     }
+
 }
 
 val Duration.millis get() = this.timeUnit.toMillis(amount)
-fun <T> pollFor(maximumTime: io.kotlintest.Duration, pollEvery : Duration = 100.milliseconds, f: () -> T): T {
+fun <T> pollFor(maximumTime: io.kotlintest.Duration, pollEvery : Duration = 300.milliseconds, f: () -> T): T {
     val end = System.nanoTime() + maximumTime.nanoseconds
     var times = 0
-    var lastException : Exception? = null
+    var lastException : Throwable? = null
     while (System.nanoTime() < end) {
         try {
-            return f()
-        } catch (e: Exception) {
+            val t = f()
+            return t
+        } catch (e: Throwable) {
             lastException = e
         }
         Thread.sleep(pollEvery.millis)
