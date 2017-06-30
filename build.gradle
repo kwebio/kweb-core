@@ -23,7 +23,7 @@ plugins {
 }
 
 group 'io.kweb'
-version '0.2.2'
+version '0.2.3'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
