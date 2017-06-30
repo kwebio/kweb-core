@@ -16,6 +16,16 @@ import java.util.*
  * Created by ian on 6/18/17.
  */
 
+fun <T : Any> ElementCreator<*>.render(bindable : Bindable<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
+    var childEC = ElementCreator(this.addToElement, this)
+    renderer(childEC, bindable.value)
+    bindable.addListener { _, newValue ->
+        childEC.cleanup()
+        childEC = ElementCreator(this.addToElement, this)
+        renderer(childEC, newValue)
+    }
+}
+
 fun <T : Any> ElementCreator<*>.asBindable(shoebox: Shoebox<T>, key: String): Bindable<T> {
     val value = shoebox[key] ?: throw RuntimeException("Key $key not found")
     val w = Bindable(value)
@@ -35,7 +45,7 @@ private data class ItemInfo<ITEM : Any>(val creator : ElementCreator<Element>, v
  *
  * @sample ordered_view_set_sample
  */
-fun <ITEM : Any> ElementCreator<*>.bindEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<Element>.(Bindable<ITEM>) -> Unit) {
+fun <ITEM : Any> ElementCreator<*>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<Element>.(Bindable<ITEM>) -> Unit) {
     val items = ArrayList<ItemInfo<ITEM>>()
     for (keyValue in orderedViewSet.keyValueEntries) {
         items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
@@ -88,7 +98,7 @@ fun ordered_view_set_sample() {
     val catColorView = cats.view("catColors", Cat::color)
     Kweb(port = 1234) {
         doc.body.new {
-            bindEach(catColorView.orderedSet("brown")) { brownCat ->
+            renderEach(catColorView.orderedSet("brown")) { brownCat ->
                 div().new {
                     h1().text(brownCat.map(Cat::name))
                 }

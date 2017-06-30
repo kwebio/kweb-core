@@ -17,6 +17,7 @@ import io.kweb.dom.attributes.id
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
+import io.kweb.state.persistent.render
 import org.apache.commons.logging.LogFactory
 import java.util.logging.Level
 
@@ -42,7 +43,7 @@ class RoutingSpec : FreeSpec() {
             Kweb(port = 4235) {
                 route<FooPath> {
                     doc.body.new {
-                        bind.to(obsPath) {
+                        render(obsPath) {
                             when (it) {
                                 is FooPath.Root -> {
                                     h1().text("Root")

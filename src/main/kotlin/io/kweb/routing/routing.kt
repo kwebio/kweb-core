@@ -5,6 +5,7 @@ import io.kweb.WebBrowser
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
 import io.kweb.state.Bindable
+import io.kweb.state.persistent.render
 import io.mola.galimatias.URL
 import java.net.URLDecoder
 
@@ -72,7 +73,7 @@ private fun test_sample_for_routing() {
     Kweb(port= 16189) {
         doc.body.new {
         route<Route> {
-                bind.to(obsPath) { thisPath ->
+                render(obsPath) { thisPath ->
                     when (thisPath) {
                         is Route -> h1().text(thisPath.a.toString())
                     }

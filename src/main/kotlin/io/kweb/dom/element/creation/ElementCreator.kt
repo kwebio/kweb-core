@@ -90,25 +90,4 @@ open class ElementCreator<out PARENT_TYPE : Element>(val addToElement: PARENT_TY
         isCleanedUp = true
         cleanupListeners.forEach { it() }
     }
-
-    val <E : Element> ElementCreator<E>.bind get() = RenderReceiver<E>(this)
-
-    /*
-     *
-     *
-    internal fun <R> withCleanupListener(listener : (Cleaner) -> Unit, receiver: ElementCreator<PARENT_TYPE>.() -> R) : R {
-        this.pushCleanupListener(listener)
-        val r = receiver.invoke(this)
-        this.popCleanupListener()
-        return r
-    }
-
-    private fun pushCleanupListener(listener : (Cleaner) -> Unit) {
-        cleanupListeners.addFirst(listener)
-    }
-
-    private fun popCleanupListener() {
-        cleanupListeners.removeFirst()
-    }
-    */
 }
