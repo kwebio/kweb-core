@@ -16,7 +16,7 @@ open class ButtonElement(val wrapped: Element) : Element(wrapped)
 enum class ButtonType {
     button, reset, submit
 }
-fun ElementCreator<Element>.button(type: ButtonType? = ButtonType.button, autofocus: Boolean? = null, attributes: Map<String, Any> = attr): ButtonElement {
+fun ElementCreator<Element>.button(attributes: Map<String, Any> = attr, type: ButtonType? = ButtonType.button, autofocus: Boolean? = null): ButtonElement {
     return ButtonElement(element("button", attributes
             .set("type", type?.name)
             .set("autofocus", autofocus)
