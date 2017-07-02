@@ -103,6 +103,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val cinema : SemanticUIClasses get() {
+        classes("cinema")
+        return this
+    }
+
     val circle : SemanticUIClasses get() {
         classes("circle")
         return this
@@ -135,6 +140,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val disabled : SemanticUIClasses get() {
         classes("disabled")
+        return this
+    }
+
+    val divided : SemanticUIClasses get() {
+        classes("divided")
         return this
     }
 
@@ -303,8 +313,14 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+
     val message : SemanticUIClasses get() {
         classes("message")
+        return this
+    }
+
+    val meta : SemanticUIClasses get() {
+        classes("meta")
         return this
     }
 
@@ -352,6 +368,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val positive : SemanticUIClasses get() {
         classes("positive")
+        return this
+    }
+
+    val primary : SemanticUIClasses get() {
+        classes("primary")
         return this
     }
 
