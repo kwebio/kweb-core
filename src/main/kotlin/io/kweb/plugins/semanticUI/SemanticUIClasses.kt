@@ -83,8 +83,18 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val check : SemanticUIClasses get() {
+        classes("check")
+        return this
+    }
+
     val checkbox : SemanticUIClasses get() {
         classes("checkbox")
+        return this
+    }
+
+    val checkmark : SemanticUIClasses get() {
+        classes("checkmark")
         return this
     }
 
@@ -298,6 +308,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val minus : SemanticUIClasses get() {
+        classes("minus")
+        return this
+    }
+
     val negative : SemanticUIClasses get() {
         classes("negative")
         return this
@@ -374,7 +389,12 @@ class SemanticUIClasses : AttributeBuilder() {
         classes("users")
         return this
     }
-    
+
+    val radio : SemanticUIClasses get() {
+        classes("radio")
+        return this
+    }
+
     val relaxed : SemanticUIClasses get() {
         classes("relaxed")
         return this
