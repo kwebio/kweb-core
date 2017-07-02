@@ -77,6 +77,10 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val center : SemanticUIClasses get() {
+        classes("center")
+        return this
+    }
 
     val centered : SemanticUIClasses get() {
         classes("centered")
@@ -230,6 +234,10 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val grid : SemanticUIClasses get() {
+        classes("grid")
+        return this
+    }
 
     val header : SemanticUIClasses get() {
         classes("header")
