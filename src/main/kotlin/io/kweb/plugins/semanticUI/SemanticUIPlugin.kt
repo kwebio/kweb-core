@@ -17,4 +17,4 @@ class SemanticUIPlugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
 
 val semanticUIPlugin = SemanticUIPlugin()
 
-val sUI get() = SemanticUIClasses()
+val semantic get() = SemanticUIClasses()
