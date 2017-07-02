@@ -282,6 +282,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val items : SemanticUIClasses get() {
+        classes("items")
+        return this
+    }
+
     val labeled : SemanticUIClasses get() {
         classes("labeled")
         return this
