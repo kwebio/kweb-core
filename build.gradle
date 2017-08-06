@@ -23,7 +23,7 @@ plugins {
 }
 
 group 'io.kweb'
-version '0.2.10'
+version '0.2.11'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
@@ -110,6 +110,8 @@ configurations.all {
         }
     }
 }
+
+kotlin { experimental { coroutines 'enable' } }
 
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'html'

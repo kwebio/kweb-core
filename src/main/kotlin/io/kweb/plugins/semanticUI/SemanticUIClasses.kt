@@ -1,7 +1,6 @@
 package io.kweb.plugins.semanticUI
 
-import io.kweb.dom.attributes.AttributeBuilder
-import io.kweb.dom.attributes.classes
+import io.kweb.dom.attributes.*
 
 class SemanticUIClasses : AttributeBuilder() {
 
@@ -495,8 +494,17 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    private var uiClassAlreadyPresent = false
+
     val ui : SemanticUIClasses get() {
+        if (uiClassAlreadyPresent) {
+            throw RuntimeException("""
+            The .ui getter has already been used on this SematicUIClasses object.  Please ensure you are creating a
+            fresh SemanticUIClasses object (using the 'semantic' getter for every element.
+""".trimIndent())
+        }
         classes("ui")
+        uiClassAlreadyPresent = true
         return this
     }
 
