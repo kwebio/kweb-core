@@ -75,3 +75,11 @@ fun ElementCreator<Element>.nav(attributes: Map<String, Any> = attr) = NavElemen
 
 open class SectionElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.section(attributes: Map<String, Any> = attr) = SectionElement(element("section", attributes))
+
+open class ImageElement(parent: Element) : Element(parent)
+/**
+ * @param src The image source. The source must be from an external server since Kweb doesn't handle internal routing yet
+ * @param attributes Extra attributes you want to add
+ */
+fun ElementCreator<Element>.img(src: String? = null, attributes: Map<String, Any> = attr) =
+        ImageElement(element("img", attributes.set("src", src)))
