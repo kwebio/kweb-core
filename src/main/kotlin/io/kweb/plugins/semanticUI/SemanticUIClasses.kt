@@ -121,6 +121,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val column : SemanticUIClasses get() {
+        classes("column")
+        return this
+    }
+
     val container : SemanticUIClasses get() {
         classes("container")
         return this
@@ -202,6 +207,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val fixed : SemanticUIClasses get() {
+        classes("fixed")
+        return this
+    }
+
     val fluid : SemanticUIClasses get() {
         classes("fluid")
         return this
@@ -245,6 +255,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val heart : SemanticUIClasses get() {
         classes("heart")
+        return this
+    }
+
+    val hidden : SemanticUIClasses get() {
+        classes("hidden")
         return this
     }
 
@@ -305,6 +320,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+	val left : SemanticUIClasses get() {
+        classes("left")
+        return this
+    }
+
     val list : SemanticUIClasses get() {
         classes("list")
         return this
@@ -312,6 +332,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val leaderboard : SemanticUIClasses get() {
         classes("leaderboard")
+        return this
+    }
+
+    val masthead : SemanticUIClasses get() {
+        classes("masthead")
         return this
     }
 
@@ -388,6 +413,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val pusher : SemanticUIClasses get() {
+        classes("pusher")
+        return this
+    }
+
     val raised : SemanticUIClasses get() {
         classes("raised")
         return this
@@ -395,6 +425,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val right : SemanticUIClasses get() {
         classes("right")
+        return this
+    }
+
+    val secondary : SemanticUIClasses get() {
+        classes("secondary")
         return this
     }
 
@@ -438,6 +473,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val row : SemanticUIClasses get() {
+        classes("row")
+        return this
+    }
+
     val section : SemanticUIClasses get() {
         classes("section")
         return this
@@ -454,6 +494,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val sidebar : SemanticUIClasses get() {
+        classes("sidebar")
+        return this
+    }
+
     val six : SemanticUIClasses get() {
         classes("six")
         return this
@@ -466,6 +511,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val small : SemanticUIClasses get() {
         classes("small")
+        return this
+    }
+
+    val striped : SemanticUIClasses get() {
+        classes("striped")
         return this
     }
 
@@ -488,9 +538,19 @@ class SemanticUIClasses : AttributeBuilder() {
         classes("top")
         return this
     }
+
+    val transition : SemanticUIClasses get() {
+        classes("transition")
+        return this
+    }
     
     val twelve : SemanticUIClasses get() {
         classes("twelve")
+        return this
+    }
+
+    val two : SemanticUIClasses get() {
+        classes("two")
         return this
     }
 
@@ -510,6 +570,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val very : SemanticUIClasses get() {
         classes("very")
+        return this
+    }
+
+    val vertical : SemanticUIClasses get() {
+        classes("vertical")
         return this
     }
 
