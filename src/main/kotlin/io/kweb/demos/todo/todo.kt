@@ -5,22 +5,21 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
-import kotlinx.coroutines.experimental.future.await
-import kotlinx.coroutines.experimental.future.future
+import kotlinx.coroutines.experimental.future.*
 
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
     Kweb(port = 8091, debug = false) {
         doc.body.new {
             // Add a header element to the body, along with some simple instructions.
-            h1().addText("Simple Kweb demo - a to-do list")
-            p().addText("Edit the text box below and click the button to add the item.  Click an item to remove it.")
+            h1().text("Simple Kweb demo - a to-do list")
+            p().text("Edit the text box below and click the button to add the item.  Click an item to remove it.")
 
             // If you're unfamiliar with the `apply` function, read this:
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
 
             // We element a <ul> element, and then use apply() to add things to it
-            val ul = ul().new {
+            ul().new {
 
                 // Add some initial items to the list
                 for (text in listOf("one", "two", "three")) {
@@ -34,7 +33,7 @@ fun main(args: Array<String>) {
 
             // And a button to add a new item
             val button = button()
-            button.text("Add ItemInfo")
+            button.text("Add Item")
             // Here we register a callback, the code block will be called when the
             // user clicks this button.
             button.on.click {

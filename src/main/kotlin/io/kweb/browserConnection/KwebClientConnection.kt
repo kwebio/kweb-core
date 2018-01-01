@@ -1,14 +1,13 @@
 package io.kweb.browserConnection
 
+import io.ktor.websocket.*
 import kotlinx.coroutines.experimental.runBlocking
-import org.jetbrains.ktor.websocket.Frame
-import org.jetbrains.ktor.websocket.WebSocket
 import java.util.concurrent.ConcurrentLinkedQueue
 
-sealed class OutboundChannel {
+sealed class KwebClientConnection {
     abstract fun send(message: String)
 
-    class WSChannel(private val channel: WebSocket) : OutboundChannel() {
+    class WebSocket(private val channel: WebSocketSession) : KwebClientConnection() {
         override fun send(message: String) {
             runBlocking {
                 channel.send(Frame.Text(message))
@@ -17,7 +16,7 @@ sealed class OutboundChannel {
 
     }
 
-    class TemporarilyStoringChannel() : OutboundChannel() {
+    class Caching : KwebClientConnection() {
         private @Volatile var queue: ConcurrentLinkedQueue<String>? = ConcurrentLinkedQueue<String>()
 
         override fun send(message: String) {

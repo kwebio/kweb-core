@@ -1,14 +1,25 @@
+allprojects {
+    buildscript {
+        repositories {
+            jcenter()
+            mavenCentral()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+    }
+}
+
 buildscript {
-    ext.kotlin_version = '1.1.3'
-    ext.dokka_version = '0.9.9'
+    ext.kotlin_version = '1.2.10'
+    ext.dokka_version = '0.9.15'
+    ext.ktor_version = '0.9.0'
 
     repositories {
+        jcenter()
         mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
-        }
-        maven {
-            url "http://dl.bintray.com/kotlin/kotlin-eap-1.1"
         }
     }
     dependencies {
@@ -16,10 +27,6 @@ buildscript {
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
     }
-}
-
-plugins {
-    id "com.github.johnrengelman.shadow" version "1.2.4"
 }
 
 group 'io.kweb'
@@ -37,20 +44,16 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     maven {
-        url "http://dl.bintray.com/kotlin/kotlin-eap-1.1"
-    }
-    maven {
         url "http://dl.bintray.com/kotlin/ktor"
     }
-    maven {
+  /*  maven {
         url "http://dl.bintray.com/cy6ergn0m/maven"
-    }
+    } */
     maven {
         url 'https://jitpack.io'
     }
     jcenter()
 }
-
 
 configurations {
     provided
@@ -69,23 +72,25 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.12'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.12'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.20'
 
-    compile ('org.jetbrains.ktor:ktor-core:0.3.0') {
+    compile ("io.ktor:ktor-server-core:$ktor_version") {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
     }
-    compile ('org.jetbrains.ktor:ktor-netty:0.3.0') {
+
+    compile ("io.ktor:ktor-server-netty:$ktor_version") {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
     }
-    compile('org.jetbrains.ktor:ktor-websockets:0.3.0') {
+    compile("io.ktor:ktor-websockets:$ktor_version") {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
     }
 
     compile('io.mola.galimatias:galimatias:0.2.0')
 
-    compile 'io.github.microutils:kotlin-logging:1.4.2'
+    compile 'io.github.microutils:kotlin-logging:1.4.9'
     compile("org.reflections:reflections:0.9.11")
 
     compile 'com.github.kwebio:shoebox:0.2.13'
@@ -93,7 +98,9 @@ dependencies {
     testCompile 'net.sourceforge.htmlunit:htmlunit:2.26'
     testCompile 'io.kotlintest:kotlintest:2.0.3'
     testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+
+    // TODO: This should be testCompile
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
 
     // Should be compileOnly
     compileOnly 'com.github.HotswapProjects.HotswapAgent:hotswap-agent-core:1.1.0-SNAPSHOT'
@@ -101,6 +108,7 @@ dependencies {
 }
 
 // Needed because there's something messy with kotlin version numbers and dependencies
+/*
 configurations.all {
     resolutionStrategy {
         eachDependency { DependencyResolveDetails details ->
@@ -110,6 +118,8 @@ configurations.all {
         }
     }
 }
+*/
+
 
 kotlin { experimental { coroutines 'enable' } }
 

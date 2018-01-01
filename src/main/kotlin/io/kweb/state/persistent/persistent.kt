@@ -1,14 +1,10 @@
 package io.kweb.state.persistent
 
-import com.github.sanity.shoebox.KeyValue
-import com.github.sanity.shoebox.OrderedViewSet
-import com.github.sanity.shoebox.Shoebox
+import com.github.sanity.shoebox.*
 import io.kweb.Kweb
-import io.kweb.dom.element.Element
+import io.kweb.dom.element.*
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.dom.element.creation.tags.div
-import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.new
+import io.kweb.dom.element.creation.tags.*
 import io.kweb.state.Bindable
 import java.util.*
 
@@ -56,7 +52,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
     }
     this.onCleanup(true) { orderedViewSet.deleteInsertListener(onInsertHandler) }
 
-    val onRemoveHandler = orderedViewSet.onRemove { index, removedValue ->
+    val onRemoveHandler = orderedViewSet.onRemove { index, _ ->
         val removed = items.removeAt(index)
         removed.creator.cleanup()
         removed.bindable.close()

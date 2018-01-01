@@ -1,6 +1,6 @@
 package io.kweb.plugins
 
-import org.jetbrains.ktor.routing.Routing
+import io.ktor.routing.Routing
 import java.util.*
 
 abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet()) {

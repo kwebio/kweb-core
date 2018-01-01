@@ -2,8 +2,7 @@ package io.kweb.state
 
 import io.kweb.random
 import mu.KotlinLogging
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedDeque
+import java.util.concurrent.*
 import kotlin.properties.Delegates
 
 /**
@@ -95,7 +94,7 @@ class Bindable<T : Any>(initialValue: T) : ReadOnlyBindable<T>(initialValue) {
             mappedObservable.value = mapper(new)
         }
         onClose { removeListener(myChangeHandle) }
-        val origChangeHandle = mappedObservable.addListener({ old, new ->
+        val origChangeHandle = mappedObservable.addListener({ _, new ->
             value = unmapper(value, new)
         })
         onClose { mappedObservable.removeListener(origChangeHandle)}

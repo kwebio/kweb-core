@@ -1,38 +1,34 @@
 package io.kweb
 
-import io.kweb.browserConnection.OutboundChannel
+import com.github.salomonbrys.kotson.fromJson
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.*
+import io.ktor.sessions.*
+import io.ktor.util.nextNonce
+import io.ktor.websocket.*
+import io.kweb.browserConnection.KwebClientConnection
+import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KWebPlugin
 import io.mola.galimatias.URL
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.channels.consumeEach
 import org.apache.commons.io.IOUtils
-import org.jetbrains.ktor.application.ApplicationRequest
-import org.jetbrains.ktor.application.call
-import org.jetbrains.ktor.application.install
-import org.jetbrains.ktor.features.DefaultHeaders
-import org.jetbrains.ktor.features.origin
-import org.jetbrains.ktor.http.ContentType
-import org.jetbrains.ktor.http.HttpStatusCode
-import org.jetbrains.ktor.request.uri
-import org.jetbrains.ktor.response.contentType
-import org.jetbrains.ktor.response.respondText
-import org.jetbrains.ktor.routing.Routing
-import org.jetbrains.ktor.routing.get
-import org.jetbrains.ktor.routing.routing
-import org.jetbrains.ktor.websocket.Frame
-import org.jetbrains.ktor.websocket.WebSocket
-import org.jetbrains.ktor.websocket.readText
-import org.jetbrains.ktor.websocket.webSocket
 import java.io.Closeable
+import java.time.Duration
 import java.util.*
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 
 /**
  * Created by ian on 12/31/16.
  */
 
-typealias OneTime = Boolean
 typealias LogError = Boolean
 typealias JavaScriptError = String
 
@@ -57,22 +53,23 @@ class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap : Boolean = false,
            val plugins: List<io.kweb.plugins.KWebPlugin> = java.util.Collections.emptyList(),
-           val appServerConfigurator: (org.jetbrains.ktor.routing.Routing) -> Unit = {},
+           val appServerConfigurator: (io.ktor.routing.Routing) -> Unit = {},
            val onError : ((List<StackTraceElement>, io.kweb.JavaScriptError) -> io.kweb.LogError) = { _, _ ->  true},
            val maxPageBuildTimeMS : Long = 200,
            val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
     companion object: mu.KLogging()
 
-    private val server: org.jetbrains.ktor.netty.NettyApplicationHost
-    private val clients: MutableMap<String, io.kweb.WSClientData>
+    // private val server: Any
+    private val clients: ConcurrentHashMap<KwebSessionId, io.kweb.RemoteClientState> = java.util.concurrent.ConcurrentHashMap()
     private val mutableAppliedPlugins: MutableSet<io.kweb.plugins.KWebPlugin> = java.util.HashSet()
     val appliedPlugins: Set<io.kweb.plugins.KWebPlugin> get() = mutableAppliedPlugins
+
+    private val server: NettyApplicationEngine
 
     init {
 
         //TODO: Need to do housekeeping to deleteIfExists old client data
-        clients = java.util.concurrent.ConcurrentHashMap<String, WSClientData>()
 
         val startHeadBuilder = StringBuilder()
         val endHeadBuilder = StringBuilder()
@@ -81,9 +78,24 @@ class Kweb(val port: Int,
             KwebHotswapPlugin.addHotswapReloadListener({refreshAllPages()})
         }
 
-        server= org.jetbrains.ktor.netty.embeddedNettyServer(port) {
+        server = embeddedServer(Netty, port) {
             install(DefaultHeaders)
-            routing {
+            install(CallLogging)
+            install(WebSockets) {
+                pingPeriod = Duration.ofMinutes(1)
+            }
+            install(Routing) {
+
+                install(Sessions) {
+                    cookie<KwebSessionId>("KWEB_SESSION_ID")
+                }
+
+                intercept(ApplicationCallPipeline.Infrastructure) {
+                    if (call.sessions.get<KwebSessionId>() == null) {
+                        logger.info {"Creating new session"}
+                        call.sessions.set(KwebSessionId(nextNonce()))
+                    }
+                }
 
                 // Register custom state.
                 appServerConfigurator.invoke(this)
@@ -106,10 +118,16 @@ class Kweb(val port: Int,
                 }
 
                 get("/{visitedUrl...}") {
-                    val newClientId = Math.abs(random.nextLong()).toString(16)
-                    val outboundBuffer = OutboundChannel.TemporarilyStoringChannel()
-                    val wsClientData = WSClientData(id = newClientId, outboundChannel = outboundBuffer)
-                    clients.put(newClientId, wsClientData)
+                    val kwebSessionId = call.sessions.get<KwebSessionId>()
+                    if (kwebSessionId == null) {
+                        close@ (CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
+                        return@get
+                    }
+
+                    val remoteClientState = clients.getOrPut(kwebSessionId) {
+                        RemoteClientState(id = kwebSessionId, clientConnection = KwebClientConnection.Caching())
+                    }
+
                     val httpRequestInfo = HttpRequestInfo(call.request)
 
                     try {
@@ -121,24 +139,26 @@ class Kweb(val port: Int,
                                 val logStatement = logStatementBuilder.toString()
                                 logger.warn { logStatement }
                             }) {
-                                buildPage(WebBrowser(newClientId, httpRequestInfo, this@Kweb))
-                                logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}" }
+                                buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
+                                logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
                             }
                         } else {
-                            buildPage(WebBrowser(newClientId, httpRequestInfo, this@Kweb))
-                            logger.debug { "Outbound message queue size after buildPage is ${outboundBuffer.queueSize()}" }
+                            buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
+                            logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
                         }
                         for (plugin in plugins) {
-                            execute(newClientId, plugin.executeAfterPageCreation())
+                            execute(kwebSessionId, plugin.executeAfterPageCreation())
                         }
-                        wsClientData.outboundChannel = OutboundChannel.TemporarilyStoringChannel()
+
+                        val initialCachedMessages = remoteClientState.clientConnection as Caching
+
+                        remoteClientState.clientConnection = Caching()
 
                         val bootstrapHtml = bootstrapHtmlTemplate
-                                .replace("--CLIENT-ID-PLACEHOLDER--", newClientId)
-                                .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", outboundBuffer.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
+                                .replace("--CLIENT-ID-PLACEHOLDER--", kwebSessionId.id)
+                                .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", initialCachedMessages.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
 
-                        // TODO replace with ktor type.
-                        call.response.contentType("text/html")
+                        call.response.contentType(ContentType.Text.Html)
                         call.respond(bootstrapHtml)
                     } catch (nfe: NotFoundException) {
                         call.response.status(HttpStatusCode.NotFound)
@@ -154,49 +174,64 @@ class Kweb(val port: Int,
                         logger.error(e) { "Exception thrown while rendering page, code $logToken" }
                     }
                 }
+
                 webSocket("/ws") {
-                    handle { frame ->
-                        if (frame is Frame.Text) {
-                            val message = gson.fromJson(frame.readText(), C2SWebsocketMessage::class.java)
-                            handleInboundMessage(this, message)
+                    val kwebSessionId = call.sessions.get<KwebSessionId>()
+                    if (kwebSessionId != null) {
+                        logger.debug("Received websocket message for $kwebSessionId")
+
+                        val session = clients.get(kwebSessionId) ?: throw RuntimeException("Unable to find session for $kwebSessionId")
+
+                        val clientConnection = session.clientConnection
+                        if (clientConnection is Caching) {
+                            val webSocketClientConnection = KwebClientConnection.WebSocket(this)
+                            session.clientConnection = webSocketClientConnection
+                            clientConnection.read().forEach { webSocketClientConnection.send(it) }
                         }
+
+                        try {
+                            incoming.consumeEach { frame ->
+                                if (frame is Frame.Text) {
+                                    val message = gson.fromJson<Client2ServerMessage>(frame.readText())
+                                    handleInboundMessage(session, message)
+                                } else {
+                                    logger.warn { "Unknown frame type: $frame" }
+                                }
+                            }
+                        } finally {
+                            logger.info("Ending WS session for client id $kwebSessionId")
+                            clients.remove(kwebSessionId)
+                        }
+                    } else {
+                        logger.warn {"No kweb sessionId found for websocket request, ignoring"}
                     }
                 }
             }
         }
 
-        server!!.start()
+        server.start()
         logger.info {"KWeb is listening on port $port"}
     }
 
-    private fun handleInboundMessage(socket: WebSocket, message: C2SWebsocketMessage) {
-        val wsClientData = clients[message.id] ?: throw RuntimeException("Message with id ${message.id} received, but id is unknown")
-        logger.debug { "Message received to client id ${wsClientData.id}" }
+    private fun handleInboundMessage(fromClient: RemoteClientState, message: Client2ServerMessage) {
+        logger.debug { "Message received to client id ${fromClient.id.id}" }
         if (message.error != null) {
-            handleError(message.error, wsClientData)
+            handleError(message.error, fromClient)
         } else if (message.hello != null) {
-            handleHello(socket, wsClientData)
+            logger.info { "Disregarding 'hello' message" }
         } else {
-            val clientId = message.id
-            val clientData = clients[clientId] ?: throw RuntimeException("No handler found for client $clientId")
             when {
                 message.callback != null -> {
                     val (resultId, result) = message.callback
-                    val resultHandler = clientData.handlers[resultId] ?: throw RuntimeException("No data handler for $resultId for client $clientId")
+                    val resultHandler = fromClient.handlers[resultId] ?: throw RuntimeException("No data handler for $resultId for client ${fromClient.id}")
                     resultHandler(result ?: "")
                 }
             }
         }
     }
 
-    private fun handleHello(socket: WebSocket, wsClientData: WSClientData) = async(CommonPool) {
-        val tempQueue = wsClientData.outboundChannel as OutboundChannel.TemporarilyStoringChannel
-        wsClientData.outboundChannel = OutboundChannel.WSChannel(socket)
-        tempQueue.read().forEach { wsClientData.outboundChannel.send(it) }
-    }
-
-    private fun handleError(error: C2SWebsocketMessage.ErrorMessage, wsClientData: WSClientData) {
-        val debugInfo = wsClientData.debugTokens[error.debugToken] ?: throw RuntimeException("DebugInfo message not found")
+    private fun handleError(error: Client2ServerMessage.ErrorMessage, remoteClientState: RemoteClientState) {
+        val debugInfo = remoteClientState.debugTokens[error.debugToken] ?: throw RuntimeException("DebugInfo message not found")
         val logStatementBuilder = StringBuilder()
         logStatementBuilder.appendln("JavaScript message: '${error.error.message}'")
         logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
@@ -229,23 +264,23 @@ class Kweb(val port: Int,
     private fun refreshAllPages() = async(CommonPool) {
         for (client in clients.values) {
             val message = S2CWebsocketMessage(
-                    yourId = client.id,
+                    yourId = client.id.id,
                     execute = S2CWebsocketMessage.Execute("window.location.reload(true);"), debugToken = null)
-            client.outboundChannel.send(message.toJson())
+            client.clientConnection.send(message.toJson())
         }
     }
 
-    fun execute(clientId: String, javascript: String) {
+    fun execute(clientId: KwebSessionId, javascript: String) {
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
             wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
             dt
         }
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId.id, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
     }
 
-    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
+    fun executeWithCallback(clientId: KwebSessionId, javascript: String, callbackId: Int, handler: (String) -> Unit) {
         // TODO: Should return handle which can be used for cleanup of event listeners
         val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
@@ -254,15 +289,15 @@ class Kweb(val port: Int,
             dt
         }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = S2CWebsocketMessage.Execute(javascript), debugToken = debugToken))
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId.id, execute = S2CWebsocketMessage.Execute(javascript), debugToken = debugToken))
     }
 
-    fun removeCallback(clientId: String, callbackId: Int) {
+    fun removeCallback(clientId: KwebSessionId, callbackId: Int) {
         clients.get(clientId)?.handlers?.remove(callbackId)
     }
 
-    fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
-        val wsClientData = clients.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+    fun evaluate(clientId: KwebSessionId, expression: String, handler: (String) -> Unit) {
+        val wsClientData = clients.get(clientId) ?: throw RuntimeException("Failed to evaluate JavaScript because client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
             wsClientData.debugTokens.put(dt, DebugInfo(expression, "evaluating", Throwable()))
@@ -270,7 +305,7 @@ class Kweb(val port: Int,
         }
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(clientId, evaluate = S2CWebsocketMessage.Evaluate(expression, callbackId), debugToken = debugToken))
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId.id, evaluate = S2CWebsocketMessage.Evaluate(expression, callbackId), debugToken = debugToken))
     }
 
     override fun close() {
@@ -279,10 +314,12 @@ class Kweb(val port: Int,
 
 }
 
-private data class WSClientData(val id: String, @Volatile var outboundChannel: OutboundChannel, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap()) {
+private data class RemoteClientState(val id: KwebSessionId, @Volatile var clientConnection: KwebClientConnection, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap()) {
     fun send(message: S2CWebsocketMessage) {
-        outboundChannel.send(gson.toJson(message))
+        clientConnection.send(gson.toJson(message))
     }
+
+    override fun toString() = "RemoteClientState(id = ${id.id})"
 }
 
 /**
@@ -308,7 +345,7 @@ data class HttpRequestInfo(val request: ApplicationRequest) {
 data class DebugInfo(val js: String, val action : String, val throwable: Throwable)
 
 data class S2CWebsocketMessage(
-        val yourId: String,
+        val yourId: String, // TODO: Remove this, client shouldn't need it as it is in cookie
         val debugToken: String?,
         val execute: Execute? = null,
         val evaluate: Evaluate? = null
@@ -317,7 +354,7 @@ data class S2CWebsocketMessage(
     data class Evaluate(val js: String, val callbackId: Int)
 }
 
-data class C2SWebsocketMessage(
+data class Client2ServerMessage(
         val id: String,
         val hello: Boolean? = true,
         val error: ErrorMessage? = null,
@@ -329,3 +366,5 @@ data class C2SWebsocketMessage(
 
     data class C2SCallback(val callbackId: Int, val data: String?)
 }
+
+data class KwebSessionId(val id: String)

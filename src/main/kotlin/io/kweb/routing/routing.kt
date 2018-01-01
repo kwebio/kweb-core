@@ -1,7 +1,6 @@
 package io.kweb.routing
 
-import io.kweb.Kweb
-import io.kweb.WebBrowser
+import io.kweb.*
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
 import io.kweb.state.Bindable
@@ -74,9 +73,7 @@ private fun test_sample_for_routing() {
         doc.body.new {
         route<Route> {
                 render(obsPath) { thisPath ->
-                    when (thisPath) {
-                        is Route -> h1().text(thisPath.a.toString())
-                    }
+                    h1().text(thisPath.a.toString())
                 }
             }
         }

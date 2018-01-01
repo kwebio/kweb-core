@@ -2,20 +2,14 @@ package io.kweb.routing
 
 import com.gargoylesoftware.htmlunit.WebClient
 import com.gargoylesoftware.htmlunit.html.HtmlPage
-import io.kotlintest.Duration
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldEqual
-import io.kotlintest.milliseconds
-import io.kotlintest.seconds
+import io.kotlintest.*
+import io.kotlintest.matchers.*
 import io.kotlintest.specs.FreeSpec
-import io.kweb.ACWebClient
-import io.kweb.Kweb
-import io.kweb.dom.attributes.attr
-import io.kweb.dom.attributes.id
+import io.kweb.*
+import io.kweb.dom.attributes.*
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
-import io.kweb.htmlUnitInit
 import io.kweb.state.persistent.render
 
 
@@ -25,11 +19,13 @@ import io.kweb.state.persistent.render
 class RoutingSpec : FreeSpec() {
     val webClient: WebClient = autoClose(ACWebClient())
 
+    private val HTTP_PORT = 2826
+
     init {
         htmlUnitInit(webClient)
 
         "Given a Kweb instance serving a simple website" - {
-            Kweb(port = 4235) {
+            Kweb(port = HTTP_PORT) {
                 route<FooPath> {
                     doc.body.new {
                         render(obsPath) {
@@ -51,7 +47,7 @@ class RoutingSpec : FreeSpec() {
                 }
             }
             "Visiting /" - {
-                val rootPage = webClient.getPage<HtmlPage>("http://127.0.0.1:4235/")
+                val rootPage = webClient.getPage<HtmlPage>("http://127.0.0.1:$HTTP_PORT/")
                 "should respond with a 200 code" {
                     rootPage.webResponse.statusCode shouldBe 200
                 }
@@ -64,7 +60,7 @@ class RoutingSpec : FreeSpec() {
                 }
             }
             "Visiting one of the dogs pages" - {
-                val fooJPage = webClient.getPage<HtmlPage>("http://127.0.0.1:4235/dogs/kraken")
+                val fooJPage = webClient.getPage<HtmlPage>("http://127.0.0.1:$HTTP_PORT/dogs/kraken")
                 fooJPage.getElementsByTagName("h1").let { headers ->
                     headers.size shouldEqual 1
                     "should return the appropriate header and text" {
@@ -74,14 +70,14 @@ class RoutingSpec : FreeSpec() {
             }
             "Visiting one of the cats pages" - {
                 "should return the appropriate text for initial pageload" {
-                    val initialPage = webClient.getPage<HtmlPage>("http://127.0.0.1:4235/cats/145/12")
+                    val initialPage = webClient.getPage<HtmlPage>("http://127.0.0.1:$HTTP_PORT/cats/145/12")
                     initialPage.getElementsByTagName("h1").let { headers ->
                         headers.size shouldEqual 1
                         headers.first().textContent shouldEqual "145-12"
                     }
                 }
                 "should should return the appropriate text for a click" {
-                    val page = webClient.getPage<HtmlPage>("http://127.0.0.1:4235/cats/145/12")
+                    val page = webClient.getPage<HtmlPage>("http://127.0.0.1:$HTTP_PORT/cats/145/12")
                     page.getElementById("clickableHeader").let { headerElement ->
                         val afterClickPage = headerElement.click<HtmlPage>()
                         pollFor(5.seconds) {

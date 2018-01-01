@@ -192,7 +192,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
      */
     fun text(text: ReadOnlyBindable<String>) {
         this.text(text.value)
-        val handle = text.addListener{ old, new ->
+        val handle = text.addListener{ _, new ->
             text(new)
         }
         this.creator?.onCleanup(true) {

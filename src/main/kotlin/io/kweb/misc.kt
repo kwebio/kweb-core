@@ -60,11 +60,4 @@ val <T : Any> KClass<T>.pkg : String get() {
     }
 }
 
-class CacheResult<in I, out O>(val f : (I) -> O) {
-    private val cache = ConcurrentHashMap<I, O>()
-    operator fun get(i : I) {
-
-    }
-}
-
 data class NotFoundException(override val message: String) : Exception(message)

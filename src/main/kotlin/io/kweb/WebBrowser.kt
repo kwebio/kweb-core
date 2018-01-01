@@ -2,8 +2,7 @@ package io.kweb
 
 import io.kweb.dom.Document
 import io.kweb.plugins.KWebPlugin
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
 import mu.KLogging
 import java.util.concurrent.CompletableFuture
 import kotlin.reflect.KClass
@@ -13,7 +12,7 @@ import kotlin.reflect.jvm.jvmName
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
  * expressions and retrieve the result.
  */
-class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb, val response: String? = null) {
+class WebBrowser(private val sessionId: KwebSessionId, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb, val response: String? = null) {
     companion object: KLogging()
 
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
@@ -36,15 +35,15 @@ class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestI
     }
 
     fun execute(js: String) {
-        kweb.execute(clientId, js)
+        kweb.execute(sessionId, js)
     }
 
     fun executeWithCallback(js: String, callbackId: Int, callback: (String) -> Unit) {
-        kweb.executeWithCallback(clientId, js, callbackId, callback)
+        kweb.executeWithCallback(sessionId, js, callbackId, callback)
     }
 
     fun removeCallback(callbackId: Int) {
-        kweb.removeCallback(clientId, callbackId)
+        kweb.removeCallback(sessionId, callbackId)
     }
 
     fun evaluate(js: String): CompletableFuture<String> {
@@ -58,7 +57,7 @@ class WebBrowser(private val clientId: String, val httpRequestInfo: HttpRequestI
 
 
     fun evaluateWithCallback(js: String, rh: WebBrowser.() -> Boolean) {
-        kweb.evaluate(clientId, js, { rh.invoke(WebBrowser(clientId, httpRequestInfo, kweb, it)) })
+        kweb.evaluate(sessionId, js, { rh.invoke(WebBrowser(sessionId, httpRequestInfo, kweb, it)) })
     }
 
     val doc = Document(this)
