@@ -138,3 +138,9 @@ artifacts {
     archives javadocJar
 }
 
+// TODO: Figure out why this is needed and remove: https://discourse.corda.net/t/m12-1-intellij-complains-cannot-inline-bytecode-build-with-jvm-target-1-8-into-bytecode-that-is-being-built-with-jvm-target-1-6/1249/3
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

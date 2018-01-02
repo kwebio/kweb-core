@@ -69,6 +69,17 @@
                     var msg = JSON.parse(event.data);
                     handleInboundMessage(msg);
                 }
+
+                socket.onclose = function(evt) {
+                    var explanation = "";
+                    if (evt.reason && evt.reason.length > 0) {
+                        explanation = "reason: " + evt.reason;
+                    } else {
+                        explanation = "without a reason specified";
+                    }
+
+                    console.log("WebSocket closed", evt);
+                };
             }
         }
 
