@@ -12,7 +12,7 @@ import kotlin.reflect.jvm.jvmName
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
  * expressions and retrieve the result.
  */
-class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb, val response: String? = null) {
+class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb, private val response: String? = null) {
     companion object: KLogging()
 
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
