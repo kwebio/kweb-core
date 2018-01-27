@@ -5,7 +5,7 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
-import io.ktor.response.*
+import io.ktor.response.respondText
 import io.ktor.routing.*
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.*
@@ -141,8 +141,7 @@ class Kweb(val port: Int,
                                 .replace("--CLIENT-ID-PLACEHOLDER--", kwebSessionId)
                                 .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", initialCachedMessages.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
 
-                        call.response.contentType(ContentType.Text.Html)
-                        call.respond(bootstrapHtml)
+                        call.respondText(bootstrapHtml, ContentType.Text.Html)
                     } catch (nfe: NotFoundException) {
                         call.response.status(HttpStatusCode.NotFound)
                         call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))

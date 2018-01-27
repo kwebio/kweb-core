@@ -19,7 +19,9 @@ fun main(args: Array<String>) {
             //   http://beust.com/weblog/2015/10/30/exploring-the-kotlin-standard-library/
 
             // We element a <ul> element, and then use apply() to add things to it
-            ul().new {
+            val listUL = ul()
+
+            listUL.new {
 
                 // Add some initial items to the list
                 for (text in listOf("one", "two", "three")) {
@@ -51,7 +53,7 @@ fun main(args: Array<String>) {
                     val newItemText = inputElement.getValue().await()
 
                     // And now we add the new item using our custom function
-                    ul().new().newListItem(newItemText)
+                    listUL.new().newListItem(newItemText)
 
                     // And finally reset the value of the inputElement element.
                     inputElement.setValue("")

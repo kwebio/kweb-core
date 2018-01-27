@@ -11,9 +11,9 @@ allprojects {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.10'
+    ext.kotlin_version = '1.2.20'
     ext.dokka_version = '0.9.15'
-    ext.ktor_version = '0.9.1-alpha-8'
+    ext.ktor_version = '0.9.1-alpha-10'
 
     repositories {
         jcenter()
@@ -59,6 +59,12 @@ configurations {
     provided
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'org.jetbrains.kotlinx:kotlinx-coroutines-io:0.21-alpha-2'
+    }
+}
+
 sourceSets {
     main.compileClasspath += configurations.provided
     test.compileClasspath += configurations.provided
@@ -74,8 +80,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.20'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21-alpha-2'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.21-alpha-2'
 
     compile ("io.ktor:ktor-server-core:$ktor_version") {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
