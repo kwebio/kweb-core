@@ -14,7 +14,6 @@ import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KWebPlugin
-import io.mola.galimatias.URL
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.consumeEach
 import org.apache.commons.io.IOUtils
@@ -306,11 +305,10 @@ private data class RemoteClientState(val id: String, @Volatile var clientConnect
  *                however you should use properties of [HttpRequestInfo] directly instead if possible.
  */
 data class HttpRequestInfo(val request: ApplicationRequest) {
-    val requestedUrl : URL by lazy {
-        val urlAsString = with(request.origin) {
+    val requestedUrl : String by lazy {
+        with(request.origin) {
             "$scheme://$host:$port$uri"
         }
-        URL.parse(urlAsString)
     }
 
     val cookies = request.cookies

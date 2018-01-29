@@ -3,10 +3,10 @@ package io.kweb.routing
 import io.kweb.*
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
-import io.kweb.state.Bindable
+import io.kweb.state.*
 import io.kweb.state.persistent.render
 import io.mola.galimatias.URL
-import java.net.URLDecoder
+
 
 
 /**
@@ -22,47 +22,58 @@ fun main(args: Array<String>) {
     println(url)
 }
 
-val urlPathTranslator = UrlPathTranslator()
-
 fun WebBrowser.pushState(path: String) {
     execute("""history.pushState({}, "$path", "$path");""")
 }
 
-inline fun <reified T : Any> WebBrowser.route(receiver: (RequestURL<T>).() -> Unit) {
-    val requestUrl = with(httpRequestInfo.requestedUrl) {
-        RequestURL<T>(
-                scheme = Scheme.valueOf(scheme()),
-                host = host().toHumanString(),
-                port = port(),
-                path = Bindable(urlPathTranslator.parse(path())),
-                query = Bindable(query() ?: ""),
-                rawUrl = this
-        )
+fun WebBrowser.route(receiver: (url: Bindable<String>) -> Unit) {
+    val url = Bindable(httpRequestInfo.requestedUrl)
+
+    url.addListener { _, new ->
+        pushState(new)
     }
-    requestUrl.path.addListener { _, new ->
-        pushState(urlPathTranslator.toPath(new) + requestUrl.query.value)
-    }
-    requestUrl.query.addListener { _, new ->
-        pushState(urlPathTranslator.toPath(requestUrl.path.value) + new)
-    }
-    receiver(requestUrl)
+
+    receiver(url)
 }
 
-data class RequestURL<T : Any>(val scheme: Scheme, val host: String, val port: Int = 80, val path: Bindable<T>, val query: Bindable<String>, val rawUrl: URL) {
-    private fun queryToQueryMap(query: String): Map<String, String> {
-        val pairs = query.split("&".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
-        val queryMap = HashMap<String, String>()
-        for (pair in pairs) {
-            val idx = pair.indexOf("=")
-            queryMap.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"))
-        }
-        return queryMap
-    }
+fun <T : Any> WebBrowser.route(mapper: (String) -> T, receiver: (url: ReadOnlyBindable<T>) -> Unit) = route { receiver(it.map(mapper)) }
+
+fun <T : Any> WebBrowser.route(func: ReversableFunction<String, T>, receiver: (url: Bindable<T>) -> Unit) = route { receiver(it.map(func)) }
+
+val withGalimatiasUrlParser = object : ReversableFunction<String, URL> {
+    override fun map(from: String): URL = URL.parse(from)
+
+    override fun unmap(original: String, change: URL) = change.toString()
+
+}
+
+operator fun <T : Any> ReadOnlyBindable<List<T>>.get(pos: Int): ReadOnlyBindable<T> {
+    return this.map { it[pos] }
+}
+
+operator fun <T : Any> Bindable<List<T>>.get(pos: Int): Bindable<T> {
+    return this.map(object : ReversableFunction<List<T>, T> {
+        override fun map(from: List<T>): T = from[pos]
+
+        override fun unmap(list: List<T>, item: T) = list.subList(0, pos).plus(item).plus(list.subList(pos + 1, list.size))
+    })
 }
 
 enum class Scheme {
     http, https
 }
+
+private val prx = "/".toRegex()
+
+fun Bindable<URL>.path() = this.map(object : ReversableFunction<URL, List<String>> {
+
+    override fun map(from: URL): List<String> = from.pathSegments()
+
+    override fun unmap(original: URL, change: List<String>) =
+            original.withPath(change.joinToString(separator = "/"))
+
+})
+
 
 ///////// Sample code
 
@@ -71,9 +82,9 @@ data class Route(val a : Int)
 private fun test_sample_for_routing() {
     Kweb(port= 16189) {
         doc.body.new {
-        route<Route> {
-                render(path) { thisPath ->
-                    h1().text(thisPath.a.toString())
+            route { url ->
+                render(url) { url ->
+                    h1().text(url)
                 }
             }
         }

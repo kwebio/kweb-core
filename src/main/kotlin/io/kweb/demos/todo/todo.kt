@@ -1,8 +1,6 @@
 package io.kweb.demos.todo
 
 import io.kweb.*
-import io.kweb.demos.todo.Route.TodoPath
-import io.kweb.demos.todo.Route.TodoPath.*
 import io.kweb.demos.todo.State.Item
 import io.kweb.demos.todo.State.List
 import io.kweb.dom.element.*
@@ -11,27 +9,37 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.on
 import io.kweb.plugins.semanticUI.*
-import io.kweb.routing.route
+import io.kweb.routing.*
 import io.kweb.state.Bindable
 import io.kweb.state.persistent.*
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.future.await
+import mu.KotlinLogging
 import java.time.Instant
+
+private val logger = KotlinLogging.logger {}
 
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
     Kweb(port = 8091, plugins = listOf(semanticUIPlugin)) {
         doc.body.new {
-            route<TodoPath> {
-                render(path) { thisPath ->
-                    when (thisPath) {
-                        is Root -> {
+            route(withGalimatiasUrlParser) { url ->
+                val path = url.path()
+                h1().text("Todo List!")
+                render(path[0]) { entityType ->
+                    when (entityType) {
+                        "" -> {
                             val newListId = generateNewUid()
                             State.lists[newListId] = State.List(newListId, "")
-                            path.value = Lists(newListId)
+                            path.value = listOf("lists", newListId)
                         }
-                        is Lists -> {
-                            bind(asBindable(State.lists, thisPath.uid))
+                        "lists" -> {
+                            render(path[1]) { listUid ->
+                                bind(asBindable(State.lists, listUid))
+                            }
+                        }
+                        else -> {
+                            throw NotFoundException("Unrecognized entity type '$entityType', path: ${path.value}")
                         }
                     }
                 }
@@ -42,6 +50,7 @@ fun main(args: Array<String>) {
 }
 
 private fun ElementCreator<*>.bind(list : Bindable<State.List>) {
+    logger.info("Rendering list ${list.value.uid}")
     h3().text(list.map(List::title))
     div(semantic.ui.middle.aligned.divided.list).new {
         renderEach(State.itemsByList(list.value.uid)) { item ->
@@ -68,8 +77,8 @@ private fun ElementCreator<*>.bind(list : Bindable<State.List>) {
 
 private fun handleAddItem(input: InputElement, list: Bindable<List>) {
     async {
-        val newItemText = input.read.text.await()
-        input.text("")
+        val newItemText = input.getValue().await()
+        input.setValue("")
         val newItem = Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
         State.items[newItem.uid] = newItem
     }

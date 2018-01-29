@@ -36,6 +36,7 @@ sealed class UserEntity {
     class Settings : UserEntity()
 }
 
+/*
 class UrlPathParserSpec : FreeSpec() {
     init {
         val urlPathParser = UrlPathTranslator()
@@ -95,4 +96,6 @@ class UrlPathParserSpec : FreeSpec() {
             }
         }
     }
+
 }
+       */

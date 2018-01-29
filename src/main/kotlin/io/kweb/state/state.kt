@@ -79,6 +79,12 @@ open class ReadOnlyBindable<T : Any>(initialValue: T) {
     }
 }
 
+interface ReversableFunction<Input, Output> {
+    fun map(from : Input) : Output
+
+    fun unmap(original : Input, change : Output) : Input
+}
+
 class Bindable<T : Any>(initialValue: T) : ReadOnlyBindable<T>(initialValue) {
     override var value: T by Delegates.observable(initialValue) { _, old, new ->
         assertNotClosed()
@@ -87,15 +93,17 @@ class Bindable<T : Any>(initialValue: T) : ReadOnlyBindable<T>(initialValue) {
         }
     }
 
-    fun <O : Any> map(mapper: (T) -> O, unmapper: ((T, O) -> T)): Bindable<O> {
+
+
+    fun <O : Any> map(rf : ReversableFunction<T, O>): Bindable<O> {
         assertNotClosed()
-        val mappedObservable = Bindable(mapper(value))
+        val mappedObservable = Bindable(rf.map(value))
         val myChangeHandle = addListener { _, new ->
-            mappedObservable.value = mapper(new)
+            mappedObservable.value = rf.map(new)
         }
         onClose { removeListener(myChangeHandle) }
         val origChangeHandle = mappedObservable.addListener({ _, new ->
-            value = unmapper(value, new)
+            value = rf.unmap(value, new)
         })
         onClose { mappedObservable.removeListener(origChangeHandle)}
         return mappedObservable

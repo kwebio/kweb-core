@@ -9,7 +9,7 @@
         </encoder>
     </appender>
 
-    <logger name="io.kweb" level="debug"
+    <logger name="io.kweb" level="info"
             additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>

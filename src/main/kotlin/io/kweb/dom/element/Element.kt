@@ -190,7 +190,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
      * Set the text of this element to an [ReadOnlyBindable] value.  If the text in the ReadOnlyBindable
      * changes the text of this element will update automatically.
      */
-    fun text(text: ReadOnlyBindable<String>) {
+    fun text(text: ReadOnlyBindable<String>) : Element {
         this.text(text.value)
         val handle = text.addListener{ _, new ->
             text(new)
@@ -198,6 +198,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
         this.creator?.onCleanup(true) {
             text.removeListener(handle)
         }
+        return this
     }
 
     fun addText(value: String): Element {

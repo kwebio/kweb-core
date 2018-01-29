@@ -12,7 +12,6 @@ import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
 import io.kweb.state.persistent.render
 
-
 /**
  * Created by ian on 4/30/17.
  */
@@ -26,24 +25,26 @@ class RoutingSpec : FreeSpec() {
 
         "Given a Kweb instance serving a simple website" - {
             Kweb(port = HTTP_PORT) {
-                route<FooPath> {
+                route(withGalimatiasUrlParser) { url ->
                     doc.body.new {
-                        render(path) {
+                        val path = url.path()
+                        render(path[0]) {
                             when (it) {
-                                is FooPath.Root -> {
+                                "root" -> {
                                     h1().text("Root")
                                 }
-                                is FooPath.Dogs -> {
-                                    h1(attributes = attr.id("dogHeader")).text(it.j1)
+                                "dogs" -> {
+                                    h1(attributes = attr.id("dogHeader")).text(path[1])
                                 }
-                                is FooPath.Cats -> {
-                                    h1(attributes = attr.id("clickableHeader")).text("${it.k1}-${it.k2}").on.click {
-                                        path.value = FooPath.Dogs("doggie")
+                                "cats" -> {
+                                    h1(attributes = attr.id("clickableHeader")).text(path.map { "${it[1]}-${it[2]}" }).on.click {
+                                        path.value = listOf("dogs", "doggie")
                                     }
                                 }
                             }
                         }
                     }
+                }
                 }
             }
             "Visiting /" - {
@@ -88,8 +89,6 @@ class RoutingSpec : FreeSpec() {
             }
         }
     }
-
-}
 
 val Duration.millis get() = this.timeUnit.toMillis(amount)
 fun <T> pollFor(maximumTime: io.kotlintest.Duration, pollEvery : Duration = 300.milliseconds, f: () -> T): T {

@@ -5,14 +5,14 @@ import io.kweb.Kweb
 import io.kweb.dom.element.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
-import io.kweb.state.Bindable
+import io.kweb.state.*
 import java.util.*
 
 /**
  * Created by ian on 6/18/17.
  */
 
-fun <T : Any> ElementCreator<*>.render(bindable : Bindable<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
+fun <T : Any> ElementCreator<*>.render(bindable : ReadOnlyBindable<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.addToElement, this)
     renderer(childEC, bindable.value)
     bindable.addListener { _, newValue ->
