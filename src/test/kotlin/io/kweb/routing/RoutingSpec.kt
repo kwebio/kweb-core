@@ -19,7 +19,7 @@ import io.kweb.state.persistent.render
 class RoutingSpec : FreeSpec() {
     val webClient: WebClient = autoClose(ACWebClient())
 
-    private val HTTP_PORT = 2826
+    private val HTTP_PORT = 2827
 
     init {
         htmlUnitInit(webClient)
@@ -28,7 +28,7 @@ class RoutingSpec : FreeSpec() {
             Kweb(port = HTTP_PORT) {
                 route<FooPath> {
                     doc.body.new {
-                        render(obsPath) {
+                        render(path) {
                             when (it) {
                                 is FooPath.Root -> {
                                     h1().text("Root")
@@ -38,7 +38,7 @@ class RoutingSpec : FreeSpec() {
                                 }
                                 is FooPath.Cats -> {
                                     h1(attributes = attr.id("clickableHeader")).text("${it.k1}-${it.k2}").on.click {
-                                        obsPath.value = FooPath.Dogs("doggie")
+                                        path.value = FooPath.Dogs("doggie")
                                     }
                                 }
                             }

@@ -1,12 +1,7 @@
 package io.kweb.routing
 
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldEqual
-import io.kotlintest.matchers.shouldThrow
-import io.kotlintest.properties.forAll
-import io.kotlintest.properties.headers
-import io.kotlintest.properties.row
-import io.kotlintest.properties.table
+import io.kotlintest.matchers.*
+import io.kotlintest.properties.*
 import io.kotlintest.specs.FreeSpec
 
 /**
@@ -45,7 +40,7 @@ class UrlPathParserSpec : FreeSpec() {
     init {
         val urlPathParser = UrlPathTranslator()
 
-        "test URL obsPath parsing" - {
+        "test URL path parsing" - {
             val parseableUrls = table(
                     headers("url", "parsedUrl"),
                     row<String, Entity>("/", Entity.Root()),
@@ -63,7 +58,7 @@ class UrlPathParserSpec : FreeSpec() {
             }
         }
 
-        "test URL obsPath generation" - {
+        "test URL path generation" - {
             val parseableUrls = table(
                     headers("url", "parsedUrl"),
                     row<String, Entity>("/", Entity.Root()),

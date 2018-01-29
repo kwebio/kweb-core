@@ -1,23 +1,18 @@
 package io.kweb.routing
 
 import io.kweb.pkg
-import io.kweb.routing.ParsingResult.NoValue
-import io.kweb.routing.ParsingResult.ValueExtracted
+import io.kweb.routing.ParsingResult.*
 import org.reflections.Reflections
 import org.reflections.scanners.SubTypesScanner
-import org.reflections.util.ClasspathHelper
-import org.reflections.util.ConfigurationBuilder
-import kotlin.reflect.KClass
-import kotlin.reflect.KParameter
+import org.reflections.util.*
+import kotlin.reflect.*
 import kotlin.reflect.KVisibility.PUBLIC
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.isSuperclassOf
-import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaType
 
 /**
  * Uses reflection to convert between a Kotlin data object and a
- * [URL obsPath](https://url.spec.whatwg.org/#concept-url-obsPath), and back again.
+ * [URL path](https://url.spec.whatwg.org/#concept-url-path), and back again.
  *
  * @author [Desprez Jean-Marc](https://github.com/jmdesprez, modifications)
  * @author [Ian Clarke](https://github.com/sanity)
@@ -25,7 +20,7 @@ import kotlin.reflect.jvm.javaType
 class UrlPathTranslator(val contextProvider: ((KClass<*>) -> Set<KClass<out Any>>)?) {
 
     /**
-     * @param pathObjectPackage The name of the package in which the obsPath data class and any
+     * @param pathObjectPackage The name of the package in which the path data class and any
      *                          related classes are defined.
      */
     constructor(vararg pathObjectPackage: String) : this(if (pathObjectPackage.isEmpty()) null else ClasspathScanner(*pathObjectPackage)::getContext)
@@ -117,7 +112,7 @@ class UrlPathTranslator(val contextProvider: ((KClass<*>) -> Set<KClass<out Any>
     }
 
     /**
-     * Convert an object to a obsPath
+     * Convert an object to a path
      *
      * @sample toPath_sample
      */
@@ -155,7 +150,7 @@ class UrlPathTranslator(val contextProvider: ((KClass<*>) -> Set<KClass<out Any>
 }
 
 /**
- * Convert a obsPath to an object.
+ * Convert a path to an object.
  *
  * @sample parse_sample
  */
@@ -168,7 +163,7 @@ inline fun <reified T : Any> UrlPathTranslator.parse(url: String): T {
         val name = kClass.simpleName?.toLowerCase()
         name == realEntityName
     }.let { entity ->
-        entity ?: throw UrlParseException("Unable to parse URL obsPath `$url`")
+        entity ?: throw UrlParseException("Unable to parse URL path `$url`")
     }
 }
 

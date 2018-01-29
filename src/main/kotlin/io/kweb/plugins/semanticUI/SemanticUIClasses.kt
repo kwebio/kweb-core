@@ -361,6 +361,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val middle : SemanticUIClasses get() {
+        classes("middle")
+        return this
+    }
+
     val minus : SemanticUIClasses get() {
         classes("minus")
         return this

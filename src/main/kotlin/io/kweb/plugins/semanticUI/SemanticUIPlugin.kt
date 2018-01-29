@@ -9,8 +9,8 @@ import io.kweb.plugins.jqueryCore.jqueryCore
 class SemanticUIPlugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         startHead.append("""
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.2/semantic.min.css">
-<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.13/semantic.min.css">
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.13/semantic.min.js"></script>
 """.trimIndent())
     }
 }

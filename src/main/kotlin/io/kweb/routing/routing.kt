@@ -34,21 +34,21 @@ inline fun <reified T : Any> WebBrowser.route(receiver: (RequestURL<T>).() -> Un
                 scheme = Scheme.valueOf(scheme()),
                 host = host().toHumanString(),
                 port = port(),
-                obsPath = Bindable(urlPathTranslator.parse(path())),
+                path = Bindable(urlPathTranslator.parse(path())),
                 query = Bindable(query() ?: ""),
                 rawUrl = this
         )
     }
-    requestUrl.obsPath.addListener { _, new ->
+    requestUrl.path.addListener { _, new ->
         pushState(urlPathTranslator.toPath(new) + requestUrl.query.value)
     }
     requestUrl.query.addListener { _, new ->
-        pushState(urlPathTranslator.toPath(requestUrl.obsPath.value) + new)
+        pushState(urlPathTranslator.toPath(requestUrl.path.value) + new)
     }
     receiver(requestUrl)
 }
 
-data class RequestURL<T : Any>(val scheme: Scheme, val host: String, val port: Int = 80, val obsPath: Bindable<T>, val query: Bindable<String>, val rawUrl: URL) {
+data class RequestURL<T : Any>(val scheme: Scheme, val host: String, val port: Int = 80, val path: Bindable<T>, val query: Bindable<String>, val rawUrl: URL) {
     private fun queryToQueryMap(query: String): Map<String, String> {
         val pairs = query.split("&".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         val queryMap = HashMap<String, String>()
@@ -72,7 +72,7 @@ private fun test_sample_for_routing() {
     Kweb(port= 16189) {
         doc.body.new {
         route<Route> {
-                render(obsPath) { thisPath ->
+                render(path) { thisPath ->
                     h1().text(thisPath.a.toString())
                 }
             }

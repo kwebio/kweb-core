@@ -102,6 +102,21 @@ class Bindable<T : Any>(initialValue: T) : ReadOnlyBindable<T>(initialValue) {
     }
 }
 
+/*
+inline fun <reified T : Any> Shoebox<T>.getAsBindable(key : String) : Bindable<T>? {
+    val initialValue = this.get(key)
+    return if (initialValue != null) {
+        val b = Bindable(initialValue)
+        this.onChange(key, {_, new, _ ->
+            b.value = new
+        })
+        b
+    } else {
+        null
+    }
+}
+*/
+
 fun bindable_sample() {
     val obs = Bindable("Hello")
     val handle = obs.addListener( {old, new ->
