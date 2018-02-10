@@ -41,6 +41,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val basic : SemanticUIClasses get() {
+        classes("basic")
+        return this
+    }
+
     val black : SemanticUIClasses get() {
         classes("black")
         return this
@@ -158,6 +163,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val divider : SemanticUIClasses get() {
         classes("divider")
+        return this
+    }
+
+    val dividing : SemanticUIClasses get() {
+        classes("dividing")
         return this
     }
 
@@ -366,6 +376,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val mini : SemanticUIClasses get() {
+        classes("mini")
+        return this
+    }
+
     val minus : SemanticUIClasses get() {
         classes("minus")
         return this
@@ -546,6 +561,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val transition : SemanticUIClasses get() {
         classes("transition")
+        return this
+    }
+
+    val trash : SemanticUIClasses get() {
+        classes("trash")
         return this
     }
     

@@ -1,4 +1,4 @@
-<configuration debug="true">
+<configuration debug="true" scan="true">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
@@ -8,7 +8,9 @@
         </encoder>
     </appender>
 
-    <root level="error">
+    <logger name="io.kweb" level="INFO"></logger>
+
+    <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

@@ -14,12 +14,12 @@ import java.util.*
 
 fun <T : Any> ElementCreator<*>.render(bindable : ReadOnlyBindable<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.addToElement, this)
-    renderer(childEC, bindable.value)
     bindable.addListener { _, newValue ->
         childEC.cleanup()
         childEC = ElementCreator(this.addToElement, this)
         renderer(childEC, newValue)
     }
+    renderer(childEC, bindable.value)
 }
 
 fun <T : Any> ElementCreator<*>.asBindable(shoebox: Shoebox<T>, key: String): Bindable<T> {

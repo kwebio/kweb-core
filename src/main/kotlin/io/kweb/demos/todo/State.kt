@@ -12,5 +12,5 @@ object State {
 
     val items = Shoebox<Item>()
 
-    fun itemsByList(listUid: String) = items.view("itemsByList", Item::listUid).orderedSet(listUid, compareBy(Item::listUid))
+    fun itemsByList(listUid: String) = items.view("itemsByList", Item::listUid).orderedSet(listUid, compareBy(Item::created))
 }

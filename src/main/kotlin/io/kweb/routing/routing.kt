@@ -65,7 +65,7 @@ enum class Scheme {
 
 private val prx = "/".toRegex()
 
-fun Bindable<URL>.path() = this.map(object : ReversableFunction<URL, List<String>> {
+val Bindable<URL>.path get() = this.map(object : ReversableFunction<URL, List<String>> {
 
     override fun map(from: URL): List<String> = from.pathSegments()
 

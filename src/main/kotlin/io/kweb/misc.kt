@@ -15,6 +15,8 @@ import kotlin.reflect.jvm.jvmName
 
 val random = Random()
 
+val ROOT_PATH = ""
+
 fun createNonce() = random.nextInt(10000000).toString(16)
 
 val gson = Gson()

@@ -22,7 +22,7 @@ import java.time.Duration
 import java.util.*
 import java.util.concurrent.*
 
-/**
+        /**
  * Created by ian on 12/31/16.
  */
 
@@ -65,6 +65,7 @@ class Kweb(val port: Int,
     private val server: NettyApplicationEngine
 
     init {
+        logger.info("Initializing Kweb listening on port $port")
 
         //TODO: Need to do housekeeping to deleteIfExists old client data
 
@@ -74,6 +75,8 @@ class Kweb(val port: Int,
         if (refreshPageOnHotswap) {
             KwebHotswapPlugin.addHotswapReloadListener({refreshAllPages()})
         }
+
+        val config = NettyApplicationEngine.Configuration()
 
         server = embeddedServer(Netty, port) {
             install(DefaultHeaders)

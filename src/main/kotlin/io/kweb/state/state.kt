@@ -58,11 +58,18 @@ open class ReadOnlyBindable<T : Any>(initialValue: T) {
         return newObservable
     }
 
+    // TODO: Temporary for debugging
+    private var closedStack: Array<out StackTraceElement>? = null
+
     fun close() {
         if (isClosed) {
-            logger.warn("Attempted to close but was already closed")
+            logger.warn("Attempted to close but was already closed, duplicate close attempt:")
+            Thread.currentThread().stackTrace.forEach { println(it) }
+            logger.warn("Previously closed by:")
+            closedStack!!.forEach { println(it) }
         } else {
             isClosed = true
+            closedStack = Thread.currentThread().stackTrace
         }
         closeHandlers.forEach { it.invoke() }
     }

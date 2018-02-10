@@ -78,7 +78,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21-alpha-2'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.21-alpha-2'
@@ -101,7 +101,7 @@ dependencies {
 
     compile 'com.github.kwebio:shoebox:0.2.13'
 
-    testCompile 'net.sourceforge.htmlunit:htmlunit:2.26'
+    compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.29'
     testCompile 'io.kotlintest:kotlintest:2.0.3'
     testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
 
@@ -109,7 +109,7 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
 
     // Should be compileOnly
-    compileOnly 'com.github.HotswapProjects.HotswapAgent:hotswap-agent-core:1.1.0-SNAPSHOT'
+    compile group: 'org.hotswapagent', name: 'hotswap-agent-core', version: '1.1.0'
 
 }
 
