@@ -30,7 +30,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.2.12'
+version '0.2.13'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
