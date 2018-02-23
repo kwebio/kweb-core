@@ -63,10 +63,22 @@ open class ReadOnlyBindable<T : Any>(initialValue: T) {
 
     fun close() {
         if (isClosed) {
-            logger.warn("Attempted to close but was already closed, duplicate close attempt:")
-            Thread.currentThread().stackTrace.forEach { println(it) }
-            logger.warn("Previously closed by:")
-            closedStack!!.forEach { println(it) }
+            val firstStackTrace = closedStack!!
+            val secondStackTrace = Thread.currentThread().stackTrace
+            logger.debug {
+                val st = secondStackTrace
+                        .filter { it.methodName != "close" }
+                        .filterNot { firstStackTrace.contains(it) }
+                        .joinToString { it.toString() }
+                "Second stack trace:\t$st"
+            }
+            logger.debug {
+                val st = firstStackTrace
+                        .filter { it.methodName != "close" }
+                        .filterNot { secondStackTrace.contains(it) }
+                        .joinToString { it.toString() }
+                "First stack trace:\t$st"
+            }
         } else {
             isClosed = true
             closedStack = Thread.currentThread().stackTrace
@@ -81,7 +93,7 @@ open class ReadOnlyBindable<T : Any>(initialValue: T) {
 
     internal fun assertNotClosed() {
         if (isClosed) {
-            logger.warn("Shouldn't be called after Bindable is closed()")
+            logger.debug("Shouldn't be called after Bindable is closed()")
         }
     }
 }

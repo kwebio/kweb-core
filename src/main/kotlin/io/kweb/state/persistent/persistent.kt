@@ -7,6 +7,7 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.state.*
 import java.util.*
+import kotlin.NoSuchElementException
 
 /**
  * Created by ian on 6/18/17.
@@ -23,12 +24,12 @@ fun <T : Any> ElementCreator<*>.render(bindable : ReadOnlyBindable<T>, renderer 
 }
 
 fun <T : Any> ElementCreator<*>.asBindable(shoebox: Shoebox<T>, key: String): Bindable<T> {
-    val value = shoebox[key] ?: throw RuntimeException("Key $key not found")
+    val value = shoebox[key] ?: throw NoSuchElementException("Key $key not found")
     val w = Bindable(value)
     w.addListener { _, n -> shoebox[key] = n }
     val changeHandle = shoebox.onChange(key) { _, n, _ -> w.value = n }
     w.onClose { shoebox.deleteChangeListener(key, changeHandle) }
-    this.onCleanup(true) {
+    this.onCleanup(withParent = true) {
         w.close()
     }
     return w

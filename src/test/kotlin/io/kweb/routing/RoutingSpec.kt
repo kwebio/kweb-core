@@ -28,7 +28,8 @@ class RoutingSpec : FreeSpec() {
     init {
         htmlUnitInit(webClient)
 
-        val kweb = Kweb(port = HTTP_PORT) {
+        "Given a Kweb instance" {
+            val kweb = Kweb(port = HTTP_PORT) {
                 route(withGalimatiasUrlParser) { url ->
                     logger.info("Rendering ${url.value}")
                     doc.body.new {
@@ -54,45 +55,18 @@ class RoutingSpec : FreeSpec() {
                         }
                     }
                 }
-        }
+            }
 
-        "Visiting /" {
-            val rootPage = webClient.getPage<HtmlPage>("http://127.0.0.1:${kweb.port}/")
+            val rootPage = webClient.getPage<HtmlPage>("http://127.0.0.1:$HTTP_PORT/")
             rootPage.webResponse.statusCode shouldBe 200
             rootPage.getElementsByTagName("h1").let { headers ->
                 headers.size shouldEqual 1
                 headers.first().textContent shouldEqual "Root"
             }
         }
-        /*
-        "Visiting one of the dogs pages" {
-            val fooJPage = webClient.getPage<HtmlPage>("http://127.0.0.1:${kweb.port}/dogs/kraken")
-            fooJPage.getElementsByTagName("h1").let { headers ->
-                headers.size shouldEqual 1
-                "should return the appropriate header and text" {
-                    headers.first().textContent shouldEqual "kraken"
-                }
-            }
-        }
-        "Visiting one of the cats pages" {
-            val initialPage = webClient.getPage<HtmlPage>("http://127.0.0.1:${kweb.port}/cats/145/12")
-            initialPage.getElementsByTagName("h1").let { headers ->
-                headers.size shouldEqual 1
-                headers.first().textContent shouldEqual "145-12"
-            }
-
-            val page = webClient.getPage<HtmlPage>("http://127.0.0.1:$HTTP_PORT/cats/145/12")
-            page.getElementById("clickableHeader").let { headerElement ->
-                val afterClickPage = headerElement.click<HtmlPage>()
-                pollFor(5.seconds) {
-                            afterClickPage.getElementById("dogHeader").textContent shouldEqual "doggie"
-                }
-            }
-        }
-        */
     }
-
 }
+
 
 val Duration.millis get() = this.timeUnit.toMillis(amount)
 fun <T> pollFor(maximumTime: io.kotlintest.Duration, pollEvery : Duration = 300.milliseconds, f: () -> T): T {

@@ -38,8 +38,12 @@ fun main(args: Array<String>) {
                                     "lists" -> {
                                         logger.info("Rendering lists/${url.path[1]}")
                                         render(url.path[1]) { listUid ->
-                                            val list = asBindable(State.lists, listUid)
-                                            renderList(list)
+                                            try {
+                                                val list = asBindable(State.lists, listUid)
+                                                renderList(list)
+                                            } catch (e : NoSuchElementException) {
+                                                throw NotFoundException("Can't find list with id $listUid")
+                                            }
                                         }
                                     }
                                     else -> {
