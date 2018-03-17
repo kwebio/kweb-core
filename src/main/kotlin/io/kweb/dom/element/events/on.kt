@@ -8,3 +8,5 @@ import io.kweb.dom.element.Element
 
 
 val Element.on: ONReceiver get() = ONReceiver(this)
+
+val Element.onImmediate : ONImmediateReceiver get() = ONImmediateReceiver(this)

@@ -73,6 +73,9 @@ sourceSets {
 
 
 dependencies {
+    // Temp for development
+    compile project(":renegade")
+
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'

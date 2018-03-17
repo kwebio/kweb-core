@@ -21,8 +21,9 @@ import java.io.Closeable
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.*
+import kotlin.collections.ArrayList
 
-        /**
+/**
  * Created by ian on 12/31/16.
  */
 
@@ -250,6 +251,25 @@ class Kweb(val port: Int,
         }
     }
 
+    interface ThreadLocalOutboundMessageCatcher {
+        fun catch(javascript : String)
+    }
+
+    /**
+     * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
+     * execution of event handlers, see `Element.immediatelyOn`
+     */
+        val outboundMessageCatcher: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
+
+        fun catchOutbound(f: () -> Unit) : List<String> {
+            require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
+
+           val jsList = ArrayList<String>()
+            outboundMessageCatcher.set(jsList)
+            f()
+            outboundMessageCatcher.set(null)
+            return jsList
+        }
     fun execute(clientId: String, javascript: String) {
         val wsClientData = clientState.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
@@ -257,7 +277,12 @@ class Kweb(val port: Int,
             wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
             dt
         }
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
+        val tlomc = outboundMessageCatcher.get()
+        if (tlomc == null) {
+            wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
+        } else {
+            tlomc.add(javascript)
+        }
     }
 
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
@@ -269,7 +294,7 @@ class Kweb(val port: Int,
             dt
         }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, execute = S2CWebsocketMessage.Execute(javascript), debugToken = debugToken))
+        wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {

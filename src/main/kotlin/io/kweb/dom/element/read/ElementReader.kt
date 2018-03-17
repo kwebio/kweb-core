@@ -1,17 +1,21 @@
 package io.kweb.dom.element.read
 
 import com.github.salomonbrys.kotson.fromJson
-import io.kweb.WebBrowser
-import io.kweb.dom.element.Element
-import io.kweb.dom.element.KWebDSL
-import io.kweb.escapeEcma
-import io.kweb.gson
+import io.kweb.*
+import io.kweb.dom.element.*
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
 @KWebDSL
 open class ElementReader(protected val receiver: WebBrowser, internal val jsExpression: String) {
     constructor(element : Element) : this(element.webBrowser, element.jsExpression)
+
+    init {
+        require(receiver.kweb.outboundMessageCatcher.get() == null) {"""
+            Reading the DOM when an outboundMessageCatcher is set is likely to have unintended consequences.
+            Most likely you are trying to read the DOM within an `immediatelyOn {...}` block.
+        """.trimIndent()}
+    }
 
     val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName")
     val attributes: CompletableFuture<Map<String, String>> get() = receiver.evaluate("$jsExpression.attributes").thenApply { gson.fromJson<Map<String, String>>(it) }

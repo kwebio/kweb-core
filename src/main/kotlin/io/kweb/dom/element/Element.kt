@@ -211,6 +211,15 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
         return this
     }
 
+    fun addImmediateEventCode(eventName : String, jsCode : String) {
+        val wrappedJS = jsExpression + """
+            .addEventListener(${eventName.toJson()}, function(event) {
+                $jsCode
+            });
+        """.trimIndent()
+        webBrowser.evaluate(wrappedJS)
+    }
+
     fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), callback: (String) -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
         val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+"}"

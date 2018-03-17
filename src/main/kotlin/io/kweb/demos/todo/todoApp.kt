@@ -6,7 +6,7 @@ import io.kweb.demos.todo.State.List
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
-import io.kweb.dom.element.events.on
+import io.kweb.dom.element.events.*
 import io.kweb.dom.element.new
 import io.kweb.plugins.semanticUI.*
 import io.kweb.routing.*
@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
                 div(Style.innerContainer).new {
                     route(withGalimatiasUrlParser) { url ->
                         val listHeadingStyle = semantic.ui.dividing.header
-                        h1(listHeadingStyle).text("Shopping list")
+                        val pageHeading = h1(listHeadingStyle).text("Shopping list")
                         div(semantic.content).new {
                             render(url.path[0]) { entityType ->
                                 logger.info("Rendering entity type $entityType")
@@ -89,8 +89,14 @@ private fun ElementCreator<*>.renderList(list: Bindable<State.List>) {
                 handleAddItem(input, list)
             }
         }
-        button(semantic.ui.button).text("Add").on.click {
-            handleAddItem(input, list)
+        button(semantic.ui.button).text("Add").apply {
+            onImmediate.click {
+                execute("console.log(\"immediate\");")
+            }
+            on.click {
+                handleAddItem(input, list)
+                execute("console.log(\"after\");")
+            }
         }
     }
 }
