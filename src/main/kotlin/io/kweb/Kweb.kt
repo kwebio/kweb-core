@@ -314,6 +314,7 @@ class Kweb(val port: Int,
     }
 
     override fun close() {
+        logger.info("Shutting down Kweb")
         server.stop(0, 0, TimeUnit.SECONDS)
     }
 

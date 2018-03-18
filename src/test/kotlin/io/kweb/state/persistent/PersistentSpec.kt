@@ -1,26 +1,9 @@
 package io.kweb.state.persistent
 
-import com.gargoylesoftware.htmlunit.WebClient
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor
-import com.gargoylesoftware.htmlunit.html.HtmlPage
-import com.github.sanity.shoebox.Shoebox
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldEqual
-import io.kotlintest.seconds
-import io.kotlintest.specs.FreeSpec
-import io.kweb.ACWebClient
-import io.kweb.Kweb
-import io.kweb.dom.element.creation.tags.a
-import io.kweb.dom.element.creation.tags.li
-import io.kweb.dom.element.creation.tags.ul
-import io.kweb.dom.element.events.on
-import io.kweb.dom.element.new
-import io.kweb.routing.pollFor
-
 /**
  * Created by ian on 6/29/17.
- */
-class PersistentSpec : FreeSpec() {
+
+object PersistentSpec : Spek({
     val webClient: WebClient = autoClose(ACWebClient())
 
     init {
@@ -124,5 +107,6 @@ class PersistentSpec : FreeSpec() {
             }
         }
     }
-}
+})
 
+*/

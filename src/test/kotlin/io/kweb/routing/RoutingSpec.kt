@@ -1,25 +1,12 @@
 package io.kweb.routing
 
-import com.gargoylesoftware.htmlunit.WebClient
-import com.gargoylesoftware.htmlunit.html.HtmlPage
-import io.kotlintest.*
-import io.kotlintest.matchers.*
-import io.kotlintest.specs.FreeSpec
-import io.kweb.*
-import io.kweb.dom.attributes.*
-import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.events.on
-import io.kweb.dom.element.new
-import io.kweb.state.persistent.render
-import mu.KotlinLogging
-import java.lang.Thread.sleep
-
 /**
  * Created by ian on 4/30/17.
  */
-class RoutingSpec : FreeSpec() {
+/*
+object RoutingSpec : Spek({
 
-    private val logger = KotlinLogging.logger {}
+    val logger = KotlinLogging.logger {}
 
     val webClient: WebClient = autoClose(ACWebClient())
 
@@ -65,7 +52,7 @@ class RoutingSpec : FreeSpec() {
             }
         }
     }
-}
+})
 
 
 val Duration.millis get() = this.timeUnit.toMillis(amount)
@@ -85,3 +72,4 @@ fun <T> pollFor(maximumTime: io.kotlintest.Duration, pollEvery : Duration = 300.
     }
     throw AssertionError("Test failed after ${maximumTime.amount} ${maximumTime.timeUnit}; attempted $times times", lastException!!)
 }
+*/

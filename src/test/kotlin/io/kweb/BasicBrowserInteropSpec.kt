@@ -1,21 +1,10 @@
 package io.kweb
 
-import com.gargoylesoftware.htmlunit.AjaxController
-import com.gargoylesoftware.htmlunit.BrowserVersion
-import com.gargoylesoftware.htmlunit.WebClient
-import com.gargoylesoftware.htmlunit.WebRequest
-import com.gargoylesoftware.htmlunit.html.HtmlPage
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.specs.FreeSpec
-import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.new
-import java.io.Closeable
-
 
 
 /**
  * Created by ian on 4/30/17.
- */
+
 class BasicBrowserInteropSpec : FreeSpec() {
     val webClient : WebClient = autoClose(ACWebClient().apply {
         options.apply {
@@ -52,5 +41,4 @@ class BasicBrowserInteropSpec : FreeSpec() {
         }
     }
 }
-
-class ACWebClient : WebClient(BrowserVersion.BEST_SUPPORTED), Closeable
+*/

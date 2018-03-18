@@ -24,19 +24,29 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10'
     }
 }
 
 group 'io.kweb'
-version '0.2.14'
+version '0.3.0'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'maven'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: "info.solidsoft.pitest"
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+junitPlatform {
+    filters {
+        engines {
+            include 'spek'
+        }
+    }
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -46,12 +56,10 @@ repositories {
     maven {
         url "http://dl.bintray.com/kotlin/ktor"
     }
-  /*  maven {
-        url "http://dl.bintray.com/cy6ergn0m/maven"
-    } */
     maven {
         url 'https://jitpack.io'
     }
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
     jcenter()
 }
 
@@ -73,19 +81,27 @@ sourceSets {
 
 
 dependencies {
-    // Temp for development
-    compile project(":renegade")
-
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
-    
+
+    //////////////////////////////
+    // Kotlin library dependencies
+    //////////////////////////////
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21-alpha-2'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.21-alpha-2'
 
+    // TODO: This should be testCompile
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+    // Should be compileOnly
+    compile group: 'org.hotswapagent', name: 'hotswap-agent-core', version: '1.1.0'
+
+    ////////////////////
+    // Ktor dependencies
+    ////////////////////
     compile ("io.ktor:ktor-server-core:$ktor_version") {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
     }
@@ -104,15 +120,20 @@ dependencies {
 
     compile 'com.github.kwebio:shoebox:0.2.13'
 
+    ///////////////////////////
+    // Dependencies for testing
+    ///////////////////////////
     compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.29'
-    testCompile 'io.kotlintest:kotlintest:2.0.3'
+    testCompile ('org.jetbrains.spek:spek-api:1.1.5') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testRuntime ('org.jetbrains.spek:spek-junit-platform-engine:1.1.5') {
+        exclude group: 'org.junit.platform'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    testImplementation 'org.amshove.kluent:kluent:1.35'
     testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
 
-    // TODO: This should be testCompile
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
-
-    // Should be compileOnly
-    compile group: 'org.hotswapagent', name: 'hotswap-agent-core', version: '1.1.0'
 
 }
 
