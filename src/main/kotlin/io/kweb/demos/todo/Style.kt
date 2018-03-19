@@ -5,4 +5,6 @@ import io.kweb.plugins.semanticUI.semantic
 object Style {
     val outerContainer = semantic.ui.three.column.centered.grid
     val innerContainer = semantic.column
+    val listHeadingStyle = semantic.ui.dividing.header
+
 }

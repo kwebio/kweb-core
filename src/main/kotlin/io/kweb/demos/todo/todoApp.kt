@@ -1,8 +1,6 @@
 package io.kweb.demos.todo
 
 import io.kweb.*
-import io.kweb.demos.todo.State.Item
-import io.kweb.demos.todo.State.List
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
@@ -26,8 +24,7 @@ fun main(args: Array<String>) {
             div(Style.outerContainer).new {
                 div(Style.innerContainer).new {
                     route(withGalimatiasUrlParser) { url ->
-                        val listHeadingStyle = semantic.ui.dividing.header
-                        val pageHeading = h1(listHeadingStyle).text("Shopping list")
+                        val pageHeading = h1(Style.listHeadingStyle).text("Shopping list")
                         div(semantic.content).new {
                             render(url.path[0]) { entityType ->
                                 logger.info("Rendering entity type $entityType")
@@ -62,14 +59,14 @@ fun main(args: Array<String>) {
 
 private fun createNewListAndRedirect(path: Bindable<kotlin.collections.List<String>>) {
     val newListId = generateNewUid()
-    State.lists[newListId] = List(newListId, "")
+    State.lists[newListId] = State.List(newListId, "")
     logger.info("Redirecting from root to lists/$newListId")
     path.value = listOf("lists", newListId)
 }
 
 private fun ElementCreator<*>.renderList(list: Bindable<State.List>) {
     logger.info("Rendering list ${list.value.uid}")
-    h3().text(list.map(List::title))
+    h3().text(list.map(State.List::title))
     div(semantic.ui.middle.aligned.divided.list).new {
         renderEach(State.itemsByList(list.value.uid)) { item ->
             logger.info("Rendering list item ${item.value.uid}")
@@ -77,7 +74,7 @@ private fun ElementCreator<*>.renderList(list: Bindable<State.List>) {
                 div(semantic.right.floated.content).new {
                     renderRemoveButton(item)
                 }
-                div(semantic.content).text(item.map(Item::text))
+                div(semantic.content).text(item.map(State.Item::text))
             }
         }
     }
@@ -101,16 +98,16 @@ private fun ElementCreator<*>.renderList(list: Bindable<State.List>) {
     }
 }
 
-private fun handleAddItem(input: InputElement, list: Bindable<List>) {
+private fun handleAddItem(input: InputElement, list: Bindable<State.List>) {
     async {
         val newItemText = input.getValue().await()
         input.setValue("")
-        val newItem = Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
+        val newItem = State.Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
         State.items[newItem.uid] = newItem
     }
 }
 
-private fun ElementCreator<DivElement>.renderRemoveButton(item: Bindable<Item>) {
+private fun ElementCreator<DivElement>.renderRemoveButton(item: Bindable<State.Item>) {
     val button = button(semantic.mini.ui.icon.button)
     button.new {
         i(semantic.trash.icon)
