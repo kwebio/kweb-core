@@ -21,7 +21,7 @@ private val logger = KotlinLogging.logger {}
 
 fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
-    Kweb(port = 8093, debug = true, plugins = listOf(semanticUIPlugin)) {
+    Kweb(port = 8091, debug = true, plugins = listOf(semanticUIPlugin)) {
         doc.body.new {
 
             pageBorderAndTitle("Todo List") {
