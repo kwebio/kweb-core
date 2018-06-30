@@ -11,13 +11,14 @@ allprojects {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.2.50'
     ext.dokka_version = '0.9.15'
-    ext.ktor_version = '0.9.1-alpha-10'
+    ext.ktor_version = '0.9.3-alpha-3'
 
     repositories {
         jcenter()
         mavenCentral()
+        maven { url "https://jitpack.io" }
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -31,7 +32,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.3.0'
+version '0.3.1'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
@@ -118,7 +119,9 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.4.9'
     compile("org.reflections:reflections:0.9.11")
 
-    compile 'com.github.kwebio:shoebox:0.2.13'
+    compile 'com.github.kwebio:shoebox:0.2.16'
+
+    compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
     ///////////////////////////
     // Dependencies for testing

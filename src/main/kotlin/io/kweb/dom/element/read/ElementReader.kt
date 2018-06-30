@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture
 
 @KWebDSL
 open class ElementReader(protected val receiver: WebBrowser, internal val jsExpression: String) {
-    constructor(element : Element) : this(element.webBrowser, element.jsExpression)
+    constructor(element : Element) : this(element.browser, element.jsExpression)
 
     init {
         require(receiver.kweb.outboundMessageCatcher.get() == null) {"""

@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
 @KWebDSL
-open class ONReceiver(private val parent: Element) : Element(parent) {
+open class ONReceiver(internal val parent: Element) : Element(parent) {
 
     val logger = KotlinLogging.logger {}
 
@@ -41,14 +41,14 @@ open class ONReceiver(private val parent: Element) : Element(parent) {
     inline fun <reified T : Any> event(eventName: String, eventType: KClass<T>, crossinline callback: (event: T) -> Unit): Element {
         // TODO: Should probably cache this rather than do the reflection every time
         val eventPropertyNames = Companion.memberProperties(eventType)
-        return event(eventName, eventPropertyNames, {propertiesAsString ->
+        return event(eventName, eventPropertyNames) { propertiesAsString ->
             val props: T = gson.fromJson(propertiesAsString)
             try {
                 callback(props)
             } catch (e : Exception) {
-                logger.error(e, {"Exception thrown by callback in response to $eventName event"})
+                logger.error(e) {"Exception thrown by callback in response to $eventName event"}
             }
-        })
+        }
     }
 
     // Mouse Events

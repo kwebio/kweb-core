@@ -7,15 +7,15 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
 @KWebDSL
-open class ONImmediateReceiver(private val parent: Element) : Element(parent) {
+open class ONImmediateReceiver(internal val parent: Element) : Element(parent) {
 
     val logger = KotlinLogging.logger {}
 
     fun event(eventName: String, callback: () -> Unit): Element {
-        val immediateJS = parent.webBrowser.kweb.catchOutbound {
+        val immediateJS = parent.browser.kweb.catchOutbound {
             callback()
         }
-        parent.addImmediateEventCode(eventName, immediateJS.joinToString(separator = "/n"))
+        parent.addImmediateEventCode(eventName, immediateJS.joinToString(separator = ""))
         return parent
     }
 

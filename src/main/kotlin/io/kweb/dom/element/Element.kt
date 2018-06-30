@@ -7,9 +7,9 @@ import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.modification.StyleReceiver
 import io.kweb.dom.element.read.ElementReader
 import io.kweb.plugins.KWebPlugin
-import io.kweb.state.ReadOnlyBindable
+import io.kweb.state.KVal
 import java.util.*
-import java.util.concurrent.CompletableFuture
+import java.util.concurrent.*
 import kotlin.reflect.KClass
 
 @DslMarker
@@ -22,8 +22,8 @@ annotation class KWebDSL
 
 
 @KWebDSL
-open class Element (open val webBrowser: WebBrowser, val creator : ElementCreator<*>?, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
-    constructor(element: Element) : this(element.webBrowser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
+open class Element (open val browser: WebBrowser, val creator : ElementCreator<*>?, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
+    constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
      *********/
@@ -34,7 +34,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
      * are based.
      */
     fun execute(js: String) {
-        webBrowser.execute(js)
+        browser.execute(js)
     }
 
     /**
@@ -43,7 +43,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
      * are based.
      */
     fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
-        return webBrowser.evaluate(js).thenApply(outputMapper)
+        return browser.evaluate(js).thenApply(outputMapper)
     }
 
     /*********
@@ -56,12 +56,12 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
      * This should be called by any function that requires a particular plugin or
      * plugins be present.
      */
-    fun assertPluginLoaded(vararg plugins: KClass<out KWebPlugin>) = webBrowser.require(*plugins)
+    fun assertPluginLoaded(vararg plugins: KClass<out KWebPlugin>) = browser.require(*plugins)
 
     /**
      * Obtain the instance of a plugin by its [KClass].
      */
-    fun <P : KWebPlugin> plugin(plugin: KClass<P>) = webBrowser.plugin(plugin)
+    fun <P : KWebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
 
 
     /**
@@ -87,7 +87,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
         return this
     }
 
-    fun setAttribute(name : String, oValue : ReadOnlyBindable<Any>) : Element {
+    fun setAttribute(name : String, oValue : KVal<Any>) : Element {
         setAttribute(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
             setAttribute(name, newValue)
@@ -103,13 +103,18 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
         return this
     }
 
-    fun setInnerHTML(value: String): Element {
+    fun innerHTML(value: String): Element {
         execute("$jsExpression.innerHTML=\"${value.escapeEcma()}\";")
         return this
     }
 
     fun focus() : Element {
         execute("$jsExpression.focus();")
+        return this
+    }
+
+    fun blur() : Element {
+        execute("$jsExpression.blur();")
         return this
     }
 
@@ -187,10 +192,10 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
     }
 
     /**
-     * Set the text of this element to an [ReadOnlyBindable] value.  If the text in the ReadOnlyBindable
+     * Set the text of this element to an [KVal] value.  If the text in the KVal
      * changes the text of this element will update automatically.
      */
-    fun text(text: ReadOnlyBindable<String>) : Element {
+    fun text(text: KVal<String>) : Element {
         this.text(text.value)
         val handle = text.addListener{ _, new ->
             text(new)
@@ -217,7 +222,7 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
                 $jsCode
             });
         """.trimIndent()
-        webBrowser.evaluate(wrappedJS)
+        browser.evaluate(wrappedJS)
     }
 
     fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), callback: (String) -> Unit): Element {
@@ -228,11 +233,11 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
                 callbackWs($callbackId, $eventObject);
             });
         """
-        webBrowser.executeWithCallback(js, callbackId) { payload ->
+        browser.executeWithCallback(js, callbackId) { payload ->
             callback.invoke(payload)
         }
         this.creator?.onCleanup(true) {
-            webBrowser.removeCallback(callbackId)
+            browser.removeCallback(callbackId)
         }
         return this
     }
@@ -248,6 +253,8 @@ open class Element (open val webBrowser: WebBrowser, val creator : ElementCreato
     fun spellcheck(spellcheck : Boolean = true) = setAttribute("spellcheck", spellcheck)
 
     val Element.style get() = StyleReceiver(this)
+
+    val flags = ConcurrentSkipListSet<String>()
 }
 
 /**

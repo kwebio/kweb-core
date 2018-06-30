@@ -1,8 +1,7 @@
 package io.kweb
 
-import com.google.gson.Gson
+import com.google.gson.*
 import io.kweb.dom.element.Element
-import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.*
 import kotlin.reflect.KClass
@@ -17,26 +16,27 @@ val random = Random()
 
 val ROOT_PATH = ""
 
-fun createNonce() = random.nextInt(10000000).toString(16)
+fun createNonce(length : Int = 6) : String {
+    val ar = ByteArray(size = length*2)
+    random.nextBytes(ar)
+    return Base64.getUrlEncoder().encodeToString(ar).substring(0, length)
+}
 
 val gson = Gson()
+
+val gsonPP = GsonBuilder().setPrettyPrinting().create()
 
 val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledThreadPool(5)
 
 fun wait(delay: Long, unit : TimeUnit, toRun : () -> Unit): ScheduledFuture<*> = scheduledExecutorService.schedule(toRun, delay, unit)
 
-fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)
+fun String.escapeEcma() =  org.apache.commons.text.StringEscapeUtils.escapeEcmaScript(this)!!
 
 fun Any.toJson(): String = gson.toJson(this)
 
 fun <T> warnIfBlocking(maxTimeMs: Long, onBlock : (Thread) -> Unit, f : () -> T) : T {
     val runningThread = Thread.currentThread()
-    val watcher = scheduledExecutorService.schedule(object : Runnable {
-        override fun run() {
-            onBlock(runningThread)
-        }
-
-    }, maxTimeMs, TimeUnit.MILLISECONDS)
+    val watcher = scheduledExecutorService.schedule({ onBlock(runningThread) }, maxTimeMs, TimeUnit.MILLISECONDS)
     val r = f()
     watcher.cancel(false)
     return r
@@ -47,7 +47,7 @@ fun <T> warnIfBlocking(maxTimeMs: Long, onBlock : (Thread) -> Unit, f : () -> T)
  * trace.  This is a little ugly but seems to work well, there may be a better approach.
  */
 fun Array<StackTraceElement>.pruneAndDumpStackTo(logStatementBuilder: StringBuilder) {
-    val disregardClassPrefixes = listOf(Kweb::class.jvmName, WebBrowser::class.jvmName, Element::class.jvmName, "org.jetbrains.ktor", "io.netty", "java.lang", "kotlin.coroutines", "kotlinx.coroutines")
+    val disregardClassPrefixes = listOf<String>(Kweb::class.jvmName, WebBrowser::class.jvmName, Element::class.jvmName, "org.jetbrains.ktor", "io.netty", "java.lang", "kotlin", "kotlinx", "io.kweb")
     this.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
         logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
     }

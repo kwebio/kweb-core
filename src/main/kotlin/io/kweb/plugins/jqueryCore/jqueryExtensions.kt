@@ -14,7 +14,7 @@ import io.kweb.toJson
 // I just use jquery()
 fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
     assertPluginLoaded(JQueryCorePlugin::class)
-    return JQueryReceiver(this.webBrowser, "$(${selector.toJson()})")
+    return JQueryReceiver(this.browser, "$(${selector.toJson()})")
 }
 
 // And here we can implement all of the useful JQuery functions

@@ -1,11 +1,9 @@
 package io.kweb.dom
 
-import io.kweb.Kweb
-import io.kweb.WebBrowser
+import io.kweb.*
 import io.kweb.dom.cookies.CookieReceiver
-import io.kweb.dom.element.Element
+import io.kweb.dom.element.*
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.new
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -21,6 +19,12 @@ class Document(val receiver: WebBrowser) {
     val cookie = CookieReceiver(receiver)
 
     val body = BodyElement(receiver)
+
+    val origin = receiver.evaluate("document.origin")
+
+    fun execCommand(command : String) {
+        receiver.execute("document.execCommand(\"$command\");")
+    }
 }
 
 /**

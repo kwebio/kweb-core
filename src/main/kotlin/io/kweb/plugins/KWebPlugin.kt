@@ -1,6 +1,7 @@
 package io.kweb.plugins
 
 import io.ktor.routing.Routing
+import io.kweb.dom.element.Element
 import java.util.*
 
 abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet()) {
@@ -13,6 +14,10 @@ abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet(
     open fun executeAfterPageCreation() = ""
 
     open fun appServerConfigurator(routeHandler : Routing) {
+
+    }
+
+    open fun elementCreationHook(element : Element) {
 
     }
 }

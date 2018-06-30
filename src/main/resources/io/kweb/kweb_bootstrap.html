@@ -22,9 +22,10 @@
             if (execute !== undefined) {
                 try {
                     eval(execute["js"])
+                    console.log("Executed `"+execute["js"]+"`")
                 } catch (err) {
                     if (debugToken != undefined) {
-                        console.error("Error evaluating `" + execute["js"] + "`: " + err)
+                        console.error("Error evaluating [" + execute["js"] + "] : " + err)
                         var error = {"debugToken": debugToken, "error": {"name": err.name, "message": err.message}}
                         var message = {"id": kwebClientId, "error": error}
                         sendMessage(JSON.stringify(message))
@@ -37,12 +38,13 @@
             if (evaluate !== undefined) {
                 try {
                     var data = eval(evaluate["js"])
+                    console.log("Evaluated ["+evaluate["js"]+"], result: `"+data+"`")
                     var callback = {"callbackId": evaluate["callbackId"], "data": data}
                     var message = {"id": kwebClientId, "callback": callback}
                     sendMessage(JSON.stringify(message))
                 } catch (err) {
                     if (debugToken != undefined) {
-                        console.error("Error evaluating `" + execute["js"] + "`: " + err)
+                        console.error("Error evaluating `" + evaluate["js"] + "`: " + err)
                         var error = {"debugToken": debugToken, "error": {"name": err.name, "message": err.message}}
                         var message = {"id": kwebClientId, "error": error}
                         sendMessage(JSON.stringify(message))
@@ -54,23 +56,29 @@
         }
         function connectWs() {
             var wsURL = toWSUrl("ws");
+            console.info("Establishing websocket connection", wsURL)
             socket = new WebSocket(wsURL);
             if (window.WebSocket === undefined) {
                 document.body.innerHTML = "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>"
+                console.error("Browser doesn't support window.WebSocket")
             } else {
                 socket.onopen = function () {
+                    console.info("socket.onopen event received")
                     websocketEstablished = true
+                    console.info("Websocket established", wsURL)
                     sendMessage(JSON.stringify({"id" : kwebClientId, "hello": true}))
                     while (preWSMsgQueue.length > 0) {
                         sendMessage(preWSMsgQueue.shift())
                     }
                 };
                 socket.onmessage = function (event) {
+                    console.info("Message received from socket")
                     var msg = JSON.parse(event.data);
                     handleInboundMessage(msg);
                 }
 
                 socket.onclose = function(evt) {
+                    console.info("Socket closed")
                     var explanation = "";
                     if (evt.reason && evt.reason.length > 0) {
                         explanation = "reason: " + evt.reason;
@@ -78,15 +86,24 @@
                         explanation = "without a reason specified";
                     }
 
-                    console.log("WebSocket closed", evt);
+                    console.warn("WebSocket was closed", explanation, evt);
+                  //  websocketEstablished = false
+                  //  connectWs()
                 };
+                socket.onerror = function(evt) {
+                    console.error("WebSocket error", evt);
+                    websocketEstablished = false
+                //    connectWs()
+                }
             }
         }
 
         function sendMessage(msg) {
             if (websocketEstablished) {
+                console.info("Sending WebSocket message", msg)
                 socket.send(msg)
             } else {
+                console.info("Queueing WebSocket message as connection isn't established", msg)
                 preWSMsgQueue.push(msg)
             }
         }
@@ -131,7 +148,7 @@
             }
         }
         var docCookies = {
-            getItems: function (sKey) {
+            getTasks: function (sKey) {
                 if (!sKey || !this.hasItem(sKey)) { return "__COOKIE_NOT_FOUND_TOKEN__"; }
                 return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
             },

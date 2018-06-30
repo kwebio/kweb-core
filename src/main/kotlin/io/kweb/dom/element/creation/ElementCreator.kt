@@ -1,11 +1,9 @@
 package io.kweb.dom.element.creation
 
+import io.kweb.*
 import io.kweb.dom.attributes.attr
-import io.kweb.dom.element.Element
-import io.kweb.dom.element.KWebDSL
+import io.kweb.dom.element.*
 import io.kweb.plugins.KWebPlugin
-import io.kweb.random
-import io.kweb.toJson
 import mu.KLogging
 import java.util.*
 import kotlin.reflect.KClass
@@ -15,20 +13,26 @@ import kotlin.reflect.KClass
  */
 
 typealias Cleaner = () -> Unit
-@KWebDSL open class ElementCreator<out PARENT_TYPE : Element>(
-        val addToElement: PARENT_TYPE,
-        val parentCreator : ElementCreator<*>? = addToElement.creator,
-        val position : Int? = null) {
 
-    companion object: KLogging()
+@KWebDSL
+open class ElementCreator<out PARENT_TYPE : Element>(
+        val addToElement: PARENT_TYPE,
+        val parentCreator: ElementCreator<*>? = addToElement.creator,
+        val position: Int? = null) {
+
+    companion object : KLogging()
 
     //private val cleanupListeners = LinkedList<(Cleaner) -> Unit>()
     private val cleanupListeners = LinkedList<Cleaner>()
-    private @Volatile var isCleanedUp = false
+    private @Volatile
+    var isCleanedUp = false
 
-    val elementsCreated : Int get() = elementsCreatedCount
+    val elementsCreated: Int get() = elementsCreatedCount
 
-    private @Volatile var elementsCreatedCount = 0
+    private @Volatile
+    var elementsCreatedCount = 0
+
+    val browser: WebBrowser get() = addToElement.browser
 
     fun element(tag: String, attributes: Map<String, Any> = attr): Element {
         elementsCreatedCount++
@@ -38,14 +42,18 @@ typealias Cleaner = () -> Unit
                 It's unwise to create multiple elements using the same ElementCreator when position is specified,
                 because each element will be added at the same position among its siblings, which will result in them
                 being inserted in reverse-order.
-                """.trimIndent().trim() }
+                """.trimIndent().trim()
+            }
         }
 
         val id: String = (attributes["id"] ?: Math.abs(random.nextInt())).toString()
         addToElement.execute(renderJavaScriptToCreateNewElement(tag, attributes, id))
-        val newElement = Element(addToElement.webBrowser, this, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+        val newElement = Element(addToElement.browser, this, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+        for (plugin in addToElement.browser.kweb.plugins) {
+            plugin.elementCreationHook(newElement)
+        }
         onCleanup(withParent = false) {
-            logger.info("Deleting element ${newElement.id}")
+            logger.debug("Deleting element ${newElement.id}")
             newElement.delete()
         }
         return newElement
@@ -73,7 +81,7 @@ typealias Cleaner = () -> Unit
         return js
     }
 
-    fun require(vararg plugins: KClass<out KWebPlugin>) = addToElement.webBrowser.require(*plugins)
+    fun require(vararg plugins: KClass<out KWebPlugin>) = addToElement.browser.require(*plugins)
 
     /**
      * Specify a listener to be called when this element is removed from the DOM.
@@ -81,7 +89,7 @@ typealias Cleaner = () -> Unit
      * @param withParent If `true` this cleaner will be called if this element is deleted, or if
      *                   any ancestor element of this element is deleted.
      */
-    fun onCleanup(withParent : Boolean, f : Cleaner) {
+    fun onCleanup(withParent: Boolean, f: Cleaner) {
         if (withParent) {
             parentCreator?.onCleanup(true, f)
         }
@@ -89,10 +97,10 @@ typealias Cleaner = () -> Unit
     }
 
     fun cleanup() {
-        if (isCleanedUp) {
-            throw RuntimeException("cleanup() called but it has already been called for this ElementCreator")
+        // TODO: Warn if called twice?
+        if (!isCleanedUp) {
+            isCleanedUp = true
+            cleanupListeners.forEach { it() }
         }
-        isCleanedUp = true
-        cleanupListeners.forEach { it() }
     }
 }

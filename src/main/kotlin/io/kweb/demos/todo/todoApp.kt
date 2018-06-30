@@ -1,19 +1,21 @@
 package io.kweb.demos.todo
 
 import io.kweb.*
+import io.kweb.dom.BodyElement
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.*
 import io.kweb.dom.element.new
-import io.kweb.plugins.semanticUI.*
+import io.kweb.plugins.semanticUI.semanticUIPlugin
 import io.kweb.routing.*
-import io.kweb.state.Bindable
+import io.kweb.state.KVar
 import io.kweb.state.persistent.*
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.future.await
 import mu.KotlinLogging
 import java.time.Instant
+import io.kweb.plugins.semanticUI.semantic as s
 
 private val logger = KotlinLogging.logger {}
 
@@ -21,32 +23,29 @@ fun main(args: Array<String>) {
     // Starts a web server listening on port 8091
     Kweb(port = 8093, debug = true, plugins = listOf(semanticUIPlugin)) {
         doc.body.new {
-            div(Style.outerContainer).new {
-                div(Style.innerContainer).new {
-                    route(withGalimatiasUrlParser) { url ->
-                        val pageHeading = h1(Style.listHeadingStyle).text("Shopping list")
-                        div(semantic.content).new {
-                            render(url.path[0]) { entityType ->
-                                logger.info("Rendering entity type $entityType")
-                                when (entityType) {
-                                    ROOT_PATH -> {
-                                        createNewListAndRedirect(url.path)
-                                    }
-                                    "lists" -> {
-                                        logger.info("Rendering lists/${url.path[1]}")
-                                        render(url.path[1]) { listUid ->
-                                            try {
-                                                val list = asBindable(State.lists, listUid)
-                                                renderList(list)
-                                            } catch (e : NoSuchElementException) {
-                                                throw NotFoundException("Can't find list with id $listUid")
-                                            }
-                                        }
-                                    }
-                                    else -> {
-                                        throw NotFoundException("Unrecognized entity type '$entityType', path: ${url.path.value}")
+
+            pageBorderAndTitle("Todo List") {
+
+                val url = url(simpleUrlParser)
+
+                div(s.content).new {
+                    render(url.path[0]) { entityType ->
+                        when (entityType) {
+                            ROOT_PATH -> {
+                                val newListId = createNewList()
+                                url.path.value = listOf("lists", newListId)
+                            }
+                            "lists" -> {
+                                render(url.path[1]) { listId ->
+                                    try {
+                                        render(toVar(State.lists, listId))
+                                    } catch (e: NoSuchElementException) {
+                                        throw NotFoundException("Can't find list with id $listId")
                                     }
                                 }
+                            }
+                            else -> {
+                                throw NotFoundException("Unrecognized entity type '$entityType', path: ${url.path.value}")
                             }
                         }
                     }
@@ -57,48 +56,54 @@ fun main(args: Array<String>) {
     Thread.sleep(10000)
 }
 
-private fun createNewListAndRedirect(path: Bindable<kotlin.collections.List<String>>) {
-    val newListId = generateNewUid()
-    State.lists[newListId] = State.List(newListId, "")
-    logger.info("Redirecting from root to lists/$newListId")
-    path.value = listOf("lists", newListId)
+private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
+    div(s.ui.three.column.centered.grid).new {
+        div(s.column).new {
+            h1(s.ui.dividing.header).text(title)
+            content(this)
+        }
+    }
 }
 
-private fun ElementCreator<*>.renderList(list: Bindable<State.List>) {
-    logger.info("Rendering list ${list.value.uid}")
+private fun createNewList(): String {
+    val newListId = generateNewUid()
+    State.lists[newListId] = State.List(newListId, "")
+    return newListId
+}
+
+private fun ElementCreator<*>.render(list: KVar<State.List>) {
     h3().text(list.map(State.List::title))
-    div(semantic.ui.middle.aligned.divided.list).new {
+    div(s.ui.middle.aligned.divided.list).new {
         renderEach(State.itemsByList(list.value.uid)) { item ->
-            logger.info("Rendering list item ${item.value.uid}")
-            div(semantic.item).new {
-                div(semantic.right.floated.content).new {
+            div(s.item).new {
+                div(s.right.floated.content).new {
                     renderRemoveButton(item)
                 }
-                div(semantic.content).text(item.map(State.Item::text))
+                div(s.content).text(item.map(State.Item::text))
             }
         }
     }
     logger.info("Rendering Add Item button")
-    div(semantic.ui.action.input).new {
+    div(s.ui.action.input).new {
         val input = input(text, placeholder = "Add Item")
         input.on.keypress { ke ->
             if (ke.code == "Enter") {
                 handleAddItem(input, list)
             }
         }
-        button(semantic.ui.button).text("Add").apply {
+        button(s.ui.button).text("Add").apply {
             onImmediate.click {
-                execute("console.log(\"immediate\");")
+                execute("console.info(\"immediate\");")
             }
             on.click {
                 handleAddItem(input, list)
-                execute("console.log(\"after\");")
+                execute("console.info(\"after\");")
             }
         }
     }
 }
 
-private fun handleAddItem(input: InputElement, list: Bindable<State.List>) {
+private fun handleAddItem(input: InputElement, list: KVar<State.List>) {
     async {
         val newItemText = input.getValue().await()
         input.setValue("")
@@ -107,10 +112,10 @@ private fun handleAddItem(input: InputElement, list: Bindable<State.List>) {
     }
 }
 
-private fun ElementCreator<DivElement>.renderRemoveButton(item: Bindable<State.Item>) {
-    val button = button(semantic.mini.ui.icon.button)
+private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<State.Item>) {
+    val button = button(s.mini.ui.icon.button)
     button.new {
-        i(semantic.trash.icon)
+        i(s.trash.icon)
     }
     button.on.click {
         State.items.remove(item.value.uid)

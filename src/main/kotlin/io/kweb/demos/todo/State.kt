@@ -1,6 +1,6 @@
 package io.kweb.demos.todo
 
-import com.github.sanity.shoebox.Shoebox
+import io.kweb.shoebox.Shoebox
 import java.time.Instant
 
 object State {

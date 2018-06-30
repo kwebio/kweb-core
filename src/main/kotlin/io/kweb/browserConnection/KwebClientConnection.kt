@@ -1,25 +1,34 @@
 package io.kweb.browserConnection
 
-import io.ktor.websocket.*
-import kotlinx.coroutines.experimental.runBlocking
+import io.ktor.http.cio.websocket.Frame.Text
+import io.ktor.http.cio.websocket.WebSocketSession
+import kotlinx.coroutines.experimental.*
+import mu.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
+
+private val logger = KotlinLogging.logger {}
 
 sealed class KwebClientConnection {
     abstract fun send(message: String)
 
     class WebSocket(private val channel: WebSocketSession) : KwebClientConnection() {
+
+        val socketContext = newSingleThreadContext("outbound-websocket-queue")
+
         override fun send(message: String) {
-            runBlocking {
-                channel.send(Frame.Text(message))
+            launch(socketContext) {
+                channel.send(Text(message))
             }
         }
 
     }
 
     class Caching : KwebClientConnection() {
-        private @Volatile var queue: ConcurrentLinkedQueue<String>? = ConcurrentLinkedQueue<String>()
+        private @Volatile
+        var queue: ConcurrentLinkedQueue<String>? = ConcurrentLinkedQueue()
 
         override fun send(message: String) {
+            logger.debug("Caching '$message' as websocket isn't yet available")
             queue.let {
                 it?.add(message) ?: throw RuntimeException("Can't write to queue after it has been read")
             }

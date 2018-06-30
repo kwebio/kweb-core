@@ -1,11 +1,12 @@
 package io.kweb.state.persistent
 
-import com.github.sanity.shoebox.*
 import io.kweb.Kweb
 import io.kweb.dom.element.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
+import io.kweb.shoebox.*
 import io.kweb.state.*
+import mu.KotlinLogging
 import java.util.*
 import kotlin.NoSuchElementException
 
@@ -13,19 +14,23 @@ import kotlin.NoSuchElementException
  * Created by ian on 6/18/17.
  */
 
-fun <T : Any> ElementCreator<*>.render(bindable : ReadOnlyBindable<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
+private val logger = KotlinLogging.logger {}
+
+fun <T : Any> ElementCreator<*>.render(kval : KVal<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.addToElement, this)
-    bindable.addListener { _, newValue ->
-        childEC.cleanup()
-        childEC = ElementCreator(this.addToElement, this)
-        renderer(childEC, newValue)
+    kval.addListener { oldValue, newValue ->
+        if (oldValue != newValue) {
+            childEC.cleanup()
+            childEC = ElementCreator(this.addToElement, this)
+            renderer(childEC, newValue)
+        }
     }
-    renderer(childEC, bindable.value)
+    renderer(childEC, kval.value)
 }
 
-fun <T : Any> ElementCreator<*>.asBindable(shoebox: Shoebox<T>, key: String): Bindable<T> {
+fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T> {
     val value = shoebox[key] ?: throw NoSuchElementException("Key $key not found")
-    val w = Bindable(value)
+    val w = KVar(value)
     w.addListener { _, n -> shoebox[key] = n }
     val changeHandle = shoebox.onChange(key) { _, n, _ -> w.value = n }
     w.onClose { shoebox.deleteChangeListener(key, changeHandle) }
@@ -35,14 +40,16 @@ fun <T : Any> ElementCreator<*>.asBindable(shoebox: Shoebox<T>, key: String): Bi
     return w
 }
 
-private data class ItemInfo<ITEM : Any>(val creator : ElementCreator<Element>, val bindable: Bindable<ITEM>)
+private data class ItemInfo<ITEM : Any>(val creator : ElementCreator<Element>, val KVar: KVar<ITEM>)
+
+data class IndexedItem<I>(val index : Int, val total : Int, val item : I)
 
 /**
  *
  *
  * @sample ordered_view_set_sample
  */
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<EL>.(Bindable<ITEM>) -> Unit) {
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<EL>.(KVar<ITEM>) -> Unit) {
     val items = ArrayList<ItemInfo<ITEM>>()
     for (keyValue in orderedViewSet.keyValueEntries) {
         items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
@@ -56,7 +63,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
     val onRemoveHandler = orderedViewSet.onRemove { index, _ ->
         val removed = items.removeAt(index)
         removed.creator.cleanup()
-        removed.bindable.close()
+        removed.KVar.close()
     }
 
     this.onCleanup(true) { orderedViewSet.deleteRemoveListener(onRemoveHandler) }
@@ -65,12 +72,12 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
 private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
         orderedViewSet: OrderedViewSet<ITEM>,
         keyValue : KeyValue<ITEM>,
-        renderer : ElementCreator<EL>.(Bindable<ITEM>) -> Unit,
+        renderer : ElementCreator<EL>.(KVar<ITEM>) -> Unit,
         insertAtPosition: Int?)
         : ItemInfo<ITEM> {
     val itemElementCreator = ElementCreator(this.addToElement, this, insertAtPosition)
-    val bindableItem = itemElementCreator.asBindable(orderedViewSet.view.viewOf, keyValue.key)
-    renderer(itemElementCreator, bindableItem)
+    val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
+    renderer(itemElementCreator, itemVar)
     if (itemElementCreator.elementsCreated != 1) {
         /*
          * Only one element may be created per-item because otherwise it would be much more complicated to figure
@@ -86,7 +93,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
             to wrap the elements in a <DIV> or other element type.
 """.trimIndent())
     }
-    return ItemInfo(itemElementCreator, bindableItem)
+    return ItemInfo(itemElementCreator, itemVar)
 }
 
 fun ordered_view_set_sample() {

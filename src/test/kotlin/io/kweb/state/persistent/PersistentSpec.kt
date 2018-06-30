@@ -30,7 +30,7 @@ object PersistentSpec : Spek({
                     doc.body.new {
                         ul().new {
                             renderEach(tanDogs) { tanDog ->
-                                li().text(tanDog.map { "${it.name} is a ${it.color} ${it.breed}" })
+                                li().text(tanDog.invoke { "${it.name} is a ${it.color} ${it.breed}" })
                             }
                         }
                         a().setAttribute("name", "add fred").text("Add fred").on.click {

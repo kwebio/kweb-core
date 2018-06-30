@@ -26,8 +26,23 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val address : SemanticUIClasses get() {
+        classes("address")
+        return this
+    }
+
     val aligned : SemanticUIClasses get() {
         classes("aligned")
+        return this
+    }
+
+    val animated : SemanticUIClasses get() {
+        classes("animated")
+        return this
+    }
+
+    val arrow : SemanticUIClasses get() {
+        classes("arrow")
         return this
     }
 
@@ -51,6 +66,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val blue : SemanticUIClasses get() {
+        classes("blue")
+        return this
+    }
+
     val blurring : SemanticUIClasses get() {
         classes("blurring")
         return this
@@ -58,6 +78,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val button : SemanticUIClasses get() {
         classes("button")
+        return this
+    }
+
+    val buttons : SemanticUIClasses get() {
+        classes("buttons")
         return this
     }
 
@@ -232,6 +257,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val floating : SemanticUIClasses get() {
+        classes("floating")
+        return this
+    }
+
     val form : SemanticUIClasses get() {
         classes("form")
         return this
@@ -270,6 +300,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val hidden : SemanticUIClasses get() {
         classes("hidden")
+        return this
+    }
+
+    val horizontal : SemanticUIClasses get() {
+        classes("horizontal")
         return this
     }
 
@@ -319,6 +354,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val label : SemanticUIClasses get() {
+        classes("label")
+        return this
+    }
+
     val labeled : SemanticUIClasses get() {
         classes("labeled")
         return this
@@ -335,6 +375,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val lightbulb : SemanticUIClasses get() {
+        classes("lightbulb")
+        return this
+    }
+
     val list : SemanticUIClasses get() {
         classes("list")
         return this
@@ -342,6 +387,16 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val leaderboard : SemanticUIClasses get() {
         classes("leaderboard")
+        return this
+    }
+
+    val loading : SemanticUIClasses get() {
+        classes("loading")
+        return this
+    }
+
+    val main : SemanticUIClasses get() {
+        classes("main")
         return this
     }
 
@@ -401,6 +456,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val one : SemanticUIClasses get() {
+        classes("one")
+        return this
+    }
+
 
     val outline : SemanticUIClasses get() {
         classes("outline")
@@ -430,6 +490,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val primary : SemanticUIClasses get() {
         classes("primary")
+        return this
+    }
+
+    val purple : SemanticUIClasses get() {
+        classes("purple")
         return this
     }
 
@@ -473,6 +538,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val user : SemanticUIClasses get() {
+        classes("user")
+        return this
+    }
+
     val users : SemanticUIClasses get() {
         classes("users")
         return this
@@ -480,6 +550,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val radio : SemanticUIClasses get() {
         classes("radio")
+        return this
+    }
+
+    val red : SemanticUIClasses get() {
+        classes("red")
         return this
     }
 
@@ -503,6 +578,10 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val segments : SemanticUIClasses get() {
+        classes("segments")
+        return this
+    }
 
     val segment : SemanticUIClasses get() {
         classes("segment")
@@ -544,6 +623,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val tabular: SemanticUIClasses get() {
+        classes("tabular")
+        return this
+    }
+
     val three : SemanticUIClasses get() {
         classes("three")
         return this
@@ -554,6 +638,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val toggle : SemanticUIClasses get() {
+        classes("toggle")
+        return this
+    }
+
     val top : SemanticUIClasses get() {
         classes("top")
         return this
@@ -561,6 +650,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val transition : SemanticUIClasses get() {
         classes("transition")
+        return this
+    }
+
+    val transparent : SemanticUIClasses get() {
+        classes("transparent")
         return this
     }
 
@@ -585,7 +679,7 @@ class SemanticUIClasses : AttributeBuilder() {
         if (uiClassAlreadyPresent) {
             throw RuntimeException("""
             The .ui getter has already been used on this SematicUIClasses object.  Please ensure you are creating a
-            fresh SemanticUIClasses object (using the 'semantic' getter for every element.
+            fresh SemanticUIClasses object (using the 'semantic' getter for every element).
 """.trimIndent())
         }
         classes("ui")
@@ -600,6 +694,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val vertical : SemanticUIClasses get() {
         classes("vertical")
+        return this
+    }
+
+    val visible : SemanticUIClasses get() {
+        classes("visible")
         return this
     }
 

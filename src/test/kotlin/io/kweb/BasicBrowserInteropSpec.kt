@@ -6,8 +6,8 @@ package io.kweb
  * Created by ian on 4/30/17.
 
 class BasicBrowserInteropSpec : FreeSpec() {
-    val webClient : WebClient = autoClose(ACWebClient().apply {
-        options.apply {
+    val webClient : WebClient = autoClose(ACWebClient().invoke {
+        options.invoke {
             isThrowExceptionOnScriptError = false
             isThrowExceptionOnFailingStatusCode = false
         }
