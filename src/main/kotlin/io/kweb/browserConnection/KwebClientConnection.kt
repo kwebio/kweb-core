@@ -2,7 +2,7 @@ package io.kweb.browserConnection
 
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.WebSocketSession
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -13,10 +13,8 @@ sealed class KwebClientConnection {
 
     class WebSocket(private val channel: WebSocketSession) : KwebClientConnection() {
 
-        val socketContext = newSingleThreadContext("outbound-websocket-queue")
-
         override fun send(message: String) {
-            launch(socketContext) {
+            launch {
                 channel.send(Text(message))
             }
         }

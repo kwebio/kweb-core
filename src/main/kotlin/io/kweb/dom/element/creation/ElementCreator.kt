@@ -53,7 +53,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             plugin.elementCreationHook(newElement)
         }
         onCleanup(withParent = false) {
-            logger.debug("Deleting element ${newElement.id}")
+            logger.debug("Deleting element ${newElement.id}", RuntimeException())
             newElement.delete()
         }
         return newElement

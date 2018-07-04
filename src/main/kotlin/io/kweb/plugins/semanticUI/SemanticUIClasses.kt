@@ -50,7 +50,12 @@ class SemanticUIClasses : AttributeBuilder() {
         classes("attached")
         return this
     }
-    
+
+    val balance : SemanticUIClasses get() {
+        classes("balance")
+        return this
+    }
+
     val banner : SemanticUIClasses get() {
         classes("banner")
         return this
@@ -156,6 +161,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val compact : SemanticUIClasses get() {
+        classes("compact")
+        return this
+    }
+
     val container : SemanticUIClasses get() {
         classes("container")
         return this
@@ -196,6 +206,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val dropdown : SemanticUIClasses get() {
+        classes("dropdown")
+        return this
+    }
+
     val edit : SemanticUIClasses get() {
         classes("edit")
         return this
@@ -209,6 +224,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val eleven : SemanticUIClasses get() {
         classes("eleven")
+        return this
+    }
+
+    val error : SemanticUIClasses get() {
+        classes("error")
         return this
     }
 
@@ -324,8 +344,18 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val indeterminate : SemanticUIClasses get() {
+        classes("indeterminate")
+        return this
+    }
+
     val info : SemanticUIClasses get() {
         classes("info")
+        return this
+    }
+
+    val inline : SemanticUIClasses get() {
+        classes("inline")
         return this
     }
 
@@ -390,6 +420,12 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val loader : SemanticUIClasses get() {
+        classes("loader")
+        return this
+    }
+
+
     val loading : SemanticUIClasses get() {
         classes("loading")
         return this
@@ -450,6 +486,12 @@ class SemanticUIClasses : AttributeBuilder() {
         classes("nine")
         return this
     }
+
+    val notched : SemanticUIClasses get() {
+        classes("notched")
+        return this
+    }
+
 
     val olive : SemanticUIClasses get() {
         classes("olive")
@@ -513,8 +555,24 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+
+    val scale : SemanticUIClasses get() {
+        classes("scale")
+        return this
+    }
+
     val secondary : SemanticUIClasses get() {
         classes("secondary")
+        return this
+    }
+
+    val selection : SemanticUIClasses get() {
+        classes("selection")
+        return this
+    }
+
+    val sortable : SemanticUIClasses get() {
+        classes("sortable")
         return this
     }
 
@@ -613,6 +671,22 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val stackable : SemanticUIClasses get() {
+        classes("stackable")
+        return this
+    }
+
+    val statistic : SemanticUIClasses get() {
+        classes("statistic")
+        return this
+    }
+
+    val statistics : SemanticUIClasses get() {
+        classes("statistics")
+        return this
+    }
+
+
     val striped : SemanticUIClasses get() {
         classes("striped")
         return this
@@ -625,6 +699,16 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val tabular: SemanticUIClasses get() {
         classes("tabular")
+        return this
+    }
+
+    val table: SemanticUIClasses get() {
+        classes("table")
+        return this
+    }
+
+    val teal: SemanticUIClasses get() {
+        classes("teal")
         return this
     }
 
@@ -687,6 +771,18 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val yellow : SemanticUIClasses get() {
+        classes("yellow")
+        return this
+    }
+
+
+    val value : SemanticUIClasses get() {
+        classes("value")
+        return this
+    }
+
+
     val very : SemanticUIClasses get() {
         classes("very")
         return this
@@ -699,6 +795,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val visible : SemanticUIClasses get() {
         classes("visible")
+        return this
+    }
+
+    val warning : SemanticUIClasses get() {
+        classes("warning")
         return this
     }
 

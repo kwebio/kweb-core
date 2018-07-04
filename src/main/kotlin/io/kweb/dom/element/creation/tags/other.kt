@@ -51,6 +51,10 @@ fun ElementCreator<Element>.textArea(rows : Int? = null, attributes: Map<String,
 open class SelectElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.select(attributes: Map<String, Any> = attr) = SelectElement(element("select", attributes))
 
+open class OptionElement(parent: Element) : Element(parent)
+fun ElementCreator<Element>.option(attributes: Map<String, Any> = attr) = OptionElement(element("option", attributes))
+
+
 open class H1Element(parent: Element) : Element(parent)
 fun ElementCreator<Element>.h1(attributes: Map<String, Any> = attr) = H1Element(element("h1", attributes))
 

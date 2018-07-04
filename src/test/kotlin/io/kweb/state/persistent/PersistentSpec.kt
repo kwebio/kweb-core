@@ -2,11 +2,10 @@ package io.kweb.state.persistent
 
 /**
  * Created by ian on 6/29/17.
-
+*
 object PersistentSpec : Spek({
     val webClient: WebClient = autoClose(ACWebClient())
 
-    init {
         // htmlUnitInit(webClient)
 
         "Given a shoebox and a ordered set of tan colored dogs" - {

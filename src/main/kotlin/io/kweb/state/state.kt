@@ -52,7 +52,11 @@ open class KVal<T : Any?>(value: T) {
                 val mappedValue = mapper(new)
                 newObservable.pValue = mappedValue
                 newObservable.listeners.values.forEach {
-                    it(mapper(old), mappedValue)
+                    try {
+                        it(mapper(old), mappedValue)
+                    } catch (e : Exception) {
+                        logger.warn("Exception thrown by listener", e)
+                    }
 
                 }
             }

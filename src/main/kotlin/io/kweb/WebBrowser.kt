@@ -86,6 +86,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
                 val url = KVar(httpRequestInfo.requestedUrl)
 
                 url.addListener { old, new ->
+                    logger.info("URL updated from $old to $new")
                     pushState(new)
                 }
 

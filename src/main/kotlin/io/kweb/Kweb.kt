@@ -57,7 +57,7 @@ class Kweb(val port: Int,
            val plugins: List<io.kweb.plugins.KWebPlugin> = java.util.Collections.emptyList(),
            val appServerConfigurator: (io.ktor.routing.Routing) -> Unit = {},
            val onError: ((List<StackTraceElement>, io.kweb.JavaScriptError) -> io.kweb.LogError) = { _, _ -> true },
-           val maxPageBuildTimeMS: Long = 500,
+           val maxPageBuildTimeMS: Long = 1000,
            val clientStateTimeout : Duration = Duration.ofHours(1),
            val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
@@ -108,6 +108,12 @@ class Kweb(val port: Int,
                         .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 
                 // Setup default KWeb routing.
+
+                get("/robots.txt") {
+                    call.response.status(HttpStatusCode.NotFound)
+                    call.respondText("robots.txt not currently supported by kweb")
+                }
+
                 get("/favicon.ico") {
                     call.response.status(HttpStatusCode.NotFound)
                     call.respondText("favicons not currently supported by kweb")

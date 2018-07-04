@@ -87,13 +87,15 @@
                     }
 
                     console.warn("WebSocket was closed", explanation, evt);
-                  //  websocketEstablished = false
-                  //  connectWs()
+                    websocketEstablished = false
+                    location.reload(true);
+                    setTimeout(function() { location.reload(true); }, 5000);
                 };
                 socket.onerror = function(evt) {
                     console.error("WebSocket error", evt);
                     websocketEstablished = false
-                //    connectWs()
+                    location.reload(true);
+                    setTimeout(function() { location.reload(true); }, 5000);
                 }
             }
         }
@@ -148,7 +150,7 @@
             }
         }
         var docCookies = {
-            getTasks: function (sKey) {
+            getItems: function (sKey) {
                 if (!sKey || !this.hasItem(sKey)) { return "__COOKIE_NOT_FOUND_TOKEN__"; }
                 return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
             },
@@ -185,6 +187,12 @@
             },
             hasItem: function (sKey) { return (new RegExp("(?:^|;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie); }
         };
+
+        window.addEventListener( "pageshow", function ( event ) {
+            if(performance.navigation.type == 2){
+                location.reload(true);
+            }
+        });
 
         function buildPage() {
             <!-- BUILD PAGE PAYLOAD PLACEHOLDER -->

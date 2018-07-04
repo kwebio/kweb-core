@@ -6,15 +6,40 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.shoebox.*
 import io.kweb.state.*
+import kotlinx.coroutines.experimental.*
 import mu.KotlinLogging
-import java.util.*
-import kotlin.NoSuchElementException
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Created by ian on 6/18/17.
  */
 
-private val logger = KotlinLogging.logger {}
+val logger = KotlinLogging.logger {}
+
+fun main(args: Array<String>) {
+
+    data class D(val a: Int, val b: Int)
+
+    val dv = KVar(D(1, 1))
+
+    Kweb(port = 13513) {
+        doc.body.new {
+            div().new {
+                render(dv) {
+                    div().text(it.a.toString())
+                    div().text(it.b.toString())
+                }
+            }
+        }
+    }
+
+    launch {
+        while(true) {
+            dv.value = dv.value.copy(a = dv.value.a + 1)
+            delay(20000)
+        }
+    }
+}
 
 fun <T : Any> ElementCreator<*>.render(kval : KVal<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.addToElement, this)
@@ -50,7 +75,7 @@ data class IndexedItem<I>(val index : Int, val total : Int, val item : I)
  * @sample ordered_view_set_sample
  */
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<EL>.(KVar<ITEM>) -> Unit) {
-    val items = ArrayList<ItemInfo<ITEM>>()
+    val items = CopyOnWriteArrayList<ItemInfo<ITEM>>()
     for (keyValue in orderedViewSet.keyValueEntries) {
         items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
     }
@@ -60,10 +85,14 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
     }
     this.onCleanup(true) { orderedViewSet.deleteInsertListener(onInsertHandler) }
 
-    val onRemoveHandler = orderedViewSet.onRemove { index, _ ->
-        val removed = items.removeAt(index)
-        removed.creator.cleanup()
-        removed.KVar.close()
+    val onRemoveHandler = orderedViewSet.onRemove { index, keyValue ->
+        if (index >= items.size) {
+            logger.warn("Invalid index $index to retrieve item from items list of size ${items.size} for key ${keyValue.key} and item ${keyValue.value}", RuntimeException())
+        } else {
+            val removed = items.removeAt(index)
+            removed.creator.cleanup()
+            removed.KVar.close()
+        }
     }
 
     this.onCleanup(true) { orderedViewSet.deleteRemoveListener(onRemoveHandler) }
@@ -77,8 +106,13 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
         : ItemInfo<ITEM> {
     val itemElementCreator = ElementCreator(this.addToElement, this, insertAtPosition)
     val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
-    renderer(itemElementCreator, itemVar)
-    if (itemElementCreator.elementsCreated != 1) {
+    try {
+        renderer(itemElementCreator, itemVar)
+    } catch (e: Exception) {
+        logger.error("Error rendering item", e)
+    }
+
+    if (itemElementCreator.elementsCreated > 1) {
         /*
          * Only one element may be created per-item because otherwise it would be much more complicated to figure
          * out where new items should be inserted by the onInsert handler below.  onRemove would be easier because

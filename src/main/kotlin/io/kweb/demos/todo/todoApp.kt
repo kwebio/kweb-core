@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
 
             pageBorderAndTitle("Todo List") {
 
-                val url = url(simpleUrlParser)
+                val url = doc.receiver.url(simpleUrlParser)
 
                 div(s.content).new {
                     render(url.path[0]) { entityType ->

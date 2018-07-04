@@ -13,7 +13,7 @@ allprojects {
 buildscript {
     ext.kotlin_version = '1.2.50'
     ext.dokka_version = '0.9.15'
-    ext.ktor_version = '0.9.3-alpha-3'
+    ext.ktor_version = '0.9.3'
 
     repositories {
         jcenter()
@@ -32,7 +32,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.3.1'
+version '0.3.2'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
@@ -119,7 +119,7 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.4.9'
     compile("org.reflections:reflections:0.9.11")
 
-    compile 'com.github.kwebio:shoebox:0.2.16'
+    compile 'com.github.kwebio:shoebox:0.2.17'
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
