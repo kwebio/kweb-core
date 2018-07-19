@@ -40,6 +40,9 @@ fun main(args: Array<String>) {
 fun <T : Any> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean = false, renderer : ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.parent, this)
     val cachedClientECs = if (cacheOnClient) ConcurrentHashMap<T, ElementCreator<Element>>() else null
+
+    // Before we set them to display:none, we retrieve the values of the "style" attribute so that we can
+    // put it back again correctly, because we're thoughtful like that.
     val retrievedStyleValues = ConcurrentHashMap<T, String>()
     val kvalListenerHandle = kval.addListener { oldValue, newValue ->
         if (oldValue != newValue) {
@@ -62,9 +65,6 @@ fun <T : Any> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean =
                 if (retainedEC == null) {
                     renderer(childEC, newValue)
                 } else {
-                    // FIXME: Do we need to cache the values of style.display here?  I'm assuming
-                    //        block, but it could be 'inline' - which would cause some weird
-                    //        and tough to track down bugs.
                     retainedEC.elementsCreated.forEach {
                         val prevStyle = retrievedStyleValues[newValue]
                         if (prevStyle == null) {
