@@ -6,9 +6,8 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.shoebox.*
 import io.kweb.state.*
-import kotlinx.coroutines.experimental.*
 import mu.KotlinLogging
-import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.*
 
 /**
  * Created by ian on 6/18/17.
@@ -17,41 +16,78 @@ import java.util.concurrent.CopyOnWriteArrayList
 val logger = KotlinLogging.logger {}
 
 fun main(args: Array<String>) {
+        data class D(val a: Int, val b: Int)
 
-    data class D(val a: Int, val b: Int)
+        val dv = KVar(D(1, 1))
 
-    val dv = KVar(D(1, 1))
-
-    Kweb(port = 13513) {
-        doc.body.new {
-            div().new {
-                render(dv) {
-                    div().text(it.a.toString())
-                    div().text(it.b.toString())
+        Kweb(port = 13513) {
+            doc.body.new {
+                div().new {
+                    render(dv) {
+                        div().text(it.a.toString())
+                        div().text(it.b.toString())
+                    }
                 }
             }
         }
-    }
 
-    launch {
         while(true) {
             dv.value = dv.value.copy(a = dv.value.a + 1)
-            delay(20000)
+            Thread.sleep(5000)
         }
-    }
 }
 
-fun <T : Any> ElementCreator<*>.render(kval : KVal<T>, renderer : ElementCreator<Element>.(T) -> Unit) {
-    var childEC = ElementCreator(this.addToElement, this)
-    kval.addListener { oldValue, newValue ->
+fun <T : Any> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean = false, renderer : ElementCreator<Element>.(T) -> Unit) {
+    var childEC = ElementCreator(this.parent, this)
+    val cachedClientECs = if (cacheOnClient) ConcurrentHashMap<T, ElementCreator<Element>>() else null
+    val retrievedStyleValues = ConcurrentHashMap<T, String>()
+    val kvalListenerHandle = kval.addListener { oldValue, newValue ->
         if (oldValue != newValue) {
-            childEC.cleanup()
-            childEC = ElementCreator(this.addToElement, this)
-            renderer(childEC, newValue)
+            if (cachedClientECs != null) {
+                cachedClientECs[oldValue] = childEC
+                childEC.elementsCreated.forEach {
+                    it.read.attribute("style").thenAccept {
+                        if (it != "" && it != "undefined") {
+                            retrievedStyleValues[oldValue] = it
+                        }
+                    }
+                }
+                childEC.elementsCreated.forEach {  it.setAttribute("style", "display:none") }
+            } else {
+                childEC.cleanup()
+            }
+            val retainedEC = cachedClientECs?.get(newValue)
+            childEC = retainedEC ?: ElementCreator(this.parent, this)
+            try {
+                if (retainedEC == null) {
+                    renderer(childEC, newValue)
+                } else {
+                    // FIXME: Do we need to cache the values of style.display here?  I'm assuming
+                    //        block, but it could be 'inline' - which would cause some weird
+                    //        and tough to track down bugs.
+                    retainedEC.elementsCreated.forEach {
+                        val prevStyle = retrievedStyleValues[newValue]
+                        if (prevStyle == null) {
+                            it.removeAttribute("style")
+                        } else {
+                            it.setAttribute("style", prevStyle)
+                        }
+                    }
+                }
+            } catch (e : Exception) {
+                logger.warn("Exception thrown by renderer while re-rendering $oldValue to $newValue", e)
+            }
         }
+    }
+    this.onCleanup(true) {
+        if (cachedClientECs != null) {
+            cachedClientECs.values.forEach { it.cleanup() }
+        }
+        kval.removeListener(kvalListenerHandle)
     }
     renderer(childEC, kval.value)
 }
+
 
 fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T> {
     val value = shoebox[key] ?: throw NoSuchElementException("Key $key not found")
@@ -95,7 +131,10 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
         }
     }
 
-    this.onCleanup(true) { orderedViewSet.deleteRemoveListener(onRemoveHandler) }
+    this.onCleanup(true) {
+
+         orderedViewSet.deleteRemoveListener(onRemoveHandler)
+    }
 }
 
 private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
@@ -104,7 +143,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
         renderer : ElementCreator<EL>.(KVar<ITEM>) -> Unit,
         insertAtPosition: Int?)
         : ItemInfo<ITEM> {
-    val itemElementCreator = ElementCreator(this.addToElement, this, insertAtPosition)
+    val itemElementCreator = ElementCreator(this.parent, this, insertAtPosition)
     val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
     try {
         renderer(itemElementCreator, itemVar)
@@ -112,7 +151,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
         logger.error("Error rendering item", e)
     }
 
-    if (itemElementCreator.elementsCreated > 1) {
+    if (itemElementCreator.elementsCreatedCount > 1) {
         /*
          * Only one element may be created per-item because otherwise it would be much more complicated to figure
          * out where new items should be inserted by the onInsert handler below.  onRemove would be easier because

@@ -1,11 +1,13 @@
 package io.kweb
 
+import io.kweb.Server2ClientMessage.Instruction
 import io.kweb.dom.Document
 import io.kweb.plugins.KWebPlugin
-import io.kweb.routing.pushState
+import io.kweb.routing.*
 import io.kweb.state.KVar
-import mu.*
+import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
@@ -14,11 +16,13 @@ import kotlin.reflect.jvm.jvmName
  * expressions and retrieve the result.
  */
 
-private val logger = KotlinLogging.logger {}
+val logger = KotlinLogging.logger {}
 
 class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
 
-    companion object : KLogging()
+    val idCounter = AtomicInteger(0)
+
+    fun generateId() : Int = idCounter.getAndIncrement()
 
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         kweb.appliedPlugins.map { it::class to it }.toMap()
@@ -64,20 +68,19 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.evaluate(sessionId, js) { rh.invoke(it) }
     }
 
+    fun send(instruction: Instruction) = send(listOf(instruction))
+
+    fun send(instructions: List<Instruction>) {
+        kweb.send(sessionId, instructions)
+    }
+
     val doc = Document(this)
-/*
-    fun async(doWork: suspend () -> Unit) {
-        launch(CommonPool) {
-            try {
-                doWork()
-            } catch (t: Throwable) {
-                val sb = StringBuilder()
-                sb.appendln("Exception thrown in Kweb async {} block:\n$t")
-                t.stackTrace.pruneAndDumpStackTo(sb)
-                logger.error(sb.toString())
-            }
-        }
-    }*/
+
+    /**
+     * A convenience method for a common operation
+     */
+    var path : List<String> get() = url.map(simpleUrlParser).path.value
+       set(v) { url.map(simpleUrlParser).path.value = v }
 
     // Note: It's important that we only have one KVar for the URL for this WebBrowser to ensure that changes
     //       propagate everywhere they should.  That's why it's lazy.
@@ -86,7 +89,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
                 val url = KVar(httpRequestInfo.requestedUrl)
 
                 url.addListener { old, new ->
-                    logger.info("URL updated from $old to $new")
                     pushState(new)
                 }
 

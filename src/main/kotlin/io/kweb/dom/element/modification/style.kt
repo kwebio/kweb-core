@@ -15,6 +15,10 @@ class StyleReceiver(private val parent : Element) {
         parent.execute("${parent.jsExpression}.style.width=\"$value\";")
     }
 
+    fun remove() {
+        parent.removeAttribute("style")
+    }
+
     enum class DisplayValues{
         none, block
     }

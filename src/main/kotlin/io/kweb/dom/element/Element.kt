@@ -2,6 +2,9 @@ package io.kweb.dom.element
 
 import com.github.salomonbrys.kotson.toJson
 import io.kweb.*
+import io.kweb.Server2ClientMessage.Instruction
+import io.kweb.Server2ClientMessage.Instruction.Type
+import io.kweb.Server2ClientMessage.Instruction.Type.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.modification.StyleReceiver
@@ -22,7 +25,7 @@ annotation class KWebDSL
 
 
 @KWebDSL
-open class Element (open val browser: WebBrowser, val creator : ElementCreator<*>?, open var jsExpression: String, val tag : String? = null, val id: String? = null) {
+open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
@@ -76,10 +79,16 @@ open class Element (open val browser: WebBrowser, val creator : ElementCreator<*
     /**
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
      * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
+     *
+     * Will be ignored if `value` is `null`.
      */
     fun setAttribute(name: String, value: Any?): Element {
         if (value != null) {
-            execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+            if (canSendInstruction()) {
+                browser.send(Instruction(type = SetAttribute, parameters = listOf(id, name, value)))
+            } else {
+                execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+            }
             if (name == "id") {
                 jsExpression = "document.getElementById(${value.toJson()})"
             }
@@ -99,12 +108,27 @@ open class Element (open val browser: WebBrowser, val creator : ElementCreator<*
     }
 
     fun removeAttribute(name: String): Element {
-        execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+        if (canSendInstruction()) {
+            browser.send(Instruction(Type.RemoveAttribute, listOf(id, name)))
+        } else {
+            execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+        }
         return this
     }
 
-    fun innerHTML(value: String): Element {
-        execute("$jsExpression.innerHTML=\"${value.escapeEcma()}\";")
+    fun innerHTML(html: String): Element {
+        execute("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+        return this
+    }
+
+    fun innerHTML(html: KVal<String>) : Element {
+        this.innerHTML(html)
+        val handle = html.addListener{ _, new ->
+            innerHTML(new)
+        }
+        this.creator?.onCleanup(true) {
+            html.removeListener(handle)
+        }
         return this
     }
 
@@ -207,12 +231,16 @@ open class Element (open val browser: WebBrowser, val creator : ElementCreator<*
     }
 
     fun addText(value: String): Element {
-        execute("""
+        if (canSendInstruction()) {
+            browser.send(Instruction(AddText, listOf(id, value)))
+        } else {
+            execute("""
                 {
                     var ntn=document.createTextNode("${value.escapeEcma()}");
                     $jsExpression.appendChild(ntn);
                 }
         """)
+        }
         return this
     }
 
@@ -252,27 +280,30 @@ open class Element (open val browser: WebBrowser, val creator : ElementCreator<*
 
     fun spellcheck(spellcheck : Boolean = true) = setAttribute("spellcheck", spellcheck)
 
-    val Element.style get() = StyleReceiver(this)
+    val style get() = StyleReceiver(this)
 
     val flags = ConcurrentSkipListSet<String>()
+
+    fun canSendInstruction() = id != null && browser.kweb.outboundMessageCatcher.get() == null
+
 }
 
 /**
  * Returns an [ElementCreator] which can be used to create new elements and add them
  * as children of the receiver element.
  *
- * @receiver This will be the addToElement element of any elements created with the returned
+ * @receiver This will be the parent element of any elements created with the returned
  *           [ElementCreator]
- * @Param position What position among the addToElement's children should the new element have?
+ * @Param position What position among the parent's children should the new element have?
  *
  * @sample new_sample_1
  */
-fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position : Int? = null): ElementCreator<ELEMENT_TYPE> = ElementCreator(addToElement = this, position = position)
+fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position: Int? = null): ElementCreator<ELEMENT_TYPE> = ElementCreator(parent = this, position = position)
 
 /**
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
  *
-* @Param position What position among the addToElement's children should the new element have?
+ * @Param position What position among the parent's children should the new element have?
  *
  * @sample new_sample_2
  */
@@ -280,8 +311,7 @@ fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE : Any> ELEMENT_TYPE.new(
         position : Int? = null,
         receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE)
         : RETURN_VALUE_TYPE {
-    val r = receiver(new(position))
-    return r
+    return receiver(new(position))
 }
 
 

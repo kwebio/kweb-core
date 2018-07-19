@@ -23,6 +23,9 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
+
+
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
@@ -35,7 +38,10 @@ group 'io.kweb'
 version '0.3.2'
 
 apply plugin: 'java'
+
 apply plugin: 'kotlin'
+kotlin { experimental { coroutines 'enable' } }
+
 apply plugin: 'maven'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: "info.solidsoft.pitest"
@@ -78,8 +84,22 @@ sourceSets {
     main.compileClasspath += configurations.provided
     test.compileClasspath += configurations.provided
     test.runtimeClasspath += configurations.provided
+
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/kotlin')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
 }
 
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
 
 dependencies {
     compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
@@ -107,7 +127,7 @@ dependencies {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
     }
 
-    compile ("io.ktor:ktor-server-netty:$ktor_version") {
+    compile ("io.ktor:ktor-server-jetty:$ktor_version") {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
     }
     compile("io.ktor:ktor-websockets:$ktor_version") {
@@ -119,14 +139,16 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.4.9'
     compile("org.reflections:reflections:0.9.11")
 
-    compile 'com.github.kwebio:shoebox:0.2.17'
+    compile 'com.github.kwebio:shoebox:0.2.18'
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.29'
+    integrationTestCompile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.31'
+    integrationTestCompile 'com.natpryce:hamkrest:1.4.2.2'
+
     testCompile ('org.jetbrains.spek:spek-api:1.1.5') {
         exclude group: 'org.jetbrains.kotlin'
     }
@@ -135,6 +157,7 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin'
     }
     testImplementation 'org.amshove.kluent:kluent:1.35'
+
     testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
 
 
@@ -153,8 +176,21 @@ configurations.all {
 }
 */
 
+//Create the task that runs the integration tests found from the
+//configured source directory and uses the correct classpath.
 
-kotlin { experimental { coroutines 'enable' } }
+task integrationTest(type: Test) {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    //If you want to ensure that integration tests are run every time when you invoke
+    //this task, uncomment the following line.
+    //outputs.upToDateWhen { false }
+}
+
+//Ensure that the check task fails the build if there are failing integration tests.
+check.dependsOn integrationTest
+//Ensure that our unit tests are run before our integration tests
+integrationTest.mustRunAfter test
 
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'html'

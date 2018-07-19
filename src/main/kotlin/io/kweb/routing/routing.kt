@@ -57,7 +57,10 @@ operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
             }
         }
 
-        override fun reverse(original: List<T>, change: T) = original.subList(0, pos).plus(change).plus(original.subList(pos + 1, original.size))
+        override fun reverse(original: List<T>, change: T) = original
+                .subList(0, pos)
+                .plus(change)
+                .plus(original.subList(pos + 1, original.size))
     })
 }
 

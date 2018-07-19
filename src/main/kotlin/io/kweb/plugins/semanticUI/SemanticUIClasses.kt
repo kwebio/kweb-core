@@ -66,6 +66,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val big : SemanticUIClasses get() {
+        classes("big")
+        return this
+    }
+
     val black : SemanticUIClasses get() {
         classes("black")
         return this
@@ -78,6 +83,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val blurring : SemanticUIClasses get() {
         classes("blurring")
+        return this
+    }
+
+    val bottom : SemanticUIClasses get() {
+        classes("bottom")
         return this
     }
 
@@ -303,6 +313,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val grey : SemanticUIClasses get() {
+        classes("grey")
+        return this
+    }
+
     val grid : SemanticUIClasses get() {
         classes("grid")
         return this
@@ -514,6 +529,12 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+
+    val play : SemanticUIClasses get() {
+        classes("play")
+        return this
+    }
+
     val plus : SemanticUIClasses get() {
         classes("plus")
         return this
@@ -558,6 +579,11 @@ class SemanticUIClasses : AttributeBuilder() {
 
     val scale : SemanticUIClasses get() {
         classes("scale")
+        return this
+    }
+
+    val spaced : SemanticUIClasses get() {
+        classes("spaced")
         return this
     }
 
@@ -670,6 +696,12 @@ class SemanticUIClasses : AttributeBuilder() {
         classes("small")
         return this
     }
+
+    val smile : SemanticUIClasses get() {
+        classes("smile")
+        return this
+    }
+
 
     val stackable : SemanticUIClasses get() {
         classes("stackable")

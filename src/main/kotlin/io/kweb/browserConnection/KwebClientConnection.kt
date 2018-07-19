@@ -1,8 +1,9 @@
 package io.kweb.browserConnection
 
+import io.ktor.http.cio.websocket.*
 import io.ktor.http.cio.websocket.Frame.Text
-import io.ktor.http.cio.websocket.WebSocketSession
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.channels.*
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -13,12 +14,25 @@ sealed class KwebClientConnection {
 
     class WebSocket(private val channel: WebSocketSession) : KwebClientConnection() {
 
-        override fun send(message: String) {
+        @Volatile var sendCount = 0
+
+        private val sendBuffer = ArrayChannel<Frame>(capacity = 1000)
+
+        init {
             launch {
-                channel.send(Text(message))
+                sendBuffer.consumeEach { channel.outgoing.send(it) }
             }
+
         }
 
+        override fun send(message: String) {
+            logger.debug("Start message send: $message on channel isFull: ${channel.outgoing.isFull}  isClosedForSend: ${channel.outgoing.isClosedForSend}")
+            runBlocking {
+                sendBuffer.send(Text(message))
+            }
+            sendCount++
+            logger.debug("End message send: $message")
+        }
     }
 
     class Caching : KwebClientConnection() {
@@ -45,4 +59,5 @@ sealed class KwebClientConnection {
 
         fun queueSize() = queue?.size
     }
+
 }

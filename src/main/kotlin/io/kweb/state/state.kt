@@ -44,25 +44,34 @@ open class KVal<T : Any?>(value: T) {
 
     fun <O : Any> map(mapper: (T) -> O): KVal<O> {
         if (isClosed) {
-            logger.warn("Mapping an already closed KVar", IllegalStateException())
+            throw IllegalStateException("Mapping an already closed KVar")
         }
         val newObservable = KVal(mapper(pValue))
         val handle = addListener { old, new ->
-            if (new != pValue) {
-                val mappedValue = mapper(new)
-                newObservable.pValue = mappedValue
-                newObservable.listeners.values.forEach {
-                    try {
-                        it(mapper(old), mappedValue)
-                    } catch (e : Exception) {
-                        logger.warn("Exception thrown by listener", e)
-                    }
+            if (!isClosed && !newObservable.isClosed) {
+                if (new != pValue) {
+                    val mappedValue = mapper(new)
+                    newObservable.pValue = mappedValue
+                    newObservable.listeners.values.forEach {
+                        try {
+                            it(mapper(old), mappedValue)
+                        } catch (e: Exception) {
+                            logger.warn("Exception thrown by listener", e)
+                        }
 
+                    }
                 }
+            } else {
+                logger.warn("Not propagating change to mapped variable because this or the other observable are closed, old: $old, new: $new")
             }
         }
         newObservable.onClose { removeListener(handle) }
-        this.onClose { newObservable.close() }
+        this.onClose {
+            newObservable.close()
+        }
+  //      newObservable.onClose {
+  //          this.close()
+  //      }
         return newObservable
     }
 
@@ -90,8 +99,8 @@ open class KVal<T : Any?>(value: T) {
         } else {
             isClosed = true
             closedStack = Thread.currentThread().stackTrace
+            closeHandlers.forEach { it.invoke() }
         }
-        closeHandlers.forEach { it.invoke() }
     }
 
     fun onClose(handler: () -> Unit) {
@@ -100,6 +109,10 @@ open class KVal<T : Any?>(value: T) {
             logger.warn("Adding a closer handler to an already closed KVar", IllegalStateException())
         }
         closeHandlers += handler
+    }
+
+    override fun toString(): String {
+        return "KVal($value)"
     }
 
 }
@@ -116,7 +129,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
             if (isClosed) {
                 logger.warn("Modifying a value in a closed KVar", IllegalStateException("Modifying a value in a closed KVar"))
             }
-            listeners.values.forEachIndexed { index, v ->
+            listeners.values.forEach { v ->
                 v(old, new)
 
             }

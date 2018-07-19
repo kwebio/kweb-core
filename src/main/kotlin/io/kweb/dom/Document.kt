@@ -14,7 +14,7 @@ import io.kweb.dom.element.creation.tags.h1
  * @sample document_sample
  */
 class Document(val receiver: WebBrowser) {
-    fun getElementById(id: String) = Element(receiver, null, "document.getElementById(\"$id\")")
+    fun getElementById(id: String) = Element(receiver, null, "document.getElementById(\"$id\")", id = id)
 
     val cookie = CookieReceiver(receiver)
 

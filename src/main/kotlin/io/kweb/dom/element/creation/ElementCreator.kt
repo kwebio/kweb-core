@@ -1,11 +1,14 @@
 package io.kweb.dom.element.creation
 
 import io.kweb.*
+import io.kweb.Server2ClientMessage.Instruction
+import io.kweb.Server2ClientMessage.Instruction.Type.CreateElement
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.element.*
 import io.kweb.plugins.KWebPlugin
 import mu.KLogging
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.reflect.KClass
 
 /**
@@ -16,8 +19,8 @@ typealias Cleaner = () -> Unit
 
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
-        val addToElement: PARENT_TYPE,
-        val parentCreator: ElementCreator<*>? = addToElement.creator,
+        val parent: PARENT_TYPE,
+        val parentCreator: ElementCreator<*>? = parent.creator,
         val position: Int? = null) {
 
     companion object : KLogging()
@@ -27,15 +30,15 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     private @Volatile
     var isCleanedUp = false
 
-    val elementsCreated: Int get() = elementsCreatedCount
+    val elementsCreatedCount: Int get() = elementsCreated.size
 
-    private @Volatile
-    var elementsCreatedCount = 0
+    internal
+    val elementsCreated = ConcurrentLinkedQueue<Element>()
 
-    val browser: WebBrowser get() = addToElement.browser
+    val browser: WebBrowser get() = parent.browser
 
     fun element(tag: String, attributes: Map<String, Any> = attr): Element {
-        elementsCreatedCount++
+
         if (position != null && elementsCreatedCount == 2) {
             logger.warn {
                 """
@@ -46,10 +49,15 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
 
-        val id: String = (attributes["id"] ?: Math.abs(random.nextInt())).toString()
-        addToElement.execute(renderJavaScriptToCreateNewElement(tag, attributes, id))
-        val newElement = Element(addToElement.browser, this, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
-        for (plugin in addToElement.browser.kweb.plugins) {
+        val id: String = (attributes["id"] ?: "K"+browser.generateId()).toString()
+        if (parent.canSendInstruction()) {
+            browser.send(Instruction(CreateElement, listOf(tag, attributes, id, parent.id, position ?: -1)))
+        } else {
+            parent.execute(renderJavaScriptToCreateNewElement(tag, attributes, id))
+        }
+        val newElement = Element(parent.browser, this, tag = tag, jsExpression = "document.getElementById(\"$id\")", id = id)
+        elementsCreated += newElement
+        for (plugin in parent.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)
         }
         onCleanup(withParent = false) {
@@ -71,9 +79,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 appendln("newEl.setAttribute(\"$name\", ${value.toJson()});")
             }
             if (position == null) {
-                appendln("${addToElement.jsExpression}.appendChild(newEl);")
+                appendln("${parent.jsExpression}.appendChild(newEl);")
             } else {
-                appendln("${addToElement.jsExpression}.insertBefore(newEl, ${addToElement.jsExpression}.childNodes[$position]);")
+                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.childNodes[$position]);")
             }
             appendln("}")
         }
@@ -81,13 +89,14 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         return js
     }
 
-    fun require(vararg plugins: KClass<out KWebPlugin>) = addToElement.browser.require(*plugins)
+    fun require(vararg plugins: KClass<out KWebPlugin>) = parent.browser.require(*plugins)
 
     /**
      * Specify a listener to be called when this element is removed from the DOM.
      *
-     * @param withParent If `true` this cleaner will be called if this element is deleted, or if
-     *                   any ancestor element of this element is deleted.
+     * @param withParent If `true` this cleaner will be called if this element is cleaned up, or if
+     *                   any ancestor element of this element is cleaned up.  Otherwise it will
+     *                   only be cleaned up if this element is cleaned up specifically.
      */
     fun onCleanup(withParent: Boolean, f: Cleaner) {
         if (withParent) {

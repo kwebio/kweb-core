@@ -1,7 +1,6 @@
-package io.kweb
-
 import com.gargoylesoftware.htmlunit.*
 import com.gargoylesoftware.htmlunit.html.HtmlPage
+import io.kweb.Kweb
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
 

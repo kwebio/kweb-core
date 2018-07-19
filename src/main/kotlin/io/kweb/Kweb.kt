@@ -2,6 +2,7 @@ package io.kweb
 
 import com.github.salomonbrys.kotson.fromJson
 import io.ktor.application.*
+import io.ktor.content.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.Frame.Text
@@ -10,8 +11,9 @@ import io.ktor.request.*
 import io.ktor.response.respondText
 import io.ktor.routing.*
 import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.*
+import io.ktor.server.jetty.*
 import io.ktor.websocket.*
+import io.kweb.Server2ClientMessage.Instruction
 import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
@@ -19,11 +21,12 @@ import io.kweb.plugins.KWebPlugin
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.consumeEach
 import org.apache.commons.io.IOUtils
-import java.io.Closeable
+import java.io.*
 import java.time.*
 import java.util.*
 import java.util.concurrent.*
 import java.util.concurrent.TimeUnit.MINUTES
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 
 /**
@@ -57,19 +60,29 @@ class Kweb(val port: Int,
            val plugins: List<io.kweb.plugins.KWebPlugin> = java.util.Collections.emptyList(),
            val appServerConfigurator: (io.ktor.routing.Routing) -> Unit = {},
            val onError: ((List<StackTraceElement>, io.kweb.JavaScriptError) -> io.kweb.LogError) = { _, _ -> true },
-           val maxPageBuildTimeMS: Long = 1000,
+           val maxPageBuildTimeMS: Long = 500,
            val clientStateTimeout : Duration = Duration.ofHours(1),
+           profileJavascript : Boolean = false,
            val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
-    companion object : mu.KLogging()
+    // TODO: This should be exposed via some diagnostic tool
+    private val javascriptProfilingStackCounts = if (profileJavascript)
+        ConcurrentHashMap<List<StackTraceElement>, AtomicInteger>() else null
 
     // private val server: Any
     private val clientState: ConcurrentHashMap<String, io.kweb.RemoteClientState> = java.util.concurrent.ConcurrentHashMap()
     private val mutableAppliedPlugins: MutableSet<io.kweb.plugins.KWebPlugin> = java.util.HashSet()
     val appliedPlugins: Set<io.kweb.plugins.KWebPlugin> get() = mutableAppliedPlugins
 
-    private val server: NettyApplicationEngine
+    private val server: JettyApplicationEngine
+
+    private fun recordForProfiling() {
+        if (javascriptProfilingStackCounts != null && this.outboundMessageCatcher.get() == null) {
+            javascriptProfilingStackCounts.computeIfAbsent(Thread.currentThread().stackTrace.slice(3..7), { AtomicInteger(0) }).incrementAndGet()
+        }
+    }
+
 
     init {
         logger.info("Initializing Kweb listening on port $port")
@@ -83,15 +96,19 @@ class Kweb(val port: Int,
             KwebHotswapPlugin.addHotswapReloadListener({ refreshAllPages() })
         }
 
-        val config = NettyApplicationEngine.Configuration()
-
-        server = embeddedServer(Netty, port) {
+        server = embeddedServer(Jetty, port) {
             install(DefaultHeaders)
-            install(CallLogging)
+          //  install(CallLogging)
+            install(Compression)
             install(WebSockets) {
-                pingPeriod = Duration.ofMinutes(1)
+                pingPeriod = Duration.ofSeconds(10)
+                timeout = Duration.ofSeconds(30)
             }
-            install(Routing) {
+            routing {
+
+                static("static") {
+                    resources("static")
+                }
 
                 // Register custom state.
                 appServerConfigurator.invoke(this)
@@ -117,6 +134,12 @@ class Kweb(val port: Int,
                 get("/favicon.ico") {
                     call.response.status(HttpStatusCode.NotFound)
                     call.respondText("favicons not currently supported by kweb")
+                }
+
+                static("/static") {
+                    // When running under IDEA make sure that working directory is set to this sample's project folder
+                    staticRootFolder = File("static")
+                    files("images")
                 }
 
                 get("/{visitedUrl...}") {
@@ -169,14 +192,16 @@ class Kweb(val port: Int,
                         call.response.status(HttpStatusCode.NotFound)
                         call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
                     } catch (e: Exception) {
-                        call.response.status(HttpStatusCode.InternalServerError)
                         val logToken = random.nextLong().toString(16)
+
+                        logger.error(e) { "Exception thrown while rendering page, code $logToken" }
+
+                        call.response.status(HttpStatusCode.InternalServerError)
                         call.respondText("""
                         Internal Server Error.
 
                         Please include code $logToken in any message report to help us track it down.
 """.trimIndent())
-                        logger.error(e) { "Exception thrown while rendering page, code $logToken" }
                     }
                 }
 
@@ -281,9 +306,9 @@ class Kweb(val port: Int,
 
     private fun refreshAllPages() = async(CommonPool) {
         for (client in clientState.values) {
-            val message = S2CWebsocketMessage(
+            val message = Server2ClientMessage(
                     yourId = client.id,
-                    execute = S2CWebsocketMessage.Execute("window.location.reload(true);"), debugToken = null)
+                    execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
             client.clientConnection.send(message.toJson())
         }
     }
@@ -305,6 +330,7 @@ class Kweb(val port: Int,
     }
 
     fun execute(clientId: String, javascript: String) {
+        recordForProfiling()
         val wsClientData = clientState.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if (!debug) null else {
@@ -312,13 +338,31 @@ class Kweb(val port: Int,
             wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
             dt
         }
-        val tlomc = outboundMessageCatcher.get()
-        if (tlomc == null) {
-            wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
         } else {
             logger.debug("Temporarily storing message for $clientId in threadloacal outboundMessageCatcher")
-            tlomc.add(javascript)
+            outboundMessageCatcher.add(javascript)
         }
+    }
+
+    fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
+
+    fun send(clientId: String, instructions: List<Instruction>) {
+        if (outboundMessageCatcher.get() != null) {
+            throw RuntimeException("""
+                Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
+                """.trimIndent())
+        }
+        val wsClientData = clientState.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(instructions.toString(), "instructions", Throwable()))
+            dt
+        }
+        wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
     }
 
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
@@ -330,7 +374,7 @@ class Kweb(val port: Int,
             dt
         }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, debugToken = debugToken, execute = S2CWebsocketMessage.Execute(javascript)))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
@@ -338,6 +382,7 @@ class Kweb(val port: Int,
     }
 
     fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
+        recordForProfiling()
         val wsClientData = clientState.get(clientId)
                 ?: throw RuntimeException("Failed to evaluate JavaScript because client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
@@ -347,7 +392,7 @@ class Kweb(val port: Int,
         }
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(S2CWebsocketMessage(yourId = clientId, evaluate = S2CWebsocketMessage.Evaluate(expression, callbackId), debugToken = debugToken))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
     }
 
     override fun close() {
@@ -375,7 +420,7 @@ class Kweb(val port: Int,
 }
 
 private data class RemoteClientState(val id: String, @Volatile var clientConnection: KwebClientConnection, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap(), var lastModified :Instant = Instant.now()) {
-    fun send(message: S2CWebsocketMessage) {
+    fun send(message: Server2ClientMessage) {
         clientConnection.send(gson.toJson(message))
     }
 
@@ -404,12 +449,22 @@ data class HttpRequestInfo(val request: ApplicationRequest) {
 
 data class DebugInfo(val js: String, val action: String, val throwable: Throwable)
 
-data class S2CWebsocketMessage(
+data class Server2ClientMessage(
         val yourId: String,
         val debugToken: String?,
         val execute: Execute? = null,
-        val evaluate: Evaluate? = null
+        val evaluate: Evaluate? = null,
+        val instructions: List<Instruction>? = null
 ) {
+
+    data class Instruction(val type: Type, val parameters: List<Any?>) {
+        enum class Type {
+            SetAttribute,
+            CreateElement,
+            AddText,
+            RemoveAttribute
+        }
+    }
 
     data class Execute(val js: String)
     data class Evaluate(val js: String, val callbackId: Int)

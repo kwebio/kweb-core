@@ -1,11 +1,10 @@
 package io.kweb
 
 import com.google.gson.*
-import io.kweb.dom.element.Element
+import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.*
 import kotlin.reflect.KClass
-import kotlin.reflect.jvm.jvmName
 
 /**
  * Created by ian on 1/7/17.
@@ -30,7 +29,7 @@ val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledT
 
 fun wait(delay: Long, unit : TimeUnit, toRun : () -> Unit): ScheduledFuture<*> = scheduledExecutorService.schedule(toRun, delay, unit)
 
-fun String.escapeEcma() =  org.apache.commons.text.StringEscapeUtils.escapeEcmaScript(this)!!
+fun String.escapeEcma() =  StringEscapeUtils.escapeEcmaScript(this)!!
 
 fun Any.toJson(): String = gson.toJson(this)
 
@@ -47,7 +46,7 @@ fun <T> warnIfBlocking(maxTimeMs: Long, onBlock : (Thread) -> Unit, f : () -> T)
  * trace.  This is a little ugly but seems to work well, there may be a better approach.
  */
 fun Array<StackTraceElement>.pruneAndDumpStackTo(logStatementBuilder: StringBuilder) {
-    val disregardClassPrefixes = listOf<String>(Kweb::class.jvmName, WebBrowser::class.jvmName, Element::class.jvmName, "org.jetbrains.ktor", "io.netty", "java.lang", "kotlin", "kotlinx", "io.kweb")
+    val disregardClassPrefixes = listOf("org.jetbrains.ktor", "io.netty", "java.lang", "kotlin", "kotlinx")
     this.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
         logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
     }

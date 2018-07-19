@@ -4,25 +4,25 @@
     <!-- START HEADER PLACEHOLDER -->
     <script language="JavaScript">
         function toWSUrl(s) {
-            var l = window.location;
+            let l = window.location;
             return ((l.protocol === "https:") ? "wss://" : "ws://") + l.host + "/" + s;
         }
 
-        var kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
-        var websocketEstablished = false;
-        var preWSMsgQueue = [];
-        var socket;
+        let kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
+        let websocketEstablished = false;
+        let preWSMsgQueue = [];
+        let socket;
         function handleInboundMessage(msg) {
-            var yourId = msg["yourId"];
-            var debugToken = msg["debugToken"];
+            const yourId = msg["yourId"];
+            const debugToken = msg["debugToken"];
             if (kwebClientId != yourId) {
                 console.error("Received message from incorrect clientId, was " + yourId + ", should be " + kwebClientId)
             }
-            var execute = msg["execute"];
+            const execute = msg["execute"];
             if (execute !== undefined) {
                 try {
                     eval(execute["js"])
-                    console.log("Executed `"+execute["js"]+"`")
+                    console.debug("Executed `"+execute["js"]+"`")
                 } catch (err) {
                     if (debugToken != undefined) {
                         console.error("Error evaluating [" + execute["js"] + "] : " + err)
@@ -34,51 +34,97 @@
                     }
                 }
             }
-            var evaluate = msg["evaluate"];
+            let evaluate = msg["evaluate"];
             if (evaluate !== undefined) {
                 try {
-                    var data = eval(evaluate["js"])
-                    console.log("Evaluated ["+evaluate["js"]+"], result: `"+data+"`")
-                    var callback = {"callbackId": evaluate["callbackId"], "data": data}
-                    var message = {"id": kwebClientId, "callback": callback}
+                    const data = eval(evaluate["js"])
+                    console.debug("Evaluated ["+evaluate["js"]+"]", data)
+                    const callback = {"callbackId": evaluate["callbackId"], "data": data}
+                    const message = {"id": kwebClientId, "callback": callback}
                     sendMessage(JSON.stringify(message))
                 } catch (err) {
                     if (debugToken != undefined) {
                         console.error("Error evaluating `" + evaluate["js"] + "`: " + err)
-                        var error = {"debugToken": debugToken, "error": {"name": err.name, "message": err.message}}
-                        var message = {"id": kwebClientId, "error": error}
+                        const error = {"debugToken": debugToken, "error": {"name": err.name, "message": err.message}}
+                        const message = {"id": kwebClientId, "error": error}
                         sendMessage(JSON.stringify(message))
                     } else {
                         throw err
                     }
                 }
             }
+            const instructions = msg["instructions"];
+            if (instructions !== undefined) {
+                for (let i = 0; i < instructions.length; i++) {
+                    const instruction = instructions[i]
+                    if (instruction.type === "SetAttribute") {
+                        document
+                            .getElementById(instruction.parameters[0])
+                            .setAttribute(instruction.parameters[1], instruction.parameters[2])
+
+                    } else if (instruction.type === "RemoveAttribute") {
+                        const id = instruction.parameters[0]
+                        const attribute = instruction.parameters[1]
+                        document.getElementById(id).removeAttribute(attribute)
+
+                    } else if (instruction.type === "CreateElement") {
+                        const tag = instruction.parameters[0]
+                        const attributes = instruction.parameters[1]
+                        const myId = instruction.parameters[2]
+                        const parentId = instruction.parameters[3]
+                        const position = instruction.parameters[4]
+                        const newEl = document.createElement(tag)
+                        newEl.setAttribute("id", myId)
+                        for (const key in attributes) {
+                            if (key !== "id") {
+                                newEl.setAttribute(key, attributes[key])
+                            }
+                        }
+
+                        let parentElement = document.getElementById(parentId)
+
+                        if (position > -1) {
+                            parentElement.insertBefore(newEl, parentElement.childNodes[position])
+                        } else {
+                            parentElement.appendChild(newEl)
+                        }
+
+                    } else if (instruction.type === "AddText") {
+                        const id = instruction.parameters[0]
+                        const text = instruction.parameters[1]
+                        const textNode = document.createTextNode(text)
+                        document.getElementById(id).appendChild(textNode)
+                    }
+
+                }
+            }
+
         }
         function connectWs() {
             var wsURL = toWSUrl("ws");
-            console.info("Establishing websocket connection", wsURL)
+            console.debug("Establishing websocket connection", wsURL)
             socket = new WebSocket(wsURL);
             if (window.WebSocket === undefined) {
                 document.body.innerHTML = "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>"
                 console.error("Browser doesn't support window.WebSocket")
             } else {
                 socket.onopen = function () {
-                    console.info("socket.onopen event received")
+                    console.debug("socket.onopen event received")
                     websocketEstablished = true
-                    console.info("Websocket established", wsURL)
+                    console.debug("Websocket established", wsURL)
                     sendMessage(JSON.stringify({"id" : kwebClientId, "hello": true}))
                     while (preWSMsgQueue.length > 0) {
                         sendMessage(preWSMsgQueue.shift())
                     }
                 };
                 socket.onmessage = function (event) {
-                    console.info("Message received from socket")
                     var msg = JSON.parse(event.data);
+                    console.debug("Message received from socket: ", event.data)
                     handleInboundMessage(msg);
                 }
 
                 socket.onclose = function(evt) {
-                    console.info("Socket closed")
+                    console.debug("Socket closed")
                     var explanation = "";
                     if (evt.reason && evt.reason.length > 0) {
                         explanation = "reason: " + evt.reason;
@@ -86,26 +132,28 @@
                         explanation = "without a reason specified";
                     }
 
-                    console.warn("WebSocket was closed", explanation, evt);
+                    console.error("WebSocket was closed", explanation, evt);
                     websocketEstablished = false
+                    console.warn("Forcing page reload")
                     location.reload(true);
-                    setTimeout(function() { location.reload(true); }, 5000);
+               //     setTimeout(function() { location.reload(true); }, 5000);
                 };
                 socket.onerror = function(evt) {
                     console.error("WebSocket error", evt);
                     websocketEstablished = false
+                    console.warn("Forcing page reload")
                     location.reload(true);
-                    setTimeout(function() { location.reload(true); }, 5000);
+              //      setTimeout(function() { location.reload(true); }, 5000);
                 }
             }
         }
 
         function sendMessage(msg) {
             if (websocketEstablished) {
-                console.info("Sending WebSocket message", msg)
+                console.debug("Sending WebSocket message", msg)
                 socket.send(msg)
             } else {
-                console.info("Queueing WebSocket message as connection isn't established", msg)
+                console.debug("Queueing WebSocket message as connection isn't established", msg)
                 preWSMsgQueue.push(msg)
             }
         }
