@@ -21,14 +21,12 @@ import io.kweb.plugins.semanticUI.semantic as s
 private val logger = KotlinLogging.logger {}
 
 fun main(args: Array<String>) {
-    /** Starts a web server listening on http://localhost:8091/.
-     */
-
     /** A simple yet flexible plugin mechanism */
     val plugins = listOf(semanticUIPlugin)
 
     /** Create a Kweb instance, and configure it to use the Semantic
-     * UI framework. Build a simple to-do list app.
+     * UI framework. Build a simple to-do list app listening on
+     * http://localhost:8091/
      * */
     Kweb(port = 8091, debug = true, plugins = plugins) {
         doc.body.new {
