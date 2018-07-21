@@ -139,7 +139,7 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.5.4'
     compile("org.reflections:reflections:0.9.11")
 
-    compile 'com.github.kwebio:shoebox:0.2.18'
+    compile 'com.github.kwebio:shoebox:0.2.19'
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 

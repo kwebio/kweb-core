@@ -53,7 +53,6 @@ fun main(args: Array<String>) {
             }
         }
     }
-    Thread.sleep(10000)
 }
 
 private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
