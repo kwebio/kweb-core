@@ -32,16 +32,15 @@ fun main(args: Array<String>) {
         doc.body.new {
 
             /** Kweb allows you to modularize your code however suits your needs
-                best.  Here I use an extension function to renderList some common
-                outer page elements */
+                best.  Here I use an extension function defined elsewhere to
+                draw some common outer page DOM elements */
             pageBorderAndTitle("Todo List") {
 
                 /** A KVar is similar to an AtomicReference in the standard Java
                     Library, but which supports the observer pattern and `map`
-                    semantics.  Here we set it to the current URL of the page.  This
+                    semantics.  Here I set it to the current URL of the page.  This
                     will update automatically the page's URL changes, and can be
-                    modified to update the page's URL,
-                    as you'll see below. */
+                    modified to update the page's URL, as you'll see below. */
                 val url: KVar<URL> = doc.receiver.url(simpleUrlParser)
 
                 /** s.content uses the semanticUIPlugin to use the excellent
@@ -55,7 +54,7 @@ fun main(args: Array<String>) {
                     val firstPathElement: KVar<String> = url.path[0]
 
                     /** Renders `firstPathElement`, but - and here's the fun part - will
-                        automatically re-renderList if firstPathElement changes.  This is
+                        automatically re-render if firstPathElement changes.  This is
                         a simple, elegant, and yet powerful routing mechanism. */
                     render(firstPathElement) { entityType ->
                         when (entityType) {
@@ -66,12 +65,12 @@ fun main(args: Array<String>) {
                             "lists" -> {
                                 /** Renders can be nested, which means that only this
                                     specific part of the page must be re-rendered if
-                                    url.path[1] changes, which is both incredibly convenient
-                                    for the developer, and efficient, leading to a very
-                                    responsive webapp. */
+                                    url.path[1] changes, which is very convenient
+                                    for the developer in comparison to other frameworks,
+                                    while being efficient under-the-hood. */
                                 render(url.path[1]) { listId ->
                                     try {
-                                        /** Here we use the same render mechanism to tie DOM
+                                        /** Here I use the same render mechanism to tie DOM
                                             state to persistent state stored in Shoebox,
                                             Kweb's simple but powerful key-value store with
                                             observer pattern support.  */
