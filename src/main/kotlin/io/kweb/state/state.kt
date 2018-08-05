@@ -42,6 +42,8 @@ open class KVal<T : Any?>(value: T) {
         listeners.remove(handle)
     }
 
+    // TODO: A cachetime could be specified, to limit recalculation, could be quite broadly useful for expensive
+    //       mappings
     fun <O : Any> map(mapper: (T) -> O): KVal<O> {
         if (isClosed) {
             throw IllegalStateException("Mapping an already closed KVar")

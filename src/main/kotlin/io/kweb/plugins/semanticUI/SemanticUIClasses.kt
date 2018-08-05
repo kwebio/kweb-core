@@ -166,6 +166,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val copy : SemanticUIClasses get() {
+        classes("copy")
+        return this
+    }
+
     val column : SemanticUIClasses get() {
         classes("column")
         return this

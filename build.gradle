@@ -11,8 +11,8 @@ allprojects {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.51'
-    ext.dokka_version = '0.9.15'
+    ext.kotlin_version = '1.2.60'
+    ext.dokka_version = '0.9.17'
     ext.ktor_version = '0.9.3'
 
     repositories {
@@ -35,7 +35,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.3.3'
+version '0.3.5'
 
 apply plugin: 'java'
 

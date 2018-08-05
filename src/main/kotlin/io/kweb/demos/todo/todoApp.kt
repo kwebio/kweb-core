@@ -38,9 +38,11 @@ fun main(args: Array<String>) {
 
                 /** A KVar is similar to an AtomicReference in the standard Java
                     Library, but which supports the observer pattern and `map`
-                    semantics.  Here I set it to the current URL of the page.  This
-                    will update automatically the page's URL changes, and can be
-                    modified to update the page's URL, as you'll see below. */
+                    semantics.  Here I set it to the current URL of the page.
+
+                    This will update automatically if the page's URL changes, and
+                    if it is modified, the page's URL will change and the DOM will
+                    re-render _without_ a page reload.  Yes, seriously. */
                 val url: KVar<URL> = doc.receiver.url(simpleUrlParser)
 
                 /** s.content uses the semanticUIPlugin to use the excellent
@@ -67,7 +69,7 @@ fun main(args: Array<String>) {
                                     specific part of the page must be re-rendered if
                                     url.path[1] changes, which is very convenient
                                     for the developer in comparison to other frameworks,
-                                    while being efficient under-the-hood. */
+                                    while minimizing server-browser chatter. */
                                 render(url.path[1]) { listId ->
                                     try {
                                         /** Here I use the same render mechanism to tie DOM
