@@ -2,8 +2,8 @@ package io.kweb.browserConnection
 
 import io.ktor.http.cio.websocket.*
 import io.ktor.http.cio.websocket.Frame.Text
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -20,18 +20,16 @@ sealed class KwebClientConnection {
 
         init {
             launch {
-                sendBuffer.consumeEach { channel.outgoing.send(it) }
+                sendBuffer.consumeEach { channel.send(it) }
             }
 
         }
 
         override fun send(message: String) {
-            logger.debug("Start message send: $message on channel isFull: ${channel.outgoing.isFull}  isClosedForSend: ${channel.outgoing.isClosedForSend}")
             runBlocking {
                 sendBuffer.send(Text(message))
             }
             sendCount++
-            logger.debug("End message send: $message")
         }
     }
 

@@ -2,11 +2,11 @@ package io.kweb
 
 import com.github.salomonbrys.kotson.fromJson
 import io.ktor.application.*
-import io.ktor.content.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.readText
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.respondText
 import io.ktor.routing.*
@@ -18,8 +18,8 @@ import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KWebPlugin
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.channels.consumeEach
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.consumeEach
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.time.*
@@ -207,7 +207,7 @@ class Kweb(val port: Int,
 
                 webSocket("/ws") {
 
-                    val hello = gson.fromJson<Client2ServerMessage>((incoming.receive() as Text).readText())
+                    val hello = gson.fromJson<Client2ServerMessage>((incoming as Text).readText())
 
 
                     if (hello.hello == null) {
@@ -304,7 +304,7 @@ class Kweb(val port: Int,
         }
     }
 
-    private fun refreshAllPages() = async(CommonPool) {
+    private fun refreshAllPages() = launch(Dispatchers.Default) {
         for (client in clientState.values) {
             val message = Server2ClientMessage(
                     yourId = client.id,

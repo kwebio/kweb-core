@@ -2,8 +2,8 @@ package io.kweb.dom.element.storage
 
 import io.kweb.Kweb
 import io.kweb.dom.Document
-import kotlinx.coroutines.experimental.future.await
-import kotlinx.coroutines.experimental.future.future
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 /**

@@ -3,8 +3,7 @@ package io.kweb.demos.async
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.tags.p
 import io.kweb.dom.element.new
-import kotlinx.coroutines.experimental.future.await
-import kotlinx.coroutines.experimental.future.future
+import kotlinx.coroutines.future.*
 import mu.KotlinLogging
 
 /**

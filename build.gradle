@@ -6,14 +6,15 @@ allprojects {
             maven {
                 url "https://plugins.gradle.org/m2/"
             }
+            maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         }
     }
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.60'
+    ext.kotlin_version = '1.3.0-rc-57'
     ext.dokka_version = '0.9.17'
-    ext.ktor_version = '0.9.3'
+    ext.ktor_version = '0.9.5-rc13'
 
     repositories {
         jcenter()
@@ -22,6 +23,8 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+
     }
 
 
@@ -35,7 +38,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.3.4'
+version '0.3.5'
 
 apply plugin: 'java'
 
@@ -68,6 +71,8 @@ repositories {
     }
     maven { url "http://dl.bintray.com/jetbrains/spek" }
     jcenter()
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+
 }
 
 configurations {
@@ -76,7 +81,7 @@ configurations {
 
 configurations.all {
     resolutionStrategy {
-        force 'org.jetbrains.kotlinx:kotlinx-coroutines-io:0.23.4'
+      //  force 'org.jetbrains.kotlinx:kotlinx-coroutines-io:0.30.0-eap13'
     }
 }
 
@@ -111,9 +116,9 @@ dependencies {
     //////////////////////////////
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.4'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.23.4'
+  //  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.30.0-eap13'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.30.0-eap13'
 
     // TODO: This should be testCompile
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
@@ -139,7 +144,7 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.5.4'
     compile("org.reflections:reflections:0.9.11")
 
-    compile 'com.github.kwebio:shoebox:0.2.19'
+    compile 'com.github.kwebio:shoebox:0.2.20'
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
