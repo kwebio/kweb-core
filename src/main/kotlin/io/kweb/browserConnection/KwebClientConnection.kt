@@ -12,14 +12,15 @@ private val logger = KotlinLogging.logger {}
 sealed class KwebClientConnection {
     abstract fun send(message: String)
 
+    @ObsoleteCoroutinesApi // TODO: For Channel.consumeEach, which will apparently become obsolete
     class WebSocket(private val channel: WebSocketSession) : KwebClientConnection() {
 
         @Volatile var sendCount = 0
 
-        private val sendBuffer = ArrayChannel<Frame>(capacity = 1000)
+        private val sendBuffer = Channel<Frame>(capacity = 1000)
 
         init {
-            launch {
+             GlobalScope.launch {
                 sendBuffer.consumeEach { channel.send(it) }
             }
 

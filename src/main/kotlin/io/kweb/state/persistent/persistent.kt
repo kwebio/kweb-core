@@ -116,8 +116,8 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
         items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
     }
 
-    val onInsertHandler = orderedViewSet.onInsert{ index, inserted ->
-        items.add(index, createItem( orderedViewSet, inserted, renderer, index))
+    val onInsertHandler = orderedViewSet.onInsert { index, inserted ->
+        items.add(index, createItem(orderedViewSet, inserted, renderer, index))
     }
     this.onCleanup(true) { orderedViewSet.deleteInsertListener(onInsertHandler) }
 
@@ -133,7 +133,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
 
     this.onCleanup(true) {
 
-         orderedViewSet.deleteRemoveListener(onRemoveHandler)
+        orderedViewSet.deleteRemoveListener(onRemoveHandler)
     }
 }
 
@@ -142,8 +142,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
         keyValue : KeyValue<ITEM>,
         renderer : ElementCreator<EL>.(KVar<ITEM>) -> Unit,
         insertAtPosition: Int?)
-
-//        : ItemInfo<ITEM> {k=j
+        : ItemInfo<ITEM> {
     val itemElementCreator = ElementCreator(this.parent, this, insertAtPosition)
     val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
     try {

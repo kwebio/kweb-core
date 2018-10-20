@@ -20,12 +20,12 @@ import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KWebPlugin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
 import java.io.*
 import java.time.*
 import java.util.*
 import java.util.concurrent.*
-import java.util.concurrent.TimeUnit.MINUTES
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 
@@ -264,9 +264,9 @@ class Kweb(val port: Int,
         server.start()
         logger.info { "KWeb is listening on port $port" }
 
-        launch {
+        GlobalScope.launch {
             while(true) {
-                delay(1, MINUTES)
+                delay(Duration.ofMinutes(1))
                 cleanUpOldClientStates()
             }
         }
@@ -304,7 +304,7 @@ class Kweb(val port: Int,
         }
     }
 
-    private fun refreshAllPages() = launch(Dispatchers.Default) {
+    private fun refreshAllPages() = GlobalScope.launch(Dispatchers.Default) {
         for (client in clientState.values) {
             val message = Server2ClientMessage(
                     yourId = client.id,

@@ -2,8 +2,8 @@ package io.kweb.dom.element.storage
 
 import io.kweb.Kweb
 import io.kweb.dom.Document
+import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -21,7 +21,7 @@ val Document.sessionStorage get() = StorageReceiver(receiver, StorageType.sessio
 private fun local_storage_sample() {
     Kweb(port = 14189) {
         doc.localStorage["time"] = System.currentTimeMillis()
-        future {
+        GlobalScope.launch {
             val username : CompletableFuture<String?> = doc.sessionStorage["user_name"]
             println("Read username: ${username.await()}")
         }

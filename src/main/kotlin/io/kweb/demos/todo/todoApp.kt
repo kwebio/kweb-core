@@ -12,12 +12,9 @@ import io.kweb.routing.*
 import io.kweb.state.KVar
 import io.kweb.state.persistent.*
 import io.mola.galimatias.URL
-import kotlinx.coroutines.async
-import kotlinx.coroutines.async
-import kotlinx.coroutines.future.await
+import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
-import sun.plugin.util.PluginSysUtil.execute
 import java.time.Instant
 import java.util.*
 import io.kweb.plugins.semanticUI.semantic as s
@@ -144,7 +141,7 @@ private fun ElementCreator<*>.renderList(list: KVar<State.List>) {
 }
 
 private fun handleAddItem(input: InputElement, list: KVar<State.List>) {
-    async {
+    GlobalScope.launch {
         val newItemText = input.getValue().await()
         input.setValue("")
         val newItem = State.Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
