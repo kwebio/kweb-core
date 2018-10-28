@@ -19,7 +19,6 @@ import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KWebPlugin
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
 import java.io.*
@@ -207,8 +206,7 @@ class Kweb(val port: Int,
 
                 webSocket("/ws") {
 
-                    val hello = gson.fromJson<Client2ServerMessage>((incoming as Text).readText())
-
+                    val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
 
                     if (hello.hello == null) {
                         throw RuntimeException("First message from client isn't 'hello'")
@@ -227,7 +225,7 @@ class Kweb(val port: Int,
 
 
                     try {
-                        incoming.consumeEach { frame ->
+                        for (frame in incoming) {
                             try {
                                 logger.debug { "Message received from client" }
 
