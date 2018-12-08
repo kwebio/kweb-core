@@ -198,7 +198,7 @@
             }
         }
         var docCookies = {
-            getItems: function (sKey) {
+            getItem: function (sKey) {
                 if (!sKey || !this.hasItem(sKey)) { return "__COOKIE_NOT_FOUND_TOKEN__"; }
                 return unescape(document.cookie.replace(new RegExp("(?:^|.*;\\s*)" + escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"), "$1"));
             },
