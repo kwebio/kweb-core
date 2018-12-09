@@ -38,7 +38,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.3.12'
+version '0.3.13'
 
 apply plugin: 'java'
 
@@ -107,7 +107,7 @@ configurations {
 }
 
 dependencies {
-    compile 'com.github.salomonbrys.kotson:kotson:2.3.0'
+    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 

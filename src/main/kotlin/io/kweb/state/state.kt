@@ -159,6 +159,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
     val numChangeListeners get() = super.listeners.size
 }
 
+
 /*
 inline fun <reified T : Any> Shoebox<T>.getAsBindable(key : String) : KVar<T>? {
     val initialValue = this.get(key)
