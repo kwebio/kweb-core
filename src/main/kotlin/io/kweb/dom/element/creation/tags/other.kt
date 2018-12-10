@@ -91,3 +91,6 @@ fun ElementCreator<Element>.img(src: String? = null, attributes: Map<String, Any
 open class CanvasElement(parent : Element) : Element(parent)
 fun ElementCreator<Element>.canvas(width : Int, height : Int)
     = CanvasElement(element("canvas", mapOf("width" to width, "height" to height)))
+
+open class BrElement(parent: Element) : Element(parent)
+fun ElementCreator<Element>.br(attributes: Map<String, Any> = attr) = BrElement(element("br", attributes))

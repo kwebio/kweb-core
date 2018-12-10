@@ -153,11 +153,14 @@ class Kweb(val port: Int,
                     try {
                         if (debug) {
                             warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
+                                logger.warn {"buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms.  More info at DEBUG loglevel"}
+
                                 val logStatementBuilder = StringBuilder()
                                 logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
+
                                 thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
                                 val logStatement = logStatementBuilder.toString()
-                                logger.warn { logStatement }
+                                logger.debug { logStatement }
                             }) {
                                 try {
                                     buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
