@@ -29,8 +29,6 @@ fun WebBrowser.pushState(path: String) {
         """.trimIndent())
 }
 
-private
-
 // TODO: Perhaps some caching so that we don't re-parse the same URL repeatedly
 fun <T : Any> WebBrowser.url(mapper: (String) -> T) = url.map(mapper)
 

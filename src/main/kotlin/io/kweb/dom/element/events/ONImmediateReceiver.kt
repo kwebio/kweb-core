@@ -6,21 +6,9 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
-/**s
- * *Warning:* Do not use this before familiarizing yourself with the information below.
- *
- * Pro:
- *   * Executes immediately, without any need for a server round-trip
- * Con:
- *   * What you can do in the callback shouldn't rely on and _certainly_ shouldn't modify any server-side state.  It's
- *     use should probably be limited to cosmetic UI cues like spinners.  If you do the results could be very
- *     unpredictable, and may cause bugs that are difficult to diagnose.
- *
- *     The reason is that the callback is actually only executed once.  Any instructions to the browser are recorded
- *     and will simply be re-executed by the browser whenever this event occurs.  This neat trick is how we avoid
- *     a server round-trip, but the price is additional caution about how we use it.
+/**
+ * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
  */
-
 @KWebDSL
 open class ONImmediateReceiver(internal val parent: Element) : Element(parent) {
 

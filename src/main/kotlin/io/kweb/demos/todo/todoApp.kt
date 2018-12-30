@@ -9,6 +9,7 @@ import io.kweb.dom.element.events.*
 import io.kweb.dom.element.new
 import io.kweb.plugins.semanticUI.semanticUIPlugin
 import io.kweb.routing.*
+import io.kweb.shoebox.Shoebox
 import io.kweb.state.KVar
 import io.kweb.state.persistent.*
 import io.mola.galimatias.URL
@@ -44,6 +45,10 @@ fun main(args: Array<String>) {
                     if it is modified, the page's URL will change and the DOM will
                     re-render _without_ a page reload.  Yes, seriously. */
                 val url: KVar<URL> = doc.receiver.url(simpleUrlParser)
+
+                val path: KVar<List<String>> = url.path
+
+                path.value = listOf("users", "12345")
 
                 /** s.content uses the semanticUIPlugin to use the excellent
                     Semantic UI framework, included as a plugin above, and implemented
@@ -160,3 +165,35 @@ private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<State.Item>
 }
 
 private fun generateNewUid() = random.nextInt(100_000_000).toString(16)
+
+fun temp() {
+    data class User(val name : String, val email : String)
+    val users = Shoebox<User>()
+    users["aaa"] = User("Ian", "ian@ian.ian")
+
+    Kweb(port = 1234) {
+        doc.body.new {
+            val user = toVar(users, "aaa")
+            ul().new {
+                li().text(user.map {"Name: ${it.name}"})
+                li().text(user.map {"Email: ${it.email}"})
+
+            }
+        }
+    }
+}
+
+fun temp2() {
+    Kweb(port = 1234) {
+        doc.body.new {
+            val url: KVar<URL> = url(simpleUrlParser)
+            render(url.path) { path ->
+                ul().new {
+                    for (p in path) {
+                        li().text(p)
+                    }
+                }
+            }
+        }
+    }
+}

@@ -10,7 +10,7 @@ open class ElementReader(protected val receiver: WebBrowser, internal val jsExpr
     constructor(element : Element) : this(element.browser, element.jsExpression)
 
     init {
-        require(receiver.kweb.outboundMessageCatcher.get() == null) {"""
+        require(receiver.kweb.isNotCatchingOutbound()) {"""
             Reading the DOM when an outboundMessageCatcher is set is likely to have unintended consequences.
             Most likely you are trying to read the DOM within an `immediatelyOn {...}` block.
         """.trimIndent()}

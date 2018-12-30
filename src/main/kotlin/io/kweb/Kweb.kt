@@ -318,7 +318,11 @@ class Kweb(val port: Int,
      * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
      * execution of event handlers, see `Element.immediatelyOn`
      */
-    val outboundMessageCatcher: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
+    private val outboundMessageCatcher: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
+
+    fun isCatchingOutbound() = outboundMessageCatcher.get() != null
+
+    fun isNotCatchingOutbound() = !isCatchingOutbound()
 
     fun catchOutbound(f: () -> Unit): List<String> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }

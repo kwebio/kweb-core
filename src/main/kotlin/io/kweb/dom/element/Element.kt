@@ -284,7 +284,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
 
     val flags = ConcurrentSkipListSet<String>()
 
-    fun canSendInstruction() = id != null && browser.kweb.outboundMessageCatcher.get() == null
+    fun canSendInstruction() = id != null && browser.kweb.isNotCatchingOutbound()
 
 }
 
