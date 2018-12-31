@@ -7,7 +7,7 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.*
 import io.kweb.dom.element.new
-import io.kweb.plugins.semanticUI.semanticUIPlugin
+import io.kweb.plugins.semanticUI.*
 import io.kweb.routing.*
 import io.kweb.shoebox.Shoebox
 import io.kweb.state.KVar
@@ -18,7 +18,6 @@ import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 import java.time.Instant
 import java.util.*
-import io.kweb.plugins.semanticUI.semantic as s
 
 private val logger = KotlinLogging.logger {}
 
@@ -35,14 +34,15 @@ fun main(args: Array<String>) {
             /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to
                 draw some common outer page DOM elements */
+
             pageBorderAndTitle("Todo List") {
 
                 /** A KVar is similar to an AtomicReference in the standard Java
                     Library, but which supports the observer pattern and `map`
                     semantics.  Here I set it to the current URL of the page.
 
-                    This will update automatically if the page's URL changes, and
-                    if it is modified, the page's URL will change and the DOM will
+                    This will update automatically if the page'semantic URL changes, and
+                    if it is modified, the page'semantic URL will change and the DOM will
                     re-render _without_ a page reload.  Yes, seriously. */
                 val url: KVar<URL> = doc.receiver.url(simpleUrlParser)
 
@@ -50,17 +50,17 @@ fun main(args: Array<String>) {
 
                 path.value = listOf("users", "12345")
 
-                /** s.content uses the semanticUIPlugin to use the excellent
+                /** semantic.content uses the semanticUIPlugin to use the excellent
                     Semantic UI framework, included as a plugin above, and implemented
                     as a convenient DSL within Kweb */
-                div(s.content).new {
+                div(semantic.content).new {
 
                     /** Note how url.path[0] is itself a KVar.  Changes to firstPathElement
                         will automatically propagate _bi-directionally_ with `url`.  This
                         comes in very handy later. */
                     val firstPathElement: KVar<String> = url.path[0]
 
-                    /** Renders `firstPathElement`, but - and here's the fun part - will
+                    /** Renders `firstPathElement`, but - and here'semantic the fun part - will
                         automatically re-render if firstPathElement changes.  This is
                         a simple, elegant, and yet powerful routing mechanism. */
                     render(firstPathElement) { entityType ->
@@ -79,7 +79,7 @@ fun main(args: Array<String>) {
                                     try {
                                         /** Here I use the same render mechanism to tie DOM
                                             state to persistent state stored in Shoebox,
-                                            Kweb's simple but powerful key-value store with
+                                            Kweb'semantic simple but powerful key-value store with
                                             observer pattern support.  */
                                         renderList(toVar(State.lists, listId))
                                     } catch (e: NoSuchElementException) {
@@ -99,9 +99,9 @@ fun main(args: Array<String>) {
 }
 
 private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
-    div(s.ui.three.column.centered.grid).new {
-        div(s.column).new {
-            h1(s.ui.dividing.header).text(title)
+    div(semantic.ui.three.column.centered.grid).new {
+        div(semantic.column).new {
+            h1(semantic.ui.dividing.header).text(title)
             content(this)
         }
     }
@@ -115,25 +115,25 @@ private fun createNewList(): String {
 
 private fun ElementCreator<*>.renderList(list: KVar<State.List>) {
     h3().text(list.map(State.List::title))
-    div(s.ui.middle.aligned.divided.list).new {
+    div(semantic.ui.middle.aligned.divided.list).new {
         renderEach(State.itemsByList(list.value.uid)) { item ->
-            div(s.item).new {
-                div(s.right.floated.content).new {
+            div(semantic.item).new {
+                div(semantic.right.floated.content).new {
                     renderRemoveButton(item)
                 }
-                div(s.content).text(item.map(State.Item::text))
+                div(semantic.content).text(item.map(State.Item::text))
             }
         }
     }
     logger.info("Rendering Add Item button")
-    div(s.ui.action.input).new {
+    div(semantic.ui.action.input).new {
         val input = input(text, placeholder = "Add Item")
         input.on.keypress { ke ->
             if (ke.code == "Enter") {
                 handleAddItem(input, list)
             }
         }
-        button(s.ui.button).text("Add").apply {
+        button(semantic.ui.button).text("Add").apply {
             onImmediate.click {
                 execute("console.info(\"immediate\");")
             }
@@ -155,9 +155,9 @@ private fun handleAddItem(input: InputElement, list: KVar<State.List>) {
 }
 
 private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<State.Item>) {
-    val button = button(s.mini.ui.icon.button)
+    val button = button(semantic.mini.ui.icon.button)
     button.new {
-        i(s.trash.icon)
+        i(semantic.trash.icon)
     }
     button.on.click {
         State.items.remove(item.value.uid)

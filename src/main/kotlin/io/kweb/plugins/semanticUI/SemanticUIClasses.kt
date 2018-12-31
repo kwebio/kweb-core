@@ -662,6 +662,11 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val search : SemanticUIClasses get() {
+        classes("search")
+        return this
+    }
+
     val section : SemanticUIClasses get() {
         classes("section")
         return this
