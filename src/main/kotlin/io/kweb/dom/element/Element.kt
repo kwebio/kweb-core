@@ -286,6 +286,8 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
 
     fun canSendInstruction() = id != null && browser.kweb.isNotCatchingOutbound()
 
+
+
 }
 
 /**

@@ -48,8 +48,6 @@ fun main(args: Array<String>) {
 
                 val path: KVar<List<String>> = url.path
 
-                path.value = listOf("users", "12345")
-
                 /** semantic.content uses the semanticUIPlugin to use the excellent
                     Semantic UI framework, included as a plugin above, and implemented
                     as a convenient DSL within Kweb */
