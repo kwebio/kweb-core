@@ -1,9 +1,12 @@
 package io.kweb.routing
 
 import io.kweb.*
-import io.kweb.dom.element.creation.tags.h1
+import io.kweb.dom.element.creation.tags.*
+import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
+import io.kweb.plugins.viewport.ViewportPlugin
 import io.kweb.state.*
+import io.kweb.state.persistent.render
 import io.mola.galimatias.URL
 import mu.KotlinLogging
 
@@ -18,8 +21,7 @@ import mu.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 fun main(args: Array<String>) {
-    val url = URL.parse("http://a.b.c/hello?dog=cat&mouse=pig")
-    println(url)
+    testSampleForRouting()
 }
 
 fun WebBrowser.pushState(path: String) {
@@ -38,6 +40,14 @@ val simpleUrlParser = object : ReversableFunction<String, URL>("simpleUrlParser"
     override fun invoke(from: String): URL = URL.parse(from)
 
     override fun reverse(original: String, change: URL) = change.toString()
+
+}
+
+fun WebBrowser.route(routeReceiver: RouteReceiver.() -> Unit) {
+
+}
+
+class RouteReceiver(val webBrowser: WebBrowser) {
 
 }
 
@@ -93,10 +103,20 @@ val KVar<URL>.path
 data class Route(val a: Int)
 
 private fun testSampleForRouting() {
-    Kweb(port = 16189) {
+    Kweb(port = 1234, plugins = listOf(ViewportPlugin())) {
         doc.body.new {
-            h1().text(url)
+            val url: KVar<URL> = url(simpleUrlParser)
+            render(url.path) { path ->
+                ul().new {
+                    for ((ix, pathFragment) in path.withIndex()) {
+                        li().new {
+                            a().text(pathFragment).on.click {
+                                url.path.value = path.subList(0, ix + 1)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-
 }

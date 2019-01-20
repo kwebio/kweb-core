@@ -36,7 +36,7 @@ open class FormElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.form(attributes: Map<String, Any> = attr) = FormElement(element("form", attributes))
 
 open class AElement(parent: Element) : Element(parent)
-fun ElementCreator<Element>.a(attributes: Map<String, Any> = attr, href : String? = null) = AElement(element("a",
+fun ElementCreator<Element>.a(attributes: Map<String, Any> = attr, href : String? = "#") = AElement(element("a",
         attributes.set("href", href)))
 
 open class TextAreaElement(parent: Element) : Element(parent) {
