@@ -9,7 +9,6 @@ import io.kweb.dom.element.events.*
 import io.kweb.dom.element.new
 import io.kweb.plugins.semanticUI.*
 import io.kweb.routing.*
-import io.kweb.shoebox.Shoebox
 import io.kweb.state.KVar
 import io.kweb.state.persistent.*
 import io.mola.galimatias.URL
@@ -163,35 +162,3 @@ private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<State.Item>
 }
 
 private fun generateNewUid() = random.nextInt(100_000_000).toString(16)
-
-fun temp() {
-    data class User(val name : String, val email : String)
-    val users = Shoebox<User>()
-    users["aaa"] = User("Ian", "ian@ian.ian")
-
-    Kweb(port = 1234) {
-        doc.body.new {
-            val user = toVar(users, "aaa")
-            ul().new {
-                li().text(user.map {"Name: ${it.name}"})
-                li().text(user.map {"Email: ${it.email}"})
-
-            }
-        }
-    }
-}
-
-fun temp2() {
-    Kweb(port = 1234) {
-        doc.body.new {
-            val url: KVar<URL> = url(simpleUrlParser)
-            render(url.path) { path ->
-                ul().new {
-                    for (p in path) {
-                        li().text(p)
-                    }
-                }
-            }
-        }
-    }
-}

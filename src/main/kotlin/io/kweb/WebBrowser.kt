@@ -22,7 +22,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     val idCounter = AtomicInteger(0)
 
-    fun generateId() : Int = idCounter.getAndIncrement()
+    fun generateId() : String = idCounter.getAndIncrement().toString(36)
 
     private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
         kweb.appliedPlugins.map { it::class to it }.toMap()
@@ -94,4 +94,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
                 url
             }
+}
+
+private fun intToByteArray(value: Int): ByteArray {
+    return byteArrayOf(value.ushr(24).toByte(), value.ushr(16).toByte(), value.ushr(8).toByte(), value.toByte())
 }
