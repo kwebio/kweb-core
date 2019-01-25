@@ -1,5 +1,6 @@
 package io.kweb.routing
 
+import io.ktor.routing.RoutingPath
 import io.kweb.*
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.events.on
@@ -48,7 +49,11 @@ fun WebBrowser.route(routeReceiver: RouteReceiver.() -> Unit) {
 }
 
 class RouteReceiver(val webBrowser: WebBrowser) {
+    fun path(path : String, pathReceiver : (params : Map<String, KVar<String>>) -> Unit) {
+        val routingPath = RoutingPath.parse(path)
 
+        val url = webBrowser.url
+    }
 }
 
 operator fun <T : Any> KVal<List<T>>.get(pos: Int): KVal<T> {
@@ -97,10 +102,6 @@ val KVar<URL>.path
                 original.withPath(change.joinToString(separator = "/"))
 
     })
-
-///////// Sample code
-
-data class Route(val a: Int)
 
 private fun testSampleForRouting() {
     Kweb(port = 1234, plugins = listOf(ViewportPlugin())) {

@@ -12,7 +12,7 @@ allprojects {
 }
 
 buildscript {
-    ext.kotlin_version = '1.3.11'
+    ext.kotlin_version = '1.3.20'
     ext.dokka_version = '0.9.17'
     ext.ktor_version = '1.0.0'
 
