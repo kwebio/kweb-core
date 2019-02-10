@@ -3,8 +3,8 @@ package io.kweb
 import io.kweb.Server2ClientMessage.Instruction
 import io.kweb.dom.Document
 import io.kweb.plugins.KWebPlugin
-import io.kweb.routing.pushState
-import io.kweb.state.KVar
+import io.kweb.state.*
+import io.mola.galimatias.URL
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
@@ -88,6 +88,17 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
                 url
             }
+
+    fun pushState(path: String) {
+        val url = URL.parse(path)
+        execute("""
+        history.pushState({}, "", location.origin+"${url.path()}");
+        """.trimIndent())
+    }
+
+    fun <T : Any> url(mapper: (String) -> T) = url.map(mapper)
+
+    fun <T : Any> url(func: ReversableFunction<String, T>) = url.map(func)
 }
 
 private fun intToByteArray(value: Int): ByteArray {
