@@ -4,15 +4,13 @@ import io.ktor.routing.*
 import io.ktor.routing.RoutingPathSegmentKind.*
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.dom.element.creation.tags.h1
+import io.kweb.dom.element.creation.tags.*
+import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
-import io.kweb.plugins.viewport.ViewportPlugin
-import io.kweb.routing.extensions.*
 import io.kweb.state.*
 import io.kweb.state.persistent.render
 import io.mola.galimatias.URL
 import mu.KotlinLogging
-import kotlin.collections.set
 
 /**
  * @sample testSampleForRouting
@@ -25,7 +23,7 @@ import kotlin.collections.set
 private val logger = KotlinLogging.logger {}
 
 fun main() {
-    testSampleForRouting()
+    test2()
 }
 
 
@@ -33,12 +31,11 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
     val url = this.browser.url(simpleUrlParser)
     val rr = RouteReceiver(this, url)
     routeReceiver(rr)
-    val pathKvar = url.path
+    val pathKvar = url.pathSegments
     val matchingTemplate : KVal<PathTemplate?> = pathKvar.map { path ->
         val size = if (path != listOf("")) path.size else 0
         val templatesOfSameLength = rr.templatesByLength[size]
         templatesOfSameLength?.keys?.firstOrNull { tpl ->
-            logger.info("Trying $tpl with $path")
             tpl.isEmpty() || tpl.withIndex().all {
                 val tf = it.value.kind != Constant || path[it.index] == it.value.value
                 tf
@@ -48,10 +45,11 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
 
     render(matchingTemplate) { template ->
         if (template != null) {
-            val parameters = HashMap<String, KVal<String>>()
+            val parameters = HashMap<String, KVar<String>>()
             for ((pos, part) in template.withIndex()) {
                 if (part.kind == Parameter) {
-                    parameters[part.value.substring(1, part.value.length - 1)] = pathKvar[pos]
+                    val str = part.value
+                    parameters[str.substring(str.indexOf('{')+1, str.indexOf('}'))] = pathKvar[pos]
                 }
             }
 
@@ -67,7 +65,7 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
 }
 
 typealias PathTemplate = List<RoutingPathSegment>
-typealias PathReceiver = ElementCreator<*>.(Map<String, KVal<String>>) -> Unit
+typealias PathReceiver = ElementCreator<*>.(params : Map<String, KVar<String>>) -> Unit
 
 class RouteReceiver internal constructor(val parentElementCreator: ElementCreator<*>, val url: KVar<URL>) {
     internal val templatesByLength = HashMap<Int, MutableMap<PathTemplate, PathReceiver>>()
@@ -79,14 +77,53 @@ class RouteReceiver internal constructor(val parentElementCreator: ElementCreato
 }
 
 private fun testSampleForRouting() {
-    Kweb(port = 1234, plugins = listOf(ViewportPlugin())) {
+    Kweb(port = 16097) {
         doc.body.new {
             route {
-                path("/mouse/{mouseid}") { params ->
-                    val mouseid = params["mouseid"]
-                    h1().text(mouseid!!.map { "Mouse #$it" })
+                path("/users/{userId}") { params ->
+                    val userId = params.getValue("userId")
+                    h1().text(userId.map { "User id: $it" })
+                }
+                path("/lists/{listId}") { params ->
+                    val listId = params.getValue("listId")
+                    h1().text(listId.map { "List id: $it" })
                 }
             }
+        }
+    }
+}
+
+private fun test2() {
+    Kweb(port = 16097) {
+        doc.body.new {
+            val path = url(simpleUrlParser).path
+            route {
+                path("/") {
+                    path.value = "/number/1"
+                }
+                path("/number/{num}") { params ->
+                    val num = params.getValue("num").toInt()
+                    a().text(num.map {"Number $it"}).on.click {
+                        path.value = "/number/${num.value + 1}"
+                    }
+                }
+            }
+        }
+    }
+}
+
+private fun test3() {
+    Kweb(port = 16097) {
+        doc.body.new {
+            val url1 = url(simpleUrlParser)
+            val url2 = url(simpleUrlParser)
+
+            println("1: $url1 2: $url2")
+
+            url1.pathSegments.value = listOf()
+
+            println("1: $url1 2: $url2")
+
         }
     }
 }

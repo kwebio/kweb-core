@@ -8,7 +8,7 @@ import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.*
 import io.kweb.dom.element.new
 import io.kweb.plugins.semanticUI.*
-import io.kweb.routing.extensions.path
+import io.kweb.state.pathSegments
 import io.kweb.routing.route
 import io.kweb.state.KVar
 import io.kweb.state.persistent.*
@@ -36,14 +36,6 @@ fun main() {
 
             pageBorderAndTitle("Todo List") {
 
-                /** A KVar is similar to an AtomicReference in the standard Java
-                    Library, but which supports the observer pattern and `map`
-                    semantics.  Here I set it to the current URL of the page.
-
-                    This will update automatically if the page'semantic URL changes, and
-                    if it is modified, the page'semantic URL will change and the DOM will
-                    re-render _without_ a page reload.  Yes, seriously. */
-
                 /** semantic.content uses the semanticUIPlugin to use the excellent
                     Semantic UI framework, included as a plugin above, and implemented
                     as a convenient DSL within Kweb */
@@ -52,15 +44,15 @@ fun main() {
                     route {
                         path("/") {
                                 val newListId = createNewList()
-                                url.path.value = listOf("lists", newListId)
+                                url.pathSegments.value = listOf("lists", newListId)
                             }
-                        path("/lists/{id}") { pathParameters ->
+                        path("/lists/{id}") { params ->
                                 /** Renders can be nested, which means that only this
                                     specific part of the page must be re-rendered if
-                                    url.path[1] changes, which is very convenient
+                                    url.pathSegments[1] changes, which is very convenient
                                     for the developer in comparison to other frameworks,
                                     while minimizing server-browser chatter. */
-                            render(pathParameters.getValue("id")) { listId ->
+                            render(params.getValue("id")) { listId ->
                                     try {
                                         /** Here I use the same render mechanism to tie DOM
                                             state to persistent state stored in Shoebox,

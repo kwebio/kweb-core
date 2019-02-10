@@ -1,6 +1,5 @@
-package io.kweb.routing.extensions
+package io.kweb.state
 
-import io.kweb.state.*
 import io.mola.galimatias.URL
 
 operator fun <T : Any> KVal<List<T>>.get(pos: Int): KVal<T> {
@@ -41,7 +40,17 @@ enum class Scheme {
 private val prx = "/".toRegex()
 
 val KVar<URL>.path
-    get() = this.map(object : ReversableFunction<URL, List<String>>("URL.path") {
+    get() = this.map(object : ReversableFunction<URL, String>("URL.pathSegments") {
+
+        override fun invoke(from: URL): String = from.path()
+
+        override fun reverse(original: URL, change: String): URL =
+                original.withPath(change)
+
+    })
+
+val KVar<URL>.pathSegments
+    get() = this.map(object : ReversableFunction<URL, List<String>>("URL.pathSegments") {
 
         override fun invoke(from: URL): List<String> = from.pathSegments()
 
@@ -56,3 +65,11 @@ val simpleUrlParser = object : ReversableFunction<String, URL>("simpleUrlParser"
     override fun reverse(original: String, change: URL) = change.toString()
 
 }
+
+fun KVar<String>.toInt() = this.map(object : ReversableFunction<String, Int>(label = "KVar<String>.toInt()") {
+    override fun invoke(from: String) = from.toInt()
+
+    override fun reverse(original: String, change: Int): String {
+        return change.toString()
+    }
+})
