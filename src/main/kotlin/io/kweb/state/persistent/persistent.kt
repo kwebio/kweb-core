@@ -37,7 +37,7 @@ fun main(args: Array<String>) {
         }
 }
 
-fun <T : Any> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean = false, renderer : ElementCreator<Element>.(T) -> Unit) {
+fun <T : Any?> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean = false, renderer : ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.parent, this)
     val cachedClientECs = if (cacheOnClient) ConcurrentHashMap<T, ElementCreator<Element>>() else null
 

@@ -1,15 +1,17 @@
 package io.kweb.routing
 
-import io.ktor.routing.RoutingPath
+import io.ktor.routing.*
+import io.ktor.routing.RoutingPathSegmentKind.*
 import io.kweb.*
-import io.kweb.dom.element.creation.tags.*
-import io.kweb.dom.element.events.on
+import io.kweb.dom.element.creation.ElementCreator
+import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
 import io.kweb.plugins.viewport.ViewportPlugin
 import io.kweb.state.*
 import io.kweb.state.persistent.render
 import io.mola.galimatias.URL
 import mu.KotlinLogging
+import kotlin.collections.set
 
 /**
  * @sample testSampleForRouting
@@ -21,7 +23,7 @@ import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-fun main(args: Array<String>) {
+fun main() {
     testSampleForRouting()
 }
 
@@ -32,7 +34,6 @@ fun WebBrowser.pushState(path: String) {
         """.trimIndent())
 }
 
-// TODO: Perhaps some caching so that we don't re-parse the same URL repeatedly
 fun <T : Any> WebBrowser.url(mapper: (String) -> T) = url.map(mapper)
 
 fun <T : Any> WebBrowser.url(func: ReversableFunction<String, T>) = url.map(func)
@@ -44,15 +45,50 @@ val simpleUrlParser = object : ReversableFunction<String, URL>("simpleUrlParser"
 
 }
 
-fun WebBrowser.route(routeReceiver: RouteReceiver.() -> Unit) {
 
+fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
+    val url = this.browser.url(simpleUrlParser)
+    val rr = RouteReceiver(this, url)
+    routeReceiver(rr)
+    val pathKvar = url.path
+    val matchingTemplate : KVal<PathTemplate?> = pathKvar.map { path ->
+        rr.templatesByLength[path.size]?.keys?.firstOrNull { tpl ->
+            tpl.withIndex().all {
+                val tf = it.value.kind != Constant || path[it.index] == it.value.value
+                tf
+            }
+        }
+    }
+
+    render(matchingTemplate) { template ->
+        if (template != null) {
+            val parameters = HashMap<String, KVal<String>>()
+            for ((pos, part) in template.withIndex()) {
+                if (part.kind == Parameter) {
+                    parameters[part.value.substring(1, part.value.length - 1)] = pathKvar[pos]
+                }
+            }
+
+            val pathRenderer = rr.templatesByLength[template.size]?.get(template)
+
+            if(pathRenderer != null) {
+                pathRenderer(this, parameters)
+            } else {
+                throw RuntimeException("Unable to find pathRenderer for template $template")
+            }
+        }
+    }
 }
 
-class RouteReceiver(val webBrowser: WebBrowser) {
-    fun path(path : String, pathReceiver : (params : Map<String, KVar<String>>) -> Unit) {
-        val routingPath = RoutingPath.parse(path)
+typealias PathTemplate = List<RoutingPathSegment>
+typealias PathReceiver = ElementCreator<*>.(Map<String, KVal<String>>) -> Unit
 
-        val url = webBrowser.url
+class RouteReceiver internal constructor(val parentElementCreator: ElementCreator<*>, val url: KVar<URL>) {
+    internal val templatesByLength = HashMap<Int, MutableMap<PathTemplate, PathReceiver>>()
+
+    fun path(template : String, pathReceiver : PathReceiver) {
+        val routingPath = RoutingPath.parse(template).parts
+        templatesByLength.computeIfAbsent(routingPath.size) {HashMap()}[routingPath]= pathReceiver
     }
 }
 
@@ -106,16 +142,10 @@ val KVar<URL>.path
 private fun testSampleForRouting() {
     Kweb(port = 1234, plugins = listOf(ViewportPlugin())) {
         doc.body.new {
-            val url: KVar<URL> = url(simpleUrlParser)
-            render(url.path) { path ->
-                ul().new {
-                    for ((ix, pathFragment) in path.withIndex()) {
-                        li().new {
-                            a().text(pathFragment).on.click {
-                                url.path.value = path.subList(0, ix + 1)
-                            }
-                        }
-                    }
+            route {
+                path("/mouse/{id}") { params ->
+                    val id = params.getValue("id")
+                    h1().text(id.map { "Mouse #$it" })
                 }
             }
         }

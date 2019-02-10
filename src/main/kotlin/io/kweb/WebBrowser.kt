@@ -3,7 +3,7 @@ package io.kweb
 import io.kweb.Server2ClientMessage.Instruction
 import io.kweb.dom.Document
 import io.kweb.plugins.KWebPlugin
-import io.kweb.routing.*
+import io.kweb.routing.pushState
 import io.kweb.state.KVar
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
@@ -75,12 +75,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     val doc = Document(this)
-
-    /**
-     * A convenience method for a common operation
-     */
-    var path : List<String> get() = url.map(simpleUrlParser).path.value
-       set(v) { url.map(simpleUrlParser).path.value = v }
 
     // Note: It's important that we only have one KVar for the URL for this WebBrowser to ensure that changes
     //       propagate everywhere they should.  That's why it's lazy.
