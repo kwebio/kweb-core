@@ -111,19 +111,3 @@ private fun test2() {
         }
     }
 }
-
-private fun test3() {
-    Kweb(port = 16097) {
-        doc.body.new {
-            val url1 = url(simpleUrlParser)
-            val url2 = url(simpleUrlParser)
-
-            println("1: $url1 2: $url2")
-
-            url1.pathSegments.value = listOf()
-
-            println("1: $url1 2: $url2")
-
-        }
-    }
-}
