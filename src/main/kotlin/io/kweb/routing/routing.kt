@@ -27,7 +27,7 @@ fun main() {
 }
 
 
-fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
+fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: RouteReceiver.() -> Unit) {
     val url = this.browser.url(simpleUrlParser)
     val rr = RouteReceiver(this, url)
     routeReceiver(rr)
@@ -43,7 +43,7 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
         }
     }
 
-    render(matchingTemplate) { template ->
+    render(matchingTemplate, cacheOnClient = cacheOnClient) { template ->
         if (template != null) {
             val parameters = HashMap<String, KVar<String>>()
             for ((pos, part) in template.withIndex()) {
