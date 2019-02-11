@@ -1,6 +1,6 @@
 package io.kweb.routing
 
-import io.kweb.state.KVar
+import io.kweb.state.*
 import org.amshove.kluent.shouldEqual
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
