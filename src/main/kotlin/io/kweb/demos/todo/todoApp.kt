@@ -9,7 +9,7 @@ import io.kweb.dom.BodyElement
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
-import io.kweb.dom.element.events.*
+import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
 import io.kweb.plugins.semanticUI.*
 import io.kweb.routing.route
@@ -114,12 +114,8 @@ private fun ElementCreator<*>.renderList(list: KVar<State.List>) {
             }
         }
         button(semantic.ui.button).text("Add").apply {
-            onImmediate.click {
-                execute("console.info(\"immediate\");")
-            }
             on.click {
                 handleAddItem(input, list)
-                execute("console.info(\"after\");")
             }
         }
     }
