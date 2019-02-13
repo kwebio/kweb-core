@@ -48,7 +48,7 @@ fun main() {
                         path("/") {
                                 val newListId = createNewList()
                                 /**
-                                 * By updating the URL path this will cause the page to switch to the new URL
+                                 * By updating the URL path this will cause the page to switch to the newly created list
                                  * automatically, and without a page refresh.
                                  */
                                 url.path.value = "/lists/$newListId"
