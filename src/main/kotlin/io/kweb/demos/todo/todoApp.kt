@@ -1,5 +1,9 @@
 package io.kweb.demos.todo
 
+/*
+ * NOTE: This will eventually be moved out of core into a separate repository
+ */
+
 import io.kweb.*
 import io.kweb.dom.BodyElement
 import io.kweb.dom.element.creation.ElementCreator
@@ -8,9 +12,8 @@ import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.*
 import io.kweb.dom.element.new
 import io.kweb.plugins.semanticUI.*
-import io.kweb.state.pathSegments
 import io.kweb.routing.route
-import io.kweb.state.KVar
+import io.kweb.state.*
 import io.kweb.state.persistent.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
@@ -44,7 +47,11 @@ fun main() {
                     route {
                         path("/") {
                                 val newListId = createNewList()
-                                url.pathSegments.value = listOf("lists", newListId)
+                                /**
+                                 * By updating the URL path this will cause the page to switch to the new URL
+                                 * automatically, and without a page refresh.
+                                 */
+                                url.path.value = "/lists/$newListId"
                             }
                         path("/lists/{id}") { params ->
                                 /** Renders can be nested, which means that only this
