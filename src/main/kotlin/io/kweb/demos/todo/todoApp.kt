@@ -29,9 +29,9 @@ fun main() {
 
     /** Create a Kweb instance, and configure it to use the Semantic
      * UI framework. Build a simple to-do list app listening on
-     * http://localhost:8091/
+     * http://localhost:8080/
      * */
-    Kweb(port = 8091, debug = true, plugins = plugins) {
+    Kweb(port = 8080, debug = true, plugins = plugins) {
         doc.body.new {
             /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to

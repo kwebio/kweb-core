@@ -4,7 +4,7 @@ import io.ktor.routing.Routing
 import io.kweb.dom.element.Element
 import java.util.*
 
-abstract class KWebPlugin(val dependsOn: Set<KWebPlugin> = Collections.emptySet()) {
+abstract class KwebPlugin(val dependsOn: Set<KwebPlugin> = Collections.emptySet()) {
     // TODO: Allow plugins to specify any other plugin that they should
     // TODO: run before or after, so that the user doesn't need to
     // TODO: worry about getting the order right.

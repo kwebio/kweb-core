@@ -141,7 +141,7 @@ dependencies {
 
     compile('io.mola.galimatias:galimatias:0.2.1')
 
-    compile 'io.github.microutils:kotlin-logging:1.5.4'
+    compile 'io.github.microutils:kotlin-logging:1.6.24'
     compile("org.reflections:reflections:0.9.11")
 
     compile 'com.github.kwebio:shoebox:0.2.27'
