@@ -466,6 +466,7 @@ data class Server2ClientMessage(
         enum class Type {
             SetAttribute,
             CreateElement,
+            SetText,
             AddText,
             RemoveAttribute
         }

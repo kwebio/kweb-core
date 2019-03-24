@@ -210,8 +210,11 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      * a `h1` element and set its text as follows: `<h1>Hello World</h1>`.
      */
     fun text(value: String): Element {
-        removeChildren()
-        addText(value)
+        if (canSendInstruction()) {
+            browser.send(Instruction(SetText, listOf(id, value)))
+        } else {
+            execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+        }
         return this
     }
 

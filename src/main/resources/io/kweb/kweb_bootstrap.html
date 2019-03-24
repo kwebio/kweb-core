@@ -102,6 +102,10 @@
                         const text = instruction.parameters[1];
                         const textNode = document.createTextNode(text);
                         document.getElementById(id).appendChild(textNode);
+                    } else if (instruction.type === "SetText") {
+                        const id = instruction.parameters[0];
+                        const text = instruction.parameters[1];
+                        document.getElementById(id).textContent = text
                     }
                 }
             }
