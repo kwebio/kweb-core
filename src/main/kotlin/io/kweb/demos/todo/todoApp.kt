@@ -18,20 +18,21 @@ import io.kweb.state.persistent.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging
+import java.nio.file.Paths
 import java.time.Instant
 import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
-fun main() {
-    /** A simple yet flexible plugin mechanism */
-    val plugins = listOf(semanticUIPlugin)
+val state = TodoState(Paths.get("data"))
+val plugins = listOf(semanticUIPlugin)
 
+fun main() {
     /** Create a Kweb instance, and configure it to use the Semantic
      * UI framework. Build a simple to-do list app listening on
-     * http://localhost:8080/
+     * http://localhost:7659/
      * */
-    Kweb(port = 8080, debug = true, plugins = plugins) {
+    Kweb(port = 7659, debug = true, plugins = plugins) {
         doc.body.new {
             /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to
@@ -60,12 +61,14 @@ fun main() {
                                     for the developer in comparison to other frameworks,
                                     while minimizing server-browser chatter. */
                             render(params.getValue("id")) { listId ->
+                                    logger.info("Rendering list id $listId")
+
                                     try {
                                         /** Here I use the same render mechanism to tie DOM
                                             state to persistent state stored in Shoebox,
                                             Kweb'semantic simple but powerful key-value store with
                                             observer pattern support.  */
-                                        renderList(toVar(State.lists, listId))
+                                        renderList(toVar(state.lists, listId))
                                     } catch (e: NoSuchElementException) {
                                         throw NotFoundException("Can't find list with id $listId")
                                     }
@@ -89,23 +92,22 @@ private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, conten
 
 private fun createNewList(): String {
     val newListId = generateNewUid()
-    State.lists[newListId] = State.List(newListId, "")
+    state.lists[newListId] = TodoState.List(newListId, "")
     return newListId
 }
 
-private fun ElementCreator<*>.renderList(list: KVar<State.List>) {
-    h3().text(list.map(State.List::title))
+private fun ElementCreator<*>.renderList(list: KVar<TodoState.List>) {
+    h3().text(list.map(TodoState.List::title))
     div(semantic.ui.middle.aligned.divided.list).new {
-        renderEach(State.itemsByList(list.value.uid)) { item ->
+        renderEach(state.itemsByList(list.value.uid)) { item ->
             div(semantic.item).new {
                 div(semantic.right.floated.content).new {
                     renderRemoveButton(item)
                 }
-                div(semantic.content).text(item.map(State.Item::text))
+                div(semantic.content).text(item.map(TodoState.Item::text))
             }
         }
     }
-    logger.info("Rendering Add Item button")
     div(semantic.ui.action.input).new {
         val input = input(text, placeholder = "Add Item")
         input.on.keypress { ke ->
@@ -121,22 +123,22 @@ private fun ElementCreator<*>.renderList(list: KVar<State.List>) {
     }
 }
 
-private fun handleAddItem(input: InputElement, list: KVar<State.List>) {
+private fun handleAddItem(input: InputElement, list: KVar<TodoState.List>) {
     GlobalScope.launch {
         val newItemText = input.getValue().await()
         input.setValue("")
-        val newItem = State.Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
-        State.items[newItem.uid] = newItem
+        val newItem = TodoState.Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
+        state.items[newItem.uid] = newItem
     }
 }
 
-private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<State.Item>) {
+private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<TodoState.Item>) {
     val button = button(semantic.mini.ui.icon.button)
     button.new {
         i(semantic.trash.icon)
     }
     button.on.click {
-        State.items.remove(item.value.uid)
+        state.items.remove(item.value.uid)
     }
 }
 
