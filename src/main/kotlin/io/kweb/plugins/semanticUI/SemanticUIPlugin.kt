@@ -1,12 +1,12 @@
 package io.kweb.plugins.semanticUI
 
-import io.kweb.plugins.KWebPlugin
+import io.kweb.plugins.KwebPlugin
 import io.kweb.plugins.jqueryCore.jqueryCore
 
 /**
  * Created by ian on 3/30/17.
  */
-class SemanticUIPlugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
+class SemanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore)) {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         startHead.append("""
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">

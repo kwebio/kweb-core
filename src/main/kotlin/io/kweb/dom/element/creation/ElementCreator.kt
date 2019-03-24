@@ -5,7 +5,7 @@ import io.kweb.Server2ClientMessage.Instruction
 import io.kweb.Server2ClientMessage.Instruction.Type.CreateElement
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.element.*
-import io.kweb.plugins.KWebPlugin
+import io.kweb.plugins.KwebPlugin
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -89,7 +89,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         return js
     }
 
-    fun require(vararg plugins: KClass<out KWebPlugin>) = parent.browser.require(*plugins)
+    fun require(vararg plugins: KClass<out KwebPlugin>) = parent.browser.require(*plugins)
 
     /**
      * Specify a listener to be called when this element is removed from the DOM.

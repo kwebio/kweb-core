@@ -9,7 +9,7 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.modification.StyleReceiver
 import io.kweb.dom.element.read.ElementReader
-import io.kweb.plugins.KWebPlugin
+import io.kweb.plugins.KwebPlugin
 import io.kweb.state.KVal
 import java.util.*
 import java.util.concurrent.*
@@ -59,12 +59,12 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      * This should be called by any function that requires a particular plugin or
      * plugins be present.
      */
-    fun assertPluginLoaded(vararg plugins: KClass<out KWebPlugin>) = browser.require(*plugins)
+    fun assertPluginLoaded(vararg plugins: KClass<out KwebPlugin>) = browser.require(*plugins)
 
     /**
      * Obtain the instance of a plugin by its [KClass].
      */
-    fun <P : KWebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
+    fun <P : KwebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
 
 
     /**

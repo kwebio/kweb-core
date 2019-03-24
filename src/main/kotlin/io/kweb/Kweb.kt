@@ -17,7 +17,7 @@ import io.kweb.Server2ClientMessage.Instruction
 import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
-import io.kweb.plugins.KWebPlugin
+import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
@@ -56,7 +56,7 @@ typealias JavaScriptError = String
 class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap: Boolean = false,
-           val plugins: List<io.kweb.plugins.KWebPlugin> = java.util.Collections.emptyList(),
+           val plugins: List<io.kweb.plugins.KwebPlugin> = java.util.Collections.emptyList(),
            val appServerConfigurator: (io.ktor.routing.Routing) -> Unit = {},
            val onError: ((List<StackTraceElement>, io.kweb.JavaScriptError) -> io.kweb.LogError) = { _, _ -> true },
            val maxPageBuildTimeMS: Long = 500,
@@ -71,8 +71,8 @@ class Kweb(val port: Int,
 
     // private val server: Any
     private val clientState: ConcurrentHashMap<String, io.kweb.RemoteClientState> = java.util.concurrent.ConcurrentHashMap()
-    private val mutableAppliedPlugins: MutableSet<io.kweb.plugins.KWebPlugin> = java.util.HashSet()
-    val appliedPlugins: Set<io.kweb.plugins.KWebPlugin> get() = mutableAppliedPlugins
+    private val mutableAppliedPlugins: MutableSet<io.kweb.plugins.KwebPlugin> = java.util.HashSet()
+    val appliedPlugins: Set<io.kweb.plugins.KwebPlugin> get() = mutableAppliedPlugins
 
     private val server: JettyApplicationEngine
 
@@ -287,8 +287,8 @@ class Kweb(val port: Int,
         }
     }
 
-    private fun applyPlugin(plugin: KWebPlugin,
-                            appliedPlugins: MutableSet<KWebPlugin>,
+    private fun applyPlugin(plugin: KwebPlugin,
+                            appliedPlugins: MutableSet<KwebPlugin>,
                             endHeadBuilder: java.lang.StringBuilder,
                             startHeadBuilder: java.lang.StringBuilder,
                             routeHandler: Routing) {

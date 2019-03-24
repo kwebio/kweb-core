@@ -2,7 +2,7 @@ package io.kweb
 
 import io.kweb.Server2ClientMessage.Instruction
 import io.kweb.dom.Document
-import io.kweb.plugins.KWebPlugin
+import io.kweb.plugins.KwebPlugin
 import io.kweb.state.*
 import io.mola.galimatias.URL
 import mu.KotlinLogging
@@ -24,16 +24,16 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun generateId() : String = idCounter.getAndIncrement().toString(36)
 
-    private val plugins: Map<KClass<out KWebPlugin>, KWebPlugin> by lazy {
+    private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         kweb.appliedPlugins.map { it::class to it }.toMap()
     }
 
     @Suppress("UNCHECKED_CAST")
-    internal fun <P : KWebPlugin> plugin(plugin: KClass<out P>): P {
+    internal fun <P : KwebPlugin> plugin(plugin: KClass<out P>): P {
         return (plugins[plugin] ?: throw RuntimeException("Plugin $plugin is missing")) as P
     }
 
-    internal fun require(vararg requiredPlugins: KClass<out KWebPlugin>) {
+    internal fun require(vararg requiredPlugins: KClass<out KwebPlugin>) {
         val missing = java.util.HashSet<String>()
         for (requiredPlugin in requiredPlugins) {
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)

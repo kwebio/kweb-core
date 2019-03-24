@@ -2,7 +2,7 @@ package io.kweb.plugins.foundation
 
 import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.plugins.KWebPlugin
+import io.kweb.plugins.KwebPlugin
 import io.kweb.plugins.jqueryCore.jqueryCore
 
 /**
@@ -22,7 +22,7 @@ import io.kweb.plugins.jqueryCore.jqueryCore
 
 val foundation = FoundationPlugin()
 
-class FoundationPlugin : KWebPlugin(dependsOn = setOf(jqueryCore)) {
+class FoundationPlugin : KwebPlugin(dependsOn = setOf(jqueryCore)) {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         //startHead.appendln("""<link rel="stylesheet" href="https://cdn.jsdelivr.net/normalize/6.0.0/normalize.css"></link>""")
        // startHead.appendln("""<link rel="stylesheet" href="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css"></link>""")
