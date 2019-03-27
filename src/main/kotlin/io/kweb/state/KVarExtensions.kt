@@ -40,7 +40,7 @@ enum class Scheme {
 private val prx = "/".toRegex()
 
 val KVar<URL>.path
-    get() = this.map(object : ReversableFunction<URL, String>("URL.pathSegments") {
+    get() = this.map(object : ReversableFunction<URL, String>("URL.path") {
 
         override fun invoke(from: URL): String = from.path()
 
@@ -52,10 +52,13 @@ val KVar<URL>.path
 val KVar<URL>.pathSegments
     get() = this.map(object : ReversableFunction<URL, List<String>>("URL.pathSegments") {
 
-        override fun invoke(from: URL): List<String> = from.pathSegments()
+        override fun invoke(from: URL): List<String> {
+            return from.pathSegments()
+        }
 
-        override fun reverse(original: URL, change: List<String>): URL =
-                original.withPath(change.joinToString(separator = "/"))
+        override fun reverse(original: URL, change: List<String>): URL {
+            return original.withPath(if (change.isEmpty()) "/" else change.joinToString(separator = "/"))
+        }
 
     })
 

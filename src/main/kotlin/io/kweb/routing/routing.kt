@@ -23,7 +23,7 @@ import mu.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 fun main() {
-    test2()
+    test3()
 }
 
 
@@ -35,12 +35,13 @@ fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: Rout
     val matchingTemplate : KVal<PathTemplate?> = pathKvar.map { path ->
         val size = if (path != listOf("")) path.size else 0
         val templatesOfSameLength = rr.templatesByLength[size]
-        templatesOfSameLength?.keys?.firstOrNull { tpl ->
+        val tpl = templatesOfSameLength?.keys?.firstOrNull { tpl ->
             tpl.isEmpty() || tpl.withIndex().all {
                 val tf = it.value.kind != Constant || path[it.index] == it.value.value
                 tf
             }
         }
+        tpl
     }
 
     render(matchingTemplate, cacheOnClient = cacheOnClient) { template ->
@@ -105,6 +106,44 @@ private fun test2() {
                     val num = params.getValue("num").toInt()
                     a().text(num.map {"Number $it"}).on.click {
                         path.value = "/number/${num.value + 1}"
+                    }
+                }
+            }
+        }
+    }
+}
+
+private fun test3() {
+    Kweb(port = 16097) {
+        doc.body.new {
+            route {
+                path("/") {
+                    h1().text("Hello World!")
+
+                    button().text("Home Page").on.click {
+                        url.path.value = "/"
+                    }
+
+                    button().text("Test Page").on.click {
+                        url.path.value = "/test"
+                    }
+                }
+
+                path("/test") { params ->
+                    button().text("Home Page").on.click {
+                        url.path.value = "/"
+                    }
+
+                    button().text("Test Page 2").on.click {
+                        url.path.value = "/test2"
+                    }
+                }
+
+                path("/test2") { params ->
+                    h1().text("Test Page 2!")
+
+                    button().text("Home Page").on.click {
+                        url.path.value = "/"
                     }
                 }
             }
