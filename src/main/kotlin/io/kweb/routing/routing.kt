@@ -2,7 +2,7 @@ package io.kweb.routing
 
 import io.ktor.routing.*
 import io.ktor.routing.RoutingPathSegmentKind.*
-import io.kweb.Kweb
+import io.kweb.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.events.on
@@ -61,6 +61,8 @@ fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: Rout
             } else {
                 throw RuntimeException("Unable to find pathRenderer for template $template")
             }
+        } else {
+            throw NotFoundException("Page not found")
         }
     }
 }
