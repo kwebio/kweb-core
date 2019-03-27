@@ -1,4 +1,4 @@
-package io.kweb.state.persistent
+package io.kweb.state.render
 
 import io.kweb.Kweb
 import io.kweb.dom.element.*
@@ -13,29 +13,7 @@ import java.util.concurrent.*
  * Created by ian on 6/18/17.
  */
 
-val logger = KotlinLogging.logger {}
-
-fun main(args: Array<String>) {
-        data class D(val a: Int, val b: Int)
-
-        val dv = KVar(D(1, 1))
-
-        Kweb(port = 13513) {
-            doc.body.new {
-                div().new {
-                    render(dv) {
-                        div().text(it.a.toString())
-                        div().text(it.b.toString())
-                    }
-                }
-            }
-        }
-
-        while(true) {
-            dv.value = dv.value.copy(a = dv.value.a + 1)
-            Thread.sleep(5000)
-        }
-}
+private val logger = KotlinLogging.logger {}
 
 fun <T : Any?> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean = false, renderer : ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.parent, this)

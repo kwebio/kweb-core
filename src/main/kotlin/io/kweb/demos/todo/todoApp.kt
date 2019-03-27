@@ -14,7 +14,7 @@ import io.kweb.dom.element.new
 import io.kweb.plugins.semanticUI.*
 import io.kweb.routing.route
 import io.kweb.state.*
-import io.kweb.state.persistent.*
+import io.kweb.state.render.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
 import mu.KotlinLogging

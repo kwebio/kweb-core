@@ -24,8 +24,10 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
             logger.warn("Mapping an already closed KVar", IllegalStateException())
         }
         val mappedObservable = KVar(reversableFunction(value))
-        val myChangeHandle = addListener { _, new ->
-            mappedObservable.value = reversableFunction.invoke(new)
+        val myChangeHandle = addListener { old, new ->
+            if (old != new) {
+                mappedObservable.value = reversableFunction.invoke(new)
+            }
         }
         onClose { removeListener(myChangeHandle) }
         val origChangeHandle = mappedObservable.addListener { _, new ->

@@ -57,7 +57,7 @@ val KVar<URL>.pathSegments
         }
 
         override fun reverse(original: URL, change: List<String>): URL {
-            return original.withPath(if (change.isEmpty()) "/" else change.joinToString(separator = "/"))
+            return original.withPath("/" + if (change.isEmpty()) "" else change.joinToString(separator = "/"))
         }
 
     })

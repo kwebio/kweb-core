@@ -8,7 +8,7 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
 import io.kweb.state.*
-import io.kweb.state.persistent.render
+import io.kweb.state.render.render
 import io.mola.galimatias.URL
 import mu.KotlinLogging
 
