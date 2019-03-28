@@ -2,10 +2,9 @@ package io.kweb.routing
 
 import io.ktor.routing.*
 import io.ktor.routing.RoutingPathSegmentKind.*
-import io.kweb.*
+import io.kweb.Kweb
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.dom.element.creation.tags.*
-import io.kweb.dom.element.events.on
+import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
 import io.kweb.state.*
 import io.kweb.state.render.render
@@ -21,11 +20,6 @@ import mu.KotlinLogging
 // TODO: Handle back button https://www.webdesignerdepot.com/2013/03/how-to-manage-the-back-button-with-javascript/
 
 private val logger = KotlinLogging.logger {}
-
-fun main() {
-    test3()
-}
-
 
 fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: RouteReceiver.() -> Unit) {
     val url = this.browser.url(simpleUrlParser)
@@ -62,20 +56,29 @@ fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: Rout
                 throw RuntimeException("Unable to find pathRenderer for template $template")
             }
         } else {
-            throw NotFoundException("Page not found")
+            rr.notFoundReceiver.invoke(this, url.value.path())
         }
     }
 }
 
 typealias PathTemplate = List<RoutingPathSegment>
 typealias PathReceiver = ElementCreator<*>.(params : Map<String, KVar<String>>) -> Unit
+typealias NotFoundReceiver = (ElementCreator<*>).(path : String) -> Unit
 
 class RouteReceiver internal constructor(val parentElementCreator: ElementCreator<*>, val url: KVar<URL>) {
     internal val templatesByLength = HashMap<Int, MutableMap<PathTemplate, PathReceiver>>()
 
+    internal var notFoundReceiver : NotFoundReceiver = { path ->
+        h1().text("Not Found: $path")
+    }
+
     fun path(template : String, pathReceiver : PathReceiver) {
         val routingPath = RoutingPath.parse(template).parts
         templatesByLength.computeIfAbsent(routingPath.size) {HashMap()}[routingPath]= pathReceiver
+    }
+
+    fun notFound(receiver : NotFoundReceiver) {
+        notFoundReceiver = receiver
     }
 }
 
@@ -90,63 +93,6 @@ private fun testSampleForRouting() {
                 path("/lists/{listId}") { params ->
                     val listId = params.getValue("listId")
                     h1().text(listId.map { "List id: $it" })
-                }
-            }
-        }
-    }
-}
-
-private fun test2() {
-    Kweb(port = 16097) {
-        doc.body.new {
-            val path = url(simpleUrlParser).path
-            route {
-                path("/") {
-                    path.value = "/number/1"
-                }
-                path("/number/{num}") { params ->
-                    val num = params.getValue("num").toInt()
-                    a().text(num.map {"Number $it"}).on.click {
-                        path.value = "/number/${num.value + 1}"
-                    }
-                }
-            }
-        }
-    }
-}
-
-private fun test3() {
-    Kweb(port = 16097) {
-        doc.body.new {
-            route {
-                path("/") {
-                    h1().text("Hello World!")
-
-                    button().text("Home Page").on.click {
-                        url.path.value = "/"
-                    }
-
-                    button().text("Test Page").on.click {
-                        url.path.value = "/test"
-                    }
-                }
-
-                path("/test") { params ->
-                    button().text("Home Page").on.click {
-                        url.path.value = "/"
-                    }
-
-                    button().text("Test Page 2").on.click {
-                        url.path.value = "/test2"
-                    }
-                }
-
-                path("/test2") { params ->
-                    h1().text("Test Page 2!")
-
-                    button().text("Home Page").on.click {
-                        url.path.value = "/"
-                    }
                 }
             }
         }
