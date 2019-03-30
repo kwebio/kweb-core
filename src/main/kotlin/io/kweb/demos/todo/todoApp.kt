@@ -84,8 +84,22 @@ fun main() {
 private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
     div(semantic.ui.three.column.centered.grid).new {
         div(semantic.column).new {
-            h1(semantic.ui.dividing.header).text(title)
-            content(this)
+            div(semantic.ui.vertical.segment).new {
+                h1(semantic.ui.dividing.header).text(title)
+                content(this)
+            }
+            div(semantic.ui.vertical.segment).new {
+                div(semantic.ui.message).new {
+                    p().innerHTML(
+                            """
+                            A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
+                            todo list.  Try visiting this URL in another browser window and make some changes.
+                            """
+                                    .trimIndent()
+                    )
+                }
+            }
+
         }
     }
 }

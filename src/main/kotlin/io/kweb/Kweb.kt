@@ -86,6 +86,10 @@ class Kweb(val port: Int,
     init {
         logger.info("Initializing Kweb listening on port $port")
 
+        if (debug) {
+            logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
+        }
+
         //TODO: Need to do housekeeping to deleteIfExists old client data
 
         val startHeadBuilder = StringBuilder()
