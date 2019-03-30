@@ -4,6 +4,10 @@ import io.kweb.shoebox.Shoebox
 import java.nio.file.*
 import java.time.Instant
 
+/**
+ * Stores all persistent state for this app in a directory, creating it if necessary
+ */
+
 class TodoState(dir: Path) {
     init {
         if (Files.notExists(dir)) {

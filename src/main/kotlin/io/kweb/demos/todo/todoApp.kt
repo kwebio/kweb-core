@@ -37,9 +37,7 @@ fun main() {
             /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to
                 draw some common outer page DOM elements */
-
             pageBorderAndTitle("Todo List") {
-
                 /** semantic.content uses the semanticUIPlugin to use the excellent
                     Semantic UI framework, included as a plugin above, and implemented
                     as a convenient DSL within Kweb */
@@ -54,6 +52,7 @@ fun main() {
                                  */
                                 url.path.value = "/lists/$newListId"
                             }
+
                         path("/lists/{id}") { params ->
                                 /** Renders can be nested, which means that only this
                                     specific part of the page must be re-rendered if
@@ -74,6 +73,13 @@ fun main() {
                                     }
                                 }
                             }
+
+                        notFound {
+                            div(semantic.ui.negative.message).new {
+                                div(semantic.header).text("Not Found :(")
+                                p().text(url.path.map { "Unable to find path $it" })
+                            }
+                        }
                     }
                 }
             }
@@ -85,21 +91,26 @@ private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, conten
     div(semantic.ui.three.column.centered.grid).new {
         div(semantic.column).new {
             div(semantic.ui.vertical.segment).new {
-                h1(semantic.ui.dividing.header).text(title)
-                content(this)
-            }
-            div(semantic.ui.vertical.segment).new {
                 div(semantic.ui.message).new {
                     p().innerHTML(
                             """
                             A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
-                            todo list.  Try visiting this URL in another browser window and make some changes.
+                            todo list.
+                            <p/>
+                            Try visiting this URL in another browser window and make some changes.
+                            <p/>
+                            You may find the source code for this app
+                            <a href="https://github.com/kwebio/core/tree/master/src/main/kotlin/io/kweb/demos/todo">here</a>.
                             """
                                     .trimIndent()
                     )
                 }
             }
 
+            div(semantic.ui.vertical.segment).new {
+                h1(semantic.ui.dividing.header).text(title)
+                content(this)
+            }
         }
     }
 }
