@@ -88,7 +88,7 @@ fun main() {
 }
 
 private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
-    div(semantic.ui.three.column.centered.grid).new {
+    div(semantic.ui.main.container).new {
         div(semantic.column).new {
             div(semantic.ui.vertical.segment).new {
                 div(semantic.ui.message).new {
