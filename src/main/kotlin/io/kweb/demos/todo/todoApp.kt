@@ -24,7 +24,7 @@ import java.util.*
 
 private val logger = KotlinLogging.logger {}
 
-val state = TodoState(Paths.get("data"))
+val state = ToDoState(Paths.get("data"))
 val plugins = listOf(semanticUIPlugin)
 
 fun main() {
@@ -37,7 +37,7 @@ fun main() {
             /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to
                 draw some common outer page DOM elements */
-            pageBorderAndTitle("Todo List") {
+            pageBorderAndTitle("To do List") {
                 /** semantic.content uses the semanticUIPlugin to use the excellent
                     Semantic UI framework, included as a plugin above, and implemented
                     as a convenient DSL within Kweb */
@@ -95,7 +95,7 @@ private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, conten
                     p().innerHTML(
                             """
                             A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
-                            todo list.
+                            to do list.
                             <p/>
                             Try visiting this URL in another browser window and make some changes.
                             <p/>
@@ -117,19 +117,19 @@ private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, conten
 
 private fun createNewList(): String {
     val newListId = generateNewUid()
-    state.lists[newListId] = TodoState.List(newListId, "")
+    state.lists[newListId] = ToDoState.List(newListId, "")
     return newListId
 }
 
-private fun ElementCreator<*>.renderList(list: KVar<TodoState.List>) {
-    h3().text(list.map(TodoState.List::title))
+private fun ElementCreator<*>.renderList(list: KVar<ToDoState.List>) {
+    h3().text(list.map(ToDoState.List::title))
     div(semantic.ui.middle.aligned.divided.list).new {
         renderEach(state.itemsByList(list.value.uid)) { item ->
             div(semantic.item).new {
                 div(semantic.right.floated.content).new {
                     renderRemoveButton(item)
                 }
-                div(semantic.content).text(item.map(TodoState.Item::text))
+                div(semantic.content).text(item.map(ToDoState.Item::text))
             }
         }
     }
@@ -148,16 +148,16 @@ private fun ElementCreator<*>.renderList(list: KVar<TodoState.List>) {
     }
 }
 
-private fun handleAddItem(input: InputElement, list: KVar<TodoState.List>) {
+private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>) {
     GlobalScope.launch {
         val newItemText = input.getValue().await()
         input.setValue("")
-        val newItem = TodoState.Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
+        val newItem = ToDoState.Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
         state.items[newItem.uid] = newItem
     }
 }
 
-private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<TodoState.Item>) {
+private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<ToDoState.Item>) {
     val button = button(semantic.mini.ui.icon.button)
     button.new {
         i(semantic.trash.icon)

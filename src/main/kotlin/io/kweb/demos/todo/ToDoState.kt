@@ -8,7 +8,7 @@ import java.time.Instant
  * Stores all persistent state for this app in a directory, creating it if necessary
  */
 
-class TodoState(dir: Path) {
+class ToDoState(dir: Path) {
     init {
         if (Files.notExists(dir)) {
             Files.createDirectory(dir)

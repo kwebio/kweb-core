@@ -61,6 +61,7 @@ fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: Rout
     }
 }
 
+
 typealias PathTemplate = List<RoutingPathSegment>
 typealias PathReceiver = ElementCreator<*>.(params : Map<String, KVar<String>>) -> Unit
 typealias NotFoundReceiver = (ElementCreator<*>).(path : String) -> Unit
