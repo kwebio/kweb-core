@@ -44,6 +44,7 @@ fun main() {
                 div(semantic.content).new {
 
                     route {
+
                         path("/") {
                                 val newListId = createNewList()
                                 /**
@@ -54,11 +55,6 @@ fun main() {
                             }
 
                         path("/lists/{id}") { params ->
-                                /** Renders can be nested, which means that only this
-                                    specific part of the page must be re-rendered if
-                                    url.pathSegments[1] changes, which is very convenient
-                                    for the developer in comparison to other frameworks,
-                                    while minimizing server-browser chatter. */
                             render(params.getValue("id")) { listId ->
                                     logger.info("Rendering list id $listId")
 
