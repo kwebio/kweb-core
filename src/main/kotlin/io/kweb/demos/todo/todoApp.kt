@@ -1,9 +1,5 @@
 package io.kweb.demos.todo
 
-/*
- * NOTE: This will eventually be moved out of core into a separate repository
- */
-
 import io.kweb.*
 import io.kweb.dom.BodyElement
 import io.kweb.dom.element.creation.ElementCreator
@@ -70,6 +66,9 @@ fun main() {
                                 }
                             }
 
+                        /*
+                         * It's not necessary, but we can also define a custom 404 handler:
+                         */
                         notFound {
                             div(semantic.ui.negative.message).new {
                                 div(semantic.header).text("Not Found :(")
