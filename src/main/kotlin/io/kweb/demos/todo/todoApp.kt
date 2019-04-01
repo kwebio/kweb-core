@@ -56,9 +56,8 @@ fun main() {
 
                                     try {
                                         /** Here I use the same render mechanism to tie DOM
-                                            state to persistent state stored in Shoebox,
-                                            Kweb'semantic simple but powerful key-value store with
-                                            observer pattern support.  */
+                                            state to persistent state stored in Shoebox, a simple but powerful
+                                            key-value store with observer pattern support. */
                                         renderList(toVar(state.lists, listId))
                                     } catch (e: NoSuchElementException) {
                                         throw NotFoundException("Can't find list with id $listId")
