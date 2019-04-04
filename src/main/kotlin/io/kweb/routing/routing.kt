@@ -13,8 +13,6 @@ import mu.KotlinLogging
 
 /**
  * @sample testSampleForRouting
- *
- * Created by @@jmdesprez, some modifications by @sanity
  */
 
 // TODO: Handle back button https://www.webdesignerdepot.com/2013/03/how-to-manage-the-back-button-with-javascript/
