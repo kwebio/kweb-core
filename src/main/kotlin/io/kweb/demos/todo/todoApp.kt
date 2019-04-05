@@ -7,7 +7,7 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
-import io.kweb.plugins.semanticUI.*
+import io.kweb.plugins.fomanticUI.*
 import io.kweb.routing.route
 import io.kweb.state.*
 import io.kweb.state.render.*

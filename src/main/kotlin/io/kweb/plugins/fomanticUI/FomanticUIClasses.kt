@@ -1,811 +1,811 @@
-package io.kweb.plugins.semanticUI
+package io.kweb.plugins.fomanticUI
 
 import io.kweb.dom.attributes.*
 
-class SemanticUIClasses : AttributeBuilder() {
+class FomanticUIClasses : AttributeBuilder() {
 
 
-    val action : SemanticUIClasses get() {
+    val action : FomanticUIClasses get() {
         classes("action")
         return this
     }
 
-    val active : SemanticUIClasses get() {
+    val active : FomanticUIClasses get() {
         classes("active")
         return this
     }
 
-    val ad : SemanticUIClasses get() {
+    val ad : FomanticUIClasses get() {
         classes("ad")
         return this
     }
 
 
-    val add : SemanticUIClasses get() {
+    val add : FomanticUIClasses get() {
         classes("add")
         return this
     }
 
-    val address : SemanticUIClasses get() {
+    val address : FomanticUIClasses get() {
         classes("address")
         return this
     }
 
-    val aligned : SemanticUIClasses get() {
+    val aligned : FomanticUIClasses get() {
         classes("aligned")
         return this
     }
 
-    val animated : SemanticUIClasses get() {
+    val animated : FomanticUIClasses get() {
         classes("animated")
         return this
     }
 
-    val arrow : SemanticUIClasses get() {
+    val arrow : FomanticUIClasses get() {
         classes("arrow")
         return this
     }
 
-    val attached : SemanticUIClasses get() {
+    val attached : FomanticUIClasses get() {
         classes("attached")
         return this
     }
 
-    val balance : SemanticUIClasses get() {
+    val balance : FomanticUIClasses get() {
         classes("balance")
         return this
     }
 
-    val banner : SemanticUIClasses get() {
+    val banner : FomanticUIClasses get() {
         classes("banner")
         return this
     }
 
-    val basic : SemanticUIClasses get() {
+    val basic : FomanticUIClasses get() {
         classes("basic")
         return this
     }
 
-    val big : SemanticUIClasses get() {
+    val big : FomanticUIClasses get() {
         classes("big")
         return this
     }
 
-    val black : SemanticUIClasses get() {
+    val black : FomanticUIClasses get() {
         classes("black")
         return this
     }
 
-    val blue : SemanticUIClasses get() {
+    val blue : FomanticUIClasses get() {
         classes("blue")
         return this
     }
 
-    val blurring : SemanticUIClasses get() {
+    val blurring : FomanticUIClasses get() {
         classes("blurring")
         return this
     }
 
-    val bottom : SemanticUIClasses get() {
+    val bottom : FomanticUIClasses get() {
         classes("bottom")
         return this
     }
 
-    val button : SemanticUIClasses get() {
+    val button : FomanticUIClasses get() {
         classes("button")
         return this
     }
 
-    val buttons : SemanticUIClasses get() {
+    val buttons : FomanticUIClasses get() {
         classes("buttons")
         return this
     }
 
-    val breadcrumb : SemanticUIClasses get() {
+    val breadcrumb : FomanticUIClasses get() {
         classes("breadcrumb")
         return this
     }
 
-    val card : SemanticUIClasses get() {
+    val card : FomanticUIClasses get() {
         classes("card")
         return this
     }
 
-    val cards : SemanticUIClasses get() {
+    val cards : FomanticUIClasses get() {
         classes("cards")
         return this
     }
 
-    val celled : SemanticUIClasses get() {
+    val celled : FomanticUIClasses get() {
         classes("celled")
         return this
     }
 
-    val center : SemanticUIClasses get() {
+    val center : FomanticUIClasses get() {
         classes("center")
         return this
     }
 
-    val centered : SemanticUIClasses get() {
+    val centered : FomanticUIClasses get() {
         classes("centered")
         return this
     }
 
-    val check : SemanticUIClasses get() {
+    val check : FomanticUIClasses get() {
         classes("check")
         return this
     }
 
-    val checkbox : SemanticUIClasses get() {
+    val checkbox : FomanticUIClasses get() {
         classes("checkbox")
         return this
     }
 
-    val checkmark : SemanticUIClasses get() {
+    val checkmark : FomanticUIClasses get() {
         classes("checkmark")
         return this
     }
 
-    val chevron : SemanticUIClasses get() {
+    val chevron : FomanticUIClasses get() {
         classes("chevron")
         return this
     }
 
-    val cinema : SemanticUIClasses get() {
+    val cinema : FomanticUIClasses get() {
         classes("cinema")
         return this
     }
 
-    val circle : SemanticUIClasses get() {
+    val circle : FomanticUIClasses get() {
         classes("circle")
         return this
     }
 
-    val circular : SemanticUIClasses get() {
+    val circular : FomanticUIClasses get() {
         classes("circular")
         return this
     }
 
-    val copy : SemanticUIClasses get() {
+    val copy : FomanticUIClasses get() {
         classes("copy")
         return this
     }
 
-    val column : SemanticUIClasses get() {
+    val column : FomanticUIClasses get() {
         classes("column")
         return this
     }
 
-    val compact : SemanticUIClasses get() {
+    val compact : FomanticUIClasses get() {
         classes("compact")
         return this
     }
 
-    val container : SemanticUIClasses get() {
+    val container : FomanticUIClasses get() {
         classes("container")
         return this
     }
 
-    val content : SemanticUIClasses get() {
+    val content : FomanticUIClasses get() {
         classes("content")
         return this
     }
 
-    val description : SemanticUIClasses get() {
+    val description : FomanticUIClasses get() {
         classes("description")
         return this
     }
 
-    val dimmer : SemanticUIClasses get() {
+    val dimmer : FomanticUIClasses get() {
         classes("dimmer")
         return this
     }
 
-    val disabled : SemanticUIClasses get() {
+    val disabled : FomanticUIClasses get() {
         classes("disabled")
         return this
     }
 
-    val divided : SemanticUIClasses get() {
+    val divided : FomanticUIClasses get() {
         classes("divided")
         return this
     }
 
-    val divider : SemanticUIClasses get() {
+    val divider : FomanticUIClasses get() {
         classes("divider")
         return this
     }
 
-    val dividing : SemanticUIClasses get() {
+    val dividing : FomanticUIClasses get() {
         classes("dividing")
         return this
     }
 
-    val dropdown : SemanticUIClasses get() {
+    val dropdown : FomanticUIClasses get() {
         classes("dropdown")
         return this
     }
 
-    val edit : SemanticUIClasses get() {
+    val edit : FomanticUIClasses get() {
         classes("edit")
         return this
     }
 
-    val eight : SemanticUIClasses get() {
+    val eight : FomanticUIClasses get() {
         classes("eight")
         return this
     }
 
 
-    val eleven : SemanticUIClasses get() {
+    val eleven : FomanticUIClasses get() {
         classes("eleven")
         return this
     }
 
-    val error : SemanticUIClasses get() {
+    val error : FomanticUIClasses get() {
         classes("error")
         return this
     }
 
-    val equal : SemanticUIClasses get() {
+    val equal : FomanticUIClasses get() {
         classes("equal")
         return this
     }
 
-    val extra : SemanticUIClasses get() {
+    val extra : FomanticUIClasses get() {
         classes("extra")
         return this
     }
 
-    val field : SemanticUIClasses get() {
+    val field : FomanticUIClasses get() {
         classes("field")
         return this
     }
 
-    val flag : SemanticUIClasses get() {
+    val flag : FomanticUIClasses get() {
         classes("flag")
         return this
     }
 
-    val fifteen : SemanticUIClasses get() {
+    val fifteen : FomanticUIClasses get() {
         classes("fifteen")
         return this
     }
 
-    val five : SemanticUIClasses get() {
+    val five : FomanticUIClasses get() {
         classes("five")
         return this
     }
 
-    val fixed : SemanticUIClasses get() {
+    val fixed : FomanticUIClasses get() {
         classes("fixed")
         return this
     }
 
-    val fluid : SemanticUIClasses get() {
+    val fluid : FomanticUIClasses get() {
         classes("fluid")
         return this
     }
 
-    val floated : SemanticUIClasses get() {
+    val floated : FomanticUIClasses get() {
         classes("floated")
         return this
     }
 
-    val floating : SemanticUIClasses get() {
+    val floating : FomanticUIClasses get() {
         classes("floating")
         return this
     }
 
-    val form : SemanticUIClasses get() {
+    val form : FomanticUIClasses get() {
         classes("form")
         return this
     }
 
-    val four : SemanticUIClasses get() {
+    val four : FomanticUIClasses get() {
         classes("four")
         return this
     }
 
-    val fourteen : SemanticUIClasses get() {
+    val fourteen : FomanticUIClasses get() {
         classes("fourteen")
         return this
     }
 
 
-    val green : SemanticUIClasses get() {
+    val green : FomanticUIClasses get() {
         classes("green")
         return this
     }
 
-    val grey : SemanticUIClasses get() {
+    val grey : FomanticUIClasses get() {
         classes("grey")
         return this
     }
 
-    val grid : SemanticUIClasses get() {
+    val grid : FomanticUIClasses get() {
         classes("grid")
         return this
     }
 
-    val header : SemanticUIClasses get() {
+    val header : FomanticUIClasses get() {
         classes("header")
         return this
     }
 
-    val heart : SemanticUIClasses get() {
+    val heart : FomanticUIClasses get() {
         classes("heart")
         return this
     }
 
-    val hidden : SemanticUIClasses get() {
+    val hidden : FomanticUIClasses get() {
         classes("hidden")
         return this
     }
 
-    val horizontal : SemanticUIClasses get() {
+    val horizontal : FomanticUIClasses get() {
         classes("horizontal")
         return this
     }
 
-    val huge : SemanticUIClasses get() {
+    val huge : FomanticUIClasses get() {
         classes("huge")
         return this
     }
 
 
-    val icon : SemanticUIClasses get() {
+    val icon : FomanticUIClasses get() {
         classes("icon")
         return this
     }
 
-    val image : SemanticUIClasses get() {
+    val image : FomanticUIClasses get() {
         classes("image")
         return this
     }
 
-    val indeterminate : SemanticUIClasses get() {
+    val indeterminate : FomanticUIClasses get() {
         classes("indeterminate")
         return this
     }
 
-    val info : SemanticUIClasses get() {
+    val info : FomanticUIClasses get() {
         classes("info")
         return this
     }
 
-    val inline : SemanticUIClasses get() {
+    val inline : FomanticUIClasses get() {
         classes("inline")
         return this
     }
 
-    val input : SemanticUIClasses get() {
+    val input : FomanticUIClasses get() {
         classes("input")
         return this
     }
 
-    val internally : SemanticUIClasses get() {
+    val internally : FomanticUIClasses get() {
         classes("internally")
         return this
     }
 
-    val inverted : SemanticUIClasses get() {
+    val inverted : FomanticUIClasses get() {
         classes("inverted")
         return this
     }
 
-    val item : SemanticUIClasses get() {
+    val item : FomanticUIClasses get() {
         classes("item")
         return this
     }
 
-    val items : SemanticUIClasses get() {
+    val items : FomanticUIClasses get() {
         classes("items")
         return this
     }
 
-    val label : SemanticUIClasses get() {
+    val label : FomanticUIClasses get() {
         classes("label")
         return this
     }
 
-    val labeled : SemanticUIClasses get() {
+    val labeled : FomanticUIClasses get() {
         classes("labeled")
         return this
     }
 
 
-    val large : SemanticUIClasses get() {
+    val large : FomanticUIClasses get() {
         classes("large")
         return this
     }
 
-	val left : SemanticUIClasses get() {
+	val left : FomanticUIClasses get() {
         classes("left")
         return this
     }
 
-    val lightbulb : SemanticUIClasses get() {
+    val lightbulb : FomanticUIClasses get() {
         classes("lightbulb")
         return this
     }
 
-    val list : SemanticUIClasses get() {
+    val list : FomanticUIClasses get() {
         classes("list")
         return this
     }
 
-    val leaderboard : SemanticUIClasses get() {
+    val leaderboard : FomanticUIClasses get() {
         classes("leaderboard")
         return this
     }
 
-    val loader : SemanticUIClasses get() {
+    val loader : FomanticUIClasses get() {
         classes("loader")
         return this
     }
 
 
-    val loading : SemanticUIClasses get() {
+    val loading : FomanticUIClasses get() {
         classes("loading")
         return this
     }
 
-    val main : SemanticUIClasses get() {
+    val main : FomanticUIClasses get() {
         classes("main")
         return this
     }
 
-    val masthead : SemanticUIClasses get() {
+    val masthead : FomanticUIClasses get() {
         classes("masthead")
         return this
     }
 
-    val medium : SemanticUIClasses get() {
+    val medium : FomanticUIClasses get() {
         classes("medium")
         return this
     }
 
-    val menu : SemanticUIClasses get() {
+    val menu : FomanticUIClasses get() {
         classes("menu")
         return this
     }
 
 
-    val message : SemanticUIClasses get() {
+    val message : FomanticUIClasses get() {
         classes("message")
         return this
     }
 
-    val meta : SemanticUIClasses get() {
+    val meta : FomanticUIClasses get() {
         classes("meta")
         return this
     }
 
-    val middle : SemanticUIClasses get() {
+    val middle : FomanticUIClasses get() {
         classes("middle")
         return this
     }
 
-    val mini : SemanticUIClasses get() {
+    val mini : FomanticUIClasses get() {
         classes("mini")
         return this
     }
 
-    val minus : SemanticUIClasses get() {
+    val minus : FomanticUIClasses get() {
         classes("minus")
         return this
     }
 
-    val negative : SemanticUIClasses get() {
+    val negative : FomanticUIClasses get() {
         classes("negative")
         return this
     }
 
-    val nine : SemanticUIClasses get() {
+    val nine : FomanticUIClasses get() {
         classes("nine")
         return this
     }
 
-    val notched : SemanticUIClasses get() {
+    val notched : FomanticUIClasses get() {
         classes("notched")
         return this
     }
 
 
-    val olive : SemanticUIClasses get() {
+    val olive : FomanticUIClasses get() {
         classes("olive")
         return this
     }
 
-    val one : SemanticUIClasses get() {
+    val one : FomanticUIClasses get() {
         classes("one")
         return this
     }
 
 
-    val outline : SemanticUIClasses get() {
+    val outline : FomanticUIClasses get() {
         classes("outline")
         return this
     }
 
-    val padded : SemanticUIClasses get() {
+    val padded : FomanticUIClasses get() {
         classes("padded")
         return this
     }
 
 
-    val play : SemanticUIClasses get() {
+    val play : FomanticUIClasses get() {
         classes("play")
         return this
     }
 
-    val plus : SemanticUIClasses get() {
+    val plus : FomanticUIClasses get() {
         classes("plus")
         return this
     }
 
-    val pointing : SemanticUIClasses get() {
+    val pointing : FomanticUIClasses get() {
         classes("pointing")
         return this
     }
 
 
-    val positive : SemanticUIClasses get() {
+    val positive : FomanticUIClasses get() {
         classes("positive")
         return this
     }
 
-    val primary : SemanticUIClasses get() {
+    val primary : FomanticUIClasses get() {
         classes("primary")
         return this
     }
 
-    val purple : SemanticUIClasses get() {
+    val purple : FomanticUIClasses get() {
         classes("purple")
         return this
     }
 
-    val pusher : SemanticUIClasses get() {
+    val pusher : FomanticUIClasses get() {
         classes("pusher")
         return this
     }
 
-    val raised : SemanticUIClasses get() {
+    val raised : FomanticUIClasses get() {
         classes("raised")
         return this
     }
 
-    val right : SemanticUIClasses get() {
+    val right : FomanticUIClasses get() {
         classes("right")
         return this
     }
 
 
-    val scale : SemanticUIClasses get() {
+    val scale : FomanticUIClasses get() {
         classes("scale")
         return this
     }
 
-    val spaced : SemanticUIClasses get() {
+    val spaced : FomanticUIClasses get() {
         classes("spaced")
         return this
     }
 
-    val secondary : SemanticUIClasses get() {
+    val secondary : FomanticUIClasses get() {
         classes("secondary")
         return this
     }
 
-    val selection : SemanticUIClasses get() {
+    val selection : FomanticUIClasses get() {
         classes("selection")
         return this
     }
 
-    val sortable : SemanticUIClasses get() {
+    val sortable : FomanticUIClasses get() {
         classes("sortable")
         return this
     }
 
-    val success : SemanticUIClasses get() {
+    val success : FomanticUIClasses get() {
         classes("success")
         return this
     }
 
-    val ten : SemanticUIClasses get() {
+    val ten : FomanticUIClasses get() {
         classes("ten")
         return this
     }
 
-    val text : SemanticUIClasses get() {
+    val text : FomanticUIClasses get() {
         classes("text")
         return this
     }
 
-    val thirteen : SemanticUIClasses get() {
+    val thirteen : FomanticUIClasses get() {
         classes("thirteen")
         return this
     }
 
-    val user : SemanticUIClasses get() {
+    val user : FomanticUIClasses get() {
         classes("user")
         return this
     }
 
-    val users : SemanticUIClasses get() {
+    val users : FomanticUIClasses get() {
         classes("users")
         return this
     }
 
-    val radio : SemanticUIClasses get() {
+    val radio : FomanticUIClasses get() {
         classes("radio")
         return this
     }
 
-    val red : SemanticUIClasses get() {
+    val red : FomanticUIClasses get() {
         classes("red")
         return this
     }
 
-    val relaxed : SemanticUIClasses get() {
+    val relaxed : FomanticUIClasses get() {
         classes("relaxed")
         return this
     }
 
-    val remove : SemanticUIClasses get() {
+    val remove : FomanticUIClasses get() {
         classes("remove")
         return this
     }
 
-    val row : SemanticUIClasses get() {
+    val row : FomanticUIClasses get() {
         classes("row")
         return this
     }
 
-    val search : SemanticUIClasses get() {
+    val search : FomanticUIClasses get() {
         classes("search")
         return this
     }
 
-    val section : SemanticUIClasses get() {
+    val section : FomanticUIClasses get() {
         classes("section")
         return this
     }
 
-    val segments : SemanticUIClasses get() {
+    val segments : FomanticUIClasses get() {
         classes("segments")
         return this
     }
 
-    val segment : SemanticUIClasses get() {
+    val segment : FomanticUIClasses get() {
         classes("segment")
         return this
     }
 
-    val seven : SemanticUIClasses get() {
+    val seven : FomanticUIClasses get() {
         classes("seven")
         return this
     }
 
-    val sidebar : SemanticUIClasses get() {
+    val sidebar : FomanticUIClasses get() {
         classes("sidebar")
         return this
     }
 
-    val six : SemanticUIClasses get() {
+    val six : FomanticUIClasses get() {
         classes("six")
         return this
     }
 
-    val sixteen : SemanticUIClasses get() {
+    val sixteen : FomanticUIClasses get() {
         classes("sixteen")
         return this
     }
 
-    val small : SemanticUIClasses get() {
+    val small : FomanticUIClasses get() {
         classes("small")
         return this
     }
 
-    val smile : SemanticUIClasses get() {
+    val smile : FomanticUIClasses get() {
         classes("smile")
         return this
     }
 
 
-    val stackable : SemanticUIClasses get() {
+    val stackable : FomanticUIClasses get() {
         classes("stackable")
         return this
     }
 
-    val statistic : SemanticUIClasses get() {
+    val statistic : FomanticUIClasses get() {
         classes("statistic")
         return this
     }
 
-    val statistics : SemanticUIClasses get() {
+    val statistics : FomanticUIClasses get() {
         classes("statistics")
         return this
     }
 
 
-    val striped : SemanticUIClasses get() {
+    val striped : FomanticUIClasses get() {
         classes("striped")
         return this
     }
 
-    val submit : SemanticUIClasses get() {
+    val submit : FomanticUIClasses get() {
         classes("submit")
         return this
     }
 
-    val tabular: SemanticUIClasses get() {
+    val tabular: FomanticUIClasses get() {
         classes("tabular")
         return this
     }
 
-    val table: SemanticUIClasses get() {
+    val table: FomanticUIClasses get() {
         classes("table")
         return this
     }
 
-    val teal: SemanticUIClasses get() {
+    val teal: FomanticUIClasses get() {
         classes("teal")
         return this
     }
 
-    val three : SemanticUIClasses get() {
+    val three : FomanticUIClasses get() {
         classes("three")
         return this
     }
 
-    val tiny : SemanticUIClasses get() {
+    val tiny : FomanticUIClasses get() {
         classes("tiny")
         return this
     }
 
-    val toggle : SemanticUIClasses get() {
+    val toggle : FomanticUIClasses get() {
         classes("toggle")
         return this
     }
 
-    val top : SemanticUIClasses get() {
+    val top : FomanticUIClasses get() {
         classes("top")
         return this
     }
 
-    val transition : SemanticUIClasses get() {
+    val transition : FomanticUIClasses get() {
         classes("transition")
         return this
     }
 
-    val transparent : SemanticUIClasses get() {
+    val transparent : FomanticUIClasses get() {
         classes("transparent")
         return this
     }
 
-    val trash : SemanticUIClasses get() {
+    val trash : FomanticUIClasses get() {
         classes("trash")
         return this
     }
     
-    val twelve : SemanticUIClasses get() {
+    val twelve : FomanticUIClasses get() {
         classes("twelve")
         return this
     }
 
-    val two : SemanticUIClasses get() {
+    val two : FomanticUIClasses get() {
         classes("two")
         return this
     }
 
     private var uiClassAlreadyPresent = false
 
-    val ui : SemanticUIClasses get() {
+    val ui : FomanticUIClasses get() {
         if (uiClassAlreadyPresent) {
             throw RuntimeException("""
             The .ui getter has already been used on this SematicUIClasses object.  Please ensure you are creating a
-            fresh SemanticUIClasses object (using the 'semantic' getter for every element).
+            fresh FomanticUIClasses object (using the 'semantic' getter for every element).
 """.trimIndent())
         }
         classes("ui")
@@ -813,39 +813,39 @@ class SemanticUIClasses : AttributeBuilder() {
         return this
     }
 
-    val yellow : SemanticUIClasses get() {
+    val yellow : FomanticUIClasses get() {
         classes("yellow")
         return this
     }
 
 
-    val value : SemanticUIClasses get() {
+    val value : FomanticUIClasses get() {
         classes("value")
         return this
     }
 
 
-    val very : SemanticUIClasses get() {
+    val very : FomanticUIClasses get() {
         classes("very")
         return this
     }
 
-    val vertical : SemanticUIClasses get() {
+    val vertical : FomanticUIClasses get() {
         classes("vertical")
         return this
     }
 
-    val visible : SemanticUIClasses get() {
+    val visible : FomanticUIClasses get() {
         classes("visible")
         return this
     }
 
-    val warning : SemanticUIClasses get() {
+    val warning : FomanticUIClasses get() {
         classes("warning")
         return this
     }
 
-    val wide : SemanticUIClasses get() {
+    val wide : FomanticUIClasses get() {
         classes("wide")
         return this
     }

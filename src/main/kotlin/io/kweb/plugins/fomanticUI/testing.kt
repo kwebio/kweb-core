@@ -1,4 +1,4 @@
-package io.kweb.plugins.semanticUI
+package io.kweb.plugins.fomanticUI
 
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.tags.a
