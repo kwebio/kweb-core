@@ -11,13 +11,13 @@ import io.kweb.dom.element.new
 
 
 fun main(args: Array<String>) {
-    Kweb(port = 3525, plugins = listOf(semanticUIPlugin)) {
+    Kweb(port = 3525, plugins = listOf(fomanticUIPlugin)) {
         doc.body.new {
-            div(semantic.ui.container).new {
-                div(semantic.ui.three.item.menu).new {
-                    a(attributes = semantic.active.item).text("Editorials")
-                    a(attributes = semantic.item).text("Reviews")
-                    a(attributes = semantic.item).text("Upcoming Events")
+            div(fomantic.ui.container).new {
+                div(fomantic.ui.three.item.menu).new {
+                    a(attributes = fomantic.active.item).text("Editorials")
+                    a(attributes = fomantic.item).text("Reviews")
+                    a(attributes = fomantic.item).text("Upcoming Events")
                 }
             }
         }

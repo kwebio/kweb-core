@@ -21,7 +21,7 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 val state = ToDoState(Paths.get("data"))
-val plugins = listOf(semanticUIPlugin)
+val plugins = listOf(fomanticUIPlugin)
 
 fun main() {
     /** Create a Kweb instance, and configure it to use the Semantic
@@ -34,10 +34,10 @@ fun main() {
                 best.  Here I use an extension function defined elsewhere to
                 draw some common outer page DOM elements */
             pageBorderAndTitle("To do List") {
-                /** semantic.content uses the semanticUIPlugin to use the excellent
+                /** fomantic.content uses the fomanticUIPlugin to use the excellent
                     Semantic UI framework, included as a plugin above, and implemented
                     as a convenient DSL within Kweb */
-                div(semantic.content).new {
+                div(fomantic.content).new {
 
                     route {
 
@@ -69,8 +69,8 @@ fun main() {
                          * It's not necessary, but we can also define a custom 404 handler:
                          */
                         notFound {
-                            div(semantic.ui.negative.message).new {
-                                div(semantic.header).text("Not Found :(")
+                            div(fomantic.ui.negative.message).new {
+                                div(fomantic.header).text("Not Found :(")
                                 p().text(url.path.map { "Unable to find path $it" })
                             }
                         }
@@ -82,10 +82,10 @@ fun main() {
 }
 
 private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
-    div(semantic.ui.main.container).new {
-        div(semantic.column).new {
-            div(semantic.ui.vertical.segment).new {
-                div(semantic.ui.message).new {
+    div(fomantic.ui.main.container).new {
+        div(fomantic.column).new {
+            div(fomantic.ui.vertical.segment).new {
+                div(fomantic.ui.message).new {
                     p().innerHTML(
                             """
                             A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
@@ -101,8 +101,8 @@ private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, conten
                 }
             }
 
-            div(semantic.ui.vertical.segment).new {
-                h1(semantic.ui.dividing.header).text(title)
+            div(fomantic.ui.vertical.segment).new {
+                h1(fomantic.ui.dividing.header).text(title)
                 content(this)
             }
         }
@@ -117,24 +117,24 @@ private fun createNewList(): String {
 
 private fun ElementCreator<*>.renderList(list: KVar<ToDoState.List>) {
     h3().text(list.map(ToDoState.List::title))
-    div(semantic.ui.middle.aligned.divided.list).new {
+    div(fomantic.ui.middle.aligned.divided.list).new {
         renderEach(state.itemsByList(list.value.uid)) { item ->
-            div(semantic.item).new {
-                div(semantic.right.floated.content).new {
+            div(fomantic.item).new {
+                div(fomantic.right.floated.content).new {
                     renderRemoveButton(item)
                 }
-                div(semantic.content).text(item.map(ToDoState.Item::text))
+                div(fomantic.content).text(item.map(ToDoState.Item::text))
             }
         }
     }
-    div(semantic.ui.action.input).new {
+    div(fomantic.ui.action.input).new {
         val input = input(text, placeholder = "Add Item")
         input.on.keypress { ke ->
             if (ke.code == "Enter") {
                 handleAddItem(input, list)
             }
         }
-        button(semantic.ui.button).text("Add").apply {
+        button(fomantic.ui.button).text("Add").apply {
             on.click {
                 handleAddItem(input, list)
             }
@@ -152,9 +152,9 @@ private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>) {
 }
 
 private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<ToDoState.Item>) {
-    val button = button(semantic.mini.ui.icon.button)
+    val button = button(fomantic.mini.ui.icon.button)
     button.new {
-        i(semantic.trash.icon)
+        i(fomantic.trash.icon)
     }
     button.on.click {
         state.items.remove(item.value.uid)

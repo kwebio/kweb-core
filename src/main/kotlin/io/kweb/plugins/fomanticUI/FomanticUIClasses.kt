@@ -805,7 +805,7 @@ class FomanticUIClasses : AttributeBuilder() {
         if (uiClassAlreadyPresent) {
             throw RuntimeException("""
             The .ui getter has already been used on this SematicUIClasses object.  Please ensure you are creating a
-            fresh FomanticUIClasses object (using the 'semantic' getter for every element).
+            fresh FomanticUIClasses object (using the 'fomantic' getter for every element).
 """.trimIndent())
         }
         classes("ui")
