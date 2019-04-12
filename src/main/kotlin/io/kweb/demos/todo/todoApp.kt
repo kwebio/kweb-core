@@ -25,8 +25,6 @@ val plugins = listOf(fomanticUIPlugin)
 
 fun main() {
 
-    Thread.sleep(100000)
-
     /** Create a Kweb instance, and configure it to use the Semantic
      * UI framework. Build a simple to-do list app listening on
      * http://localhost:7659/
