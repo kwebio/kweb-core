@@ -256,9 +256,10 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         browser.evaluate(wrappedJS)
     }
 
-    fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), callback: (String) -> Unit): Element {
+    fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), retrieveJs : String?, callback: (String) -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
-        val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+"}"
+        val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
+        val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+retrieveJs + "}"
         val js = jsExpression + """
             .addEventListener(${eventName.toJson()}, function(event) {
                 callbackWs($callbackId, $eventObject);

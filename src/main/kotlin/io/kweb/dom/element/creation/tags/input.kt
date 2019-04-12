@@ -4,7 +4,10 @@ import com.github.salomonbrys.kotson.toJson
 import io.kweb.dom.attributes.*
 import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.ElementCreator
+import io.kweb.dom.element.events.ONReceiver
+import io.kweb.dom.element.events.on
 import io.kweb.state.KVal
+import io.kweb.state.KVar
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -21,21 +24,31 @@ fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null,
     ))
 }
 
+// TODO: Other element types might also benefit from some of this functionality, extract a common parent Element type
 open class InputElement(val element: Element) : Element(element) {
     fun checked(checked: Boolean = false) = setAttribute("checked", checked)
     fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value;") { s: String -> s }
             ?: throw RuntimeException("Not sure why .evaluate() would return null")
 
     fun setValue(newValue: String) = element.browser.execute("$jsExpression.value=${newValue.toJson()};")
-    fun setValue(newValue: KVal<String?>) {
+    fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
-        if (initialValue != null) {
-            setValue(initialValue)
-        }
+        setValue(initialValue)
         newValue.addListener { _, new ->
-            if (new != null) {
-                setValue(new)
-            }
+            setValue(new)
+        }
+    }
+
+    /**
+     * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
+     */
+    fun setValue(toBind : KVar<String>, updateOn : String = "input") {
+        setValue(toBind as KVal<String>)
+
+        // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
+        //       entire value each time PARTICULARLY for large inputs
+        on(retrieveJs = "${jsExpression}.value").event(updateOn, ONReceiver.Event::class) {
+            toBind.value = it.retrieved ?: throw RuntimeException("No value was retrieved")
         }
     }
 

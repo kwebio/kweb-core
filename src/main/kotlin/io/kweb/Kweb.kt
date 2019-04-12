@@ -38,7 +38,7 @@ typealias JavaScriptError = String
 
 /**
  * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
- * with a javascript page which will establish a websocket connection to retrieve and send instructions and data
+ * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
  * between browser and server.
  *
  * @property port  The TCP port on which the HTTP server should listen

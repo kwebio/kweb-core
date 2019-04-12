@@ -19,7 +19,7 @@ fun <T : Any?> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean 
     var childEC = ElementCreator(this.parent, this)
     val cachedClientECs = if (cacheOnClient) ConcurrentHashMap<T, ElementCreator<Element>>() else null
 
-    // Before we set them to display:none, we retrieve the values of the "style" attribute so that we can
+    // Before we set them to display:none, we retrieveJs the values of the "style" attribute so that we can
     // put it back again correctly, because we're thoughtful like that.
     val retrievedStyleValues = ConcurrentHashMap<T, String>()
     val kvalListenerHandle = kval.addListener { oldValue, newValue ->
@@ -106,7 +106,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
 
     val onRemoveHandler = orderedViewSet.onRemove { index, keyValue ->
         if (index >= items.size) {
-            logger.warn("Invalid index $index to retrieve item from items list of size ${items.size} for key ${keyValue.key} and item ${keyValue.value}", RuntimeException())
+            logger.warn("Invalid index $index to retrieveJs item from items list of size ${items.size} for key ${keyValue.key} and item ${keyValue.value}", RuntimeException())
         } else {
             val removed = items.removeAt(index)
             removed.creator.cleanup()

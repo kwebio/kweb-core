@@ -13,7 +13,7 @@ import kotlin.reflect.jvm.jvmName
 
 /**
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
- * expressions and retrieve the result.
+ * expressions and retrieveJs the result.
  */
 
 val logger = KotlinLogging.logger {}
