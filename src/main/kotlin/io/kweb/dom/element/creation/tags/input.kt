@@ -39,6 +39,20 @@ open class InputElement(val element: Element) : Element(element) {
         }
     }
 
+    private @Volatile var _valueKvar : KVar<String>? = null
+
+    var value : KVar<String> get() {
+        if (_valueKvar == null) {
+            _valueKvar = KVar("")
+        }
+        return _valueKvar!!
+    }
+    set(v) {
+        if (_valueKvar != null) throw RuntimeException("`value` may only be set once, and cannot be set after it has been retrieved")
+        setValue(v, updateOn = "input")
+        _valueKvar = v
+    }
+
     /**
      * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
      */

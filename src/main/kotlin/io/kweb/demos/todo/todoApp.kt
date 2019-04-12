@@ -25,6 +25,21 @@ val plugins = listOf(fomanticUIPlugin)
 
 fun main() {
 
+    Kweb(port = 1245) {
+        doc.body.new {
+            val i1 = input(placeholder = "Type here")
+
+            val i2 = input(placeholder = "Or here")
+
+            val commonString = KVar("")
+
+            i1.value = commonString
+            i2.value = commonString
+        }
+    }
+
+    Thread.sleep(100000)
+
     /** Create a Kweb instance, and configure it to use the Semantic
      * UI framework. Build a simple to-do list app listening on
      * http://localhost:7659/
