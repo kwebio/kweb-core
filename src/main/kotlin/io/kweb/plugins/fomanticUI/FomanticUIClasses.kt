@@ -221,6 +221,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val double : FomanticUIClasses get() {
+        classes("double")
+        return this
+    }
+
     val dropdown : FomanticUIClasses get() {
         classes("dropdown")
         return this
@@ -233,6 +238,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val eight : FomanticUIClasses get() {
         classes("eight")
+        return this
+    }
+
+    val elastic : FomanticUIClasses get() {
+        classes("elastic")
         return this
     }
 
@@ -534,6 +544,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val placeholder : FomanticUIClasses get() {
+        classes("placeholder==")
+        return this
+    }
+
 
     val play : FomanticUIClasses get() {
         classes("play")
@@ -575,6 +590,12 @@ class FomanticUIClasses : AttributeBuilder() {
         classes("raised")
         return this
     }
+
+    val range : FomanticUIClasses get() {
+        classes("range")
+        return this
+    }
+
 
     val right : FomanticUIClasses get() {
         classes("right")
@@ -699,6 +720,16 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val sixteen : FomanticUIClasses get() {
         classes("sixteen")
+        return this
+    }
+
+    val slider : FomanticUIClasses get() {
+        classes("slider")
+        return this
+    }
+
+    val slow : FomanticUIClasses get() {
+        classes("slow")
         return this
     }
 
