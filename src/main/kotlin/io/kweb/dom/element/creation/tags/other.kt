@@ -39,17 +39,8 @@ open class AElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.a(attributes: Map<String, Any> = attr, href : String? = "#") = AElement(element("a",
         attributes.set("href", href)))
 
-open class TextAreaElement(parent: Element) : Element(parent) {
-    override val read get() = TextAreaElementReader(this)
-}
-open class TextAreaElementReader(element : TextAreaElement) : ElementReader(element) {
-    val value get() = receiver.evaluate("($jsExpression.innerText);")
-}
 
 fun ElementCreator<Element>.textArea(rows : Int? = null, attributes: Map<String, Any> = attr) = TextAreaElement(element("textarea", attributes.set("rows", rows?.toString()).set("type", "text")))
-
-open class SelectElement(parent: Element) : Element(parent)
-fun ElementCreator<Element>.select(attributes: Map<String, Any> = attr) = SelectElement(element("select", attributes))
 
 open class OptionElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.option(attributes: Map<String, Any> = attr) = OptionElement(element("option", attributes))
