@@ -11,6 +11,7 @@ import io.kweb.dom.element.modification.StyleReceiver
 import io.kweb.dom.element.read.ElementReader
 import io.kweb.plugins.KwebPlugin
 import io.kweb.state.KVal
+import io.kweb.state.KVar
 import java.util.*
 import java.util.concurrent.*
 import kotlin.reflect.KClass
@@ -232,6 +233,16 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         }
         return this
     }
+
+    var text : KVar<String>
+        get() {
+            val t = KVar("")
+            text(t)
+            return t
+        }
+        set(nv) {
+            text(nv)
+        }
 
     fun addText(value: String): Element {
         if (canSendInstruction()) {
