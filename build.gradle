@@ -38,7 +38,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.4.11'
+version '0.4.12'
 
 apply plugin: 'java'
 
