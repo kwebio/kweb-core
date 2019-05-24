@@ -1,8 +1,8 @@
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 object KwebSpec : Spek({
     describe("Start a kweb instance") {
