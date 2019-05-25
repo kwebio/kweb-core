@@ -52,6 +52,26 @@ class TodoDemoTest {
         }
         itemElem?.isDisplayed?.shouldBeTrue()
     }
+
+    @Test
+    fun multipleUsers(driver1:WebDriver, driver2:WebDriver){
+        val todoItem = "bring me a great big flood"
+        driver1.get("http://localhost:7659")
+        val site = TodoSite(driver1)
+
+        //make sure we go to the same list the first driver was redirected to
+        driver2.get(driver1.currentUrl)
+
+        //after both pages have loaded, add item via first driver
+        site.addTodoItem(todoItem)
+
+        //make sure it appears for second driver
+        val itemElem = WebDriverWait(driver2, 5).until {
+            driver2.findElement<WebElement>(
+                    By.xpath("//div[contains(text(),'$todoItem') and @class='content']"))
+        }
+        itemElem?.isDisplayed?.shouldBeTrue()
+    }
 }
 
 class TodoSite(driver: WebDriver){
