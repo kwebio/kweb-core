@@ -179,6 +179,7 @@ configurations.all {
 //configured source directory and uses the correct classpath.
 
 task integrationTest(type: Test) {
+    group "verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     //If you want to ensure that integration tests are run every time when you invoke
