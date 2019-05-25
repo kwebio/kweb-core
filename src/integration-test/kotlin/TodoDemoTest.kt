@@ -1,6 +1,8 @@
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kweb.demos.todo.TodoApp
+import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -35,7 +37,6 @@ class TodoDemoTest {
 
     @Test
     fun pageRenders(driver:WebDriver){
-        driver.get("http://localhost:7659")
         val site = TodoSite(driver)
         site.allElementsExist().shouldBeTrue()
     }
@@ -43,7 +44,6 @@ class TodoDemoTest {
     @Test
     fun enterNewItem(driver:WebDriver){
         val todoItem = "feel like an ocean, warmed by the sun"
-        driver.get("http://localhost:7659")
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
         val itemElem = WebDriverWait(driver, 5).until {
@@ -56,7 +56,6 @@ class TodoDemoTest {
     @Test
     fun multipleUsers(driver1:WebDriver, driver2:WebDriver){
         val todoItem = "bring me a great big flood"
-        driver1.get("http://localhost:7659")
         val site = TodoSite(driver1)
 
         //make sure we go to the same list the first driver was redirected to
@@ -72,9 +71,28 @@ class TodoDemoTest {
         }
         itemElem?.isDisplayed?.shouldBeTrue()
     }
+
+    @Test
+    fun deleteItems(driver:WebDriver){
+        val firstItem = "We'll be all right"
+        val secondItem = "Stay here some time"
+        val thirdItem = "This country dog won't die in the city"
+
+        val site = TodoSite(driver)
+        site.addTodoItem(firstItem)
+        site.addTodoItem(secondItem)
+        site.addTodoItem(thirdItem)
+
+        site.deleteItemByText(secondItem)
+
+        val allItems = site.getAllItems()
+        allItems.find{it.text == firstItem}.shouldNotBeNull()
+        allItems.find{it.text == secondItem}.shouldBeNull()
+        allItems.find{it.text == thirdItem}.shouldNotBeNull()
+    }
 }
 
-class TodoSite(driver: WebDriver){
+class TodoSite(private val driver: WebDriver){
 
     @FindBy(className = "message")
     val message: WebElement? = null
@@ -85,7 +103,7 @@ class TodoSite(driver: WebDriver){
     @FindBy(tagName = "input")
     val input: WebElement? = null
 
-    @FindBy(tagName = "button")
+    @FindBy(xpath = "//button[text()='Add']")
     val addButton: WebElement? = null
 
     fun allElementsExist() : Boolean {
@@ -96,12 +114,26 @@ class TodoSite(driver: WebDriver){
     }
 
     fun addTodoItem(item:String){
-        println("Adding item $item")
         input?.sendKeys(item)
         addButton?.click()
     }
 
+    fun getAllItems() : List<WebElement> {
+        return driver.findElements<WebElement>(By.xpath("//div[@class='item']"))
+    }
+
+    fun deleteItemByText(itemText:String){
+        val allItems = getAllItems()
+        val item = allItems.find{ it.text == itemText }
+        val delButton = item?.findElement<WebElement>(By.tagName("button"))
+        delButton?.click()
+    }
+
     init {
+        if(!driver.currentUrl.startsWith("http://localhost:7659/lists")){
+            //if not on correct page, navigate there when page object inits
+            driver.get("http://localhost:7659")
+        }
         PageFactory.initElements(driver, this)
     }
 }
