@@ -7,6 +7,7 @@ allprojects {
                 url "https://plugins.gradle.org/m2/"
             }
             maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+            maven { url "http://dl.bintray.com/jetbrains/spek" }
         }
     }
 }
@@ -38,7 +39,7 @@ buildscript {
 }
 
 group 'io.kweb'
-version '0.4.12'
+version '0.4.13'
 
 apply plugin: 'java'
 
@@ -53,7 +54,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 junitPlatform {
     filters {
         engines {
-            include 'spek'
+            include 'spek2'
         }
     }
 }
@@ -155,10 +156,10 @@ dependencies {
     integrationTestCompile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.31'
     integrationTestCompile 'com.natpryce:hamkrest:1.4.2.2'
 
-    testCompile ('org.jetbrains.spek:spek-api:1.1.5') {
+    testCompile ('org.spekframework.spek2:spek-dsl-jvm:2.0.5') {
         exclude group: 'org.jetbrains.kotlin'
     }
-    testRuntime ('org.jetbrains.spek:spek-junit-platform-engine:1.1.5') {
+    testRuntime ('org.spekframework.spek2:spek-runner-junit5:2.0.5') {
         exclude group: 'org.junit.platform'
         exclude group: 'org.jetbrains.kotlin'
     }
@@ -166,6 +167,7 @@ dependencies {
 
     testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
 
+    testCompile 'org.amshove.kluent:kluent:1.49'
 
 }
 
