@@ -18,6 +18,8 @@ import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KwebPlugin
+import io.kweb.state.KVar
+import io.kweb.state.ReversableFunction
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
@@ -496,3 +498,4 @@ data class Client2ServerMessage(
 
     data class C2SHistoryStateChange(val newState : String)
 }
+
