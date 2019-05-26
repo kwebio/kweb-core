@@ -104,6 +104,7 @@ sourceSets {
 
 configurations {
     integrationTestCompile.extendsFrom testCompile
+    integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
 }
 
@@ -153,22 +154,24 @@ dependencies {
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
+
     integrationTestCompile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.31'
     integrationTestCompile 'com.natpryce:hamkrest:1.4.2.2'
 
-    testCompile ('org.spekframework.spek2:spek-dsl-jvm:2.0.5') {
-        exclude group: 'org.jetbrains.kotlin'
-    }
-    testRuntime ('org.spekframework.spek2:spek-runner-junit5:2.0.5') {
-        exclude group: 'org.junit.platform'
-        exclude group: 'org.jetbrains.kotlin'
-    }
+
     testImplementation 'org.amshove.kluent:kluent:1.35'
 
     testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
 
     testCompile 'org.amshove.kluent:kluent:1.49'
 
+    integrationTestCompile('net.sourceforge.htmlunit:htmlunit:2.35.0')
+    testImplementation('org.spekframework.spek2:spek-dsl-jvm:2.0.5')
+    testRuntimeOnly('org.spekframework.spek2:spek-runner-junit5:2.0.5')
+    testImplementation('org.amshove.kluent:kluent:1.35')
+    testCompile('org.slf4j:slf4j-api:1.7.+')
+    testCompile("io.github.bonigarcia:selenium-jupiter:3.2.1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
 }
 
 // Needed because there's something messy with kotlin version numbers and dependencies
@@ -188,6 +191,7 @@ configurations.all {
 //configured source directory and uses the correct classpath.
 
 task integrationTest(type: Test) {
+    group "verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     //If you want to ensure that integration tests are run every time when you invoke
