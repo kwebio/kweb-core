@@ -12,12 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import org.openqa.selenium.support.ui.WebDriverWait
-
 
 /**
  * Test for the todoApp demo
@@ -39,20 +38,27 @@ class TodoDemoTest {
             todoKweb.server.close()
         }
 
+        //selenium-jupiter will automatically fall back if the first browser it tries doesn't work
+        //https://bonigarcia.github.io/selenium-jupiter/#generic-driver
         @Options
         var chromeOptions = ChromeOptions().apply {
+            setHeadless(true)
+        }
+
+        @Options
+        var firefoxOptions = FirefoxOptions().apply {
             setHeadless(true)
         }
     }
 
     @Test
-    fun pageRenders(driver:ChromeDriver){
+    fun pageRenders(driver:WebDriver){
         val site = TodoSite(driver)
         site.allElementsExist().shouldBeTrue()
     }
 
     @Test
-    fun enterNewItem(driver:ChromeDriver){
+    fun enterNewItem(driver:WebDriver){
         val todoItem = "Right eyelids closed, both feet behind"
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
@@ -60,7 +66,7 @@ class TodoDemoTest {
     }
 
     @Test
-    fun multipleUsers(driver1:ChromeDriver, driver2:ChromeDriver){
+    fun multipleUsers(driver1:WebDriver, driver2:WebDriver){
         val todoItem = "I aim for tomorrow, work on my mind"
         val site = TodoSite(driver1)
 
@@ -76,7 +82,7 @@ class TodoDemoTest {
     }
 
     @Test
-    fun deleteItems(driver:ChromeDriver){
+    fun deleteItems(driver:WebDriver){
         val firstItem = "We'll be all right"
         val secondItem = "Stay here some time"
         val thirdItem = "This country dog won't die in the city"
