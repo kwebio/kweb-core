@@ -1,6 +1,6 @@
 package io.kweb.demos.todo
 
-import io.github.bonigarcia.seljup.Arguments
+import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
@@ -13,9 +13,11 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import org.openqa.selenium.support.ui.WebDriverWait
+
 
 /**
  * Test for the todoApp demo
@@ -36,16 +38,21 @@ class TodoDemoTest {
         fun teardownServer() {
             todoKweb.server.close()
         }
+
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            setHeadless(true)
+        }
     }
 
     @Test
-    fun pageRenders(@Arguments("--headless") driver:ChromeDriver){
+    fun pageRenders(driver:ChromeDriver){
         val site = TodoSite(driver)
         site.allElementsExist().shouldBeTrue()
     }
 
     @Test
-    fun enterNewItem(@Arguments("--headless") driver:ChromeDriver){
+    fun enterNewItem(driver:ChromeDriver){
         val todoItem = "feel like an ocean, warmed by the sun"
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
@@ -57,8 +64,7 @@ class TodoDemoTest {
     }
 
     @Test
-    fun multipleUsers(@Arguments("--headless") driver1:ChromeDriver,
-                      @Arguments("--headless") driver2:ChromeDriver){
+    fun multipleUsers(driver1:ChromeDriver, driver2:ChromeDriver){
         val todoItem = "bring me a great big flood"
         val site = TodoSite(driver1)
 
@@ -77,7 +83,7 @@ class TodoDemoTest {
     }
 
     @Test
-    fun deleteItems(@Arguments("--headless") driver:ChromeDriver){
+    fun deleteItems(driver:ChromeDriver){
         val firstItem = "We'll be all right"
         val secondItem = "Stay here some time"
         val thirdItem = "This country dog won't die in the city"
