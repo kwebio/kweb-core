@@ -26,7 +26,6 @@ repositories {
 test {
     useJUnitPlatform()
     systemProperty('sel.jup.default.browser', System.getProperty('sel.jup.default.browser'))
-    systemProperty('sel.jup.default.browser.fallback', System.getProperty('sel.jup.default.browser.fallback'))
 }
 
 dependencies {
