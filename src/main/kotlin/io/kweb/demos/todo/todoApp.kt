@@ -170,5 +170,4 @@ class TodoApp {
     }
 
     private fun generateNewUid() = random.nextInt(100_000_000).toString(16)
-
 }

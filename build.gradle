@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 allprojects {
     buildscript {
         repositories {
@@ -229,3 +230,230 @@ task fatJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+=======
+allprojects {
+    buildscript {
+        repositories {
+            jcenter()
+            mavenCentral()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+            maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+            maven { url "http://dl.bintray.com/jetbrains/spek" }
+        }
+    }
+}
+
+buildscript {
+    ext.kotlin_version = '1.3.31'
+    ext.dokka_version = '0.9.17'
+    ext.ktor_version = '1.2.0'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+       // maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+
+    }
+
+
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.3.0'
+    }
+}
+
+group 'io.kweb'
+version '0.4.15'
+
+apply plugin: 'java'
+
+apply plugin: 'kotlin'
+kotlin { experimental { coroutines 'enable' } }
+
+apply plugin: 'maven'
+apply plugin: 'org.jetbrains.dokka'
+apply plugin: "info.solidsoft.pitest"
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+junitPlatform {
+    filters {
+        engines {
+            include 'spek2'
+        }
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://dl.bintray.com/kotlin/ktor"
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
+    jcenter()
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+
+}
+
+configurations {
+    provided
+}
+
+configurations.all {
+    resolutionStrategy {
+      //  force 'org.jetbrains.kotlinx:kotlinx-coroutines-io:0.30.0-eap13'
+    }
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/kotlin')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+dependencies {
+    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+    //////////////////////////////
+    // Kotlin library dependencies
+    //////////////////////////////
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  //  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1'
+
+    // TODO: This should be testCompile
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+    // Should be compileOnly
+    compile group: 'org.hotswapagent', name: 'hotswap-agent-core', version: '1.1.0'
+
+    ////////////////////
+    // Ktor dependencies
+    ////////////////////
+    compile ("io.ktor:ktor-server-core:$ktor_version") {
+        exclude group : 'ch.qos.logback', module : 'logback-classic'
+    }
+
+    compile ("io.ktor:ktor-server-jetty:$ktor_version") {
+        exclude group : 'ch.qos.logback', module : 'logback-classic'
+    }
+    compile("io.ktor:ktor-websockets:$ktor_version") {
+        exclude group : 'ch.qos.logback', module : 'logback-classic'
+    }
+
+    compile('io.mola.galimatias:galimatias:0.2.1')
+
+    compile 'io.github.microutils:kotlin-logging:1.6.24'
+    compile("org.reflections:reflections:0.9.11")
+
+    compile 'com.github.kwebio:shoebox:0.2.27'
+
+    compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
+
+
+    ///////////////////////////
+    // Dependencies for testing
+    ///////////////////////////
+    integrationTestCompile('net.sourceforge.htmlunit:htmlunit:2.35.0')
+    testImplementation('org.spekframework.spek2:spek-dsl-jvm:2.0.5')
+    testRuntimeOnly('org.spekframework.spek2:spek-runner-junit5:2.0.5')
+    testImplementation('org.amshove.kluent:kluent:1.49')
+    testCompile('org.slf4j:slf4j-api:1.7.+')
+    testCompile("io.github.bonigarcia:selenium-jupiter:3.2.1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
+}
+
+// Needed because there's something messy with kotlin version numbers and dependencies
+/*
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.jetbrains.kotlin') {
+                details.useVersion "$kotlin_version"
+            }
+        }
+    }
+}
+*/
+
+//Create the task that runs the integration tests found from the
+//configured source directory and uses the correct classpath.
+
+task integrationTest(type: Test) {
+    group "verification"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    //If you want to ensure that integration tests are run every time when you invoke
+    //this task, uncomment the following line.
+    //outputs.upToDateWhen { false }
+}
+
+//Ensure that the check task fails the build if there are failing integration tests.
+check.dependsOn integrationTest
+//Ensure that our unit tests are run before our integration tests
+integrationTest.mustRunAfter test
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'html'
+    outputDirectory = javadoc.destinationDir
+    inputs.dir 'src/main/kotlin'
+}
+
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+}
+
+// TODO: Figure out why this is needed and remove: https://discourse.corda.net/t/m12-1-intellij-complains-cannot-inline-bytecode-build-with-jvm-target-1-8-into-bytecode-that-is-being-built-with-jvm-target-1-6/1249/3
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'io.kweb.demos.todo.TodoAppKt'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+>>>>>>> fc1b3efa6747f18738ee20b44926275ac3ccf15d
