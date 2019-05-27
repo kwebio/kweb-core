@@ -43,33 +43,26 @@ class TodoDemoTest {
 
     @Test
     fun enterNewItem(driver:WebDriver){
-        val todoItem = "feel like an ocean, warmed by the sun"
+        val todoItem = "Right eyelids closed, both feet behind"
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
-        val itemElem = WebDriverWait(driver, 5).until {
-            driver.findElement<WebElement>(
-                    By.xpath("//div[contains(text(),'$todoItem') and @class='content']"))
-        }
-        itemElem?.isDisplayed?.shouldBeTrue()
+        site.getItemByText(todoItem).isDisplayed.shouldBeTrue()
     }
 
     @Test
     fun multipleUsers(driver1:WebDriver, driver2:WebDriver){
-        val todoItem = "bring me a great big flood"
+        val todoItem = "I aim for tomorrow, work on my mind"
         val site = TodoSite(driver1)
 
         //make sure we go to the same list the first driver was redirected to
         driver2.get(driver1.currentUrl)
+        val site2 = TodoSite(driver2)
 
         //after both pages have loaded, add item via first driver
         site.addTodoItem(todoItem)
 
         //make sure it appears for second driver
-        val itemElem = WebDriverWait(driver2, 5).until {
-            driver2.findElement<WebElement>(
-                    By.xpath("//div[contains(text(),'$todoItem') and @class='content']"))
-        }
-        itemElem?.isDisplayed?.shouldBeTrue()
+        site2.getItemByText(todoItem).isDisplayed.shouldBeTrue()
     }
 
     @Test
@@ -122,11 +115,21 @@ class TodoSite(private val driver: WebDriver){
         return driver.findElements<WebElement>(By.xpath("//div[@class='item']"))
     }
 
+    /**
+     * Returns the webelement for a single item in the todolist.
+     * Waits 5 seconds for it to appear, then throws ElementNotFoundException.
+     * itemText cannot contain single quotes (') because those are used in the xpath to delimit the search string
+     */
+    fun getItemByText(itemText:String) : WebElement {
+        return WebDriverWait(driver, 5).until {
+            driver.findElement(By.xpath("//div[contains(descendant::text(),'$itemText') and @class='item']"))
+        }
+    }
+
     fun deleteItemByText(itemText:String){
-        val allItems = getAllItems()
-        val item = allItems.find{ it.text == itemText }
-        val delButton = item?.findElement<WebElement>(By.tagName("button"))
-        delButton?.click()
+        val item = getItemByText(itemText)
+        val delButton = item.findElement<WebElement>(By.tagName("button"))
+        delButton.click()
     }
 
     init {
