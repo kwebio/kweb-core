@@ -12,7 +12,7 @@ allprojects {
 
 buildscript {
     ext.kotlin_version = '1.3.31'
-    ext.dokka_version = '0.9.18'
+    ext.dokka_version = '0.9.17'
     ext.ktor_version = '1.2.0'
 
     repositories {
@@ -48,6 +48,14 @@ apply plugin: 'maven'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: "info.solidsoft.pitest"
 apply plugin: 'org.junit.platform.gradle.plugin'
+
+junitPlatform {
+    filters {
+        engines {
+            include 'spek2'
+        }
+    }
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -91,14 +99,14 @@ sourceSets {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
 
 configurations {
     integrationTestCompile.extendsFrom testCompile
+    integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntime.extendsFrom testRuntime
-}
-
-test {
-    useJUnitPlatform()
 }
 
 dependencies {
@@ -149,8 +157,17 @@ dependencies {
     ///////////////////////////
 
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
-}
 
+    testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+
+    integrationTestCompile('net.sourceforge.htmlunit:htmlunit:2.35.0')
+    testImplementation('org.spekframework.spek2:spek-dsl-jvm:2.0.5')
+    testRuntimeOnly('org.spekframework.spek2:spek-runner-junit5:2.0.5')
+    testImplementation('org.amshove.kluent:kluent:1.35')
+    testCompile('org.slf4j:slf4j-api:1.7.+')
+    testCompile("io.github.bonigarcia:selenium-jupiter:3.2.1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
+}
 
 // Needed because there's something messy with kotlin version numbers and dependencies
 /*
@@ -169,6 +186,7 @@ configurations.all {
 //configured source directory and uses the correct classpath.
 
 task integrationTest(type: Test) {
+    group "verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     //If you want to ensure that integration tests are run every time when you invoke
