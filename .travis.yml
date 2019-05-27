@@ -5,7 +5,7 @@ addons:
   chrome: stable
 
 script:
-  - ./gradlew build --scan -s
+  - ./gradlew build --scan -s -Dsel.jup.default.browser=chrome
 
 notifications:
   email:
