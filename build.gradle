@@ -6,15 +6,13 @@ allprojects {
             maven {
                 url "https://plugins.gradle.org/m2/"
             }
-            maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-            maven { url "http://dl.bintray.com/jetbrains/spek" }
         }
     }
 }
 
 buildscript {
     ext.kotlin_version = '1.3.31'
-    ext.dokka_version = '0.9.17'
+    ext.dokka_version = '0.9.18'
     ext.ktor_version = '1.2.0'
 
     repositories {
@@ -50,14 +48,6 @@ apply plugin: 'maven'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: "info.solidsoft.pitest"
 apply plugin: 'org.junit.platform.gradle.plugin'
-
-junitPlatform {
-    filters {
-        engines {
-            include 'spek2'
-        }
-    }
-}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -107,6 +97,10 @@ configurations {
     integrationTestRuntime.extendsFrom testRuntime
 }
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
@@ -153,23 +147,10 @@ dependencies {
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    integrationTestCompile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.31'
-    integrationTestCompile 'com.natpryce:hamkrest:1.4.2.2'
 
-    testCompile ('org.spekframework.spek2:spek-dsl-jvm:2.0.5') {
-        exclude group: 'org.jetbrains.kotlin'
-    }
-    testRuntime ('org.spekframework.spek2:spek-runner-junit5:2.0.5') {
-        exclude group: 'org.junit.platform'
-        exclude group: 'org.jetbrains.kotlin'
-    }
-    testImplementation 'org.amshove.kluent:kluent:1.35'
-
-    testCompile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
-
-    testCompile 'org.amshove.kluent:kluent:1.49'
-
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
 }
+
 
 // Needed because there's something messy with kotlin version numbers and dependencies
 /*
