@@ -53,8 +53,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
   //  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.2.1'
 
     compileOnly 'org.hotswapagent:hotswap-agent-core:1.1.0'
 
@@ -78,7 +78,6 @@ dependencies {
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-
     compile 'org.amshove.kluent:kluent:1.49'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
     testCompile('org.slf4j:slf4j-api:1.7.+')
