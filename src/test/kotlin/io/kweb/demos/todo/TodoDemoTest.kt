@@ -1,5 +1,6 @@
 package io.kweb.demos.todo
 
+import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import org.openqa.selenium.support.ui.WebDriverWait
@@ -37,25 +39,26 @@ class TodoDemoTest {
     }
 
     @Test
-    fun pageRenders(driver:WebDriver){
+    fun pageRenders(@Arguments("--headless") driver:ChromeDriver){
         val site = TodoSite(driver)
         site.allElementsExist().shouldBeTrue()
     }
 
     @Test
-    fun enterNewItem(driver:WebDriver){
+    fun enterNewItem(@Arguments("--headless") driver:ChromeDriver){
         val todoItem = "feel like an ocean, warmed by the sun"
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
         val itemElem = WebDriverWait(driver, 5).until {
-            driver.findElement<WebElement>(
+            driver.findElement(
                     By.xpath("//div[contains(text(),'$todoItem') and @class='content']"))
         }
         itemElem?.isDisplayed?.shouldBeTrue()
     }
 
     @Test
-    fun multipleUsers(driver1:WebDriver, driver2:WebDriver){
+    fun multipleUsers(@Arguments("--headless") driver1:ChromeDriver,
+                      @Arguments("--headless") driver2:ChromeDriver){
         val todoItem = "bring me a great big flood"
         val site = TodoSite(driver1)
 
@@ -67,14 +70,14 @@ class TodoDemoTest {
 
         //make sure it appears for second driver
         val itemElem = WebDriverWait(driver2, 5).until {
-            driver2.findElement<WebElement>(
+            driver2.findElement(
                     By.xpath("//div[contains(text(),'$todoItem') and @class='content']"))
         }
         itemElem?.isDisplayed?.shouldBeTrue()
     }
 
     @Test
-    fun deleteItems(driver:WebDriver){
+    fun deleteItems(@Arguments("--headless") driver:ChromeDriver){
         val firstItem = "We'll be all right"
         val secondItem = "Stay here some time"
         val thirdItem = "This country dog won't die in the city"
