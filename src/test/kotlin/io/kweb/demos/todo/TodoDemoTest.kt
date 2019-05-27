@@ -1,5 +1,6 @@
+package io.kweb.demos.todo
+
 import io.github.bonigarcia.seljup.SeleniumExtension
-import io.kweb.demos.todo.TodoApp
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldNotBeNull
