@@ -129,11 +129,12 @@ dependencies {
     ///////////////////////////
 
     compile 'org.amshove.kluent:kluent:1.49'
-    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+    testCompile 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
     testCompile('org.slf4j:slf4j-api:1.7.+')
     
-    testCompile("io.github.bonigarcia:selenium-jupiter:3.2.1")
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
+    testCompile "io.github.bonigarcia:selenium-jupiter:3.2.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.1"
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
@@ -150,14 +151,14 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
 artifacts {
     archives javadocJar
 }
-/*
+
 // TODO: Figure out why this is needed and remove: https://discourse.corda.net/t/m12-1-intellij-complains-cannot-inline-bytecode-build-with-jvm-target-1-8-into-bytecode-that-is-being-built-with-jvm-target-1-6/1249/3
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         jvmTarget = "1.8"
     }
 }
-*/
+
 task fatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'io.kweb.demos.todo.TodoAppKt'
