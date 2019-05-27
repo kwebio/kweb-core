@@ -1,7 +1,6 @@
 package io.kweb.state
 
 import io.kotlintest.specs.FreeSpec
-import io.kotlintest.specs.StringSpec
 import org.amshove.kluent.shouldEqual
 
 /**
