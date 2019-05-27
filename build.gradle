@@ -76,24 +76,10 @@ sourceSets {
     test.compileClasspath += configurations.provided
     test.runtimeClasspath += configurations.provided
 
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/kotlin')
-        }
-        resources.srcDir file('src/integration-test/resources')
-    }
 }
 
 test {
     useJUnitPlatform()
-}
-
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -150,36 +136,6 @@ dependencies {
     testCompile("io.github.bonigarcia:selenium-jupiter:3.2.1")
     testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
 }
-
-// Needed because there's something messy with kotlin version numbers and dependencies
-/*
-configurations.all {
-    resolutionStrategy {
-        eachDependency { DependencyResolveDetails details ->
-            if (details.requested.group == 'org.jetbrains.kotlin') {
-                details.useVersion "$kotlin_version"
-            }
-        }
-    }
-}
-*/
-
-//Create the task that runs the integration tests found from the
-//configured source directory and uses the correct classpath.
-
-task integrationTest(type: Test) {
-    group "verification"
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    //If you want to ensure that integration tests are run every time when you invoke
-    //this task, uncomment the following line.
-    //outputs.upToDateWhen { false }
-}
-
-//Ensure that the check task fails the build if there are failing integration tests.
-check.dependsOn integrationTest
-//Ensure that our unit tests are run before our integration tests
-integrationTest.mustRunAfter test
 
 task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
     outputFormat = 'html'
