@@ -56,24 +56,14 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1'
 
-    // TODO: This should be testCompile
-    compile 'ch.qos.logback:logback-classic:1.+'
-    // Should be compileOnly
-    compile 'org.hotswapagent:hotswap-agent-core:1.1.0'
+    compileOnly 'org.hotswapagent:hotswap-agent-core:1.1.0'
 
     ////////////////////
     // Ktor dependencies
     ////////////////////
-    compile ("io.ktor:ktor-server-core:$ktor_version") {
-        exclude group : 'ch.qos.logback', module : 'logback-classic'
-    }
-
-    compile ("io.ktor:ktor-server-jetty:$ktor_version") {
-        exclude group : 'ch.qos.logback', module : 'logback-classic'
-    }
-    compile("io.ktor:ktor-websockets:$ktor_version") {
-        exclude group : 'ch.qos.logback', module : 'logback-classic'
-    }
+    compile "io.ktor:ktor-server-core:$ktor_version"
+    compile "io.ktor:ktor-server-jetty:$ktor_version"
+    compile "io.ktor:ktor-websockets:$ktor_version"
 
     compile 'io.mola.galimatias:galimatias:0.2.1'
 
