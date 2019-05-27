@@ -44,8 +44,8 @@ test {
 
 dependencies {
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile 'org.apache.commons:commons-lang3:3.0'
+    compile 'commons-io:commons-io:2.6'
 
     //////////////////////////////
     // Kotlin library dependencies
@@ -57,9 +57,9 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1'
 
     // TODO: This should be testCompile
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+    compile 'ch.qos.logback:logback-classic:1.+'
     // Should be compileOnly
-    compile group: 'org.hotswapagent', name: 'hotswap-agent-core', version: '1.1.0'
+    compile 'org.hotswapagent:hotswap-agent-core:1.1.0'
 
     ////////////////////
     // Ktor dependencies
@@ -75,10 +75,10 @@ dependencies {
         exclude group : 'ch.qos.logback', module : 'logback-classic'
     }
 
-    compile('io.mola.galimatias:galimatias:0.2.1')
+    compile 'io.mola.galimatias:galimatias:0.2.1'
 
     compile 'io.github.microutils:kotlin-logging:1.6.24'
-    compile("org.reflections:reflections:0.9.11")
+    compile "org.reflections:reflections:0.9.11"
 
     compile 'com.github.kwebio:shoebox:0.2.27'
 
