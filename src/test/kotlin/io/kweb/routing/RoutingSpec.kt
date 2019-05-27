@@ -1,22 +1,22 @@
 package io.kweb.routing
 
 import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotlintest.specs.FreeSpec
 import io.kweb.state.*
 
 /**
  * Created by ian on 4/30/17.
  */
 
-object RoutingSpec : StringSpec({
-    "a simple KVar list where a subList is created" {
+class RoutingSpec : FreeSpec({
+    "a simple KVar list where a subList is created" - {
         val list = KVar(listOf(1, 2, 3, 4))
         val sublist = list.subList(1, 3)
         "should be the correct subList" {
             sublist.value shouldBe listOf(2, 3)
         }
     }
-    "a simple KVar list where a subList is created and modified" {
+    "a simple KVar list where a subList is created and modified" - {
         val list = KVar(listOf(1, 2, 3, 4))
         val sublist = list.subList(1, 3)
         sublist.value = listOf(8, 9, 10)

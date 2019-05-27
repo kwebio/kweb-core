@@ -1,15 +1,16 @@
 package io.kweb.state
 
+import io.kotlintest.specs.FreeSpec
 import io.kotlintest.specs.StringSpec
 import org.amshove.kluent.shouldEqual
 
 /**
  * Created by ian on 6/18/17.
  */
-object StateSpec : StringSpec({
-    "KVal" {
+class StateSpec : FreeSpec({
+    "KVal" - {
         val readOnlyBindable = KVal("Test")
-        "retrieving its value" {
+        "retrieving its value" - {
             val value = readOnlyBindable.value
             "should match the value it was initialized with" {
                 readOnlyBindable.value shouldEqual "Test"
@@ -17,7 +18,7 @@ object StateSpec : StringSpec({
         }
     }
 
-    "A simple string KVar" {
+    "A simple string KVar" - {
         val kvar = KVar("Foo")
         var old: String? = null
         var new: String? = null
@@ -27,7 +28,7 @@ object StateSpec : StringSpec({
             old = o
             new = n
         }
-        "KVar modified with listener" {
+        "KVar modified with listener" - {
             "value is modified" {
                 kvar.value = "Bar"
             }
@@ -36,11 +37,11 @@ object StateSpec : StringSpec({
                 new shouldEqual "Bar"
             }
         }
-        "removing the listener and modifying the value again" {
-            "Listener is removed" {
+        "removing the listener and modifying the value again" - {
+            "Listener is removed" - {
                 kvar.removeListener(handle)
             }
-            "value is modified" {
+            "value is modified" - {
                 kvar.value = "FooBar"
             }
             "listener shouldn't have been called" {
@@ -49,7 +50,7 @@ object StateSpec : StringSpec({
             }
         }
 
-        "creating a one-way mapping" {
+        "creating a one-way mapping" - {
             val mappedBindable = kvar.map { it.length }
 
             "original KVar is modified" {
@@ -61,7 +62,7 @@ object StateSpec : StringSpec({
         }
     }
 
-    "Two-way mapping on KVar" {
+    "Two-way mapping on KVar" - {
         val lowerCaseVar = KVar("foo")
         val upperCaseVar = lowerCaseVar.map(object : ReversableFunction<String, String>("upperCase") {
             override fun invoke(from: String) = from.toUpperCase()
@@ -69,7 +70,7 @@ object StateSpec : StringSpec({
             override fun reverse(original: String, change: String) = change.toLowerCase()
 
         })
-        "Mapping from original to target" {
+        "Mapping from original to target" - {
 
             "original KVar is modified" {
                 lowerCaseVar.value = "one"
@@ -79,7 +80,7 @@ object StateSpec : StringSpec({
                 value shouldEqual "ONE"
             }
         }
-        "Mapping from target to original" {
+        "Mapping from target to original" - {
             "target KVar is modified" {
                 upperCaseVar.value = "TWO"
             }
