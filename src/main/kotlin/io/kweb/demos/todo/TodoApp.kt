@@ -32,7 +32,7 @@ class TodoApp {
 
     init {
 
-        /** Create a Kweb instance, and configure it to use the Semantic
+        /** Create a Kweb instance, and configure it to use the Fomantic
          * UI framework. Build a simple to-do list app listening on
          * http://localhost:7659/
          * */
