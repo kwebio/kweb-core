@@ -15,7 +15,7 @@ import java.util.concurrent.*
 
 private val logger = KotlinLogging.logger {}
 
-fun <T : Any?> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean = false, renderer : ElementCreator<Element>.(T) -> Unit) {
+fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, cacheOnClient: Boolean = false, renderer: ElementCreator<Element>.(T) -> Unit) {
     var childEC = ElementCreator(this.parent, this)
     val cachedClientECs = if (cacheOnClient) ConcurrentHashMap<T, ElementCreator<Element>>() else null
 
@@ -33,7 +33,7 @@ fun <T : Any?> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean 
                         }
                     }
                 }
-                childEC.elementsCreated.forEach {  it.setAttribute("style", "display:none") }
+                childEC.elementsCreated.forEach { it.setAttribute("style", "display:none") }
             } else {
                 childEC.cleanup()
             }
@@ -52,7 +52,7 @@ fun <T : Any?> ElementCreator<*>.render(kval : KVal<T>, cacheOnClient : Boolean 
                         }
                     }
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 logger.warn("Exception thrown by renderer while re-rendering $oldValue to $newValue", e)
             }
         }
@@ -73,7 +73,8 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
     w.addListener { _, n ->
         require(this.browser.kweb.isNotCatchingOutbound()) {
             """You appear to be modifying Shoebox state from within an onImmediate callback, which
-                |should only make simple modifications to the DOM.""".trimMargin() }
+                |should only make simple modifications to the DOM.""".trimMargin()
+        }
         shoebox[key] = n
     }
     val changeHandle = shoebox.onChange(key) { _, n, _ -> w.value = n }
@@ -84,16 +85,16 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
     return w
 }
 
-private data class ItemInfo<ITEM : Any>(val creator : ElementCreator<Element>, val KVar: KVar<ITEM>)
+private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, val KVar: KVar<ITEM>)
 
-data class IndexedItem<I>(val index : Int, val total : Int, val item : I)
+data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
 /**
  *
  *
  * @sample ordered_view_set_sample
  */
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer : ElementCreator<EL>.(KVar<ITEM>) -> Unit) {
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit) {
     val items = CopyOnWriteArrayList<ItemInfo<ITEM>>()
     for (keyValue in orderedViewSet.keyValueEntries) {
         items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
@@ -122,8 +123,8 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
 
 private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
         orderedViewSet: OrderedViewSet<ITEM>,
-        keyValue : KeyValue<ITEM>,
-        renderer : ElementCreator<EL>.(KVar<ITEM>) -> Unit,
+        keyValue: KeyValue<ITEM>,
+        renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit,
         insertAtPosition: Int?)
         : ItemInfo<ITEM> {
     val itemElementCreator = ElementCreator(this.parent, this, insertAtPosition)
@@ -153,7 +154,8 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
 }
 
 fun ordered_view_set_sample() {
-    data class Cat(val name : String, val color : String)
+    data class Cat(val name: String, val color: String)
+
     val cats = Shoebox<Cat>()
     val catColorView = cats.view("catColors", Cat::color)
     Kweb(port = 1234) {
@@ -166,3 +168,4 @@ fun ordered_view_set_sample() {
         }
     }
 }
+
