@@ -13,8 +13,6 @@ import kotlin.reflect.KClass
 
 val random = Random()
 
-val ROOT_PATH = ""
-
 fun createNonce(length : Int = 6) : String {
     val ar = ByteArray(size = length*2)
     random.nextBytes(ar)
@@ -23,11 +21,7 @@ fun createNonce(length : Int = 6) : String {
 
 val gson = Gson()
 
-val gsonPP = GsonBuilder().setPrettyPrinting().create()
-
 val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledThreadPool(5)
-
-fun wait(delay: Long, unit : TimeUnit, toRun : () -> Unit): ScheduledFuture<*> = scheduledExecutorService.schedule(toRun, delay, unit)
 
 fun String.escapeEcma() =  StringEscapeUtils.escapeEcmaScript(this)!!
 
