@@ -64,7 +64,7 @@ dependencies {
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    compile 'org.amshove.kluent:kluent:1.49'
+    testCompile 'org.amshove.kluent:kluent:1.49'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
     testCompile 'org.slf4j:slf4j-api:1.7.+'
     testCompile "io.github.bonigarcia:selenium-jupiter:3.2.1"
