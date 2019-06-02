@@ -19,7 +19,6 @@ import kotlin.reflect.KClass
 @DslMarker
 annotation class KWebDSL
 
-
 // TODO: Explicit support for global attributes from http://www.w3schools.com/tags/ref_standardattributes.asp
 // TODO: These should probably be accessed via a field like element.attr[GlobalAttributes.hidden], possibly
 // TODO: using generics to ensure the correct return-type

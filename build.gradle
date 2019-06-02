@@ -56,7 +56,7 @@ dependencies {
     compile 'io.github.microutils:kotlin-logging:1.6.24'
     compile "org.reflections:reflections:0.9.11"
 
-    compile 'com.github.kwebio:shoebox:0.2.27'
+    compile 'com.github.kwebio:shoebox:0.2.28'
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
