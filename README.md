@@ -6,8 +6,6 @@ Kweb is a new way to create beautiful, efficient, and scalable websites in Kotli
 
 Please see [Kweb user manual](http://docs.kweb.io/) for more information.
 
-This is the main Kweb source code.
-
 This chart shows the number of people who have starred this repository, over time, likely a good indicator of interest:
 
 [![Stargazers over time](https://starchart.cc/kwebio/core.svg)](https://starchart.cc/kwebio/core)
