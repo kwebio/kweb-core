@@ -103,12 +103,12 @@ class Kweb(val port: Int,
 
         server = embeddedServer(Jetty, port) {
             install(DefaultHeaders)
-          //  install(CallLogging)
             install(Compression)
             install(WebSockets) {
                 pingPeriod = Duration.ofSeconds(10)
                 timeout = Duration.ofSeconds(30)
             }
+            plugins.forEach { it.ktorApplicationConfigurator(this) }
             routing {
 
                 static("static") {

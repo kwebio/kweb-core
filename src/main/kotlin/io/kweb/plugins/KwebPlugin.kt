@@ -1,5 +1,6 @@
 package io.kweb.plugins
 
+import io.ktor.application.Application
 import io.ktor.routing.Routing
 import io.kweb.dom.element.Element
 import java.util.*
@@ -12,6 +13,10 @@ abstract class KwebPlugin(val dependsOn: Set<KwebPlugin> = Collections.emptySet(
     abstract fun decorate(startHead: StringBuilder, endHead: StringBuilder)
 
     open fun executeAfterPageCreation() = ""
+
+    open fun ktorApplicationConfigurator(applicationHandler : Application) {
+
+    }
 
     open fun appServerConfigurator(routeHandler : Routing) {
 
