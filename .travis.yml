@@ -6,6 +6,7 @@ addons:
 
 script:
   - ./gradlew build --scan -s -Dsel.jup.default.browser=chrome
+  - ./gradlew test --rerun-tasks -Dsel.jup.default.browser=firefox
 
 notifications:
   email:
