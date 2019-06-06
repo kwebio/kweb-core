@@ -145,8 +145,13 @@
 
                     console.error("WebSocket was closed", explanation, evt);
                     websocketEstablished = false;
-                    console.warn("Forcing page reload");
-                    location.reload(true);
+                    if (evt.wasClean){
+                        console.warn("Attempting reconnect...")
+                        connectWs()
+                    } else {
+                        console.warn("Forcing page reload");
+                        location.reload(true);
+                    }
                     //     setTimeout(function() { location.reload(true); }, 5000);
                 };
                 socket.onerror = function(evt) {
