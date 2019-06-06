@@ -4,6 +4,7 @@ import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldNotBeEqualTo
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -24,7 +25,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 @ExtendWith(SeleniumExtension::class)
 class TodoDemoTest {
     companion object {
-        lateinit var todoKweb:TodoApp
+        private lateinit var todoKweb:TodoApp
 
         @JvmStatic
         @BeforeAll
@@ -98,6 +99,14 @@ class TodoDemoTest {
         allItems.find{it.text == firstItem}.shouldNotBeNull()
         allItems.find{it.text == secondItem}.shouldBeNull()
         allItems.find{it.text == thirdItem}.shouldNotBeNull()
+    }
+
+    @Test
+    fun navigateToNewSite(driver:WebDriver){
+        driver.get("http://localhost:7659")
+        val firstSiteUrl = driver.currentUrl
+        driver.get("http://localhost:7659")
+        driver.currentUrl.shouldNotBeEqualTo(firstSiteUrl)
     }
 }
 
