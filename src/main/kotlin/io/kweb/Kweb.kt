@@ -18,8 +18,6 @@ import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KwebPlugin
-import io.kweb.state.KVar
-import io.kweb.state.ReversableFunction
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
@@ -97,6 +95,8 @@ class Kweb(val port: Int,
         val startHeadBuilder = StringBuilder()
         val endHeadBuilder = StringBuilder()
 
+        val bootstrapHtmlTemplate : String
+
         if (refreshPageOnHotswap) {
             KwebHotswapPlugin.addHotswapReloadListener({ refreshAllPages() })
         }
@@ -111,7 +111,7 @@ class Kweb(val port: Int,
             plugins.forEach { it.ktorApplicationConfigurator(this) }
             routing {
 
-                static("static") {
+                static("static") { // FIXME: Is this being used?
                     resources("static")
                 }
 
@@ -147,124 +147,9 @@ class Kweb(val port: Int,
                     files("images")
                 }
 
-                get("/{visitedUrl...}") {
-                    val kwebSessionId = createNonce()
+                listenForHTTPConnection(bootstrapHtmlTemplate)
 
-                    val remoteClientState = clientState.getOrPut(kwebSessionId) {
-                        RemoteClientState(id = kwebSessionId, clientConnection = KwebClientConnection.Caching())
-                    }
-
-                    val httpRequestInfo = HttpRequestInfo(call.request)
-
-                    try {
-                        if (debug) {
-                            warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
-                                logger.warn {"buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms.  More info at DEBUG loglevel"}
-
-                                val logStatementBuilder = StringBuilder()
-                                logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
-
-                                thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
-                                val logStatement = logStatementBuilder.toString()
-                                logger.debug { logStatement }
-                            }) {
-                                try {
-                                    buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
-                                } catch (e: Exception) {
-                                    logger.error("Exception thrown building page", e)
-                                }
-                                logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
-                            }
-                        } else {
-                            try {
-                                buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
-                            } catch (e: Exception) {
-                                logger.error("Exception thrown building page", e)
-                            }
-                            logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
-                        }
-                        for (plugin in plugins) {
-                            execute(kwebSessionId, plugin.executeAfterPageCreation())
-                        }
-
-                        val initialCachedMessages = remoteClientState.clientConnection as Caching
-
-                        remoteClientState.clientConnection = Caching()
-
-                        val bootstrapHtml = bootstrapHtmlTemplate
-                                .replace("--CLIENT-ID-PLACEHOLDER--", kwebSessionId)
-                                .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", initialCachedMessages.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
-
-                        call.respondText(bootstrapHtml, ContentType.Text.Html)
-                    } catch (nfe: NotFoundException) {
-                        call.response.status(HttpStatusCode.NotFound)
-                        call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
-                    } catch (e: Exception) {
-                        val logToken = random.nextLong().toString(16)
-
-                        logger.error(e) { "Exception thrown while rendering page, code $logToken" }
-
-                        call.response.status(HttpStatusCode.InternalServerError)
-                        call.respondText("""
-                        Internal Server Error.
-
-                        Please include code $logToken in any message report to help us track it down.
-""".trimIndent())
-                    }
-                }
-
-                webSocket("/ws") {
-
-                    val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
-
-                    if (hello.hello == null) {
-                        throw RuntimeException("First message from client isn't 'hello'")
-                    }
-
-                    val remoteClientState = clientState.get(hello.id)
-                            ?: throw RuntimeException("Unable to find server state corresponding to client id ${hello.id}")
-
-                    assert(remoteClientState.clientConnection is Caching)
-                    logger.debug("Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache")
-                    val oldConnection = remoteClientState.clientConnection as Caching
-                    val webSocketClientConnection = KwebClientConnection.WebSocket(this)
-                    remoteClientState.clientConnection = webSocketClientConnection
-                    logger.debug("Set clientConnection for ${remoteClientState.id} to WebSocket")
-                    oldConnection.read().forEach { webSocketClientConnection.send(it) }
-
-
-                    try {
-                        for (frame in incoming) {
-                            try {
-                                logger.debug { "Message received from client" }
-
-                                if (frame is Text) {
-                                    val message = gson.fromJson<Client2ServerMessage>(frame.readText())
-                                    if (message.error != null) {
-                                        handleError(message.error, remoteClientState)
-                                    } else {
-                                        when {
-                                            message.callback != null -> {
-                                                val (resultId, result) = message.callback
-                                                val resultHandler = remoteClientState.handlers[resultId]
-                                                        ?: throw RuntimeException("No data handler for $resultId for client ${remoteClientState.id}")
-                                                resultHandler(result ?: "")
-                                            }
-                                            message.historyStateChange != null -> {
-                                                
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (e: Exception) {
-                                logger.error("Exception while receiving websocket message", e)
-                            }
-                        }
-                    } finally {
-                        logger.info("WS session disconnected for client id: ${remoteClientState.id}")
-                        remoteClientState.clientConnection = Caching()
-                    }
-                }
+                listenForWebsocketConnection()
             }
         }
 
@@ -275,6 +160,129 @@ class Kweb(val port: Int,
             while(true) {
                 delay(Duration.ofMinutes(1))
                 cleanUpOldClientStates()
+            }
+        }
+    }
+
+    private fun Routing.listenForWebsocketConnection() {
+        webSocket("/ws") {
+
+            val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
+
+            if (hello.hello == null) {
+                throw RuntimeException("First message from client isn't 'hello'")
+            }
+
+            val remoteClientState = clientState.get(hello.id)
+                    ?: throw RuntimeException("Unable to find server state corresponding to client id ${hello.id}")
+
+            assert(remoteClientState.clientConnection is Caching)
+            logger.debug("Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache")
+            val oldConnection = remoteClientState.clientConnection as Caching
+            val webSocketClientConnection = KwebClientConnection.WebSocket(this)
+            remoteClientState.clientConnection = webSocketClientConnection
+            logger.debug("Set clientConnection for ${remoteClientState.id} to WebSocket")
+            oldConnection.read().forEach { webSocketClientConnection.send(it) }
+
+
+            try {
+                for (frame in incoming) {
+                    try {
+                        logger.debug { "Message received from client" }
+
+                        if (frame is Text) {
+                            val message = gson.fromJson<Client2ServerMessage>(frame.readText())
+                            if (message.error != null) {
+                                handleError(message.error, remoteClientState)
+                            } else {
+                                when {
+                                    message.callback != null -> {
+                                        val (resultId, result) = message.callback
+                                        val resultHandler = remoteClientState.handlers[resultId]
+                                                ?: throw RuntimeException("No data handler for $resultId for client ${remoteClientState.id}")
+                                        resultHandler(result ?: "")
+                                    }
+                                    message.historyStateChange != null -> {
+
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        logger.error("Exception while receiving websocket message", e)
+                    }
+                }
+            } finally {
+                logger.info("WS session disconnected for client id: ${remoteClientState.id}")
+                remoteClientState.clientConnection = Caching()
+            }
+        }
+    }
+
+    private fun Routing.listenForHTTPConnection(bootstrapHtmlTemplate: String) {
+        get("/{visitedUrl...}") {
+            val kwebSessionId = createNonce()
+
+            val remoteClientState = clientState.getOrPut(kwebSessionId) {
+                RemoteClientState(id = kwebSessionId, clientConnection = Caching())
+            }
+
+            val httpRequestInfo = HttpRequestInfo(call.request)
+
+            try {
+                if (debug) {
+                    warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
+                        logger.warn { "buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms.  More info at DEBUG loglevel" }
+
+                        val logStatementBuilder = StringBuilder()
+                        logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
+
+                        thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
+                        val logStatement = logStatementBuilder.toString()
+                        logger.debug { logStatement }
+                    }) {
+                        try {
+                            buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
+                        } catch (e: Exception) {
+                            logger.error("Exception thrown building page", e)
+                        }
+                        logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
+                    }
+                } else {
+                    try {
+                        buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
+                    } catch (e: Exception) {
+                        logger.error("Exception thrown building page", e)
+                    }
+                    logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
+                }
+                for (plugin in plugins) {
+                    execute(kwebSessionId, plugin.executeAfterPageCreation())
+                }
+
+                val initialCachedMessages = remoteClientState.clientConnection as Caching
+
+                remoteClientState.clientConnection = Caching()
+
+                val bootstrapHtml = bootstrapHtmlTemplate
+                        .replace("--CLIENT-ID-PLACEHOLDER--", kwebSessionId)
+                        .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", initialCachedMessages.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
+
+                call.respondText(bootstrapHtml, ContentType.Text.Html)
+            } catch (nfe: NotFoundException) {
+                call.response.status(HttpStatusCode.NotFound)
+                call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
+            } catch (e: Exception) {
+                val logToken = random.nextLong().toString(16)
+
+                logger.error(e) { "Exception thrown while rendering page, code $logToken" }
+
+                call.response.status(HttpStatusCode.InternalServerError)
+                call.respondText("""
+                            Internal Server Error.
+
+                            Please include code $logToken in any message report to help us track it down.
+    """.trimIndent())
             }
         }
     }
