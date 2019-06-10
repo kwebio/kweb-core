@@ -144,8 +144,8 @@ class Kweb(val port: Int,
         }
     }
 
-    private fun Routing.listenForWebsocketConnection() {
-        webSocket("/ws") {
+    private fun Routing.listenForWebsocketConnection(path : String = "/ws") {
+        webSocket(path) {
 
             val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
 
