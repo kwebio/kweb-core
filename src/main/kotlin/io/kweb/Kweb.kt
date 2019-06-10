@@ -6,7 +6,6 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.readText
-import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.respondText
 import io.ktor.routing.*
@@ -17,7 +16,6 @@ import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.client.*
-import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
@@ -26,7 +24,6 @@ import java.io.*
 import java.time.*
 import java.util.*
 import java.util.concurrent.*
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 
 /**
@@ -87,24 +84,9 @@ class Kweb(val port: Int,
             }
             plugins.forEach { it.ktorApplicationConfigurator(this) }
 
-            val startHeadBuilder = StringBuilder()
-            val endHeadBuilder = StringBuilder()
-
             routing {
 
-                for (plugin in plugins) {
-                    applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
-                }
-
-                val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.html")
-                val bootstrapHtmlTemplate = IOUtils.toString(resourceStream, Charsets.UTF_8)
-                        .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
-                        .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
-
-
-                static("static") { // FIXME: Is this being used?
-                    resources("static")
-                }
+                val bootstrapHtmlTemplate = generateHTMLTemplate()
 
                 get("/robots.txt") {
                     call.response.status(HttpStatusCode.NotFound)
@@ -115,13 +97,6 @@ class Kweb(val port: Int,
                     call.response.status(HttpStatusCode.NotFound)
                     call.respondText("favicons not currently supported by kweb")
                 }
-
-                static("/static") { // FIXME: Not sure that this is being used either
-                    // When running under IDEA make sure that working directory is set to this sample's project folder
-                    staticRootFolder = File("static")
-                    files("images")
-                }
-
 
 
                 // Setup default KWeb routing.
@@ -142,6 +117,21 @@ class Kweb(val port: Int,
                 cleanUpOldClientStates()
             }
         }
+    }
+
+    private fun Routing.generateHTMLTemplate(): String {
+        val startHeadBuilder = StringBuilder()
+        val endHeadBuilder = StringBuilder()
+
+        for (plugin in plugins) {
+            applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
+        }
+
+        val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.html")
+        val bootstrapHtmlTemplate = IOUtils.toString(resourceStream, Charsets.UTF_8)
+                .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
+                .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
+        return bootstrapHtmlTemplate
     }
 
     private fun Routing.listenForWebsocketConnection(path : String = "/ws") {
