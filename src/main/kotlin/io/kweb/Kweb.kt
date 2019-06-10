@@ -64,6 +64,8 @@ class Kweb(val port: Int,
 ) : Closeable {
 
     private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
+
+
     private val mutableAppliedPlugins: MutableSet<KwebPlugin> = HashSet()
     val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
 
@@ -90,6 +92,16 @@ class Kweb(val port: Int,
 
             routing {
 
+                for (plugin in plugins) {
+                    applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
+                }
+
+                val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.html")
+                val bootstrapHtmlTemplate = IOUtils.toString(resourceStream, Charsets.UTF_8)
+                        .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
+                        .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
+
+
                 static("static") { // FIXME: Is this being used?
                     resources("static")
                 }
@@ -110,16 +122,7 @@ class Kweb(val port: Int,
                     files("images")
                 }
 
-                // TODO this is pretty awful but don't see an alternative....
-                // Register plugins and allow plugin specific routing to be added.
-                for (plugin in plugins) {
-                    applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
-                }
 
-                val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.html")
-                val bootstrapHtmlTemplate = IOUtils.toString(resourceStream, Charsets.UTF_8)
-                        .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
-                        .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
 
                 // Setup default KWeb routing.
 
