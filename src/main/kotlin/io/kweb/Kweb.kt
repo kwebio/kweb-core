@@ -59,7 +59,6 @@ private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(1)
  */
 class Kweb(val port: Int,
            val debug: Boolean = true,
-           val refreshPageOnHotswap: Boolean = false,
            val plugins: List<KwebPlugin> = Collections.emptyList(),
            val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
@@ -75,11 +74,6 @@ class Kweb(val port: Int,
 
         if (debug) {
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
-        }
-
-
-        if (refreshPageOnHotswap) {
-            KwebHotswapPlugin.addHotswapReloadListener { refreshAllPages() }
         }
 
         server = embeddedServer(Jetty, port) {
@@ -300,7 +294,14 @@ class Kweb(val port: Int,
         }
     }
 
-    private fun refreshAllPages() = GlobalScope.launch(Dispatchers.Default) {
+    /**
+     * Forces all currently connected clients to refresh their pages.  This can be useful if there has been a
+     * code-change, for example.
+     *
+     * If there are a large number of connected clients this could place a lot of load on the server.  An
+     * unexpected page refresh may also confuse website visitors.
+     */
+    fun refreshAllPages() = GlobalScope.launch(Dispatchers.Default) {
         for (client in clientState.values) {
             val message = Server2ClientMessage(
                     yourId = client.id,

@@ -6,7 +6,11 @@ import org.hotswap.agent.annotation.OnClassLoadEvent
 import org.hotswap.agent.annotation.Plugin
 
 /**
- * Created by ian on 3/1/17.
+ * WARNING:
+ *
+ * This is incomplete.  In particular, Kweb.refreshAllPages() must be called on a hotswap reload.
+ *
+ * @author Ian Clarke
  */
 
 private val logger = KotlinLogging.logger {}
@@ -17,6 +21,7 @@ private val logger = KotlinLogging.logger {}
         expectedVersions = arrayOf("0.0")
 )
 class KwebHotswapPlugin {
+
     companion object {
         private val listeners = ArrayList<() -> Unit>()
 

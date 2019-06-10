@@ -46,7 +46,7 @@ fun main(args: Array<String>) {
 }
 
 private fun foundation_menu_sample() {
-    Kweb(port = 1234, plugins = listOf(foundation), refreshPageOnHotswap = true) {
+    Kweb(port = 1234, plugins = listOf(foundation)) {
         doc.body.new {
             foundation.topBar().new {
                 titleArea().new()
