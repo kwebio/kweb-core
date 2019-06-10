@@ -37,6 +37,9 @@ typealias LogError = Boolean
 
 typealias JavaScriptError = String
 
+private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
+private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(1)
+
 /**
  * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
  * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
@@ -58,31 +61,14 @@ class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap: Boolean = false,
            val plugins: List<KwebPlugin> = Collections.emptyList(),
-           val appServerConfigurator: (Routing) -> Unit = {},
-           val onError: ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ -> true },
-           val maxPageBuildTimeMS: Long = 500,
-           val clientStateTimeout : Duration = Duration.ofHours(1),
-           profileJavascript : Boolean = false,
            val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
-    // TODO: This should be exposed via some diagnostic tool
-    private val javascriptProfilingStackCounts = if (profileJavascript)
-        ConcurrentHashMap<List<StackTraceElement>, AtomicInteger>() else null
-
-    // private val server: Any
     private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
     private val mutableAppliedPlugins: MutableSet<KwebPlugin> = HashSet()
     val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
 
     private val server: JettyApplicationEngine
-
-    private fun recordForProfiling() {
-        if (javascriptProfilingStackCounts != null && this.outboundMessageCatcher.get() == null) {
-            javascriptProfilingStackCounts.computeIfAbsent(Thread.currentThread().stackTrace.slice(3..7), { AtomicInteger(0) }).incrementAndGet()
-        }
-    }
-
 
     init {
         logger.info("Initializing Kweb listening on port $port")
@@ -129,9 +115,6 @@ class Kweb(val port: Int,
                     staticRootFolder = File("static")
                     files("images")
                 }
-
-                // Register custom state.
-                appServerConfigurator.invoke(this)
 
                 // TODO this is pretty awful but don't see an alternative....
                 // Register plugins and allow plugin specific routing to be added.
@@ -231,11 +214,11 @@ class Kweb(val port: Int,
 
             try {
                 if (debug) {
-                    warnIfBlocking(maxTimeMs = maxPageBuildTimeMS, onBlock = { thread ->
-                        logger.warn { "buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms.  More info at DEBUG loglevel" }
+                    warnIfBlocking(maxTimeMs = MAX_PAGE_BUILD_TIME.toMillis(), onBlock = { thread ->
+                        logger.warn { "buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME.  More info at DEBUG loglevel" }
 
                         val logStatementBuilder = StringBuilder()
-                        logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $maxPageBuildTimeMS ms, appears to be blocking here:")
+                        logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME, appears to be blocking here:")
 
                         thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
                         val logStatement = logStatementBuilder.toString()
@@ -296,9 +279,7 @@ class Kweb(val port: Int,
         // TODO: Filtering the stacktrace like this seems a bit kludgy, although I can't think
         // TODO: of a specific reason why it would be bad.
         debugInfo.throwable.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
-        if (onError(debugInfo.throwable.stackTrace.toList(), error.error.message)) {
-            logger.error(logStatementBuilder.toString())
-        }
+        logger.error(logStatementBuilder.toString())
     }
 
     private fun applyPlugin(plugin: KwebPlugin,
@@ -349,7 +330,6 @@ class Kweb(val port: Int,
     }
 
     fun execute(clientId: String, javascript: String) {
-        recordForProfiling()
         val wsClientData = clientState.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if (!debug) null else {
@@ -401,7 +381,6 @@ class Kweb(val port: Int,
     }
 
     fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
-        recordForProfiling()
         val wsClientData = clientState.get(clientId)
                 ?: throw RuntimeException("Failed to evaluate JavaScript because client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
@@ -422,7 +401,7 @@ class Kweb(val port: Int,
     private fun cleanUpOldClientStates() {
         val now = Instant.now()
         val toRemove = clientState.entries.mapNotNull { (id: String, state: RemoteClientState) ->
-            if (Duration.between(state.lastModified, now) > clientStateTimeout) {
+            if (Duration.between(state.lastModified, now) > CLIENT_STATE_TIMEOUT) {
                 id
             } else {
                 null
