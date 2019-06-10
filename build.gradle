@@ -32,7 +32,8 @@ dependencies {
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile 'org.apache.commons:commons-lang3:3.0'
     compile 'commons-io:commons-io:2.6'
-
+    compile 'org.jsoup:jsoup:1.6.3'
+    
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////

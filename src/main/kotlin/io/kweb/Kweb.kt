@@ -21,6 +21,7 @@ import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
+import org.jsoup.nodes.Document
 import java.io.*
 import java.time.*
 import java.util.*
@@ -56,9 +57,9 @@ typealias JavaScriptError = String
 class Kweb(val port: Int,
            val debug: Boolean = true,
            val refreshPageOnHotswap: Boolean = false,
-           val plugins: List<io.kweb.plugins.KwebPlugin> = java.util.Collections.emptyList(),
-           val appServerConfigurator: (io.ktor.routing.Routing) -> Unit = {},
-           val onError: ((List<StackTraceElement>, io.kweb.JavaScriptError) -> io.kweb.LogError) = { _, _ -> true },
+           val plugins: List<KwebPlugin> = Collections.emptyList(),
+           val appServerConfigurator: (Routing) -> Unit = {},
+           val onError: ((List<StackTraceElement>, JavaScriptError) -> LogError) = { _, _ -> true },
            val maxPageBuildTimeMS: Long = 500,
            val clientStateTimeout : Duration = Duration.ofHours(1),
            profileJavascript : Boolean = false,
@@ -70,9 +71,9 @@ class Kweb(val port: Int,
         ConcurrentHashMap<List<StackTraceElement>, AtomicInteger>() else null
 
     // private val server: Any
-    private val clientState: ConcurrentHashMap<String, io.kweb.RemoteClientState> = java.util.concurrent.ConcurrentHashMap()
-    private val mutableAppliedPlugins: MutableSet<io.kweb.plugins.KwebPlugin> = java.util.HashSet()
-    val appliedPlugins: Set<io.kweb.plugins.KwebPlugin> get() = mutableAppliedPlugins
+    private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
+    private val mutableAppliedPlugins: MutableSet<KwebPlugin> = HashSet()
+    val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
 
     private val server: JettyApplicationEngine
 
@@ -90,15 +91,9 @@ class Kweb(val port: Int,
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-        //TODO: Need to do housekeeping to deleteIfExists old client data
-
-        val startHeadBuilder = StringBuilder()
-        val endHeadBuilder = StringBuilder()
-
-        val bootstrapHtmlTemplate : String
 
         if (refreshPageOnHotswap) {
-            KwebHotswapPlugin.addHotswapReloadListener({ refreshAllPages() })
+            KwebHotswapPlugin.addHotswapReloadListener { refreshAllPages() }
         }
 
         server = embeddedServer(Jetty, port) {
@@ -109,10 +104,30 @@ class Kweb(val port: Int,
                 timeout = Duration.ofSeconds(30)
             }
             plugins.forEach { it.ktorApplicationConfigurator(this) }
+
+            val startHeadBuilder = StringBuilder()
+            val endHeadBuilder = StringBuilder()
+
             routing {
 
                 static("static") { // FIXME: Is this being used?
                     resources("static")
+                }
+
+                get("/robots.txt") {
+                    call.response.status(HttpStatusCode.NotFound)
+                    call.respondText("robots.txt not currently supported by kweb")
+                }
+
+                get("/favicon.ico") {
+                    call.response.status(HttpStatusCode.NotFound)
+                    call.respondText("favicons not currently supported by kweb")
+                }
+
+                static("/static") { // FIXME: Not sure that this is being used either
+                    // When running under IDEA make sure that working directory is set to this sample's project folder
+                    staticRootFolder = File("static")
+                    files("images")
                 }
 
                 // Register custom state.
@@ -131,21 +146,6 @@ class Kweb(val port: Int,
 
                 // Setup default KWeb routing.
 
-                get("/robots.txt") {
-                    call.response.status(HttpStatusCode.NotFound)
-                    call.respondText("robots.txt not currently supported by kweb")
-                }
-
-                get("/favicon.ico") {
-                    call.response.status(HttpStatusCode.NotFound)
-                    call.respondText("favicons not currently supported by kweb")
-                }
-
-                static("/static") {
-                    // When running under IDEA make sure that working directory is set to this sample's project folder
-                    staticRootFolder = File("static")
-                    files("images")
-                }
 
                 listenForHTTPConnection(bootstrapHtmlTemplate)
 
