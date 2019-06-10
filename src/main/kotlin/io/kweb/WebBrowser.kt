@@ -1,6 +1,7 @@
 package io.kweb
 
-import io.kweb.Server2ClientMessage.Instruction
+import io.kweb.client.HttpRequestInfo
+import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.dom.Document
 import io.kweb.plugins.KwebPlugin
 import io.kweb.state.*

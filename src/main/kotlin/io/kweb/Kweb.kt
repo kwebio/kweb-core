@@ -13,15 +13,15 @@ import io.ktor.routing.*
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.*
 import io.ktor.websocket.*
-import io.kweb.Server2ClientMessage.Instruction
+import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
+import io.kweb.client.*
 import io.kweb.dev.hotswap.KwebHotswapPlugin
 import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
-import org.jsoup.nodes.Document
 import java.io.*
 import java.time.*
 import java.util.*
@@ -438,72 +438,4 @@ class Kweb(val port: Int,
 
 }
 
-private data class RemoteClientState(val id: String, @Volatile var clientConnection: KwebClientConnection, val handlers: MutableMap<Int, (String) -> Unit> = HashMap(), val debugTokens: MutableMap<String, DebugInfo> = HashMap(), var lastModified :Instant = Instant.now()) {
-    fun send(message: Server2ClientMessage) {
-        clientConnection.send(gson.toJson(message))
-    }
-
-    override fun toString() = "RemoteClientState(id = $id)"
-}
-
-/**
- * @param request This is the raw ApplicationRequest object to [Ktor](https://github.com/Kotlin/ktor), the HTTP
- *                library used by Kweb.  It can be used to read various information about the inbound HTTP request,
- *                however you should use properties of [HttpRequestInfo] directly instead if possible.
- */
-data class HttpRequestInfo(val request: ApplicationRequest) {
-
-    val requestedUrl: String by lazy {
-        with(request.origin) {
-            "$scheme://$host:$port$uri"
-        }
-    }
-
-    val cookies = request.cookies
-
-    val remoteHost = request.origin.remoteHost
-
-    val userAgent = request.headers["User-Agent"]
-}
-
 data class DebugInfo(val js: String, val action: String, val throwable: Throwable)
-
-data class Server2ClientMessage(
-        val yourId: String,
-        val debugToken: String?,
-        val execute: Execute? = null,
-        val evaluate: Evaluate? = null,
-        val instructions: List<Instruction>? = null
-) {
-
-    data class Instruction(val type: Type, val parameters: List<Any?>) {
-        enum class Type {
-            SetAttribute,
-            CreateElement,
-            SetText,
-            AddText,
-            RemoveAttribute
-        }
-    }
-
-    data class Execute(val js: String)
-    data class Evaluate(val js: String, val callbackId: Int)
-}
-
-data class Client2ServerMessage(
-        val id: String,
-        val hello: Boolean? = true,
-        val error: ErrorMessage? = null,
-        val callback: C2SCallback? = null,
-        val historyStateChange : C2SHistoryStateChange? = null
-) {
-
-    data class ErrorMessage(val debugToken: String, val error: Error) {
-        data class Error(val name: String, val message: String)
-    }
-
-    data class C2SCallback(val callbackId: Int, val data: String?)
-
-    data class C2SHistoryStateChange(val newState : String)
-}
-

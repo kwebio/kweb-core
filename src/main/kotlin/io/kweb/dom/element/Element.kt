@@ -2,9 +2,9 @@ package io.kweb.dom.element
 
 import com.github.salomonbrys.kotson.toJson
 import io.kweb.*
-import io.kweb.Server2ClientMessage.Instruction
-import io.kweb.Server2ClientMessage.Instruction.Type
-import io.kweb.Server2ClientMessage.Instruction.Type.*
+import io.kweb.client.Server2ClientMessage.Instruction
+import io.kweb.client.Server2ClientMessage.Instruction.Type
+import io.kweb.client.Server2ClientMessage.Instruction.Type.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.modification.StyleReceiver
