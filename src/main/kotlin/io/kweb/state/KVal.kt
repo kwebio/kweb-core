@@ -21,7 +21,7 @@ open class KVal<T : Any?>(value: T) {
     }
 
     @Volatile
-    private var pValue: T = value
+    protected var pValue: T = value
 
     open val value : T get() {
         return pValue
@@ -37,7 +37,7 @@ open class KVal<T : Any?>(value: T) {
         if (isClosed) {
             throw IllegalStateException("Mapping an already closed KVar")
         }
-        val newObservable = KVal(mapper(pValue))
+        val newObservable = KVal(mapper(value))
         val handle = addListener { old, new ->
             if (!isClosed && !newObservable.isClosed) {
                 if (new != pValue) {

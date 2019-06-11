@@ -1,10 +1,11 @@
 package io.kweb.state
 
 import io.kotlintest.shouldBe
+import io.kotlintest.specs.FreeSpec
 import io.kotlintest.specs.StringSpec
 
-object KVarSpec : StringSpec({
-    "a KVar with value `dog`" {
+class KVarSpec : FreeSpec({
+    "a KVar with value `dog`" - {
         data class Foo(val bar : String)
         val f = Foo("dog")
         val kvf = KVar(f)
@@ -19,5 +20,12 @@ object KVarSpec : StringSpec({
         "should have modified the underlying KVar" {
             kvf.value.bar shouldBe "cat"
         }
+    }
+
+    "a mapped kvar" - {
+        val kv = KVar("one")
+        kv.value = "three"
+        val mappedKv = kv.map { it.length }
+        mappedKv.value shouldBe 5
     }
 })
