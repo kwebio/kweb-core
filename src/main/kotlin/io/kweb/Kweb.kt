@@ -124,7 +124,7 @@ class Kweb(val port: Int,
         val endHeadBuilder = StringBuilder()
 
         for (plugin in plugins) {
-            applyPlugin(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
+            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
         }
 
         val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.html")
@@ -269,14 +269,14 @@ class Kweb(val port: Int,
         logger.error(logStatementBuilder.toString())
     }
 
-    private fun applyPlugin(plugin: KwebPlugin,
-                            appliedPlugins: MutableSet<KwebPlugin>,
-                            endHeadBuilder: java.lang.StringBuilder,
-                            startHeadBuilder: java.lang.StringBuilder,
-                            routeHandler: Routing) {
+    private fun applyPluginWithDependencies(plugin: KwebPlugin,
+                                            appliedPlugins: MutableSet<KwebPlugin>,
+                                            endHeadBuilder: java.lang.StringBuilder,
+                                            startHeadBuilder: java.lang.StringBuilder,
+                                            routeHandler: Routing) {
         for (dependantPlugin in plugin.dependsOn) {
             if (!appliedPlugins.contains(dependantPlugin)) {
-                applyPlugin(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder, routeHandler)
+                applyPluginWithDependencies(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder, routeHandler)
                 appliedPlugins.add(dependantPlugin)
             }
         }
