@@ -21,7 +21,7 @@ open class KVal<T : Any?>(value: T) {
     }
 
     @Volatile
-    protected var pValue: T = value
+    private var pValue: T = value
 
     open val value : T get() {
         return pValue
