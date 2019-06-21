@@ -8,8 +8,8 @@ plugins {
 }
 
 ext {
-    dokka_version = '0.9.17'
-    ktor_version = '1.2.0'
+    dokka_version = '0.9.18'
+    ktor_version = '1.2.2'
 }
 
 group 'io.kweb'

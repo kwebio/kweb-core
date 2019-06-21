@@ -26,14 +26,6 @@ import java.util.*
 import java.util.concurrent.*
 import kotlin.collections.ArrayList
 
-/**
- * Created by ian on 12/31/16.
- */
-
-typealias LogError = Boolean
-
-typealias JavaScriptError = String
-
 private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(1)
 
@@ -97,10 +89,6 @@ class Kweb(val port: Int,
                     call.response.status(HttpStatusCode.NotFound)
                     call.respondText("favicons not currently supported by kweb")
                 }
-
-
-                // Setup default KWeb routing.
-
 
                 listenForHTTPConnection(bootstrapHtmlTemplate)
 
