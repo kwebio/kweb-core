@@ -19,11 +19,11 @@ val Document.localStorage get() = StorageReceiver(receiver, StorageType.local)
 val Document.sessionStorage get() = StorageReceiver(receiver, StorageType.session)
 
 private fun local_storage_sample() {
-    Kweb(port = 14189) {
+    Kweb(port = 14189, buildPage = {
         doc.localStorage["time"] = System.currentTimeMillis()
         GlobalScope.launch {
             val username : CompletableFuture<String?> = doc.sessionStorage["user_name"]
             println("Read username: ${username.await()}")
         }
-    }
+    }, jettyConfiguration = {})
 }

@@ -37,10 +37,10 @@ class Document(val receiver: WebBrowser) {
 class BodyElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, null, "document.body", "body", id)
 
 private fun document_sample() {
-    Kweb(port = 1234) {
+    Kweb(port = 1234, buildPage = {
         doc.body.new {
             h1().text("Hello World!")
         }
-    }
+    }, jettyConfiguration = {})
 }
 

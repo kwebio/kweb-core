@@ -11,7 +11,7 @@ import io.kweb.dom.element.new
 
 
 fun main(args: Array<String>) {
-    Kweb(port = 3525, plugins = listOf(fomanticUIPlugin)) {
+    Kweb(port = 3525, plugins = listOf(fomanticUIPlugin), buildPage = {
         doc.body.new {
             div(fomantic.ui.container).new {
                 div(fomantic.ui.three.item.menu).new {
@@ -21,5 +21,5 @@ fun main(args: Array<String>) {
                 }
             }
         }
-    }
+    }, jettyConfiguration = {})
 }

@@ -158,7 +158,7 @@ fun ordered_view_set_sample() {
 
     val cats = Shoebox<Cat>()
     val catColorView = cats.view("catColors", Cat::color)
-    Kweb(port = 1234) {
+    Kweb(port = 1234, buildPage = {
         doc.body.new {
             renderEach(catColorView.orderedSet("brown")) { brownCat ->
                 div().new {
@@ -166,6 +166,6 @@ fun ordered_view_set_sample() {
                 }
             }
         }
-    }
+    }, jettyConfiguration = {})
 }
 

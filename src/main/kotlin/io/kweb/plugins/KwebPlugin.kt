@@ -14,10 +14,6 @@ abstract class KwebPlugin(val dependsOn: Set<KwebPlugin> = Collections.emptySet(
 
     open fun executeAfterPageCreation() = ""
 
-    open fun ktorApplicationConfigurator(applicationHandler : Application) {
-
-    }
-
     open fun appServerConfigurator(routeHandler : Routing) {
 
     }

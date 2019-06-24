@@ -36,7 +36,7 @@ class TodoApp {
          * UI framework. Build a simple to-do list app listening on
          * http://localhost:7659/
          * */
-        server = Kweb(port = 7659, debug = true, plugins = plugins) {
+        server = Kweb(port = 7659, debug = true, plugins = plugins, buildPage = {
             doc.body.new {
                 /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to
@@ -74,8 +74,8 @@ class TodoApp {
                             }
 
                             /*
-                         * It's not necessary, but we can also define a custom 404 handler:
-                         */
+                                 * It's not necessary, but we can also define a custom 404 handler:
+                                 */
                             notFound {
                                 div(fomantic.ui.negative.message).new {
                                     div(fomantic.header).text("Not Found :(")
@@ -86,7 +86,7 @@ class TodoApp {
                     }
                 }
             }
-        }
+        }, jettyConfiguration = {})
     }
 
     private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {

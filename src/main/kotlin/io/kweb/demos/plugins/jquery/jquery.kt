@@ -14,7 +14,7 @@ import io.kweb.plugins.jqueryCore.jqueryCore
  */
 
 fun main(args: Array<String>) {
-    Kweb(port = 8091, plugins = listOf(jqueryCore)) {
+    Kweb(port = 8091, plugins = listOf(jqueryCore), buildPage = {
         doc.body.new {
             h1(attributes = attr.classes("test")).addText("Simple Demo of JQuery plugin").apply {
                 jquery(".test").apply {
@@ -30,5 +30,5 @@ fun main(args: Array<String>) {
                 }
             }
         }
-    }
+    }, jettyConfiguration = {})
 }

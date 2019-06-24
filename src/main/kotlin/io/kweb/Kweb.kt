@@ -9,6 +9,7 @@ import io.ktor.http.cio.websocket.readText
 import io.ktor.request.*
 import io.ktor.response.respondText
 import io.ktor.routing.*
+import io.ktor.server.engine.EngineAPI
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.*
 import io.ktor.websocket.*
@@ -43,13 +44,15 @@ private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(1)
  * @property onError A handler for JavaScript errors (only detected if `debug == true`)
  * @property maxPageBuildTimeMS If `debug == true` this is the maximum time permitted to build a page before a
  *                              warning is logged
+ * @property jettyConfiguration The Jetty configuration object, which can be used to configure HTTPs, among other things
  * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
  *                     go
  */
-class Kweb(val port: Int,
-           val debug: Boolean = true,
-           val plugins: List<KwebPlugin> = Collections.emptyList(),
-           val buildPage: WebBrowser.() -> Unit
+class Kweb @EngineAPI constructor(val port: Int,
+                                  val debug: Boolean = true,
+                                  val plugins: List<KwebPlugin> = Collections.emptyList(),
+                                  val jettyConfiguration: JettyApplicationEngineBase.Configuration.() -> Unit = {},
+                                  val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
     private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
@@ -67,14 +70,13 @@ class Kweb(val port: Int,
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-        server = embeddedServer(Jetty, port) {
+        server = embeddedServer(Jetty, port, configure = jettyConfiguration) {
             install(DefaultHeaders)
             install(Compression)
             install(WebSockets) {
                 pingPeriod = Duration.ofSeconds(10)
                 timeout = Duration.ofSeconds(30)
             }
-            plugins.forEach { it.ktorApplicationConfigurator(this) }
 
             routing {
 

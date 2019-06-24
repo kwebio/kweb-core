@@ -33,7 +33,7 @@ fun ElementCreator<TrElement>.td(attributes: Map<String, Any> = attr) = TdElemen
 class TdElement(parent: Element) : Element(parent)
 
 fun table_example() {
-    Kweb(port = 2314) {
+    Kweb(port = 2314, buildPage = {
         doc.body.new {
             table().new {
                 thead().new {
@@ -48,5 +48,5 @@ fun table_example() {
                 }
             }
         }
-    }
+    }, jettyConfiguration = {})
 }

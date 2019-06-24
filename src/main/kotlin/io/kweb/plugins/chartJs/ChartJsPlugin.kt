@@ -7,7 +7,7 @@ import io.kweb.plugins.KwebPlugin
 import io.kweb.plugins.chartJs.ChartType.line
 
 fun main(args: Array<String>) {
-    Kweb(port = 5252, plugins = listOf(chartJs)) {
+    Kweb(port = 5252, plugins = listOf(chartJs), buildPage = {
         doc.body.new {
             Chart(canvas(400, 300), ChartConfig(
                     type = line,
@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
                     ))
             )
         }
-    }
+    }, jettyConfiguration = {})
     Thread.sleep(100000)
 }
 

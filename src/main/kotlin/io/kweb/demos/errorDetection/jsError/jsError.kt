@@ -7,7 +7,7 @@ import io.kweb.Kweb
  */
 
 fun main(args: Array<String>) {
-    Kweb(port = 4124, debug = true) {
+    Kweb(port = 4124, debug = true, buildPage = {
         doc.body.execute("deliberate message;")
-    }
+    }, jettyConfiguration = {})
 }

@@ -46,7 +46,7 @@ fun main(args: Array<String>) {
 }
 
 private fun foundation_menu_sample() {
-    Kweb(port = 1234, plugins = listOf(foundation)) {
+    Kweb(port = 1234, plugins = listOf(foundation), buildPage = {
         doc.body.new {
             foundation.topBar().new {
                 titleArea().new()
@@ -56,5 +56,5 @@ private fun foundation_menu_sample() {
                         .text("My Site")
             }
         }
-    }
+    }, jettyConfiguration = {})
 }

@@ -82,7 +82,7 @@ class RouteReceiver internal constructor(val parentElementCreator: ElementCreato
 }
 
 private fun testSampleForRouting() {
-    Kweb(port = 16097) {
+    Kweb(port = 16097, buildPage = {
         doc.body.new {
             route {
                 path("/users/{userId}") { params ->
@@ -95,5 +95,5 @@ private fun testSampleForRouting() {
                 }
             }
         }
-    }
+    }, jettyConfiguration = {})
 }

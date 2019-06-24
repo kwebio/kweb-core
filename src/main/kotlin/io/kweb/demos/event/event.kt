@@ -10,11 +10,11 @@ import io.kweb.dom.element.new
  */
 
 fun main() {
-    Kweb(4682) {
+    Kweb(4682, buildPage = {
         doc.body.new {
             input().on.keydown { e ->
                 println("Received: '${e}'")
             }
         }
-    }
+    }, jettyConfiguration = {})
 }
