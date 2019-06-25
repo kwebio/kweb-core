@@ -10,6 +10,7 @@ import io.ktor.request.*
 import io.ktor.response.respondText
 import io.ktor.routing.*
 import io.ktor.server.engine.EngineAPI
+import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.*
 import io.ktor.websocket.*
@@ -69,6 +70,7 @@ class Kweb @EngineAPI constructor(val port: Int,
         if (debug) {
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
+
 
         server = embeddedServer(Jetty, port, configure = jettyConfiguration) {
             install(DefaultHeaders)

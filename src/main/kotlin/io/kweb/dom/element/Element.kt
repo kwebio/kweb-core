@@ -142,6 +142,8 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
+    fun classes(vararg value : String) = setClasses(*value)
+
     fun setClasses(vararg value: String): Element {
         setAttribute("class", value.joinToString(separator = " ").toJson())
         return this
