@@ -176,6 +176,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val comment : FomanticUIClasses get() {
+        classes("comment")
+        return this
+    }
+
     val comments : FomanticUIClasses get() {
         classes("comments")
         return this
