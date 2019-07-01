@@ -7,6 +7,7 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
+import io.kweb.dom.title
 import io.kweb.plugins.fomanticUI.*
 import io.kweb.routing.route
 import io.kweb.state.*
@@ -42,9 +43,6 @@ class TodoApp {
                 best.  Here I use an extension function defined elsewhere to
                 draw some common outer page DOM elements */
                 pageBorderAndTitle("To do List") {
-                    /** fomantic.content uses the fomanticUIPlugin to use the excellent
-                    Semantic UI framework, included as a plugin above, and implemented
-                    as a convenient DSL within Kweb */
                     div(fomantic.content).new {
 
                         route {
@@ -59,6 +57,9 @@ class TodoApp {
                             }
 
                             path("/lists/{id}") { params ->
+                                doc.head.new {
+                                    title().text("To Do List #" + params.getValue("id"))
+                                }
                                 render(params.getValue("id")) { listId ->
                                     logger.info("Rendering list id $listId")
 

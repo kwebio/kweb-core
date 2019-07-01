@@ -1,8 +1,10 @@
 package io.kweb.dom
 
 import io.kweb.*
+import io.kweb.dom.attributes.attr
 import io.kweb.dom.cookies.CookieReceiver
 import io.kweb.dom.element.*
+import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
 
 /**
@@ -20,6 +22,8 @@ class Document(val receiver: WebBrowser) {
 
     val body = BodyElement(receiver)
 
+    val head = HeadElement(receiver)
+
     val origin = receiver.evaluate("document.origin")
 
     fun execCommand(command : String) {
@@ -35,6 +39,12 @@ class Document(val receiver: WebBrowser) {
  * @sample document_sample
  */
 class BodyElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, null, "document.body", "body", id)
+
+class HeadElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, null, "document.head", "head", id)
+
+open class TitleElement(parent: Element) : Element(parent)
+fun ElementCreator<HeadElement>.title(attributes: Map<String, Any> = attr) = TitleElement(element("title", attributes))
+
 
 private fun document_sample() {
     Kweb(port = 1234, buildPage = {

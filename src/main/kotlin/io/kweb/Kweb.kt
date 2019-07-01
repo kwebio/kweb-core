@@ -243,7 +243,7 @@ class Kweb @EngineAPI constructor(val port: Int,
                 call.respondText("""
                             Internal Server Error.
 
-                            Please include code $logToken in any message report to help us track it down.
+                            Please include code $logToken in any error report to help us track it down.
     """.trimIndent())
             }
         }

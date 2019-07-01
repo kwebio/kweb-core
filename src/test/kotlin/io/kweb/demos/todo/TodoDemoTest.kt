@@ -2,10 +2,7 @@ package io.kweb.demos.todo
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
-import org.amshove.kluent.shouldBeNull
-import org.amshove.kluent.shouldBeTrue
-import org.amshove.kluent.shouldNotBeEqualTo
-import org.amshove.kluent.shouldNotBeNull
+import org.amshove.kluent.*
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -56,6 +53,8 @@ class TodoDemoTest {
     fun pageRenders(driver:WebDriver){
         val site = TodoSite(driver)
         site.allElementsExist().shouldBeTrue()
+        val listId = driver.currentUrl.split('/').reversed()[0]
+       // site.title!!.text.shouldBe("To Do List #$listId")
     }
 
     @Test
@@ -111,6 +110,9 @@ class TodoDemoTest {
 }
 
 class TodoSite(private val driver: WebDriver){
+
+    @FindBy(tagName = "title")
+    val title : WebElement? = null
 
     @FindBy(className = "message")
     val message: WebElement? = null
