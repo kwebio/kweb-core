@@ -6,23 +6,21 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.readText
-import io.ktor.request.*
+import io.ktor.request.uri
 import io.ktor.response.respondText
 import io.ktor.routing.*
-import io.ktor.server.engine.EngineAPI
-import io.ktor.server.engine.applicationEngineEnvironment
-import io.ktor.server.engine.embeddedServer
+import io.ktor.server.engine.*
 import io.ktor.server.jetty.*
 import io.ktor.websocket.*
-import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
 import io.kweb.client.*
+import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
-import java.io.*
+import java.io.Closeable
 import java.time.*
 import java.util.*
 import java.util.concurrent.*
@@ -189,7 +187,7 @@ class Kweb @EngineAPI constructor(val port: Int,
                 RemoteClientState(id = kwebSessionId, clientConnection = Caching())
             }
 
-            val httpRequestInfo = HttpRequestInfo(call.request)
+            val httpRequestInfo = io.kweb.client.HttpRequestInfo(call.request)
 
             try {
                 if (debug) {
