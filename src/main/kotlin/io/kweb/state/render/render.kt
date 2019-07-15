@@ -58,9 +58,8 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, cacheOnClient: Boolean = 
         }
     }
     this.onCleanup(true) {
-        if (cachedClientECs != null) {
-            cachedClientECs.values.forEach { it.cleanup() }
-        }
+        childEC.cleanup()
+        cachedClientECs?.values?.forEach { it.cleanup() }
         kval.removeListener(kvalListenerHandle)
     }
     renderer(childEC, kval.value)
