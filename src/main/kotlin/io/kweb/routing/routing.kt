@@ -36,7 +36,7 @@ fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: Rout
         tpl
     }
 
-    render(matchingTemplate, cacheOnClient = cacheOnClient) { template ->
+    render(matchingTemplate) { template ->
         if (template != null) {
             val parameters = HashMap<String, KVar<String>>()
             for ((pos, part) in template.withIndex()) {
