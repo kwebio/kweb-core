@@ -19,7 +19,7 @@ import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-fun ElementCreator<*>.route(cacheOnClient : Boolean = false, routeReceiver: RouteReceiver.() -> Unit) {
+fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
     val url = this.browser.url(simpleUrlParser)
     val rr = RouteReceiver(this, url)
     routeReceiver(rr)
