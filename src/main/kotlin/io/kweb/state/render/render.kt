@@ -7,7 +7,7 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.shoebox.*
 import io.kweb.state.*
 import mu.KotlinLogging
-import java.util.concurrent.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Created by ian on 6/18/17.
@@ -15,54 +15,25 @@ import java.util.concurrent.*
 
 private val logger = KotlinLogging.logger {}
 
-fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, cacheOnClient: Boolean = false, renderer: ElementCreator<Element>.(T) -> Unit) {
-    var childEC = ElementCreator(this.parent, this)
-    val cachedClientECs = if (cacheOnClient) ConcurrentHashMap<T, ElementCreator<Element>>() else null
+fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Element>.(T) -> Unit) {
 
-    // Before we set them to display:none, we retrieveJs the values of the "style" attribute so that we can
-    // put it back again correctly, because we're thoughtful like that.
-    val retrievedStyleValues = ConcurrentHashMap<T, String>()
-    val kvalListenerHandle = kval.addListener { oldValue, newValue ->
-        if (oldValue != newValue) {
-            if (cachedClientECs != null) {
-                cachedClientECs[oldValue] = childEC
-                childEC.elementsCreated.forEach {
-                    it.read.attribute("style").thenAccept {
-                        if (it != "" && it != "undefined") {
-                            retrievedStyleValues[oldValue] = it
-                        }
-                    }
-                }
-                childEC.elementsCreated.forEach { it.setAttribute("style", "display:none") }
-            } else {
-                childEC.cleanup()
-            }
-            val retainedEC = cachedClientECs?.get(newValue)
-            childEC = retainedEC ?: ElementCreator(this.parent, this)
-            try {
-                if (retainedEC == null) {
-                    renderer(childEC, newValue)
-                } else {
-                    retainedEC.elementsCreated.forEach {
-                        val prevStyle = retrievedStyleValues[newValue]
-                        if (prevStyle == null) {
-                            it.removeAttribute("style")
-                        } else {
-                            it.setAttribute("style", prevStyle)
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                logger.warn("Exception thrown by renderer while re-rendering $oldValue to $newValue", e)
-            }
+    val containerSpan = span()
+
+    containerSpan.new {
+        block(kval.value)
+    }
+
+    val listenerHandle = kval.addListener { _, newValue ->
+        containerSpan.removeChildren()
+        containerSpan.new {
+            block(newValue)
         }
     }
+
     this.onCleanup(true) {
-        childEC.cleanup()
-        cachedClientECs?.values?.forEach { it.cleanup() }
-        kval.removeListener(kvalListenerHandle)
+        kval.removeListener(listenerHandle)
+        containerSpan.deleteIfExists()
     }
-    renderer(childEC, kval.value)
 }
 
 
