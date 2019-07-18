@@ -51,6 +51,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val author : FomanticUIClasses get() {
+        classes("author")
+        return this
+    }
+
     val balance : FomanticUIClasses get() {
         classes("balance")
         return this
@@ -198,6 +203,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val content : FomanticUIClasses get() {
         classes("content")
+        return this
+    }
+
+    val date : FomanticUIClasses get() {
+        classes("date")
         return this
     }
 
@@ -499,6 +509,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val meta : FomanticUIClasses get() {
         classes("meta")
+        return this
+    }
+
+    val metadata : FomanticUIClasses get() {
+        classes("metadata")
         return this
     }
 
