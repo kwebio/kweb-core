@@ -2,10 +2,8 @@ package io.kweb.state
 
 import mu.KotlinLogging
 import kotlin.properties.Delegates
-import kotlin.reflect.KProperty0
 import kotlin.reflect.KProperty1
-import kotlin.reflect.full.instanceParameter
-import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -22,7 +20,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
         }
     }
 
-    fun <O : Any> map(reversableFunction: ReversableFunction<T, O>): KVar<O> {
+    fun <O : Any?> map(reversableFunction: ReversableFunction<T, O>): KVar<O> {
         if (isClosed) {
             logger.warn("Mapping an already closed KVar", IllegalStateException())
         }
@@ -47,7 +45,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 
 }
 
-inline fun <O : Any, reified T : Any> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
+inline fun <O : Any?, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
     return this.map(object : ReversableFunction<T, O>("prop: ${property.name}") {
 
         private val kClass = T::class
