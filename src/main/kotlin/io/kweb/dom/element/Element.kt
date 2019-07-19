@@ -195,8 +195,10 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
 
     fun removeChildren(): Element {
         execute("""
-        while ($jsExpression.firstChild) {
-            $jsExpression.removeChild($jsExpression.firstChild);
+        if ($jsExpression != null) {
+            while ($jsExpression.firstChild) {
+                $jsExpression.removeChild($jsExpression.firstChild);
+            }
         }
      """.trimIndent())
         return this
