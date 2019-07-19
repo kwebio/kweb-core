@@ -19,20 +19,19 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
     val containerSpan = span()
 
+    val listenerHandle = kval.addListener { _, newVal ->
+        containerSpan.removeChildren()
+        containerSpan.new {
+            block(newVal)
+        }
+    }
+
     containerSpan.new {
         block(kval.value)
     }
 
-    val listenerHandle = kval.addListener { _, newValue ->
-        containerSpan.removeChildren()
-        containerSpan.new {
-            block(newValue)
-        }
-    }
-
     this.onCleanup(true) {
         kval.removeListener(listenerHandle)
-        containerSpan.deleteIfExists()
     }
 }
 
