@@ -12,13 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.*
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
-
+/*
 fun main() {
     RenderTestApp()
     Thread.sleep(1000000)
 }
 
-
+*/
 @ExtendWith(SeleniumExtension::class)
 class RenderTest {
     companion object {

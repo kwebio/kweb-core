@@ -8,6 +8,7 @@ import io.kweb.shoebox.*
 import io.kweb.state.*
 import mu.KotlinLogging
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Created by ian on 6/18/17.
@@ -19,10 +20,14 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
     val containerSpan = span()
 
+    val previousElementCreator : AtomicReference<ElementCreator<SpanElement>?> = AtomicReference(null)
+
     val listenerHandle = kval.addListener { _, newVal ->
         containerSpan.removeChildren()
         containerSpan.new {
             block(newVal)
+            previousElementCreator.get()?.cleanup()
+            previousElementCreator.set(this)
         }
     }
 
