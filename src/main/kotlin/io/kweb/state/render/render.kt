@@ -26,8 +26,8 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
         containerSpan.removeChildren()
         containerSpan.new {
             block(newVal)
-            previousElementCreator.get()?.cleanup()
-            previousElementCreator.set(this)
+            // Remember this ElementCreator and clean up the previous one if necessary
+            previousElementCreator.getAndSet(this)?.cleanup()
         }
     }
 
