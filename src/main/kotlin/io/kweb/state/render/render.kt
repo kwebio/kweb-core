@@ -20,7 +20,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
     val containerSpan = span()
 
-    val previousElementCreator : AtomicReference<ElementCreator<SpanElement>?> = AtomicReference(null)
+    val previousElementCreator : AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
     val listenerHandle = kval.addListener { _, newVal ->
         containerSpan.removeChildren()
@@ -28,6 +28,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
             block(newVal)
             // Remember this ElementCreator and clean up the previous one if necessary
             previousElementCreator.getAndSet(this)?.cleanup()
+            1
         }
     }
 

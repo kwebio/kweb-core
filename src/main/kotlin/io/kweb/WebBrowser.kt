@@ -83,8 +83,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             by lazy {
                 val url = KVar(httpRequestInfo.requestedUrl)
 
-                url.addListener { old, new ->
-                    pushState(new)
+                url.addListener { _, newState ->
+                    pushState(newState)
                 }
 
                 url
