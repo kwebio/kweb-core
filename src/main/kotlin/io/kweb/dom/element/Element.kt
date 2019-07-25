@@ -327,7 +327,7 @@ fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position: Int? = null): ElementCre
  *
  * @sample new_sample_2
  */
-fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE : Any> ELEMENT_TYPE.new(
+fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
         position : Int? = null,
         receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE)
         : RETURN_VALUE_TYPE {

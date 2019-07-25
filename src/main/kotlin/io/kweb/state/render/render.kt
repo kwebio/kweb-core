@@ -28,7 +28,6 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
             block(newVal)
             // Remember this ElementCreator and clean up the previous one if necessary
             previousElementCreator.getAndSet(this)?.cleanup()
-            1
         }
     }
 
