@@ -62,9 +62,9 @@ inline fun <O : Any?, reified T : Any?> KVar<T>.property(property: KProperty1<T,
     })
 }
 
-fun <O : Any> KVar<O?>.notNull(default : O, invertDefault : Boolean = true): KVar<O> {
+fun <O : Any> KVar<O?>.notNull(default : O? = null, invertDefault : Boolean = true): KVar<O> {
     return this.map(object : ReversableFunction<O?, O>(label = "notNull") {
-        override fun invoke(from: O?): O = from ?: default
+        override fun invoke(from: O?): O = from ?: default!!
 
         override fun reverse(original: O?, change: O): O? = if (invertDefault) {
             if (change != default) change else null
