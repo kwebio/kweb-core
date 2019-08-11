@@ -45,7 +45,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 
 }
 
-inline fun <O : Any?, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
+inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
     return this.map(object : ReversableFunction<T, O>("prop: ${property.name}") {
 
         private val kClass = T::class
