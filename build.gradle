@@ -4,6 +4,7 @@ plugins {
     id 'maven'
     id 'org.jetbrains.dokka' version '0.9.17'
     id 'com.github.johnrengelman.shadow' version '5.0.0'
+    id 'com.gradle.build-scan' version '2.4'
 }
 
 ext {
