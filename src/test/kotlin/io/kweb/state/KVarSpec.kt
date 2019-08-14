@@ -2,7 +2,6 @@ package io.kweb.state
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
-import io.kotlintest.specs.StringSpec
 
 class KVarSpec : FreeSpec({
     "a KVar with value `dog`" - {
@@ -27,5 +26,7 @@ class KVarSpec : FreeSpec({
         kv.value = "three"
         val mappedKv = kv.map { it.length }
         mappedKv.value shouldBe 5
+        kv.value = "one"
+        mappedKv.value shouldBe 3
     }
 })

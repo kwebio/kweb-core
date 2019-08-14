@@ -35,13 +35,13 @@ open class KVal<T : Any?>(value: T) {
     //       mappings
     fun <O : Any?> map(mapper: (T) -> O): KVal<O> {
         if (isClosed) {
-            throw IllegalStateException("Mapping an already closed KVar")
+            error("Mapping an already closed KVar")
         }
         val newObservable = KVal(mapper(value))
         val handle = addListener { old, new ->
             if (!isClosed && !newObservable.isClosed) {
-                if (new != pValue) {
-                    logger.debug("Updating mapped $pValue to $new")
+                if (old != new) {
+                    logger.debug("Updating mapped $value to $new")
                     val mappedValue = mapper(new)
                     newObservable.pValue = mappedValue
                     newObservable.listeners.values.forEach {
@@ -54,7 +54,7 @@ open class KVal<T : Any?>(value: T) {
                     }
                 }
             } else {
-                logger.warn("Not propagating change to mapped variable because this or the other observable are closed, old: $old, new: $new")
+                error("Not propagating change to mapped variable because this or the other observable are closed, old: $old, new: $new")
             }
         }
         newObservable.onClose { removeListener(handle) }
