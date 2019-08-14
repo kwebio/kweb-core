@@ -49,6 +49,16 @@ val KVar<URL>.path
 
     })
 
+val KVar<URL>.query
+    get() = this.map(object : ReversableFunction<URL, String>("URL.query") {
+
+        override fun invoke(from: URL): String = from.query()
+
+        override fun reverse(original: URL, change: String): URL =
+                original.withQuery(change)
+
+    })
+
 val KVar<URL>.pathSegments
     get() = this.map(object : ReversableFunction<URL, List<String>>("URL.pathSegments") {
 
