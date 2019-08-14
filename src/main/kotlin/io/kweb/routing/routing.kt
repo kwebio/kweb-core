@@ -95,5 +95,5 @@ private fun testSampleForRouting() {
                 }
             }
         }
-    }, jettyConfiguration = {})
+    })
 }

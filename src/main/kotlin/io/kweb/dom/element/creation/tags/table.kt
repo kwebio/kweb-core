@@ -48,5 +48,5 @@ fun table_example() {
                 }
             }
         }
-    }, jettyConfiguration = {})
+    })
 }

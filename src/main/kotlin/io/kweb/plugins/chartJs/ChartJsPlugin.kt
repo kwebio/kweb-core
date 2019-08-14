@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
                     ))
             )
         }
-    }, jettyConfiguration = {})
+    })
     Thread.sleep(100000)
 }
 

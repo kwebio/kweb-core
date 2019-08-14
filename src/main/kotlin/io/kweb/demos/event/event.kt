@@ -16,5 +16,5 @@ fun main() {
                 println("Received: '${e}'")
             }
         }
-    }, jettyConfiguration = {})
+    })
 }

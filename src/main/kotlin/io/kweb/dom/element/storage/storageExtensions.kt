@@ -25,5 +25,5 @@ private fun local_storage_sample() {
             val username : CompletableFuture<String?> = doc.sessionStorage["user_name"]
             println("Read username: ${username.await()}")
         }
-    }, jettyConfiguration = {})
+    })
 }

@@ -339,7 +339,7 @@ fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
 private fun new_sample_1() {
     Kweb(port = 1234, buildPage = {
         doc.body.new().h1().text("Hello World!")
-    }, jettyConfiguration = {})
+    })
 }
 
 private fun new_sample_2() {
@@ -347,6 +347,6 @@ private fun new_sample_2() {
         doc.body.new {
             h1().text("Hello World!")
         }
-    }, jettyConfiguration = {})
+    })
 }
 

@@ -9,6 +9,6 @@ import io.kweb.Kweb
 fun main(args: Array<String>) {
     Kweb(port = 1234, debug = true, buildPage = {
         Thread.sleep(1000)
-    }, jettyConfiguration = {})
+    })
     Thread.sleep(2000)
 }

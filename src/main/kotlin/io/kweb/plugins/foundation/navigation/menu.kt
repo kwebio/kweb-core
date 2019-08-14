@@ -56,5 +56,5 @@ private fun foundation_menu_sample() {
                         .text("My Site")
             }
         }
-    }, jettyConfiguration = {})
+    })
 }

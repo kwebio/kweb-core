@@ -140,6 +140,6 @@ fun ordered_view_set_sample() {
                 }
             }
         }
-    }, jettyConfiguration = {})
+    })
 }
 

@@ -17,6 +17,6 @@ fun main(args: Array<String>) {
                 counter.value++
             }
         }
-    }, jettyConfiguration = {})
+    })
 }
 

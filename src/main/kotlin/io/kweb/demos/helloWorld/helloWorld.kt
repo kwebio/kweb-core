@@ -9,5 +9,5 @@ fun main() {
         doc.body.new {
             h1().text("Hello World!")
         }
-    }, jettyConfiguration = {})
+    })
 }

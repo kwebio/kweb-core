@@ -51,6 +51,6 @@ private fun document_sample() {
         doc.body.new {
             h1().text("Hello World!")
         }
-    }, jettyConfiguration = {})
+    })
 }
 

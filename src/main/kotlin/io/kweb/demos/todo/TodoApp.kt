@@ -87,7 +87,7 @@ class TodoApp {
                     }
                 }
             }
-        }, jettyConfiguration = {})
+        })
     }
 
     private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
