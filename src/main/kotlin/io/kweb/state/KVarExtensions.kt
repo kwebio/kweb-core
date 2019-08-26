@@ -2,10 +2,6 @@ package io.kweb.state
 
 import io.mola.galimatias.URL
 
-operator fun <T : Any> KVal<List<T>>.get(pos: Int): KVal<T> {
-    return this.map { it[pos] }
-}
-
 operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
     return this.map(object : ReversableFunction<List<T>, T>("get($pos)") {
         override fun invoke(from: List<T>): T {
@@ -20,6 +16,20 @@ operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
                 .subList(0, pos)
                 .plus(change)
                 .plus(original.subList(pos + 1, original.size))
+    })
+}
+
+operator fun <K : Any, V : Any> KVar<Map<K, V>>.get(k : K) : KVar<V?> {
+    return this.map(object : ReversableFunction<Map<K, V>, V?>("map[$k]") {
+        override fun invoke(from: Map<K, V>): V? = from[k]
+
+        override fun reverse(original: Map<K, V>, change: V?): Map<K, V> {
+            return if (change != null) {
+                original + (k to change)
+            } else {
+                original - k
+            }
+        }
     })
 }
 
