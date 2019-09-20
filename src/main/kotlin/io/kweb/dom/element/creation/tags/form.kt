@@ -48,7 +48,25 @@ fun ElementCreator<Element>.textarea(rows : Int?, cols : Int?, required : Boolea
 }
 
 open class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
-fun ElementCreator<Element>.select(attributes: Map<String, Any> = attr) = SelectElement(element("select", attributes))
+fun <T : Any> ElementCreator<Element>.select(options: List<T>, optionValue: (T) -> String, optionText: (T) -> String = { it.toString() }, name: String? = null, required : Boolean? = null, attributes: Map<String, Any> = attr) : SelectElement {
+    return select(options.map {
+        optionValue(it) to optionText(it)
+    }, name, required, attributes)
+}
+fun ElementCreator<Element>.select(options: List<Pair<String, Any>>, name: String? = null, required : Boolean? = null, attributes: Map<String, Any> = attr) : SelectElement {
+    val selectElement = element("select", attributes = attributes
+            .set("name", name)
+            .set("required", required)
+    )
+
+    ElementCreator(selectElement).apply {
+        for (i in options) {
+            element("option", mapOf("value" to i.first)).text(i.second.toString())
+        }
+    }
+
+    return SelectElement(selectElement)
+}
 
 open class TextAreaElement(parent: Element) : ValueElement(parent) {
     override val read get() = TextAreaElementReader(this)
