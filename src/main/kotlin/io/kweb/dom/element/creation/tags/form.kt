@@ -39,7 +39,7 @@ enum class InputType {
     button, checkbox, color, date, datetime, email, file, hidden, image, month, number, password, radio, range, reset, search, submit, tel, text, time, url, week
 }
 
-fun ElementCreator<Element>.textarea(rows : Int?, cols : Int?, required : Boolean?, attributes: Map<String, Any> = attr) : TextAreaElement {
+fun ElementCreator<Element>.textarea(rows : Int? = null, cols : Int? = null, required : Boolean? = null, attributes: Map<String, Any> = attr) : TextAreaElement {
     return TextAreaElement(element("textarea", attributes = attributes
             .set("rows", rows)
             .set("cols", cols)
