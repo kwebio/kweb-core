@@ -62,7 +62,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
         onCleanup(withParent = false) {
             logger.debug("Deleting element ${newElement.id}", RuntimeException())
-            newElement.delete()
+            newElement.deleteIfExists()
         }
         return newElement
     }
