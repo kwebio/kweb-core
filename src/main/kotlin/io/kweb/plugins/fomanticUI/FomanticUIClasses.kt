@@ -96,6 +96,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val bulleted : FomanticUIClasses get() {
+        classes("bulleted")
+        return this
+    }
+
     val button : FomanticUIClasses get() {
         classes("button")
         return this
