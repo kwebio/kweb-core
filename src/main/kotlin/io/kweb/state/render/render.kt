@@ -25,15 +25,15 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
     val listenerHandle = kval.addListener { _, newVal ->
         containerSpan.removeChildren()
         containerSpan.new {
+            previousElementCreator.getAndSet(this)?.cleanup()
             block(newVal)
             // Remember this ElementCreator and clean up the previous one if necessary
-            previousElementCreator.getAndSet(this)?.cleanup()
         }
     }
 
     containerSpan.new {
-        block(kval.value)
         previousElementCreator.getAndSet(this)?.cleanup()
+        block(kval.value)
     }
 
     this.onCleanup(false) {
