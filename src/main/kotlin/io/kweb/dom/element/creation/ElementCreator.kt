@@ -95,8 +95,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      * Specify a listener to be called when this element is removed from the DOM.
      *
      * @param withParent If `true` this cleaner will be called if this element is cleaned up, or if
-     *                   any ancestor element of this element is cleaned up.  Otherwise it will
-     *                   only be cleaned up if this element is cleaned up specifically.
+     *                   any ancestor element of this ElementCreator is cleaned up.  Otherwise it will
+     *                   only be cleaned up if this ElementCreator is cleaned up specifically.
+     *
+     *                   As a rule-of-thumb, use 'true' for anything except deleting DOM elements
      */
     fun onCleanup(withParent: Boolean, f: Cleaner) {
         if (withParent) {

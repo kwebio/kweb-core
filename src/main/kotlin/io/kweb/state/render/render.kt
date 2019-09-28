@@ -35,7 +35,12 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
         block(kval.value)
     }
 
+    this.onCleanup(false) {
+        containerSpan.deleteIfExists()
+    }
+
     this.onCleanup(true) {
+        previousElementCreator.getAndSet(null)?.cleanup()
         kval.removeListener(listenerHandle)
     }
 }
