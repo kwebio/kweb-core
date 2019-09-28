@@ -33,6 +33,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
     containerSpan.new {
         block(kval.value)
+        previousElementCreator.getAndSet(this)?.cleanup()
     }
 
     this.onCleanup(false) {
