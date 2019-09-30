@@ -46,7 +46,10 @@ open class KVal<T : Any?>(value: T) {
                     newObservable.pValue = mappedValue
                     newObservable.listeners.values.forEach {
                         try {
-                            it(mapper(old), mappedValue)
+                            val mappedOld = mapper(old)
+                            if (mappedOld != mappedValue) {
+                                it(mappedOld, mappedValue)
+                            }
                         } catch (e: Exception) {
                             logger.warn("Exception thrown by listener", e)
                         }

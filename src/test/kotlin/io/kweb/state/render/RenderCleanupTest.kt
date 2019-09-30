@@ -7,7 +7,10 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
+import io.kweb.plugins.fomanticUI.fomantic
+import io.kweb.plugins.fomanticUI.fomanticUIPlugin
 import io.kweb.state.*
+import org.apache.tools.ant.taskdefs.Parallel
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.*
@@ -62,22 +65,47 @@ fun main() {
     RenderCleanupTestApp()
 }
 
+data class TaskList(val tasks: List<String>)
+
 class RenderCleanupTestApp {
-    val v = KVar("")
+    val taskList = KVar(emptyList<String>())
 
-    val server: Kweb = Kweb(port = 7659) {
+    val server: Kweb = Kweb(port = 7659, plugins = listOf(fomanticUIPlugin)) {
+
+        val editing = KVar(false)
+
         doc.body.new {
-            button().apply {
-                text("Start")
-                on.click {
-                    v.value = "1"
-
-                    v.value = "2"
+            render(editing) { _editing ->
+                if (_editing) {
+                    div(fomantic.ui.form).new {
+                        div(fomantic.field).new {
+                            label().text("What tasks would you like to prioritize?  (one per line)")
+                            val ta = textarea()
+                            ta.setValue(taskList.value.joinToString(separator = "\n"))
+                            div(fomantic.ui.buttons).new {
+                                button(fomantic.ui.button, type = ButtonType.submit).text("Save").on("${ta.jsExpression}.value").click { event ->
+                                    taskList.value = event.retrieved!!.split('\n').map { it.trim() }.toList()
+                                    editing.value = false
+                                }
+                                button(fomantic.ui.button, type = ButtonType.submit).text("Cancel").on("${ta.jsExpression}.value").click { event ->
+                                    editing.value = false
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    render(taskList.map { it.size }) { listSize ->
+                        div(fomantic.ui.bulleted.list).new {
+                            for (ix in 0 until listSize) {
+                                div(fomantic.item).text(taskList[ix])
+                            }
+                        }
+                        button(fomantic.ui.button).text("Edit").on.click {
+                            editing.value = true
+                        }
+                        Unit
+                    }
                 }
-            }
-
-            render(v){
-                p().text(v.value)
             }
         }
     }

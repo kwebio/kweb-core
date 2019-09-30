@@ -93,8 +93,11 @@ abstract class ValueElement(open val element : Element, val kvarUpdateEvent : St
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)
-        newValue.addListener { _, new ->
+        val listenerHandle = newValue.addListener { _, new ->
             setValue(new)
+        }
+        element.creator?.onCleanup(true) {
+            newValue.removeListener(listenerHandle)
         }
     }
 
