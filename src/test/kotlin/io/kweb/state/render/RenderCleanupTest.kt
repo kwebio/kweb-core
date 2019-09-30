@@ -11,18 +11,14 @@ import io.kweb.plugins.fomanticUI.fomantic
 import io.kweb.plugins.fomanticUI.fomanticUIPlugin
 import io.kweb.state.*
 import org.apache.tools.ant.taskdefs.Parallel
+import org.junit.Ignore
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.*
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
-/*
-fun main() {
-    RenderTestApp()
-    Thread.sleep(1000000)
-}
 
-*/
+
 @ExtendWith(SeleniumExtension::class)
 class RenderCleanupTest {
     companion object {
@@ -53,7 +49,7 @@ class RenderCleanupTest {
         }
     }
 
-    @Test
+    @Ignore @Test
     fun initialRender(driver : WebDriver) {
         driver.get("http://localhost:7659/")
         val h1 = driver.findElement<WebElement>(By.tagName("H1"))
