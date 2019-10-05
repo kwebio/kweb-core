@@ -11,7 +11,6 @@ import io.kweb.plugins.fomanticUI.fomantic
 import io.kweb.plugins.fomanticUI.fomanticUIPlugin
 import io.kweb.state.*
 import org.apache.tools.ant.taskdefs.Parallel
-import org.junit.Ignore
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.*
@@ -48,13 +47,14 @@ class RenderCleanupTest {
             setHeadless(true)
         }
     }
-
-    @Ignore @Test
+    /*
+    @Test
     fun initialRender(driver : WebDriver) {
         driver.get("http://localhost:7659/")
         val h1 = driver.findElement<WebElement>(By.tagName("H1"))
         h1.shouldNotBeNull()
     }
+     */
 }
 
 fun main() {
