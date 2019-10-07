@@ -1,6 +1,5 @@
 package io.kweb.plugins
 
-import io.ktor.application.Application
 import io.ktor.routing.Routing
 import io.kweb.dom.element.Element
 import java.util.*

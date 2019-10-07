@@ -1,8 +1,11 @@
 package io.kweb.dom.element.read
 
 import com.github.salomonbrys.kotson.fromJson
-import io.kweb.*
-import io.kweb.dom.element.*
+import io.kweb.WebBrowser
+import io.kweb.dom.element.Element
+import io.kweb.dom.element.KWebDSL
+import io.kweb.escapeEcma
+import io.kweb.gson
 import java.util.concurrent.CompletableFuture
 
 @KWebDSL

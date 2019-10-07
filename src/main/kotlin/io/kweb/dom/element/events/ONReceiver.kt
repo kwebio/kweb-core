@@ -1,7 +1,8 @@
 package io.kweb.dom.element.events
 
 import com.github.salomonbrys.kotson.fromJson
-import io.kweb.dom.element.*
+import io.kweb.dom.element.Element
+import io.kweb.dom.element.KWebDSL
 import io.kweb.gson
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap

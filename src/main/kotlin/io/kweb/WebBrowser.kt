@@ -4,7 +4,8 @@ import io.kweb.client.HttpRequestInfo
 import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.dom.Document
 import io.kweb.plugins.KwebPlugin
-import io.kweb.state.*
+import io.kweb.state.KVar
+import io.kweb.state.ReversableFunction
 import io.mola.galimatias.URL
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture

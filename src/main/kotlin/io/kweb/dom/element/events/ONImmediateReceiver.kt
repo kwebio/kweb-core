@@ -1,6 +1,7 @@
 package io.kweb.dom.element.events
 
-import io.kweb.dom.element.*
+import io.kweb.dom.element.Element
+import io.kweb.dom.element.KWebDSL
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass

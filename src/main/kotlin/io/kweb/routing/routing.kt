@@ -1,7 +1,9 @@
 package io.kweb.routing
 
-import io.ktor.routing.*
-import io.ktor.routing.RoutingPathSegmentKind.*
+import io.ktor.routing.RoutingPath
+import io.ktor.routing.RoutingPathSegment
+import io.ktor.routing.RoutingPathSegmentKind.Constant
+import io.ktor.routing.RoutingPathSegmentKind.Parameter
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
@@ -10,6 +12,16 @@ import io.kweb.state.*
 import io.kweb.state.render.render
 import io.mola.galimatias.URL
 import mu.KotlinLogging
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.all
+import kotlin.collections.firstOrNull
+import kotlin.collections.getValue
+import kotlin.collections.listOf
+import kotlin.collections.set
+import kotlin.collections.withIndex
 
 /**
  * @sample testSampleForRouting

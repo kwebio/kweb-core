@@ -1,7 +1,8 @@
 package io.kweb.plugins.chartJs
 
-import io.kweb.*
 import io.kweb.dom.element.creation.tags.CanvasElement
+import io.kweb.random
+import io.kweb.toJson
 import java.time.Instant
 
 class Chart(canvas: CanvasElement, chartConfig: ChartConfig) {

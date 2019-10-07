@@ -1,9 +1,9 @@
 package io.kweb.dom.element.creation.tags
 
-import io.kweb.dom.attributes.*
+import io.kweb.dom.attributes.attr
+import io.kweb.dom.attributes.set
 import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.dom.element.read.ElementReader
 
 open class ULElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.ul(attributes: Map<String, Any> = attr) = ULElement(element("ul", attributes))

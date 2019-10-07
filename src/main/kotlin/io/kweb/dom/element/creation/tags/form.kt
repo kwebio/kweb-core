@@ -1,11 +1,11 @@
 package io.kweb.dom.element.creation.tags
 
 import com.github.salomonbrys.kotson.toJson
-import io.kweb.dom.attributes.*
+import io.kweb.dom.attributes.attr
+import io.kweb.dom.attributes.set
 import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.events.ONReceiver
-import io.kweb.dom.element.events.on
 import io.kweb.dom.element.read.ElementReader
 import io.kweb.state.KVal
 import io.kweb.state.KVar

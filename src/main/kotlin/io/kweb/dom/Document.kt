@@ -1,11 +1,13 @@
 package io.kweb.dom
 
-import io.kweb.*
+import io.kweb.Kweb
+import io.kweb.WebBrowser
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.cookies.CookieReceiver
-import io.kweb.dom.element.*
+import io.kweb.dom.element.Element
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
+import io.kweb.dom.element.new
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript

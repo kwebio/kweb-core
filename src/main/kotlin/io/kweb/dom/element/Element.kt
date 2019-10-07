@@ -7,13 +7,16 @@ import io.kweb.client.Server2ClientMessage.Instruction.Type
 import io.kweb.client.Server2ClientMessage.Instruction.Type.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
+import io.kweb.dom.element.events.ONImmediateReceiver
+import io.kweb.dom.element.events.ONReceiver
 import io.kweb.dom.element.modification.StyleReceiver
 import io.kweb.dom.element.read.ElementReader
 import io.kweb.plugins.KwebPlugin
 import io.kweb.state.KVal
 import io.kweb.state.KVar
 import java.util.*
-import java.util.concurrent.*
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.reflect.KClass
 
 @DslMarker
@@ -304,8 +307,21 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
 
     fun canSendInstruction() = id != null && browser.kweb.isNotCatchingOutbound()
 
+    /**
+     * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
+     */
+    val on: ONReceiver get() = ONReceiver(this)
 
+    /**
+     * You can supply a javascript expression `retrieveJs` which will
+     * be available via [Event.retrieveJs]
+     */
+    fun on(retrieveJs : String) = ONReceiver(this, retrieveJs)
 
+    /**
+     * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
+     */
+    val onImmediate : ONImmediateReceiver get() = ONImmediateReceiver(this)
 }
 
 /**

@@ -1,9 +1,9 @@
 package io.kweb.docs
 
 import io.kweb.Kweb
-import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.ButtonType.button
-import io.kweb.dom.element.events.on
+import io.kweb.dom.element.creation.tags.button
+import io.kweb.dom.element.creation.tags.p
 import io.kweb.dom.element.new
 import io.kweb.state.KVar
 

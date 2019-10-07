@@ -2,7 +2,6 @@ package io.kweb.demos.event
 
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.tags.input
-import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
 
 /**

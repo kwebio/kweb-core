@@ -1,6 +1,7 @@
 package io.kweb.plugins.fomanticUI
 
-import io.kweb.dom.attributes.*
+import io.kweb.dom.attributes.AttributeBuilder
+import io.kweb.dom.attributes.classes
 
 class FomanticUIClasses : AttributeBuilder() {
 

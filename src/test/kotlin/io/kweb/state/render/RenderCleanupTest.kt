@@ -1,19 +1,18 @@
 package io.kweb.state.render
 
-import io.github.bonigarcia.seljup.*
-import io.kotlintest.matchers.types.shouldNotBeNull
+import io.github.bonigarcia.seljup.Options
+import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.tags.*
-import io.kweb.dom.element.creation.tags.InputType.text
-import io.kweb.dom.element.events.on
 import io.kweb.dom.element.new
 import io.kweb.plugins.fomanticUI.fomantic
 import io.kweb.plugins.fomanticUI.fomanticUIPlugin
-import io.kweb.state.*
-import org.apache.tools.ant.taskdefs.Parallel
-import org.junit.jupiter.api.*
+import io.kweb.state.KVar
+import io.kweb.state.ReversableFunction
+import io.kweb.state.get
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.extension.ExtendWith
-import org.openqa.selenium.*
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 

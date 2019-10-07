@@ -1,9 +1,12 @@
 package io.kweb.browserConnection
 
-import io.ktor.http.cio.websocket.*
+import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.Frame.Text
-import kotlinx.coroutines.*
+import io.ktor.http.cio.websocket.WebSocketSession
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
 

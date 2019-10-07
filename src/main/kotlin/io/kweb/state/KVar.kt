@@ -3,7 +3,8 @@ package io.kweb.state
 import mu.KotlinLogging
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty1
-import kotlin.reflect.full.*
+import kotlin.reflect.full.instanceParameter
+import kotlin.reflect.full.memberFunctions
 
 private val logger = KotlinLogging.logger {}
 
