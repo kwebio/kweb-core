@@ -297,6 +297,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val fields : FomanticUIClasses get() {
+        classes("fields")
+        return this
+    }
+
     val flag : FomanticUIClasses get() {
         classes("flag")
         return this
