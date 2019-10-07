@@ -368,6 +368,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val grouped : FomanticUIClasses get() {
+        classes("grouped")
+        return this
+    }
+
     val header : FomanticUIClasses get() {
         classes("header")
         return this
