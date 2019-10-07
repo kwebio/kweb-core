@@ -152,6 +152,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val checked : FomanticUIClasses get() {
+        classes("checked")
+        return this
+    }
+
     val checkmark : FomanticUIClasses get() {
         classes("checkmark")
         return this
