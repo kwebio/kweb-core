@@ -816,6 +816,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val tab: FomanticUIClasses get() {
+        classes("tab")
+        return this
+    }
+
     val tabular: FomanticUIClasses get() {
         classes("tabular")
         return this
