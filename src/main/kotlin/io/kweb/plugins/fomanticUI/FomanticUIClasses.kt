@@ -11,6 +11,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val actions : FomanticUIClasses get() {
+        classes("actions")
+        return this
+    }
+
     val active : FomanticUIClasses get() {
         classes("active")
         return this
@@ -32,8 +37,18 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val accordion : FomanticUIClasses get() {
+        classes("accordion")
+        return this
+    }
+
     val aligned : FomanticUIClasses get() {
         classes("aligned")
+        return this
+    }
+
+    val angle : FomanticUIClasses get() {
+        classes("angle")
         return this
     }
 
@@ -64,6 +79,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val banner : FomanticUIClasses get() {
         classes("banner")
+        return this
+    }
+
+    val bar : FomanticUIClasses get() {
+        classes("bar")
         return this
     }
 
@@ -99,6 +119,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val bulleted : FomanticUIClasses get() {
         classes("bulleted")
+        return this
+    }
+
+    val brown : FomanticUIClasses get() {
+        classes("brown")
         return this
     }
 
@@ -182,6 +207,16 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val clock : FomanticUIClasses get() {
+        classes("clock")
+        return this
+    }
+
+    val close : FomanticUIClasses get() {
+        classes("close")
+        return this
+    }
+
     val copy : FomanticUIClasses get() {
         classes("copy")
         return this
@@ -219,6 +254,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val date : FomanticUIClasses get() {
         classes("date")
+        return this
+    }
+
+    val deny : FomanticUIClasses get() {
+        classes("deny")
         return this
     }
 
@@ -358,6 +398,10 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val fullscreen : FomanticUIClasses get() {
+        classes("fullscreen")
+        return this
+    }
 
     val green : FomanticUIClasses get() {
         classes("green")
@@ -417,6 +461,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val indeterminate : FomanticUIClasses get() {
         classes("indeterminate")
+        return this
+    }
+
+    val indicating : FomanticUIClasses get() {
+        classes("indicating")
         return this
     }
 
@@ -507,6 +556,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val massive : FomanticUIClasses get() {
+        classes("massive")
+        return this
+    }
+
     val masthead : FomanticUIClasses get() {
         classes("masthead")
         return this
@@ -553,6 +607,16 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val modal : FomanticUIClasses get() {
+        classes("modal")
+        return this
+    }
+
+    val multiple : FomanticUIClasses get() {
+        classes("multiple")
+        return this
+    }
+
     val negative : FomanticUIClasses get() {
         classes("negative")
         return this
@@ -582,6 +646,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val outline : FomanticUIClasses get() {
         classes("outline")
+        return this
+    }
+
+    val overlay : FomanticUIClasses get() {
+        classes("overlay")
         return this
     }
 
@@ -619,6 +688,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val primary : FomanticUIClasses get() {
         classes("primary")
+        return this
+    }
+
+    val progress : FomanticUIClasses get() {
+        classes("progress")
         return this
     }
 
@@ -674,6 +748,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val styled : FomanticUIClasses get() {
+        classes("styled")
+        return this
+    }
+
     val success : FomanticUIClasses get() {
         classes("success")
         return this
@@ -691,6 +770,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val thirteen : FomanticUIClasses get() {
         classes("thirteen")
+        return this
+    }
+
+    val title : FomanticUIClasses get() {
+        classes("title")
         return this
     }
 
