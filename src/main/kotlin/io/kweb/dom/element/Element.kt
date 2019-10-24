@@ -85,7 +85,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      *
      * Will be ignored if `value` is `null`.
      */
-    fun setAttribute(name: String, value: Any?): Element {
+    fun setAttributeRaw(name: String, value: Any?): Element {
         if (value != null) {
             if (canSendInstruction()) {
                 browser.send(Instruction(type = SetAttribute, parameters = listOf(id, name, value)))
@@ -100,9 +100,9 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     }
 
     fun setAttribute(name : String, oValue : KVal<Any>) : Element {
-        setAttribute(name, oValue.value)
+        setAttributeRaw(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
-            setAttribute(name, newValue)
+            setAttributeRaw(name, newValue)
         }
         this.creator?.onCleanup(true) {
             oValue.removeListener(handle)
@@ -148,7 +148,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     fun classes(vararg value : String) = setClasses(*value)
 
     fun setClasses(vararg value: String): Element {
-        setAttribute("class", value.joinToString(separator = " ").toJson())
+        setAttributeRaw("class", value.joinToString(separator = " ").toJson())
         return this
     }
 
@@ -187,7 +187,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     }
 
     fun disable(): Element {
-        setAttribute("disabled", true)
+        setAttributeRaw("disabled", true)
         return this
     }
 
@@ -299,7 +299,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         execute("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
     }
 
-    fun spellcheck(spellcheck : Boolean = true) = setAttribute("spellcheck", spellcheck)
+    fun spellcheck(spellcheck : Boolean = true) = setAttributeRaw("spellcheck", spellcheck)
 
     val style get() = StyleReceiver(this)
 
