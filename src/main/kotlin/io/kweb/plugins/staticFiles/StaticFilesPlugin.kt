@@ -48,6 +48,5 @@ class StaticFilesPlugin private constructor(private val servedRoute: String = "a
 }
 
 internal const val internalStaticFilePath = "kweb_native_assets"
-internal val internalStaticFilesPlugin = StaticFilesPlugin(ResourceFolder("io/kweb/assets"), servedRoute = internalStaticFilePath)
 
 data class ResourceFolder(val resourceFolder: String)
