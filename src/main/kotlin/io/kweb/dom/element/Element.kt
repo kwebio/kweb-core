@@ -125,7 +125,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     }
 
     fun innerHTML(html: KVal<String>) : Element {
-        this.innerHTML(html)
+        this.innerHTML(html.value)
         val handle = html.addListener{ _, new ->
             innerHTML(new)
         }
