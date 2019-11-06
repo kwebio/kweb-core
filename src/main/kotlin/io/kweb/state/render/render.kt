@@ -87,7 +87,11 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
     }
 
     val onInsertHandler = orderedViewSet.onInsert { index, inserted ->
-        items.add(index, createItem(orderedViewSet, inserted, renderer, index))
+        if (index < items.size) {
+            items.add(index, createItem(orderedViewSet, inserted, renderer, index))
+        } else {
+            items.add(createItem(orderedViewSet, inserted, renderer, insertAtPosition = null))
+        }
     }
     this.onCleanup(true) { orderedViewSet.deleteInsertListener(onInsertHandler) }
 
