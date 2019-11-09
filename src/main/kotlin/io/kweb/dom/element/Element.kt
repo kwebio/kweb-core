@@ -99,7 +99,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    fun setAttribute(name : String, oValue : KVal<in Any>) : Element {
+    fun setAttribute(name : String, oValue : KVal<out Any>) : Element {
         setAttributeRaw(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
             setAttributeRaw(name, newValue)
