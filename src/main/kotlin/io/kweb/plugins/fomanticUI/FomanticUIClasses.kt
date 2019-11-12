@@ -778,6 +778,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val unstackable : FomanticUIClasses get() {
+        classes("unstackable")
+        return this
+    }
+
     val user : FomanticUIClasses get() {
         classes("user")
         return this
