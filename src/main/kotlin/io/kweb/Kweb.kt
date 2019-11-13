@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(1)
+private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
 
 /**
  * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
