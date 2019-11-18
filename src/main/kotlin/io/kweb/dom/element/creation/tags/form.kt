@@ -32,6 +32,13 @@ open class InputElement(override val element: Element) :ValueElement(element) {
 
     fun select() = element.execute("$jsExpression.select();")
 
+    /*
+
+     copyText.setSelectionRange(0, 99999);
+     */
+
+    fun setSelectionRange(start : Int, end : Int) = element.execute("$jsExpression.setSelectionRange($start, $end);")
+
     fun setReadOnly(ro: Boolean) = element.execute("$jsExpression.readOnly = $ro;")
 }
 
