@@ -50,12 +50,7 @@ private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
  * @property port  The TCP port on which the HTTP server should listen
  * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
  *                 but false during production because it is inefficient at scale
- * @property refreshPageOnHotswap Detects code-reloads by [HotSwapAgent](http://hotswapagent.org/) and refreshes
- *                                any connected webpage if this is detected
  * @property plugins A list of Kweb plugins to be loaded by Kweb
- * @property onError A handler for JavaScript errors (only detected if `debug == true`)
- * @property maxPageBuildTimeMS If `debug == true` this is the maximum time permitted to build a page before a
- *                              warning is logged
  * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
  *                     go
  */
