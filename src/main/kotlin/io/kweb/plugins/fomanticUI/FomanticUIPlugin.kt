@@ -15,9 +15,9 @@ class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
 ) {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         startHead.append("""
-            <link rel="stylesheet" type="text/css" href="$resourceRoute/semantic.min.css">
-            <script src="$resourceRoute/semantic.min.js"></script>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+            <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.js"></script>
 """.trimIndent())
     }
 
