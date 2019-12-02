@@ -97,7 +97,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
 
     val onRemoveHandler = orderedViewSet.onRemove { index, keyValue ->
         if (index >= items.size) {
-            logger.warn("Invalid index $index to retrieveJs item from items list of size ${items.size} for key ${keyValue.key} and item ${keyValue.value}", RuntimeException())
+            logger.warn("Invalid index $index to retrieve item from items list of size ${items.size} for key ${keyValue.key} and item ${keyValue.value}, ignoring.")
         } else {
             val removed = items.removeAt(index)
             removed.creator.cleanup()
