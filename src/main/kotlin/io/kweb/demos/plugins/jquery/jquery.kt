@@ -1,5 +1,5 @@
 package io.kweb.demos.plugins.jquery
-
+/*
 import io.kweb.Kweb
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.attributes.classes
@@ -32,3 +32,5 @@ fun main(args: Array<String>) {
         }
     })
 }
+
+ */

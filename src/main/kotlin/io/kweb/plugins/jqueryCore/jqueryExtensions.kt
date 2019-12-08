@@ -10,12 +10,13 @@ import io.kweb.toJson
  */
 
 
+// Temporarily disabled until problems with static file loader can be addressed - ian
 // Support for $(...), since Kotlin doesn't allow methods called '$' (which is probably a good thing)
 // I just use jquery()
-fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
-    assertPluginLoaded(JQueryCorePlugin::class)
-    return JQueryReceiver(this.browser, "$(${selector.toJson()})")
-}
+//fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
+//   // assertPluginLoaded(JQueryCorePlugin::class)
+//    return JQueryReceiver(this.browser, "$(${selector.toJson()})")
+//}
 
 // And here we can implement all of the useful JQuery functions
 @KWebDSL

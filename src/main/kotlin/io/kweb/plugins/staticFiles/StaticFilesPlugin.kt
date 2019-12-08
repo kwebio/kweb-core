@@ -7,7 +7,6 @@ import io.ktor.http.content.staticRootFolder
 import io.ktor.routing.Route
 import io.ktor.routing.Routing
 import io.kweb.plugins.KwebPlugin
-import io.kweb.plugins.jqueryCore.jqueryCore
 import java.io.File
 import java.net.URL
 /*

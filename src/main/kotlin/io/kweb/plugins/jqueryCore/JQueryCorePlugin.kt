@@ -1,6 +1,9 @@
 package io.kweb.plugins.jqueryCore
 
 import io.kweb.plugins.KwebPlugin
+
+/* Temporarily disabled until issues with static plugin can be addressed - ian
+
 import io.kweb.plugins.staticFiles.ResourceFolder
 import io.kweb.plugins.staticFiles.StaticFilesPlugin
 import io.kweb.plugins.staticFiles.internalStaticFilePath
@@ -23,3 +26,4 @@ class JQueryCorePlugin : KwebPlugin(dependsOn = setOf(StaticFilesPlugin(Resource
 }
 
 val jqueryCore = JQueryCorePlugin()
+*/
