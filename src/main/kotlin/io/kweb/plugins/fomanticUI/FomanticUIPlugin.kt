@@ -10,9 +10,7 @@ private const val resourceRoute = "$internalStaticFilePath/fomantic"
 /**
  * Created by ian on 3/30/17.
  */
-class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
-        StaticFilesPlugin(ResourceFolder(resourceFolder), resourceRoute))
-) {
+class FomanticUIPlugin : KwebPlugin() {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         startHead.append("""
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
