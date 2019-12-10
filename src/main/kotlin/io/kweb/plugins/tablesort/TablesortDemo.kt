@@ -7,8 +7,6 @@ import io.kweb.dom.element.new
 import io.kweb.plugins.fomanticUI.fomantic
 import io.kweb.plugins.fomanticUI.fomanticUIPlugin
 
-/*
-
 fun main(args: Array<String>) {
     Kweb(port = 4200, plugins = listOf(fomanticUIPlugin, tableSortPlugin), buildPage = {
         doc.body.new {
@@ -44,6 +42,3 @@ private fun ElementCreator<TbodyElement>.tableRow(person: String, age: Int, net:
             td().text("$age")
             td(mapOf("data-sort-value" to net)).text("$net")
         }
-
-
- */

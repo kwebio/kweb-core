@@ -7,12 +7,11 @@ import io.ktor.http.content.staticRootFolder
 import io.ktor.routing.Route
 import io.ktor.routing.Routing
 import io.kweb.plugins.KwebPlugin
+import io.kweb.plugins.jqueryCore.jqueryCore
 import java.io.File
 import java.net.URL
-/*
-*
-* Temporarily remove from API due to apparent cyclic dependency in jquery include - ian
-*
+
+/**
  * @author rpanic
  *
  * This Plugin serves static files to be used in the frontend
@@ -20,7 +19,7 @@ import java.net.URL
  * @property rootFolder The root folder, where the static assets are saved
  * @property resourceFolder For serving resources, the path to the folder which will be served
  * @property servedRoute The route where these assets are being served
-
+ */
 class StaticFilesPlugin private constructor(private val servedRoute: String = "assets") : KwebPlugin() {
 
     private lateinit var datasource: (Route) -> Unit
@@ -51,5 +50,3 @@ class StaticFilesPlugin private constructor(private val servedRoute: String = "a
 internal const val internalStaticFilePath = "kweb_native_assets"
 
 data class ResourceFolder(val resourceFolder: String)
-
- */

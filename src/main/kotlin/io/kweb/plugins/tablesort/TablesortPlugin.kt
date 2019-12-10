@@ -2,15 +2,9 @@ package io.kweb.plugins.tablesort
 
 import io.kweb.dom.element.creation.tags.TableElement
 import io.kweb.plugins.KwebPlugin
-/*
+import io.kweb.plugins.jqueryCore.jqueryCore
 
-Temporarily disabled to sort out some related issues with jquery plugin, if I publish a release without restoring this
- someone please kick me hard - ian
- *
-
- *
- *
-*
+/**
  * Uses kylexfox's [tablesort plugin](https://github.com/kylefox/jquery-tablesort) to allow sortable
  * tables.
  *
@@ -18,7 +12,7 @@ Temporarily disabled to sort out some related issues with jquery plugin, if I pu
  *
  * @author Alexander Papageorgiou Koufidis
  * @see main usage example
- *
+ */
 class TablesortPlugin : KwebPlugin(dependsOn = setOf(jqueryCore)) {
     override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
         startHead.append("""
@@ -39,7 +33,3 @@ val tableSortPlugin = TablesortPlugin()
  */
 fun TableElement.sort() =
         apply { execute("\$('table').tablesort()") }
-
-
-
- */
