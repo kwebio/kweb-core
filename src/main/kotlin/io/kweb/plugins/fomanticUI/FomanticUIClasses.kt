@@ -660,7 +660,7 @@ class FomanticUIClasses : AttributeBuilder() {
     }
 
     val placeholder : FomanticUIClasses get() {
-        classes("placeholder==")
+        classes("placeholder")
         return this
     }
 
