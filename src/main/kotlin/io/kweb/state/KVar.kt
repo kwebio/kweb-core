@@ -51,11 +51,11 @@ inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): K
 
         private val kClass = T::class
         private val copyFunc = kClass.memberFunctions.firstOrNull { it.name == "copy" }
-                ?: throw RuntimeException("Can't find `copy` function in class ${kClass.simpleName}, are you sure it's a data object?")
+                ?: error("Can't find `copy` function in class ${kClass.simpleName}, are you sure it's a data object?")
         private val instanceParam = copyFunc.instanceParameter
-                ?: throw RuntimeException("Unable to obtain instanceParam")
+                ?: error("Unable to obtain instanceParam")
         private val fieldParam = copyFunc.parameters.firstOrNull { it.name == property.name }
-                ?: throw RuntimeException("Unable to identify parameter for ${property.name} in ${kClass.simpleName}.copy() function")
+                ?: error("Unable to identify parameter for ${property.name} in ${kClass.simpleName}.copy() function")
 
         override fun invoke(from: T): O = property.invoke(from)
 

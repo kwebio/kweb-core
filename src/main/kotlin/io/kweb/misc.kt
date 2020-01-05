@@ -55,7 +55,7 @@ val <T : Any> KClass<T>.pkg : String get() {
         val endIndex = packageName.length - className.length - 1
         packageName.substring(0, endIndex)
     } else {
-        throw RuntimeException("Cannot determine package for $this because it may be local or an anonymous object literal")
+        error("Cannot determine package for $this because it may be local or an anonymous object literal")
     }
 }
 

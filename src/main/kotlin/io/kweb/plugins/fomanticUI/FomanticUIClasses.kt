@@ -974,7 +974,7 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val ui : FomanticUIClasses get() {
         if (uiClassAlreadyPresent) {
-            throw RuntimeException("""
+            error("""
             The .ui getter has already been used on this SematicUIClasses object.  Please ensure you are creating a
             fresh FomanticUIClasses object (using the 'fomantic' getter for every element).
 """.trimIndent())

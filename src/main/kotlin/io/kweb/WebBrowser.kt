@@ -32,7 +32,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     @Suppress("UNCHECKED_CAST")
     internal fun <P : KwebPlugin> plugin(plugin: KClass<out P>): P {
-        return (plugins[plugin] ?: throw RuntimeException("Plugin $plugin is missing")) as P
+        return (plugins[plugin] ?: error("Plugin $plugin is missing")) as P
     }
 
     internal fun require(vararg requiredPlugins: KClass<out KwebPlugin>) {
@@ -41,7 +41,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
         if (missing.isNotEmpty()) {
-            throw RuntimeException("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to Kweb constructor")
+            error("Plugin(s) ${missing.joinToString(separator = ", ")} required but not passed to Kweb constructor")
         }
     }
 

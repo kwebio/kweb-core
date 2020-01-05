@@ -156,7 +156,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         if (onlyIf) {
             for (class_ in classes) {
                 if (class_.contains(' ')) {
-                    throw RuntimeException("Class names must not contain spaces")
+                    error("Class names must not contain spaces")
                 }
                 execute("addClass($jsExpression, ${class_.toJson()});")
             }
@@ -168,7 +168,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         if (onlyIf) {
             for (class_ in classes) {
                 if (class_.contains(' ')) {
-                    throw RuntimeException("Class names must not contain spaces")
+                    error("Class names must not contain spaces")
                 }
                 execute("removeClass($jsExpression, ${class_.toJson()});")
             }

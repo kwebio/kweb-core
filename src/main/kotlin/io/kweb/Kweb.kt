@@ -136,11 +136,11 @@ class Kweb constructor(val port: Int,
             val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
 
             if (hello.hello == null) {
-                throw RuntimeException("First message from client isn't 'hello'")
+                error("First message from client isn't 'hello'")
             }
 
             val remoteClientState = clientState.get(hello.id)
-                    ?: throw RuntimeException("Unable to find server state corresponding to client id ${hello.id}")
+                    ?: error("Unable to find server state corresponding to client id ${hello.id}")
 
             assert(remoteClientState.clientConnection is Caching)
             logger.debug("Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache")
@@ -165,7 +165,7 @@ class Kweb constructor(val port: Int,
                                     message.callback != null -> {
                                         val (resultId, result) = message.callback
                                         val resultHandler = remoteClientState.handlers[resultId]
-                                                ?: throw RuntimeException("No data handler for $resultId for client ${remoteClientState.id}")
+                                                ?: error("No data handler for $resultId for client ${remoteClientState.id}")
                                         resultHandler(result ?: "")
                                     }
                                     message.historyStateChange != null -> {
@@ -255,7 +255,7 @@ class Kweb constructor(val port: Int,
 
     private fun handleError(error: Client2ServerMessage.ErrorMessage, remoteClientState: RemoteClientState) {
         val debugInfo = remoteClientState.debugTokens[error.debugToken]
-                ?: throw RuntimeException("DebugInfo message not found")
+                ?: error("DebugInfo message not found")
         val logStatementBuilder = StringBuilder()
         logStatementBuilder.appendln("JavaScript message: '${error.error.message}'")
         logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
@@ -320,7 +320,7 @@ class Kweb constructor(val port: Int,
     }
 
     fun execute(clientId: String, javascript: String) {
-        val wsClientData = clientState.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
@@ -340,11 +340,11 @@ class Kweb constructor(val port: Int,
 
     fun send(clientId: String, instructions: List<Instruction>) {
         if (outboundMessageCatcher.get() != null) {
-            throw RuntimeException("""
+            error("""
                 Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
                 """.trimIndent())
         }
-        val wsClientData = clientState.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
@@ -356,7 +356,7 @@ class Kweb constructor(val port: Int,
 
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
         // TODO: Should return handle which can be used for cleanup of event listeners
-        val wsClientData = clientState.get(clientId) ?: throw RuntimeException("Client id $clientId not found")
+        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
             wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing with callback", Throwable()))
@@ -372,7 +372,7 @@ class Kweb constructor(val port: Int,
 
     fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
         val wsClientData = clientState.get(clientId)
-                ?: throw RuntimeException("Failed to evaluate JavaScript because client id $clientId not found")
+                ?: error("Failed to evaluate JavaScript because client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
             wsClientData.debugTokens.put(dt, DebugInfo(expression, "evaluating", Throwable()))

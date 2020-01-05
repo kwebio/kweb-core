@@ -28,7 +28,7 @@ val tableSortPlugin = TablesortPlugin()
  *
  * For this to work properly for non-strings, add the `data-sort-value` attribute to your TDs!
  * [About data-sort-value](https://github.com/kylefox/jquery-tablesort#how-cells-are-sorted)
- *
+ *as
  * You don't need to call again, unless you change the DOM
  */
 fun TableElement.sort() =

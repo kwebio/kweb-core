@@ -134,7 +134,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
          * This shouldn't be an onerous requirement because typically with lists of things there is just one
           * root <ol> or <ul> per item.  If it does turn out to be a problem we'll need to find another approach.
          */
-        throw RuntimeException("""
+        error("""
             Only one element may be created per item but ${itemElementCreator.elementsCreated} were created for
             item key ${keyValue.key}.  Note that this element may have as many children as you like, so you may just need
             to wrap the elements in a <DIV> or other element type.

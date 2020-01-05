@@ -63,7 +63,7 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
             if(pathRenderer != null) {
                 pathRenderer(this, parameters)
             } else {
-                throw RuntimeException("Unable to find pathRenderer for template $template")
+                error("Unable to find pathRenderer for template $template")
             }
         } else {
             rr.notFoundReceiver.invoke(this, url.value.path())

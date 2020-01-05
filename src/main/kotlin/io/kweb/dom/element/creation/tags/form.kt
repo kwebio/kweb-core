@@ -94,7 +94,7 @@ open class LabelElement(wrapped: Element) : Element(wrapped)
  */
 abstract class ValueElement(open val element : Element, val kvarUpdateEvent : String = "input") : Element(element) {
     fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value;") { s: String -> s }
-            ?: throw RuntimeException("Not sure why .evaluate() would return null")
+            ?: error("Not sure why .evaluate() would return null")
 
     fun setValue(newValue: String) = element.browser.execute("$jsExpression.value=${newValue.toJson()};")
     fun setValue(newValue: KVal<String>) {
@@ -117,7 +117,7 @@ abstract class ValueElement(open val element : Element, val kvarUpdateEvent : St
         return _valueKvar!!
     }
         set(v) {
-            if (_valueKvar != null) throw RuntimeException("`value` may only be set once, and cannot be set after it has been retrieved")
+            if (_valueKvar != null) error("`value` may only be set once, and cannot be set after it has been retrieved")
             setValue(v, updateOn = kvarUpdateEvent)
             _valueKvar = v
         }
@@ -131,7 +131,7 @@ abstract class ValueElement(open val element : Element, val kvarUpdateEvent : St
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
         on(retrieveJs = "${jsExpression}.value").event(updateOn, ONReceiver.Event::class) {
-            toBind.value = it.retrieved ?: throw RuntimeException("No value was retrieved")
+            toBind.value = it.retrieved ?: error("No value was retrieved")
         }
     }
 }

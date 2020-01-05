@@ -46,13 +46,13 @@ sealed class KwebClientConnection {
         override fun send(message: String) {
             logger.debug("Caching '$message' as websocket isn't yet available")
             queue.let {
-                it?.add(message) ?: throw RuntimeException("Can't write to queue after it has been read")
+                it?.add(message) ?: error("Can't write to queue after it has been read")
             }
         }
 
         fun read(): List<String> {
             queue.let {
-                if (it == null) throw RuntimeException("Queue can only be read once")
+                if (it == null) error("Queue can only be read once")
                 else {
                     val r = it.toList()
                     queue = null
