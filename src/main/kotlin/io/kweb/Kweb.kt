@@ -8,7 +8,9 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.cio.websocket.Frame.Text
+import io.ktor.http.cio.websocket.pingPeriod
 import io.ktor.http.cio.websocket.readText
+import io.ktor.http.cio.websocket.timeout
 import io.ktor.request.uri
 import io.ktor.response.respondText
 import io.ktor.routing.Routing
@@ -385,7 +387,7 @@ class Kweb constructor(val port: Int,
 
     override fun close() {
         logger.info("Shutting down Kweb")
-        server.stop(0, 0, TimeUnit.SECONDS)
+        server.stop(0, 0)
     }
 
     private fun cleanUpOldClientStates() {
