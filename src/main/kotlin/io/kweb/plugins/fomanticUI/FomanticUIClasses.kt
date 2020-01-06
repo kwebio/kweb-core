@@ -338,6 +338,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val fade : FomanticUIClasses get() {
+        classes("fade")
+        return this
+    }
+
     val field : FomanticUIClasses get() {
         classes("field")
         return this
@@ -484,6 +489,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val instant : FomanticUIClasses get() {
+        classes("instant")
+        return this
+    }
+
     val internally : FomanticUIClasses get() {
         classes("internally")
         return this
@@ -612,6 +622,11 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val move : FomanticUIClasses get() {
+        classes("move")
+        return this
+    }
+
     val multiple : FomanticUIClasses get() {
         classes("multiple")
         return this
@@ -716,6 +731,10 @@ class FomanticUIClasses : AttributeBuilder() {
         return this
     }
 
+    val reveal : FomanticUIClasses get() {
+        classes("reveal")
+        return this
+    }
 
     val right : FomanticUIClasses get() {
         classes("right")
@@ -810,6 +829,11 @@ class FomanticUIClasses : AttributeBuilder() {
 
     val remove : FomanticUIClasses get() {
         classes("remove")
+        return this
+    }
+
+    val rotate : FomanticUIClasses get() {
+        classes("rotate")
         return this
     }
 
@@ -959,7 +983,7 @@ class FomanticUIClasses : AttributeBuilder() {
         classes("trash")
         return this
     }
-    
+
     val twelve : FomanticUIClasses get() {
         classes("twelve")
         return this
