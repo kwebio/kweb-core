@@ -43,7 +43,9 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
         return "KVar($value)"
     }
 
-
+    fun modify(f : (T) -> T) {
+        this.value = f(this.value)
+    }
 }
 
 inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
