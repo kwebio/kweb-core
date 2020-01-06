@@ -1,6 +1,9 @@
 package io.kweb.state
 
 import mu.KotlinLogging
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.instanceParameter
@@ -43,9 +46,6 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
         return "KVar($value)"
     }
 
-    fun modify(f : (T) -> T) {
-        this.value = f(this.value)
-    }
 }
 
 inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
@@ -74,4 +74,12 @@ fun <O : Any> KVar<O?>.notNull(default : O? = null, invertDefault : Boolean = tr
         } else change
 
     })
+}
+
+@ExperimentalContracts
+fun <T : Any> KVar<T>.modify(f : (T) -> T) {
+    contract {
+        callsInPlace(f, InvocationKind.EXACTLY_ONCE)
+    }
+    this.value = f(this.value)
 }
