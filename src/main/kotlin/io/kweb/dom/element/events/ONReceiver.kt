@@ -35,7 +35,7 @@ open class ONReceiver(internal val parent: Element, val retrieveJs: String? = nu
                               val animationName: String, val elapsedTime: Int, val retrieved : String?)
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: String) -> Unit): Element {
-        parent.addEventListener(eventName, returnEventFields = returnEventFields, callback = callback, retrieveJs = retrieveJs)
+        parent.addEventListener(eventName, returnEventFields = returnEventFields, callback = {callback(it.toString())}, retrieveJs = retrieveJs)
         return parent
     }
 

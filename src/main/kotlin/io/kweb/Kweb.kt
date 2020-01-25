@@ -356,7 +356,7 @@ class Kweb constructor(val port: Int,
         wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
     }
 
-    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (String) -> Unit) {
+    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
         // TODO: Should return handle which can be used for cleanup of event listeners
         val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
@@ -372,7 +372,7 @@ class Kweb constructor(val port: Int,
         clientState[clientId]?.handlers?.remove(callbackId)
     }
 
-    fun evaluate(clientId: String, expression: String, handler: (String) -> Unit) {
+    fun evaluate(clientId: String, expression: String, handler: (Any) -> Unit) {
         val wsClientData = clientState.get(clientId)
                 ?: error("Failed to evaluate JavaScript because client id $clientId not found")
         val debugToken: String? = if (!debug) null else {

@@ -48,7 +48,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
      */
-    fun <O> evaluate(js: String, outputMapper: (String) -> O): CompletableFuture<O>? {
+    fun <O> evaluate(js: String, outputMapper: (Any) -> O): CompletableFuture<O>? {
         return browser.evaluate(js).thenApply(outputMapper)
     }
 
@@ -273,7 +273,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         browser.evaluate(wrappedJS)
     }
 
-    fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), retrieveJs : String?, callback: (String) -> Unit): Element {
+    fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), retrieveJs : String?, callback: (Any) -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+retrieveJs + "}"

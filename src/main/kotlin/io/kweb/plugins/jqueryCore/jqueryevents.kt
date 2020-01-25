@@ -17,7 +17,7 @@ open class JQueryOnReceiver(val parent : JQueryReceiver) {
         val callbackId = Math.abs(random.nextInt())
         val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+"}"
         parent.webBrowser.executeWithCallback("${parent.selectorExpression}.on(${event.toJson()}, function(event) {callbackWs($callbackId, $eventObject);})", callbackId) { payload ->
-            callback.invoke(payload)
+            callback.invoke(payload.toString())
         }
         return parent
     }
@@ -25,10 +25,10 @@ open class JQueryOnReceiver(val parent : JQueryReceiver) {
     inline fun <reified T : Any> event(eventName : String, crossinline callback : (T)-> Unit) : JQueryReceiver {
         // TODO: Should probably cache this rather than do the reflection every time
         val eventPropertyNames = T::class.memberProperties.map {it.name}.toSet()
-        event(eventName, eventPropertyNames, { propertiesAsString ->
+        event(eventName, eventPropertyNames) { propertiesAsString ->
             val props : T = gson.fromJson(propertiesAsString)
             callback(props)
-        })
+        }
         return parent
     }
 

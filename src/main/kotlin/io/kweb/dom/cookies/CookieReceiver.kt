@@ -45,7 +45,7 @@ class CookieReceiver(val receiver: WebBrowser) {
                     if (it == "__COOKIE_NOT_FOUND_TOKEN__") {
                         null
                     } else {
-                        it
+                        it.toString()
                     }
                 }
     }

@@ -49,7 +49,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.execute(sessionId, js)
     }
 
-    fun executeWithCallback(js: String, callbackId: Int, callback: (String) -> Unit) {
+    fun executeWithCallback(js: String, callbackId: Int, callback: (Any) -> Unit) {
         kweb.executeWithCallback(sessionId, js, callbackId, callback)
     }
 
@@ -57,8 +57,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    fun evaluate(js: String): CompletableFuture<String> {
-        val cf = CompletableFuture<String>()
+    fun evaluate(js: String): CompletableFuture<Any> {
+        val cf = CompletableFuture<Any>()
         evaluateWithCallback(js) { response ->
             cf.complete(response)
             false
@@ -66,7 +66,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return cf
     }
 
-    fun evaluateWithCallback(js: String, rh: (String) -> Boolean) {
+    fun evaluateWithCallback(js: String, rh: (Any) -> Boolean) {
         kweb.evaluate(sessionId, js) { rh.invoke(it) }
     }
 
