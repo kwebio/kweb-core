@@ -12,7 +12,7 @@ data class Client2ServerMessage(
         data class Error(val name: String, val message: String)
     }
 
-    data class C2SCallback(val callbackId: Int, val data: Any?)
+    data class C2SCallback(val callbackId: Int, val jsonResult: String)
 
     data class C2SHistoryStateChange(val newState : String)
 }

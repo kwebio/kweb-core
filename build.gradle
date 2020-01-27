@@ -42,8 +42,11 @@ test {
 }
 
 dependencies {
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30' // TODO: Remove
+
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
-    compile 'org.apache.commons:commons-lang3:3.9'
+ //   compile 'org.apache.commons:commons-lang3:3.9'
+    compile 'org.apache.commons:commons-text:1.8'
     compile 'commons-io:commons-io:2.6'
     compile 'org.jsoup:jsoup:1.12.1'
     
@@ -79,6 +82,7 @@ dependencies {
     testCompile 'org.amshove.kluent:kluent:1.57'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
     testCompile 'org.slf4j:slf4j-api:2.0.0-alpha1'
+
     testCompile "io.github.bonigarcia:selenium-jupiter:3.3.2"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.6.0-M1"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0-M1'

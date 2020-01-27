@@ -84,10 +84,10 @@ val KVar<URL>.pathSegments
 
 fun <A, B> Pair<KVar<A>, KVar<B>>.combine() : KVar<Pair<A, B>> {
     val newKVar = KVar(this.first.value to this.second.value)
-    this.first.addListener { o, n -> newKVar.value = n to this.second.value }
-    this.second.addListener {o, n -> newKVar.value = this.first.value to n }
+    this.first.addListener { _, n -> newKVar.value = n to this.second.value }
+    this.second.addListener {_, n -> newKVar.value = this.first.value to n }
 
-    newKVar.addListener { o, n ->
+    newKVar.addListener { _, n ->
         this.first.value = n.first
         this.second.value = n.second
     }

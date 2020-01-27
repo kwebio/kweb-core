@@ -26,7 +26,7 @@ class Document(val receiver: WebBrowser) {
 
     val head = HeadElement(receiver)
 
-    val origin = receiver.evaluate("document.origin")
+    val origin = receiver.evaluate<String>("document.origin")
 
     fun execCommand(command : String) {
         receiver.execute("document.execCommand(\"$command\");")

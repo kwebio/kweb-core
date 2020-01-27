@@ -57,16 +57,20 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    fun evaluate(js: String): CompletableFuture<Any> {
-        val cf = CompletableFuture<Any>()
-        evaluateWithCallback(js) { response ->
-            cf.complete(response)
+    inline fun <reified ResultType : Any?> evaluate(js : String) : CompletableFuture<ResultType> {
+        return evaluateRaw(js).thenApply { gson.fromJson(it, ResultType::class.java) }
+    }
+
+    fun evaluateRaw(js: String): CompletableFuture<String> {
+        val cf = CompletableFuture<String>()
+        evaluateWithCallback(js) { jsonResult ->
+            cf.complete(jsonResult)
             false
         }
         return cf
     }
 
-    fun evaluateWithCallback(js: String, rh: (Any) -> Boolean) {
+    fun evaluateWithCallback(js: String, rh: (jsonResult : String) -> Boolean) {
         kweb.evaluate(sessionId, js) { rh.invoke(it) }
     }
 

@@ -48,7 +48,7 @@
                 try {
                     const data = eval(evaluate["js"]);
                     console.debug("Evaluated [" + evaluate["js"] + "]", data);
-                    const callback = { callbackId: evaluate["callbackId"], data: data };
+                    const callback = { callbackId: evaluate["callbackId"], jsonResult: JSON.stringify(data) };
                     const message = { id: kwebClientId, callback: callback };
                     sendMessage(JSON.stringify(message));
                 } catch (err) {
