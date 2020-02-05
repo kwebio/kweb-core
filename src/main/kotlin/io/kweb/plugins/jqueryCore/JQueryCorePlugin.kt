@@ -1,5 +1,6 @@
 package io.kweb.plugins.jqueryCore
 
+import io.kweb.dom.element.Element
 import io.kweb.plugins.KwebPlugin
 import io.kweb.plugins.staticFiles.ResourceFolder
 import io.kweb.plugins.staticFiles.StaticFilesPlugin
@@ -23,3 +24,12 @@ class JQueryCorePlugin : KwebPlugin(dependsOn = setOf(StaticFilesPlugin(Resource
 }
 
 val jqueryCore = JQueryCorePlugin()
+
+/**
+ * Selects the element based on id, then executes the provided js
+ *
+ * @sample table().executeOnSelf(".tablesort()")
+ */
+fun Element.executeOnSelf(js: String) {
+    execute("$('#$id')$js")
+}
