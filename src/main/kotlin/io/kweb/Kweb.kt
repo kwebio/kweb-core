@@ -63,7 +63,7 @@ class Kweb constructor(
     val port: Int,
     val debug: Boolean = true,
     val plugins: List<KwebPlugin> = Collections.emptyList(),
-    private val httpsConfig : EngineSSLConnectorConfig = SSLConfig(),
+    private val httpsConfig : EngineSSLConnectorConfig? = null,
     val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
@@ -130,7 +130,8 @@ class Kweb constructor(
                 this.host = "0.0.0.0"
             }
 
-            connectors.add(httpsConfig)
+            if (httpsConfig != null)
+                connectors.add(httpsConfig)
         })
     }
 
