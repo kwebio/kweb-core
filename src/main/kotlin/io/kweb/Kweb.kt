@@ -11,12 +11,18 @@ import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.pingPeriod
 import io.ktor.http.cio.websocket.readText
 import io.ktor.http.cio.websocket.timeout
+import io.ktor.network.tls.certificates.buildKeyStore
+import io.ktor.network.tls.extensions.HashAlgorithm
+import io.ktor.network.tls.extensions.SignatureAlgorithm
 import io.ktor.request.uri
 import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.routing
+import io.ktor.server.engine.applicationEngineEnvironment
+import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
+import io.ktor.server.engine.sslConnector
 import io.ktor.server.jetty.Jetty
 import io.ktor.server.jetty.JettyApplicationEngine
 import io.ktor.websocket.WebSockets
@@ -33,13 +39,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
+import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
-import java.util.*
+import java.util.Collections
+import java.util.HashSet
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
+import kotlin.coroutines.EmptyCoroutineContext
 
 private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
@@ -77,34 +84,56 @@ class Kweb constructor(val port: Int,
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-
-        server = embeddedServer(Jetty, port) {
-            install(DefaultHeaders)
-            install(Compression)
-            install(WebSockets) {
-                pingPeriod = Duration.ofSeconds(10)
-                timeout = Duration.ofSeconds(30)
-            }
-
-            routing {
-
-                val bootstrapHtmlTemplate = generateHTMLTemplate()
-
-                get("/robots.txt") {
-                    call.response.status(HttpStatusCode.NotFound)
-                    call.respondText("robots.txt not currently supported by kweb")
-                }
-
-                get("/favicon.ico") {
-                    call.response.status(HttpStatusCode.NotFound)
-                    call.respondText("favicons not currently supported by kweb")
-                }
-
-                listenForHTTPConnection(bootstrapHtmlTemplate)
-
-                listenForWebsocketConnection()
+        val keyStore = buildKeyStore {
+            certificate("test") {
+                hash = HashAlgorithm.SHA1
+                sign = SignatureAlgorithm.RSA
+                password = "changeit"
             }
         }
+
+        server = embeddedServer(Jetty,
+            environment = applicationEngineEnvironment {
+                this.parentCoroutineContext = EmptyCoroutineContext + parentCoroutineContext
+                this.log = LoggerFactory.getLogger("ktor.application")
+                this.watchPaths = watchPaths
+                this.module {
+                        install(DefaultHeaders)
+                        install(Compression)
+                        install(WebSockets) {
+                            pingPeriod = Duration.ofSeconds(10)
+                            timeout = Duration.ofSeconds(30)
+                        }
+
+                        routing {
+
+                            val bootstrapHtmlTemplate = generateHTMLTemplate()
+
+                            get("/robots.txt") {
+                                call.response.status(HttpStatusCode.NotFound)
+                                call.respondText("robots.txt not currently supported by kweb")
+                            }
+
+                            get("/favicon.ico") {
+                                call.response.status(HttpStatusCode.NotFound)
+                                call.respondText("favicons not currently supported by kweb")
+                            }
+
+                            listenForHTTPConnection(bootstrapHtmlTemplate)
+
+                            listenForWebsocketConnection()
+                        }
+                    }
+
+                connector {
+                    this.port = this@Kweb.port
+                    this.host = "0.0.0.0"
+                }
+
+                sslConnector(keyStore = keyStore, keyAlias = "mykey", keyStorePassword = { "changeit".toCharArray() }, privateKeyPassword = { "changeit".toCharArray() }) {
+                    port = 9091
+                }
+            })
 
         server.start()
         logger.info { "KWeb is listening on port $port" }
