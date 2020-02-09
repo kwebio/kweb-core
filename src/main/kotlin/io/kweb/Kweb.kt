@@ -16,6 +16,9 @@ import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.routing
+import io.ktor.server.engine.EngineSSLConnectorConfig
+import io.ktor.server.engine.applicationEngineEnvironment
+import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.Jetty
 import io.ktor.server.jetty.JettyApplicationEngine
@@ -27,6 +30,7 @@ import io.kweb.client.Client2ServerMessage
 import io.kweb.client.RemoteClientState
 import io.kweb.client.Server2ClientMessage
 import io.kweb.client.Server2ClientMessage.Instruction
+import io.kweb.https.SSLConfig
 import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,10 +40,9 @@ import org.apache.commons.io.IOUtils
 import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
-import java.util.*
+import java.util.Collections
+import java.util.HashSet
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
@@ -56,10 +59,12 @@ private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
  * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
  *                     go
  */
-class Kweb constructor(val port: Int,
-                                  val debug: Boolean = true,
-                                  val plugins: List<KwebPlugin> = Collections.emptyList(),
-                                  val buildPage: WebBrowser.() -> Unit
+class Kweb constructor(
+    val port: Int,
+    val debug: Boolean = true,
+    val plugins: List<KwebPlugin> = Collections.emptyList(),
+    private val httpsConfig : EngineSSLConnectorConfig? = null,
+    val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
     private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
@@ -77,34 +82,7 @@ class Kweb constructor(val port: Int,
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-
-        server = embeddedServer(Jetty, port) {
-            install(DefaultHeaders)
-            install(Compression)
-            install(WebSockets) {
-                pingPeriod = Duration.ofSeconds(10)
-                timeout = Duration.ofSeconds(30)
-            }
-
-            routing {
-
-                val bootstrapHtmlTemplate = generateHTMLTemplate()
-
-                get("/robots.txt") {
-                    call.response.status(HttpStatusCode.NotFound)
-                    call.respondText("robots.txt not currently supported by kweb")
-                }
-
-                get("/favicon.ico") {
-                    call.response.status(HttpStatusCode.NotFound)
-                    call.respondText("favicons not currently supported by kweb")
-                }
-
-                listenForHTTPConnection(bootstrapHtmlTemplate)
-
-                listenForWebsocketConnection()
-            }
-        }
+        server = createServer()
 
         server.start()
         logger.info { "KWeb is listening on port $port" }
@@ -115,6 +93,46 @@ class Kweb constructor(val port: Int,
                 cleanUpOldClientStates()
             }
         }
+    }
+
+    private fun createServer(): JettyApplicationEngine {
+        return embeddedServer(Jetty, applicationEngineEnvironment {
+            this.module {
+                install(DefaultHeaders)
+                install(Compression)
+                install(WebSockets) {
+                    pingPeriod = Duration.ofSeconds(10)
+                    timeout = Duration.ofSeconds(30)
+                }
+
+                routing {
+
+                    val bootstrapHtmlTemplate = generateHTMLTemplate()
+
+                    get("/robots.txt") {
+                        call.response.status(HttpStatusCode.NotFound)
+                        call.respondText("robots.txt not currently supported by kweb")
+                    }
+
+                    get("/favicon.ico") {
+                        call.response.status(HttpStatusCode.NotFound)
+                        call.respondText("favicons not currently supported by kweb")
+                    }
+
+                    listenForHTTPConnection(bootstrapHtmlTemplate)
+
+                    listenForWebsocketConnection()
+                }
+            }
+
+            connector {
+                this.port = this@Kweb.port
+                this.host = "0.0.0.0"
+            }
+
+            if (httpsConfig != null)
+                connectors.add(httpsConfig)
+        })
     }
 
     private fun Routing.generateHTMLTemplate(): String {
