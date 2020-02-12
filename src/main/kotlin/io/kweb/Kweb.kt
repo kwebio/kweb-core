@@ -1,6 +1,8 @@
 package io.kweb
 
 import com.github.salomonbrys.kotson.fromJson
+import io.ktor.application.Application
+import io.ktor.application.ApplicationFeature
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.Compression
@@ -22,6 +24,7 @@ import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.Jetty
 import io.ktor.server.jetty.JettyApplicationEngine
+import io.ktor.util.AttributeKey
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 import io.kweb.browserConnection.KwebClientConnection
@@ -30,7 +33,6 @@ import io.kweb.client.Client2ServerMessage
 import io.kweb.client.RemoteClientState
 import io.kweb.client.Server2ClientMessage
 import io.kweb.client.Server2ClientMessage.Instruction
-import io.kweb.https.SSLConfig
 import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -47,25 +49,49 @@ import java.util.concurrent.ConcurrentHashMap
 private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
 
-/**
- * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
- * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
- * between browser and server.
- *
- * @property port  The TCP port on which the HTTP server should listen
- * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
- *                 but false during production because it is inefficient at scale
- * @property plugins A list of Kweb plugins to be loaded by Kweb
- * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
- *                     go
- */
-class Kweb constructor(
-    val port: Int,
-    val debug: Boolean = true,
-    val plugins: List<KwebPlugin> = Collections.emptyList(),
-    private val httpsConfig : EngineSSLConnectorConfig? = null,
+class Kweb private constructor(
+    val debug: Boolean,
+    val plugins: List<KwebPlugin>,
     val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
+
+    /**
+     * If you have an existing Ktor server, you can use the Kweb class as a feature. Adding this to your code is easy:
+     *
+     * ```
+     *     install(DefaultHeaders)
+     *     install(Compression)
+     *     install(WebSockets) {
+     *         pingPeriod = Duration.ofSeconds(10)
+     *         timeout = Duration.ofSeconds(30)
+     *     }
+     *
+     *     install(Kweb) {
+     *         // Set debug or plugins here, if you'd like
+     *         buildPage = {
+     *             // Your app goes here as it would using the Ktor constructor
+     *         }
+     *     }
+     * ```
+     *
+     * See FeatureApp.kt for an example.
+     */
+    companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
+        class Configuration {
+            var debug: Boolean = true
+            var plugins: List<KwebPlugin> = Collections.emptyList()
+            lateinit var buildPage: WebBrowser.() -> Unit
+        }
+
+        override val key = AttributeKey<Kweb>("Kweb")
+
+        override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
+            val configuration = Configuration().apply(configure)
+            val feature = Kweb(configuration.debug, configuration.plugins, configuration.buildPage)
+            feature.setupKweb(pipeline)
+            return feature
+        }
+    }
 
     private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
 
@@ -73,29 +99,40 @@ class Kweb constructor(
     private val mutableAppliedPlugins: MutableSet<KwebPlugin> = HashSet()
     val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
 
-    private val server: JettyApplicationEngine
+    private var server: JettyApplicationEngine? = null
 
-    init {
+    /**
+     * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
+     * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
+     * between browser and server.
+     *
+     * @property port  The TCP port on which the HTTP server should listen
+     * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
+     *                 but false during production because it is inefficient at scale
+     * @property plugins A list of Kweb plugins to be loaded by Kweb
+     * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
+     *                     go
+     */
+    constructor(
+            port: Int,
+            debug: Boolean = true,
+            plugins: List<KwebPlugin> = Collections.emptyList(),
+            httpsConfig : EngineSSLConnectorConfig? = null,
+            buildPage: WebBrowser.() -> Unit
+    ) : this(debug, plugins, buildPage) {
         logger.info("Initializing Kweb listening on port $port")
 
         if (debug) {
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-        server = createServer()
+        server = createServer(port, httpsConfig)
 
-        server.start()
+        server!!.start()
         logger.info { "KWeb is listening on port $port" }
-
-        GlobalScope.launch {
-            while(true) {
-                delay(Duration.ofMinutes(1))
-                cleanUpOldClientStates()
-            }
-        }
     }
 
-    private fun createServer(): JettyApplicationEngine {
+    private fun createServer(port: Int, httpsConfig: EngineSSLConnectorConfig?): JettyApplicationEngine {
         return embeddedServer(Jetty, applicationEngineEnvironment {
             this.module {
                 install(DefaultHeaders)
@@ -105,34 +142,45 @@ class Kweb constructor(
                     timeout = Duration.ofSeconds(30)
                 }
 
-                routing {
-
-                    val bootstrapHtmlTemplate = generateHTMLTemplate()
-
-                    get("/robots.txt") {
-                        call.response.status(HttpStatusCode.NotFound)
-                        call.respondText("robots.txt not currently supported by kweb")
-                    }
-
-                    get("/favicon.ico") {
-                        call.response.status(HttpStatusCode.NotFound)
-                        call.respondText("favicons not currently supported by kweb")
-                    }
-
-                    listenForHTTPConnection(bootstrapHtmlTemplate)
-
-                    listenForWebsocketConnection()
-                }
+                setupKweb(this)
             }
 
             connector {
-                this.port = this@Kweb.port
+                this.port = port
                 this.host = "0.0.0.0"
             }
 
             if (httpsConfig != null)
                 connectors.add(httpsConfig)
         })
+    }
+
+    private fun setupKweb(application: Application) {
+        application.routing {
+
+            val bootstrapHtmlTemplate = generateHTMLTemplate()
+
+            get("/robots.txt") {
+                call.response.status(HttpStatusCode.NotFound)
+                call.respondText("robots.txt not currently supported by kweb")
+            }
+
+            get("/favicon.ico") {
+                call.response.status(HttpStatusCode.NotFound)
+                call.respondText("favicons not currently supported by kweb")
+            }
+
+            listenForHTTPConnection(bootstrapHtmlTemplate)
+
+            listenForWebsocketConnection()
+        }
+
+        GlobalScope.launch {
+            while(true) {
+                delay(Duration.ofMinutes(1))
+                cleanUpOldClientStates()
+            }
+        }
     }
 
     private fun Routing.generateHTMLTemplate(): String {
@@ -405,7 +453,7 @@ class Kweb constructor(
 
     override fun close() {
         logger.info("Shutting down Kweb")
-        server.stop(0, 0)
+        server?.stop(0, 0)
     }
 
     private fun cleanUpOldClientStates() {
