@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 buildscript {
     repositories {
         jcenter()
