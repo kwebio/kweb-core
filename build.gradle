@@ -42,10 +42,8 @@ test {
 }
 
 dependencies {
-
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
- //   compile 'org.apache.commons:commons-lang3:3.9'
-    compile 'org.apache.commons:commons-text:1.8'
+    compile 'org.apache.commons:commons-lang3:3.9'
     compile 'commons-io:commons-io:2.6'
     compile 'org.jsoup:jsoup:1.12.1'
     

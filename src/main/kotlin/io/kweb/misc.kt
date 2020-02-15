@@ -1,7 +1,7 @@
 package io.kweb
 
 import com.google.gson.Gson
-import org.apache.commons.text.StringEscapeUtils
+import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService

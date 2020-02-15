@@ -40,7 +40,7 @@ class CookieReceiver(val receiver: WebBrowser) {
     }
 
     fun getString(name: String): CompletableFuture<String?> {
-        return receiver.evaluate<String>("docCookies.getItem(${name.toJson()});")
+        return receiver.evaluate("docCookies.getItem(${name.toJson()});")
                 .thenApply {
                     if (it == "__COOKIE_NOT_FOUND_TOKEN__") {
                         null

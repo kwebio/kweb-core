@@ -32,7 +32,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
         }
     }
 
-    fun getString(key: String): CompletableFuture<String?> = receiver.evaluate<String>("$obj.getItem(${key.toJson()})").thenApply {
+    fun getString(key: String): CompletableFuture<String?> = receiver.evaluate("$obj.getItem(${key.toJson()})").thenApply {
         when (it) {
             "" -> null
             else -> it.toString()

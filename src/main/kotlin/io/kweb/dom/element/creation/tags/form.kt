@@ -79,7 +79,7 @@ open class TextAreaElement(parent: Element) : ValueElement(parent) {
     override val read get() = TextAreaElementReader(this)
 }
 open class TextAreaElementReader(element : TextAreaElement) : ElementReader(element) {
-    val value get() = receiver.evaluate<String>("($jsExpression.innerText);")
+    val value get() = receiver.evaluate("($jsExpression.innerText);")
 }
 
 
@@ -93,7 +93,8 @@ open class LabelElement(wrapped: Element) : Element(wrapped)
  * Abstract class for the various elements that have a `value` attribute and which support `change` and `input` events.
  */
 abstract class ValueElement(open val element : Element, val kvarUpdateEvent : String = "input") : Element(element) {
-    fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value;")
+    fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value;") { it.toString() }
+            ?: error("Not sure why .evaluate() would return null")
 
     fun setValue(newValue: String) = element.browser.execute("$jsExpression.value=${newValue.toJson()};")
     fun setValue(newValue: KVal<String>) {

@@ -165,10 +165,10 @@ class Kweb constructor(val port: Int,
                             } else {
                                 when {
                                     message.callback != null -> {
-                                        val (resultId, response) = message.callback
+                                        val (resultId, result) = message.callback
                                         val resultHandler = remoteClientState.handlers[resultId]
                                                 ?: error("No data handler for $resultId for client ${remoteClientState.id}")
-                                        resultHandler(response)
+                                        resultHandler(result ?: "")
                                     }
                                     message.historyStateChange != null -> {
 
@@ -356,7 +356,7 @@ class Kweb constructor(val port: Int,
         wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
     }
 
-    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (jsonResult : String) -> Unit) {
+    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
         // TODO: Should return handle which can be used for cleanup of event listeners
         val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
@@ -372,8 +372,8 @@ class Kweb constructor(val port: Int,
         clientState[clientId]?.handlers?.remove(callbackId)
     }
 
-    fun evaluate(clientId: String, expression: String, handler: (jsonResult : String) -> Unit) {
-        val wsClientData = clientState[clientId]
+    fun evaluate(clientId: String, expression: String, handler: (Any) -> Unit) {
+        val wsClientData = clientState.get(clientId)
                 ?: error("Failed to evaluate JavaScript because client id $clientId not found")
         val debugToken: String? = if (!debug) null else {
             val dt = Math.abs(random.nextLong()).toString(16)
@@ -381,7 +381,7 @@ class Kweb constructor(val port: Int,
             dt
         }
         val callbackId = Math.abs(random.nextInt())
-        wsClientData.handlers[callbackId] = handler
+        wsClientData.handlers.put(callbackId, handler)
         wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
     }
 
