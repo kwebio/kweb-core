@@ -2,6 +2,7 @@ package io.kweb.plugins.tablesort
 
 import io.kweb.dom.element.creation.tags.TableElement
 import io.kweb.plugins.KwebPlugin
+import io.kweb.plugins.jqueryCore.executeOnSelf
 import io.kweb.plugins.jqueryCore.jqueryCore
 
 /**
@@ -32,4 +33,4 @@ val tableSortPlugin = TablesortPlugin()
  * You don't need to call again, unless you change the DOM
  */
 fun TableElement.sort() =
-        apply { execute("\$('table').tablesort()") }
+        apply { executeOnSelf(".tablesort()") }
