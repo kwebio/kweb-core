@@ -9,6 +9,7 @@ import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
 import io.kweb.dom.element.new
 import io.kweb.state.*
+import io.kweb.state.render.closeOnElementCreatorCleanup
 import io.kweb.state.render.render
 import io.mola.galimatias.URL
 import mu.KotlinLogging
@@ -35,8 +36,8 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
     val url = this.browser.url(simpleUrlParser)
     val rr = RouteReceiver(this, url)
     routeReceiver(rr)
-    val pathKvar = url.pathSegments
-    val matchingTemplate : KVal<PathTemplate?> = pathKvar.map { path ->
+    val pathKVar = url.pathSegments
+    val matchingTemplate : KVal<PathTemplate?> = pathKVar.map { path ->
         val size = if (path != listOf("")) path.size else 0
         val templatesOfSameLength = rr.templatesByLength[size]
         val tpl = templatesOfSameLength?.keys?.firstOrNull { tpl ->
@@ -54,7 +55,9 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
             for ((pos, part) in template.withIndex()) {
                 if (part.kind == Parameter) {
                     val str = part.value
-                    parameters[str.substring(str.indexOf('{')+1, str.indexOf('}'))] = pathKvar[pos]
+                    val paramKVar = pathKVar[pos]
+                    closeOnElementCreatorCleanup(paramKVar)
+                    parameters[str.substring(str.indexOf('{')+1, str.indexOf('}'))] = paramKVar
                 }
             }
 

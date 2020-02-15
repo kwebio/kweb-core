@@ -52,6 +52,11 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
     }
 }
 
+fun ElementCreator<*>.closeOnElementCreatorCleanup(kv : KVal<*>) {
+    this.onCleanup(withParent = true) {
+        kv.close()
+    }
+}
 
 fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T> {
     val value = shoebox[key] ?: throw NoSuchElementException("Key $key not found")

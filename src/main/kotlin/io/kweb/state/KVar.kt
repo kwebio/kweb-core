@@ -17,9 +17,12 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
             if (isClosed) {
                 logger.warn("Modifying a value in a closed KVar", IllegalStateException("Modifying a value in a closed KVar"))
             }
-            listeners.values.forEach { v ->
-                v(old, new)
-
+            listeners.values.forEach { listener ->
+                try {
+                    listener(old, new)
+                } catch (e : Exception) {
+                    logger.warn("Exception thrown by listener", e)
+                }
             }
         }
     }
@@ -35,6 +38,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
             }
         }
         onClose { removeListener(myChangeHandle) }
+        mappedObservable.onClose { removeListener(myChangeHandle) }
         val origChangeHandle = mappedObservable.addListener { _, new ->
             value = reversableFunction.reverse(value, new)
         }

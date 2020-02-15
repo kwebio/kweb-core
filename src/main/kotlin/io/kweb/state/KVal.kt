@@ -45,11 +45,11 @@ open class KVal<T : Any?>(value: T) {
                     logger.debug("Updating mapped $value to $new")
                     val mappedValue = mapper(new)
                     newObservable.pValue = mappedValue
-                    newObservable.listeners.values.forEach {
+                    newObservable.listeners.values.forEach { listener ->
                         try {
                             val mappedOld = mapper(old)
                             if (mappedOld != mappedValue) {
-                                it(mappedOld, mappedValue)
+                                listener(mappedOld, mappedValue)
                             }
                         } catch (e: Exception) {
                             logger.warn("Exception thrown by listener", e)
@@ -65,9 +65,6 @@ open class KVal<T : Any?>(value: T) {
         this.onClose {
             newObservable.close()
         }
-  //      newObservable.onClose {
-  //          this.close()
-  //      }
         return newObservable
     }
 
