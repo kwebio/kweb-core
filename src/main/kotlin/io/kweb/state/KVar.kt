@@ -15,7 +15,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
     override var value: T by Delegates.observable(initialValue) { _, old, new ->
         if (old != new) {
             if (isClosed) {
-                logger.warn("Modifying a value in a closed KVar", IllegalStateException("Modifying a value in a closed KVar"))
+                error("Can't modify a value in a closed KVal - $closeReason")
             }
             listeners.values.forEach { listener ->
                 try {
@@ -29,12 +29,16 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 
     fun <O : Any?> map(reversableFunction: ReversableFunction<T, O>): KVar<O> {
         if (isClosed) {
-            logger.warn("Mapping an already closed KVar", IllegalStateException())
+            logger.warn("Mapping an KVar which had been closed due to $closeReason")
         }
         val mappedObservable = KVar(reversableFunction(value))
         val myChangeHandle = addListener { old, new ->
             if (old != new) {
-                mappedObservable.value = reversableFunction.invoke(new)
+                try {
+                    mappedObservable.value = reversableFunction.invoke(new)
+                } catch (e : Exception) {
+                    mappedObservable.close(CloseReason("Closed because mapper threw an exception", e))
+                }
             }
         }
         onClose { removeListener(myChangeHandle) }

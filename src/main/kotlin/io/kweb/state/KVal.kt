@@ -10,7 +10,9 @@ private val logger = KotlinLogging.logger {}
 open class KVal<T : Any?>(value: T) {
 
     @Volatile
-    internal var isClosed = false
+    protected var closeReason : CloseReason? = null
+
+    internal val isClosed get() = closeReason != null
 
     protected val listeners  = ConcurrentHashMap<Long, (T, T) -> Unit>()
     private val closeHandlers = ConcurrentLinkedDeque<() -> Unit>()
@@ -25,6 +27,9 @@ open class KVal<T : Any?>(value: T) {
     private var pValue: T = value
 
     open val value : T get() {
+        if (isClosed) {
+            error("Can't read value from KVal as it was closed due to $closeReason")
+        }
         return pValue
     }
 
@@ -36,7 +41,7 @@ open class KVal<T : Any?>(value: T) {
     //       mappings
     fun <O : Any?> map(mapper: (T) -> O): KVal<O> {
         if (isClosed) {
-            error("Mapping an already closed KVar")
+            error("Can't map this var because it was closed due to $closeReason")
         }
         val newObservable = KVal(mapper(value))
         val handle = addListener { old, new ->
@@ -52,7 +57,7 @@ open class KVal<T : Any?>(value: T) {
                                 listener(mappedOld, mappedValue)
                             }
                         } catch (e: Exception) {
-                            logger.warn("Exception thrown by listener", e)
+                            newObservable.close(CloseReason("Closed because mapper threw an exception", e))
                         }
 
                     }
@@ -63,7 +68,7 @@ open class KVal<T : Any?>(value: T) {
         }
         newObservable.onClose { removeListener(handle) }
         this.onClose {
-            newObservable.close()
+            newObservable.close(CloseReason("KVar this was mapped from was closed"))
         }
         return newObservable
     }
@@ -71,7 +76,7 @@ open class KVal<T : Any?>(value: T) {
     // TODO: Temporary for debugging
     private var closedStack: Array<out StackTraceElement>? = null
 
-    fun close() {
+    fun close(reason : CloseReason) {
         if (isClosed) {
             val firstStackTrace = closedStack!!
             val secondStackTrace = Thread.currentThread().stackTrace
@@ -90,7 +95,7 @@ open class KVal<T : Any?>(value: T) {
                 "First stack trace:\t$st"
             }
         } else {
-            isClosed = true
+            closeReason = reason
             closedStack = Thread.currentThread().stackTrace
             closeHandlers.forEach { it.invoke() }
         }
@@ -109,3 +114,5 @@ open class KVal<T : Any?>(value: T) {
     }
 
 }
+
+data class CloseReason(val explanation : String, val throwable : Throwable? = null)

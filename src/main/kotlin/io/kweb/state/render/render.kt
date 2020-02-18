@@ -10,6 +10,7 @@ import io.kweb.dom.element.new
 import io.kweb.shoebox.KeyValue
 import io.kweb.shoebox.OrderedViewSet
 import io.kweb.shoebox.Shoebox
+import io.kweb.state.CloseReason
 import io.kweb.state.KVal
 import io.kweb.state.KVar
 import mu.KotlinLogging
@@ -54,7 +55,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
 fun ElementCreator<*>.closeOnElementCreatorCleanup(kv : KVal<*>) {
     this.onCleanup(withParent = true) {
-        kv.close()
+        kv.close(CloseReason("Closed because a parent ElementCreator was cleaned up"))
     }
 }
 
@@ -71,7 +72,7 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
     val changeHandle = shoebox.onChange(key) { _, n, _ -> w.value = n }
     w.onClose { shoebox.deleteChangeListener(key, changeHandle) }
     this.onCleanup(withParent = true) {
-        w.close()
+        w.close(CloseReason("Closed because parent ElementCreator was cleaned up"))
     }
     return w
 }
@@ -106,7 +107,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
         } else {
             val removed = items.removeAt(index)
             removed.creator.cleanup()
-            removed.KVar.close()
+            removed.KVar.close(CloseReason("Closed because associated item was removed from OrderedViewSet"))
         }
     }
 
