@@ -91,8 +91,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
                 url
             }
 
-    fun pushState(path: String) {
-        val url = URL.parse(path)
+    private fun pushState(path: String) {
+        val url = URL.parse(path).path()
         execute("""
         history.pushState({}, "", "$url");
         """.trimIndent())
