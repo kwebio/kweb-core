@@ -21,9 +21,7 @@ operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
 
 operator fun <K : Any, V : Any> KVar<Map<K, V>>.get(k : K) : KVar<V?> {
     return this.map(object : ReversableFunction<Map<K, V>, V?>("map[$k]") {
-        override fun invoke(from: Map<K, V>): V? {
-            return from[k]
-        }
+        override fun invoke(from: Map<K, V>): V? = from[k]
 
         override fun reverse(original: Map<K, V>, change: V?): Map<K, V> {
             return if (change != null) {
