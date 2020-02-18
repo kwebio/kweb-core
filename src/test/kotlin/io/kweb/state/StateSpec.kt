@@ -1,7 +1,7 @@
 package io.kweb.state
 
 import io.kotlintest.specs.FreeSpec
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 
 /**
  * Created by ian on 6/18/17.
@@ -12,7 +12,7 @@ class StateSpec : FreeSpec({
         "retrieving its value" - {
             val value = readOnlyBindable.value
             "should match the value it was initialized with" {
-                readOnlyBindable.value shouldEqual "Test"
+                readOnlyBindable.value shouldBeEqualTo "Test"
             }
         }
     }
@@ -22,8 +22,8 @@ class StateSpec : FreeSpec({
         var old: String? = null
         var new: String? = null
         val handle = kvar.addListener { o, n ->
-            old shouldEqual null
-            new shouldEqual null
+            old shouldBeEqualTo null
+            new shouldBeEqualTo null
             old = o
             new = n
         }
@@ -32,8 +32,8 @@ class StateSpec : FreeSpec({
                 kvar.value = "Bar"
             }
             "should call the listener, modifying the vars accordingly" {
-                old shouldEqual "Foo"
-                new shouldEqual "Bar"
+                old shouldBeEqualTo "Foo"
+                new shouldBeEqualTo "Bar"
             }
         }
         "removing the listener and modifying the value again" - {
@@ -44,8 +44,8 @@ class StateSpec : FreeSpec({
                 kvar.value = "FooBar"
             }
             "listener shouldn't have been called" {
-                old shouldEqual "Foo"
-                new shouldEqual "Bar"
+                old shouldBeEqualTo "Foo"
+                new shouldBeEqualTo "Bar"
             }
         }
 
@@ -56,7 +56,7 @@ class StateSpec : FreeSpec({
                 kvar.value = "elephant"
             }
             "should be mapped correctly" {
-                mappedBindable.value shouldEqual 8
+                mappedBindable.value shouldBeEqualTo 8
             }
         }
     }
@@ -76,7 +76,7 @@ class StateSpec : FreeSpec({
             }
             "value should be mapped correctly to target" {
                 val value = upperCaseVar.value
-                value shouldEqual "ONE"
+                value shouldBeEqualTo "ONE"
             }
         }
         "Mapping from target to original" - {
@@ -85,7 +85,7 @@ class StateSpec : FreeSpec({
             }
             "value should be mapped correctly to original" {
                 val value = lowerCaseVar.value
-                value shouldEqual "two"
+                value shouldBeEqualTo "two"
             }
         }
     }
