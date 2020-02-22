@@ -14,9 +14,7 @@ private val logger = KotlinLogging.logger {}
 class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
     override var value: T by Delegates.observable(initialValue) { _, old, new ->
         if (old != new) {
-            if (isClosed) {
-                error("Can't modify a value in a closed KVal - $closeReason")
-            }
+            verifyNotClosed("modify KVar.value")
             listeners.values.forEach { listener ->
                 try {
                     listener(old, new)
@@ -28,9 +26,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
     }
 
     fun <O : Any?> map(reversableFunction: ReversableFunction<T, O>): KVar<O> {
-        if (isClosed) {
-            logger.warn("Mapping an KVar which had been closed due to $closeReason")
-        }
+        verifyNotClosed("create a mapping")
         val mappedObservable = KVar(reversableFunction(value))
         val myChangeHandle = addListener { old, new ->
             if (old != new) {
@@ -51,6 +47,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
     }
 
     override fun toString(): String {
+        verifyNotClosed("call KVar.toString()")
         return "KVar($value)"
     }
 

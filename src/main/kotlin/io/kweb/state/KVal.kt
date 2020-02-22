@@ -18,6 +18,7 @@ open class KVal<T : Any?>(value: T) {
     private val closeHandlers = ConcurrentLinkedDeque<() -> Unit>()
 
     fun addListener(listener : (T, T) -> Unit) : Long {
+        verifyNotClosed("add a listener")
         val handle = random.nextLong()
         listeners[handle] = listener
         return handle
@@ -27,9 +28,7 @@ open class KVal<T : Any?>(value: T) {
     private var pValue: T = value
 
     open val value : T get() {
-        if (isClosed) {
-            error("Can't read value from KVal as it was closed due to $closeReason")
-        }
+        verifyNotClosed("retrieve KVal.value")
         return pValue
     }
 
@@ -102,15 +101,25 @@ open class KVal<T : Any?>(value: T) {
     }
 
     fun onClose(handler: () -> Unit) {
-        if (isClosed) {
-            //logger.debug("Shouldn't be called after KVar is closed()")
-            logger.warn("Adding a closer handler to an already closed KVar", IllegalStateException())
-        }
+        verifyNotClosed("add a close handler")
         closeHandlers += handler
     }
 
     override fun toString(): String {
+        verifyNotClosed("call KVal.toString()")
         return "KVal($value)"
+    }
+
+    protected fun verifyNotClosed(triedTo : String) {
+        closeReason.let { closeReason ->
+            if (closeReason != null) {
+                if (closeReason.throwable == null) {
+                    throw RuntimeException("Can't $triedTo as it was closed due to ${closeReason.explanation}")
+                } else {
+                    throw RuntimeException("Can't $triedTo as it was closed due to ${closeReason.explanation}", closeReason.throwable)
+                }
+            }
+        }
     }
 
 }
