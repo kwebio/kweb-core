@@ -113,10 +113,10 @@ open class KVal<T : Any?>(value: T) {
     protected fun verifyNotClosed(triedTo : String) {
         closeReason.let { closeReason ->
             if (closeReason != null) {
-                if (closeReason.throwable == null) {
-                    throw RuntimeException("Can't $triedTo as it was closed due to ${closeReason.explanation}")
+                if (closeReason.cause == null) {
+                    throw IllegalStateException("Can't $triedTo as it was closed due to ${closeReason.explanation}")
                 } else {
-                    throw RuntimeException("Can't $triedTo as it was closed due to ${closeReason.explanation}", closeReason.throwable)
+                    throw IllegalStateException("Can't $triedTo as it was closed due to ${closeReason.explanation}", closeReason.cause)
                 }
             }
         }
@@ -124,4 +124,4 @@ open class KVal<T : Any?>(value: T) {
 
 }
 
-data class CloseReason(val explanation : String, val throwable : Throwable? = null)
+data class CloseReason(val explanation : String, val cause : Throwable? = null)
