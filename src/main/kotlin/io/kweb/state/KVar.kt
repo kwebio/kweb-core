@@ -32,8 +32,8 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
             if (old != new) {
                 try {
                     mappedObservable.value = reversableFunction.invoke(new)
-                } catch (e : Exception) {
-                    mappedObservable.close(CloseReason("Closed because mapper threw an exception", e))
+                } catch (throwable : Throwable) {
+                    mappedObservable.close(CloseReason("Closed because mapper threw an error or exception", throwable))
                 }
             }
         }
