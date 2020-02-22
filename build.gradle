@@ -79,7 +79,7 @@ dependencies {
     ///////////////////////////
     testCompile 'org.amshove.kluent:kluent:1.60'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
-    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta4'
+    testCompile 'ch.qos.logback:logback-classic:1.2.3'
     testCompile "io.github.bonigarcia:selenium-jupiter:3.3.4"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.6.0"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
