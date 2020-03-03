@@ -142,9 +142,12 @@ class Kweb private constructor(
     }
 
     private fun setupKweb(application: Application) {
+
         application.routing {
 
-            get("/robots.txt") {
+            val htmlDocumentSupplier = createHtmlDocumentSupplier()
+
+                get("/robots.txt") {
                 call.response.status(HttpStatusCode.NotFound)
                 call.respondText("robots.txt not currently supported by kweb")
             }
@@ -154,7 +157,8 @@ class Kweb private constructor(
                 call.respondText("favicons not currently supported by kweb")
             }
 
-            listenForHTTPConnection()
+            // It's important to use a clone of the template because the result will be modified
+            listenForHTTPConnection(htmlDocumentSupplier.invoke())
 
             listenForWebsocketConnection()
         }
@@ -167,19 +171,20 @@ class Kweb private constructor(
         }
     }
 
-    private fun Routing.createHTMLDocument(): Document {
-
+    private fun Routing.createHtmlDocumentSupplier() : () -> Document {
         val document = Document("") // TODO: What should this base URL be?
 
-        document.appendElement("head")
-        document.appendElement("body")
+        val htmlElement = document.appendElement("html")
 
-        document.head().appendElement("meta")
+        val headElement = htmlElement.appendElement("head")
+        val bodyElement = htmlElement.appendElement("body")
+
+        headElement.appendElement("meta")
                 .attr("name", "viewport")
                 .attr("content", "width=device-width, initial-scale=1.0")
 
-        document.body().attr("onload", "buildPage()")
-        document.body().appendElement("noscript")
+        bodyElement.attr("onload", "buildPage()")
+        bodyElement.appendElement("noscript")
                 .html(
                         """
                             | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
@@ -188,7 +193,7 @@ class Kweb private constructor(
             applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = document, routeHandler = this)
         }
 
-        return document
+        return {document.clone()}
     }
 
     private fun Routing.listenForWebsocketConnection(path : String = "/ws") {
@@ -246,9 +251,9 @@ class Kweb private constructor(
         }
     }
 
-    private fun Routing.listenForHTTPConnection() {
+    private fun Routing.listenForHTTPConnection(htmlDocumentTemplate : Document) {
         get("/{visitedUrl...}") {
-            val htmlDocument = this@listenForHTTPConnection.createHTMLDocument()
+            val htmlDocument = htmlDocumentTemplate.clone()
 
             val kwebSessionId = createNonce()
 
@@ -305,7 +310,7 @@ class Kweb private constructor(
                 htmlDocument.head().appendElement("script")
                         .attr("language", "JavaScript")
                         .appendChild(DataNode(bootstrapJS))
-                htmlDocument.outputSettings().prettyPrint(false)
+                htmlDocument.outputSettings().prettyPrint(debug)
 
 
                 call.respondText(htmlDocument.outerHtml(), ContentType.Text.Html)
