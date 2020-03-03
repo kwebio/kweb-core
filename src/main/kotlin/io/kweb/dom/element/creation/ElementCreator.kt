@@ -3,6 +3,7 @@ package io.kweb.dom.element.creation
 import io.kweb.*
 import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
+import io.kweb.dom.*
 import io.kweb.dom.attributes.attr
 import io.kweb.dom.element.*
 import io.kweb.plugins.KwebPlugin
@@ -27,8 +28,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     //private val cleanupListeners = LinkedList<(Cleaner) -> Unit>()
     private val cleanupListeners = LinkedList<Cleaner>()
-    private @Volatile
-    var isCleanedUp = false
+    @Volatile
+    private var isCleanedUp = false
 
     val elementsCreatedCount: Int get() = elementsCreated.size
 
@@ -51,19 +52,31 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
         val id: String = (attributes["id"] ?: "K"+browser.generateId()).toString()
         val htmlDoc = browser.htmlDocument.get()
-        if (htmlDoc != null) {
-            val jsElement = htmlDoc.createElement(tag)
-            for ((k, v) in attributes) {
-                if (v is Boolean) {
-                    jsElement.attr(k, v)
-                } else {
-                    jsElement.attr(k, v.toString())
+        when {
+            htmlDoc != null -> {
+                val jsElement = when {
+                    parent is HeadElement -> {
+                        htmlDoc.head()
+                    }
+                    parent is BodyElement -> {
+                        htmlDoc.body()
+                    }
+                    else -> htmlDoc.getElementById(parent.id)
+                }!!
+                for ((k, v) in attributes) {
+                    if (v is Boolean) {
+                        jsElement.attr(k, v)
+                    } else  {
+                        jsElement.attr(k, v.toString())
+                    }
                 }
             }
-        } else if (parent.canSendInstruction()) {
-            browser.send(Instruction(CreateElement, listOf(tag, attributes, id, parent.id, position ?: -1)))
-        } else {
-            parent.execute(renderJavaScriptToCreateNewElement(tag, attributes, id))
+            parent.canSendInstruction() -> {
+                browser.send(Instruction(CreateElement, listOf(tag, attributes, id, parent.id, position ?: -1)))
+            }
+            else -> {
+                parent.execute(renderJavaScriptToCreateNewElement(tag, attributes, id))
+            }
         }
         val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
         elementsCreated += newElement
