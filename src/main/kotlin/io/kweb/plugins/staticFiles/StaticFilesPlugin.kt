@@ -1,15 +1,9 @@
 package io.kweb.plugins.staticFiles
 
-import io.ktor.http.content.files
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
-import io.ktor.http.content.staticRootFolder
-import io.ktor.routing.Route
-import io.ktor.routing.Routing
+import io.ktor.http.content.*
+import io.ktor.routing.*
 import io.kweb.plugins.KwebPlugin
-import io.kweb.plugins.jqueryCore.jqueryCore
 import java.io.File
-import java.net.URL
 
 /**
  * @author rpanic
@@ -35,8 +29,6 @@ class StaticFilesPlugin private constructor(private val servedRoute: String = "a
             it.resources(resourceFolder.resourceFolder)
         }
     }
-
-    override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {}
 
     override fun appServerConfigurator(routeHandler: Routing) {
         routeHandler.static(servedRoute) {

@@ -3,6 +3,7 @@ package io.kweb.plugins.fomanticUI
 import io.kweb.plugins.KwebPlugin
 import io.kweb.plugins.jqueryCore.jqueryCore
 import io.kweb.plugins.staticFiles.*
+import org.jsoup.nodes.Document
 
 private const val resourceFolder = "io/kweb/plugins/fomanticUI/static"
 private const val resourceRoute = "$internalStaticFilePath/fomantic"
@@ -13,12 +14,18 @@ private const val resourceRoute = "$internalStaticFilePath/fomantic"
 class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
         StaticFilesPlugin(ResourceFolder(resourceFolder), resourceRoute))
 ) {
-    override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
-        startHead.append("""
-            <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.css">
-            <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.js"></script>
-""".trimIndent())
+    override fun decorate(doc : Document) {
+        doc.head().appendElement("script")
+                .attr("src", "https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js")
+
+        doc.head().appendElement("link")
+                .attr("rel", "stylesheet")
+                .attr("type", "text/css")
+                .attr("href", "https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.css")
+
+        doc.head().appendElement("script")
+                .attr("src", "https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.js")
+
     }
 
 }

@@ -2,6 +2,7 @@ package io.kweb.plugins
 
 import io.ktor.routing.Routing
 import io.kweb.dom.element.Element
+import org.jsoup.nodes.Document
 import java.util.*
 
 abstract class KwebPlugin(val dependsOn: Set<KwebPlugin> = Collections.emptySet()) {
@@ -9,7 +10,9 @@ abstract class KwebPlugin(val dependsOn: Set<KwebPlugin> = Collections.emptySet(
     // TODO: run before or after, so that the user doesn't need to
     // TODO: worry about getting the order right.
 
-    abstract fun decorate(startHead: StringBuilder, endHead: StringBuilder)
+    open fun decorate(doc : Document) {
+
+    }
 
     open fun executeAfterPageCreation() = ""
 

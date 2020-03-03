@@ -20,8 +20,7 @@ import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.plugins.KwebPlugin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
-import org.apache.commons.io.IOUtils
-import org.jsoup.Jsoup
+import org.jsoup.nodes.*
 import java.io.Closeable
 import java.time.*
 import java.util.*
@@ -145,8 +144,6 @@ class Kweb private constructor(
     private fun setupKweb(application: Application) {
         application.routing {
 
-            val bootstrapHtmlTemplate = generateHTMLTemplate()
-
             get("/robots.txt") {
                 call.response.status(HttpStatusCode.NotFound)
                 call.respondText("robots.txt not currently supported by kweb")
@@ -157,7 +154,7 @@ class Kweb private constructor(
                 call.respondText("favicons not currently supported by kweb")
             }
 
-            listenForHTTPConnection(bootstrapHtmlTemplate)
+            listenForHTTPConnection()
 
             listenForWebsocketConnection()
         }
@@ -170,19 +167,28 @@ class Kweb private constructor(
         }
     }
 
-    private fun Routing.generateHTMLTemplate(): String {
-        val startHeadBuilder = StringBuilder()
-        val endHeadBuilder = StringBuilder()
+    private fun Routing.createHTMLDocument(): Document {
 
+        val document = Document("") // TODO: What should this base URL be?
+
+        document.appendElement("head")
+        document.appendElement("body")
+
+        document.head().appendElement("meta")
+                .attr("name", "viewport")
+                .attr("content", "width=device-width, initial-scale=1.0")
+
+        document.body().attr("onload", "buildPage()")
+        document.body().appendElement("noscript")
+                .html(
+                        """
+                            | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
+                            | requires JavaScript to be enabled.""".trimMargin())
         for (plugin in plugins) {
-            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, endHeadBuilder = endHeadBuilder, startHeadBuilder = startHeadBuilder, routeHandler = this)
+            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = document, routeHandler = this)
         }
 
-        val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.html")
-        val bootstrapHtmlTemplate = IOUtils.toString(resourceStream, Charsets.UTF_8)
-                .replace("<!-- START HEADER PLACEHOLDER -->", startHeadBuilder.toString())
-                .replace("<!-- END HEADER PLACEHOLDER -->", endHeadBuilder.toString())
-        return bootstrapHtmlTemplate
+        return document
     }
 
     private fun Routing.listenForWebsocketConnection(path : String = "/ws") {
@@ -240,8 +246,10 @@ class Kweb private constructor(
         }
     }
 
-    private fun Routing.listenForHTTPConnection(bootstrapHtmlTemplate: String) {
+    private fun Routing.listenForHTTPConnection() {
         get("/{visitedUrl...}") {
+            val htmlDocument = this@listenForHTTPConnection.createHTMLDocument()
+
             val kwebSessionId = createNonce()
 
             val remoteClientState = clientState.getOrPut(kwebSessionId) {
@@ -249,11 +257,6 @@ class Kweb private constructor(
             }
 
             val httpRequestInfo = io.kweb.client.HttpRequestInfo(call.request)
-
-            // TODO: We should be parsing and caching this Jsoup document, but
-            // TODO: important not to forget to clone the cached document before
-            // TODO: mutating it.
-            val htmlDocument = if (serverSideRendering) Jsoup.parse(bootstrapHtmlTemplate) else null
 
             try {
                 val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb)
@@ -294,13 +297,18 @@ class Kweb private constructor(
 
                 remoteClientState.clientConnection = Caching()
 
-                // FIXME: Inefficient, we should probably use JSoup to do these template replacements before rendering
-                // out the doc.
-                val bootstrapHtml = htmlDocument.toString()
-                        .replace("--CLIENT-ID-PLACEHOLDER--", kwebSessionId)
-                        .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", initialCachedMessages.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
+                val bootstrapJS = BootstrapJs.hydrate(
+                        kwebSessionId,
+                        initialCachedMessages
+                                .read().joinToString(separator = "\n") { "handleInboundMessage($it);" })
 
-                call.respondText(bootstrapHtml, ContentType.Text.Html)
+                htmlDocument.head().appendElement("script")
+                        .attr("language", "JavaScript")
+                        .appendChild(DataNode(bootstrapJS))
+                htmlDocument.outputSettings().prettyPrint(false)
+
+
+                call.respondText(htmlDocument.outerHtml(), ContentType.Text.Html)
             } catch (nfe: NotFoundException) {
                 call.response.status(HttpStatusCode.NotFound)
                 call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
@@ -333,17 +341,16 @@ class Kweb private constructor(
 
     private fun applyPluginWithDependencies(plugin: KwebPlugin,
                                             appliedPlugins: MutableSet<KwebPlugin>,
-                                            endHeadBuilder: java.lang.StringBuilder,
-                                            startHeadBuilder: java.lang.StringBuilder,
-                                            routeHandler: Routing) {
+                                            routeHandler: Routing,
+                                            document: Document) {
         for (dependantPlugin in plugin.dependsOn) {
             if (!appliedPlugins.contains(dependantPlugin)) {
-                applyPluginWithDependencies(dependantPlugin, appliedPlugins, endHeadBuilder, startHeadBuilder, routeHandler)
+                applyPluginWithDependencies(dependantPlugin, appliedPlugins, routeHandler, document)
                 appliedPlugins.add(dependantPlugin)
             }
         }
         if (!appliedPlugins.contains(plugin)) {
-            plugin.decorate(startHeadBuilder, endHeadBuilder)
+            plugin.decorate(document)
             plugin.appServerConfigurator(routeHandler)
             appliedPlugins.add(plugin)
         }

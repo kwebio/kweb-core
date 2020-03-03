@@ -117,7 +117,16 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     }
 
     fun innerHTML(html: String): Element {
-        execute("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+        val htmlDoc = browser.htmlDocument.get()
+        when {
+            htmlDoc != null -> {
+                val thisEl = htmlDoc.getElementById(this.id!!)
+                thisEl.html(html)
+            }
+            else -> {
+                execute("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+            }
+        }
         return this
     }
 

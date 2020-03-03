@@ -2,8 +2,8 @@ package io.kweb.plugins.tablesort
 
 import io.kweb.dom.element.creation.tags.TableElement
 import io.kweb.plugins.KwebPlugin
-import io.kweb.plugins.jqueryCore.executeOnSelf
-import io.kweb.plugins.jqueryCore.jqueryCore
+import io.kweb.plugins.jqueryCore.*
+import org.jsoup.nodes.Document
 
 /**
  * Uses kylexfox's [tablesort plugin](https://github.com/kylefox/jquery-tablesort) to allow sortable
@@ -15,10 +15,9 @@ import io.kweb.plugins.jqueryCore.jqueryCore
  * @see main usage example
  */
 class TablesortPlugin : KwebPlugin(dependsOn = setOf(jqueryCore)) {
-    override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
-        startHead.append("""
-            <script src="https://semantic-ui.com/javascript/library/tablesort.js"></script>
-""".trimIndent())
+    override fun decorate(doc : Document) {
+        doc.head().appendElement("script")
+                .attr("src", "https://semantic-ui.com/javascript/library/tablesort.js")
     }
 }
 

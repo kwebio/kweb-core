@@ -5,6 +5,7 @@ import io.kweb.dom.element.creation.tags.canvas
 import io.kweb.dom.element.new
 import io.kweb.plugins.KwebPlugin
 import io.kweb.plugins.chartJs.ChartType.line
+import org.jsoup.nodes.Document
 
 fun main(args: Array<String>) {
     Kweb(port = 5252, plugins = listOf(chartJs), buildPage = {
@@ -25,8 +26,10 @@ fun main(args: Array<String>) {
 }
 
 class ChartJsPlugin : KwebPlugin() {
-    override fun decorate(startHead: StringBuilder, endHead: StringBuilder) {
-        startHead.appendln("<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js\"></script>")
+    override fun decorate(doc : Document) {
+        doc.head().appendElement("script")
+                .attr("type", "text/javascript")
+                .attr("src", "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js")
     }
 }
 
