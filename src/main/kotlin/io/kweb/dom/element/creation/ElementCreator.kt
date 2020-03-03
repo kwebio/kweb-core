@@ -40,6 +40,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     fun element(tag: String, attributes: Map<String, Any> = attr): Element {
 
+        val mutAttributes = HashMap(attributes)
+
         if (position != null && elementsCreatedCount == 2) {
             logger.warn {
                 """
@@ -50,20 +52,20 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
 
-        val id: String = (attributes["id"] ?: "K"+browser.generateId()).toString()
+        val id: String = (mutAttributes.computeIfAbsent("id") {"K"+browser.generateId()}.toString())
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
                 val jsElement = when {
                     parent is HeadElement -> {
-                        htmlDoc.head()
+                        htmlDoc.head().appendElement(tag)
                     }
                     parent is BodyElement -> {
-                        htmlDoc.body()
+                        htmlDoc.body().appendElement(tag)
                     }
-                    else -> htmlDoc.getElementById(parent.id)
+                    else -> htmlDoc.getElementById(parent.id).appendElement(tag)
                 }!!
-                for ((k, v) in attributes) {
+                for ((k, v) in mutAttributes) {
                     if (v is Boolean) {
                         jsElement.attr(k, v)
                     } else  {
@@ -72,10 +74,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 }
             }
             parent.canSendInstruction() -> {
-                browser.send(Instruction(CreateElement, listOf(tag, attributes, id, parent.id, position ?: -1)))
+                browser.send(Instruction(CreateElement, listOf(tag, mutAttributes, id, parent.id, position ?: -1)))
             }
             else -> {
-                parent.execute(renderJavaScriptToCreateNewElement(tag, attributes, id))
+                parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
