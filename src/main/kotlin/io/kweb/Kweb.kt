@@ -36,6 +36,7 @@ private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
 class Kweb private constructor(
     val debug: Boolean,
     val plugins: List<KwebPlugin>,
+    val serverSideRendering: Boolean = true,
     val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
@@ -63,6 +64,7 @@ class Kweb private constructor(
     companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
         class Configuration {
             var debug: Boolean = true
+            var serverSideRendering: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
             lateinit var buildPage: WebBrowser.() -> Unit
         }
@@ -71,7 +73,7 @@ class Kweb private constructor(
 
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
-            val feature = Kweb(configuration.debug, configuration.plugins, configuration.buildPage)
+            val feature = Kweb(configuration.debug, configuration.plugins, configuration.serverSideRendering ,configuration.buildPage)
             feature.setupKweb(pipeline)
             return feature
         }
@@ -102,8 +104,9 @@ class Kweb private constructor(
             debug: Boolean = true,
             plugins: List<KwebPlugin> = Collections.emptyList(),
             httpsConfig : EngineSSLConnectorConfig? = null,
+            serverSideRendering: Boolean = true,
             buildPage: WebBrowser.() -> Unit
-    ) : this(debug, plugins, buildPage) {
+    ) : this(debug, plugins, serverSideRendering, buildPage) {
         logger.info("Initializing Kweb listening on port $port")
 
         if (debug) {
@@ -250,7 +253,7 @@ class Kweb private constructor(
             // TODO: We should be parsing and caching this Jsoup document, but
             // TODO: important not to forget to clone the cached document before
             // TODO: mutating it.
-            val htmlDocument = Jsoup.parse(bootstrapHtmlTemplate)
+            val htmlDocument = if (serverSideRendering) Jsoup.parse(bootstrapHtmlTemplate) else null
 
             try {
                 val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb)
