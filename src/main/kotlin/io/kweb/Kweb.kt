@@ -1,50 +1,34 @@
 package io.kweb
 
 import com.github.salomonbrys.kotson.fromJson
-import io.ktor.application.Application
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.features.Compression
-import io.ktor.features.DefaultHeaders
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.http.cio.websocket.*
 import io.ktor.http.cio.websocket.Frame.Text
-import io.ktor.http.cio.websocket.pingPeriod
-import io.ktor.http.cio.websocket.readText
-import io.ktor.http.cio.websocket.timeout
 import io.ktor.request.uri
 import io.ktor.response.respondText
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.routing.routing
-import io.ktor.server.engine.EngineSSLConnectorConfig
-import io.ktor.server.engine.applicationEngineEnvironment
-import io.ktor.server.engine.connector
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.jetty.Jetty
-import io.ktor.server.jetty.JettyApplicationEngine
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.jetty.*
 import io.ktor.util.AttributeKey
-import io.ktor.websocket.WebSockets
-import io.ktor.websocket.webSocket
+import io.ktor.websocket.*
 import io.kweb.browserConnection.KwebClientConnection
 import io.kweb.browserConnection.KwebClientConnection.Caching
-import io.kweb.client.Client2ServerMessage
-import io.kweb.client.RemoteClientState
-import io.kweb.client.Server2ClientMessage
+import io.kweb.client.*
 import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.plugins.KwebPlugin
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.time.delay
 import org.apache.commons.io.IOUtils
+import org.jsoup.Jsoup
 import java.io.Closeable
-import java.time.Duration
-import java.time.Instant
-import java.util.Collections
-import java.util.HashSet
+import java.time.*
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.ArrayList
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
@@ -263,7 +247,14 @@ class Kweb private constructor(
 
             val httpRequestInfo = io.kweb.client.HttpRequestInfo(call.request)
 
+            // TODO: We should be parsing and caching this Jsoup document, but
+            // TODO: important not to forget to clone the cached document before
+            // TODO: mutating it.
+            val htmlDocument = Jsoup.parse(bootstrapHtmlTemplate)
+
             try {
+                val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb)
+                webBrowser.htmlDocument.set(htmlDocument)
                 if (debug) {
                     warnIfBlocking(maxTimeMs = MAX_PAGE_BUILD_TIME.toMillis(), onBlock = { thread ->
                         logger.warn { "buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME.  More info at DEBUG loglevel" }
@@ -276,7 +267,7 @@ class Kweb private constructor(
                         logger.debug { logStatement }
                     }) {
                         try {
-                            buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
+                            buildPage(webBrowser)
                         } catch (e: Exception) {
                             logger.error("Exception thrown building page", e)
                         }
@@ -284,7 +275,7 @@ class Kweb private constructor(
                     }
                 } else {
                     try {
-                        buildPage(WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb))
+                        buildPage(webBrowser)
                     } catch (e: Exception) {
                         logger.error("Exception thrown building page", e)
                     }
@@ -294,11 +285,15 @@ class Kweb private constructor(
                     execute(kwebSessionId, plugin.executeAfterPageCreation())
                 }
 
+                webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
+
                 val initialCachedMessages = remoteClientState.clientConnection as Caching
 
                 remoteClientState.clientConnection = Caching()
 
-                val bootstrapHtml = bootstrapHtmlTemplate
+                // FIXME: Inefficient, we should probably use JSoup to do these template replacements before rendering
+                // out the doc.
+                val bootstrapHtml = htmlDocument.toString()
                         .replace("--CLIENT-ID-PLACEHOLDER--", kwebSessionId)
                         .replace("<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->", initialCachedMessages.read().map { "handleInboundMessage($it);" }.joinToString(separator = "\n"))
 

@@ -1,13 +1,11 @@
 package io.kweb.dom.element.creation
 
-import io.kweb.WebBrowser
+import io.kweb.*
 import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import io.kweb.dom.attributes.attr
-import io.kweb.dom.element.Element
-import io.kweb.dom.element.KWebDSL
+import io.kweb.dom.element.*
 import io.kweb.plugins.KwebPlugin
-import io.kweb.toJson
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -52,7 +50,17 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
 
         val id: String = (attributes["id"] ?: "K"+browser.generateId()).toString()
-        if (parent.canSendInstruction()) {
+        val htmlDoc = browser.htmlDocument.get()
+        if (htmlDoc != null) {
+            val jsElement = htmlDoc.createElement(tag)
+            for ((k, v) in attributes) {
+                if (v is Boolean) {
+                    jsElement.attr(k, v)
+                } else {
+                    jsElement.attr(k, v.toString())
+                }
+            }
+        } else if (parent.canSendInstruction()) {
             browser.send(Instruction(CreateElement, listOf(tag, attributes, id, parent.id, position ?: -1)))
         } else {
             parent.execute(renderJavaScriptToCreateNewElement(tag, attributes, id))

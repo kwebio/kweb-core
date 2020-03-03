@@ -4,12 +4,11 @@ import io.kweb.client.HttpRequestInfo
 import io.kweb.client.Server2ClientMessage.Instruction
 import io.kweb.dom.Document
 import io.kweb.plugins.KwebPlugin
-import io.kweb.state.KVar
-import io.kweb.state.ReversableFunction
+import io.kweb.state.*
 import io.mola.galimatias.URL
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.*
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
@@ -23,6 +22,17 @@ val logger = KotlinLogging.logger {}
 class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
 
     val idCounter = AtomicInteger(0)
+
+    /**
+     * During page render, the initial HTML document will be available for modifiation as a
+     * [JSoup Document](https://jsoup.org/) in this [AtomicReference].
+     *
+     * Callers to [execute] may check for this being non-null, and if so edit the document
+     * *instead* of some or all of the JavaScript they must call.
+     *
+     * The purpose of this is to implement Server-Side Rendering.
+     */
+    val htmlDocument = AtomicReference<org.jsoup.nodes.Document?>(null)
 
     fun generateId() : String = idCounter.getAndIncrement().toString(36)
 
