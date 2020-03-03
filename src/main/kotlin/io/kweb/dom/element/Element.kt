@@ -7,16 +7,13 @@ import io.kweb.client.Server2ClientMessage.Instruction.Type
 import io.kweb.client.Server2ClientMessage.Instruction.Type.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.events.ONImmediateReceiver
-import io.kweb.dom.element.events.ONReceiver
+import io.kweb.dom.element.events.*
 import io.kweb.dom.element.modification.StyleReceiver
 import io.kweb.dom.element.read.ElementReader
 import io.kweb.plugins.KwebPlugin
-import io.kweb.state.KVal
-import io.kweb.state.KVar
+import io.kweb.state.*
 import java.util.*
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ConcurrentSkipListSet
+import java.util.concurrent.*
 import kotlin.reflect.KClass
 
 @DslMarker
@@ -217,10 +214,18 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      * a `h1` element and set its text as follows: `<h1>Hello World</h1>`.
      */
     fun text(value: String): Element {
-        if (canSendInstruction()) {
-            browser.send(Instruction(SetText, listOf(id, value)))
-        } else {
-            execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+        val jsoupDoc = browser.htmlDocument.get()
+        when {
+            jsoupDoc != null -> {
+                val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
+                element.text(value)
+            }
+            canSendInstruction() -> {
+                browser.send(Instruction(SetText, listOf(id, value)))
+            }
+            else -> {
+                execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+            }
         }
         return this
     }
@@ -251,15 +256,23 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         }
 
     fun addText(value: String): Element {
-        if (canSendInstruction()) {
-            browser.send(Instruction(AddText, listOf(id, value)))
-        } else {
-            execute("""
+        val jsoupDoc = browser.htmlDocument.get()
+        when {
+            jsoupDoc != null -> {
+                val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
+                element.appendText(value)
+            }
+            canSendInstruction() -> {
+                browser.send(Instruction(AddText, listOf(id, value)))
+            }
+            else -> {
+                execute("""
                 {
                     var ntn=document.createTextNode("${value.escapeEcma()}");
                     $jsExpression.appendChild(ntn);
                 }
         """)
+            }
         }
         return this
     }
