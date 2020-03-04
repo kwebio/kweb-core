@@ -1,18 +1,12 @@
 package io.kweb.state.render
 
 import io.kweb.Kweb
-import io.kweb.dom.element.Element
+import io.kweb.dom.element.*
 import io.kweb.dom.element.creation.ElementCreator
-import io.kweb.dom.element.creation.tags.div
-import io.kweb.dom.element.creation.tags.h1
-import io.kweb.dom.element.creation.tags.span
-import io.kweb.dom.element.new
-import io.kweb.shoebox.KeyValue
-import io.kweb.shoebox.OrderedViewSet
-import io.kweb.shoebox.Shoebox
-import io.kweb.state.CloseReason
-import io.kweb.state.KVal
-import io.kweb.state.KVar
+import io.kweb.dom.element.creation.tags.*
+import io.kweb.shoebox.*
+import io.kweb.state.*
+import io.kweb.state.render.RenderState.*
 import mu.KotlinLogging
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
@@ -29,18 +23,46 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
     val previousElementCreator : AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
+    val renderState = AtomicReference<RenderState>(NOT_RENDERING)
+
+    fun eraseAndRender() {
+        renderState.set(RENDERING_NO_PENDING_CHANGE)
+        do {
+            containerSpan.removeChildren()
+            containerSpan.new {
+                previousElementCreator.getAndSet(this)?.cleanup()
+                block(kval.value)
+                if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+                    renderState.set(NOT_RENDERING)
+                }
+            }
+        } while (renderState.get() != NOT_RENDERING)
+    }
+
     val listenerHandle = kval.addListener { _, newVal ->
-        containerSpan.removeChildren()
-        containerSpan.new {
-            previousElementCreator.getAndSet(this)?.cleanup()
-            block(newVal)
-            // Remember this ElementCreator and clean up the previous one if necessary
+        when (renderState.get()) {
+            NOT_RENDERING -> {
+                eraseAndRender()
+            }
+            RENDERING_NO_PENDING_CHANGE -> {
+                renderState.set(RENDERING_WITH_PENDING_CHANGE)
+            }
+            else -> {
+                // This space intentionally left blank
+            }
         }
     }
 
     containerSpan.new {
         previousElementCreator.getAndSet(this)?.cleanup()
+        renderState.set(RENDERING_NO_PENDING_CHANGE)
         block(kval.value)
+        if (renderState.get() == RENDERING_WITH_PENDING_CHANGE) {
+            eraseAndRender()
+        } else {
+            renderState.set(NOT_RENDERING)
+        }
+
     }
 
     this.onCleanup(false) {
@@ -147,6 +169,10 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
 """.trimIndent())
     }
     return ItemInfo(itemElementCreator, itemVar)
+}
+
+private enum class RenderState {
+    NOT_RENDERING, RENDERING_NO_PENDING_CHANGE, RENDERING_WITH_PENDING_CHANGE
 }
 
 fun ordered_view_set_sample() {
