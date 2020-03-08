@@ -50,6 +50,8 @@ sealed class KwebClientConnection {
             }
         }
 
+        val size = queue?.size ?: 0
+
         fun read(): List<String> {
             queue.let {
                 if (it == null) error("Queue can only be read once")

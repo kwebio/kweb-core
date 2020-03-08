@@ -79,14 +79,14 @@ open class KVal<T : Any?>(value: T) {
         if (isClosed) {
             val firstStackTrace = closedStack!!
             val secondStackTrace = Thread.currentThread().stackTrace
-            logger.debug {
+            logger.trace {
                 val st = secondStackTrace
                         .filter { it.methodName != "close" }
                         .filterNot { firstStackTrace.contains(it) }
                         .joinToString { it.toString() }
                 "Second stack trace:\t$st"
             }
-            logger.debug {
+            logger.trace {
                 val st = firstStackTrace
                         .filter { it.methodName != "close" }
                         .filterNot { secondStackTrace.contains(it) }

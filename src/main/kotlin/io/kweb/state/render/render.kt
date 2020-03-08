@@ -26,11 +26,11 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
     val renderState = AtomicReference<RenderState>(NOT_RENDERING)
 
     fun eraseAndRender() {
-        renderState.set(RENDERING_NO_PENDING_CHANGE)
         do {
             containerSpan.removeChildren()
             containerSpan.new {
                 previousElementCreator.getAndSet(this)?.cleanup()
+                renderState.set(RENDERING_NO_PENDING_CHANGE)
                 block(kval.value)
                 if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
                     renderState.set(NOT_RENDERING)

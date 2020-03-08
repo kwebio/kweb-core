@@ -8,6 +8,7 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 function handleInboundMessage(msg) {
+    console.debug("")
     const yourId = msg["yourId"];
     const debugToken = msg["debugToken"];
     if (kwebClientId != yourId) {
@@ -22,7 +23,7 @@ function handleInboundMessage(msg) {
     if (execute !== undefined) {
         try {
             eval(execute["js"]);
-            console.debug("Executed `" + execute["js"] + "`");
+            console.debug("Executed JavaScript", execute["js"]);
         } catch (err) {
             if (debugToken != undefined) {
                 console.error("Error evaluating [" + execute["js"] + "] : " + err);

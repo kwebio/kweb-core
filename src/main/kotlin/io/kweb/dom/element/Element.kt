@@ -96,7 +96,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    fun setAttribute(name : String, oValue : KVal<out Any>) : Element {
+    fun setAttribute(name: String, oValue: KVal<out Any>): Element {
         setAttributeRaw(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
             setAttributeRaw(name, newValue)
@@ -130,9 +130,9 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    fun innerHTML(html: KVal<String>) : Element {
+    fun innerHTML(html: KVal<String>): Element {
         this.innerHTML(html.value)
-        val handle = html.addListener{ _, new ->
+        val handle = html.addListener { _, new ->
             innerHTML(new)
         }
         this.creator?.onCleanup(true) {
@@ -141,24 +141,24 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    fun focus() : Element {
+    fun focus(): Element {
         execute("$jsExpression.focus();")
         return this
     }
 
-    fun blur() : Element {
+    fun blur(): Element {
         execute("$jsExpression.blur();")
         return this
     }
 
-    fun classes(vararg value : String) = setClasses(*value)
+    fun classes(vararg value: String) = setClasses(*value)
 
     fun setClasses(vararg value: String): Element {
         setAttributeRaw("class", value.joinToString(separator = " ").toJson())
         return this
     }
 
-    fun addClasses(vararg classes: String, onlyIf : Boolean = true): Element {
+    fun addClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
             for (class_ in classes) {
                 if (class_.contains(' ')) {
@@ -203,18 +203,39 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     }
 
     fun removeChildren(): Element {
-        execute("""
+        val htmlDoc = browser.htmlDocument.get()
+        when {
+            htmlDoc != null -> {
+                htmlDoc.getElementById(this.id).let { jsoupElement ->
+                    jsoupElement.children().remove()
+                }
+            }
+            else -> {
+                execute("""
         if ($jsExpression != null) {
             while ($jsExpression.firstChild) {
                 $jsExpression.removeChild($jsExpression.firstChild);
             }
         }
      """.trimIndent())
+            }
+        }
+
         return this
     }
 
-    fun removeChildAt(position : Int) : Element {
-        execute("$jsExpression.removeChild($jsExpression.childNodes[$position]);".trimIndent())
+    fun removeChildAt(position: Int): Element {
+        val htmlDoc = browser.htmlDocument.get()
+        when {
+            htmlDoc != null -> {
+                htmlDoc.getElementById(this.id).let { jsoupElement ->
+                    jsoupElement.children()[position]
+                }
+            }
+            else -> {
+                execute("$jsExpression.removeChild($jsExpression.childNodes[$position]);".trimIndent())
+            }
+        }
         return this
     }
 
@@ -243,9 +264,9 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      * Set the text of this element to an [KVal] value.  If the text in the KVal
      * changes the text of this element will update automatically.
      */
-    fun text(text: KVal<String>) : Element {
+    fun text(text: KVal<String>): Element {
         this.text(text.value)
-        val handle = text.addListener{ _, new ->
+        val handle = text.addListener { _, new ->
             text(new)
         }
         this.creator?.onCleanup(true) {
@@ -254,7 +275,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    var text : KVar<String>
+    var text: KVar<String>
         get() {
             val t = KVar("")
             text(t)
@@ -286,7 +307,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    fun addImmediateEventCode(eventName : String, jsCode : String) {
+    fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = jsExpression + """
             .addEventListener(${eventName.toJson()}, function(event) {
                 $jsCode
@@ -295,10 +316,10 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         browser.evaluate(wrappedJS)
     }
 
-    fun addEventListener(eventName: String, returnEventFields : Set<String> = Collections.emptySet(), retrieveJs : String?, callback: (Any) -> Unit): Element {
+    fun addEventListener(eventName: String, returnEventFields: Set<String> = Collections.emptySet(), retrieveJs: String?, callback: (Any) -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
-        val eventObject = "{"+returnEventFields.map {"\"$it\" : event.$it"}.joinToString(separator = ", ")+retrieveJs + "}"
+        val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + retrieveJs + "}"
         val js = jsExpression + """
             .addEventListener(${eventName.toJson()}, function(event) {
                 callbackWs($callbackId, $eventObject);
@@ -321,7 +342,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         execute("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
     }
 
-    fun spellcheck(spellcheck : Boolean = true) = setAttributeRaw("spellcheck", spellcheck)
+    fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)
 
     val style get() = StyleReceiver(this)
 
@@ -338,12 +359,12 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      * You can supply a javascript expression `retrieveJs` which will
      * be available via [Event.retrieveJs]
      */
-    fun on(retrieveJs : String) = ONReceiver(this, retrieveJs)
+    fun on(retrieveJs: String) = ONReceiver(this, retrieveJs)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
-    val onImmediate : ONImmediateReceiver get() = ONImmediateReceiver(this)
+    val onImmediate: ONImmediateReceiver get() = ONImmediateReceiver(this)
 }
 
 /**
@@ -366,7 +387,7 @@ fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position: Int? = null): ElementCre
  * @sample new_sample_2
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
-        position : Int? = null,
+        position: Int? = null,
         receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE)
         : RETURN_VALUE_TYPE {
     return receiver(new(position))

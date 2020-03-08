@@ -209,12 +209,12 @@ class Kweb private constructor(
                     ?: error("Unable to find server state corresponding to client id ${hello.id}")
 
             assert(remoteClientState.clientConnection is Caching)
-            logger.debug("Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache")
-            val oldConnection = remoteClientState.clientConnection as Caching
+            logger.debug {"Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache"}
+            val cachedConnection = remoteClientState.clientConnection as Caching
             val webSocketClientConnection = KwebClientConnection.WebSocket(this)
             remoteClientState.clientConnection = webSocketClientConnection
-            logger.debug("Set clientConnection for ${remoteClientState.id} to WebSocket")
-            oldConnection.read().forEach { webSocketClientConnection.send(it) }
+            logger.debug {"Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages"}
+            cachedConnection.read().forEach { webSocketClientConnection.send(it) }
 
 
             try {
@@ -224,6 +224,7 @@ class Kweb private constructor(
 
                         if (frame is Text) {
                             val message = gson.fromJson<Client2ServerMessage>(frame.readText())
+                            logger.debug { "Message received: $message" }
                             if (message.error != null) {
                                 handleError(message.error, remoteClientState)
                             } else {
