@@ -62,7 +62,6 @@ class Kweb private constructor(
     companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
         class Configuration {
             var debug: Boolean = true
-            var serverSideRendering: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
             lateinit var buildPage: WebBrowser.() -> Unit
         }
@@ -71,7 +70,7 @@ class Kweb private constructor(
 
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
-            val feature = Kweb(configuration.debug, configuration.plugins, configuration.serverSideRendering ,configuration.buildPage)
+            val feature = Kweb(configuration.debug, configuration.plugins ,configuration.buildPage)
             feature.setupKweb(pipeline)
             return feature
         }
@@ -102,9 +101,8 @@ class Kweb private constructor(
             debug: Boolean = true,
             plugins: List<KwebPlugin> = Collections.emptyList(),
             httpsConfig : EngineSSLConnectorConfig? = null,
-            serverSideRendering: Boolean = true,
             buildPage: WebBrowser.() -> Unit
-    ) : this(debug, plugins, serverSideRendering, buildPage) {
+    ) : this(debug, plugins, buildPage) {
         logger.info("Initializing Kweb listening on port $port")
 
         if (debug) {
