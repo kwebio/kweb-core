@@ -35,7 +35,6 @@ private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
 class Kweb private constructor(
     val debug: Boolean,
     val plugins: List<KwebPlugin>,
-    val serverSideRendering: Boolean = true,
     val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
