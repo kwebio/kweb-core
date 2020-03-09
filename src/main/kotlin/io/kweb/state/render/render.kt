@@ -7,6 +7,7 @@ import io.kweb.dom.element.creation.tags.*
 import io.kweb.shoebox.*
 import io.kweb.state.*
 import io.kweb.state.render.RenderState.*
+import kotlinx.coroutines.sync.Mutex
 import mu.KotlinLogging
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
@@ -23,7 +24,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
     val previousElementCreator : AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
-    val renderState = AtomicReference<RenderState>(NOT_RENDERING)
+    val renderState = AtomicReference(NOT_RENDERING)
 
     fun eraseAndRender() {
         do {
@@ -39,7 +40,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
         } while (renderState.get() != NOT_RENDERING)
     }
 
-    val listenerHandle = kval.addListener { _, newVal ->
+    val listenerHandle = kval.addListener { _, _ ->
         when (renderState.get()) {
             NOT_RENDERING -> {
                 eraseAndRender()
