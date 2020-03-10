@@ -1,13 +1,10 @@
 package io.kweb.state
 
 import mu.KotlinLogging
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
+import kotlin.contracts.*
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty1
-import kotlin.reflect.full.instanceParameter
-import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -27,23 +24,23 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 
     fun <O : Any?> map(reversableFunction: ReversableFunction<T, O>): KVar<O> {
         verifyNotClosed("create a mapping")
-        val mappedObservable = KVar(reversableFunction(value))
+        val mappedKVar = KVar(reversableFunction(value))
         val myChangeHandle = addListener { old, new ->
             if (old != new) {
                 try {
-                    mappedObservable.value = reversableFunction.invoke(new)
+                    mappedKVar.value = reversableFunction.invoke(new)
                 } catch (throwable : Throwable) {
-                    mappedObservable.close(CloseReason("Closed because mapper threw an error or exception", throwable))
+                    mappedKVar.close(CloseReason("Closed because mapper threw an error or exception", throwable))
                 }
             }
         }
         onClose { removeListener(myChangeHandle) }
-        mappedObservable.onClose { removeListener(myChangeHandle) }
-        val origChangeHandle = mappedObservable.addListener { _, new ->
+        mappedKVar.onClose { removeListener(myChangeHandle) }
+        val origChangeHandle = mappedKVar.addListener { _, new ->
             value = reversableFunction.reverse(value, new)
         }
-        onClose { mappedObservable.removeListener(origChangeHandle) }
-        return mappedObservable
+        onClose { mappedKVar.removeListener(origChangeHandle) }
+        return mappedKVar
     }
 
     override fun toString(): String {
