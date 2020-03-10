@@ -27,7 +27,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     companion object : KLogging()
 
     //private val cleanupListeners = LinkedList<(Cleaner) -> Unit>()
-    private val cleanupListeners = LinkedList<Cleaner>()
+    private val cleanupListeners : MutableCollection<Cleaner> = ConcurrentLinkedQueue<Cleaner>()
     @Volatile
     private var isCleanedUp = false
 
