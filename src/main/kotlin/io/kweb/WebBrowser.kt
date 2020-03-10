@@ -101,8 +101,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
                 url
             }
 
-    private fun pushState(path: String) {
-        val url = URL.parse(path).path()
+    private fun pushState(url: String) {
+        // Reverse proxies appear to prefer that this be
+        // expressed relative to the origin (the http://host:port)
+        val url = URL.parse(url).relativeToOrigin
         execute("""
         history.pushState({}, "", "$url");
         """.trimIndent())
@@ -115,4 +117,17 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
 private fun intToByteArray(value: Int): ByteArray {
     return byteArrayOf(value.ushr(24).toByte(), value.ushr(16).toByte(), value.ushr(8).toByte(), value.toByte())
+}
+private val URL.relativeToOrigin : String get() {
+    val sb = StringBuilder()
+    if (path() != null) {
+        sb.append(path())
+    }
+    if (query() != null) {
+        sb.append('?').append(query())
+    }
+    if (fragment() != null) {
+        sb.append('#').append(fragment())
+    }
+    return sb.toString()
 }
