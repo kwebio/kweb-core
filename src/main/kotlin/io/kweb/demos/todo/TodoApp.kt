@@ -1,25 +1,17 @@
 package io.kweb.demos.todo
 
-import io.kweb.Kweb
-import io.kweb.NotFoundException
-import io.kweb.dom.BodyElement
+import io.kweb.*
+import io.kweb.dom.*
 import io.kweb.dom.element.creation.ElementCreator
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.creation.tags.InputType.text
 import io.kweb.dom.element.new
-import io.kweb.dom.title
-import io.kweb.plugins.fomanticUI.fomantic
-import io.kweb.plugins.fomanticUI.fomanticUIPlugin
-import io.kweb.random
+import io.kweb.plugins.fomanticUI.*
 import io.kweb.routing.route
-import io.kweb.state.KVar
-import io.kweb.state.path
-import io.kweb.state.render.render
-import io.kweb.state.render.renderEach
-import io.kweb.state.render.toVar
-import kotlinx.coroutines.GlobalScope
+import io.kweb.state.*
+import io.kweb.state.render.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.time.Instant
@@ -73,7 +65,9 @@ class TodoApp {
                                         /** Here I use the same render mechanism to tie DOM
                                         state to persistent state stored in Shoebox, a simple but powerful
                                         key-value store with observer pattern support. */
-                                        renderList(toVar(state.lists, listId))
+                                        val list: KVar<ToDoState.List> = toVar(state.lists, listId)
+
+                                        renderList(list)
                                     } catch (e: NoSuchElementException) {
                                         throw NotFoundException("Can't find list with id $listId")
                                     }
@@ -131,7 +125,7 @@ class TodoApp {
     }
 
     private fun ElementCreator<*>.renderList(list: KVar<ToDoState.List>) {
-        h3().text(list.map(ToDoState.List::title))
+        h3().text(list.property(ToDoState.List::title))
         div(fomantic.ui.middle.aligned.divided.list).new {
             renderEach(state.itemsByList(list.value.uid)) { item ->
                 div(fomantic.item).new {
