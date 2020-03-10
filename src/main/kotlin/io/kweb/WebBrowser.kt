@@ -102,8 +102,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             }
 
     private fun pushState(url: String) {
-        // Reverse proxies appear to prefer that this be
-        // expressed relative to the origin (the http://host:port)
+        /* Reverse proxies appear to prefer that this be
+         * expressed relative to the origin (the http://host:port),
+         * See https://github.com/kwebio/kweb-core/issues/104
+         * */
         val url = URL.parse(url).relativeToOrigin
         execute("""
         history.pushState({}, "", "$url");
