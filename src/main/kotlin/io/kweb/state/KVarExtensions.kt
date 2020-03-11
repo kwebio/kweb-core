@@ -3,7 +3,7 @@ package io.kweb.state
 import io.mola.galimatias.URL
 
 operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
-    return this.map(object : ReversableFunction<List<T>, T>("get($pos)") {
+    return this.map(object : ReversibleFunction<List<T>, T>("get($pos)") {
         override fun invoke(from: List<T>): T {
             return try {
                 from[pos]
@@ -20,7 +20,7 @@ operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
 }
 
 operator fun <K : Any, V : Any> KVar<Map<K, V>>.get(k : K) : KVar<V?> {
-    return this.map(object : ReversableFunction<Map<K, V>, V?>("map[$k]") {
+    return this.map(object : ReversibleFunction<Map<K, V>, V?>("map[$k]") {
         override fun invoke(from: Map<K, V>): V? = from[k]
 
         override fun reverse(original: Map<K, V>, change: V?): Map<K, V> {
@@ -33,7 +33,7 @@ operator fun <K : Any, V : Any> KVar<Map<K, V>>.get(k : K) : KVar<V?> {
     })
 }
 
-fun <T : Any> KVar<List<T>>.subList(fromIx: Int, toIx: Int): KVar<List<T>> = this.map(object : ReversableFunction<List<T>, List<T>>("subList($fromIx, $toIx)") {
+fun <T : Any> KVar<List<T>>.subList(fromIx: Int, toIx: Int): KVar<List<T>> = this.map(object : ReversibleFunction<List<T>, List<T>>("subList($fromIx, $toIx)") {
     override fun invoke(from: List<T>): List<T> = from.subList(fromIx, toIx)
 
     override fun reverse(original: List<T>, change: List<T>): List<T> {
@@ -50,7 +50,7 @@ enum class Scheme {
 private val prx = "/".toRegex()
 
 val KVar<URL>.path
-    get() = this.map(object : ReversableFunction<URL, String>("URL.path") {
+    get() = this.map(object : ReversibleFunction<URL, String>("URL.path") {
 
         override fun invoke(from: URL): String = from.path()
 
@@ -60,7 +60,7 @@ val KVar<URL>.path
     })
 
 val KVar<URL>.query
-    get() = this.map(object : ReversableFunction<URL, String?>("URL.query") {
+    get() = this.map(object : ReversibleFunction<URL, String?>("URL.query") {
 
         override fun invoke(from: URL): String? = from.query()
 
@@ -70,7 +70,7 @@ val KVar<URL>.query
     })
 
 val KVar<URL>.pathSegments
-    get() = this.map(object : ReversableFunction<URL, List<String>>("URL.pathSegments") {
+    get() = this.map(object : ReversibleFunction<URL, List<String>>("URL.pathSegments") {
 
         override fun invoke(from: URL): List<String> {
             return from.pathSegments()
@@ -94,7 +94,7 @@ fun <A, B> Pair<KVar<A>, KVar<B>>.combine() : KVar<Pair<A, B>> {
     return newKVar
 }
 
-val simpleUrlParser = object : ReversableFunction<String, URL>("simpleUrlParser") {
+val simpleUrlParser = object : ReversibleFunction<String, URL>("simpleUrlParser") {
     override fun invoke(from: String): URL = URL.parse(from)
 
     override fun reverse(original: String, change: URL) = change.toString()
@@ -104,7 +104,7 @@ val simpleUrlParser = object : ReversableFunction<String, URL>("simpleUrlParser"
 infix operator fun KVar<String>.plus(s : String) = this.map { it + s }
 infix operator fun String.plus(sKV : KVar<String>) = sKV.map { this + it }
 
-fun KVar<String>.toInt() = this.map(object : ReversableFunction<String, Int>(label = "KVar<String>.toInt()") {
+fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(label = "KVar<String>.toInt()") {
     override fun invoke(from: String) = from.toInt()
 
     override fun reverse(original: String, change: Int): String {

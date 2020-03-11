@@ -8,7 +8,7 @@ import io.kweb.dom.element.new
 import io.kweb.plugins.fomanticUI.fomantic
 import io.kweb.plugins.fomanticUI.fomanticUIPlugin
 import io.kweb.state.KVar
-import io.kweb.state.ReversableFunction
+import io.kweb.state.ReversibleFunction
 import io.kweb.state.get
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -107,7 +107,7 @@ class RenderCleanupTestApp {
 
 }
 
-private val stringBool = object : ReversableFunction<Boolean, String>(label = "bool -> string") {
+private val stringBool = object : ReversibleFunction<Boolean, String>(label = "bool -> string") {
     override fun invoke(from: Boolean) = if (from) "true" else "false"
     override fun reverse(original: Boolean, change: String) = change == "true"
 }

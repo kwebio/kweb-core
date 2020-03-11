@@ -22,13 +22,13 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
         }
     }
 
-    fun <O : Any?> map(reversableFunction: ReversableFunction<T, O>): KVar<O> {
+    fun <O : Any?> map(reversibleFunction: ReversibleFunction<T, O>): KVar<O> {
         verifyNotClosed("create a mapping")
-        val mappedKVar = KVar(reversableFunction(value))
+        val mappedKVar = KVar(reversibleFunction(value))
         val myChangeHandle = addListener { old, new ->
             if (old != new) {
                 try {
-                    mappedKVar.value = reversableFunction.invoke(new)
+                    mappedKVar.value = reversibleFunction.invoke(new)
                 } catch (throwable : Throwable) {
                     mappedKVar.close(CloseReason("Closed because mapper threw an error or exception", throwable))
                 }
@@ -37,7 +37,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
         onClose { removeListener(myChangeHandle) }
         mappedKVar.onClose { removeListener(myChangeHandle) }
         val origChangeHandle = mappedKVar.addListener { _, new ->
-            value = reversableFunction.reverse(value, new)
+            value = reversibleFunction.reverse(value, new)
         }
         onClose { mappedKVar.removeListener(origChangeHandle) }
         return mappedKVar
@@ -51,7 +51,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 }
 
 inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
-    return this.map(object : ReversableFunction<T, O>("prop: ${property.name}") {
+    return this.map(object : ReversibleFunction<T, O>("prop: ${property.name}") {
 
         private val kClass = T::class
         private val copyFunc = kClass.memberFunctions.firstOrNull { it.name == "copy" }
@@ -68,7 +68,7 @@ inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): K
 }
 
 fun <O : Any> KVar<O?>.notNull(default : O? = null, invertDefault : Boolean = true): KVar<O> {
-    return this.map(object : ReversableFunction<O?, O>(label = "notNull") {
+    return this.map(object : ReversibleFunction<O?, O>(label = "notNull") {
         override fun invoke(from: O?): O = from ?: default!!
 
         override fun reverse(original: O?, change: O): O? = if (invertDefault) {

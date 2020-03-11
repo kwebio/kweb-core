@@ -114,6 +114,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun <T : Any> url(mapper: (String) -> T) = url.map(mapper)
 
-    fun <T : Any> url(func: ReversableFunction<String, T>) = url.map(func)
+    fun <T : Any> url(func: ReversibleFunction<String, T>) = url.map(func)
 }
 

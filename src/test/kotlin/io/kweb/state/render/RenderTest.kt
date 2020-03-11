@@ -10,7 +10,7 @@ import io.kweb.dom.element.creation.tags.h2
 import io.kweb.dom.element.creation.tags.input
 import io.kweb.dom.element.new
 import io.kweb.state.KVar
-import io.kweb.state.ReversableFunction
+import io.kweb.state.ReversibleFunction
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -100,7 +100,7 @@ class RenderTestApp {
 
 }
 
-private val stringBool = object : ReversableFunction<Boolean, String>(label = "bool -> string") {
+private val stringBool = object : ReversibleFunction<Boolean, String>(label = "bool -> string") {
     override fun invoke(from: Boolean) = if (from) "true" else "false"
     override fun reverse(original: Boolean, change: String) = change == "true"
 }
