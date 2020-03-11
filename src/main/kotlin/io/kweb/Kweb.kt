@@ -171,21 +171,25 @@ class Kweb private constructor(
     private fun Routing.createHtmlDocumentSupplier() : () -> Document {
         val document = Document("") // TODO: What should this base URL be?
 
-        val htmlElement = document.appendElement("html")
+        document.appendElement("html").let { html : Element ->
 
-        val headElement = htmlElement.appendElement("head")
-        val bodyElement = htmlElement.appendElement("body")
+            html.appendElement("head").let { head : Element ->
 
-        headElement.appendElement("meta")
-                .attr("name", "viewport")
-                .attr("content", "width=device-width, initial-scale=1.0")
+                head.appendElement("meta")
+                        .attr("name", "viewport")
+                        .attr("content", "width=device-width, initial-scale=1.0")
+            }
 
-        bodyElement.attr("onload", "buildPage()")
-        bodyElement.appendElement("noscript")
-                .html(
-                        """
+            html.appendElement("body").let { body : Element ->
+
+                body.attr("onload", "buildPage()")
+                body.appendElement("noscript")
+                        .html(
+                                """
                             | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
                             | requires JavaScript to be enabled.""".trimMargin())
+            }
+        }
         for (plugin in plugins) {
             applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = document, routeHandler = this)
         }
