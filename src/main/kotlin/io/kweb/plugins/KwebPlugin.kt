@@ -6,9 +6,6 @@ import org.jsoup.nodes.Document
 import java.util.*
 
 abstract class KwebPlugin(val dependsOn: Set<KwebPlugin> = Collections.emptySet()) {
-    // TODO: Allow plugins to specify any other plugin that they should
-    // TODO: run before or after, so that the user doesn't need to
-    // TODO: worry about getting the order right.
 
     open fun decorate(doc : Document) {
 
