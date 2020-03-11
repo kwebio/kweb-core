@@ -10,11 +10,13 @@ object BootstrapJs {
     private val template : Template by lazy {
         val resourceStream = Kweb::class.java.getResourceAsStream("kweb_bootstrap.js")
         val jsAsString = IOUtils.toString(resourceStream, Charsets.UTF_8)
-                // This is required to prevent JSoup from mangling the script
-            //    .replace("<", "&lt;")
+        // By storing the Template we only need to locate the tokens once
         Template(jsAsString, clientIdToken, buildPageToken)
     }
 
+    /**
+     * Efficiently inject required data into kweb_bootstrap.js
+     */
     fun hydrate(clientId : String, pageBuildInstructions : String) : String {
         return template.apply(clientId, pageBuildInstructions)
     }

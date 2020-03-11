@@ -21,10 +21,10 @@ val logger = KotlinLogging.logger {}
 
 class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
 
-    val idCounter = AtomicInteger(0)
+    private val idCounter = AtomicInteger(0)
 
     /**
-     * During page render, the initial HTML document will be available for modifiation as a
+     * During page render, the initial HTML document will be available for modification as a
      * [JSoup Document](https://jsoup.org/) in this [AtomicReference].
      *
      * Callers to [execute] may check for this being non-null, and if so edit the document
@@ -117,19 +117,3 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun <T : Any> url(func: ReversableFunction<String, T>) = url.map(func)
 }
 
-private fun intToByteArray(value: Int): ByteArray {
-    return byteArrayOf(value.ushr(24).toByte(), value.ushr(16).toByte(), value.ushr(8).toByte(), value.toByte())
-}
-private val URL.relativeToOrigin : String get() {
-    val sb = StringBuilder()
-    if (path() != null) {
-        sb.append(path())
-    }
-    if (query() != null) {
-        sb.append('?').append(query())
-    }
-    if (fragment() != null) {
-        sb.append('#').append(fragment())
-    }
-    return sb.toString()
-}
