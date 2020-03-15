@@ -14,17 +14,17 @@ import java.io.File
  * @property resourceFolder For serving resources, the path to the folder which will be served
  * @property servedRoute The route where these assets are being served
  */
-class StaticFilesPlugin private constructor(private val servedRoute: String = "assets") : KwebPlugin() {
+class StaticFilesPlugin private constructor(private val servedRoute: String) : KwebPlugin() {
 
     private lateinit var datasource: (Route) -> Unit
 
-    constructor(rootFolder: File, servedRoute: String = "assets") : this(servedRoute) {
+    constructor(rootFolder: File, servedRoute: String) : this(servedRoute) {
         datasource = {
             it.staticRootFolder = rootFolder
         }
     }
 
-    constructor(resourceFolder: ResourceFolder, servedRoute: String = "assets") : this(servedRoute) {
+    constructor(resourceFolder: ResourceFolder, servedRoute: String) : this(servedRoute) {
         datasource = {
             it.resources(resourceFolder.resourceFolder)
         }
@@ -39,6 +39,6 @@ class StaticFilesPlugin private constructor(private val servedRoute: String = "a
 
 }
 
-internal const val internalStaticFilePath = "/kweb_native_assets"
+internal const val internalStaticFilePath = "/static"
 
 data class ResourceFolder(val resourceFolder: String)
