@@ -8,8 +8,12 @@ import org.jsoup.nodes.Document
 private const val resourceFolder = "io/kweb/plugins/fomanticUI/static"
 private const val resourceRoute = "$internalStaticFilePath/fomantic"
 
+// NOTE: Static assets should be updated from https://github.com/fomantic/Fomantic-UI-CSS,
+//       only semantic.mic.css, semantic.min.js, components/ and themes/ are required
+//       from this REPO.
+
 /**
- * Created by ian on 3/30/17.
+ * Includes the Fomantic UI framework, see: https://fomantic-ui.com/
  */
 class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
         StaticFilesPlugin(ResourceFolder(resourceFolder), resourceRoute))
