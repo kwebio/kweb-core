@@ -15,9 +15,6 @@ class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
         StaticFilesPlugin(ResourceFolder(resourceFolder), resourceRoute))
 ) {
     override fun decorate(doc : Document) {
-        doc.head().appendElement("script")
-                .attr("src", "https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js")
-
         doc.head().appendElement("link")
                 .attr("rel", "stylesheet")
                 .attr("type", "text/css")
