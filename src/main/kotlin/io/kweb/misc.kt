@@ -1,6 +1,7 @@
 package io.kweb
 
 import com.google.gson.Gson
+import io.mola.galimatias.URL
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
@@ -60,3 +61,17 @@ val <T : Any> KClass<T>.pkg : String get() {
 }
 
 data class NotFoundException(override val message: String) : Exception(message)
+
+val URL.relativeToOrigin : String get() {
+    val sb = StringBuilder()
+    if (path() != null) {
+        sb.append(path())
+    }
+    if (query() != null) {
+        sb.append('?').append(query())
+    }
+    if (fragment() != null) {
+        sb.append('#').append(fragment())
+    }
+    return sb.toString()
+}

@@ -63,7 +63,7 @@ class StateSpec : FreeSpec({
 
     "Two-way mapping on KVar" - {
         val lowerCaseVar = KVar("foo")
-        val upperCaseVar = lowerCaseVar.map(object : ReversableFunction<String, String>("upperCase") {
+        val upperCaseVar = lowerCaseVar.map(object : ReversibleFunction<String, String>("upperCase") {
             override fun invoke(from: String) = from.toUpperCase()
 
             override fun reverse(original: String, change: String) = change.toLowerCase()

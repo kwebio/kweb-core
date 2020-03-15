@@ -2,8 +2,7 @@ package io.kweb.state
 
 import io.kweb.random
 import mu.KotlinLogging
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedDeque
+import java.util.concurrent.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -42,21 +41,21 @@ open class KVal<T : Any?>(value: T) {
         if (isClosed) {
             error("Can't map this var because it was closed due to $closeReason")
         }
-        val newObservable = KVal(mapper(value))
+        val mappedKVal = KVal(mapper(value))
         val handle = addListener { old, new ->
-            if (!isClosed && !newObservable.isClosed) {
+            if (!isClosed && !mappedKVal.isClosed) {
                 if (old != new) {
                     logger.debug("Updating mapped $value to $new")
                     val mappedValue = mapper(new)
-                    newObservable.pValue = mappedValue
-                    newObservable.listeners.values.forEach { listener ->
+                    mappedKVal.pValue = mappedValue
+                    mappedKVal.listeners.values.forEach { listener ->
                         try {
                             val mappedOld = mapper(old)
                             if (mappedOld != mappedValue) {
                                 listener(mappedOld, mappedValue)
                             }
                         } catch (e: Exception) {
-                            newObservable.close(CloseReason("Closed because mapper threw an exception", e))
+                            mappedKVal.close(CloseReason("Closed because mapper threw an exception", e))
                         }
 
                     }
@@ -65,11 +64,11 @@ open class KVal<T : Any?>(value: T) {
                 error("Not propagating change to mapped variable because this or the other observable are closed, old: $old, new: $new")
             }
         }
-        newObservable.onClose { removeListener(handle) }
+        mappedKVal.onClose { removeListener(handle) }
         this.onClose {
-            newObservable.close(CloseReason("KVar this was mapped from was closed"))
+            mappedKVal.close(CloseReason("KVar this was mapped from was closed"))
         }
-        return newObservable
+        return mappedKVal
     }
 
     // TODO: Temporary for debugging

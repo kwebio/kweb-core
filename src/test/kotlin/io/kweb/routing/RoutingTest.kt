@@ -5,7 +5,6 @@ import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kweb.Kweb
 import io.kweb.dom.element.creation.tags.*
 import io.kweb.dom.element.new
-import io.kweb.plugins.fomanticUI.fomantic
 import io.kweb.plugins.fomanticUI.fomanticUIPlugin
 import io.kweb.state.*
 import org.junit.jupiter.api.AfterAll
@@ -81,7 +80,7 @@ class RoutingTestApp {
 
 }
 
-private val stringBool = object : ReversableFunction<Boolean, String>(label = "bool -> string") {
+private val stringBool = object : ReversibleFunction<Boolean, String>(label = "bool -> string") {
     override fun invoke(from: Boolean) = if (from) "true" else "false"
     override fun reverse(original: Boolean, change: String) = change == "true"
 }

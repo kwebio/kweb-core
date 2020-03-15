@@ -39,6 +39,37 @@ class Kweb private constructor(
 ) : Closeable {
 
     /**
+     * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
+     * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
+     * between browser and server.
+     *
+     * @property port  The TCP port on which the HTTP server should listen
+     * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
+     *                 but false during production because it is inefficient at scale
+     * @property plugins A list of Kweb plugins to be loaded by Kweb
+     * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
+     *                     go
+     */
+    constructor(
+            port: Int,
+            debug: Boolean = true,
+            plugins: List<KwebPlugin> = Collections.emptyList(),
+            httpsConfig : EngineSSLConnectorConfig? = null,
+            buildPage: WebBrowser.() -> Unit
+    ) : this(debug, plugins, buildPage) {
+        logger.info("Initializing Kweb listening on port $port")
+
+        if (debug) {
+            logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
+        }
+
+        server = createServer(port, httpsConfig)
+
+        server!!.start()
+        logger.info { "KWeb is listening on port $port" }
+    }
+
+    /**
      * If you have an existing Ktor server, you can use the Kweb class as a feature. Adding this to your code is easy:
      *
      * ```
@@ -84,35 +115,87 @@ class Kweb private constructor(
 
     private var server: JettyApplicationEngine? = null
 
-    /**
-     * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
-     * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
-     * between browser and server.
-     *
-     * @property port  The TCP port on which the HTTP server should listen
-     * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
-     *                 but false during production because it is inefficient at scale
-     * @property plugins A list of Kweb plugins to be loaded by Kweb
-     * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
-     *                     go
-     */
-    constructor(
-            port: Int,
-            debug: Boolean = true,
-            plugins: List<KwebPlugin> = Collections.emptyList(),
-            httpsConfig : EngineSSLConnectorConfig? = null,
-            buildPage: WebBrowser.() -> Unit
-    ) : this(debug, plugins, buildPage) {
-        logger.info("Initializing Kweb listening on port $port")
+    fun isCatchingOutbound() = outboundMessageCatcher.get() != null
 
-        if (debug) {
-            logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
+    fun isNotCatchingOutbound() = !isCatchingOutbound()
+
+    fun catchOutbound(f: () -> Unit): List<String> {
+        require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
+
+        val jsList = ArrayList<String>()
+        outboundMessageCatcher.set(jsList)
+        f()
+        outboundMessageCatcher.set(null)
+        return jsList
+    }
+
+    fun execute(clientId: String, javascript: String) {
+        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
+            dt
         }
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+        } else {
+            logger.debug("Temporarily storing message for $clientId in threadloacal outboundMessageCatcher")
+            outboundMessageCatcher.add(javascript)
+        }
+    }
 
-        server = createServer(port, httpsConfig)
+    fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
 
-        server!!.start()
-        logger.info { "KWeb is listening on port $port" }
+    fun send(clientId: String, instructions: List<Instruction>) {
+        if (outboundMessageCatcher.get() != null) {
+            error("""
+                Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
+                """.trimIndent())
+        }
+        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(instructions.toString(), "instructions", Throwable()))
+            dt
+        }
+        wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
+    }
+
+    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
+        // TODO: Should return handle which can be used for cleanup of event listeners
+        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing with callback", Throwable()))
+            dt
+        }
+        wsClientData.handlers.put(callbackId, handler)
+        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+    }
+
+    fun removeCallback(clientId: String, callbackId: Int) {
+        clientState[clientId]?.handlers?.remove(callbackId)
+    }
+
+    fun evaluate(clientId: String, expression: String, handler: (Any) -> Unit) {
+        val wsClientData = clientState.get(clientId)
+                ?: error("Failed to evaluate JavaScript because client id $clientId not found")
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(expression, "evaluating", Throwable()))
+            dt
+        }
+        val callbackId = Math.abs(random.nextInt())
+        wsClientData.handlers.put(callbackId, handler)
+        wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
+    }
+
+    override fun close() {
+        logger.info("Shutting down Kweb")
+        server?.stop(0, 0)
     }
 
     private fun createServer(port: Int, httpsConfig: EngineSSLConnectorConfig?): JettyApplicationEngine {
@@ -169,28 +252,32 @@ class Kweb private constructor(
     }
 
     private fun Routing.createHtmlDocumentSupplier() : () -> Document {
-        val document = Document("") // TODO: What should this base URL be?
+        val docTemplate = Document("") // TODO: What should this base URL be?
 
-        val htmlElement = document.appendElement("html")
+        docTemplate.appendElement("html").let { html : Element ->
 
-        val headElement = htmlElement.appendElement("head")
-        val bodyElement = htmlElement.appendElement("body")
+            html.appendElement("head").let { head : Element ->
 
-        headElement.appendElement("meta")
-                .attr("name", "viewport")
-                .attr("content", "width=device-width, initial-scale=1.0")
+                head.appendElement("meta")
+                        .attr("name", "viewport")
+                        .attr("content", "width=device-width, initial-scale=1.0")
+            }
 
-        bodyElement.attr("onload", "buildPage()")
-        bodyElement.appendElement("noscript")
-                .html(
-                        """
+            html.appendElement("body").let { body : Element ->
+
+                body.attr("onload", "buildPage()")
+                body.appendElement("noscript")
+                        .html(
+                                """
                             | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
                             | requires JavaScript to be enabled.""".trimMargin())
+            }
+        }
         for (plugin in plugins) {
-            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = document, routeHandler = this)
+            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = docTemplate, routeHandler = this)
         }
 
-        return {document.clone()}
+        return {docTemplate.clone()}
     }
 
     private fun Routing.listenForWebsocketConnection(path : String = "/ws") {
@@ -380,89 +467,6 @@ class Kweb private constructor(
      * execution of event handlers, see `Element.immediatelyOn`
      */
     private val outboundMessageCatcher: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
-
-    fun isCatchingOutbound() = outboundMessageCatcher.get() != null
-
-    fun isNotCatchingOutbound() = !isCatchingOutbound()
-
-    fun catchOutbound(f: () -> Unit): List<String> {
-        require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
-
-        val jsList = ArrayList<String>()
-        outboundMessageCatcher.set(jsList)
-        f()
-        outboundMessageCatcher.set(null)
-        return jsList
-    }
-
-    fun execute(clientId: String, javascript: String) {
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
-        wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
-            dt
-        }
-        val outboundMessageCatcher = outboundMessageCatcher.get()
-        if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
-        } else {
-            logger.debug("Temporarily storing message for $clientId in threadloacal outboundMessageCatcher")
-            outboundMessageCatcher.add(javascript)
-        }
-    }
-
-    fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
-
-    fun send(clientId: String, instructions: List<Instruction>) {
-        if (outboundMessageCatcher.get() != null) {
-            error("""
-                Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
-                """.trimIndent())
-        }
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
-        wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(instructions.toString(), "instructions", Throwable()))
-            dt
-        }
-        wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
-    }
-
-    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
-        // TODO: Should return handle which can be used for cleanup of event listeners
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing with callback", Throwable()))
-            dt
-        }
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
-    }
-
-    fun removeCallback(clientId: String, callbackId: Int) {
-        clientState[clientId]?.handlers?.remove(callbackId)
-    }
-
-    fun evaluate(clientId: String, expression: String, handler: (Any) -> Unit) {
-        val wsClientData = clientState.get(clientId)
-                ?: error("Failed to evaluate JavaScript because client id $clientId not found")
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(expression, "evaluating", Throwable()))
-            dt
-        }
-        val callbackId = Math.abs(random.nextInt())
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
-    }
-
-    override fun close() {
-        logger.info("Shutting down Kweb")
-        server?.stop(0, 0)
-    }
 
     private fun cleanUpOldClientStates() {
         val now = Instant.now()
