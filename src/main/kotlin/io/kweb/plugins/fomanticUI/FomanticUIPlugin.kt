@@ -18,10 +18,10 @@ class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
         doc.head().appendElement("link")
                 .attr("rel", "stylesheet")
                 .attr("type", "text/css")
-                .attr("href", "https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.css")
+                .attr("href", "$resourceRoute/semantic.min.css")
 
         doc.head().appendElement("script")
-                .attr("src", "https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.2/dist/semantic.min.js")
+                .attr("src", "$resourceRoute/semantic.min.js")
 
     }
 
