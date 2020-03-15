@@ -254,6 +254,8 @@ class Kweb private constructor(
     private fun Routing.createHtmlDocumentSupplier() : () -> Document {
         val docTemplate = Document("") // TODO: What should this base URL be?
 
+        docTemplate.appendChild(DocumentType("html", "", ""))
+
         docTemplate.appendElement("html").let { html : Element ->
 
             html.appendElement("head").let { head : Element ->
