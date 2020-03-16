@@ -1,5 +1,6 @@
-package kweb.kweb.state
+package kweb.state
 
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
 
 class KVarSpec : FreeSpec({

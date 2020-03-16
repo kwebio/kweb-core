@@ -1,4 +1,4 @@
-package kweb.kweb.state.render
+package kweb.state.render
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension

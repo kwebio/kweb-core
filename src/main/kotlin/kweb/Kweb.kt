@@ -348,7 +348,7 @@ class Kweb private constructor(
                 RemoteClientState(id = kwebSessionId, clientConnection = Caching())
             }
 
-            val httpRequestInfo = io.kweb.client.HttpRequestInfo(call.request)
+            val httpRequestInfo = HttpRequestInfo(call.request)
 
             try {
                 val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb)

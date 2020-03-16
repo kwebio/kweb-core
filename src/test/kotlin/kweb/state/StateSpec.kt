@@ -1,4 +1,4 @@
-package kweb.kweb.state
+package kweb.state
 
 import io.kotlintest.specs.FreeSpec
 import org.amshove.kluent.shouldBeEqualTo

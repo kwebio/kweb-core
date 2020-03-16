@@ -1,4 +1,4 @@
-package kweb.kweb.routing
+package kweb.routing
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension

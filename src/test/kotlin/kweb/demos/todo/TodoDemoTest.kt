@@ -1,22 +1,14 @@
-package kweb.kweb.demos.todo
+package kweb.demos.todo
 
-import io.github.bonigarcia.seljup.Options
-import io.github.bonigarcia.seljup.SeleniumExtension
-import org.amshove.kluent.shouldBeNull
-import org.amshove.kluent.shouldBeTrue
-import org.amshove.kluent.shouldNotBeEqualTo
-import org.amshove.kluent.shouldNotBeNull
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
+import io.github.bonigarcia.seljup.*
+import kweb.demos.todo.TodoApp
+import org.amshove.kluent.*
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
-import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
+import org.openqa.selenium.*
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
-import org.openqa.selenium.support.FindBy
-import org.openqa.selenium.support.PageFactory
+import org.openqa.selenium.support.*
 import org.openqa.selenium.support.ui.WebDriverWait
 
 /**
