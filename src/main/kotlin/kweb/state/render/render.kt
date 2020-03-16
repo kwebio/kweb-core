@@ -4,7 +4,7 @@ import kweb.Kweb
 import kweb.dom.element.*
 import kweb.dom.element.creation.ElementCreator
 import kweb.dom.element.creation.tags.*
-import io.kweb.shoebox.*
+import kweb.shoebox.*
 import kweb.state.*
 import kweb.state.render.RenderState.*
 import mu.KotlinLogging
