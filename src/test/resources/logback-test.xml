@@ -8,7 +8,7 @@
         </encoder>
     </appender>
 
-    <logger name="io.kweb" level="DEBUG"></logger>
+    <logger name="kweb" level="DEBUG"></logger>
 
     <root level="info">
         <appender-ref ref="STDOUT" />
