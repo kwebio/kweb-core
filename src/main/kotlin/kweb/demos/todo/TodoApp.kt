@@ -1,5 +1,7 @@
 package kweb.demos.todo
 
+import kotlinx.coroutines.*
+import kotlinx.coroutines.future.await
 import kweb.*
 import kweb.dom.*
 import kweb.dom.element.creation.ElementCreator
@@ -10,8 +12,6 @@ import kweb.plugins.fomanticUI.*
 import kweb.routing.route
 import kweb.state.*
 import kweb.state.render.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.future.await
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.time.Instant
@@ -61,7 +61,7 @@ class TodoApp {
 
                             path("/lists/{id}") { params ->
                                 doc.head.new {
-                                    title().text("To Do List #" + params.getValue("id"))
+                                    title().text("To Do List #${params.getValue("id").value}")
                                 }
                                 render(params.getValue("id")) { listId ->
                                     logger.info("Rendering list id $listId")
