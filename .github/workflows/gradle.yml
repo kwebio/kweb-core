@@ -17,6 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: setup-java
+      uses: actions/setup-java@v6
       with:
         java-version: 12
     - name: Grant execute permission for gradlew
