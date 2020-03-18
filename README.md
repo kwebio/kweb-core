@@ -1,6 +1,6 @@
 ## Kweb
 
- [![](https://jitpack.io/v/kwebio/kweb-core.svg)](https://jitpack.io/#kwebio/kweb-core) [![Build Status](https://travis-ci.org/kwebio/kweb-core.svg?branch=master)](https://travis-ci.org/kwebio/kweb-core)
+ [![](https://jitpack.io/v/kwebio/kweb-core.svg)](https://jitpack.io/#kwebio/kweb-core) ![tests](https://github.com/kwebio/kweb-core/workflows/tests/badge.svg)
 
 Kweb is a new way to create beautiful, efficient, and scalable websites in Kotlin, quickly.
 
