@@ -1,7 +1,6 @@
 package kweb.demos.todo
 
 import io.github.bonigarcia.seljup.*
-import kweb.demos.todo.TodoApp
 import org.amshove.kluent.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -91,7 +90,7 @@ class TodoDemoTest {
 
         val allItems = site.getAllItems()
         allItems.find{it.text == firstItem}.shouldNotBeNull()
-        allItems.find{it.text == secondItem}.shouldNotBeNull() // Deliberately introduced bug to test C.I
+        allItems.find{it.text == secondItem}.shouldBeNull()
         allItems.find{it.text == thirdItem}.shouldNotBeNull()
     }
 
