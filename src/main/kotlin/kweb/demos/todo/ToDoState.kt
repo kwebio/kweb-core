@@ -1,8 +1,7 @@
 package kweb.demos.todo
 
 import kweb.shoebox.Shoebox
-import java.nio.file.Files
-import java.nio.file.Path
+import java.nio.file.*
 import java.time.Instant
 
 /**
@@ -24,7 +23,7 @@ class ToDoState(dir: Path) {
 
     val items = Shoebox<Item>(dir.resolve("items"))
 
-    val itemsByList = items.view("itemsByList", Item::listUid)
+    private val itemsByList = items.view("itemsByList", Item::listUid)
 
     fun itemsByList(listUid: String) = itemsByList.orderedSet(listUid, compareBy(Item::created))
 }
