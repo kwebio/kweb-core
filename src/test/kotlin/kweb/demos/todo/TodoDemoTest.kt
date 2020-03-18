@@ -91,7 +91,7 @@ class TodoDemoTest {
 
         val allItems = site.getAllItems()
         allItems.find{it.text == firstItem}.shouldNotBeNull()
-        allItems.find{it.text == secondItem}.shouldBeNull()
+        allItems.find{it.text == secondItem}.shouldNotBeNull() // Deliberately introduced bug to test C.I
         allItems.find{it.text == thirdItem}.shouldNotBeNull()
     }
 
