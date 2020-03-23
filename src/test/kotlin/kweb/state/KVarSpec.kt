@@ -2,6 +2,7 @@ package kweb.state
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
+import io.mola.galimatias.URL
 
 class KVarSpec : FreeSpec({
     "a KVar with value `dog`" - {
@@ -43,6 +44,17 @@ class KVarSpec : FreeSpec({
             newKV.value = (9 to 10)
             kvarPair.first.value shouldBe 9
             kvarPair.second.value shouldBe 10
+        }
+    }
+
+    "KVar<URL>.relativeToOrigin" - {
+        "Should correctly extract and replace URL portion after origin" {
+            val orig = URL.parse("http://myhost:322/aba?k=5#12")
+            val kv = KVar(orig)
+            val orkv = kv.relativeToOrigin
+            orkv.value shouldBe "/aba?k=5#12"
+            orkv.value = "/trd?p=25#4"
+            kv.value shouldBe URL.parse("http://myhost:322/trd?p=25#4")
         }
     }
 })

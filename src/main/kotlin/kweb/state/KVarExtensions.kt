@@ -1,6 +1,7 @@
 package kweb.state
 
 import io.mola.galimatias.URL
+import kweb.relativeToOrigin
 
 operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
     return this.map(object : ReversibleFunction<List<T>, T>("get($pos)") {
@@ -81,6 +82,16 @@ val KVar<URL>.pathSegments
         }
 
     })
+
+val KVar<URL>.relativeToOrigin get() = this.map(object : ReversibleFunction<URL, String>("URL.relativeToOrigin") {
+    override fun invoke(from: URL): String {
+        return from.relativeToOrigin
+    }
+
+    override fun reverse(original: URL, change: String): URL {
+        return original.resolve(change)
+    }
+})
 
 fun <A, B> Pair<KVar<A>, KVar<B>>.combine() : KVar<Pair<A, B>> {
     val newKVar = KVar(this.first.value to this.second.value)
