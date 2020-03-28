@@ -1,6 +1,5 @@
-package kweb.dom.element.creation
+package kweb
 
-import kweb.*
 import kweb.client.Server2ClientMessage.Instruction
 import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import kweb.dom.*
