@@ -79,7 +79,7 @@ typealias PathTemplate = List<RoutingPathSegment>
 typealias PathReceiver = ElementCreator<*>.(params : Map<String, KVar<String>>) -> Unit
 typealias NotFoundReceiver = (ElementCreator<*>).(path : String) -> Unit
 
-class RouteReceiver internal constructor(val parentElementCreator: ElementCreator<*>, val url: KVar<URL>) {
+class RouteReceiver internal constructor(val parentElementCreator: ElementCreator<*>, private val url: KVar<URL>) {
     internal val templatesByLength = HashMap<Int, MutableMap<PathTemplate, PathReceiver>>()
 
     internal var notFoundReceiver : NotFoundReceiver = { path ->

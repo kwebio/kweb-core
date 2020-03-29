@@ -92,7 +92,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     //       propagate everywhere they should.  That's why it's lazy.
     val url: KVar<String>
             by lazy {
-                val url = KVar(httpRequestInfo.requestedUrl)
+                val originRelativeURL = URL.parse(httpRequestInfo.requestedUrl).pathQueryFragment
+                val url = KVar(originRelativeURL)
 
                 url.addListener { _, newState ->
                     pushState(newState)
@@ -102,11 +103,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             }
 
     private fun pushState(url: String) {
-        /* Reverse proxies appear to prefer that this be
-         * expressed relative to the origin (the http://host:port),
-         * See https://github.com/kwebio/kweb-core/issues/104
-         * */
-        val url = URL.parse(url).pathQueryFragment
+        if (!url.startsWith('/')) {
+            logger.warn("pushState should only be called with origin-relative URLs (ie. they should start with a /)")
+        }
         execute("""
         history.pushState({}, "", "$url");
         """.trimIndent())
@@ -115,8 +114,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun <T : Any> url(mapper: (String) -> T) = url.map(mapper)
 
     fun <T : Any> url(func: ReversibleFunction<String, T>) = url.map(func)
-
-    val pathQueryFragment : KVar<String> get() = url(simpleUrlParser).pathQueryFragment
 
 }
 
