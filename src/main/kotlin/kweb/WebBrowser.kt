@@ -106,7 +106,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
          * expressed relative to the origin (the http://host:port),
          * See https://github.com/kwebio/kweb-core/issues/104
          * */
-        val url = URL.parse(url).relativeToOrigin
+        val url = URL.parse(url).pathQueryFragment
         execute("""
         history.pushState({}, "", "$url");
         """.trimIndent())
@@ -115,5 +115,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun <T : Any> url(mapper: (String) -> T) = url.map(mapper)
 
     fun <T : Any> url(func: ReversibleFunction<String, T>) = url.map(func)
+
+    val pathQueryFragment : KVar<String> get() = url(simpleUrlParser).pathQueryFragment
+
 }
 
