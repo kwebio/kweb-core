@@ -33,10 +33,17 @@ import kotlin.collections.withIndex
 private val logger = KotlinLogging.logger {}
 
 fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
-    val url = this.browser.url(simpleUrlParser)
-    val rr = RouteReceiver(this, url)
+    val rr = RouteReceiver()
     routeReceiver(rr)
-    val pathKVar = url.pathSegments
+    val pathKVar : KVar<List<String>> = this.browser.url.map( object : ReversibleFunction<String, List<String>>(label = "url -> pathSegments") {
+        override fun invoke(from: String): List<String> {
+            return URL.parse(from).pathSegments()
+        }
+
+        override fun reverse(original: String, change: List<String>): String {
+            return URL.parse(original).withPath(change.joinToString(separator = "/")).toString()
+        }
+    } )
     val matchingTemplate : KVal<PathTemplate?> = pathKVar.map { path ->
         val size = if (path != listOf("")) path.size else 0
         val templatesOfSameLength = rr.templatesByLength[size]
@@ -69,7 +76,7 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
                 error("Unable to find pathRenderer for template $template")
             }
         } else {
-            rr.notFoundReceiver.invoke(this, url.value.path())
+            rr.notFoundReceiver.invoke(this, URL.parse(this.browser.url.value).path() )
         }
     }
 }
@@ -79,7 +86,7 @@ typealias PathTemplate = List<RoutingPathSegment>
 typealias PathReceiver = ElementCreator<*>.(params : Map<String, KVar<String>>) -> Unit
 typealias NotFoundReceiver = (ElementCreator<*>).(path : String) -> Unit
 
-class RouteReceiver internal constructor(val parentElementCreator: ElementCreator<*>, private val url: KVar<URL>) {
+class RouteReceiver internal constructor() {
     internal val templatesByLength = HashMap<Int, MutableMap<PathTemplate, PathReceiver>>()
 
     internal var notFoundReceiver : NotFoundReceiver = { path ->
