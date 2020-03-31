@@ -88,8 +88,13 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     val doc = Document(this)
 
-    // Note: It's important that we only have one KVar for the URL for this WebBrowser to ensure that changes
-    //       propagate everywhere they should.  That's why it's lazy.
+    /**
+     * The URL of the page, relative to the origin - so for the page `http://foo/bar?baz#1`, the value would be
+     * `/bar?baz#1`.
+     *
+     * When this KVar is modified the browser will automatically update the URL in the browser along with any DOM
+     * elements based on this [url] (this will be handled automatically by [kweb.routing.route]).
+     */
     val url: KVar<String>
             by lazy {
                 val originRelativeURL = URL.parse(httpRequestInfo.requestedUrl).pathQueryFragment
