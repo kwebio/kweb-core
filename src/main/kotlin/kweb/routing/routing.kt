@@ -35,15 +35,7 @@ private val logger = KotlinLogging.logger {}
 fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
     val rr = RouteReceiver()
     routeReceiver(rr)
-    val pathKVar : KVar<List<String>> = this.browser.url.map( object : ReversibleFunction<String, List<String>>(label = "url -> pathSegments") {
-        override fun invoke(from: String): List<String> {
-            return URL.parse(from).pathSegments()
-        }
-
-        override fun reverse(original: String, change: List<String>): String {
-            return URL.parse(original).withPath(change.joinToString(separator = "/")).toString()
-        }
-    } )
+    val pathKVar : KVar<List<String>> = this.browser.url.map(UrlToPathSegmentsRF)
     val matchingTemplate : KVal<PathTemplate?> = pathKVar.map { path ->
         val size = if (path != listOf("")) path.size else 0
         val templatesOfSameLength = rr.templatesByLength[size]
@@ -78,6 +70,17 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
         } else {
             rr.notFoundReceiver.invoke(this, URL.parse(this.browser.url.value).path() )
         }
+    }
+}
+
+object UrlToPathSegmentsRF : ReversibleFunction<String, List<String>>(label = "UrlToPathSegmentsRF") {
+    override fun invoke(from: String): List<String> {
+        return from.substringBefore('?').split('/').drop(1)
+    }
+
+    override fun reverse(original: String, change: List<String>): String {
+        val queryFragment = original.substringAfter('?')
+        return '/' + change.joinToString(separator = "/") + '?' + queryFragment
     }
 }
 
