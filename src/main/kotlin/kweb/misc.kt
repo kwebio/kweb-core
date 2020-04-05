@@ -62,7 +62,7 @@ val <T : Any> KClass<T>.pkg : String get() {
 
 data class NotFoundException(override val message: String) : Exception(message)
 
-val URL.relativeToOrigin : String get() {
+val URL.pathQueryFragment : String get() {
     val sb = StringBuilder()
     if (path() != null) {
         sb.append(path())

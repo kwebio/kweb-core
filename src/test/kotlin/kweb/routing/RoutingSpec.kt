@@ -25,4 +25,18 @@ class RoutingSpec : FreeSpec({
 
         }
     }
+
+    "Path segment transform works" - {
+        val url1 = "/p1/p2?query#fragment"
+        val segments = UrlToPathSegmentsRF.invoke(url1)
+        "should extract segments correctly" {
+            segments shouldBe listOf("p1", "p2")
+        }
+
+        "should replace segments correctly" {
+            val url2 = "/foo/bar?query#fragment"
+            val replaced = UrlToPathSegmentsRF.reverse(url2, listOf("a", "b", "c"))
+            replaced shouldBe "/a/b/c?query#fragment"
+        }
+    }
 })

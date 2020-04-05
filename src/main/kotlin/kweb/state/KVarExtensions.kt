@@ -1,6 +1,7 @@
 package kweb.state
 
 import io.mola.galimatias.URL
+import kweb.pathQueryFragment
 
 operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
     return this.map(object : ReversibleFunction<List<T>, T>("get($pos)") {
@@ -81,6 +82,24 @@ val KVar<URL>.pathSegments
         }
 
     })
+
+/**
+ * Given the URI specification:
+ *
+ * `URI = scheme:[//authority]path[?query][#fragment]`
+ *
+ * The `pqf` refers to the `path[?query][#fragment]` and can be used to change the path, query, and/or fragment
+ * of the URL in one shot.
+ */
+val KVar<URL>.pathQueryFragment get() = this.map(object : ReversibleFunction<URL, String>("URL.pathQueryFragment") {
+    override fun invoke(from: URL): String {
+        return from.pathQueryFragment
+    }
+
+    override fun reverse(original: URL, change: String): URL {
+        return original.resolve(change)
+    }
+})
 
 fun <A, B> Pair<KVar<A>, KVar<B>>.combine() : KVar<Pair<A, B>> {
     val newKVar = KVar(this.first.value to this.second.value)

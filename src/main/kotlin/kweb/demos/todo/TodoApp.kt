@@ -53,10 +53,10 @@ class TodoApp {
                             path("/") {
                                 val newListId = createNewList()
                                 /**
-                                 * By updating the URL path this will cause the page to switch to the newly created list
-                                 * automatically, and without a page refresh.
+                                 * This will cause the page to switch to the newly created list automatically, and
+                                 * without a page refresh.
                                  */
-                                url.path.value = "/lists/$newListId"
+                                url.value = "/lists/$newListId"
                             }
 
                             path("/lists/{id}") { params ->
@@ -85,7 +85,7 @@ class TodoApp {
                             notFound {
                                 div(fomantic.ui.negative.message).new {
                                     div(fomantic.header).text("Not Found :(")
-                                    p().text(url.path.map { "Unable to find path $it" })
+                                    p().text(url.map { "Unable to find path $it" })
                                 }
                             }
                         }
