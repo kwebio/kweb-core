@@ -1,6 +1,7 @@
 package kweb.plugins.fomanticUI
 
-import kweb.*
+import kweb.AttributeBuilder
+import kweb.classes
 
 class FomanticUIClasses : AttributeBuilder() {
 

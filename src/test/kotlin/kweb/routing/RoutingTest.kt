@@ -2,7 +2,10 @@ package kweb.routing
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
-import kweb.*
+import kweb.Kweb
+import kweb.a
+import kweb.h1
+import kweb.new
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction

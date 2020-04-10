@@ -1,7 +1,8 @@
 package kweb.dom.element.events
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.*
+import kweb.Element
+import kweb.KWebDSL
 import kweb.gson
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap

@@ -1,7 +1,8 @@
 package kweb.plugins.jqueryCore
 
+import kweb.Element
+import kweb.KWebDSL
 import kweb.WebBrowser
-import kweb.*
 import kweb.toJson
 
 /**

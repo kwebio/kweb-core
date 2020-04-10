@@ -1,6 +1,9 @@
 package kweb.plugins.fomanticUI
 
-import kweb.*
+import kweb.Kweb
+import kweb.a
+import kweb.div
+import kweb.new
 
 /**
  * Created by ian on 4/1/17.

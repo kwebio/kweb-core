@@ -6,8 +6,13 @@ import io.ktor.routing.RoutingPathSegmentKind.Constant
 import io.ktor.routing.RoutingPathSegmentKind.Parameter
 import io.mola.galimatias.URL
 import kweb.ElementCreator
-import kweb.*
-import kweb.state.*
+import kweb.Kweb
+import kweb.h1
+import kweb.new
+import kweb.state.KVal
+import kweb.state.KVar
+import kweb.state.ReversibleFunction
+import kweb.state.get
 import kweb.state.render.closeOnElementCreatorCleanup
 import kweb.state.render.render
 import mu.KotlinLogging

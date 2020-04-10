@@ -4,7 +4,8 @@ import io.ktor.application.install
 import io.ktor.features.CachingHeaders
 import io.ktor.http.CacheControl
 import io.ktor.http.content.*
-import io.ktor.routing.*
+import io.ktor.routing.Route
+import io.ktor.routing.Routing
 import kweb.plugins.KwebPlugin
 import java.io.File
 

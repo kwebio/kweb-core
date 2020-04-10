@@ -1,7 +1,8 @@
 package kweb.dom.element.read
 
+import kweb.Element
+import kweb.KWebDSL
 import kweb.WebBrowser
-import kweb.*
 import kweb.escapeEcma
 import java.util.concurrent.CompletableFuture
 

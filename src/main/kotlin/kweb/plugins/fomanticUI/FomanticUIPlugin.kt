@@ -2,7 +2,9 @@ package kweb.plugins.fomanticUI
 
 import kweb.plugins.KwebPlugin
 import kweb.plugins.jqueryCore.jqueryCore
-import kweb.plugins.staticFiles.*
+import kweb.plugins.staticFiles.ResourceFolder
+import kweb.plugins.staticFiles.StaticFilesPlugin
+import kweb.plugins.staticFiles.internalStaticFilePath
 import org.jsoup.nodes.Document
 
 private const val resourceFolder = "kweb/plugins/fomanticUI/static"

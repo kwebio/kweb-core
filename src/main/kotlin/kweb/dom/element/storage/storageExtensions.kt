@@ -1,10 +1,10 @@
 package kweb.dom.element.storage
 
-import kweb.Kweb
-import kweb.dom.Document
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
+import kweb.Kweb
+import kweb.dom.Document
 import java.util.concurrent.CompletableFuture
 
 /**

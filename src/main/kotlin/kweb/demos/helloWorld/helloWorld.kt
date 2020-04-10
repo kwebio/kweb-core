@@ -1,6 +1,8 @@
 package kweb.demos.helloWorld
 
-import kweb.*
+import kweb.Kweb
+import kweb.h1
+import kweb.new
 
 fun main() {
     Kweb(port = 16097, buildPage = {
