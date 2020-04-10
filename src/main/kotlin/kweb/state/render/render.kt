@@ -1,9 +1,7 @@
 package kweb.state.render
 
-import kweb.Kweb
-import kweb.dom.element.*
-import kweb.dom.element.creation.ElementCreator
-import kweb.dom.element.creation.tags.*
+import kweb.Element
+import kweb.*
 import kweb.shoebox.*
 import kweb.state.*
 import kweb.state.render.RenderState.*

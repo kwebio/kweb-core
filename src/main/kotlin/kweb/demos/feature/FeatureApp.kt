@@ -9,12 +9,7 @@ import io.ktor.http.cio.websocket.timeout
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.Jetty
 import io.ktor.websocket.WebSockets
-import kweb.Kweb
-import kweb.dom.element.creation.tags.button
-import kweb.dom.element.creation.tags.h1
-import kweb.dom.element.creation.tags.input
-import kweb.dom.element.creation.tags.span
-import kweb.dom.element.new
+import kweb.*
 import kweb.state.KVar
 import kweb.state.path
 import kweb.state.simpleUrlParser

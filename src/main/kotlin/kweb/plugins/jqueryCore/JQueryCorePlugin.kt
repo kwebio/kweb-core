@@ -1,8 +1,11 @@
 package kweb.plugins.jqueryCore
 
-import kweb.dom.element.Element
+import kweb.Element
 import kweb.plugins.KwebPlugin
-import kweb.plugins.staticFiles.*
+import kweb.plugins.staticFiles.ResourceFolder
+import kweb.plugins.staticFiles.StaticFilesPlugin
+import kweb.plugins.staticFiles.internalStaticFilePath
+import kweb.table
 import org.jsoup.nodes.Document
 
 private const val resourceFolder = "kweb/plugins/jqueryCore/static"

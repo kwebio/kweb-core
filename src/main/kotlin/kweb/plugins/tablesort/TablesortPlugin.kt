@@ -1,8 +1,9 @@
 package kweb.plugins.tablesort
 
-import kweb.dom.element.creation.tags.TableElement
+import kweb.TableElement
 import kweb.plugins.KwebPlugin
-import kweb.plugins.jqueryCore.*
+import kweb.plugins.jqueryCore.executeOnSelf
+import kweb.plugins.jqueryCore.jqueryCore
 import org.jsoup.nodes.Document
 
 /**

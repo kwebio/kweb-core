@@ -4,25 +4,14 @@ import io.ktor.routing.RoutingPath
 import io.ktor.routing.RoutingPathSegment
 import io.ktor.routing.RoutingPathSegmentKind.Constant
 import io.ktor.routing.RoutingPathSegmentKind.Parameter
-import kweb.Kweb
-import kweb.dom.element.creation.ElementCreator
-import kweb.dom.element.creation.tags.h1
-import kweb.dom.element.new
+import io.mola.galimatias.URL
+import kweb.ElementCreator
+import kweb.*
 import kweb.state.*
 import kweb.state.render.closeOnElementCreatorCleanup
 import kweb.state.render.render
-import io.mola.galimatias.URL
 import mu.KotlinLogging
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
-import kotlin.collections.all
-import kotlin.collections.firstOrNull
-import kotlin.collections.getValue
-import kotlin.collections.listOf
 import kotlin.collections.set
-import kotlin.collections.withIndex
 
 /**
  * @sample testSampleForRouting

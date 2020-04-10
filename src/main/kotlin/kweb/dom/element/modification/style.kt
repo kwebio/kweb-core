@@ -1,6 +1,6 @@
 package kweb.dom.element.modification
 
-import kweb.dom.element.Element
+import kweb.*
 
 /**
  * Created by ian on 2/12/17.

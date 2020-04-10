@@ -1,6 +1,6 @@
 package kweb.plugins.chartJs
 
-import kweb.dom.element.creation.tags.CanvasElement
+import kweb.CanvasElement
 import kweb.random
 import kweb.toJson
 import java.time.Instant

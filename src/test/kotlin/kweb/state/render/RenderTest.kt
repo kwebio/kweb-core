@@ -3,12 +3,7 @@ package kweb.state.render
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kotlintest.matchers.types.shouldNotBeNull
-import kweb.Kweb
-import kweb.dom.element.creation.tags.InputType.text
-import kweb.dom.element.creation.tags.h1
-import kweb.dom.element.creation.tags.h2
-import kweb.dom.element.creation.tags.input
-import kweb.dom.element.new
+import kweb.*
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
 import org.junit.jupiter.api.AfterAll
@@ -93,8 +88,8 @@ class RenderTestApp {
                 }
             }
 
-            input(type = text).value = outerKvar.map(stringBool)
-            input(type = text).value = innerKvar.map(stringBool)
+            input(type = InputType.text).value = outerKvar.map(stringBool)
+            input(type = InputType.text).value = innerKvar.map(stringBool)
         }
     }
 

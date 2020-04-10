@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
+import org.jsoup.nodes.Element as JsoupElement
 
 private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
@@ -256,16 +257,16 @@ class Kweb private constructor(
 
         docTemplate.appendChild(DocumentType("html", "", ""))
 
-        docTemplate.appendElement("html").let { html : Element ->
+        docTemplate.appendElement("html").let { html : JsoupElement ->
 
-            html.appendElement("head").let { head : Element ->
+            html.appendElement("head").let { head : JsoupElement ->
 
                 head.appendElement("meta")
                         .attr("name", "viewport")
                         .attr("content", "width=device-width, initial-scale=1.0")
             }
 
-            html.appendElement("body").let { body : Element ->
+            html.appendElement("body").let { body : JsoupElement ->
 
                 body.attr("onload", "buildPage()")
                 body.appendElement("noscript")

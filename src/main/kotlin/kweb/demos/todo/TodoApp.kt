@@ -1,17 +1,19 @@
 package kweb.demos.todo
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
+import kotlinx.coroutines.launch
 import kweb.*
-import kweb.dom.*
-import kweb.dom.element.creation.ElementCreator
-import kweb.dom.element.creation.tags.*
-import kweb.dom.element.creation.tags.InputType.text
-import kweb.dom.element.new
-import kweb.plugins.fomanticUI.*
+import kweb.dom.BodyElement
+import kweb.dom.title
+import kweb.plugins.fomanticUI.fomantic
+import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.routing.route
-import kweb.state.*
-import kweb.state.render.*
+import kweb.state.KVar
+import kweb.state.property
+import kweb.state.render.render
+import kweb.state.render.renderEach
+import kweb.state.render.toVar
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.time.Instant
@@ -142,7 +144,7 @@ class TodoApp {
             }
         }
         div(fomantic.ui.action.input).new {
-            val input = input(text, placeholder = "Add Item")
+            val input = input(InputType.text, placeholder = "Add Item")
             input.on.keypress { ke ->
                 if (ke.code == "Enter") {
                     handleAddItem(input, list)

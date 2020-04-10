@@ -1,13 +1,6 @@
 package kweb.dom
 
-import kweb.Kweb
-import kweb.WebBrowser
-import kweb.dom.attributes.attr
-import kweb.dom.cookies.CookieReceiver
-import kweb.dom.element.Element
-import kweb.dom.element.creation.ElementCreator
-import kweb.dom.element.creation.tags.h1
-import kweb.dom.element.new
+import kweb.*
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript

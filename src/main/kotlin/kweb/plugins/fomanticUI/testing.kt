@@ -1,9 +1,6 @@
 package kweb.plugins.fomanticUI
 
-import kweb.Kweb
-import kweb.dom.element.creation.tags.a
-import kweb.dom.element.creation.tags.div
-import kweb.dom.element.new
+import kweb.*
 
 /**
  * Created by ian on 4/1/17.

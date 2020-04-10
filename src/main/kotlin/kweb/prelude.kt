@@ -1,11 +1,7 @@
 package kweb
 
-
 import com.github.salomonbrys.kotson.toJson
 import kweb.dom.HeadElement
-import kweb.dom.attributes.attr
-import kweb.dom.attributes.set
-import kweb.dom.element.Element
 import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.state.KVal

@@ -1,28 +1,18 @@
-package kweb.dom.element
+package kweb
 
 import com.github.salomonbrys.kotson.toJson
-import kweb.*
-import kweb.client.Server2ClientMessage.Instruction
-import kweb.client.Server2ClientMessage.Instruction.Type
-import kweb.client.Server2ClientMessage.Instruction.Type.*
-import kweb.dom.element.creation.ElementCreator
-import kweb.dom.element.creation.tags.h1
-import kweb.dom.element.events.*
+import kweb.client.Server2ClientMessage
+import kweb.dom.element.events.ONImmediateReceiver
+import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.modification.StyleReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.plugins.KwebPlugin
-import kweb.state.*
+import kweb.state.KVal
+import kweb.state.KVar
 import java.util.*
-import java.util.concurrent.*
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.reflect.KClass
-
-@DslMarker
-annotation class KWebDSL
-
-// TODO: Explicit support for global attributes from http://www.w3schools.com/tags/ref_standardattributes.asp
-// TODO: These should probably be accessed via a field like element.attr[GlobalAttributes.hidden], possibly
-// TODO: using generics to ensure the correct return-type
-
 
 @KWebDSL
 open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) {
@@ -85,7 +75,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     fun setAttributeRaw(name: String, value: Any?): Element {
         if (value != null) {
             if (canSendInstruction()) {
-                browser.send(Instruction(type = SetAttribute, parameters = listOf(id, name, value)))
+                browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
             } else {
                 execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
             }
@@ -109,7 +99,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
 
     fun removeAttribute(name: String): Element {
         if (canSendInstruction()) {
-            browser.send(Instruction(Type.RemoveAttribute, listOf(id, name)))
+            browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.RemoveAttribute, listOf(id, name)))
         } else {
             execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
         }
@@ -251,7 +241,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
                 element.text(value)
             }
             canSendInstruction() -> {
-                browser.send(Instruction(SetText, listOf(id, value)))
+                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.SetText, listOf(id, value)))
             }
             else -> {
                 execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
@@ -293,7 +283,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
                 element.appendText(value)
             }
             canSendInstruction() -> {
-                browser.send(Instruction(AddText, listOf(id, value)))
+                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.AddText, listOf(id, value)))
             }
             else -> {
                 execute("""
@@ -374,8 +364,6 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
  * @receiver This will be the parent element of any elements created with the returned
  *           [ElementCreator]
  * @Param position What position among the parent's children should the new element have?
- *
- * @sample new_sample_1
  */
 fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position: Int? = null): ElementCreator<ELEMENT_TYPE> = ElementCreator(parent = this, position = position)
 
@@ -383,29 +371,11 @@ fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position: Int? = null): ElementCre
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
  *
  * @Param position What position among the parent's children should the new element have?
- *
- * @sample new_sample_2
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
         position: Int? = null,
         receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE)
         : RETURN_VALUE_TYPE {
     return receiver(new(position))
-}
-
-
-// Element Attribute modifier
-private fun new_sample_1() {
-    Kweb(port = 1234, buildPage = {
-        doc.body.new().h1().text("Hello World!")
-    })
-}
-
-private fun new_sample_2() {
-    Kweb(port = 1234, buildPage = {
-        doc.body.new {
-            h1().text("Hello World!")
-        }
-    })
 }
 

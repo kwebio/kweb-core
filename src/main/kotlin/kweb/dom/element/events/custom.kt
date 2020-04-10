@@ -1,7 +1,7 @@
 package kweb.dom.element.events
 
-import kweb.dom.element.Element
-import kweb.dom.element.creation.tags.InputElement
+import kweb.Element
+import kweb.InputElement
 import kweb.dom.element.events.ONReceiver.KeyboardEvent
 
 private const val ENTER_PRESSED_EVENT_ATTACHED_FLAG = "enterPressedEventAttached"

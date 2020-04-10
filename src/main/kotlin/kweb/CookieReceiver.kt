@@ -1,10 +1,6 @@
-package kweb.dom.cookies
+package kweb
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.WebBrowser
-import kweb.dom.element.KWebDSL
-import kweb.gson
-import kweb.toJson
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.CompletableFuture

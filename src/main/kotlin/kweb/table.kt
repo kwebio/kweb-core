@@ -1,10 +1,4 @@
-package kweb.dom.element.creation.tags
-
-import kweb.Kweb
-import kweb.dom.attributes.attr
-import kweb.dom.element.Element
-import kweb.dom.element.creation.ElementCreator
-import kweb.dom.element.new
+package kweb
 
 /**
  * Create tables

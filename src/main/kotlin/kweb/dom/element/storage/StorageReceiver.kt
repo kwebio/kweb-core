@@ -2,7 +2,7 @@ package kweb.dom.element.storage
 
 import com.github.salomonbrys.kotson.fromJson
 import kweb.WebBrowser
-import kweb.dom.element.KWebDSL
+import kweb.*
 import kweb.gson
 import kweb.toJson
 import java.util.concurrent.CompletableFuture

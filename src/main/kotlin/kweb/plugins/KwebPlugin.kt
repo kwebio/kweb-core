@@ -1,7 +1,7 @@
 package kweb.plugins
 
 import io.ktor.routing.Routing
-import kweb.dom.element.Element
+import kweb.*
 import java.util.*
 import org.jsoup.nodes.Document as JSoupDocument
 

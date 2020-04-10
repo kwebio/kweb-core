@@ -2,9 +2,8 @@ package kweb
 
 import kweb.client.Server2ClientMessage.Instruction
 import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
-import kweb.dom.*
-import kweb.dom.attributes.attr
-import kweb.dom.element.*
+import kweb.dom.BodyElement
+import kweb.dom.HeadElement
 import kweb.plugins.KwebPlugin
 import mu.KLogging
 import java.util.*

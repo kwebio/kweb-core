@@ -1,8 +1,6 @@
 package kweb.demos.helloWorld
 
-import kweb.Kweb
-import kweb.dom.element.creation.tags.h1
-import kweb.dom.element.new
+import kweb.*
 
 fun main() {
     Kweb(port = 16097, buildPage = {

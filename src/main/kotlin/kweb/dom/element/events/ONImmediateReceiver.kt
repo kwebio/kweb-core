@@ -1,7 +1,6 @@
 package kweb.dom.element.events
 
-import kweb.dom.element.Element
-import kweb.dom.element.KWebDSL
+import kweb.*
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass

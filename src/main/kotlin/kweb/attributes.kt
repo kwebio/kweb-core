@@ -1,4 +1,4 @@
-package kweb.dom.attributes
+package kweb
 
 /**
  * Created by ian on 1/14/17.

@@ -1,13 +1,13 @@
 package kweb.plugins.chartJs
 
 import kweb.Kweb
-import kweb.dom.element.creation.tags.canvas
-import kweb.dom.element.new
+import kweb.canvas
+import kweb.new
 import kweb.plugins.KwebPlugin
 import kweb.plugins.chartJs.ChartType.line
 import org.jsoup.nodes.Document
 
-fun main(args: Array<String>) {
+fun main() {
     Kweb(port = 5252, plugins = listOf(chartJs), buildPage = {
         doc.body.new {
             Chart(canvas(400, 300), ChartConfig(
