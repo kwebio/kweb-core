@@ -1,17 +1,25 @@
 package kweb.demos.todo
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
-import kweb.*
-import kweb.dom.*
+import kotlinx.coroutines.launch
+import kweb.Kweb
+import kweb.NotFoundException
+import kweb.dom.BodyElement
 import kweb.dom.element.creation.ElementCreator
 import kweb.dom.element.creation.tags.*
 import kweb.dom.element.creation.tags.InputType.text
 import kweb.dom.element.new
-import kweb.plugins.fomanticUI.*
+import kweb.dom.title
+import kweb.plugins.fomanticUI.fomantic
+import kweb.plugins.fomanticUI.fomanticUIPlugin
+import kweb.random
 import kweb.routing.route
-import kweb.state.*
-import kweb.state.render.*
+import kweb.state.KVar
+import kweb.state.property
+import kweb.state.render.render
+import kweb.state.render.renderEach
+import kweb.state.render.toVar
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.time.Instant
@@ -108,7 +116,7 @@ class TodoApp {
                             Try visiting this URL in another browser window and make some changes.
                             <p/>
                             You may find the source code for this app
-                            <a href="https://github.com/kwebio/core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
+                            <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
                             """
                                         .trimIndent()
                         )
