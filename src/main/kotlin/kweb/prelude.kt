@@ -141,7 +141,6 @@ fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null,
     ))
 }
 
-// TODO: Other element types might also benefit from some of this functionality, extract a util parent Element type
 open class InputElement(override val element: Element) : ValueElement(element) {
     fun checked(checked: Boolean) = setAttributeRaw("checked", checked)
 
