@@ -7,9 +7,9 @@ package kweb.common
  * [.apply]. The order of tokens supplied in the constructor
  * corresponds to the order of strings supplied in apply().
  *
- * The io.kweb.common.Template will compile your string into an executable stack, which
+ * The io.kweb.util.Template will compile your string into an executable stack, which
  * generates output with extreme efficiency; the only string-matching performed
- * is during io.kweb.common.Template compile, and it processes all tokens in a single,
+ * is during io.kweb.util.Template compile, and it processes all tokens in a single,
  * efficient iteration of the template String.
  *
  * This ensures an absolute minimum of processing, and allows large templates
@@ -44,7 +44,7 @@ class Template(template: String, vararg replaceables: String) : Stack("") {
      */
     private fun compile(template: String, replaceables: Array<out String>) {
         var numLive = 0
-        // These are the only two arrays created by the io.kweb.common.Template
+        // These are the only two arrays created by the io.kweb.util.Template
         val tokenPositions = IntArray(replaceables.size)
         val liveIndices = IntArray(replaceables.size)
         // Get the first index, if any, of each replaceable token.
@@ -68,7 +68,7 @@ class Template(template: String, vararg replaceables: String) : Stack("") {
     }
 
     /**
-     * Performs the lexing of the template, filling the io.kweb.common.Template io.kweb.common.Stack.
+     * Performs the lexing of the template, filling the io.kweb.util.Template io.kweb.util.Stack.
      */
     private fun lexTemplate(
             head: Stack, template: String, replaceables: Array<out String>,
@@ -147,7 +147,7 @@ class Template(template: String, vararg replaceables: String) : Stack("") {
 }
 
 /**
- * This is the base stack object used in the compiled io.kweb.common.Template.
+ * This is the base stack object used in the compiled io.kweb.util.Template.
  *
  * This superclass is used only for the head and tail node, which allows us to
  * limit the number of null checks by ensuring regular nodes never have null pointers.
@@ -180,10 +180,10 @@ open class Stack(prefix: String?) {
 }
 
 /**
- * This subclass of io.kweb.common.Stack is for active nodes of the template which have both
+ * This subclass of io.kweb.util.Stack is for active nodes of the template which have both
  * a string prefix, and a pointer to a replacement value.
  *
- * Each instance of io.kweb.common.StackNode performs one direct lookup of a value during
+ * Each instance of io.kweb.util.StackNode performs one direct lookup of a value during
  * .toString()
  *
  * @author "James X. Nelson (james@wetheinter.net)"

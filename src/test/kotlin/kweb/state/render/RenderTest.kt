@@ -6,6 +6,7 @@ import io.kotlintest.matchers.types.shouldNotBeNull
 import kweb.*
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
+import kweb.state.render
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test

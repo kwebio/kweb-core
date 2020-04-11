@@ -9,11 +9,7 @@ import kweb.dom.title
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.routing.route
-import kweb.state.KVar
-import kweb.state.property
-import kweb.state.render.render
-import kweb.state.render.renderEach
-import kweb.state.render.toVar
+import kweb.state.*
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.time.Instant
@@ -46,7 +42,7 @@ class TodoApp {
             doc.body.new {
                 /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to
-                draw some common outer page DOM elements */
+                draw some util outer page DOM elements */
                 pageBorderAndTitle("To do List") {
                     div(fomantic.content).new {
 

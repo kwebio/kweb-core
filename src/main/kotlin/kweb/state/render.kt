@@ -1,13 +1,10 @@
-package kweb.state.render
+package kweb.state
 
 import kweb.*
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
-import kweb.state.CloseReason
-import kweb.state.KVal
-import kweb.state.KVar
-import kweb.state.render.RenderState.*
+import kweb.state.RenderState.*
 import mu.KotlinLogging
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference

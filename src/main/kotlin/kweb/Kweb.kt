@@ -31,8 +31,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
-import kweb.browserConnection.KwebClientConnection
-import kweb.browserConnection.KwebClientConnection.Caching
+import kweb.client.ClientConnection
+import kweb.client.ClientConnection.Caching
 import kweb.client.Client2ServerMessage
 import kweb.client.HttpRequestInfo
 import kweb.client.RemoteClientState
@@ -320,7 +320,7 @@ class Kweb private constructor(
             assert(remoteClientState.clientConnection is Caching)
             logger.debug {"Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache"}
             val cachedConnection = remoteClientState.clientConnection as Caching
-            val webSocketClientConnection = KwebClientConnection.WebSocket(this)
+            val webSocketClientConnection = ClientConnection.WebSocket(this)
             remoteClientState.clientConnection = webSocketClientConnection
             logger.debug {"Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages"}
             cachedConnection.read().forEach { webSocketClientConnection.send(it) }

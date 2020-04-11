@@ -1,6 +1,5 @@
 package kweb.routing
 
-import io.ktor.routing.RoutingPath
 import io.ktor.routing.RoutingPathSegment
 import io.ktor.routing.RoutingPathSegmentKind.Constant
 import io.ktor.routing.RoutingPathSegmentKind.Parameter
@@ -9,12 +8,7 @@ import kweb.ElementCreator
 import kweb.Kweb
 import kweb.h1
 import kweb.new
-import kweb.state.KVal
-import kweb.state.KVar
-import kweb.state.ReversibleFunction
-import kweb.state.get
-import kweb.state.render.closeOnElementCreatorCleanup
-import kweb.state.render.render
+import kweb.state.*
 import mu.KotlinLogging
 import kotlin.collections.set
 
@@ -67,38 +61,10 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
     }
 }
 
-object UrlToPathSegmentsRF : ReversibleFunction<String, List<String>>(label = "UrlToPathSegmentsRF") {
-    override fun invoke(from: String): List<String> {
-        return from.substringBefore('?').split('/').drop(1)
-    }
-
-    override fun reverse(original: String, change: List<String>): String {
-        val queryFragment = original.substringAfter('?')
-        return '/' + change.joinToString(separator = "/") + '?' + queryFragment
-    }
-}
-
 
 typealias PathTemplate = List<RoutingPathSegment>
 typealias PathReceiver = ElementCreator<*>.(params : Map<String, KVar<String>>) -> Unit
 typealias NotFoundReceiver = (ElementCreator<*>).(path : String) -> Unit
-
-class RouteReceiver internal constructor() {
-    internal val templatesByLength = HashMap<Int, MutableMap<PathTemplate, PathReceiver>>()
-
-    internal var notFoundReceiver : NotFoundReceiver = { path ->
-        h1().text("Not Found: $path")
-    }
-
-    fun path(template : String, pathReceiver : PathReceiver) {
-        val routingPath = RoutingPath.parse(template).parts
-        templatesByLength.computeIfAbsent(routingPath.size) {HashMap()}[routingPath]= pathReceiver
-    }
-
-    fun notFound(receiver : NotFoundReceiver) {
-        notFoundReceiver = receiver
-    }
-}
 
 private fun testSampleForRouting() {
     Kweb(port = 16097, buildPage = {

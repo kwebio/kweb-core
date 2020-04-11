@@ -25,7 +25,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
         receiver.execute("$obj.setItem(${key.toJson()}, ${value.toJson()});")
     }
 
-    operator inline fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
+    inline operator fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
         when (it) {
             null -> null
             else -> gson.fromJson<V>(it)

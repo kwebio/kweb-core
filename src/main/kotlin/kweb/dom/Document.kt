@@ -1,6 +1,8 @@
 package kweb.dom
 
 import kweb.*
+import kweb.dom.element.storage.StorageReceiver
+import kweb.dom.element.storage.StorageType
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -24,6 +26,19 @@ class Document(val receiver: WebBrowser) {
     fun execCommand(command : String) {
         receiver.execute("document.execCommand(\"$command\");")
     }
+
+    /**
+     * Allows data to be stored in and retrieved from the browser's [local storage](https://www.w3schools.com/html/html5_webstorage.as).
+     *
+     * @sample local_storage_sample
+     */
+    val localStorage get() = StorageReceiver(receiver, StorageType.local)
+
+
+    /**
+     * Allows data to be stored in and retrieved from the browser's [session storage](https://www.w3schools.com/html/html5_webstorage.as).
+     */
+    val sessionStorage get() = StorageReceiver(receiver, StorageType.session)
 }
 
 

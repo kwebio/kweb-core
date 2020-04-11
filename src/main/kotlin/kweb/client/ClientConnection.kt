@@ -1,4 +1,4 @@
-package kweb.browserConnection
+package kweb.client
 
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.Frame.Text
@@ -12,11 +12,11 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 private val logger = KotlinLogging.logger {}
 
-sealed class KwebClientConnection {
+sealed class ClientConnection {
     abstract fun send(message: String)
 
     //@ObsoleteCoroutinesApi // TODO: For Channel.consumeEach, which will apparently become obsolete
-    class WebSocket(private val channel: WebSocketSession) : KwebClientConnection() {
+    class WebSocket(private val channel: WebSocketSession) : ClientConnection() {
 
         @Volatile var sendCount = 0
 
@@ -39,7 +39,7 @@ sealed class KwebClientConnection {
         }
     }
 
-    class Caching : KwebClientConnection() {
+    class Caching : ClientConnection() {
         private @Volatile
         var queue: ConcurrentLinkedQueue<String>? = ConcurrentLinkedQueue()
 
