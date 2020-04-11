@@ -18,15 +18,16 @@ sealed class ClientConnection {
     //@ObsoleteCoroutinesApi // TODO: For Channel.consumeEach, which will apparently become obsolete
     class WebSocket(private val channel: WebSocketSession) : ClientConnection() {
 
-        @Volatile var sendCount = 0
+        @Volatile
+        var sendCount = 0
 
         private val sendBuffer = Channel<Frame>(capacity = 1000)
 
         init {
-             GlobalScope.launch {
-                 for (frame in sendBuffer) {
-                     channel.send(frame)
-                 }
+            GlobalScope.launch {
+                for (frame in sendBuffer) {
+                    channel.send(frame)
+                }
             }
 
         }

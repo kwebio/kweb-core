@@ -2,8 +2,8 @@ package kweb
 
 import kweb.client.Server2ClientMessage.Instruction
 import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
-import kweb.dom.BodyElement
-import kweb.dom.HeadElement
+import kweb.html.BodyElement
+import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
 import mu.KLogging
 import java.util.*
@@ -25,7 +25,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     companion object : KLogging()
 
     //private val cleanupListeners = LinkedList<(Cleaner) -> Unit>()
-    private val cleanupListeners : MutableCollection<Cleaner> = ConcurrentLinkedQueue<Cleaner>()
+    private val cleanupListeners: MutableCollection<Cleaner> = ConcurrentLinkedQueue<Cleaner>()
+
     @Volatile
     private var isCleanedUp = false
 
@@ -50,7 +51,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
 
-        val id: String = (mutAttributes.computeIfAbsent("id") {"K"+browser.generateId()}.toString())
+        val id: String = (mutAttributes.computeIfAbsent("id") { "K" + browser.generateId() }.toString())
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
@@ -66,7 +67,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 for ((k, v) in mutAttributes) {
                     if (v is Boolean) {
                         jsElement.attr(k, v)
-                    } else  {
+                    } else {
                         jsElement.attr(k, v.toString())
                     }
                 }
@@ -84,7 +85,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             plugin.elementCreationHook(newElement)
         }
         onCleanup(withParent = false) {
-            logger.debug {"Deleting element ${newElement.id}"}
+            logger.debug { "Deleting element ${newElement.id}" }
             newElement.deleteIfExists()
         }
         return newElement

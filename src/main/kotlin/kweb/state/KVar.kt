@@ -18,7 +18,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
             listeners.values.forEach { listener ->
                 try {
                     listener(old, new)
-                } catch (e : Exception) {
+                } catch (e: Exception) {
                     logger.warn("Exception thrown by listener", e)
                 }
             }
@@ -32,7 +32,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
             if (old != new) {
                 try {
                     mappedKVar.value = reversibleFunction.invoke(new)
-                } catch (throwable : Throwable) {
+                } catch (throwable: Throwable) {
                     mappedKVar.close(CloseReason("Closed because mapper threw an error or exception", throwable))
                 }
             }
@@ -70,7 +70,7 @@ inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): K
     })
 }
 
-fun <O : Any> KVar<O?>.notNull(default : O? = null, invertDefault : Boolean = true): KVar<O> {
+fun <O : Any> KVar<O?>.notNull(default: O? = null, invertDefault: Boolean = true): KVar<O> {
     return this.map(object : ReversibleFunction<O?, O>(label = "notNull") {
         override fun invoke(from: O?): O = from ?: default!!
 
@@ -82,7 +82,7 @@ fun <O : Any> KVar<O?>.notNull(default : O? = null, invertDefault : Boolean = tr
 }
 
 @ExperimentalContracts
-fun <T : Any> KVar<T>.modify(f : (T) -> T) {
+fun <T : Any> KVar<T>.modify(f: (T) -> T) {
     contract {
         callsInPlace(f, InvocationKind.EXACTLY_ONCE)
     }

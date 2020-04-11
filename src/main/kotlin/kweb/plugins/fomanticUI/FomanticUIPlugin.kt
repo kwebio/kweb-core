@@ -20,7 +20,7 @@ private const val resourceRoute = "$internalStaticFilePath/fomantic"
 class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
         StaticFilesPlugin(ResourceFolder(resourceFolder), resourceRoute))
 ) {
-    override fun decorate(doc : Document) {
+    override fun decorate(doc: Document) {
         doc.head().appendElement("link")
                 .attr("rel", "stylesheet")
                 .attr("type", "text/css")

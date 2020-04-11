@@ -1,12 +1,24 @@
 package kweb
 
 import com.github.salomonbrys.kotson.toJson
-import kweb.dom.HeadElement
+import io.ktor.routing.RoutingPathSegmentKind
+import io.mola.galimatias.URL
 import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.read.ElementReader
-import kweb.state.KVal
-import kweb.state.KVar
+import kweb.html.HeadElement
+import kweb.html.TitleElement
+import kweb.routing.PathTemplate
+import kweb.routing.RouteReceiver
+import kweb.routing.UrlToPathSegmentsRF
+import kweb.state.*
 import java.util.concurrent.CompletableFuture
+
+/*
+ * Mostly extension functions (and any simple classes they depend on), placed here such that an `import kweb.*`
+ * will pick them up.
+ */
+
+fun ElementCreator<HeadElement>.title(attributes: Map<String, Any> = attr) = TitleElement(element("title", attributes))
 
 open class ULElement(parent: Element) : Element(parent)
 
@@ -118,7 +130,6 @@ fun ElementCreator<HeadElement>.meta(name: String, content: String, httpEquiv: S
             .set("charset", charset)
     ))
 }
-
 
 fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, Any> = attr): InputElement {
     return InputElement(element("input", attributes = attributes
@@ -246,3 +257,180 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     }
 }
 
+/******************************
+ * Route extension
+ ******************************/
+
+fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
+    val rr = RouteReceiver()
+    routeReceiver(rr)
+    val pathKVar: KVar<List<String>> = this.browser.url.map(UrlToPathSegmentsRF)
+    val matchingTemplate: KVal<PathTemplate?> = pathKVar.map { path ->
+        val size = if (path != listOf("")) path.size else 0
+        val templatesOfSameLength = rr.templatesByLength[size]
+        val tpl = templatesOfSameLength?.keys?.firstOrNull { tpl ->
+            tpl.isEmpty() || tpl.withIndex().all {
+                val tf = it.value.kind != RoutingPathSegmentKind.Constant || path[it.index] == it.value.value
+                tf
+            }
+        }
+        tpl
+    }
+
+    render(matchingTemplate) { template ->
+        if (template != null) {
+            val parameters = HashMap<String, KVar<String>>()
+            for ((pos, part) in template.withIndex()) {
+                if (part.kind == RoutingPathSegmentKind.Parameter) {
+                    val str = part.value
+                    val paramKVar = pathKVar[pos]
+                    closeOnElementCreatorCleanup(paramKVar)
+                    parameters[str.substring(str.indexOf('{') + 1, str.indexOf('}'))] = paramKVar
+                }
+            }
+
+            val pathRenderer = rr.templatesByLength[template.size]?.get(template)
+
+            if (pathRenderer != null) {
+                pathRenderer(this, parameters)
+            } else {
+                error("Unable to find pathRenderer for template $template")
+            }
+        } else {
+            rr.notFoundReceiver.invoke(this, URL.parse(this.browser.url.value).path())
+        }
+    }
+}
+
+/******************************
+ * KVar extensions
+ ******************************/
+
+operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
+    return this.map(object : ReversibleFunction<List<T>, T>("get($pos)") {
+        override fun invoke(from: List<T>): T {
+            return try {
+                from[pos]
+            } catch (e: IndexOutOfBoundsException) {
+                throw kotlin.IndexOutOfBoundsException("Index $pos out of bounds in list $from")
+            }
+        }
+
+        override fun reverse(original: List<T>, change: T) = original
+                .subList(0, pos)
+                .plus(change)
+                .plus(original.subList(pos + 1, original.size))
+    })
+}
+
+operator fun <K : Any, V : Any> KVar<Map<K, V>>.get(k: K): KVar<V?> {
+    return this.map(object : ReversibleFunction<Map<K, V>, V?>("map[$k]") {
+        override fun invoke(from: Map<K, V>): V? = from[k]
+
+        override fun reverse(original: Map<K, V>, change: V?): Map<K, V> {
+            return if (change != null) {
+                original + (k to change)
+            } else {
+                original - k
+            }
+        }
+    })
+}
+
+fun <T : Any> KVar<List<T>>.subList(fromIx: Int, toIx: Int): KVar<List<T>> = this.map(object : ReversibleFunction<List<T>, List<T>>("subList($fromIx, $toIx)") {
+    override fun invoke(from: List<T>): List<T> = from.subList(fromIx, toIx)
+
+    override fun reverse(original: List<T>, change: List<T>): List<T> {
+        return original.subList(0, fromIx) + change + original.subList(toIx, original.size)
+    }
+})
+
+fun <T : Any> KVal<List<T>>.subList(fromIx: Int, toIx: Int): KVal<List<T>> = this.map { it.subList(fromIx, toIx) }
+
+enum class Scheme {
+    http, https
+}
+
+private val prx = "/".toRegex()
+
+val KVar<URL>.path
+    get() = this.map(object : ReversibleFunction<URL, String>("URL.path") {
+
+        override fun invoke(from: URL): String = from.path()
+
+        override fun reverse(original: URL, change: String): URL =
+                original.withPath(change)
+
+    })
+
+val KVar<URL>.query
+    get() = this.map(object : ReversibleFunction<URL, String?>("URL.query") {
+
+        override fun invoke(from: URL): String? = from.query()
+
+        override fun reverse(original: URL, change: String?): URL =
+                original.withQuery(change)
+
+    })
+
+val KVar<URL>.pathSegments
+    get() = this.map(object : ReversibleFunction<URL, List<String>>("URL.pathSegments") {
+
+        override fun invoke(from: URL): List<String> {
+            return from.pathSegments()
+        }
+
+        override fun reverse(original: URL, change: List<String>): URL {
+            return original.withPath("/" + if (change.isEmpty()) "" else change.joinToString(separator = "/"))
+        }
+
+    })
+
+/**
+ * Given the URI specification:
+ *
+ * `URI = scheme:[//authority]path[?query][#fragment]`
+ *
+ * The `pqf` refers to the `path[?query][#fragment]` and can be used to change the path, query, and/or fragment
+ * of the URL in one shot.
+ */
+val KVar<URL>.pathQueryFragment
+    get() = this.map(object : ReversibleFunction<URL, String>("URL.pathQueryFragment") {
+        override fun invoke(from: URL): String {
+            return from.pathQueryFragment
+        }
+
+        override fun reverse(original: URL, change: String): URL {
+            return original.resolve(change)
+        }
+    })
+
+fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
+    val newKVar = KVar(this.first.value to this.second.value)
+    this.first.addListener { o, n -> newKVar.value = n to this.second.value }
+    this.second.addListener { o, n -> newKVar.value = this.first.value to n }
+
+    newKVar.addListener { o, n ->
+        this.first.value = n.first
+        this.second.value = n.second
+    }
+    return newKVar
+}
+
+val simpleUrlParser = object : ReversibleFunction<String, URL>("simpleUrlParser") {
+    override fun invoke(from: String): URL = URL.parse(from)
+
+    override fun reverse(original: String, change: URL) = change.toString()
+
+}
+
+infix operator fun KVar<String>.plus(s: String) = this.map { it + s }
+infix operator fun String.plus(sKV: KVar<String>) = sKV.map { this + it }
+
+fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(label = "KVar<String>.toInt()") {
+    override fun invoke(from: String) = from.toInt()
+
+    override fun reverse(original: String, change: Int): String {
+        return change.toString()
+    }
+})

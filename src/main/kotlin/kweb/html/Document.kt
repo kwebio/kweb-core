@@ -3,6 +3,8 @@ package kweb.dom
 import kweb.*
 import kweb.dom.element.storage.StorageReceiver
 import kweb.dom.element.storage.StorageType
+import kweb.html.BodyElement
+import kweb.html.HeadElement
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -23,7 +25,7 @@ class Document(val receiver: WebBrowser) {
 
     val origin = receiver.evaluate("document.origin")
 
-    fun execCommand(command : String) {
+    fun execCommand(command: String) {
         receiver.execute("document.execCommand(\"$command\");")
     }
 
@@ -40,20 +42,6 @@ class Document(val receiver: WebBrowser) {
      */
     val sessionStorage get() = StorageReceiver(receiver, StorageType.session)
 }
-
-
-/**
- * Represents the `body` element of the in-browser Document Object Model, corresponding to
- * the JavaScript [body](https://www.w3schools.com/tags/tag_body.asp) tag.
- *
- * @sample document_sample
- */
-class BodyElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, null, "document.body", "body", id)
-
-class HeadElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, null, "document.head", "head", id)
-
-open class TitleElement(parent: Element) : Element(parent)
-fun ElementCreator<HeadElement>.title(attributes: Map<String, Any> = attr) = TitleElement(element("title", attributes))
 
 
 private fun document_sample() {

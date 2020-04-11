@@ -36,7 +36,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      */
     val htmlDocument = AtomicReference<org.jsoup.nodes.Document?>(null)
 
-    fun generateId() : String = idCounter.getAndIncrement().toString(36)
+    fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         kweb.appliedPlugins.map { it::class to it }.toMap()

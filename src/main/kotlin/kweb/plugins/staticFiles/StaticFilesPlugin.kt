@@ -18,7 +18,7 @@ import java.io.File
  * @property resourceFolder For serving resources, the path to the folder which will be served
  * @property servedRoute The route where these assets are being served
  */
-class StaticFilesPlugin private constructor(private val servedRoute: String, private val maxCacheAgeSeconds : Int = 60 * 60) : KwebPlugin() {
+class StaticFilesPlugin private constructor(private val servedRoute: String, private val maxCacheAgeSeconds: Int = 60 * 60) : KwebPlugin() {
 
     private lateinit var datasource: (Route) -> Unit
 
@@ -42,10 +42,10 @@ class StaticFilesPlugin private constructor(private val servedRoute: String, pri
                 TODO: so that we can set a very long cache time (> 1 year).  For now it defaults
                 TODO: to one hour.
                  */
-            options {
-                CachingOptions(CacheControl.MaxAge(maxAgeSeconds = maxCacheAgeSeconds))
+                options {
+                    CachingOptions(CacheControl.MaxAge(maxAgeSeconds = maxCacheAgeSeconds))
+                }
             }
-        }
 
             datasource(this)
             files(".")

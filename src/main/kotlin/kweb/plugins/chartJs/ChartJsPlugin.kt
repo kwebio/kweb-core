@@ -26,7 +26,7 @@ fun main() {
 }
 
 class ChartJsPlugin : KwebPlugin() {
-    override fun decorate(doc : Document) {
+    override fun decorate(doc: Document) {
         doc.head().appendElement("script")
                 .attr("type", "text/javascript")
                 .attr("src", "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js")

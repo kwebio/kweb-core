@@ -7,6 +7,7 @@ let kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
 let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
+
 function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
@@ -29,9 +30,9 @@ function handleInboundMessage(msg) {
                 console.error("Error evaluating [" + execute["js"] + "] : " + err);
                 var error = {
                     debugToken: debugToken,
-                    error: { name: err.name, message: err.message }
+                    error: {name: err.name, message: err.message}
                 };
-                var message = { id: kwebClientId, error: error };
+                var message = {id: kwebClientId, error: error};
                 sendMessage(JSON.stringify(message));
             } else {
                 throw err;
@@ -43,17 +44,17 @@ function handleInboundMessage(msg) {
         try {
             const data = eval(evaluate["js"]);
             console.debug("Evaluated [" + evaluate["js"] + "]", data);
-            const callback = { callbackId: evaluate["callbackId"], data: data };
-            const message = { id: kwebClientId, callback: callback };
+            const callback = {callbackId: evaluate["callbackId"], data: data};
+            const message = {id: kwebClientId, callback: callback};
             sendMessage(JSON.stringify(message));
         } catch (err) {
             if (debugToken != undefined) {
                 console.error("Error evaluating `" + evaluate["js"] + "`: " + err);
                 const error = {
                     debugToken: debugToken,
-                    error: { name: err.name, message: err.message }
+                    error: {name: err.name, message: err.message}
                 };
-                const message = { id: kwebClientId, error: error };
+                const message = {id: kwebClientId, error: error};
                 sendMessage(JSON.stringify(message));
             } else {
                 throw err;
@@ -106,6 +107,7 @@ function handleInboundMessage(msg) {
         }
     }
 }
+
 function connectWs() {
     var wsURL = toWSUrl("ws");
     console.debug("Establishing websocket connection", wsURL);
@@ -115,22 +117,22 @@ function connectWs() {
             "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>";
         console.error("Browser doesn't support window.WebSocket");
     } else {
-        socket.onopen = function() {
+        socket.onopen = function () {
             console.debug("socket.onopen event received");
             websocketEstablished = true;
             console.debug("Websocket established", wsURL);
-            sendMessage(JSON.stringify({ id: kwebClientId, hello: true }));
+            sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
             while (preWSMsgQueue.length > 0) {
                 sendMessage(preWSMsgQueue.shift());
             }
         };
-        socket.onmessage = function(event) {
+        socket.onmessage = function (event) {
             var msg = JSON.parse(event.data);
             console.debug("Message received from socket: ", event.data);
             handleInboundMessage(msg);
         };
 
-        socket.onclose = function(evt) {
+        socket.onclose = function (evt) {
             console.debug("Socket closed");
             var explanation = "";
             if (evt.reason && evt.reason.length > 0) {
@@ -141,7 +143,7 @@ function connectWs() {
 
             console.error("WebSocket was closed", explanation, evt);
             websocketEstablished = false;
-            if (evt.wasClean){
+            if (evt.wasClean) {
                 console.warn("Attempting reconnect...")
                 connectWs()
             } else {
@@ -149,7 +151,7 @@ function connectWs() {
                 location.reload(true);
             }
         };
-        socket.onerror = function(evt) {
+        socket.onerror = function (evt) {
             console.error("WebSocket error", evt);
             websocketEstablished = false;
             console.warn("Forcing page reload");
@@ -174,7 +176,7 @@ function sendMessage(msg) {
 function callbackWs(callbackId, data) {
     var msg = JSON.stringify({
         id: kwebClientId,
-        callback: { callbackId: callbackId, data: JSON.stringify(data) }
+        callback: {callbackId: callbackId, data: JSON.stringify(data)}
     });
     sendMessage(msg);
 }
@@ -207,8 +209,9 @@ function removeElementByIdIfExists(id) {
         e.parentNode.removeChild(e);
     }
 }
+
 var docCookies = {
-    getItem: function(sKey) {
+    getItem: function (sKey) {
         if (!sKey || !this.hasItem(sKey)) {
             return "__COOKIE_NOT_FOUND_TOKEN__";
         }
@@ -224,7 +227,7 @@ var docCookies = {
         );
     },
 
-    setItem: function(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
         if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/.test(sKey)) {
             return;
         }
@@ -253,7 +256,7 @@ var docCookies = {
             (sPath ? "; path=" + sPath : "") +
             (bSecure ? "; secure" : "");
     },
-    removeItem: function(sKey) {
+    removeItem: function (sKey) {
         if (!sKey || !this.hasItem(sKey)) {
             return;
         }
@@ -262,14 +265,14 @@ var docCookies = {
         document.cookie =
             encodeURIComponent(sKey) + "=; expires=" + oExpDate.toGMTString() + "; path=/";
     },
-    hasItem: function(sKey) {
+    hasItem: function (sKey) {
         return new RegExp(
             "(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\="
         ).test(document.cookie);
     }
 };
 
-window.addEventListener("pageshow", function(event) {
+window.addEventListener("pageshow", function (event) {
     if (window.performance.navigation.type === 2) {
         location.reload(true);
     }

@@ -15,7 +15,7 @@ private const val resourceRoute = "$internalStaticFilePath/jquery"
  * Created by ian on 1/9/17.
  */
 class JQueryCorePlugin : KwebPlugin(dependsOn = setOf(StaticFilesPlugin(ResourceFolder(resourceFolder), resourceRoute))) {
-    override fun decorate(doc : Document) {
+    override fun decorate(doc: Document) {
         doc.head().appendElement("script")
                 .attr("src", "$resourceRoute/jquery-3.4.1.min.js")
                 .attr("crossorigin", "anonymous")

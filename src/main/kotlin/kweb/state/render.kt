@@ -19,7 +19,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
 
     val containerSpan = span()
 
-    val previousElementCreator : AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
+    val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
     val renderState = AtomicReference(NOT_RENDERING)
 
@@ -73,7 +73,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Ele
     }
 }
 
-fun ElementCreator<*>.closeOnElementCreatorCleanup(kv : KVal<*>) {
+fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
     this.onCleanup(withParent = true) {
         kv.close(CloseReason("Closed because a parent ElementCreator was cleaned up"))
     }

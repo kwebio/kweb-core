@@ -14,28 +14,28 @@ open class ONReceiver(internal val parent: Element, val retrieveJs: String? = nu
 
     val logger = KotlinLogging.logger {}
 
-    open class Event(open val type : String, val retrieved : String?)
+    open class Event(open val type: String, val retrieved: String?)
 
     data class MouseEvent(val type: String, val detail: Long,
-                          val altKey : Boolean, val button : Int, val buttons : Int,
-                          val clientX : Int, val clientY : Int, val ctrlKey : Boolean,
-                          val metaKey : Boolean, val movementX : Int, val movementY : Int,
-                          val region : String, val screenX : Int, val screenY : Int,
-                          val shiftKey : Boolean, val x : Int = clientX, val y : Int = clientY, val retrieved : String?
+                          val altKey: Boolean, val button: Int, val buttons: Int,
+                          val clientX: Int, val clientY: Int, val ctrlKey: Boolean,
+                          val metaKey: Boolean, val movementX: Int, val movementY: Int,
+                          val region: String, val screenX: Int, val screenY: Int,
+                          val shiftKey: Boolean, val x: Int = clientX, val y: Int = clientY, val retrieved: String?
     )
 
     data class KeyboardEvent(val type: String, val detail: Long,
-                             val key : String, val altKey : Boolean,
-                             val ctrlKey : Boolean, val code : String,
-                             val location : Int, val metaKey : Boolean,
-                             val shiftKey : Boolean, val locale : String,
-                             val isComposing: Boolean, val retrieved : String?)
+                             val key: String, val altKey: Boolean,
+                             val ctrlKey: Boolean, val code: String,
+                             val location: Int, val metaKey: Boolean,
+                             val shiftKey: Boolean, val locale: String,
+                             val isComposing: Boolean, val retrieved: String?)
 
     data class AnimationEvent(val type: String, val detail: Long,
-                              val animationName: String, val elapsedTime: Int, val retrieved : String?)
+                              val animationName: String, val elapsedTime: Int, val retrieved: String?)
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: String) -> Unit): Element {
-        parent.addEventListener(eventName, returnEventFields = returnEventFields, callback = {callback(it.toString())}, retrieveJs = retrieveJs)
+        parent.addEventListener(eventName, returnEventFields = returnEventFields, callback = { callback(it.toString()) }, retrieveJs = retrieveJs)
         return parent
     }
 
@@ -46,8 +46,8 @@ open class ONReceiver(internal val parent: Element, val retrieveJs: String? = nu
             val props: T = gson.fromJson(propertiesAsString)
             try {
                 callback(props)
-            } catch (e : Exception) {
-                logger.error(e) {"Exception thrown by callback in response to $eventName event"}
+            } catch (e: Exception) {
+                logger.error(e) { "Exception thrown by callback in response to $eventName event" }
             }
         }
     }
@@ -169,8 +169,10 @@ open class ONReceiver(internal val parent: Element, val retrieveJs: String? = nu
     // Animation Events
     /** The event occurs when a CSS animation has completed **/
     fun animationend(callback: (event: AnimationEvent) -> Unit) = event("animationend", eventType = AnimationEvent::class, callback = callback)
+
     /** The event occurs when a CSS animation is repeated **/
     fun animationiteration(callback: (event: AnimationEvent) -> Unit) = event("animationiteration", eventType = AnimationEvent::class, callback = callback)
+
     /** The event occurs when a CSS animation has started **/
     fun animationstart(callback: (event: AnimationEvent) -> Unit) = event("animationstart", eventType = AnimationEvent::class, callback = callback)
 
@@ -188,9 +190,9 @@ open class ONReceiver(internal val parent: Element, val retrieveJs: String? = nu
 
 
     companion object {
-        val memberPropertiesCache : ConcurrentHashMap<KClass<*>, Set<String>> = ConcurrentHashMap()
-        inline fun <reified T:Any> memberProperties(clazz : KClass<T>) =
-            memberPropertiesCache.get(clazz) ?:
-            T::class.memberProperties.map {it.name}.toSet().also{ memberPropertiesCache.put(clazz,it) }
+        val memberPropertiesCache: ConcurrentHashMap<KClass<*>, Set<String>> = ConcurrentHashMap()
+        inline fun <reified T : Any> memberProperties(clazz: KClass<T>) =
+                memberPropertiesCache.get(clazz)
+                        ?: T::class.memberProperties.map { it.name }.toSet().also { memberPropertiesCache.put(clazz, it) }
     }
 }

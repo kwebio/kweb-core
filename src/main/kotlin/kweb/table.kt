@@ -6,19 +6,19 @@ package kweb
  * @sample table_example
  */
 fun ElementCreator<Element>.table(attributes: Map<String, Any> = attr) = TableElement(element("table", attributes))
-open class TableElement(parent : Element) : Element(parent)
+open class TableElement(parent: Element) : Element(parent)
 
 fun ElementCreator<TableElement>.thead(attributes: Map<String, Any> = attr) = TheadElement(element("thead", attributes))
 open class TheadElement(parent: Element) : Element(parent)
 
 fun ElementCreator<TheadElement>.tr(attributes: Map<String, Any> = attr) = TrHeadElement(element("tr", attributes))
-open class TrHeadElement(parent : Element) : Element(parent)
+open class TrHeadElement(parent: Element) : Element(parent)
 
 fun ElementCreator<TrHeadElement>.th(attributes: Map<String, Any> = attr) = ThElement(element("th", attributes))
 open class ThElement(parent: Element) : Element(parent)
 
 fun ElementCreator<TableElement>.tbody(attributes: Map<String, Any> = attr) = TbodyElement(element("tbody", attributes))
-open class TbodyElement(parent: Element)  : Element(parent)
+open class TbodyElement(parent: Element) : Element(parent)
 
 fun ElementCreator<TbodyElement>.tr(attributes: Map<String, Any> = attr) = TrElement(element("tr", attributes))
 open class TrElement(parent: Element) : Element(parent)

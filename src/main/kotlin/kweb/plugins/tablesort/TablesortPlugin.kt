@@ -16,7 +16,7 @@ import org.jsoup.nodes.Document
  * @see main usage example
  */
 class TablesortPlugin : KwebPlugin(dependsOn = setOf(jqueryCore)) {
-    override fun decorate(doc : Document) {
+    override fun decorate(doc: Document) {
         doc.head().appendElement("script")
                 .attr("src", "https://semantic-ui.com/javascript/library/tablesort.js")
     }

@@ -20,9 +20,9 @@ fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
 // And here we can implement all of the useful JQuery functions
 @KWebDSL
 class JQueryReceiver(internal val webBrowser: WebBrowser, internal val selectorExpression: String) {
-    val on : JQueryOnReceiver get() = JQueryOnReceiver(this)
+    val on: JQueryOnReceiver get() = JQueryOnReceiver(this)
 
-    fun execute(js : String) {
+    fun execute(js: String) {
         webBrowser.execute("$selectorExpression.$js;")
     }
 

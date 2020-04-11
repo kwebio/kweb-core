@@ -31,12 +31,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
-import kweb.client.ClientConnection
+import kweb.client.*
 import kweb.client.ClientConnection.Caching
-import kweb.client.Client2ServerMessage
-import kweb.client.HttpRequestInfo
-import kweb.client.RemoteClientState
-import kweb.client.Server2ClientMessage
 import kweb.client.Server2ClientMessage.Instruction
 import kweb.plugins.KwebPlugin
 import org.jsoup.nodes.DataNode
@@ -52,13 +48,13 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import org.jsoup.nodes.Element as JsoupElement
 
-private val MAX_PAGE_BUILD_TIME : Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT : Duration = Duration.ofHours(48)
+private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
+private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
 
 class Kweb private constructor(
-    val debug: Boolean,
-    val plugins: List<KwebPlugin>,
-    val buildPage: WebBrowser.() -> Unit
+        val debug: Boolean,
+        val plugins: List<KwebPlugin>,
+        val buildPage: WebBrowser.() -> Unit
 ) : Closeable {
 
     /**
@@ -77,7 +73,7 @@ class Kweb private constructor(
             port: Int,
             debug: Boolean = true,
             plugins: List<KwebPlugin> = Collections.emptyList(),
-            httpsConfig : EngineSSLConnectorConfig? = null,
+            httpsConfig: EngineSSLConnectorConfig? = null,
             buildPage: WebBrowser.() -> Unit
     ) : this(debug, plugins, buildPage) {
         logger.info("Initializing Kweb listening on port $port")
@@ -124,7 +120,7 @@ class Kweb private constructor(
 
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
-            val feature = Kweb(configuration.debug, configuration.plugins ,configuration.buildPage)
+            val feature = Kweb(configuration.debug, configuration.plugins, configuration.buildPage)
             feature.setupKweb(pipeline)
             return feature
         }
@@ -250,7 +246,7 @@ class Kweb private constructor(
 
             val htmlDocumentSupplier = createHtmlDocumentSupplier()
 
-                get("/robots.txt") {
+            get("/robots.txt") {
                 call.response.status(HttpStatusCode.NotFound)
                 call.respondText("robots.txt not currently supported by kweb")
             }
@@ -267,28 +263,28 @@ class Kweb private constructor(
         }
 
         GlobalScope.launch {
-            while(true) {
+            while (true) {
                 delay(Duration.ofMinutes(1))
                 cleanUpOldClientStates()
             }
         }
     }
 
-    private fun Routing.createHtmlDocumentSupplier() : () -> Document {
+    private fun Routing.createHtmlDocumentSupplier(): () -> Document {
         val docTemplate = Document("") // TODO: What should this base URL be?
 
         docTemplate.appendChild(DocumentType("html", "", ""))
 
-        docTemplate.appendElement("html").let { html : JsoupElement ->
+        docTemplate.appendElement("html").let { html: JsoupElement ->
 
-            html.appendElement("head").let { head : JsoupElement ->
+            html.appendElement("head").let { head: JsoupElement ->
 
                 head.appendElement("meta")
                         .attr("name", "viewport")
                         .attr("content", "width=device-width, initial-scale=1.0")
             }
 
-            html.appendElement("body").let { body : JsoupElement ->
+            html.appendElement("body").let { body: JsoupElement ->
 
                 body.attr("onload", "buildPage()")
                 body.appendElement("noscript")
@@ -302,10 +298,10 @@ class Kweb private constructor(
             applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = docTemplate, routeHandler = this)
         }
 
-        return {docTemplate.clone()}
+        return { docTemplate.clone() }
     }
 
-    private fun Routing.listenForWebsocketConnection(path : String = "/ws") {
+    private fun Routing.listenForWebsocketConnection(path: String = "/ws") {
         webSocket(path) {
 
             val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
@@ -318,11 +314,11 @@ class Kweb private constructor(
                     ?: error("Unable to find server state corresponding to client id ${hello.id}")
 
             assert(remoteClientState.clientConnection is Caching)
-            logger.debug {"Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache"}
+            logger.debug { "Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache" }
             val cachedConnection = remoteClientState.clientConnection as Caching
             val webSocketClientConnection = ClientConnection.WebSocket(this)
             remoteClientState.clientConnection = webSocketClientConnection
-            logger.debug {"Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages"}
+            logger.debug { "Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages" }
             cachedConnection.read().forEach { webSocketClientConnection.send(it) }
 
 
@@ -361,7 +357,7 @@ class Kweb private constructor(
         }
     }
 
-    private fun Routing.listenForHTTPConnection(htmlDocumentTemplate : Document) {
+    private fun Routing.listenForHTTPConnection(htmlDocumentTemplate: Document) {
         get("/{visitedUrl...}") {
             val htmlDocument = htmlDocumentTemplate.clone()
 

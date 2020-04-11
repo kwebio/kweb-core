@@ -8,13 +8,15 @@ import java.util.concurrent.CompletableFuture
 
 @KWebDSL
 open class ElementReader(protected val receiver: WebBrowser, internal val jsExpression: String) {
-    constructor(element : Element) : this(element.browser, element.jsExpression)
+    constructor(element: Element) : this(element.browser, element.jsExpression)
 
     init {
-        require(receiver.kweb.isNotCatchingOutbound()) {"""
+        require(receiver.kweb.isNotCatchingOutbound()) {
+            """
             Reading the DOM when an outboundMessageCatcher is set is likely to have unintended consequences.
             Most likely you are trying to read the DOM within an `immediatelyOn {...}` block.
-        """.trimIndent()}
+        """.trimIndent()
+        }
     }
 
     val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName").thenApply { it.toString() }

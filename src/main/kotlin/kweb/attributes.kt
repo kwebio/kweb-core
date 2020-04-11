@@ -8,7 +8,7 @@ val attr: MutableMap<String, Any> get() = AttributeBuilder()
 
 open class AttributeBuilder : MutableMap<String, Any> by LinkedHashMap()
 
-fun Map<String, Any>.set(key : String, value : Any?) : Map<String, Any> {
+fun Map<String, Any>.set(key: String, value: Any?): Map<String, Any> {
     if (value != null) {
         if (this is AttributeBuilder) {
             put(key, value)

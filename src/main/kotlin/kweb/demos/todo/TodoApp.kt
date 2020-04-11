@@ -4,18 +4,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
 import kweb.*
-import kweb.dom.BodyElement
-import kweb.dom.title
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
-import kweb.routing.route
 import kweb.state.*
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.time.Instant
 import java.util.*
 
-fun main(){
+fun main() {
     TodoApp()
 }
 
@@ -25,7 +22,7 @@ class TodoApp {
 
     val state = ToDoState(Paths.get("data"))
     val plugins = listOf(fomanticUIPlugin)
-    val server:Kweb
+    val server: Kweb
 
     init {
 
@@ -93,7 +90,7 @@ class TodoApp {
         })
     }
 
-    private fun ElementCreator<BodyElement>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
+    private fun ElementCreator<*>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
         div(fomantic.ui.main.container).new {
             div(fomantic.column).new {
                 div(fomantic.ui.vertical.segment).new {
