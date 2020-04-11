@@ -6,8 +6,6 @@ import kweb.*
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
-import kweb.state.path
-import kweb.state.simpleUrlParser
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.extension.ExtendWith

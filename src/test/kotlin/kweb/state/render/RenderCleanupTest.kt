@@ -7,7 +7,6 @@ import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
-import kweb.state.get
 import kweb.state.render
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll

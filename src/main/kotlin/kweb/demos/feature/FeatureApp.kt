@@ -11,8 +11,6 @@ import io.ktor.server.jetty.Jetty
 import io.ktor.websocket.WebSockets
 import kweb.*
 import kweb.state.KVar
-import kweb.state.path
-import kweb.state.simpleUrlParser
 import java.time.Duration
 
 fun main() {
