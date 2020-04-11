@@ -1,13 +1,13 @@
 package kweb.plugins.chartJs
 
 import kweb.Kweb
-import kweb.dom.element.creation.tags.canvas
-import kweb.dom.element.new
+import kweb.canvas
+import kweb.new
 import kweb.plugins.KwebPlugin
 import kweb.plugins.chartJs.ChartType.line
 import org.jsoup.nodes.Document
 
-fun main(args: Array<String>) {
+fun main() {
     Kweb(port = 5252, plugins = listOf(chartJs), buildPage = {
         doc.body.new {
             Chart(canvas(400, 300), ChartConfig(
@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
 }
 
 class ChartJsPlugin : KwebPlugin() {
-    override fun decorate(doc : Document) {
+    override fun decorate(doc: Document) {
         doc.head().appendElement("script")
                 .attr("type", "text/javascript")
                 .attr("src", "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js")

@@ -15,21 +15,24 @@
 *******************************/
 
 .ui.ad {
-  display: block;
-  overflow: hidden;
-  margin: 1em 0;
+    display: block;
+    overflow: hidden;
+    margin: 1em 0;
 }
+
 .ui.ad:first-child {
-  margin: 0;
+    margin: 0;
 }
+
 .ui.ad:last-child {
-  margin: 0;
+    margin: 0;
 }
+
 .ui.ad iframe {
-  margin: 0;
-  padding: 0;
-  border: none;
-  overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
 }
 
 /*--------------
@@ -39,26 +42,26 @@
 
 /* Leaderboard */
 .ui.leaderboard.ad {
-  width: 728px;
-  height: 90px;
+    width: 728px;
+    height: 90px;
 }
 
 /* Medium Rectangle */
 .ui[class*="medium rectangle"].ad {
-  width: 300px;
-  height: 250px;
+    width: 300px;
+    height: 250px;
 }
 
 /* Large Rectangle */
 .ui[class*="large rectangle"].ad {
-  width: 336px;
-  height: 280px;
+    width: 336px;
+    height: 280px;
 }
 
 /* Half Page */
 .ui[class*="half page"].ad {
-  width: 300px;
-  height: 600px;
+    width: 300px;
+    height: 600px;
 }
 
 /*--------------
@@ -68,14 +71,14 @@
 
 /* Square */
 .ui.square.ad {
-  width: 250px;
-  height: 250px;
+    width: 250px;
+    height: 250px;
 }
 
 /* Small Square */
 .ui[class*="small square"].ad {
-  width: 200px;
-  height: 200px;
+    width: 200px;
+    height: 200px;
 }
 
 /*--------------
@@ -85,14 +88,14 @@
 
 /* Small Rectangle */
 .ui[class*="small rectangle"].ad {
-  width: 180px;
-  height: 150px;
+    width: 180px;
+    height: 150px;
 }
 
 /* Vertical Rectangle */
 .ui[class*="vertical rectangle"].ad {
-  width: 240px;
-  height: 400px;
+    width: 240px;
+    height: 400px;
 }
 
 /*--------------
@@ -100,16 +103,18 @@
   ---------------*/
 
 .ui.button.ad {
-  width: 120px;
-  height: 90px;
+    width: 120px;
+    height: 90px;
 }
+
 .ui[class*="square button"].ad {
-  width: 125px;
-  height: 125px;
+    width: 125px;
+    height: 125px;
 }
+
 .ui[class*="small button"].ad {
-  width: 120px;
-  height: 60px;
+    width: 120px;
+    height: 60px;
 }
 
 /*--------------
@@ -119,13 +124,13 @@
 
 /* Skyscraper */
 .ui.skyscraper.ad {
-  width: 120px;
-  height: 600px;
+    width: 120px;
+    height: 600px;
 }
 
 /* Wide Skyscraper */
 .ui[class*="wide skyscraper"].ad {
-  width: 160px;
+    width: 160px;
 }
 
 /*--------------
@@ -135,26 +140,26 @@
 
 /* Banner */
 .ui.banner.ad {
-  width: 468px;
-  height: 60px;
+    width: 468px;
+    height: 60px;
 }
 
 /* Vertical Banner */
 .ui[class*="vertical banner"].ad {
-  width: 120px;
-  height: 240px;
+    width: 120px;
+    height: 240px;
 }
 
 /* Top Banner */
 .ui[class*="top banner"].ad {
-  width: 930px;
-  height: 180px;
+    width: 930px;
+    height: 180px;
 }
 
 /* Half Banner */
 .ui[class*="half banner"].ad {
-  width: 234px;
-  height: 60px;
+    width: 234px;
+    height: 60px;
 }
 
 /*--------------
@@ -164,14 +169,14 @@
 
 /* Leaderboard */
 .ui[class*="large leaderboard"].ad {
-  width: 970px;
-  height: 90px;
+    width: 970px;
+    height: 90px;
 }
 
 /* Billboard */
 .ui.billboard.ad {
-  width: 970px;
-  height: 250px;
+    width: 970px;
+    height: 250px;
 }
 
 /*--------------
@@ -181,8 +186,8 @@
 
 /* Panorama */
 .ui.panorama.ad {
-  width: 980px;
-  height: 120px;
+    width: 980px;
+    height: 120px;
 }
 
 /*--------------
@@ -192,8 +197,8 @@
 
 /* Netboard */
 .ui.netboard.ad {
-  width: 580px;
-  height: 400px;
+    width: 580px;
+    height: 400px;
 }
 
 /*--------------
@@ -203,14 +208,14 @@
 
 /* Large Mobile Banner */
 .ui[class*="large mobile banner"].ad {
-  width: 320px;
-  height: 100px;
+    width: 320px;
+    height: 100px;
 }
 
 /* Mobile Leaderboard */
 .ui[class*="mobile leaderboard"].ad {
-  width: 320px;
-  height: 50px;
+    width: 320px;
+    height: 50px;
 }
 
 
@@ -221,12 +226,13 @@
 
 /* Mobile Sizes */
 .ui.mobile.ad {
-  display: none;
+    display: none;
 }
+
 @media only screen and (max-width: 767.98px) {
-  .ui.mobile.ad {
-    display: block;
-  }
+    .ui.mobile.ad {
+        display: block;
+    }
 }
 
 
@@ -235,38 +241,41 @@
 *******************************/
 
 .ui.centered.ad {
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 .ui.test.ad {
-  position: relative;
-  background: #545454;
+    position: relative;
+    background: #545454;
 }
+
 .ui.test.ad:after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  text-align: center;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  content: 'Ad';
-  color: #FFFFFF;
-  font-size: 1em;
-  font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    text-align: center;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    content: 'Ad';
+    color: #FFFFFF;
+    font-size: 1em;
+    font-weight: bold;
 }
+
 .ui.mobile.test.ad:after {
-  font-size: 0.85714286em;
+    font-size: 0.85714286em;
 }
+
 .ui.test.ad[data-text]:after {
-  content: attr(data-text);
+    content: attr(data-text);
 }
 
 
 /*******************************
          Theme Overrides
 *******************************/
-
 
 
 /*******************************

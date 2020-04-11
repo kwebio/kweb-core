@@ -14,47 +14,52 @@
 *******************************/
 
 .ui.range {
-  height: 20px;
-  width: 100%;
+    height: 20px;
+    width: 100%;
 }
+
 .ui.range .inner {
-  margin: 0 10px 0 10px;
-  height: 20px;
-  position: relative;
+    margin: 0 10px 0 10px;
+    height: 20px;
+    position: relative;
 }
+
 .ui.range .inner:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 .ui.range .inner .track {
-  position: absolute;
-  height: 4px;
-  width: 100%;
-  border-radius: 0.28571429rem;
-  top: 9px;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.05);
+    position: absolute;
+    height: 4px;
+    width: 100%;
+    border-radius: 0.28571429rem;
+    top: 9px;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.05);
 }
+
 .ui.range .inner .track-fill {
-  position: absolute;
-  height: 4px;
-  width: 0;
-  border-radius: 0.28571429rem;
-  top: 9px;
-  left: 0;
-  background-color: #1B1C1D;
+    position: absolute;
+    height: 4px;
+    width: 0;
+    border-radius: 0.28571429rem;
+    top: 9px;
+    left: 0;
+    background-color: #1B1C1D;
 }
+
 .ui.range .inner .thumb {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 20px;
-  width: 20px;
-  background: #fff -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.05)));
-  background: #fff -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
-  background: #fff linear-gradient(transparent, rgba(0, 0, 0, 0.05));
-  border-radius: 100%;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15), 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
-          box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15), 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background: #fff -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.05)));
+    background: #fff -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+    background: #fff linear-gradient(transparent, rgba(0, 0, 0, 0.05));
+    border-radius: 100%;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15), 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+    box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15), 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
 }
 
 /*--------------
@@ -62,10 +67,11 @@
 ---------------*/
 
 .ui.inverted.range .inner .track {
-  background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.08);
 }
+
 .ui.inverted.range .inner .track-fill {
-  background-color: #545454;
+    background-color: #545454;
 }
 
 /*--------------
@@ -75,106 +81,119 @@
 
 /* Red */
 .ui.red.range .inner .track-fill {
-  background-color: #DB2828;
+    background-color: #DB2828;
 }
+
 .ui.red.inverted.range .inner .track-fill {
-  background-color: #FF695E;
+    background-color: #FF695E;
 }
 
 /* Orange */
 .ui.orange.range .inner .track-fill {
-  background-color: #F2711C;
+    background-color: #F2711C;
 }
+
 .ui.orange.inverted.range .inner .track-fill {
-  background-color: #FF851B;
+    background-color: #FF851B;
 }
 
 /* Yellow */
 .ui.yellow.range .inner .track-fill {
-  background-color: #FBBD08;
+    background-color: #FBBD08;
 }
+
 .ui.yellow.inverted.range .inner .track-fill {
-  background-color: #FFE21F;
+    background-color: #FFE21F;
 }
 
 /* Olive */
 .ui.olive.range .inner .track-fill {
-  background-color: #B5CC18;
+    background-color: #B5CC18;
 }
+
 .ui.olive.inverted.range .inner .track-fill {
-  background-color: #D9E778;
+    background-color: #D9E778;
 }
 
 /* Green */
 .ui.green.range .inner .track-fill {
-  background-color: #21BA45;
+    background-color: #21BA45;
 }
+
 .ui.green.inverted.range .inner .track-fill {
-  background-color: #2ECC40;
+    background-color: #2ECC40;
 }
 
 /* Teal */
 .ui.teal.range .inner .track-fill {
-  background-color: #00B5AD;
+    background-color: #00B5AD;
 }
+
 .ui.teal.inverted.range .inner .track-fill {
-  background-color: #6DFFFF;
+    background-color: #6DFFFF;
 }
 
 /* Blue */
 .ui.blue.range .inner .track-fill {
-  background-color: #2185D0;
+    background-color: #2185D0;
 }
+
 .ui.blue.inverted.range .inner .track-fill {
-  background-color: #54C8FF;
+    background-color: #54C8FF;
 }
 
 /* Violet */
 .ui.violet.range .inner .track-fill {
-  background-color: #6435C9;
+    background-color: #6435C9;
 }
+
 .ui.violet.inverted.range .inner .track-fill {
-  background-color: #A291FB;
+    background-color: #A291FB;
 }
 
 /* Purple */
 .ui.purple.range .inner .track-fill {
-  background-color: #A333C8;
+    background-color: #A333C8;
 }
+
 .ui.purple.inverted.range .inner .track-fill {
-  background-color: #DC73FF;
+    background-color: #DC73FF;
 }
 
 /* Pink */
 .ui.pink.range .inner .track-fill {
-  background-color: #E03997;
+    background-color: #E03997;
 }
+
 .ui.pink.inverted.range .inner .track-fill {
-  background-color: #FF8EDF;
+    background-color: #FF8EDF;
 }
 
 /* Brown */
 .ui.brown.range .inner .track-fill {
-  background-color: #A5673F;
+    background-color: #A5673F;
 }
+
 .ui.brown.inverted.range .inner .track-fill {
-  background-color: #D67C1C;
+    background-color: #D67C1C;
 }
 
 /* Grey */
 .ui.grey.range .inner .track-fill {
-  background-color: #767676;
+    background-color: #767676;
 }
+
 .ui.grey.inverted.range .inner .track-fill {
-  background-color: #DCDDDE;
+    background-color: #DCDDDE;
 }
 
 /* Black */
 .ui.black.range .inner .track-fill {
-  background-color: #1B1C1D;
+    background-color: #1B1C1D;
 }
+
 .ui.black.inverted.range .inner .track-fill {
-  background-color: #545454;
+    background-color: #545454;
 }
 
 /*--------------
@@ -182,11 +201,13 @@
 ---------------*/
 
 .ui.range.disabled {
-  opacity: 0.5;
+    opacity: 0.5;
 }
+
 .ui.range.disabled .inner:hover {
-  cursor: auto;
+    cursor: auto;
 }
+
 .ui.range.disabled .inner .track-fill {
-  background: #767676;
+    background: #767676;
 }

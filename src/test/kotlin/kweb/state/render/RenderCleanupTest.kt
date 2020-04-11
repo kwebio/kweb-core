@@ -2,14 +2,13 @@ package kweb.state.render
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
-import kweb.Kweb
-import kweb.dom.element.creation.tags.*
-import kweb.dom.element.new
+import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
 import kweb.state.get
+import kweb.state.render
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.extension.ExtendWith

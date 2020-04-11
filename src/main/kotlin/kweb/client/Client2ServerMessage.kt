@@ -5,7 +5,7 @@ data class Client2ServerMessage(
         val hello: Boolean? = true,
         val error: ErrorMessage? = null,
         val callback: C2SCallback? = null,
-        val historyStateChange : C2SHistoryStateChange? = null
+        val historyStateChange: C2SHistoryStateChange? = null
 ) {
 
     data class ErrorMessage(val debugToken: String, val error: Error) {
@@ -14,5 +14,5 @@ data class Client2ServerMessage(
 
     data class C2SCallback(val callbackId: Int, val data: Any?)
 
-    data class C2SHistoryStateChange(val newState : String)
+    data class C2SHistoryStateChange(val newState: String)
 }

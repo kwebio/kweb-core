@@ -16,8 +16,8 @@ import kotlin.reflect.KClass
 
 val random = Random()
 
-fun createNonce(length : Int = 6) : String {
-    val ar = ByteArray(size = length*2)
+fun createNonce(length: Int = 6): String {
+    val ar = ByteArray(size = length * 2)
     random.nextBytes(ar)
     return Base64.getUrlEncoder().encodeToString(ar).substring(0, length)
 }
@@ -26,11 +26,11 @@ val gson = Gson()
 
 val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledThreadPool(5)
 
-fun String.escapeEcma() =  StringEscapeUtils.escapeEcmaScript(this)!!
+fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
 fun Any.toJson(): String = gson.toJson(this)
 
-fun <T> warnIfBlocking(maxTimeMs: Long, onBlock : (Thread) -> Unit, f : () -> T) : T {
+fun <T> warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -> Unit, f: () -> T): T {
     val runningThread = Thread.currentThread()
     val watcher = scheduledExecutorService.schedule({ onBlock(runningThread) }, maxTimeMs, TimeUnit.MILLISECONDS)
     val r = f()
@@ -49,29 +49,34 @@ fun Array<StackTraceElement>.pruneAndDumpStackTo(logStatementBuilder: StringBuil
     }
 }
 
-val <T : Any> KClass<T>.pkg : String get() {
-    val packageName = qualifiedName
-    val className = simpleName
-    return if (packageName != null && className != null) {
-        val endIndex = packageName.length - className.length - 1
-        packageName.substring(0, endIndex)
-    } else {
-        error("Cannot determine package for $this because it may be local or an anonymous object literal")
+val <T : Any> KClass<T>.pkg: String
+    get() {
+        val packageName = qualifiedName
+        val className = simpleName
+        return if (packageName != null && className != null) {
+            val endIndex = packageName.length - className.length - 1
+            packageName.substring(0, endIndex)
+        } else {
+            error("Cannot determine package for $this because it may be local or an anonymous object literal")
+        }
     }
-}
 
 data class NotFoundException(override val message: String) : Exception(message)
 
-val URL.pathQueryFragment : String get() {
-    val sb = StringBuilder()
-    if (path() != null) {
-        sb.append(path())
+val URL.pathQueryFragment: String
+    get() {
+        val sb = StringBuilder()
+        if (path() != null) {
+            sb.append(path())
+        }
+        if (query() != null) {
+            sb.append('?').append(query())
+        }
+        if (fragment() != null) {
+            sb.append('#').append(fragment())
+        }
+        return sb.toString()
     }
-    if (query() != null) {
-        sb.append('?').append(query())
-    }
-    if (fragment() != null) {
-        sb.append('#').append(fragment())
-    }
-    return sb.toString()
-}
+
+@DslMarker
+annotation class KWebDSL

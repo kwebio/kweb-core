@@ -2,21 +2,22 @@ package kweb.state
 
 import kweb.random
 import mu.KotlinLogging
-import java.util.concurrent.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentLinkedDeque
 
 private val logger = KotlinLogging.logger {}
 
 open class KVal<T : Any?>(value: T) {
 
     @Volatile
-    protected var closeReason : CloseReason? = null
+    protected var closeReason: CloseReason? = null
 
     internal val isClosed get() = closeReason != null
 
-    protected val listeners  = ConcurrentHashMap<Long, (T, T) -> Unit>()
+    protected val listeners = ConcurrentHashMap<Long, (T, T) -> Unit>()
     private val closeHandlers = ConcurrentLinkedDeque<() -> Unit>()
 
-    fun addListener(listener : (T, T) -> Unit) : Long {
+    fun addListener(listener: (T, T) -> Unit): Long {
         verifyNotClosed("add a listener")
         val handle = random.nextLong()
         listeners[handle] = listener
@@ -26,10 +27,11 @@ open class KVal<T : Any?>(value: T) {
     @Volatile
     private var pValue: T = value
 
-    open val value : T get() {
-        verifyNotClosed("retrieve KVal.value")
-        return pValue
-    }
+    open val value: T
+        get() {
+            verifyNotClosed("retrieve KVal.value")
+            return pValue
+        }
 
     fun removeListener(handle: Long) {
         listeners.remove(handle)
@@ -74,7 +76,7 @@ open class KVal<T : Any?>(value: T) {
     // TODO: Temporary for debugging
     private var closedStack: Array<out StackTraceElement>? = null
 
-    fun close(reason : CloseReason) {
+    fun close(reason: CloseReason) {
         if (isClosed) {
             val firstStackTrace = closedStack!!
             val secondStackTrace = Thread.currentThread().stackTrace
@@ -109,7 +111,7 @@ open class KVal<T : Any?>(value: T) {
         return "KVal($value)"
     }
 
-    protected fun verifyNotClosed(triedTo : String) {
+    protected fun verifyNotClosed(triedTo: String) {
         closeReason.let { closeReason ->
             if (closeReason != null) {
                 if (closeReason.cause == null) {
@@ -123,4 +125,4 @@ open class KVal<T : Any?>(value: T) {
 
 }
 
-data class CloseReason(val explanation : String, val cause : Throwable? = null)
+data class CloseReason(val explanation: String, val cause: Throwable? = null)

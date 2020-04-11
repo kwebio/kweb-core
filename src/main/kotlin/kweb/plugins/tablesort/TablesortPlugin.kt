@@ -1,8 +1,9 @@
 package kweb.plugins.tablesort
 
-import kweb.dom.element.creation.tags.TableElement
+import kweb.TableElement
 import kweb.plugins.KwebPlugin
-import kweb.plugins.jqueryCore.*
+import kweb.plugins.jqueryCore.executeOnSelf
+import kweb.plugins.jqueryCore.jqueryCore
 import org.jsoup.nodes.Document
 
 /**
@@ -15,7 +16,7 @@ import org.jsoup.nodes.Document
  * @see main usage example
  */
 class TablesortPlugin : KwebPlugin(dependsOn = setOf(jqueryCore)) {
-    override fun decorate(doc : Document) {
+    override fun decorate(doc: Document) {
         doc.head().appendElement("script")
                 .attr("src", "https://semantic-ui.com/javascript/library/tablesort.js")
     }

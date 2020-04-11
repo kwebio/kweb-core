@@ -1,14 +1,16 @@
 package kweb
 
+import io.mola.galimatias.URL
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage.Instruction
 import kweb.dom.Document
 import kweb.plugins.KwebPlugin
-import kweb.state.*
-import io.mola.galimatias.URL
+import kweb.state.KVar
+import kweb.state.ReversibleFunction
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.atomic.*
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
@@ -34,7 +36,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      */
     val htmlDocument = AtomicReference<org.jsoup.nodes.Document?>(null)
 
-    fun generateId() : String = idCounter.getAndIncrement().toString(36)
+    fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         kweb.appliedPlugins.map { it::class to it }.toMap()

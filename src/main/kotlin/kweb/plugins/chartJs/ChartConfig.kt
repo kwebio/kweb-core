@@ -1,6 +1,6 @@
 package kweb.plugins.chartJs
 
-import kweb.dom.element.creation.tags.CanvasElement
+import kweb.CanvasElement
 import kweb.random
 import kweb.toJson
 import java.time.Instant
@@ -29,16 +29,16 @@ data class ChartData(val labels: List<String>,
                      val datasets: List<DataSet>)
 
 class DataSet(val label: String,
-                   dataList: DataList,
-              val type : ChartType? = null) {
-    val data : Array<out Any> = dataList.list
+              dataList: DataList,
+              val type: ChartType? = null) {
+    val data: Array<out Any> = dataList.list
 }
 
-data class Point(val x : Number, val y : Number)
-data class DatePoint(val x : Instant, val y : Number)
+data class Point(val x: Number, val y: Number)
+data class DatePoint(val x: Instant, val y: Number)
 
-sealed class DataList(val list : Array<out Any>) {
-    class Numbers(vararg numbers : Number) : DataList(numbers)
-    class Points(vararg points : Point) : DataList(points)
+sealed class DataList(val list: Array<out Any>) {
+    class Numbers(vararg numbers: Number) : DataList(numbers)
+    class Points(vararg points: Point) : DataList(points)
 }
 

@@ -1,10 +1,10 @@
 package kweb.demos.https
 
 import kweb.Kweb
-import kweb.dom.element.creation.tags.div
-import kweb.dom.element.creation.tags.h1
-import kweb.dom.element.new
+import kweb.div
+import kweb.h1
 import kweb.https.SSLConfig
+import kweb.new
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 

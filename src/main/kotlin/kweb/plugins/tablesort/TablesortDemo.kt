@@ -1,9 +1,6 @@
 package kweb.plugins.tablesort
 
-import kweb.Kweb
-import kweb.dom.element.creation.ElementCreator
-import kweb.dom.element.creation.tags.*
-import kweb.dom.element.new
+import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 
