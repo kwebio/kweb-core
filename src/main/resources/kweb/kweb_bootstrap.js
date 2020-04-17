@@ -4,7 +4,6 @@ function toWSUrl(s) {
 }
 
 let kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
-let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 
@@ -119,7 +118,6 @@ function connectWs() {
     } else {
         socket.onopen = function () {
             console.debug("socket.onopen event received");
-            websocketEstablished = true;
             console.debug("Websocket established", wsURL);
             sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
             while (preWSMsgQueue.length > 0) {
@@ -142,7 +140,6 @@ function connectWs() {
             }
 
             console.error("WebSocket was closed", explanation, evt);
-            websocketEstablished = false;
             if (evt.wasClean) {
                 console.warn("Attempting reconnect...")
                 connectWs()
@@ -153,15 +150,14 @@ function connectWs() {
         };
         socket.onerror = function (evt) {
             console.error("WebSocket error", evt);
-            websocketEstablished = false;
             console.warn("Forcing page reload");
-            location.reload(true);
+            //location.reload(true);
         };
     }
 }
 
 function sendMessage(msg) {
-    if (websocketEstablished) {
+    if (typeof socket !== 'undefined' && socket.readyState === WebSocket.OPEN ) {
         console.debug("Sending WebSocket message", msg);
         socket.send(msg);
     } else {
