@@ -7,6 +7,66 @@ let kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
 let preWSMsgQueue = [];
 let socket;
 
+//https://github.com/lukeed/sockette
+const Sockette = function (url, opts) {
+    opts = opts || {};
+
+    function noop() {}
+
+    var ws, num=0, timer=1, $={};
+    var max = opts.maxAttempts || Infinity;
+
+    $.open = function () {
+        ws = new WebSocket(url, opts.protocols || []);
+
+        ws.onmessage = opts.onmessage || noop;
+
+        ws.onopen = function (e) {
+            (opts.onopen || noop)(e);
+            num = 0;
+        };
+
+        ws.onclose = function (e) {
+            e.code === 1e3 || e.code === 1001 || e.code === 1005 || $.reconnect(e);
+            (opts.onclose || noop)(e);
+        };
+
+        ws.onerror = function (e) {
+            (e && e.code==='ECONNREFUSED') ? $.reconnect(e) : (opts.onerror || noop)(e);
+        };
+    };
+
+    $.reconnect = function (e) {
+        if (timer && num++ < max) {
+            timer = setTimeout(function () {
+                (opts.onreconnect || noop)(e);
+                $.open();
+            }, opts.timeout || 1e3);
+        } else {
+            (opts.onmaximum || noop)(e);
+        }
+    };
+
+    $.json = function (x) {
+        ws.send(JSON.stringify(x));
+    };
+
+    $.send = function (x) {
+        ws.send(x);
+    };
+
+    $.close = function (x, y) {
+        timer = clearTimeout(timer);
+        ws.close(x || 1e3, y);
+    };
+
+    $.readyState = () => { return ws.readyState }
+
+    $.open(); // init
+
+    return $;
+}
+
 function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
@@ -108,54 +168,50 @@ function handleInboundMessage(msg) {
 }
 
 function connectWs() {
-    var wsURL = toWSUrl("ws");
-    console.debug("Establishing websocket connection", wsURL);
-    socket = new WebSocket(wsURL);
+    const wsURL = toWSUrl("ws");
     if (window.WebSocket === undefined) {
         document.body.innerHTML =
             "<h1>Unfortunately this website requires a browser that supports websockets (all modern browsers do)</h1>";
         console.error("Browser doesn't support window.WebSocket");
     } else {
-        socket.onopen = function () {
-            console.debug("socket.onopen event received");
-            console.debug("Websocket established", wsURL);
-            sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
-            while (preWSMsgQueue.length > 0) {
-                sendMessage(preWSMsgQueue.shift());
-            }
-        };
-        socket.onmessage = function (event) {
-            var msg = JSON.parse(event.data);
-            console.debug("Message received from socket: ", event.data);
-            handleInboundMessage(msg);
-        };
-
-        socket.onclose = function (evt) {
-            console.debug("Socket closed");
-            var explanation = "";
-            if (evt.reason && evt.reason.length > 0) {
-                explanation = "reason: " + evt.reason;
-            } else {
-                explanation = "without a reason specified";
-            }
-
-            console.error("WebSocket was closed", explanation, evt);
-            if (evt.wasClean) {
-                console.warn("Attempting reconnect...")
-                connectWs()
-            } else {
-                console.warn("Forcing page reload");
-                location.reload(true);
-            }
-        };
-        socket.onerror = function (evt) {
-            console.error("WebSocket error", evt);
-        };
+        console.debug("Establishing websocket connection", wsURL);
+        socket = new Sockette(wsURL, {
+            timeout: 3e3,
+            maxAttempts: 25,
+            onopen: function () {
+                console.debug("Websocket established", wsURL);
+                sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
+                while (preWSMsgQueue.length > 0) {
+                    sendMessage(preWSMsgQueue.shift());
+                }
+            },
+            onmessage: function (event) {
+                var msg = JSON.parse(event.data);
+                console.debug("Message received from socket: ", event.data);
+                handleInboundMessage(msg);
+            },
+            onclose: function (event) {
+                var explanation = "";
+                if (event.reason && event.reason.length > 0) {
+                    explanation = "reason: " + event.reason;
+                } else {
+                    explanation = "without a reason specified";
+                }
+                console.error("WebSocket was closed", explanation, event);
+            },
+            onerror: function(event) {
+                console.error("WebSocket error", event);
+            },
+            onmaximum: function(event) {
+                console.error("Maximum WebSocket connection attempts reached!")
+                alert("Couldn't establish connection to server, please refresh the page.")
+            },
+        })
     }
 }
 
 function sendMessage(msg) {
-    if (typeof socket !== 'undefined' && socket.readyState === WebSocket.OPEN ) {
+    if (socket !== undefined && socket.readyState() === WebSocket.OPEN ) {
         console.debug("Sending WebSocket message", msg);
         socket.send(msg);
     } else {
