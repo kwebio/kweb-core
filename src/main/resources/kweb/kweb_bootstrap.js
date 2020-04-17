@@ -150,8 +150,6 @@ function connectWs() {
         };
         socket.onerror = function (evt) {
             console.error("WebSocket error", evt);
-            console.warn("Forcing page reload");
-            //location.reload(true);
         };
     }
 }
