@@ -4,7 +4,7 @@ function toWSUrl(s) {
 }
 
 let kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
-let preWSMsgQueue = [];
+let msgQueue = [];
 let socket;
 
 //https://github.com/lukeed/sockette
@@ -13,8 +13,8 @@ const Sockette = function (url, opts) {
 
     function noop() {}
 
-    var ws, num=0, timer=1, $={};
-    var max = opts.maxAttempts || Infinity;
+    let ws, num=0, timer=1, $={};
+    const max = opts.maxAttempts || Infinity;
 
     $.open = function () {
         ws = new WebSocket(url, opts.protocols || []);
@@ -177,21 +177,20 @@ function connectWs() {
         console.debug("Establishing websocket connection", wsURL);
         socket = new Sockette(wsURL, {
             timeout: 3e3,
-            maxAttempts: 25,
             onopen: function () {
                 console.debug("Websocket established", wsURL);
                 sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
-                while (preWSMsgQueue.length > 0) {
-                    sendMessage(preWSMsgQueue.shift());
+                while (msgQueue.length > 0) {
+                    sendMessage(msgQueue.shift());
                 }
             },
             onmessage: function (event) {
-                var msg = JSON.parse(event.data);
+                let msg = JSON.parse(event.data);
                 console.debug("Message received from socket: ", event.data);
                 handleInboundMessage(msg);
             },
             onclose: function (event) {
-                var explanation = "";
+                let explanation;
                 if (event.reason && event.reason.length > 0) {
                     explanation = "reason: " + event.reason;
                 } else {
@@ -201,10 +200,6 @@ function connectWs() {
             },
             onerror: function(event) {
                 console.error("WebSocket error", event);
-            },
-            onmaximum: function(event) {
-                console.error("Maximum WebSocket connection attempts reached!")
-                alert("Couldn't establish connection to server, please refresh the page.")
             },
         })
     }
@@ -219,7 +214,7 @@ function sendMessage(msg) {
             "Queueing WebSocket message as connection isn't established",
             msg
         );
-        preWSMsgQueue.push(msg);
+        msgQueue.push(msg);
     }
 }
 
