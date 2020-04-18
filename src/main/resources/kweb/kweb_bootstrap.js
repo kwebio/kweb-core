@@ -179,9 +179,14 @@ function connectWs() {
             timeout: 3e3,
             onopen: function () {
                 console.debug("Websocket established", wsURL);
+                /*We need to move all the messages to a separate list, otherwise we can get stuck in an infinite loop if
+                    the connection closes before all messages are sent (while loop pulls message from queue, sendMessage
+                    fails and message goes right back into queue). */
+                const queuedMessages = msgQueue
+                msgQueue = []
                 sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
-                while (msgQueue.length > 0) {
-                    sendMessage(msgQueue.shift());
+                while (queuedMessages.length > 0) {
+                    sendMessage(queuedMessages.shift());
                 }
             },
             onmessage: function (event) {

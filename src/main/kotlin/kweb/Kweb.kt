@@ -310,17 +310,24 @@ class Kweb private constructor(
                 error("First message from client isn't 'hello'")
             }
 
+            val webSocketClientConnection = ClientConnection.WebSocket(this)
+
             val remoteClientState = clientState.get(hello.id)
-                    ?: error("Unable to find server state corresponding to client id ${hello.id}")
+
+            if(remoteClientState == null) {
+                val message = Server2ClientMessage(
+                        yourId = hello.id,
+                        execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
+                webSocketClientConnection.send(message.toJson())
+                error("Unable to find server state corresponding to client id ${hello.id}")
+            }
 
             assert(remoteClientState.clientConnection is Caching)
             logger.debug { "Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache" }
             val cachedConnection = remoteClientState.clientConnection as Caching
-            val webSocketClientConnection = ClientConnection.WebSocket(this)
             remoteClientState.clientConnection = webSocketClientConnection
             logger.debug { "Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages" }
             cachedConnection.read().forEach { webSocketClientConnection.send(it) }
-
 
             try {
                 for (frame in incoming) {
