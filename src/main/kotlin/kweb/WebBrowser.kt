@@ -3,14 +3,12 @@ package kweb
 import io.mola.galimatias.URL
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage.Instruction
-import kweb.dom.Document
+import kweb.html.Document
 import kweb.plugins.KwebPlugin
-import kweb.state.KVar
-import kweb.state.ReversibleFunction
+import kweb.state.*
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.atomic.*
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
