@@ -1,10 +1,8 @@
-package kweb.dom
+package kweb.html
 
 import kweb.*
 import kweb.dom.element.storage.StorageReceiver
 import kweb.dom.element.storage.StorageType
-import kweb.html.BodyElement
-import kweb.html.HeadElement
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -42,13 +40,3 @@ class Document(val receiver: WebBrowser) {
      */
     val sessionStorage get() = StorageReceiver(receiver, StorageType.session)
 }
-
-
-private fun document_sample() {
-    Kweb(port = 1234, buildPage = {
-        doc.body.new {
-            h1().text("Hello World!")
-        }
-    })
-}
-
