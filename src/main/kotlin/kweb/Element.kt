@@ -74,10 +74,17 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      */
     fun setAttributeRaw(name: String, value: Any?): Element {
         if (value != null) {
-            if (canSendInstruction()) {
-                browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
-            } else {
-                execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+            val htmlDoc = browser.htmlDocument.get()
+            when {
+                htmlDoc != null -> {
+                    val el = htmlDoc.getElementById(this.id!!).attr(name, value.toJson())
+                }
+                canSendInstruction() -> {
+                    browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
+                }
+                else -> {
+                    execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+                }
             }
             if (name == "id") {
                 jsExpression = "document.getElementById(${value.toJson()})"
