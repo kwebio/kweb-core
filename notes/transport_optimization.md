@@ -281,7 +281,7 @@
 ### Calls -> 2
          io.kweb.WebBrowser.evaluateWithCallback(WebBrowser.kt:63)
          io.kweb.WebBrowser.evaluate(WebBrowser.kt:55)
-         io.kweb.dom.Document.<init>(Document.kt:23)
+         io.kweb.html.Document.<init>(Document.kt:23)
          io.kweb.WebBrowser.<init>(WebBrowser.kt:72)
          io.kweb.Kweb$4$2$3$2.invoke(Kweb.kt:169)
 

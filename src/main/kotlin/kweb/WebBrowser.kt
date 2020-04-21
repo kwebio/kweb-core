@@ -3,7 +3,7 @@ package kweb
 import io.mola.galimatias.URL
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage.Instruction
-import kweb.dom.Document
+import kweb.html.Document
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
