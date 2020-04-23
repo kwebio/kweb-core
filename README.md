@@ -1,4 +1,4 @@
-## Kweb
+## Kweb 🦆
 
 [![](https://jitpack.io/v/kwebio/kweb-core.svg)](https://jitpack.io/#kwebio/kweb-core) [![Build Status](https://github.com/kwebio/kweb-core/workflows/tests/badge.svg?branch=master)](https://github.com/kwebio/kweb-core/actions?query=branch%3Amaster+workflow%3Atests)
 
