@@ -55,11 +55,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                val jsElement = when {
-                    parent is HeadElement -> {
+                val jsElement = when (parent) {
+                    is HeadElement -> {
                         htmlDoc.head().appendElement(tag)
                     }
-                    parent is BodyElement -> {
+                    is BodyElement -> {
                         htmlDoc.body().appendElement(tag)
                     }
                     else -> htmlDoc.getElementById(parent.id).appendElement(tag)
