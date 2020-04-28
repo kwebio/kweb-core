@@ -76,8 +76,8 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         if (value != null) {
             val htmlDoc = browser.htmlDocument.get()
             when {
-                htmlDoc != null -> {
-                    val el = htmlDoc.getElementById(this.id!!).attr(name, value.toJson())
+                htmlDoc != null && this.id!= null -> {
+                    htmlDoc.getElementById(this.id).attr(name, value.toJson())
                 }
                 canSendInstruction() -> {
                     browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
