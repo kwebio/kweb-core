@@ -118,9 +118,18 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         """.trimIndent())
     }
 
-    fun <T : Any> url(mapper: (String) -> T) = url.map(mapper)
+    /**
+     * The absolute URL of the page, mapped to a [io.mola.galimatias.URL](http://galimatias.mola.io/apidocs/0.2.0/io/mola/galimatias/URL.html) for convenience.
+     */
+    val gurl : KVar<URL> = url.map(object : ReversibleFunction<String, URL>(label = "gurl") {
+        override fun invoke(from: String): URL {
+            return URL.parse(this@WebBrowser.httpRequestInfo.requestedUrl).resolve(from)
+        }
 
-    fun <T : Any> url(func: ReversibleFunction<String, T>) = url.map(func)
+        override fun reverse(original: String, change: URL): String {
+            return change.pathQueryFragment
+        }
+    } )
 
 }
 

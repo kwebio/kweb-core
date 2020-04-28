@@ -416,13 +416,6 @@ fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
     return newKVar
 }
 
-val simpleUrlParser = object : ReversibleFunction<String, URL>("simpleUrlParser") {
-    override fun invoke(from: String): URL = URL.parse(from)
-
-    override fun reverse(original: String, change: URL) = change.toString()
-
-}
-
 infix operator fun KVar<String>.plus(s: String) = this.map { it + s }
 infix operator fun String.plus(sKV: KVar<String>) = sKV.map { this + it }
 
@@ -433,3 +426,8 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
         return change.toString()
     }
 })
+
+
+fun <T : Any?> ElementCreator<*>.renderEach(collection : KVar<Iterable<T>>, block : ElementCreator<Element>.(value : T, index : Int) -> Unit) {
+
+}

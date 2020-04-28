@@ -28,7 +28,7 @@ private fun Application.kwebFeature() {
     install(Kweb) {
         buildPage = {
             doc.body.new {
-                val path = url(simpleUrlParser).path
+                val path = gurl.path
                 val greeting = path.map { it.removePrefix("/") }.map { "Hello " + if (it.isNotBlank()) it else "World" }
 
                 val next = KVar("")
