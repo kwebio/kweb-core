@@ -105,7 +105,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             if (position == null) {
                 appendln("${parent.jsExpression}.appendChild(newEl);")
             } else {
-                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.childNodes[$position]);")
+                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.children[$position]);")
             }
             appendln("}")
         }

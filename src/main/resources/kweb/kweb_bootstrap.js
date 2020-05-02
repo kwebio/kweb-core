@@ -90,7 +90,7 @@ function handleInboundMessage(msg) {
                 let parentElement = document.getElementById(parentId);
 
                 if (position > -1) {
-                    parentElement.insertBefore(newEl, parentElement.childNodes[position]);
+                    parentElement.insertBefore(newEl, parentElement.children[position]);
                 } else {
                     parentElement.appendChild(newEl);
                 }
