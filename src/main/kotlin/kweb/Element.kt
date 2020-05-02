@@ -230,7 +230,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
                 }
             }
             else -> {
-                execute("$jsExpression.removeChild($jsExpression.childNodes[$position]);".trimIndent())
+                execute("$jsExpression.removeChild($jsExpression.children[$position]);".trimIndent())
             }
         }
         return this
