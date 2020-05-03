@@ -296,7 +296,7 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
                 error("Unable to find pathRenderer for template $template")
             }
         } else {
-            rr.notFoundReceiver.invoke(this, URL.parse(this.browser.url.value).path())
+            rr.notFoundReceiver.invoke(this, this.browser.gurl.path.value)
         }
     }
 }
