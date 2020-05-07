@@ -297,12 +297,13 @@ class Kweb private constructor(
     suspend fun respondKweb(pipelineContext: ApplicationCall, buildPage: WebBrowser.() -> Unit) {
         val htmlDocument = createHtmlDocumentSupplier().invoke()
 
-        // It's important to use a clone of the template because the result will be modified
         for (plugin in plugins) {
-            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = htmlDocument.clone(), routeHandler = pipelineContext.application.routing {  })
+            // The document will be modified here!
+            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = htmlDocument, routeHandler = pipelineContext.application.routing {  })
         }
 
-        pipelineContext.listenForHTTPConnection(htmlDocument.clone(), buildPage)
+        // Passing a clone to ensure the plugins won't do any funky business
+        pipelineContext.listenForHTTPConnection(htmlDocument, buildPage)
     }
 
     private fun createHtmlDocumentSupplier(): () -> Document {
@@ -536,7 +537,9 @@ class Kweb private constructor(
 const val buildPageReplacementCode = """
     routing {
         get("/{visitedUrl...}") {
-            buildPage
+            call.respondKweb { 
+                buildPage
+            }
         }
     }
     """
