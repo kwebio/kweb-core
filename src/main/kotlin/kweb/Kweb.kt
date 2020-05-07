@@ -117,6 +117,8 @@ class Kweb private constructor(
         class Configuration {
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
+            @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
+            var buildPage: (WebBrowser.() -> Unit)? = null
         }
 
         override val key = AttributeKey<Kweb>("Kweb")
@@ -124,7 +126,13 @@ class Kweb private constructor(
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
             val feature = Kweb(configuration.debug, configuration.plugins)
+
+            configuration.buildPage?.let {
+                logger.info { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
+                feature.installKwebOnAllRemainingRoutes(pipeline, it)
+            }
             feature.installRequiredKwebComponents(pipeline)
+
             return feature
         }
     }
@@ -257,12 +265,18 @@ class Kweb private constructor(
                 call.respondText("favicons not currently supported by kweb")
             }
 
+        }
 
+        installKwebOnAllRemainingRoutes(application, buildPage)
+        installRequiredKwebComponents(application)
+    }
+
+    private fun installKwebOnAllRemainingRoutes(application: Application, buildPage: WebBrowser.() -> Unit) {
+        application.routing {
             get("/{visitedUrl...}") {
                 respondKweb(call, buildPage)
             }
         }
-        installRequiredKwebComponents(application)
     }
 
     private fun installRequiredKwebComponents(application: Application) {
@@ -518,6 +532,14 @@ class Kweb private constructor(
     }
 
 }
+
+const val buildPageReplacementCode = """
+    routing {
+        get("/{visitedUrl...}") {
+            buildPage
+        }
+    }
+    """
 
 /**
  * Allows for defining Kweb responses inlined in Ktor routing code
