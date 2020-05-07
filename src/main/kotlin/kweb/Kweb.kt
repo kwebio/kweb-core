@@ -5,7 +5,6 @@ import io.ktor.application.Application
 import io.ktor.application.ApplicationCall
 import io.ktor.application.ApplicationFeature
 import io.ktor.application.call
-import io.ktor.application.feature
 import io.ktor.application.install
 import io.ktor.features.Compression
 import io.ktor.features.DefaultHeaders
@@ -107,7 +106,7 @@ class Kweb private constructor(
      *     }
      * ```
      *
-     * See FeatureApp.kt for an example.
+     * @see kweb.demos.feature.kwebFeature for an example
      */
     companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
         class Configuration {
@@ -125,7 +124,7 @@ class Kweb private constructor(
 
             configuration.buildPage?.let {
                 logger.info { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
-                feature.installKwebOnAllRemainingRoutes(pipeline, it)
+                pipeline.installKwebOnRemainingRoutes(it)
             }
             feature.installRequiredKwebComponents(pipeline)
 
@@ -259,18 +258,11 @@ class Kweb private constructor(
 
         }
 
-        installKwebOnAllRemainingRoutes(application, buildPage)
+        application.installKwebOnRemainingRoutes(buildPage)
         installRequiredKwebComponents(application)
     }
 
-    private fun installKwebOnAllRemainingRoutes(application: Application, buildPage: WebBrowser.() -> Unit) {
-        application.routing {
-            get("/{visitedUrl...}") {
-                respondKweb(call, buildPage)
-            }
-        }
-    }
-
+    // We can't convert this param to receiver because it's called on receiver in the companion Feature
     private fun installRequiredKwebComponents(application: Application) {
         HtmlDocumentSupplier.createDocTemplate(plugins, application.routing {  })
 
@@ -472,23 +464,5 @@ class Kweb private constructor(
     }
 
 }
-
-const val buildPageReplacementCode = """
-    routing {
-        get("/{visitedUrl...}") {
-            call.respondKweb { 
-                buildPage
-            }
-        }
-    }
-    """
-
-/**
- * Allows for defining Kweb responses inlined in Ktor routing code
- *
- * @see kweb.demos.feature.kwebFeature
- */
-suspend fun ApplicationCall.respondKweb(buildPage: WebBrowser.() -> Unit) =
-    application.feature(Kweb).respondKweb(this, buildPage)
 
 data class DebugInfo(val js: String, val action: String, val throwable: Throwable)
