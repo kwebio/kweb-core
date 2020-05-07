@@ -4,6 +4,7 @@ import io.mola.galimatias.URL
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.Document
+import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
@@ -39,7 +40,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
-        kweb.appliedPlugins.map { it::class to it }.toMap()
+        HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
     }
 
     @Suppress("UNCHECKED_CAST")

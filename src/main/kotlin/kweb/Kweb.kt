@@ -18,7 +18,6 @@ import io.ktor.http.cio.websocket.readText
 import io.ktor.http.cio.websocket.timeout
 import io.ktor.request.uri
 import io.ktor.response.respondText
-import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.EngineSSLConnectorConfig
@@ -28,7 +27,6 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.Jetty
 import io.ktor.server.jetty.JettyApplicationEngine
 import io.ktor.util.AttributeKey
-import io.ktor.util.pipeline.PipelineContext
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.Dispatchers
@@ -38,10 +36,9 @@ import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
 import kweb.client.Server2ClientMessage.Instruction
+import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import org.jsoup.nodes.DataNode
-import org.jsoup.nodes.Document
-import org.jsoup.nodes.DocumentType
 import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
@@ -50,7 +47,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
-import org.jsoup.nodes.Element as JsoupElement
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
@@ -138,10 +134,6 @@ class Kweb private constructor(
     }
 
     private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
-
-
-    private val mutableAppliedPlugins: MutableSet<KwebPlugin> = HashSet()
-    val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
 
     private var server: JettyApplicationEngine? = null
 
@@ -280,6 +272,8 @@ class Kweb private constructor(
     }
 
     private fun installRequiredKwebComponents(application: Application) {
+        HtmlDocumentSupplier.createDocTemplate(plugins, application.routing {  })
+
         application.routing {
             webSocket("/ws") {
                 listenForWebsocketConnection()
@@ -292,46 +286,6 @@ class Kweb private constructor(
                 cleanUpOldClientStates()
             }
         }
-    }
-
-    suspend fun respondKweb(pipelineContext: ApplicationCall, buildPage: WebBrowser.() -> Unit) {
-        val htmlDocument = createHtmlDocumentSupplier().invoke()
-
-        for (plugin in plugins) {
-            // The document will be modified here!
-            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = htmlDocument, routeHandler = pipelineContext.application.routing {  })
-        }
-
-        // Passing a clone to ensure the plugins won't do any funky business
-        pipelineContext.listenForHTTPConnection(htmlDocument, buildPage)
-    }
-
-    private fun createHtmlDocumentSupplier(): () -> Document {
-        val docTemplate = Document("") // TODO: What should this base URL be?
-
-        docTemplate.appendChild(DocumentType("html", "", ""))
-
-        docTemplate.appendElement("html").let { html: JsoupElement ->
-
-            html.appendElement("head").let { head: JsoupElement ->
-
-                head.appendElement("meta")
-                        .attr("name", "viewport")
-                        .attr("content", "width=device-width, initial-scale=1.0")
-            }
-
-            html.appendElement("body").let { body: JsoupElement ->
-
-                body.attr("onload", "buildPage()")
-                body.appendElement("noscript")
-                        .html(
-                                """
-                            | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
-                            | requires JavaScript to be enabled.""".trimMargin())
-            }
-        }
-
-        return { docTemplate.clone() }
     }
 
     private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
@@ -387,17 +341,19 @@ class Kweb private constructor(
         }
     }
 
-    private suspend fun ApplicationCall.listenForHTTPConnection(htmlDocument: Document, buildPage: WebBrowser.() -> Unit) {
+    suspend fun respondKweb(call: ApplicationCall, buildPage: WebBrowser.() -> Unit) {
+        val htmlDocument = HtmlDocumentSupplier.getTemplateCopy()
+
         val kwebSessionId = createNonce()
 
         val remoteClientState = clientState.getOrPut(kwebSessionId) {
             RemoteClientState(id = kwebSessionId, clientConnection = Caching())
         }
 
-        val httpRequestInfo = HttpRequestInfo(request)
+        val httpRequestInfo = HttpRequestInfo(call.request)
 
         try {
-            val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb)
+            val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
             webBrowser.htmlDocument.set(htmlDocument)
             if (debug) {
                 warnIfBlocking(maxTimeMs = MAX_PAGE_BUILD_TIME.toMillis(), onBlock = { thread ->
@@ -446,17 +402,17 @@ class Kweb private constructor(
             htmlDocument.outputSettings().prettyPrint(debug)
 
 
-            respondText(htmlDocument.outerHtml(), ContentType.Text.Html)
+            call.respondText(htmlDocument.outerHtml(), ContentType.Text.Html)
         } catch (nfe: NotFoundException) {
-            response.status(HttpStatusCode.NotFound)
-            respondText("URL ${request.uri} not found.", ContentType.parse("text/plain"))
+            call.response.status(HttpStatusCode.NotFound)
+            call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
         } catch (e: Exception) {
             val logToken = random.nextLong().toString(16)
 
             logger.error(e) { "Exception thrown while rendering page, code $logToken" }
 
-            response.status(HttpStatusCode.InternalServerError)
-            respondText("""
+            call.response.status(HttpStatusCode.InternalServerError)
+            call.respondText("""
                         Internal Server Error.
 
                         Please include code $logToken in any error report to help us track it down.
@@ -474,23 +430,6 @@ class Kweb private constructor(
         // TODO: of a specific reason why it would be bad.
         debugInfo.throwable.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
         logger.error(logStatementBuilder.toString())
-    }
-
-    private fun applyPluginWithDependencies(plugin: KwebPlugin,
-                                            appliedPlugins: MutableSet<KwebPlugin>,
-                                            routeHandler: Routing,
-                                            document: Document) {
-        for (dependantPlugin in plugin.dependsOn) {
-            if (!appliedPlugins.contains(dependantPlugin)) {
-                applyPluginWithDependencies(dependantPlugin, appliedPlugins, routeHandler, document)
-                appliedPlugins.add(dependantPlugin)
-            }
-        }
-        if (!appliedPlugins.contains(plugin)) {
-            plugin.decorate(document)
-            plugin.appServerConfigurator(routeHandler)
-            appliedPlugins.add(plugin)
-        }
     }
 
     /**
