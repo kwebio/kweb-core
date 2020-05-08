@@ -256,9 +256,12 @@ class Kweb private constructor(
                 call.respondText("favicons not currently supported by kweb")
             }
 
+            get("/{visitedUrl...}") {
+                respondKweb(call, buildPage)
+            }
+
         }
 
-        application.installKwebOnRemainingRoutes(buildPage)
         installRequiredKwebComponents(application)
     }
 
