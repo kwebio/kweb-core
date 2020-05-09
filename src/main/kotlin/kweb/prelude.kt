@@ -406,8 +406,8 @@ val KVar<URL>.pathQueryFragment
 
 fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
     val newKVar = KVar(this.first.value to this.second.value)
-    this.first.addListener { o, n -> newKVar.value = n to this.second.value }
-    this.second.addListener { o, n -> newKVar.value = this.first.value to n }
+    this.first.addListener { _, n -> newKVar.value = n to this.second.value }
+    this.second.addListener { _, n -> newKVar.value = this.first.value to n }
 
     newKVar.addListener { o, n ->
         this.first.value = n.first
@@ -427,7 +427,17 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
     }
 })
 
-
-fun <T : Any?> ElementCreator<*>.renderEach(collection : KVar<Iterable<T>>, block : ElementCreator<Element>.(value : T, index : Int) -> Unit) {
-
+/**
+ * Render each element of a List
+ */
+fun <T : Any> ElementCreator<*>.renderEach(list : KVar<List<T>>, block : ElementCreator<Element>.(value : KVar<T>) -> Unit) {
+    /*
+     * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing
+     *       DOM elements - this is inefficient.
+     */
+    render(list.map { it.size }) { size ->
+        for (ix in 0 until size) {
+            block(list[ix])
+        }
+    }
 }
