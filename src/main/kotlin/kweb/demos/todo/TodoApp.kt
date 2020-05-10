@@ -4,6 +4,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
 import kweb.*
+import kweb.html.events.click
+import kweb.html.events.keypress
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.*
@@ -138,7 +140,7 @@ class TodoApp {
         }
         div(fomantic.ui.action.input).new {
             val input = input(InputType.text, placeholder = "Add Item")
-            input.on.keypress { ke ->
+            input.newOn.keypress { ke ->
                 if (ke.code == "Enter") {
                     handleAddItem(input, list)
                 }
@@ -165,7 +167,7 @@ class TodoApp {
         button.new {
             i(fomantic.trash.icon)
         }
-        button.on.click {
+        button.newOn.click {
             state.items.remove(item.value.uid)
         }
     }

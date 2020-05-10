@@ -6,6 +6,10 @@ import kweb.dom.element.events.ONImmediateReceiver
 import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.dom.style.StyleReceiver
+import kweb.html.events.EventGenerator
+import kweb.html.events.KeyboardEvents
+import kweb.html.events.MouseEvents
+import kweb.html.events.NewOnReceiver
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.state.KVar
@@ -15,7 +19,8 @@ import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.reflect.KClass
 
 @KWebDSL
-open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) {
+open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
+        EventGenerator<Element>, KeyboardEvents, MouseEvents {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
@@ -313,7 +318,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         browser.evaluate(wrappedJS)
     }
 
-    fun addEventListener(eventName: String, returnEventFields: Set<String> = Collections.emptySet(), retrieveJs: String?, callback: (Any) -> Unit): Element {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + retrieveJs + "}"
@@ -330,6 +335,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         }
         return this
     }
+
 
     fun delete() {
         execute("$jsExpression.parentNode.removeChild($jsExpression);")
@@ -351,6 +357,8 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
     val on: ONReceiver get() = ONReceiver(this)
+
+    val newOn: NewOnReceiver<Element> get() = NewOnReceiver(this)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
