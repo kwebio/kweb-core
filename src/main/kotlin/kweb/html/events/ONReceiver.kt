@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
 @KWebDSL
-open class ONReceiver(internal val parent: Element, val retrieveJs: String? = null) : Element(parent) {
+open class ONReceiver(internal val parent: Element, val retrieveJs: String? = null) {
 
     val logger = KotlinLogging.logger {}
 

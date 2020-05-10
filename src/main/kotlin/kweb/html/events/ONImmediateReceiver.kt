@@ -11,7 +11,7 @@ import kotlin.reflect.full.memberProperties
  * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
  */
 @KWebDSL
-open class ONImmediateReceiver(internal val parent: Element) : Element(parent) {
+open class ONImmediateReceiver(internal val parent: Element) {
 
     val logger = KotlinLogging.logger {}
 

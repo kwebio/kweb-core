@@ -3,10 +3,10 @@ package kweb
 import com.github.salomonbrys.kotson.toJson
 import io.ktor.routing.RoutingPathSegmentKind
 import io.mola.galimatias.URL
-import kweb.html.events.ONReceiver
 import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
+import kweb.html.events.ONReceiver
 import kweb.routing.PathTemplate
 import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF

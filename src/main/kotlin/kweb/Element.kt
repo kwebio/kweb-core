@@ -2,9 +2,9 @@ package kweb
 
 import com.github.salomonbrys.kotson.toJson
 import kweb.client.Server2ClientMessage
-import kweb.dom.element.events.ONImmediateReceiver
-import kweb.html.events.ONReceiver
 import kweb.html.ElementReader
+import kweb.html.events.ONImmediateReceiver
+import kweb.html.events.ONReceiver
 import kweb.html.style.StyleReceiver
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
