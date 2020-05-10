@@ -1,4 +1,4 @@
-package kweb.dom.element.events
+package kweb.html.events
 
 import kweb.Element
 import kweb.KWebDSL

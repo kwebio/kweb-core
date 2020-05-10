@@ -1,4 +1,4 @@
-package kweb.dom.element.events
+package kweb.html.events
 
 import com.github.salomonbrys.kotson.fromJson
 import kweb.Element
@@ -41,7 +41,7 @@ open class ONReceiver(internal val parent: Element, val retrieveJs: String? = nu
 
     inline fun <reified T : Any> event(eventName: String, eventType: KClass<T>, crossinline callback: (event: T) -> Unit): Element {
         // TODO: Should probably cache this rather than do the reflection every time
-        val eventPropertyNames = Companion.memberProperties(eventType)
+        val eventPropertyNames = memberProperties(eventType)
         return event(eventName, eventPropertyNames) { propertiesAsString ->
             val props: T = gson.fromJson(propertiesAsString)
             try {

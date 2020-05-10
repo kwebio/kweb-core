@@ -4,8 +4,6 @@ import kweb.CookieReceiver
 import kweb.Element
 import kweb.Kweb
 import kweb.WebBrowser
-import kweb.dom.element.storage.StorageReceiver
-import kweb.dom.element.storage.StorageType
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript

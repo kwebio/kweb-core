@@ -1,4 +1,4 @@
-package kweb.dom.element.read
+package kweb.html
 
 import kweb.Element
 import kweb.KWebDSL

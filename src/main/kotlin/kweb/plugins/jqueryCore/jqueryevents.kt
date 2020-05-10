@@ -1,7 +1,7 @@
 package kweb.plugins.jqueryCore
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.dom.element.events.ONReceiver
+import kweb.html.events.ONReceiver
 import kweb.gson
 import kweb.random
 import kweb.toJson

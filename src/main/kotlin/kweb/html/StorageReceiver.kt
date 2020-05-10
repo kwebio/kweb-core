@@ -1,4 +1,4 @@
-package kweb.dom.element.storage
+package kweb.html
 
 import com.github.salomonbrys.kotson.fromJson
 import kweb.KWebDSL

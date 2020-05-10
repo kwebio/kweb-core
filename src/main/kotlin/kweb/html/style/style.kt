@@ -1,4 +1,4 @@
-package kweb.dom.style
+package kweb.html.style
 
 import kweb.Element
 
