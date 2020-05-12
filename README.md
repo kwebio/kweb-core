@@ -24,7 +24,7 @@ fun main() {
 }
 ```
 
-### Learn More
+### Learn More...
 
 * [User Manual](http://docs.kweb.io/)
 * [Live Example](http://demo.kweb.io:7659/)
