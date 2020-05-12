@@ -4,8 +4,25 @@
 
 Kweb is a new way to create beautiful, efficient, and scalable websites in Kotlin, quickly.
 
-Please see [Kweb user manual](http://docs.kweb.io/) for more information.
+```kotlin
+import kweb.*
 
-This chart shows the number of people who have starred this repository, over time, likely a good indicator of interest:
+fun main() {
+  Kweb(port = 16097) {
+    doc.body.new {
+      h1().text("Hello World!")
+    }
+ }
+}
+```
 
-[![Stargazers over time](https://starchart.cc/kwebio/kweb-core.svg)](https://starchart.cc/kwebio/kweb-core)
+Modern websites consist of at least two tightly coupled components, one runs in the browser, the other on the server. These are often written in different programming languages and must communicate with each other over an HTTP connection.
+
+Kweb’s goal is to eliminate this server/browser separation so that your webapp’s architecture is determined by the problem you’re solving, rather than the limitations of today’s tools.
+
+* [User Manual](http://docs.kweb.io/)
+* [Live Example](http://demo.kweb.io:7659/)
+* [Template Repo](https://github.com/kwebio/kweb-template)
+* [Example Projects](https://github.com/kwebio/kweb-demos)
+* [Support](https://github.com/kwebio/kweb-core/issues)
+* [FAQ](http://docs.kweb.io/en/latest/faq.html)
