@@ -8,7 +8,7 @@ Read [Getting Started](http://docs.kweb.io/en/latest/gettingstarted.html) from t
 
 ## Overview
 
-Kweb is a new way to create beautiful, efficient, and scalable websites in Kotlin, where server-browser communication is handled automatically.
+Kweb is a new way to create beautiful, efficient, and scalable websites in [Kotlin](https://kotlinlang.org/), where server-browser communication is handled automatically.
 
 ## Example
 
