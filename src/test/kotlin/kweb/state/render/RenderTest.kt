@@ -17,13 +17,6 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 
-/*
-fun main() {
-    RenderTestApp()
-    Thread.sleep(1000000)
-}
-
-*/
 @ExtendWith(SeleniumExtension::class)
 class RenderTest {
     companion object {
