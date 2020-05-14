@@ -4,7 +4,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
 import io.mola.galimatias.URL
 import kweb.combine
-import kweb.pathQueryFragment
+import kweb.util.pathQueryFragment
 
 class KVarSpec : FreeSpec({
     "a KVar with value `dog`" - {

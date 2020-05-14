@@ -1,8 +1,8 @@
 package kweb.plugins.chartJs
 
 import kweb.CanvasElement
-import kweb.random
-import kweb.toJson
+import kweb.util.random
+import kweb.util.toJson
 import java.time.Instant
 
 class Chart(canvas: CanvasElement, chartConfig: ChartConfig) {

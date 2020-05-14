@@ -37,6 +37,7 @@ import kweb.client.ClientConnection.Caching
 import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
+import kweb.util.*
 import org.jsoup.nodes.DataNode
 import java.io.Closeable
 import java.time.Duration
