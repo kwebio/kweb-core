@@ -48,15 +48,4 @@ class KVarSpec : FreeSpec({
             kvarPair.second.value shouldBe 10
         }
     }
-
-    "KVar<URL>.pqf" - {
-        "Should correctly extract and replace URL portion after origin" {
-            val orig = URL.parse("http://myhost:322/aba?k=5#12")
-            val kv = KVar(orig)
-            val orkv = kv.pathQueryFragment
-            orkv.value shouldBe "/aba?k=5#12"
-            orkv.value = "/trd?p=25#4"
-            kv.value shouldBe URL.parse("http://myhost:322/trd?p=25#4")
-        }
-    }
 })
