@@ -1,13 +1,15 @@
-package kweb.html.events
+package kweb.html.events.receiver
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.dom.element.events.ONReceiver
+import kweb.KWebDSL
 import kweb.gson
+import kweb.html.events.EventGenerator
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
+@KWebDSL
 class NewOnReceiver<T : EventGenerator<T>>(private val source: T, private val retrieveJs: String? = null) {
 
     val logger = KotlinLogging.logger {}

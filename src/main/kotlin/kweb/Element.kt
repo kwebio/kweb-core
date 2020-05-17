@@ -7,20 +7,19 @@ import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.dom.style.StyleReceiver
 import kweb.html.events.EventGenerator
-import kweb.html.events.KeyboardEvents
-import kweb.html.events.MouseEvents
-import kweb.html.events.NewOnReceiver
+import kweb.html.events.receiver.KeyboardEventsReceiver
+import kweb.html.events.receiver.MouseEventsReceiver
+import kweb.html.events.receiver.NewOnReceiver
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.state.KVar
-import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.reflect.KClass
 
 @KWebDSL
 open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
-        EventGenerator<Element>, KeyboardEvents, MouseEvents {
+        EventGenerator<Element>, KeyboardEventsReceiver, MouseEventsReceiver {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods

@@ -4,8 +4,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
 import kweb.*
-import kweb.html.events.click
-import kweb.html.events.keypress
+import kweb.html.events.receiver.click
+import kweb.html.events.receiver.keypress
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.*
@@ -146,7 +146,7 @@ class TodoApp {
                 }
             }
             button(fomantic.ui.button).text("Add").apply {
-                on.click {
+                newOn.click {
                     handleAddItem(input, list)
                 }
             }
