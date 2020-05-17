@@ -1,4 +1,4 @@
-package kweb.html.events
+package kweb.html.events.receiver
 
 import java.util.*
 

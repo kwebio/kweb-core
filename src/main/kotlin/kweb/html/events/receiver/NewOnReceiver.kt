@@ -3,7 +3,6 @@ package kweb.html.events.receiver
 import com.github.salomonbrys.kotson.fromJson
 import kweb.KWebDSL
 import kweb.gson
-import kweb.html.events.EventGenerator
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass

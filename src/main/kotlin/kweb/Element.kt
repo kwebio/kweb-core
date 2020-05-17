@@ -6,7 +6,7 @@ import kweb.dom.element.events.ONImmediateReceiver
 import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.dom.style.StyleReceiver
-import kweb.html.events.EventGenerator
+import kweb.html.events.receiver.EventGenerator
 import kweb.html.events.receiver.KeyboardEventsReceiver
 import kweb.html.events.receiver.MouseEventsReceiver
 import kweb.html.events.receiver.NewOnReceiver
