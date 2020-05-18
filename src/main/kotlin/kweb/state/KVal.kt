@@ -1,6 +1,6 @@
 package kweb.state
 
-import kweb.random
+import kweb.util.random
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedDeque

@@ -1,7 +1,7 @@
 package kweb.client
 
 import kweb.DebugInfo
-import kweb.gson
+import kweb.util.gson
 import java.time.Instant
 import java.util.*
 

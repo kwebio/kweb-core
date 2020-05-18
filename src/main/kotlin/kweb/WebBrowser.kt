@@ -8,6 +8,7 @@ import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
+import kweb.util.pathQueryFragment
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger

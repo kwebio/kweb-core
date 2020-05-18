@@ -1,10 +1,10 @@
 package kweb.plugins.jqueryCore
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.gson
 import kweb.html.events.MouseEvent
-import kweb.random
-import kweb.toJson
+import kweb.util.gson
+import kweb.util.random
+import kweb.util.toJson
 import java.util.*
 import kotlin.reflect.full.memberProperties
 

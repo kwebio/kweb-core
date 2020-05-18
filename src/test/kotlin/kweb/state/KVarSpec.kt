@@ -2,9 +2,7 @@ package kweb.state
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
-import io.mola.galimatias.URL
 import kweb.combine
-import kweb.pathQueryFragment
 
 class KVarSpec : FreeSpec({
     "a KVar with value `dog`" - {
@@ -37,7 +35,7 @@ class KVarSpec : FreeSpec({
 
     "a Pair of Kvars" - {
         val kvarPair = KVar(1) to KVar(2)
-        "should be convertable to a single KVar" {
+        "should be convertible to a single KVar" {
             val newKV = kvarPair.combine()
             newKV.value shouldBe (1 to 2)
             kvarPair.first.value = 5
@@ -46,17 +44,6 @@ class KVarSpec : FreeSpec({
             newKV.value = (9 to 10)
             kvarPair.first.value shouldBe 9
             kvarPair.second.value shouldBe 10
-        }
-    }
-
-    "KVar<URL>.pqf" - {
-        "Should correctly extract and replace URL portion after origin" {
-            val orig = URL.parse("http://myhost:322/aba?k=5#12")
-            val kv = KVar(orig)
-            val orkv = kv.pathQueryFragment
-            orkv.value shouldBe "/aba?k=5#12"
-            orkv.value = "/trd?p=25#4"
-            kv.value shouldBe URL.parse("http://myhost:322/trd?p=25#4")
         }
     }
 })

@@ -1,10 +1,12 @@
 package kweb.html
 
 import com.github.salomonbrys.kotson.toJson
-import kweb.*
-import kweb.dom.element.storage.StorageReceiver
-import kweb.dom.element.storage.StorageType
+import kweb.CookieReceiver
+import kweb.Element
+import kweb.Kweb
+import kweb.WebBrowser
 import kweb.html.events.*
+import kweb.util.random
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript

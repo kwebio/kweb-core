@@ -1,6 +1,6 @@
 package kweb.html.events
 
-import kweb.KWebDSL
+import kweb.util.KWebDSL
 
 @KWebDSL
 class NewOnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {

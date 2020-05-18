@@ -3,7 +3,7 @@ package kweb
 import com.github.salomonbrys.kotson.toJson
 import io.ktor.routing.RoutingPathSegmentKind
 import io.mola.galimatias.URL
-import kweb.dom.element.read.ElementReader
+import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
 import kweb.html.events.Event
@@ -11,6 +11,7 @@ import kweb.routing.PathTemplate
 import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF
 import kweb.state.*
+import kweb.util.pathQueryFragment
 import java.util.concurrent.CompletableFuture
 
 /*

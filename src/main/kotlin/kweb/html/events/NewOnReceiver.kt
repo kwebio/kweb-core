@@ -1,8 +1,8 @@
 package kweb.html.events
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.KWebDSL
-import kweb.gson
+import kweb.util.KWebDSL
+import kweb.util.gson
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
