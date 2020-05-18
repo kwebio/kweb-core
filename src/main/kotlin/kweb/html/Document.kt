@@ -4,8 +4,7 @@ import com.github.salomonbrys.kotson.toJson
 import kweb.*
 import kweb.dom.element.storage.StorageReceiver
 import kweb.dom.element.storage.StorageType
-import kweb.html.events.receiver.EventGenerator
-import kweb.html.events.receiver.NewOnReceiver
+import kweb.html.events.receiver.*
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -15,7 +14,7 @@ import kweb.html.events.receiver.NewOnReceiver
  *
  * @sample document_sample
  */
-class Document(val receiver: WebBrowser) : EventGenerator<Document> {
+class Document(val receiver: WebBrowser) : EventGenerator<Document>, KeyboardEventReceiver, MouseEventReceiver, EventReceiver {
     fun getElementById(id: String) = Element(receiver, null, "document.getElementById(\"$id\")", id = id)
 
     val cookie = CookieReceiver(receiver)
@@ -42,6 +41,18 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
      * Allows data to be stored in and retrieved from the browser's [session storage](https://www.w3schools.com/html/html5_webstorage.as).
      */
     val sessionStorage get() = StorageReceiver(receiver, StorageType.session)
+
+    override val browser = receiver
+
+    override fun addImmediateEventCode(eventName: String, jsCode: String) {
+        val wrappedJS = """
+            document.addEventListener(${eventName.toJson()}, function(event) {
+                $jsCode
+            });
+        """.trimIndent()
+        receiver.evaluate(wrappedJS)
+    }
+
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Document {
         val callbackId = Math.abs(random.nextInt())

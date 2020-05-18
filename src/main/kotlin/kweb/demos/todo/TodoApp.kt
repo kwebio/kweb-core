@@ -4,6 +4,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
 import kweb.*
+import kweb.html.events.receiver.Event
+import kweb.html.events.receiver.blur
 import kweb.html.events.receiver.click
 import kweb.html.events.receiver.keypress
 import kweb.plugins.fomanticUI.fomantic
@@ -33,6 +35,7 @@ class TodoApp {
          * http://localhost:7659/
          * */
         server = Kweb(port = 7659, debug = true, plugins = plugins, buildPage = {
+
             doc.head.new {
                 // Not required, but recommended by HTML spec
                 meta(name = "Description", content = "A simple To Do list app to demonstrate Kweb")
@@ -140,13 +143,13 @@ class TodoApp {
         }
         div(fomantic.ui.action.input).new {
             val input = input(InputType.text, placeholder = "Add Item")
-            input.newOn.keypress { ke ->
+            input.on.keypress { ke ->
                 if (ke.code == "Enter") {
                     handleAddItem(input, list)
                 }
             }
             button(fomantic.ui.button).text("Add").apply {
-                newOn.click {
+                on.click {
                     handleAddItem(input, list)
                 }
             }
@@ -167,7 +170,7 @@ class TodoApp {
         button.new {
             i(fomantic.trash.icon)
         }
-        button.newOn.click {
+        button.on.click {
             state.items.remove(item.value.uid)
         }
     }

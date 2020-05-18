@@ -14,6 +14,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.jetty.Jetty
 import io.ktor.websocket.WebSockets
 import kweb.*
+import kweb.html.events.receiver.click
 import kweb.state.KVar
 import java.time.Duration
 

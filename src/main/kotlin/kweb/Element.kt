@@ -3,13 +3,9 @@ package kweb
 import com.github.salomonbrys.kotson.toJson
 import kweb.client.Server2ClientMessage
 import kweb.dom.element.events.ONImmediateReceiver
-import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.dom.style.StyleReceiver
-import kweb.html.events.receiver.EventGenerator
-import kweb.html.events.receiver.KeyboardEventsReceiver
-import kweb.html.events.receiver.MouseEventsReceiver
-import kweb.html.events.receiver.NewOnReceiver
+import kweb.html.events.receiver.*
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.state.KVar
@@ -18,8 +14,8 @@ import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.reflect.KClass
 
 @KWebDSL
-open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
-        EventGenerator<Element>, KeyboardEventsReceiver, MouseEventsReceiver {
+open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
+        EventGenerator<Element>, KeyboardEventReceiver, MouseEventReceiver, EventReceiver {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
@@ -308,7 +304,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    fun addImmediateEventCode(eventName: String, jsCode: String) {
+    override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = jsExpression + """
             .addEventListener(${eventName.toJson()}, function(event) {
                 $jsCode
@@ -355,20 +351,19 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: ONReceiver get() = ONReceiver(this)
-
-    val newOn: NewOnReceiver<Element> get() = NewOnReceiver(this)
+    val on: NewOnReceiver<Element> get() = NewOnReceiver(this)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
      * be available via [Event.retrieveJs]
      */
-    fun on(retrieveJs: String) = ONReceiver(this, retrieveJs)
+    fun on(retrieveJs: String) = NewOnReceiver(this, retrieveJs)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
     val onImmediate: ONImmediateReceiver get() = ONImmediateReceiver(this)
+    val newOnImmediate get() = NewOnImmediateReceiver(this)
 }
 
 /**

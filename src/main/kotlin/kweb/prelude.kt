@@ -11,6 +11,7 @@ import kweb.routing.PathTemplate
 import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF
 import kweb.state.*
+import kweb.html.events.receiver.*
 import java.util.concurrent.CompletableFuture
 
 /*
