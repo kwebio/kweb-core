@@ -2,10 +2,9 @@ package kweb
 
 import com.github.salomonbrys.kotson.toJson
 import kweb.client.Server2ClientMessage
-import kweb.dom.element.events.ONImmediateReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.dom.style.StyleReceiver
-import kweb.html.events.receiver.*
+import kweb.html.events.*
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.state.KVar
@@ -362,8 +361,7 @@ open class Element(override val browser: WebBrowser, val creator: ElementCreator
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
-    val onImmediate: ONImmediateReceiver get() = ONImmediateReceiver(this)
-    val newOnImmediate get() = NewOnImmediateReceiver(this)
+    val onImmediate get() = NewOnImmediateReceiver(this)
 }
 
 /**

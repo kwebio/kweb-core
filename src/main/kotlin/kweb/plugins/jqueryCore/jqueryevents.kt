@@ -1,8 +1,8 @@
 package kweb.plugins.jqueryCore
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.dom.element.events.ONReceiver
 import kweb.gson
+import kweb.html.events.MouseEvent
 import kweb.random
 import kweb.toJson
 import java.util.*
@@ -33,16 +33,16 @@ open class JQueryOnReceiver(val parent: JQueryReceiver) {
     }
 
     // From http://www.w3schools.com/jquery/jquery_ref_events.asp, incomplete
-    fun blur(callback: (ONReceiver.MouseEvent) -> Unit) = event("blur", callback = callback)
-    fun click(callback: (ONReceiver.MouseEvent) -> Unit) = event("click", callback = callback)
-    fun dblclick(callback: (ONReceiver.MouseEvent) -> Unit) = event("dblclick", callback = callback)
-    fun focus(callback: (ONReceiver.MouseEvent) -> Unit) = event("focus", callback = callback)
-    fun focusin(callback: (ONReceiver.MouseEvent) -> Unit) = event("focusin", callback = callback)
-    fun focusout(callback: (ONReceiver.MouseEvent) -> Unit) = event("focusout", callback = callback)
-    fun hover(callback: (ONReceiver.MouseEvent) -> Unit) = event("hover", callback = callback)
-    fun mouseup(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseup", callback = callback)
-    fun mousedown(callback: (ONReceiver.MouseEvent) -> Unit) = event("mousedown", callback = callback)
-    fun mouseenter(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseenter", callback = callback)
-    fun mouseleave(callback: (ONReceiver.MouseEvent) -> Unit) = event("mouseleave", callback = callback)
-    fun mousemove(callback: (ONReceiver.MouseEvent) -> Unit) = event("mousemove", callback = callback)
+    fun blur(callback: (MouseEvent) -> Unit) = event("blur", callback = callback)
+    fun click(callback: (MouseEvent) -> Unit) = event("click", callback = callback)
+    fun dblclick(callback: (MouseEvent) -> Unit) = event("dblclick", callback = callback)
+    fun focus(callback: (MouseEvent) -> Unit) = event("focus", callback = callback)
+    fun focusin(callback: (MouseEvent) -> Unit) = event("focusin", callback = callback)
+    fun focusout(callback: (MouseEvent) -> Unit) = event("focusout", callback = callback)
+    fun hover(callback: (MouseEvent) -> Unit) = event("hover", callback = callback)
+    fun mouseup(callback: (MouseEvent) -> Unit) = event("mouseup", callback = callback)
+    fun mousedown(callback: (MouseEvent) -> Unit) = event("mousedown", callback = callback)
+    fun mouseenter(callback: (MouseEvent) -> Unit) = event("mouseenter", callback = callback)
+    fun mouseleave(callback: (MouseEvent) -> Unit) = event("mouseleave", callback = callback)
+    fun mousemove(callback: (MouseEvent) -> Unit) = event("mousemove", callback = callback)
 }

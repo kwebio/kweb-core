@@ -1,4 +1,4 @@
-package kweb.html.events.receiver
+package kweb.html.events
 
 interface EventReceiver
 

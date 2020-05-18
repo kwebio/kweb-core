@@ -3,7 +3,7 @@ package kweb.routing
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
 import kweb.*
-import kweb.html.events.receiver.click
+import kweb.html.events.click
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction

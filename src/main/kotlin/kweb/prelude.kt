@@ -3,15 +3,14 @@ package kweb
 import com.github.salomonbrys.kotson.toJson
 import io.ktor.routing.RoutingPathSegmentKind
 import io.mola.galimatias.URL
-import kweb.dom.element.events.ONReceiver
 import kweb.dom.element.read.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
+import kweb.html.events.Event
 import kweb.routing.PathTemplate
 import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF
 import kweb.state.*
-import kweb.html.events.receiver.*
 import java.util.concurrent.CompletableFuture
 
 /*
@@ -251,7 +250,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
-        on(retrieveJs = "${jsExpression}.value").event(updateOn, ONReceiver.Event::class) {
+        on(retrieveJs = "${jsExpression}.value").event(updateOn, Event::class) {
             toBind.value = it.retrieved ?: error("No value was retrieved")
         }
     }

@@ -1,4 +1,4 @@
-package kweb.html.events.receiver
+package kweb.html.events
 
 import com.github.salomonbrys.kotson.fromJson
 import kweb.KWebDSL
@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
 @KWebDSL
-class NewOnReceiver<T : EventGenerator<T>>(private val source: T, private val retrieveJs: String? = null) {
+class NewOnReceiver<T : EventGenerator<T>>(internal val source: T, private val retrieveJs: String? = null) {
 
     val logger = KotlinLogging.logger {}
 

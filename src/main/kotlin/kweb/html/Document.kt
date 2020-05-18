@@ -4,7 +4,7 @@ import com.github.salomonbrys.kotson.toJson
 import kweb.*
 import kweb.dom.element.storage.StorageReceiver
 import kweb.dom.element.storage.StorageType
-import kweb.html.events.receiver.*
+import kweb.html.events.*
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -69,5 +69,19 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document>, KeyboardEve
         return this
     }
 
+    /**
+     * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
+     */
     val on: NewOnReceiver<Document> get() = NewOnReceiver(this)
+
+    /**
+     * You can supply a javascript expression `retrieveJs` which will
+     * be available via [Event.retrieveJs]
+     */
+    fun on(retrieveJs: String) = NewOnReceiver(this, retrieveJs)
+
+    /**
+     * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
+     */
+    val onImmediate get() = NewOnImmediateReceiver(this)
 }
