@@ -2,7 +2,9 @@ package kweb.html.events
 
 import kweb.Element
 import kweb.InputElement
-import kweb.html.events.ONReceiver.KeyboardEvent
+import kweb.html.events.KeyboardEvent
+import kweb.html.events.NewOnImmediateReceiver
+import kweb.html.events.NewOnReceiver
 
 private const val ENTER_PRESSED_EVENT_ATTACHED_FLAG = "enterPressedEventAttached"
 
@@ -27,12 +29,12 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
     """.trimIndent())
 }
 
-fun ONReceiver.keySpecificKeyup(callback: (event: KeyboardEvent) -> Unit): Element {
-    require(parent.flags.contains(ENTER_PRESSED_EVENT_ATTACHED_FLAG)) { "InputElement.attachKeySpecificKeyupEvent() must be called before listening for keySpecificKeyup" }
+fun NewOnReceiver<Element>.keySpecificKeyup(callback: (event: KeyboardEvent) -> Unit): Element {
+    require(source.flags.contains(ENTER_PRESSED_EVENT_ATTACHED_FLAG)) { "InputElement.attachKeySpecificKeyupEvent() must be called before listening for keySpecificKeyup" }
     return this.event("keySpecificKeyUpEvent", eventType = KeyboardEvent::class, callback = callback)
 }
 
-fun ONImmediateReceiver.keySpecificKeyup(callback: () -> Unit): Element {
-    require(parent.flags.contains(ENTER_PRESSED_EVENT_ATTACHED_FLAG)) { "InputElement.attachKeySpecificKeyupEvent() must be called before listening for keySpecificKeyup" }
+fun NewOnImmediateReceiver<Element>.keySpecificKeyup(callback: () -> Unit): Element {
+    require(source.flags.contains(ENTER_PRESSED_EVENT_ATTACHED_FLAG)) { "InputElement.attachKeySpecificKeyupEvent() must be called before listening for keySpecificKeyup" }
     return event("keySpecificKeyUpEvent", callback = callback)
 }

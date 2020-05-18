@@ -3,23 +3,22 @@ package kweb
 import com.github.salomonbrys.kotson.toJson
 import kweb.client.Server2ClientMessage
 import kweb.html.ElementReader
-import kweb.html.events.ONImmediateReceiver
-import kweb.html.events.ONReceiver
 import kweb.html.style.StyleReceiver
+import kweb.html.events.*
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.state.KVar
 import kweb.util.KWebDSL
+import java.util.concurrent.CompletableFuture
 import kweb.util.escapeEcma
 import kweb.util.random
 import kweb.util.toJson
-import java.util.*
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.reflect.KClass
 
 @KWebDSL
-open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) {
+open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
+        EventGenerator<Element>, KeyboardEventReceiver, MouseEventReceiver, EventReceiver {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
@@ -308,7 +307,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         return this
     }
 
-    fun addImmediateEventCode(eventName: String, jsCode: String) {
+    override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = jsExpression + """
             .addEventListener(${eventName.toJson()}, function(event) {
                 $jsCode
@@ -317,7 +316,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         browser.evaluate(wrappedJS)
     }
 
-    fun addEventListener(eventName: String, returnEventFields: Set<String> = Collections.emptySet(), retrieveJs: String?, callback: (Any) -> Unit): Element {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + retrieveJs + "}"
@@ -334,6 +333,7 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
         }
         return this
     }
+
 
     fun delete() {
         execute("$jsExpression.parentNode.removeChild($jsExpression);")
@@ -354,18 +354,18 @@ open class Element(open val browser: WebBrowser, val creator: ElementCreator<*>?
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: ONReceiver get() = ONReceiver(this)
+    val on: NewOnReceiver<Element> get() = NewOnReceiver(this)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
      * be available via [Event.retrieveJs]
      */
-    fun on(retrieveJs: String) = ONReceiver(this, retrieveJs)
+    fun on(retrieveJs: String) = NewOnReceiver(this, retrieveJs)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
-    val onImmediate: ONImmediateReceiver get() = ONImmediateReceiver(this)
+    val onImmediate get() = NewOnImmediateReceiver(this)
 }
 
 /**
