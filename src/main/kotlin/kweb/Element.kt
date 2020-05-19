@@ -354,18 +354,18 @@ open class Element(override val browser: WebBrowser, val creator: ElementCreator
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: NewOnReceiver<Element> get() = NewOnReceiver(this)
+    val on: OnReceiver<Element> get() = OnReceiver(this)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
      * be available via [Event.retrieveJs]
      */
-    fun on(retrieveJs: String) = NewOnReceiver(this, retrieveJs)
+    fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
-    val onImmediate get() = NewOnImmediateReceiver(this)
+    val onImmediate get() = OnImmediateReceiver(this)
 }
 
 /**

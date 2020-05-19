@@ -1,7 +1,7 @@
 package kweb.plugins.jqueryCore
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.html.events.MouseEvent
+import kweb.MouseEvent
 import kweb.util.gson
 import kweb.util.random
 import kweb.util.toJson

@@ -1,10 +1,7 @@
 package kweb.html
 
 import com.github.salomonbrys.kotson.toJson
-import kweb.CookieReceiver
-import kweb.Element
-import kweb.Kweb
-import kweb.WebBrowser
+import kweb.*
 import kweb.html.events.*
 import kweb.util.random
 
@@ -74,16 +71,16 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document>, KeyboardEve
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: NewOnReceiver<Document> get() = NewOnReceiver(this)
+    val on: OnReceiver<Document> get() = OnReceiver(this)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
      * be available via [Event.retrieveJs]
      */
-    fun on(retrieveJs: String) = NewOnReceiver(this, retrieveJs)
+    fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
-    val onImmediate get() = NewOnImmediateReceiver(this)
+    val onImmediate get() = OnImmediateReceiver(this)
 }
