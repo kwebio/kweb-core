@@ -101,6 +101,10 @@ class OnReceiver<T : EventGenerator<T>>(internal val source: T, private val retr
     fun afterprint(callback: (event: Event) -> Unit) = event("afterprint", eventType = Event::class, callback = callback)
     fun beforeprint(callback: (event: Event) -> Unit) = event("beforeprint", eventType = Event::class, callback = callback)
 
+    // Selection Events TODO: define eventtype
+    fun selectstart(callback: (event: Event) -> Unit) = event("selectstart", eventType = Event::class, callback = callback)
+    fun selectionchange(callback: (event: Event) -> Unit) = event("selectionchange", eventType = Event::class, callback = callback)
+
     /*
     // Media Events TODO: define eventtype
     fun abort(callback: (event: Event) -> Unit) = event("abort", eventType = Event::class, callback = callback)

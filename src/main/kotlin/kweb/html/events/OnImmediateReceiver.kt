@@ -75,6 +75,10 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
     fun afterprint(callback: () -> Unit) = event("afterprint", callback)
     fun beforeprint(callback: () -> Unit) = event("beforeprint", callback)
 
+    // Selection Events
+    fun selectstart(callback: () -> Unit) = event("selectstart", callback = callback)
+    fun selectionchange(callback: () -> Unit) = event("selectionchange",  callback = callback)
+
     // Media events
     /*
     fun abort(callback: () -> Unit) = event("abort", callback)
