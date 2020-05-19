@@ -16,7 +16,7 @@ import kweb.util.random
  *
  * @sample document_sample
  */
-class Document(val receiver: WebBrowser) : EventGenerator<Document>, KeyboardEventReceiver, MouseEventReceiver, EventReceiver {
+class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     fun getElementById(id: String) = Element(receiver, null, "document.getElementById(\"$id\")", id = id)
 
     val cookie = CookieReceiver(receiver)

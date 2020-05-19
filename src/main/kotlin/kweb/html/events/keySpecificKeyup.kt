@@ -2,7 +2,6 @@ package kweb.html.events
 
 import kweb.Element
 import kweb.InputElement
-import kweb.KeyboardEvent
 
 private const val ENTER_PRESSED_EVENT_ATTACHED_FLAG = "enterPressedEventAttached"
 

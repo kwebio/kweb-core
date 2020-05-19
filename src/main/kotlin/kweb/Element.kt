@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
 
 @KWebDSL
 open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
-        EventGenerator<Element>, KeyboardEventReceiver, MouseEventReceiver, EventReceiver {
+        EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
     /*********
      ********* Low level methods
