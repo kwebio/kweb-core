@@ -2,7 +2,10 @@ package kweb.html
 
 import com.github.salomonbrys.kotson.toJson
 import kweb.*
-import kweb.html.events.*
+import kweb.html.events.Event
+import kweb.html.events.EventGenerator
+import kweb.html.events.OnImmediateReceiver
+import kweb.html.events.OnReceiver
 import kweb.util.random
 
 /**

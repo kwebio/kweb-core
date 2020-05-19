@@ -5,7 +5,7 @@ import kweb.plugins.KwebPlugin
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.DocumentType
 import org.jsoup.nodes.Element
-import java.util.HashSet
+import java.util.*
 
 internal object HtmlDocumentSupplier {
     val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins

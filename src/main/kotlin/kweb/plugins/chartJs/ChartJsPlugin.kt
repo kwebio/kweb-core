@@ -1,10 +1,6 @@
 package kweb.plugins.chartJs
 
-import kweb.Kweb
-import kweb.canvas
-import kweb.new
 import kweb.plugins.KwebPlugin
-import kweb.plugins.chartJs.ChartType.line
 import org.jsoup.nodes.Document
 
 class ChartJsPlugin : KwebPlugin() {

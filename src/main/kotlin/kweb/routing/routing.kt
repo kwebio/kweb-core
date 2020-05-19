@@ -3,7 +3,6 @@ package kweb.routing
 import io.ktor.routing.RoutingPathSegment
 import kweb.*
 import kweb.state.KVar
-import mu.KotlinLogging
 
 /**
  * @sample testSampleForRouting

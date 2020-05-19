@@ -1,8 +1,8 @@
 package kweb.html
 
 import com.github.salomonbrys.kotson.fromJson
-import kweb.util.KWebDSL
 import kweb.WebBrowser
+import kweb.util.KWebDSL
 import kweb.util.gson
 import kweb.util.toJson
 import java.util.concurrent.CompletableFuture
