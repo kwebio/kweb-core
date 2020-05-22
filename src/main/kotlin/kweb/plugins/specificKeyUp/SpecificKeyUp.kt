@@ -2,7 +2,7 @@ package kweb.plugins.specificKeyUp
 
 import kweb.Element
 import kweb.InputElement
-import kweb.KeyboardEvent
+import kweb.html.events.KeyboardEvent
 import kweb.html.events.OnImmediateReceiver
 import kweb.html.events.OnReceiver
 import kweb.plugins.KwebPlugin
