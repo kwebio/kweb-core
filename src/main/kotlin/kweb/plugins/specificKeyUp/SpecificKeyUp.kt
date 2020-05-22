@@ -1,7 +1,19 @@
-package kweb.html.events
+package kweb.plugins.specificKeyUp
 
 import kweb.Element
 import kweb.InputElement
+import kweb.html.events.KeyboardEvent
+import kweb.html.events.OnImmediateReceiver
+import kweb.html.events.OnReceiver
+import kweb.plugins.KwebPlugin
+
+/**
+ * @author sanity
+ *
+ * This plugin allows registering a listener on a specific key to avoid sending all `keyup` events
+ * to the backend.
+ */
+object SpecificKeyUpPlugin : KwebPlugin()
 
 private const val ENTER_PRESSED_EVENT_ATTACHED_FLAG = "enterPressedEventAttached"
 
@@ -11,7 +23,7 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
     flags += ENTER_PRESSED_EVENT_ATTACHED_FLAG
     this.execute("""
         $jsExpression.addEventListener("keyup", function(origEvent) {
-            var keys = [${keys.map { "\"$it\"" }.joinToString(separator = ",")}]
+            var keys = [${keys.joinToString(separator = ",") { "\"$it\"" }}]
             if (keys.includes(origEvent.key)) {
                 if (window.CustomEvent) {
                   var keySpecificKeyUpEvent = new CustomEvent('keySpecificKeyUpEvent');
