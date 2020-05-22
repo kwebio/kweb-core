@@ -16,7 +16,7 @@ import kweb.util.random
  *
  * @sample document_sample
  */
-class Document(val receiver: WebBrowser) : EventGenerator<Document>, KeyboardEventReceiver, MouseEventReceiver, EventReceiver {
+class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     fun getElementById(id: String) = Element(receiver, null, "document.getElementById(\"$id\")", id = id)
 
     val cookie = CookieReceiver(receiver)
@@ -59,7 +59,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document>, KeyboardEve
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Document {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
-        val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + retrieveJs + "}"
+        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
             document.addEventListener(${eventName.toJson()}, function(event) {
                 callbackWs($callbackId, $eventObject);
