@@ -13,7 +13,7 @@ import kweb.plugins.KwebPlugin
  * This plugin allows registering a listener on a specific key to avoid sending all `keyup` events
  * to the backend.
  */
-class SpecificKeyUpPlugin : KwebPlugin()
+object SpecificKeyUpPlugin : KwebPlugin()
 
 private const val ENTER_PRESSED_EVENT_ATTACHED_FLAG = "enterPressedEventAttached"
 
