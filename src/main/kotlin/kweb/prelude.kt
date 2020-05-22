@@ -143,7 +143,7 @@ fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null,
 }
 
 open class InputElement(override val element: Element) : ValueElement(element) {
-    fun checked(checked: Boolean) = setAttributeRaw("checked", checked)
+    fun checked(checked: Boolean) = if(checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
 
 
     fun select() = element.execute("$jsExpression.select();")
