@@ -61,7 +61,8 @@ class TodoApp {
                                 doc.head.new {
                                     title().text("To Do List #${params.getValue("id").value}")
                                 }
-                                render(params.getValue("id")) { listId ->
+                                span().render(params.getValue("id")) { listId ->
+//                                render(params.getValue("id")) { listId ->
                                     logger.info("Rendering list id $listId")
 
                                     try {

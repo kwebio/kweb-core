@@ -5,11 +5,13 @@ import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
+import kweb.state.KVal
 import kweb.util.KWebDSL
 import kweb.util.toJson
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
 /**

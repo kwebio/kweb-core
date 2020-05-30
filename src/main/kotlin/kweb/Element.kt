@@ -17,6 +17,7 @@ import kweb.util.random
 import kweb.util.toJson
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentSkipListSet
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
 @KWebDSL
@@ -369,6 +370,68 @@ open class Element(override val browser: WebBrowser, val creator: ElementCreator
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
     val onImmediate get() = OnImmediateReceiver(this)
+
+    private enum class RenderState {
+        NOT_RENDERING, RENDERING_NO_PENDING_CHANGE, RENDERING_WITH_PENDING_CHANGE
+    }
+
+    fun <T : Any?> render(kval: KVal<T>, block: ElementCreator<Element>.(T) -> Unit) {
+
+        val containerSpan = this
+
+        val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
+
+        val renderState = AtomicReference(RenderState.NOT_RENDERING)
+
+        fun eraseAndRender() {
+            do {
+                containerSpan.removeChildren()
+                containerSpan.new {
+                    previousElementCreator.getAndSet(this)?.cleanup()
+                    renderState.set(RenderState.RENDERING_NO_PENDING_CHANGE)
+                    block(kval.value)
+                    if (renderState.get() == RenderState.RENDERING_NO_PENDING_CHANGE) {
+                        renderState.set(RenderState.NOT_RENDERING)
+                    }
+                }
+            } while (renderState.get() != RenderState.NOT_RENDERING)
+        }
+
+        val listenerHandle = kval.addListener { _, _ ->
+            when (renderState.get()) {
+                RenderState.NOT_RENDERING -> {
+                    eraseAndRender()
+                }
+                RenderState.RENDERING_NO_PENDING_CHANGE -> {
+                    renderState.set(RenderState.RENDERING_WITH_PENDING_CHANGE)
+                }
+                else -> {
+                    // This space intentionally left blank
+                }
+            }
+        }
+
+        containerSpan.new {
+            previousElementCreator.getAndSet(this)?.cleanup()
+            renderState.set(RenderState.RENDERING_NO_PENDING_CHANGE)
+            block(kval.value)
+            if (renderState.get() == RenderState.RENDERING_WITH_PENDING_CHANGE) {
+                eraseAndRender()
+            } else {
+                renderState.set(RenderState.NOT_RENDERING)
+            }
+
+        }
+
+//        this.onCleanup(false) {
+//            containerSpan.deleteIfExists()
+//        }
+
+//        this.onCleanup(true) {
+//            previousElementCreator.getAndSet(null)?.cleanup()
+//            kval.removeListener(listenerHandle)
+//        }
+    }
 }
 
 /**
