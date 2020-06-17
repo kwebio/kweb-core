@@ -1,10 +1,12 @@
-package kweb.dom
+package kweb.html
 
+import com.github.salomonbrys.kotson.toJson
 import kweb.*
-import kweb.dom.element.storage.StorageReceiver
-import kweb.dom.element.storage.StorageType
-import kweb.html.BodyElement
-import kweb.html.HeadElement
+import kweb.html.events.Event
+import kweb.html.events.EventGenerator
+import kweb.html.events.OnImmediateReceiver
+import kweb.html.events.OnReceiver
+import kweb.util.random
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -14,7 +16,7 @@ import kweb.html.HeadElement
  *
  * @sample document_sample
  */
-class Document(val receiver: WebBrowser) {
+class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     fun getElementById(id: String) = Element(receiver, null, "document.getElementById(\"$id\")", id = id)
 
     val cookie = CookieReceiver(receiver)
@@ -41,14 +43,47 @@ class Document(val receiver: WebBrowser) {
      * Allows data to be stored in and retrieved from the browser's [session storage](https://www.w3schools.com/html/html5_webstorage.as).
      */
     val sessionStorage get() = StorageReceiver(receiver, StorageType.session)
-}
+
+    override val browser = receiver
+
+    override fun addImmediateEventCode(eventName: String, jsCode: String) {
+        val wrappedJS = """
+            document.addEventListener(${eventName.toJson()}, function(event) {
+                $jsCode
+            });
+        """.trimIndent()
+        receiver.evaluate(wrappedJS)
+    }
 
 
-private fun document_sample() {
-    Kweb(port = 1234, buildPage = {
-        doc.body.new {
-            h1().text("Hello World!")
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Document {
+        val callbackId = Math.abs(random.nextInt())
+        val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
+        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
+        val js = """
+            document.addEventListener(${eventName.toJson()}, function(event) {
+                callbackWs($callbackId, $eventObject);
+            });
+        """
+        receiver.executeWithCallback(js, callbackId) { payload ->
+            callback.invoke(payload)
         }
-    })
-}
+        return this
+    }
 
+    /**
+     * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
+     */
+    val on: OnReceiver<Document> get() = OnReceiver(this)
+
+    /**
+     * You can supply a javascript expression `retrieveJs` which will
+     * be available via [Event.retrieveJs]
+     */
+    fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
+
+    /**
+     * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
+     */
+    val onImmediate get() = OnImmediateReceiver(this)
+}

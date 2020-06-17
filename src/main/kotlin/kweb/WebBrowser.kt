@@ -3,10 +3,12 @@ package kweb
 import io.mola.galimatias.URL
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage.Instruction
-import kweb.dom.Document
+import kweb.html.Document
+import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
+import kweb.util.pathQueryFragment
 import mu.KotlinLogging
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger
@@ -39,7 +41,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
-        kweb.appliedPlugins.map { it::class to it }.toMap()
+        HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -118,9 +120,18 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         """.trimIndent())
     }
 
-    fun <T : Any> url(mapper: (String) -> T) = url.map(mapper)
+    /**
+     * The absolute URL of the page, mapped to a [io.mola.galimatias.URL](http://galimatias.mola.io/apidocs/0.2.0/io/mola/galimatias/URL.html) for convenience.
+     */
+    val gurl : KVar<URL> = url.map(object : ReversibleFunction<String, URL>(label = "gurl") {
+        override fun invoke(from: String): URL {
+            return URL.parse(this@WebBrowser.httpRequestInfo.requestedUrl).resolve(from)
+        }
 
-    fun <T : Any> url(func: ReversibleFunction<String, T>) = url.map(func)
+        override fun reverse(original: String, change: URL): String {
+            return change.pathQueryFragment
+        }
+    } )
 
 }
 

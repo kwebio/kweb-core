@@ -1,21 +1,18 @@
 package kweb
 
 import com.github.salomonbrys.kotson.fromJson
-import io.ktor.application.Application
-import io.ktor.application.ApplicationFeature
-import io.ktor.application.call
-import io.ktor.application.install
+import io.ktor.application.*
 import io.ktor.features.Compression
 import io.ktor.features.DefaultHeaders
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.cio.websocket.DefaultWebSocketSession
 import io.ktor.http.cio.websocket.Frame.Text
 import io.ktor.http.cio.websocket.pingPeriod
 import io.ktor.http.cio.websocket.readText
 import io.ktor.http.cio.websocket.timeout
 import io.ktor.request.uri
 import io.ktor.response.respondText
-import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.EngineSSLConnectorConfig
@@ -34,10 +31,10 @@ import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
 import kweb.client.Server2ClientMessage.Instruction
+import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
+import kweb.util.*
 import org.jsoup.nodes.DataNode
-import org.jsoup.nodes.Document
-import org.jsoup.nodes.DocumentType
 import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
@@ -46,18 +43,17 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
-import org.jsoup.nodes.Element as JsoupElement
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
 
 class Kweb private constructor(
         val debug: Boolean,
-        val plugins: List<KwebPlugin>,
-        val buildPage: WebBrowser.() -> Unit
+        val plugins: List<KwebPlugin>
 ) : Closeable {
 
     /**
+     *
      * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
      * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
      * between browser and server.
@@ -75,14 +71,14 @@ class Kweb private constructor(
             plugins: List<KwebPlugin> = Collections.emptyList(),
             httpsConfig: EngineSSLConnectorConfig? = null,
             buildPage: WebBrowser.() -> Unit
-    ) : this(debug, plugins, buildPage) {
+    ) : this(debug, plugins) {
         logger.info("Initializing Kweb listening on port $port")
 
         if (debug) {
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-        server = createServer(port, httpsConfig)
+        server = createServer(port, httpsConfig, buildPage)
 
         server!!.start()
         logger.info { "KWeb is listening on port $port" }
@@ -107,30 +103,33 @@ class Kweb private constructor(
      *     }
      * ```
      *
-     * See FeatureApp.kt for an example.
+     * @see kweb.demos.feature.kwebFeature for an example
      */
     companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
         class Configuration {
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
-            lateinit var buildPage: WebBrowser.() -> Unit
+            @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
+            var buildPage: (WebBrowser.() -> Unit)? = null
         }
 
         override val key = AttributeKey<Kweb>("Kweb")
 
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
-            val feature = Kweb(configuration.debug, configuration.plugins, configuration.buildPage)
-            feature.setupKweb(pipeline)
+            val feature = Kweb(configuration.debug, configuration.plugins)
+
+            configuration.buildPage?.let {
+                logger.info { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
+                pipeline.installKwebOnRemainingRoutes(it)
+            }
+            feature.installRequiredKwebComponents(pipeline)
+
             return feature
         }
     }
 
     private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
-
-
-    private val mutableAppliedPlugins: MutableSet<KwebPlugin> = HashSet()
-    val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
 
     private var server: JettyApplicationEngine? = null
 
@@ -217,7 +216,7 @@ class Kweb private constructor(
         server?.stop(0, 0)
     }
 
-    private fun createServer(port: Int, httpsConfig: EngineSSLConnectorConfig?): JettyApplicationEngine {
+    private fun createServer(port: Int, httpsConfig: EngineSSLConnectorConfig?, buildPage: WebBrowser.() -> Unit): JettyApplicationEngine {
         return embeddedServer(Jetty, applicationEngineEnvironment {
             this.module {
                 install(DefaultHeaders)
@@ -227,7 +226,7 @@ class Kweb private constructor(
                     timeout = Duration.ofSeconds(30)
                 }
 
-                setupKweb(this)
+                setupKweb(this, buildPage)
             }
 
             connector {
@@ -240,11 +239,9 @@ class Kweb private constructor(
         })
     }
 
-    private fun setupKweb(application: Application) {
+    private fun setupKweb(application: Application, buildPage: WebBrowser.() -> Unit) {
 
         application.routing {
-
-            val htmlDocumentSupplier = createHtmlDocumentSupplier()
 
             get("/robots.txt") {
                 call.response.status(HttpStatusCode.NotFound)
@@ -256,10 +253,23 @@ class Kweb private constructor(
                 call.respondText("favicons not currently supported by kweb")
             }
 
-            // It's important to use a clone of the template because the result will be modified
-            listenForHTTPConnection(htmlDocumentSupplier.invoke())
+            get("/{visitedUrl...}") {
+                respondKweb(call, buildPage)
+            }
 
-            listenForWebsocketConnection()
+        }
+
+        installRequiredKwebComponents(application)
+    }
+
+    // We can't convert this param to receiver because it's called on receiver in the companion Feature
+    private fun installRequiredKwebComponents(application: Application) {
+        HtmlDocumentSupplier.createDocTemplate(plugins, application.routing {  })
+
+        application.routing {
+            webSocket("/ws") {
+                listenForWebsocketConnection()
+            }
         }
 
         GlobalScope.launch {
@@ -270,134 +280,93 @@ class Kweb private constructor(
         }
     }
 
-    private fun Routing.createHtmlDocumentSupplier(): () -> Document {
-        val docTemplate = Document("") // TODO: What should this base URL be?
+    private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
+        val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
 
-        docTemplate.appendChild(DocumentType("html", "", ""))
-
-        docTemplate.appendElement("html").let { html: JsoupElement ->
-
-            html.appendElement("head").let { head: JsoupElement ->
-
-                head.appendElement("meta")
-                        .attr("name", "viewport")
-                        .attr("content", "width=device-width, initial-scale=1.0")
-            }
-
-            html.appendElement("body").let { body: JsoupElement ->
-
-                body.attr("onload", "buildPage()")
-                body.appendElement("noscript")
-                        .html(
-                                """
-                            | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
-                            | requires JavaScript to be enabled.""".trimMargin())
-            }
-        }
-        for (plugin in plugins) {
-            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = docTemplate, routeHandler = this)
+        if (hello.hello == null) {
+            error("First message from client isn't 'hello'")
         }
 
-        return { docTemplate.clone() }
-    }
+        val webSocketClientConnection = ClientConnection.WebSocket(this)
 
-    private fun Routing.listenForWebsocketConnection(path: String = "/ws") {
-        webSocket(path) {
+        val remoteClientState = clientState.get(hello.id)
 
-            val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
+        if(remoteClientState == null) {
+            val message = Server2ClientMessage(
+                    yourId = hello.id,
+                    execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
+            webSocketClientConnection.send(message.toJson())
+            error("Unable to find server state corresponding to client id ${hello.id}")
+        }
 
-            if (hello.hello == null) {
-                error("First message from client isn't 'hello'")
-            }
+        assert(remoteClientState.clientConnection is Caching)
+        logger.debug { "Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache" }
+        val cachedConnection = remoteClientState.clientConnection as Caching
+        val webSocketClientConnection = ClientConnection.WebSocket(this)
+        remoteClientState.clientConnection = webSocketClientConnection
+        logger.debug { "Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages" }
+        cachedConnection.read().forEach { webSocketClientConnection.send(it) }
 
-            val webSocketClientConnection = ClientConnection.WebSocket(this)
 
-            val remoteClientState = clientState.get(hello.id)
+        try {
+            for (frame in incoming) {
+                try {
+                    logger.debug { "Message received from client" }
 
-            if(remoteClientState == null) {
-                val message = Server2ClientMessage(
-                        yourId = hello.id,
-                        execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
-                webSocketClientConnection.send(message.toJson())
-                error("Unable to find server state corresponding to client id ${hello.id}")
-            }
+                    if (frame is Text) {
+                        val message = gson.fromJson<Client2ServerMessage>(frame.readText())
+                        logger.debug { "Message received: $message" }
+                        if (message.error != null) {
+                            handleError(message.error, remoteClientState)
+                        } else {
+                            when {
+                                message.callback != null -> {
+                                    val (resultId, result) = message.callback
+                                    val resultHandler = remoteClientState.handlers[resultId]
+                                            ?: error("No data handler for $resultId for client ${remoteClientState.id}")
+                                    resultHandler(result ?: "")
+                                }
+                                message.historyStateChange != null -> {
 
-            assert(remoteClientState.clientConnection is Caching)
-            logger.debug { "Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache" }
-            val cachedConnection = remoteClientState.clientConnection as Caching
-            remoteClientState.clientConnection = webSocketClientConnection
-            logger.debug { "Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages" }
-            cachedConnection.read().forEach { webSocketClientConnection.send(it) }
-
-            try {
-                for (frame in incoming) {
-                    try {
-                        logger.debug { "Message received from client" }
-
-                        if (frame is Text) {
-                            val message = gson.fromJson<Client2ServerMessage>(frame.readText())
-                            logger.debug { "Message received: $message" }
-                            if (message.error != null) {
-                                handleError(message.error, remoteClientState)
-                            } else {
-                                when {
-                                    message.callback != null -> {
-                                        val (resultId, result) = message.callback
-                                        val resultHandler = remoteClientState.handlers[resultId]
-                                                ?: error("No data handler for $resultId for client ${remoteClientState.id}")
-                                        resultHandler(result ?: "")
-                                    }
-                                    message.historyStateChange != null -> {
-
-                                    }
                                 }
                             }
                         }
-                    } catch (e: Exception) {
-                        logger.error("Exception while receiving websocket message", e)
                     }
+                } catch (e: Exception) {
+                    logger.error("Exception while receiving websocket message", e)
                 }
-            } finally {
-                logger.info("WS session disconnected for client id: ${remoteClientState.id}")
-                remoteClientState.clientConnection = Caching()
             }
+        } finally {
+            logger.info("WS session disconnected for client id: ${remoteClientState.id}")
+            remoteClientState.clientConnection = Caching()
         }
     }
 
-    private fun Routing.listenForHTTPConnection(htmlDocumentTemplate: Document) {
-        get("/{visitedUrl...}") {
-            val htmlDocument = htmlDocumentTemplate.clone()
+    suspend fun respondKweb(call: ApplicationCall, buildPage: WebBrowser.() -> Unit) {
+        val htmlDocument = HtmlDocumentSupplier.getTemplateCopy()
 
-            val kwebSessionId = createNonce()
+        val kwebSessionId = createNonce()
 
-            val remoteClientState = clientState.getOrPut(kwebSessionId) {
-                RemoteClientState(id = kwebSessionId, clientConnection = Caching())
-            }
+        val remoteClientState = clientState.getOrPut(kwebSessionId) {
+            RemoteClientState(id = kwebSessionId, clientConnection = Caching())
+        }
 
-            val httpRequestInfo = HttpRequestInfo(call.request)
+        val httpRequestInfo = HttpRequestInfo(call.request)
 
-            try {
-                val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this@Kweb)
-                webBrowser.htmlDocument.set(htmlDocument)
-                if (debug) {
-                    warnIfBlocking(maxTimeMs = MAX_PAGE_BUILD_TIME.toMillis(), onBlock = { thread ->
-                        logger.warn { "buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME.  More info at DEBUG loglevel" }
+        try {
+            val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
+            webBrowser.htmlDocument.set(htmlDocument)
+            if (debug) {
+                warnIfBlocking(maxTimeMs = MAX_PAGE_BUILD_TIME.toMillis(), onBlock = { thread ->
+                    logger.warn { "buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME.  More info at DEBUG loglevel" }
 
-                        val logStatementBuilder = StringBuilder()
-                        logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME, appears to be blocking here:")
+                    val logStatementBuilder = StringBuilder()
+                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME, appears to be blocking here:")
 
-                        thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
-                        val logStatement = logStatementBuilder.toString()
-                        logger.debug { logStatement }
-                    }) {
-                        try {
-                            buildPage(webBrowser)
-                        } catch (e: Exception) {
-                            logger.error("Exception thrown building page", e)
-                        }
-                        logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
-                    }
-                } else {
+                    thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
+                    val logStatement = logStatementBuilder.toString()
+                    logger.debug { logStatement }
+                }) {
                     try {
                         buildPage(webBrowser)
                     } catch (e: Exception) {
@@ -405,43 +374,50 @@ class Kweb private constructor(
                     }
                     logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
                 }
-                for (plugin in plugins) {
-                    execute(kwebSessionId, plugin.executeAfterPageCreation())
+            } else {
+                try {
+                    buildPage(webBrowser)
+                } catch (e: Exception) {
+                    logger.error("Exception thrown building page", e)
                 }
-
-                webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
-
-                val initialCachedMessages = remoteClientState.clientConnection as Caching
-
-                remoteClientState.clientConnection = Caching()
-
-                val bootstrapJS = BootstrapJs.hydrate(
-                        kwebSessionId,
-                        initialCachedMessages
-                                .read().joinToString(separator = "\n") { "handleInboundMessage($it);" })
-
-                htmlDocument.head().appendElement("script")
-                        .attr("language", "JavaScript")
-                        .appendChild(DataNode(bootstrapJS))
-                htmlDocument.outputSettings().prettyPrint(debug)
-
-
-                call.respondText(htmlDocument.outerHtml(), ContentType.Text.Html)
-            } catch (nfe: NotFoundException) {
-                call.response.status(HttpStatusCode.NotFound)
-                call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
-            } catch (e: Exception) {
-                val logToken = random.nextLong().toString(16)
-
-                logger.error(e) { "Exception thrown while rendering page, code $logToken" }
-
-                call.response.status(HttpStatusCode.InternalServerError)
-                call.respondText("""
-                            Internal Server Error.
-
-                            Please include code $logToken in any error report to help us track it down.
-    """.trimIndent())
+                logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
             }
+            for (plugin in plugins) {
+                execute(kwebSessionId, plugin.executeAfterPageCreation())
+            }
+
+            webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
+
+            val initialCachedMessages = remoteClientState.clientConnection as Caching
+
+            remoteClientState.clientConnection = Caching()
+
+            val bootstrapJS = BootstrapJs.hydrate(
+                    kwebSessionId,
+                    initialCachedMessages
+                            .read().joinToString(separator = "\n") { "handleInboundMessage($it);" })
+
+            htmlDocument.head().appendElement("script")
+                    .attr("language", "JavaScript")
+                    .appendChild(DataNode(bootstrapJS))
+            htmlDocument.outputSettings().prettyPrint(debug)
+
+
+            call.respondText(htmlDocument.outerHtml(), ContentType.Text.Html)
+        } catch (nfe: NotFoundException) {
+            call.response.status(HttpStatusCode.NotFound)
+            call.respondText("URL ${call.request.uri} not found.", ContentType.parse("text/plain"))
+        } catch (e: Exception) {
+            val logToken = random.nextLong().toString(16)
+
+            logger.error(e) { "Exception thrown while rendering page, code $logToken" }
+
+            call.response.status(HttpStatusCode.InternalServerError)
+            call.respondText("""
+                        Internal Server Error.
+
+                        Please include code $logToken in any error report to help us track it down.
+""".trimIndent())
         }
     }
 
@@ -455,23 +431,6 @@ class Kweb private constructor(
         // TODO: of a specific reason why it would be bad.
         debugInfo.throwable.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
         logger.error(logStatementBuilder.toString())
-    }
-
-    private fun applyPluginWithDependencies(plugin: KwebPlugin,
-                                            appliedPlugins: MutableSet<KwebPlugin>,
-                                            routeHandler: Routing,
-                                            document: Document) {
-        for (dependantPlugin in plugin.dependsOn) {
-            if (!appliedPlugins.contains(dependantPlugin)) {
-                applyPluginWithDependencies(dependantPlugin, appliedPlugins, routeHandler, document)
-                appliedPlugins.add(dependantPlugin)
-            }
-        }
-        if (!appliedPlugins.contains(plugin)) {
-            plugin.decorate(document)
-            plugin.appServerConfigurator(routeHandler)
-            appliedPlugins.add(plugin)
-        }
     }
 
     /**

@@ -1,9 +1,9 @@
-package kweb.dom.element.read
+package kweb.html
 
 import kweb.Element
-import kweb.KWebDSL
 import kweb.WebBrowser
-import kweb.escapeEcma
+import kweb.util.KWebDSL
+import kweb.util.escapeEcma
 import java.util.concurrent.CompletableFuture
 
 @KWebDSL

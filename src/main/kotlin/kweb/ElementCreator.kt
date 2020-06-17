@@ -5,6 +5,8 @@ import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
+import kweb.util.KWebDSL
+import kweb.util.toJson
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -55,11 +57,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                val jsElement = when {
-                    parent is HeadElement -> {
+                val jsElement = when (parent) {
+                    is HeadElement -> {
                         htmlDoc.head().appendElement(tag)
                     }
-                    parent is BodyElement -> {
+                    is BodyElement -> {
                         htmlDoc.body().appendElement(tag)
                     }
                     else -> htmlDoc.getElementById(parent.id).appendElement(tag)
@@ -105,7 +107,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             if (position == null) {
                 appendln("${parent.jsExpression}.appendChild(newEl);")
             } else {
-                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.childNodes[$position]);")
+                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.children[$position]);")
             }
             appendln("}")
         }

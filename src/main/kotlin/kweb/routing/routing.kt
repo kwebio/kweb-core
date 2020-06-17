@@ -3,15 +3,12 @@ package kweb.routing
 import io.ktor.routing.RoutingPathSegment
 import kweb.*
 import kweb.state.KVar
-import mu.KotlinLogging
 
 /**
  * @sample testSampleForRouting
  */
 
 // TODO: Handle back button https://www.webdesignerdepot.com/2013/03/how-to-manage-the-back-button-with-javascript/
-
-private val logger = KotlinLogging.logger {}
 
 typealias PathTemplate = List<RoutingPathSegment>
 typealias PathReceiver = ElementCreator<*>.(params: Map<String, KVar<String>>) -> Unit

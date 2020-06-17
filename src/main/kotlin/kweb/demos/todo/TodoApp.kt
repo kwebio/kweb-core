@@ -7,6 +7,8 @@ import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.*
+import kweb.util.NotFoundException
+import kweb.util.random
 import mu.KotlinLogging
 import java.nio.file.Paths
 import java.time.Instant
@@ -31,6 +33,7 @@ class TodoApp {
          * http://localhost:7659/
          * */
         server = Kweb(port = 7659, debug = true, plugins = plugins, buildPage = {
+
             doc.head.new {
                 // Not required, but recommended by HTML spec
                 meta(name = "Description", content = "A simple To Do list app to demonstrate Kweb")

@@ -3,14 +3,15 @@ package kweb
 import com.github.salomonbrys.kotson.toJson
 import io.ktor.routing.RoutingPathSegmentKind
 import io.mola.galimatias.URL
-import kweb.dom.element.events.ONReceiver
-import kweb.dom.element.read.ElementReader
+import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
+import kweb.html.events.Event
 import kweb.routing.PathTemplate
 import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF
 import kweb.state.*
+import kweb.util.pathQueryFragment
 import java.util.concurrent.CompletableFuture
 
 /*
@@ -142,7 +143,7 @@ fun ElementCreator<Element>.input(type: InputType? = null, name: String? = null,
 }
 
 open class InputElement(override val element: Element) : ValueElement(element) {
-    fun checked(checked: Boolean) = setAttributeRaw("checked", checked)
+    fun checked(checked: Boolean) = if(checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
 
 
     fun select() = element.execute("$jsExpression.select();")
@@ -250,7 +251,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
-        on(retrieveJs = "${jsExpression}.value").event(updateOn, ONReceiver.Event::class) {
+        on(retrieveJs = "${jsExpression}.value").event(updateOn, Event::class) {
             toBind.value = it.retrieved ?: error("No value was retrieved")
         }
     }
@@ -296,7 +297,7 @@ fun ElementCreator<*>.route(routeReceiver: RouteReceiver.() -> Unit) {
                 error("Unable to find pathRenderer for template $template")
             }
         } else {
-            rr.notFoundReceiver.invoke(this, URL.parse(this.browser.url.value).path())
+            rr.notFoundReceiver.invoke(this, this.browser.gurl.path.value)
         }
     }
 }
@@ -406,21 +407,14 @@ val KVar<URL>.pathQueryFragment
 
 fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
     val newKVar = KVar(this.first.value to this.second.value)
-    this.first.addListener { o, n -> newKVar.value = n to this.second.value }
-    this.second.addListener { o, n -> newKVar.value = this.first.value to n }
+    this.first.addListener { _, n -> newKVar.value = n to this.second.value }
+    this.second.addListener { _, n -> newKVar.value = this.first.value to n }
 
     newKVar.addListener { o, n ->
         this.first.value = n.first
         this.second.value = n.second
     }
     return newKVar
-}
-
-val simpleUrlParser = object : ReversibleFunction<String, URL>("simpleUrlParser") {
-    override fun invoke(from: String): URL = URL.parse(from)
-
-    override fun reverse(original: String, change: URL) = change.toString()
-
 }
 
 infix operator fun KVar<String>.plus(s: String) = this.map { it + s }
@@ -433,3 +427,18 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
         return change.toString()
     }
 })
+
+/**
+ * Render each element of a List
+ */
+fun <T : Any> ElementCreator<*>.renderEach(list : KVar<List<T>>, block : ElementCreator<Element>.(value : KVar<T>) -> Unit) {
+    /*
+     * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing
+     *       DOM elements - this is inefficient.
+     */
+    render(list.map { it.size }) { size ->
+        for (ix in 0 until size) {
+            block(list[ix])
+        }
+    }
+}

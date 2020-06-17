@@ -1,4 +1,4 @@
-package kweb
+package kweb.util
 
 import com.google.gson.Gson
 import io.mola.galimatias.URL
