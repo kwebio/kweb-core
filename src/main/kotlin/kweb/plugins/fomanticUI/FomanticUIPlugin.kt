@@ -33,6 +33,6 @@ class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore,
 
 }
 
-val fomanticUIPlugin = FomanticUIPlugin()
+val fomanticUIPlugin get() = FomanticUIPlugin()
 
 val fomantic get() = FomanticUIClasses()
