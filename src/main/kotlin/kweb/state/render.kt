@@ -17,7 +17,8 @@ private val logger = KotlinLogging.logger {}
 
 fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : String = "span", block: ElementCreator<Element>.(T) -> Unit) {
 
-    val containerSpan : Element = element(containerElementTag)
+    // NOTE: Per https://github.com/kwebio/kweb-core/issues/151 eventually render() won't rely on a container element.
+    val containerElement : Element = element(containerElementTag)
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
@@ -25,8 +26,8 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : Str
 
     fun eraseAndRender() {
         do {
-            containerSpan.removeChildren()
-            containerSpan.new {
+            containerElement.removeChildren()
+            containerElement.new {
                 previousElementCreator.getAndSet(this)?.cleanup()
                 renderState.set(RENDERING_NO_PENDING_CHANGE)
                 block(kval.value)
@@ -51,7 +52,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : Str
         }
     }
 
-    containerSpan.new {
+    containerElement.new {
         previousElementCreator.getAndSet(this)?.cleanup()
         renderState.set(RENDERING_NO_PENDING_CHANGE)
         block(kval.value)
@@ -64,7 +65,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : Str
     }
 
     this.onCleanup(false) {
-        containerSpan.deleteIfExists()
+        containerElement.deleteIfExists()
     }
 
     this.onCleanup(true) {
