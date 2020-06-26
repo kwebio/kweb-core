@@ -15,9 +15,9 @@ import java.util.concurrent.atomic.AtomicReference
 
 private val logger = KotlinLogging.logger {}
 
-fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, block: ElementCreator<Element>.(T) -> Unit) {
+fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : String = "span", block: ElementCreator<Element>.(T) -> Unit) {
 
-    val containerSpan = span()
+    val containerSpan : Element = element(containerElementTag)
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
