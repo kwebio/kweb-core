@@ -1,6 +1,7 @@
 package kweb.state
 
 import kweb.*
+import kweb.html.style.StyleReceiver
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
@@ -15,10 +16,10 @@ import java.util.concurrent.atomic.AtomicReference
 
 private val logger = KotlinLogging.logger {}
 
-fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : String = "span", block: ElementCreator<Element>.(T) -> Unit) {
+fun <T : Any?> ElementCreator<*>.render(value: KVal<T>, container : ElementCreator<*>.() -> Element = { span() }, block: ElementCreator<Element>.(T) -> Unit) {
 
     // NOTE: Per https://github.com/kwebio/kweb-core/issues/151 eventually render() won't rely on a container element.
-    val containerElement : Element = element(containerElementTag)
+    val containerElement : Element = container(this)
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
@@ -30,7 +31,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : Str
             containerElement.new {
                 previousElementCreator.getAndSet(this)?.cleanup()
                 renderState.set(RENDERING_NO_PENDING_CHANGE)
-                block(kval.value)
+                StyleReceiver.DisplayValues.block(value.value)
                 if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
                     renderState.set(NOT_RENDERING)
                 }
@@ -38,7 +39,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : Str
         } while (renderState.get() != NOT_RENDERING)
     }
 
-    val listenerHandle = kval.addListener { _, _ ->
+    val listenerHandle = value.addListener { _, _ ->
         when (renderState.get()) {
             NOT_RENDERING -> {
                 eraseAndRender()
@@ -55,7 +56,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : Str
     containerElement.new {
         previousElementCreator.getAndSet(this)?.cleanup()
         renderState.set(RENDERING_NO_PENDING_CHANGE)
-        block(kval.value)
+        StyleReceiver.DisplayValues.block(value.value)
         if (renderState.get() == RENDERING_WITH_PENDING_CHANGE) {
             eraseAndRender()
         } else {
@@ -70,7 +71,7 @@ fun <T : Any?> ElementCreator<*>.render(kval: KVal<T>, containerElementTag : Str
 
     this.onCleanup(true) {
         previousElementCreator.getAndSet(null)?.cleanup()
-        kval.removeListener(listenerHandle)
+        value.removeListener(listenerHandle)
     }
 }
 

@@ -23,9 +23,6 @@ import kotlin.reflect.KClass
 open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
         EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
-    /*********
-     ********* Low level methods
-     *********/
 
     /**
      * Execute some JavaScript in the browser.  This is the
@@ -62,6 +59,8 @@ open class Element(override val browser: WebBrowser, val creator: ElementCreator
      */
     fun <P : KwebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
 
+
+    val children: List<Element> = ArrayList()
 
     /**
      * Obtain an [ElementReader] that can be used to read various properties of this element.
