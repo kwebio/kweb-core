@@ -27,7 +27,7 @@ fun ElementCreator<Element>.ul(attributes: Map<String, Any> = attr) = ULElement(
 
 open class LIElement(parent: Element) : Element(parent)
 
-fun ElementCreator<ULElement>.li(attributes: Map<String, Any> = attr) = LIElement(element("li", attributes))
+fun ElementCreator<Element>.li(attributes: Map<String, Any> = attr) = LIElement(element("li", attributes))
 
 open class ButtonElement(val wrapped: Element) : Element(wrapped)
 enum class ButtonType {

@@ -1,7 +1,6 @@
 package kweb.state
 
 import kweb.*
-import kweb.html.style.StyleReceiver
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
@@ -31,7 +30,7 @@ fun <T : Any?> ElementCreator<*>.render(value: KVal<T>, container : ElementCreat
             containerElement.new {
                 previousElementCreator.getAndSet(this)?.cleanup()
                 renderState.set(RENDERING_NO_PENDING_CHANGE)
-                StyleReceiver.DisplayValues.block(value.value)
+                block(value.value)
                 if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
                     renderState.set(NOT_RENDERING)
                 }
@@ -56,7 +55,7 @@ fun <T : Any?> ElementCreator<*>.render(value: KVal<T>, container : ElementCreat
     containerElement.new {
         previousElementCreator.getAndSet(this)?.cleanup()
         renderState.set(RENDERING_NO_PENDING_CHANGE)
-        StyleReceiver.DisplayValues.block(value.value)
+        block(value.value)
         if (renderState.get() == RENDERING_WITH_PENDING_CHANGE) {
             eraseAndRender()
         } else {
