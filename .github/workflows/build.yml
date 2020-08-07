@@ -24,6 +24,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
   dokka:
+    runs-on: ubuntu-latest
     needs: build
     steps:
      - name: Build Dokka
