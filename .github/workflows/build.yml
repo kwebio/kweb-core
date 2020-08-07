@@ -27,7 +27,7 @@ jobs:
     needs: build
     steps:
      - name: Build Dokka
-     run: ./gradlew dokkaHtml
+       run: ./gradlew dokkaHtml
      - name: Deploy Dokka
        uses: JamesIves/github-pages-deploy-action@3.5.9
        with:
