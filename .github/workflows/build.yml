@@ -23,3 +23,14 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+  dokka:
+    needs: build
+    steps:
+     - name: Build Dokka
+     run: ./gradlew dokkaHtml
+     - name: Deploy Dokka
+       uses: JamesIves/github-pages-deploy-action@3.5.9
+       with:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         BRANCH: gh-pages
+         FOLDER: build/dokka/html
