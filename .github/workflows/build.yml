@@ -22,9 +22,9 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Build Dokka
+    - name: Generate API documentation
       run: ./gradlew dokkaHtml
-    - name: Deploy Dokka
+    - name: Deploy API documentation to Github Pages
       uses: JamesIves/github-pages-deploy-action@3.5.9
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
