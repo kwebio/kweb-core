@@ -20,7 +20,7 @@ jobs:
         java-version: 12
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
+    - name: Build and run tests
       run: ./gradlew build
     - name: Generate API documentation
       run: ./gradlew dokkaHtml
