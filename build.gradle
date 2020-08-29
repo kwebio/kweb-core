@@ -25,7 +25,7 @@ ext {
 }
 
 group 'com.github.kwebio'
-version '0.7.22'
+version '0.'
 
 repositories {
     mavenCentral()
