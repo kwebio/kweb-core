@@ -14,13 +14,13 @@
 *******************************/
 
 .ui.calendar .ui.popup {
-    max-width: none;
-    padding: 0;
-    border: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  max-width: none;
+  padding: 0;
+  border: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 
@@ -29,7 +29,7 @@
 *******************************/
 
 .ui.calendar .calendar:focus {
-    outline: 0;
+  outline: 0;
 }
 
 
@@ -38,12 +38,11 @@
 *******************************/
 
 .ui.calendar .ui.popup .ui.grid {
-    display: block;
-    white-space: nowrap;
+  display: block;
+  white-space: nowrap;
 }
-
 .ui.calendar .ui.popup .ui.grid > .column {
-    width: auto;
+  width: auto;
 }
 
 
@@ -54,80 +53,65 @@
 .ui.calendar .ui.table.year,
 .ui.calendar .ui.table.month,
 .ui.calendar .ui.table.minute {
-    min-width: 15em;
+  min-width: 15em;
 }
-
 .ui.calendar .ui.table.day {
-    min-width: 18em;
+  min-width: 18em;
 }
-
 .ui.calendar .ui.table.day.andweek {
-    min-width: 22em;
+  min-width: 22em;
 }
-
 .ui.calendar .ui.table.hour {
-    min-width: 20em;
+  min-width: 20em;
 }
-
 .ui.calendar .ui.table tr th,
 .ui.calendar .ui.table tr td {
-    padding: 0.5em;
-    white-space: nowrap;
+  padding: 0.5em;
+  white-space: nowrap;
 }
-
 .ui.calendar .ui.table tr th {
-    border-left: none;
+  border-left: none;
 }
-
 .ui.calendar .ui.table tr th .icon {
-    margin: 0;
+  margin: 0;
 }
-
 .ui.calendar .ui.table tr:first-child th {
-    position: relative;
-    padding-left: 0;
-    padding-right: 0;
+  position: relative;
+  padding-left: 0;
+  padding-right: 0;
 }
-
 .ui.calendar .ui.table.day tr:first-child th {
-    border: none;
+  border: none;
 }
-
 .ui.calendar .ui.table.day tr:nth-child(2) th {
-    padding-top: 0.2em;
-    padding-bottom: 0.3em;
+  padding-top: 0.2em;
+  padding-bottom: 0.3em;
 }
-
 .ui.calendar .ui.table tr td {
-    padding-left: 0.1em;
-    padding-right: 0.1em;
+  padding-left: 0.1em;
+  padding-right: 0.1em;
 }
-
 .ui.calendar .ui.table tr .link {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 .ui.calendar .ui.table tr .prev.link {
-    width: 14.28571429%;
-    position: absolute;
-    left: 0;
+  width: 14.28571429%;
+  position: absolute;
+  left: 0;
 }
-
 .ui.calendar .ui.table tr .next.link {
-    width: 14.28571429%;
-    position: absolute;
-    right: 0;
+  width: 14.28571429%;
+  position: absolute;
+  right: 0;
 }
-
 .ui.calendar .ui.table tr .disabled {
-    pointer-events: auto;
-    cursor: default;
-    color: rgba(40, 40, 40, 0.3);
+  pointer-events: auto;
+  cursor: default;
+  color: rgba(40, 40, 40, 0.3);
 }
-
 .ui.calendar .ui.table tr .adjacent:not(.disabled) {
-    color: rgba(0, 0, 0, 0.6);
-    background: rgba(0, 0, 0, 0.03);
+  color: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 /*--------------
@@ -135,33 +119,29 @@
 ---------------*/
 
 .ui.calendar .ui.table tr td.today {
-    font-weight: bold;
+  font-weight: bold;
 }
-
 .ui.calendar .ui.table tr td.range {
-    background: rgba(0, 0, 0, 0.05);
-    color: rgba(0, 0, 0, 0.95);
-    -webkit-box-shadow: none;
-    box-shadow: none;
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.95);
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
-
 .ui.calendar .ui.table.inverted tr td.range {
-    background: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
-
 .ui.calendar:not(.disabled) .calendar:focus .ui.table tbody tr td.focus,
 .ui.calendar:not(.disabled) .calendar.active .ui.table tbody tr td.focus {
-    -webkit-box-shadow: inset 0 0 0 1px #85B7D9;
-    box-shadow: inset 0 0 0 1px #85B7D9;
+  -webkit-box-shadow: inset 0 0 0 1px #85B7D9;
+          box-shadow: inset 0 0 0 1px #85B7D9;
 }
-
 .ui.calendar:not(.disabled) .calendar:focus .ui.table.inverted tbody tr td.focus,
 .ui.calendar:not(.disabled) .calendar.active .ui.table.inverted tbody tr td.focus {
-    -webkit-box-shadow: inset 0 0 0 1px #85B7D9;
-    box-shadow: inset 0 0 0 1px #85B7D9;
+  -webkit-box-shadow: inset 0 0 0 1px #85B7D9;
+          box-shadow: inset 0 0 0 1px #85B7D9;
 }
 
 
@@ -175,12 +155,11 @@
   ---------------------*/
 
 .ui.disabled.calendar {
-    opacity: 0.45;
+  opacity: 0.45;
 }
-
 .ui.disabled.calendar > .input,
 .ui.disabled.calendar .ui.table tr .link {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 
