@@ -11,7 +11,6 @@ import kweb.util.NotFoundException
 import kweb.util.random
 import mu.KotlinLogging
 import java.nio.file.Paths
-import java.time.Instant
 import java.util.*
 
 fun main() {
@@ -158,7 +157,7 @@ class TodoApp {
         GlobalScope.launch {
             val newItemText = input.getValue().await()
             input.setValue("")
-            val newItem = ToDoState.Item(generateNewUid(), Instant.now(), list.value.uid, newItemText)
+            val newItem = ToDoState.Item(generateNewUid(), System.currentTimeMillis(), list.value.uid, newItemText)
             state.items[newItem.uid] = newItem
         }
     }
