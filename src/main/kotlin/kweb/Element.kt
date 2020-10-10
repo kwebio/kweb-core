@@ -21,7 +21,7 @@ import kotlin.math.abs
 import kotlin.reflect.KClass
 
 @KWebDSL
-open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, @Volatile var id: String?) :
+open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, @Volatile open var jsExpression: String, val tag: String? = null, @Volatile var id: String?) :
         EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
 
