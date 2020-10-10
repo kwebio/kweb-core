@@ -17,10 +17,11 @@ import kweb.util.random
 import kweb.util.toJson
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentSkipListSet
+import kotlin.math.abs
 import kotlin.reflect.KClass
 
 @KWebDSL
-open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, val id: String?) :
+open class Element(override val browser: WebBrowser, val creator: ElementCreator<*>?, open var jsExpression: String, val tag: String? = null, @Volatile var id: String?) :
         EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
 
@@ -81,7 +82,7 @@ open class Element(override val browser: WebBrowser, val creator: ElementCreator
         if (value != null) {
             val htmlDoc = browser.htmlDocument.get()
             when {
-                htmlDoc != null && this.id!= null -> {
+                htmlDoc != null && this.id != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendInstruction() -> {
@@ -91,7 +92,8 @@ open class Element(override val browser: WebBrowser, val creator: ElementCreator
                     execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
                 }
             }
-            if (name == "id") {
+            if (name.equals("id", ignoreCase = true)) {
+                this.id = value.toString()
                 jsExpression = "document.getElementById(${value.toJson()})"
             }
         }
@@ -319,7 +321,7 @@ open class Element(override val browser: WebBrowser, val creator: ElementCreator
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
-        val callbackId = Math.abs(random.nextInt())
+        val callbackId = abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = jsExpression + """
