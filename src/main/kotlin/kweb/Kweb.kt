@@ -2,28 +2,17 @@ package kweb
 
 import com.github.salomonbrys.kotson.fromJson
 import io.ktor.application.*
-import io.ktor.features.Compression
-import io.ktor.features.DefaultHeaders
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.cio.websocket.DefaultWebSocketSession
-import io.ktor.http.cio.websocket.Frame.Text
-import io.ktor.http.cio.websocket.pingPeriod
-import io.ktor.http.cio.websocket.readText
-import io.ktor.http.cio.websocket.timeout
-import io.ktor.request.uri
-import io.ktor.response.respondText
-import io.ktor.routing.get
-import io.ktor.routing.routing
-import io.ktor.server.engine.EngineSSLConnectorConfig
-import io.ktor.server.engine.applicationEngineEnvironment
-import io.ktor.server.engine.connector
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.jetty.Jetty
-import io.ktor.server.jetty.JettyApplicationEngine
-import io.ktor.util.AttributeKey
-import io.ktor.websocket.WebSockets
-import io.ktor.websocket.webSocket
+import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.http.cio.websocket.*
+import io.ktor.http.cio.websocket.Frame.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.jetty.*
+import io.ktor.util.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,6 +23,7 @@ import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
+import kweb.util.NotFoundException
 import org.jsoup.nodes.DataNode
 import java.io.Closeable
 import java.time.Duration
@@ -281,7 +271,7 @@ class Kweb private constructor(
     }
 
     private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
-        val hello = gson.fromJson<Client2ServerMessage>(((incoming.receive() as Text).readText()))
+        val hello = gson.fromJson<Client2ServerMessage>((incoming.receive() as Text).readText())
 
         if (hello.hello == null) {
             error("First message from client isn't 'hello'")

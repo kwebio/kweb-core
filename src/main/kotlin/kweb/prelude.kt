@@ -1,18 +1,20 @@
 package kweb
 
 import com.github.salomonbrys.kotson.toJson
-import io.ktor.routing.RoutingPathSegmentKind
+import io.ktor.routing.*
 import io.mola.galimatias.URL
 import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
 import kweb.html.events.Event
+import kweb.html.fileUpload.FileFormInput
 import kweb.routing.PathTemplate
 import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF
 import kweb.state.*
 import kweb.util.pathQueryFragment
 import java.util.concurrent.CompletableFuture
+import kotlin.collections.set
 
 /*
  * Mostly extension functions (and any simple classes they depend on), placed here such that an `import kweb.*`
@@ -439,6 +441,34 @@ fun <T : Any> ElementCreator<*>.renderEach(list : KVar<List<T>>, block : Element
     render(list.map { it.size }) { size ->
         for (ix in 0 until size) {
             block(list[ix])
+        }
+    }
+}
+
+/**
+ * Create a [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
+ *
+ * @sample fileReaderSample
+ */
+fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, Any> = attr): FileFormInput {
+    val inputElement = input(InputType.file, name, initialValue, size, placeholder, attributes)
+    val formInput = FileFormInput()
+    formInput.setInputElement(inputElement)
+    return formInput
+}
+
+private fun fileReaderSample() {
+    var imageString = KVar("")
+    Kweb(port = 123) {
+        doc.body.new {
+            val input = fileInput()
+            input.onFileSelect {
+                input.retrieveFile {
+                    imageString.value = it.base64Content
+                }
+            }
+            input.inputElement.setAttributeRaw("hidden", true)
+            img().setAttribute("src", imageString)
         }
     }
 }
