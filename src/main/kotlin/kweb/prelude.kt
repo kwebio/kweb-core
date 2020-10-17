@@ -467,7 +467,6 @@ fun fileReaderSample() {
                     imageString.value = it.base64Content
                 }
             }
-            input.inputElement.setAttributeRaw("hidden", true)
             img().setAttribute("src", imageString)
         }
     }
