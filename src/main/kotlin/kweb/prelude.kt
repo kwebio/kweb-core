@@ -457,8 +457,8 @@ fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = nu
     return formInput
 }
 
-private fun fileReaderSample() {
-    var imageString = KVar("")
+fun fileReaderSample() {
+    val imageString = KVar("")
     Kweb(port = 123) {
         doc.body.new {
             val input = fileInput()
