@@ -23,34 +23,47 @@ import kotlin.collections.set
 
 fun ElementCreator<HeadElement>.title(attributes: Map<String, Any> = attr) = TitleElement(element("title", attributes))
 
-open class ULElement(parent: Element) : Element(parent)
+fun <R_TYPE> ElementCreator<HeadElement>.title(new : ElementCreator<TitleElement>.() -> R_TYPE) : R_TYPE {
+    return title().new(receiver = new)
+}
 
+open class ULElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.ul(attributes: Map<String, Any> = attr) = ULElement(element("ul", attributes))
+fun <R_TYPE> ElementCreator<Element>.ul(new : ElementCreator<ULElement>.() -> R_TYPE) : R_TYPE {
+    return ul().new(receiver = new)
+}
 
 open class LIElement(parent: Element) : Element(parent)
-
 fun ElementCreator<Element>.li(attributes: Map<String, Any> = attr) = LIElement(element("li", attributes))
+fun <R_TYPE> ElementCreator<Element>.li(new : ElementCreator<LIElement>.() -> R_TYPE) : R_TYPE {
+    return li().new(receiver = new)
+}
 
 open class ButtonElement(val wrapped: Element) : Element(wrapped)
 enum class ButtonType {
     button, reset, submit
 }
-
 fun ElementCreator<Element>.button(attributes: Map<String, Any> = attr, type: ButtonType? = ButtonType.button, autofocus: Boolean? = null): ButtonElement {
     return ButtonElement(element("button", attributes
             .set("type", type?.name)
             .set("autofocus", autofocus)
     ))
 }
-
+fun <R_TYPE> ElementCreator<Element>.button(new : ElementCreator<ButtonElement>.() -> R_TYPE) : R_TYPE {
+    return button().new(receiver = new)
+}
 
 open class SpanElement(parent: Element) : Element(parent)
-
 fun ElementCreator<Element>.span(attributes: Map<String, Any> = attr) = SpanElement(element("span", attributes))
+fun <R_TYPE> ElementCreator<Element>.span(new : ElementCreator<SpanElement>.() -> R_TYPE) : R_TYPE {
+    return span().new(receiver = new)
+}
 
 open class DivElement(parent: Element) : Element(parent)
-
 fun ElementCreator<Element>.div(attributes: Map<String, Any> = attr) = DivElement(element("div", attributes))
+fun <R_TYPE> ElementCreator<Element>.div(new : ElementCreator<DivElement>.() -> R_TYPE) : R_TYPE {
+    return div().new(receiver = new)
+}
 
 open class IElement(parent: Element) : Element(parent)
 
@@ -93,13 +106,25 @@ open class H5Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h5(attributes: Map<String, Any> = attr) = H5Element(element("h5", attributes))
 
+fun <R_TYPE> ElementCreator<Element>.h5(new : ElementCreator<H5Element>.() -> R_TYPE) : R_TYPE {
+    return h5().new(receiver = new)
+}
+
 open class PElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.p(attributes: Map<String, Any> = attr) = PElement(element("p", attributes))
 
+fun <R_TYPE> ElementCreator<Element>.p(new : ElementCreator<PElement>.() -> R_TYPE) : R_TYPE {
+    return p().new(receiver = new)
+}
+
 open class NavElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.nav(attributes: Map<String, Any> = attr) = NavElement(element("nav", attributes))
+
+fun <R_TYPE> ElementCreator<Element>.nav(new : ElementCreator<NavElement>.() -> R_TYPE) : R_TYPE {
+    return nav().new(receiver = new)
+}
 
 open class SectionElement(parent: Element) : Element(parent)
 
@@ -114,6 +139,10 @@ open class ImageElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.img(src: String? = null, attributes: Map<String, Any> = attr) =
         ImageElement(element("img", attributes.set("src", src)))
 
+
+fun <R_TYPE> ElementCreator<Element>.img(new : ElementCreator<ImageElement>.() -> R_TYPE) : R_TYPE {
+    return img().new(receiver = new)
+}
 
 open class CanvasElement(parent: Element) : Element(parent)
 

@@ -33,12 +33,12 @@ class TodoApp {
          * */
         server = Kweb(port = 7659, debug = true, plugins = plugins, buildPage = {
 
-            doc.head.new {
+            doc.head {
                 // Not required, but recommended by HTML spec
                 meta(name = "Description", content = "A simple To Do list app to demonstrate Kweb")
             }
 
-            doc.body.new {
+            doc.body {
                 /** Kweb allows you to modularize your code however suits your needs
                 best.  Here I use an extension function defined elsewhere to
                 draw some util outer page DOM elements */

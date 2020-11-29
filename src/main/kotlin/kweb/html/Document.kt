@@ -23,7 +23,15 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     val body = BodyElement(receiver)
 
+    fun <R_TYPE> body(new : ElementCreator<BodyElement>.() -> R_TYPE) : R_TYPE {
+        return body.new(receiver = new)
+    }
+
     val head = HeadElement(receiver)
+
+    fun <R_TYPE> head(new : ElementCreator<HeadElement>.() -> R_TYPE) : R_TYPE {
+        return head.new(receiver = new)
+    }
 
     val origin = receiver.evaluate("document.origin")
 
