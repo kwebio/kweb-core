@@ -28,9 +28,29 @@ fun <R_TYPE> ElementCreator<HeadElement>.title(new : ElementCreator<TitleElement
 }
 
 open class ULElement(parent: Element) : Element(parent)
-fun ElementCreator<Element>.ul(attributes: Map<String, Any> = attr) = ULElement(element("ul", attributes))
-fun <R_TYPE> ElementCreator<Element>.ul(new : ElementCreator<ULElement>.() -> R_TYPE) : R_TYPE {
-    return ul().new(receiver = new)
+// fun ElementCreator<Element>.ul(attributes: Map<String, Any> = attr) =
+fun ElementCreator<Element>.ul(attributes: Map<String, Any> = emptyMap(), new : ElementCreator<ULElement>.() -> Unit = { error("") }) : ULElement {
+    val ul = ULElement(element("ul", attributes))
+        ul.new(receiver = new)
+    return ul
+}
+
+fun testUL() {
+    // TODO: REMOVEME
+
+    Kweb(port = 1243) {
+        doc.body {
+            ul()
+
+            ul {
+                li()
+            }
+
+            ul (mapOf("class" to "dog")) {
+                li()
+            }
+        }
+    }
 }
 
 open class LIElement(parent: Element) : Element(parent)
