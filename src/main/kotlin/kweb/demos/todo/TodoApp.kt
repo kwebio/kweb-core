@@ -43,7 +43,7 @@ class TodoApp {
                 best.  Here I use an extension function defined elsewhere to
                 draw some util outer page DOM elements */
                 pageBorderAndTitle("To do List") {
-                    div(fomantic.content).new {
+                    div(fomantic.content) {
 
                         route {
 
@@ -57,7 +57,7 @@ class TodoApp {
                             }
 
                             path("/lists/{id}") { params ->
-                                doc.head.new {
+                                doc.head {
                                     title().text("To Do List #${params.getValue("id").value}")
                                 }
                                 render(params.getValue("id")) { listId ->
@@ -80,7 +80,7 @@ class TodoApp {
                                  * It's not necessary, but we can also define a custom 404 handler:
                                  */
                             notFound {
-                                div(fomantic.ui.negative.message).new {
+                                div(fomantic.ui.negative.message) {
                                     div(fomantic.header).text("Not Found :(")
                                     p().text(url.map { "Unable to find path $it" })
                                 }
@@ -93,10 +93,10 @@ class TodoApp {
     }
 
     private fun ElementCreator<*>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
-        div(fomantic.ui.main.container).new {
-            div(fomantic.column).new {
-                div(fomantic.ui.vertical.segment).new {
-                    div(fomantic.ui.message).new {
+        div(fomantic.ui.main.container) {
+            div(fomantic.column) {
+                div(fomantic.ui.vertical.segment) {
+                    div(fomantic.ui.message) {
                         p().innerHTML(
                                 """
                             A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
@@ -112,7 +112,7 @@ class TodoApp {
                     }
                 }
 
-                div(fomantic.ui.vertical.segment).new {
+                div(fomantic.ui.vertical.segment) {
                     h1(fomantic.ui.dividing.header).text(title)
                     content(this)
                 }
@@ -128,18 +128,18 @@ class TodoApp {
 
     private fun ElementCreator<*>.renderList(list: KVar<ToDoState.List>) {
         h3().text(list.property(ToDoState.List::title))
-        div(fomantic.ui.middle.aligned.divided.list).new {
+        div(fomantic.ui.middle.aligned.divided.list) {
             renderEach(state.itemsByList(list.value.uid)) { item ->
-                div(fomantic.item).new {
-                    div(fomantic.right.floated.content).new {
+                div(fomantic.item) {
+                    div(fomantic.right.floated.content) {
                         renderRemoveButton(item)
                     }
                     div(fomantic.content).text(item.map(ToDoState.Item::text))
                 }
             }
         }
-        div(fomantic.ui.action.input).new {
-            val input = input(InputType.text, placeholder = "Add Item")
+        div(fomantic.ui.action.input) {
+            val input = input(type = InputType.text, placeholder = "Add Item")
             input.on.keypress { ke ->
                 if (ke.code == "Enter") {
                     handleAddItem(input, list)

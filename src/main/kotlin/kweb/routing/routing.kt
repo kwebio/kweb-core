@@ -1,7 +1,10 @@
 package kweb.routing
 
-import io.ktor.routing.RoutingPathSegment
-import kweb.*
+import io.ktor.routing.*
+import kweb.ElementCreator
+import kweb.Kweb
+import kweb.h1
+import kweb.route
 import kweb.state.KVar
 
 /**
@@ -16,7 +19,7 @@ typealias NotFoundReceiver = (ElementCreator<*>).(path: String) -> Unit
 
 private fun testSampleForRouting() {
     Kweb(port = 16097, buildPage = {
-        doc.body.new {
+        doc.body {
             route {
                 path("/users/{userId}") { params ->
                     val userId = params.getValue("userId")

@@ -379,16 +379,6 @@ open class Element(
 }
 
 /**
- * Returns an [ElementCreator] which can be used to create new elements and add them
- * as children of the receiver element.
- *
- * @receiver This will be the parent element of any elements created with the returned
- *           [ElementCreator]
- * @Param position What position among the parent's children should the new element have?
- */
-fun <ELEMENT_TYPE : Element> ELEMENT_TYPE.new(position: Int? = null): ElementCreator<ELEMENT_TYPE> = ElementCreator(parent = this, position = position)
-
-/**
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
  *
  * @Param position What position among the parent's children should the new element have?
@@ -397,6 +387,16 @@ fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
         position: Int? = null,
         receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE)
         : RETURN_VALUE_TYPE {
-    return receiver(new(position))
+    return receiver(
+        /**
+         * Returns an [ElementCreator] which can be used to create new elements and add them
+         * as children of the receiver element.
+         *
+         * @receiver This will be the parent element of any elements created with the returned
+         *           [ElementCreator]
+         * @Param position What position among the parent's children should the new element have?
+         */
+        ElementCreator(parent = this, position = position)
+    )
 }
 

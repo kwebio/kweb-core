@@ -67,15 +67,15 @@ class RenderCleanupTestApp {
 
         val editing = KVar(false)
 
-        doc.body.new {
+        doc.body {
             render(editing) { _editing ->
                 if (_editing) {
-                    div(fomantic.ui.form).new {
-                        div(fomantic.field).new {
+                    div(fomantic.ui.form) {
+                        div(fomantic.field) {
                             label().text("What tasks would you like to prioritize?  (one per line)")
-                            val ta = textarea()
+                            val ta = textArea()
                             ta.setValue(taskList.value.joinToString(separator = "\n"))
-                            div(fomantic.ui.buttons).new {
+                            div(fomantic.ui.buttons) {
                                 button(fomantic.ui.button, type = ButtonType.submit).text("Save").on("${ta.jsExpression}.value").click { event ->
                                     taskList.value = event.retrieved!!.split('\n').map { it.trim() }.toList()
                                     editing.value = false
@@ -88,7 +88,7 @@ class RenderCleanupTestApp {
                     }
                 } else {
                     render(taskList.map { it.size }) { listSize ->
-                        div(fomantic.ui.bulleted.list).new {
+                        div(fomantic.ui.bulleted.list) {
                             for (ix in 0 until listSize) {
                                 div(fomantic.item).text(taskList[ix])
                             }
