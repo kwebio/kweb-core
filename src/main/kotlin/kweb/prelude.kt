@@ -41,24 +41,6 @@ fun ElementCreator<Element>.ul(
     }
 }
 
-fun testUL() {
-    // TODO: REMOVEME
-
-    Kweb(port = 1243) {
-        doc.body {
-            ul()
-
-            ul {
-                li()
-            }
-
-            ul(mapOf("class" to "dog")) {
-                li()
-            }
-        }
-    }
-}
-
 open class LIElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.li(
