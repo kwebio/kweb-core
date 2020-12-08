@@ -1,7 +1,7 @@
 package kweb
 
 import kweb.common.Template
-import org.apache.commons.io.IOUtil
+import org.apache.commons.io.IOUtils
 
 object BootstrapJs {
     private const val clientIdToken = "--CLIENT-ID-PLACEHOLDER--"
