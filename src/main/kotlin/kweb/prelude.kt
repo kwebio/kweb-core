@@ -43,7 +43,7 @@ fun ElementCreator<Element>.ul(
 
 open class OLElement(parent: Element) : Element(parent)
 
-fun ElementCreator<Element>.ul(
+fun ElementCreator<Element>.ol(
     attributes: Map<String, Any> = emptyMap(),
     new: (ElementCreator<OLElement>.() -> Unit)? = null
 ): OLElement {

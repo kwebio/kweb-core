@@ -5,6 +5,7 @@ import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
+import kweb.state.KVal
 import kweb.util.KWebDSL
 import kweb.util.toJson
 import mu.KLogging
@@ -139,5 +140,13 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             isCleanedUp = true
             cleanupListeners.forEach { it() }
         }
+    }
+
+    fun text(text : String) {
+        this.parent.text(text)
+    }
+
+    fun text(text : KVal<String>) {
+        this.parent.text(text)
     }
 }

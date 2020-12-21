@@ -105,7 +105,7 @@ class TodoApp {
                             Try visiting this URL in another browser window and make some changes.
                             <p/>
                             You may find the source code for this app
-                            <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
+                         5   <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
                             """
                                         .trimIndent()
                         )
@@ -134,7 +134,9 @@ class TodoApp {
                     div(fomantic.right.floated.content) {
                         renderRemoveButton(item)
                     }
-                    div(fomantic.content).text(item.map(ToDoState.Item::text))
+                    div(fomantic.content) {
+                        text(item.map(ToDoState.Item::text))
+                    }
                 }
             }
         }

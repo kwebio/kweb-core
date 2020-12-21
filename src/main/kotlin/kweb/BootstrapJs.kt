@@ -26,7 +26,7 @@ object BootstrapJs {
 fun tmp() {
     Kweb(port = 1234) {
         doc.body.new {
-            ul().new {
+            changeul().new {
                 li().text("One")
                 li().text("Two")
                 li().text("Three")
