@@ -158,7 +158,7 @@ class TodoSite(private val driver: WebDriver){
 
     fun deleteItemByText(itemText:String){
         val item = getItemByText(itemText)
-        val delButton = item.findElement(By.tagName("button"))
+        val delButton = item.findElement<WebElement>(By.tagName("button"))
         delButton.click()
     }
 

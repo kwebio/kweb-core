@@ -53,8 +53,8 @@ dependencies {
     //////////////////////////////
     compile "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.21"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.2'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.1'
 
     ////////////////////
     // Ktor dependencies
