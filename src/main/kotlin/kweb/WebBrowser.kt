@@ -21,7 +21,7 @@ import kotlin.reflect.jvm.jvmName
  * expressions and retrieveJs the result.
  */
 
-val logger = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 
 class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
 

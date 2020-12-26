@@ -24,6 +24,7 @@ import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
 import kweb.util.NotFoundException
+import mu.KotlinLogging
 import org.jsoup.nodes.DataNode
 import java.io.Closeable
 import java.time.Duration
@@ -36,6 +37,8 @@ import kotlin.collections.component2
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
+
+private val logger = KotlinLogging.logger {}
 
 class Kweb private constructor(
         val debug: Boolean,

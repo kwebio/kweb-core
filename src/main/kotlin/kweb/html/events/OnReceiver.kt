@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
+@PublishedApi internal val logger = KotlinLogging.logger {}
+
 @KWebDSL
 class OnReceiver<T : EventGenerator<T>>(internal val source: T, private val retrieveJs: String? = null) {
-
-    val logger = KotlinLogging.logger {}
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: String) -> Unit): T {
         source.addEventListener(eventName, returnEventFields = returnEventFields, callback = { callback(it.toString()) }, retrieveJs = retrieveJs)

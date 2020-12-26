@@ -3,9 +3,11 @@ package kweb.html.fileUpload
 
 import kotlinx.serialization.json.Json
 import kweb.Element
-import kweb.logger
 import kweb.util.random
+import mu.KotlinLogging
 import kotlin.math.abs
+
+private val logger = KotlinLogging.logger {}
 
 class FileFormInput {
 
