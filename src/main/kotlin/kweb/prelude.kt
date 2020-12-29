@@ -70,9 +70,9 @@ enum class ButtonType {
 
 fun ElementCreator<Element>.button(
     attributes: Map<String, Any> = emptyMap(),
-    new: (ElementCreator<ButtonElement>.() -> Unit)? = null,
     type: ButtonType? = ButtonType.button,
-    autofocus: Boolean? = null
+    autofocus: Boolean? = null,
+    new: (ElementCreator<ButtonElement>.() -> Unit)? = null,
 ): ButtonElement {
     return ButtonElement(
         element(
