@@ -6,6 +6,7 @@ import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
 import kweb.state.RenderState.*
 import mu.KotlinLogging
+import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
 
@@ -15,10 +16,15 @@ import java.util.concurrent.atomic.AtomicReference
 
 private val logger = KotlinLogging.logger {}
 
-fun <T : Any?> ElementCreator<*>.render(value: KVal<T>, container : ElementCreator<*>.() -> Element = { span() }, block: ElementCreator<Element>.(T) -> Unit) {
+fun <T : Any?> ElementCreator<*>.render(
+    value: KVal<T>,
+    container: ElementCreator<*>.() -> Element
+        = { span().setAttributeRaw("style", "display: contents;") },
+    block: ElementCreator<Element>.(T) -> Unit
+) {
 
     // NOTE: Per https://github.com/kwebio/kweb-core/issues/151 eventually render() won't rely on a container element.
-    val containerElement : Element = container(this)
+    val containerElement: Element = container(this)
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
@@ -139,10 +145,11 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: Ord
 }
 
 private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
-        orderedViewSet: OrderedViewSet<ITEM>,
-        keyValue: KeyValue<ITEM>,
-        renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit,
-        insertAtPosition: Int?)
+    orderedViewSet: OrderedViewSet<ITEM>,
+    keyValue: KeyValue<ITEM>,
+    renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit,
+    insertAtPosition: Int?
+)
         : ItemInfo<ITEM> {
     val itemElementCreator = ElementCreator(this.parent, this, insertAtPosition)
     val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
@@ -161,11 +168,13 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
          * This shouldn't be an onerous requirement because typically with lists of things there is just one
           * root <ol> or <ul> per item.  If it does turn out to be a problem we'll need to find another approach.
          */
-        error("""
+        error(
+            """
             Only one element may be created per item but ${itemElementCreator.elementsCreated} were created for
             item key ${keyValue.key}.  Note that this element may have as many children as you like, so you may just need
             to wrap the elements in a <DIV> or other element type.
-""".trimIndent())
+""".trimIndent()
+        )
     }
     return ItemInfo(itemElementCreator, itemVar)
 }

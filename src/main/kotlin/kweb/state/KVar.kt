@@ -88,3 +88,4 @@ fun <T : Any> KVar<T>.modify(f: (T) -> T) {
     }
     this.value = f(this.value)
 }
+
