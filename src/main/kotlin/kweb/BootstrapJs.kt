@@ -1,6 +1,6 @@
 package kweb
 
-import kweb.common.Template
+import kweb.util.Template
 import org.apache.commons.io.IOUtils
 
 object BootstrapJs {

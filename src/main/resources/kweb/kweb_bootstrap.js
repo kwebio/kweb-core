@@ -203,6 +203,57 @@ function removeClass(el, className) {
     }
 }
 
+class DiffPatchData {
+    constructor(prefixEndIndex, postfixOffset, diffString) {
+        this.prefixEndIndex = prefixEndIndex;
+        this.postfixOffset = postfixOffset;
+        this.diffString = diffString;
+    }
+}
+
+function getDiffPatchData(newString, id) {
+    let e = document.getElementById(id);
+    let oldArray = Array.from(e.dataset.previousInput);//reads the oldString from the data-attribute data-previous-input
+    let newArray = Array.from(newString);
+
+    let commonPrefixEnd = 0;
+
+    let oldStringLastIndex = oldArray.length - 1;
+    let newStringLastIndex = newArray.length - 1;
+
+    let commonPostfixOffset = 0;
+
+    let shorterStringLength = (oldArray.length > newArray.length) ? newArray.length : oldArray.length;
+
+    for (let i = 0; i < shorterStringLength; i++) {
+        if (oldArray[i] == newArray[i]) {
+            commonPrefixEnd = i+1;
+        } else break;
+    }
+    for(let offset = 0; offset < shorterStringLength - commonPrefixEnd; offset++) {
+        if (oldArray[oldStringLastIndex - offset] == newArray[newStringLastIndex - offset]) {
+            commonPostfixOffset = offset;
+        } else break;
+    }
+    if (oldStringLastIndex > newStringLastIndex) {//if oldString is longer we are removing text and we send an empty string as the diff
+        return new DiffPatchData(commonPrefixEnd, commonPostfixOffset, "");
+    } else {
+        return new DiffPatchData(commonPrefixEnd, commonPostfixOffset,
+            newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset));
+    }
+}
+
+function applyPatch(inputString, patchData) {
+    if (patchData.postfixOffset == 0) {
+        return inputString.substring(0, patchData.prefixEndIndex) + patchData.diffString;
+    } else if (patchData.prefixEndIndex > 0) {
+        return inputString.substring(0, patchData.prefixEndIndex) + patchData.diffString +
+            inputString.substring(inputString.length( - 1 - patchData.postfixOffset));
+    } else {
+        return patchData.diffString + inputString.substring(patchData.prefixEndIndex, patchData.postfixOffset)
+    }
+}
+
 function removeElementByIdIfExists(id) {
     var e = document.getElementById(id);
     if (e) {
