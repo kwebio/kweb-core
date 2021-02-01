@@ -211,9 +211,19 @@ class DiffPatchData {
     }
 }
 
-function getDiffPatchData(newString, id) {
+function get_diff_changes(id) {
     let e = document.getElementById(id);
-    let oldArray = Array.from(e.dataset.previousInput);//reads the oldString from the data-attribute data-previous-input
+    let newString = e.dataset.value;//reads the new string value from data-attribute data-vale
+    let oldString = e.dataset.previousInput;//reads the oldString from the data-attribute data-previous-input
+
+    //This seems like a logical place to do this, but I'm unsure if it is safe to do so
+    //I think it might prematurely change the value of toBind.value in prelude.kt's setValue function
+    //savePreviousInput(newString, id)//put the newString into the data attribute so it can be used as the oldString the next time this method is run
+
+    if (oldString === undefined) {//the first time this is run previous-input should be undefined so we just return the new string
+        return new DiffPatchData(0, 0, newString);
+    }
+    let oldArray = Array.from(oldString);
     let newArray = Array.from(newString);
 
     let commonPrefixEnd = 0;
@@ -243,15 +253,10 @@ function getDiffPatchData(newString, id) {
     }
 }
 
-function applyPatch(inputString, patchData) {
-    if (patchData.postfixOffset == 0) {
-        return inputString.substring(0, patchData.prefixEndIndex) + patchData.diffString;
-    } else if (patchData.prefixEndIndex > 0) {
-        return inputString.substring(0, patchData.prefixEndIndex) + patchData.diffString +
-            inputString.substring(inputString.length( - 1 - patchData.postfixOffset));
-    } else {
-        return patchData.diffString + inputString.substring(patchData.prefixEndIndex, patchData.postfixOffset)
-    }
+
+function savePreviousInput(previousInputString, id) {
+    let e = document.getElementById(id);
+    e.dataset.previousInput = previousInputString;
 }
 
 function removeElementByIdIfExists(id) {
