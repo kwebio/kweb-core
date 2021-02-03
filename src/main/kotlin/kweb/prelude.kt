@@ -503,7 +503,7 @@ operator fun <T : Any> KVar<List<T>>.get(pos: Int): KVar<T> {
             return try {
                 from[pos]
             } catch (e: IndexOutOfBoundsException) {
-                throw kotlin.IndexOutOfBoundsException("Index $pos out of bounds in list $from")
+                throw IndexOutOfBoundsException("Index $pos out of bounds in list $from")
             }
         }
 
