@@ -6,6 +6,8 @@ name: build
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
@@ -21,6 +23,7 @@ jobs:
     - name: Build and run tests
       run: ./gradlew build
     - name: Generate API documentation
+      if: ${{github.event_name == 'push'}}
       run: ./gradlew dokkaHtml
     - name: Deploy API documentation to Github Pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
