@@ -447,14 +447,18 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     data class DiffData(val prefixEnd: Int, val postFixOffset: Int, val diff: String)
 
     private fun applyDiff(oldString: String, diffData: DiffData) : String {
-        return if (diffData.postFixOffset == 0) {//these 2 edge cases prevent the prefix or the postfix from being
-            // repeated when you append text to the beginning of the text or the end of the text
-            oldString.substring(0, diffData.prefixEnd) + diffData.diff
-        } else if (diffData.prefixEnd == 0) {
-            diffData.diff + oldString.substring(oldString.length - 1 - diffData.postFixOffset)
-        } else {
-            oldString.substring(0, diffData.prefixEnd) + diffData.diff +
-                    oldString.substring(oldString.length - 1 - diffData.postFixOffset)
+        return when {
+            diffData.postFixOffset == 0 -> {//these 2 edge cases prevent the prefix or the postfix from being
+                // repeated when you append text to the beginning of the text or the end of the text
+                oldString.substring(0, diffData.prefixEnd) + diffData.diff
+            }
+            diffData.prefixEnd == 0 -> {
+                diffData.diff + oldString.substring(oldString.length - 1 - diffData.postFixOffset)
+            }
+            else -> {
+                oldString.substring(0, diffData.prefixEnd) + diffData.diff +
+                        oldString.substring(oldString.length - 1 - diffData.postFixOffset)
+            }
         }
     }
 
@@ -464,11 +468,9 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
         on(retrieveJs = "get_diff_changes(${jsExpression})").event(updateOn, Event::class) {
-            //I think this line could be made better to look at. But I think it works.
-            //I hate having to use the !!, it'd be better to catch the null and do some error handling
-            //But, I don't know really know what this function should do if it's sent a bad input
-            val diffData: DiffData? = it.retrieved?.let { it1 -> Json.decodeFromString<DiffData>(it1) }
-            toBind.value = applyDiff(toBind.value, diffData!!)
+            val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
+            val diffData = Json.decodeFromString<DiffData>(diffDataJson)
+            toBind.value = applyDiff(toBind.value, diffData)
         }
     }
 }

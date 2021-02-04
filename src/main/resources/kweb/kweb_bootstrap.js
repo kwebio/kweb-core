@@ -223,34 +223,26 @@ function get_diff_changes(id) {
     if (oldString === undefined) {//the first time this is run previous-input should be undefined so we just return the new string
         return new DiffPatchData(0, 0, newString);
     }
-    let oldArray = Array.from(oldString);
-    let newArray = Array.from(newString);
-
     let commonPrefixEnd = 0;
 
-    let oldStringLastIndex = oldArray.length - 1;
-    let newStringLastIndex = newArray.length - 1;
+    let oldStringLastIndex = oldString.length - 1;
+    let newStringLastIndex = newString.length - 1;
 
     let commonPostfixOffset = 0;
 
-    let shorterStringLength = (oldArray.length > newArray.length) ? newArray.length : oldArray.length;
+    let shorterStringLength = (oldString.length > newString.length) ? newString.length : oldString.length;
 
     for (let i = 0; i < shorterStringLength; i++) {
-        if (oldArray[i] == newArray[i]) {
+        if (oldString.charAt(i) == newString.charAt(i)) {
             commonPrefixEnd = i+1;
         } else break;
     }
     for(let offset = 0; offset < shorterStringLength - commonPrefixEnd; offset++) {
-        if (oldArray[oldStringLastIndex - offset] == newArray[newStringLastIndex - offset]) {
+        if (oldString.charAt(oldStringLastIndex - offset) == newString.charAt(newStringLastIndex - offset)) {
             commonPostfixOffset = offset;
         } else break;
     }
-    if (oldStringLastIndex > newStringLastIndex) {//if oldString is longer we are removing text and we send an empty string as the diff
-        return new DiffPatchData(commonPrefixEnd, commonPostfixOffset, "");
-    } else {
-        return new DiffPatchData(commonPrefixEnd, commonPostfixOffset,
-            newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset));
-    }
+    newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset);
 }
 
 
