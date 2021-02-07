@@ -442,7 +442,6 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
      * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
      */
 
-    //I wasn't sure where this data class and function should go
     @Serializable
     data class DiffData(val prefixEnd: Int, val postFixOffset: Int, val diff: String)
 

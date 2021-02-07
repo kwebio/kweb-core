@@ -211,14 +211,13 @@ class DiffPatchData {
     }
 }
 
+//Used by setValue() in prelude.kt to compare 2 strings and return the difference between the 2.
 function get_diff_changes(id) {
     let e = document.getElementById(id);
     let newString = e.dataset.value;//reads the new string value from data-attribute data-vale
     let oldString = e.dataset.previousInput;//reads the oldString from the data-attribute data-previous-input
 
-    //This seems like a logical place to do this, but I'm unsure if it is safe to do so
-    //I think it might prematurely change the value of toBind.value in prelude.kt's setValue function
-    //savePreviousInput(newString, id)//put the newString into the data attribute so it can be used as the oldString the next time this method is run
+    savePreviousInput(newString, id)//put the newString into the data attribute so it can be used as the oldString the next time this method is run
 
     if (oldString === undefined) {//the first time this is run previous-input should be undefined so we just return the new string
         return new DiffPatchData(0, 0, newString);
@@ -245,7 +244,7 @@ function get_diff_changes(id) {
     newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset);
 }
 
-
+//Used to save the previous value of an input field to a data-attribute
 function savePreviousInput(previousInputString, id) {
     let e = document.getElementById(id);
     e.dataset.previousInput = previousInputString;

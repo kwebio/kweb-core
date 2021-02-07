@@ -49,6 +49,7 @@ class PreludeTest {
         }
     }
 
+    //These tests change the string in the input field, and then make sure that the new setValue() function returns the correct result
     @Test
     fun appendTextFromBeginning(driver: WebDriver) {
         driver.get("http://localhost:7659/")
@@ -107,7 +108,6 @@ class PreludeTestApp {
             render(inputKvar) {
                 input = input(type = InputType.text)
                 input.setValue("Lazy Brown Fox")
-                //input.setValue(KVar("Lazy Browner Fox"), "input")
             }
         }
     }
