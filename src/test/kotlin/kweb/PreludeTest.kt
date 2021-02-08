@@ -23,7 +23,13 @@ import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumExtension::class)
-class PreludeTest(@Arguments("--headless") private val driver: WebDriver) {
+class PreludeTest(@Arguments("--headless") private var driver: WebDriver) {
+
+    init {
+        //ThreadGuard.protect ensures that only the thread that creates the driver, can call the driver.
+        //This gives the tests thread safety, with the downside of slowing down the tests a little.
+        driver = ThreadGuard.protect(driver)
+    }
 
     companion object {
         private lateinit var preludeTestApp: PreludeTestApp
