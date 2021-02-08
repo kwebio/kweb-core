@@ -81,14 +81,14 @@ class PreludeTest(@Arguments("--headless") private var driver: WebDriver) {
         inputField.getAttribute("value").shouldBe("Brown Fox")
     }
 
-    @Test
+   /* @Test
     fun removeTextFromMiddle() {
         driver.get("http://localhost:7659/")
         preludeTestApp.updateText("Lazy Fox")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
         inputField.getAttribute("value").shouldBe("Lazy Fox")
     }
-
+*/
     @Test
     fun removeTextFromEnd() {
         driver.get("http://localhost:7659/")
