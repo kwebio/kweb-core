@@ -23,13 +23,7 @@ import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumExtension::class)
-class PreludeTest(@Arguments("--headless") private var driver: WebDriver) {
-
-    init {
-        //ThreadGuard.protect ensures that only the thread that creates the driver, can call the driver.
-        //This gives the tests thread safety, with the downside of slowing down the tests a little.
-        driver = ThreadGuard.protect(driver)
-    }
+class PreludeTest() {
 
     companion object {
         private lateinit var preludeTestApp: PreludeTestApp
@@ -46,54 +40,69 @@ class PreludeTest(@Arguments("--headless") private var driver: WebDriver) {
             PreludeTest.preludeTestApp.server.close()
         }
 
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            setHeadless(true)
+        }
+
+        @Options
+        var firefoxOptions = FirefoxOptions().apply {
+            setHeadless(true)
+        }
     }
 
     //These tests change the string in the input field, and then make sure that the new setValue() function returns the correct result
     @Test
-    fun appendTextFromBeginning() {
+    fun appendTextFromBeginning(driver: WebDriver) {
         driver.get("http://localhost:7659/")
         preludeTestApp.updateText("Super Lazy Brown Fox")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        Thread.sleep(300)
         inputField.getAttribute("value").shouldBe("Super Lazy Brown Fox")
     }
 
     @Test
-    fun appendTextFromMiddle() {
+    fun appendTextFromMiddle(driver: WebDriver) {
         driver.get("http://localhost:7659/")
         preludeTestApp.updateText("Lazy Reddish Brown Fox")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        Thread.sleep(300)
         inputField.getAttribute("value").shouldBe("Lazy Reddish Brown Fox")
     }
 
     @Test
-    fun appendTextFromEnd() {
+    fun appendTextFromEnd(driver: WebDriver) {
         driver.get("http://localhost:7659/")
         preludeTestApp.updateText("Lazy Brown Fox Jumped")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        Thread.sleep(300)
         inputField.getAttribute("value").shouldBe("Lazy Brown Fox Jumped")
     }
 
     @Test
-    fun removeTextFromBeginning() {
+    fun removeTextFromBeginning(driver: WebDriver) {
         driver.get("http://localhost:7659/")
         preludeTestApp.updateText("Brown Fox")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        Thread.sleep(300)
         inputField.getAttribute("value").shouldBe("Brown Fox")
     }
 
-   /* @Test
-    fun removeTextFromMiddle() {
+    @Test
+    fun removeTextFromMiddle(driver: WebDriver) {
         driver.get("http://localhost:7659/")
         preludeTestApp.updateText("Lazy Fox")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        Thread.sleep(300)
         inputField.getAttribute("value").shouldBe("Lazy Fox")
     }
-*/
+
     @Test
-    fun removeTextFromEnd() {
+    fun removeTextFromEnd(driver: WebDriver) {
         driver.get("http://localhost:7659/")
         preludeTestApp.updateText("Lazy Brown")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        Thread.sleep(300)
         inputField.getAttribute("value").shouldBe("Lazy Brown")
     }
 }
