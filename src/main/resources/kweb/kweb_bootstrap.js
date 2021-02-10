@@ -212,12 +212,11 @@ class DiffPatchData {
 }
 
 //Used by setValue() in prelude.kt to compare 2 strings and return the difference between the 2.
-function get_diff_changes(id) {
-    let e = document.getElementById(id);
-    let newString = e.dataset.value;//reads the new string value from data-attribute data-vale
-    let oldString = e.dataset.previousInput;//reads the oldString from the data-attribute data-previous-input
+function get_diff_changes(htmlInputElement) {
+    let newString = htmlInputElement.value;//reads the new string value from data-attribute data-vale
+    let oldString = htmlInputElement.dataset.previousInput;//reads the oldString from the data-attribute data-previous-input
 
-    savePreviousInput(newString, id)//put the newString into the data attribute so it can be used as the oldString the next time this method is run
+    savePreviousInput(newString, htmlInputElement)//put the newString into the data attribute so it can be used as the oldString the next time this method is run
 
     if (oldString === undefined) {//the first time this is run previous-input should be undefined so we just return the new string
         return new DiffPatchData(0, 0, newString);
@@ -227,7 +226,7 @@ function get_diff_changes(id) {
     let oldStringLastIndex = oldString.length - 1;
     let newStringLastIndex = newString.length - 1;
 
-    let commonPostfixOffset = 0;
+    let commonPostfixOffset = -1; //if the postFix value is set to -1, it means there is no match on the end of the string
 
     let shorterStringLength = (oldString.length > newString.length) ? newString.length : oldString.length;
 
@@ -238,16 +237,16 @@ function get_diff_changes(id) {
     }
     for(let offset = 0; offset < shorterStringLength - commonPrefixEnd; offset++) {
         if (oldString.charAt(oldStringLastIndex - offset) == newString.charAt(newStringLastIndex - offset)) {
-            commonPostfixOffset = offset;
+            commonPostfixOffset = offset+1;
         } else break;
     }
-    newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset);
+    htmlInputElement.dataset.patchData = new DiffPatchData(commonPrefixEnd, commonPostfixOffset, newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset)).toJSON;
+    return new DiffPatchData(commonPrefixEnd, commonPostfixOffset, newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset));
 }
 
 //Used to save the previous value of an input field to a data-attribute
-function savePreviousInput(previousInputString, id) {
-    let e = document.getElementById(id);
-    e.dataset.previousInput = previousInputString;
+function savePreviousInput(previousInputString, htmlInputElement) {
+    htmlInputElement.dataset.previousInput = previousInputString
 }
 
 function removeElementByIdIfExists(id) {
