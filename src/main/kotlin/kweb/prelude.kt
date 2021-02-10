@@ -447,16 +447,16 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
     private fun applyDiff(oldString: String, diffData: DiffData) : String {
         return when {
-            diffData.postFixOffset == 0 -> {//these 2 edge cases prevent the prefix or the postfix from being
+            diffData.postFixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
                 // repeated when you append text to the beginning of the text or the end of the text
                 oldString.substring(0, diffData.prefixEnd) + diffData.diff
             }
             diffData.prefixEnd == 0 -> {
-                diffData.diff + oldString.substring(oldString.length - 1 - diffData.postFixOffset)
+                diffData.diff + oldString.substring(oldString.length - diffData.postFixOffset)
             }
             else -> {
                 oldString.substring(0, diffData.prefixEnd) + diffData.diff +
-                        oldString.substring(oldString.length - 1 - diffData.postFixOffset)
+                        oldString.substring(oldString.length - diffData.postFixOffset)
             }
         }
     }
