@@ -240,7 +240,6 @@ function get_diff_changes(htmlInputElement) {
             commonPostfixOffset = offset+1;
         } else break;
     }
-    htmlInputElement.dataset.patchData = new DiffPatchData(commonPrefixEnd, commonPostfixOffset, newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset)).toJSON;
     return new DiffPatchData(commonPrefixEnd, commonPostfixOffset, newString.substring(commonPrefixEnd, newString.length - commonPostfixOffset));
 }
 
