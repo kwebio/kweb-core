@@ -18,6 +18,8 @@ import org.openqa.selenium.support.ThreadGuard
 class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
+		//ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
+		//This should make this test thread safe.
         driver = ThreadGuard.protect(driver)
     }
 
