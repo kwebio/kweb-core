@@ -1,4 +1,4 @@
-package kweb.common
+package kweb.util
 
 /**
  * A fast, lightweight string templating system with zero dependencies.

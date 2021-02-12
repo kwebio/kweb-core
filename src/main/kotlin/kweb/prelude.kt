@@ -3,6 +3,9 @@ package kweb
 import com.github.salomonbrys.kotson.toJson
 import io.ktor.routing.*
 import io.mola.galimatias.URL
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
@@ -434,16 +437,39 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
             _valueKvar = v
         }
 
+
     /**
      * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
      */
+
+    @Serializable
+    data class DiffData(val prefixEnd: Int, val postFixOffset: Int, val diff: String)
+
+    private fun applyDiff(oldString: String, diffData: DiffData) : String {
+        return when {
+            diffData.postFixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
+                // repeated when you append text to the beginning of the text or the end of the text
+                oldString.substring(0, diffData.prefixEnd) + diffData.diff
+            }
+            diffData.prefixEnd == 0 -> {
+                diffData.diff + oldString.substring(oldString.length - diffData.postFixOffset)
+            }
+            else -> {
+                oldString.substring(0, diffData.prefixEnd) + diffData.diff +
+                        oldString.substring(oldString.length - diffData.postFixOffset)
+            }
+        }
+    }
+
     fun setValue(toBind: KVar<String>, updateOn: String = "input") {
         setValue(toBind as KVal<String>)
 
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
-        on(retrieveJs = "${jsExpression}.value").event(updateOn, Event::class) {
-            toBind.value = it.retrieved ?: error("No value was retrieved")
+        on(retrieveJs = "get_diff_changes(${jsExpression})").event(updateOn, Event::class) {
+            val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
+            val diffData = Json.decodeFromString<DiffData>(diffDataJson)
+            toBind.value = applyDiff(toBind.value, diffData)
         }
     }
 }

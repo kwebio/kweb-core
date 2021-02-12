@@ -10,12 +10,12 @@ buildscript {
 
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version '1.4.21'
+    id "org.jetbrains.kotlin.jvm" version '1.4.30'
     id 'maven'
     id 'org.jetbrains.dokka' version '1.4.20'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.github.ben-manes.versions" version "0.36.0"
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.21'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.30'
 }
 
 apply plugin: "com.github.ben-manes.versions"
@@ -51,10 +51,11 @@ dependencies {
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.21"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.4.30"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.30"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.2'
+    compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC'
 
     ////////////////////
     // Ktor dependencies
