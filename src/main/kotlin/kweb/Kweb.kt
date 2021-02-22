@@ -152,8 +152,30 @@ class Kweb private constructor(
         if (outboundMessageCatcher == null) {
             wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
         } else {
-            logger.debug("Temporarily storing message for $clientId in threadloacal outboundMessageCatcher")
+            logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.add(javascript)
+        }
+    }
+
+    fun cacheAndExecute(clientId: String, cacheId: Int, js: String, parameters: String, vararg args: Any) {
+        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
+                instructions = listOf(Instruction(Instruction.Type.CacheFunction,
+                    parameters = listOf(cacheId, js, parameters, args)))))//execute = Server2ClientMessage.Execute(javascript)))
+        }
+
+    }
+
+    fun executeFromCache(clientId: String, cacheId: Int, vararg args: Any) {
+        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
+                instructions = listOf(Instruction(Instruction.Type.ExecuteFromCache, parameters = listOf(cacheId, args)))))//execute = Server2ClientMessage.Execute(javascript)))
         }
     }
 
@@ -161,6 +183,7 @@ class Kweb private constructor(
 
     fun send(clientId: String, instructions: List<Instruction>) {
         if (outboundMessageCatcher.get() != null) {
+            //TODO, this comment does not complete it's thought.
             error("""
                 Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
                 """.trimIndent())

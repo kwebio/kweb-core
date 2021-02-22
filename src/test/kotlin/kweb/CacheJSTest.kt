@@ -15,8 +15,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 @ExtendWith(SeleniumExtension::class)
-class CacheJSTest(private var driver: WebDriver) {
-//class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
+//class CacheJSTest(private var driver: WebDriver) {
+class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
 
     companion object {
         private lateinit var cacheJSApp: CacheJSApp
@@ -39,7 +39,7 @@ class CacheJSTest(private var driver: WebDriver) {
     fun checkCacheSize() {
         driver.get("http://localhost:7659/")
         val browser = cacheJSApp.returnBrowser()
-        browser.executeFromCache("""alert({} + "!!!!!");""","Derek")
+        browser.executeFromCache("""alert("Hello " + {});""","Derek")
         browser.executeFromCache("return {} * {}", 4, 4)
         browser.cachedFunctions.size.shouldBe(2)
     }

@@ -8,6 +8,8 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 
+let cachedFunctions = new Map();
+
 function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
@@ -103,10 +105,28 @@ function handleInboundMessage(msg) {
                 const id = instruction.parameters[0];
                 const text = instruction.parameters[1];
                 document.getElementById(id).textContent = text
+            } else if (instruction.type === "CacheFunction") {//cache and execute
+                const id = instruction.parameters[0];
+                const js = instruction.parameters[1];
+                const params = instruction.parameters[2];
+                //params is a comma separated string of the parameters our function will use
+                let args = instruction.parameters[3];
+                let func = new Function(params, js);
+                cachedFunctions.set(id, func);
+                func.apply(this, args[0]);
+                //TODO for some reason args is an array with a single element. That element is the array of our arguments.
+                //I'm not sure why that outer array is being created. using args[0] makes this work though.
+            } else if (instruction.type === "ExecuteFromCache") {
+                const id = instruction.parameters[0];
+                const args = instruction.parameters[1];
+                const cachedFunc = cachedFunctions.get(id);
+                cachedFunc.apply(this, args[0]);
             }
         }
     }
 }
+
+
 
 function connectWs() {
     var wsURL = toWSUrl("ws");

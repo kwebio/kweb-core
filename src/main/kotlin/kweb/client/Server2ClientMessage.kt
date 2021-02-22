@@ -14,7 +14,9 @@ data class Server2ClientMessage(
             CreateElement,
             SetText,
             AddText,
-            RemoveAttribute
+            RemoveAttribute,
+            CacheFunction,
+            ExecuteFromCache
         }
     }
 
