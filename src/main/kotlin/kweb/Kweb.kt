@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
-import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
@@ -150,7 +149,7 @@ class Kweb private constructor(
         }
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript, jsId = 0))
         } else {
             logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.add(javascript)
@@ -161,10 +160,10 @@ class Kweb private constructor(
         val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val outboundMessageCatcher = outboundMessageCatcher.get()
+        val argers = arrayOf('a', 'b', 'c')
         if (outboundMessageCatcher == null) {
             wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
-                instructions = listOf(Instruction(Instruction.Type.CacheFunction,
-                    parameters = listOf(cacheId, js, parameters, args)))))//execute = Server2ClientMessage.Execute(javascript)))
+                jsId = cacheId, parameters = parameters, arguments = args.asList()))
         }
 
     }
@@ -175,7 +174,7 @@ class Kweb private constructor(
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
             wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
-                instructions = listOf(Instruction(Instruction.Type.ExecuteFromCache, parameters = listOf(cacheId, args)))))//execute = Server2ClientMessage.Execute(javascript)))
+            jsId = cacheId, arguments = args.asList()))
         }
     }
 
