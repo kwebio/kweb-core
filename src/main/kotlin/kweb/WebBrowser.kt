@@ -114,9 +114,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return cf
     }
 
-    fun evaluateWithCallback(js: String, rh: (Any) -> Boolean) {
-        //kweb.evaluate(sessionId, js) { rh.invoke(it) }
-        kweb.execute(sessionId, js)
+    fun evaluateWithCallback(js: String, returnHandler: (Any) -> Boolean) {
+        kweb.evaluate(sessionId, js) { returnHandler.invoke(it) }
     }
 
     val doc = Document(this)

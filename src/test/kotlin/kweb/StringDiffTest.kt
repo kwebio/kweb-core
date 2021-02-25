@@ -1,4 +1,3 @@
-import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kotlintest.shouldBe
 import kweb.*
@@ -15,7 +14,8 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumExtension::class)
-class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
+//class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
+class StringDiffTest(private var driver: WebDriver) {
 
     init {
 		//ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
@@ -56,6 +56,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
         inputField.sendKeys(Keys.HOME)
         for (i in 0 until 5) {
             inputField.sendKeys(Keys.ARROW_RIGHT)
+            Thread.sleep(200);
         }
         inputField.sendKeys("Reddish ")
         inputField.sendKeys(Keys.ENTER)
@@ -125,7 +126,7 @@ class StringDiffTestApp {
         }
     }
 
-    fun getValue() : String {
+    fun getValue(): String {
         return input.getValue().get()
     }
 }

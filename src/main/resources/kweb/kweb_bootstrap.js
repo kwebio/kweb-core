@@ -23,70 +23,71 @@ function handleInboundMessage(msg) {
         );
     }
 
+    let func;
+    let js;
+    const args = msg["arguments"];
     const cacheId = msg["jsId"];
-    var params;
-    if (msg["parameters"] !== undefined) {
-        params = msg["parameters"];
-    }
-    let args = msg["arguments"];
-	var func;
-	if (cacheId === undefined) {
-	    func = new Function(params, msg["js"])
-	    func.apply(this, args);
-	    return;
-	}
-    if (cachedFunctions.get(cacheId) === undefined) {
-		let js = msg["js"];
-		func = new Function(params, js);
-		cachedFunctions.set(cacheId, func);
-    } else {
-		func = cachedFunctions.get(cacheId);
-	}
+    const callbackId = msg["callbackId"];
 
-	if (msg["callbackId"] === undefined) {
-		//execute without callback
-		try {
-			func.apply(this, args);
-			console.debug("Executed JavaScript", func.toString());
-		} catch (err) {
-			if (debugToken != undefined) {
-				console.error("Error evaluating [" + func.toString() + "]" + err);
-				var error = {
-					debugToken: debugToken,
-					error: {name: err.name, message: err.message}
-				};
-				var message = {id: kwebClientId, error: error};
-				sendMessage(JSON.stringify(message));
-			}
-			else {
-				throw err;
-			}
-		}
-	} else {
-		//execute with callback
-		try {
-			const data = func.apply(this, args);
-			console.debug("Evaluated [" + func.toString() + "]", data);
-			const callback = {callbackId: msg["callbackId"], data: data};
-			const message = {id: kwebClientId, callback: callback};
-			sendMessage(JSON.stringify(message));
-		} catch (err) {
-			if (debugToken != undefined) {
-				console.error("Error evaluating `" + func.toString() + "`: " + err);
-				const error = {
-					debugToken: debugToken,
-					error: {name: err.name, message: err.message}
-				};
-				const message = {id: kwebClientId, error: error};
-				sendMessage(JSON.stringify(message));
-			} else {
-				throw err;
-			}
-		}
-	}
+    if (cacheId !== undefined) {
+        if (cachedFunctions.get(cacheId) !== undefined) { //our function has already been cached
+            func = cachedFunctions.get(cacheId);
+        } else {//our function has not yet been cached, and we need to cache it.
+            const params = msg["parameters"];
+            js = msg["js"];
+            if (params !== undefined) {
+                func = new Function(params, js);
+            } else {
+                func = new Function(js);
+            }
+            cachedFunctions.set(cacheId, func);
+        }
+    } else {
+        //TODO this is a special case for a function with a null cacheId. This means we don't want to cache this function
+        //This will probably be removed
+        js = msg["js"];
+        const params = msg["parameters"];
+        js = msg["js"];
+        if (params !== undefined) {
+            func = new Function(params, js);
+        } else {
+            func = new Function(js);
+        }
+    }
+
+    if (callbackId !== undefined) { //execute with callback
+        try {
+            const data = func.apply(this, args);
+            console.debug("Evaluated [ " + func.toString() + "]", data);
+            const callback = {callbackId: callbackId, data: data};
+            const message = {id: kwebClientId, callback: callback};
+            sendMessage(JSON.stringify(message));
+        } catch (err) {
+            debugErr(debugToken, err, "Error Evaluating `" + func.toString() + "`: " + err);
+        }
+    } else { //execute without callback
+        try {
+            func.apply(this, args);
+            console.debug("Executed Javascript", func.toString());
+        } catch (err) {
+            debugErr(debugToken, err, "Error executing `" + func.toString() + "`: " + err);
+        }
+    }
 }
 
-
+function debugErr(debugToken, err, errMsg) {
+    if (debugToken !== undefined) {
+        console.error(errMsg);
+        const error = {
+            debugToken: debugToken,
+            error: {name: err.name, message: err.message}
+        };
+        const message = {id: kwebClientId, error: err};
+        sendMessage(JSON.stringify(message));
+    } else {
+        throw err;
+    }
+} 
 
 function connectWs() {
     var wsURL = toWSUrl("ws");
