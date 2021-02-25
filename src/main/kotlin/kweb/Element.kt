@@ -92,7 +92,8 @@ open class Element(
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendInstruction() -> {
-                    browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
+                    browser.executeFromCache("""document.getElementById({}).setAttribute({}, {});""",
+                        id, name, value)
                 }
                 else -> {
                     execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
@@ -119,7 +120,7 @@ open class Element(
 
     fun removeAttribute(name: String): Element {
         if (canSendInstruction()) {
-            browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.RemoveAttribute, listOf(id, name)))
+            browser.executeFromCache("document.getElementById({}).removeAttribute({})", id, name)
         } else {
             execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
         }
@@ -261,7 +262,7 @@ open class Element(
                 element.text(value)
             }
             canSendInstruction() -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.SetText, listOf(id, value)))
+                browser.executeFromCache("document.getElementById({}).textContent = {}", id, value)
             }
             else -> {
                 execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
@@ -303,7 +304,8 @@ open class Element(
                 element.appendText(value)
             }
             canSendInstruction() -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.AddText, listOf(id, value)))
+                val js = "const textNode = document.createTextNode({});document.getElementById({}).appendChild(textNode);"
+                browser.executeFromCache(js, value, id)
             }
             else -> {
                 execute("""

@@ -1,7 +1,5 @@
 package kweb
 
-import kweb.client.Server2ClientMessage.Instruction
-import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
@@ -76,7 +74,22 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 }
             }
             parent.canSendInstruction() -> {
-                browser.send(Instruction(CreateElement, listOf(tag, mutAttributes, id, parent.id, position ?: -1)))
+                val js = """const newEl = document.createElement({});
+                    newEl.setAttribute("id", {});
+                    let attributes = {};
+                    for (const key in attributes) {
+                        if(key !== "id") {
+                            newEl.setAttribute(key, attributes[key]);
+                        }
+                    }
+                    let parentElement = document.getElementById({});
+                    if ({} > -1) {
+                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                    } else {
+                        parentElement.appendChild(newEl);
+                    }
+                """.trimIndent()
+                browser.executeFromCache(js, tag, id, mutAttributes, parent.id, position ?: -1)
             }
             else -> {
                 parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))

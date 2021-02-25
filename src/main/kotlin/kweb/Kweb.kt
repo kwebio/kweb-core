@@ -178,25 +178,6 @@ class Kweb private constructor(
         }
     }
 
-    fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
-
-    fun send(clientId: String, instructions: List<Instruction>) {
-        if (outboundMessageCatcher.get() != null) {
-            //TODO, this comment does not complete it's thought.
-            error("""
-                Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
-                """.trimIndent())
-        }
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
-        wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(instructions.toString(), "instructions", Throwable()))
-            dt
-        }
-        wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
-    }
-
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
         // TODO: Should return handle which can be used for cleanup of event listeners
         val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
@@ -206,7 +187,7 @@ class Kweb private constructor(
             dt
         }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript))
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
@@ -223,7 +204,7 @@ class Kweb private constructor(
         }
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = expression, callbackId = callbackId))
     }
 
     override fun close() {
@@ -450,7 +431,9 @@ class Kweb private constructor(
         for (client in clientState.values) {
             val message = Server2ClientMessage(
                     yourId = client.id,
-                    execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
+                    debugToken = null,
+                    js = ("window.location.reload(true);")
+            )
             client.clientConnection.send(message.toJson())
         }
     }

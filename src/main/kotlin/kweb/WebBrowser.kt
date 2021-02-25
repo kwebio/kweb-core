@@ -2,7 +2,6 @@ package kweb
 
 import io.mola.galimatias.URL
 import kweb.client.HttpRequestInfo
-import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
@@ -67,7 +66,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.execute(sessionId, js)
     }
 
-    fun executeFromCache(js: String, vararg args: Any) {
+    fun executeFromCache(js: String, vararg args: Any?) {
         cachedFunctions[js]?.toInt()?.let {
             kweb.executeFromCache(sessionId, it, args)
         } ?: run {
@@ -116,13 +115,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     fun evaluateWithCallback(js: String, rh: (Any) -> Boolean) {
-        kweb.evaluate(sessionId, js) { rh.invoke(it) }
-    }
-
-    fun send(instruction: Instruction) = send(listOf(instruction))
-
-    fun send(instructions: List<Instruction>) {
-        kweb.send(sessionId, instructions)
+        //kweb.evaluate(sessionId, js) { rh.invoke(it) }
+        kweb.execute(sessionId, js)
     }
 
     val doc = Document(this)
