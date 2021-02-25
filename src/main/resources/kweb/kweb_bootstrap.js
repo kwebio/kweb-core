@@ -57,7 +57,7 @@ function handleInboundMessage(msg) {
 
     if (callbackId !== undefined) { //execute with callback
         try {
-            const data = func.apply(this, args);
+            const data = func.apply(this, args)
             console.debug("Evaluated [ " + func.toString() + "]", data);
             const callback = {callbackId: callbackId, data: data};
             const message = {id: kwebClientId, callback: callback};
