@@ -95,7 +95,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
             }
         }
-        val newElement = Element(parent.browser, this, tag = tag, jsExpression = """return document.getElementById("$id")""", id = id)
+        val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
         elementsCreated += newElement
         for (plugin in parent.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)
