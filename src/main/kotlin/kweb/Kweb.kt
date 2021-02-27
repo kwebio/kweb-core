@@ -157,6 +157,28 @@ class Kweb private constructor(
         }
     }
 
+    fun cacheAndExecute(clientId: String, cacheId: Int, js: String, parameters: String, vararg args: Any) {
+        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        val argers = arrayOf('a', 'b', 'c')
+        if (outboundMessageCatcher == null) {
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
+                    jsId = cacheId, parameters = parameters, arguments = args.asList()))
+        }
+
+    }
+
+    fun executeFromCache(clientId: String, cacheId: Int, vararg args: Any) {
+        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
+                    jsId = cacheId, arguments = args.asList()))
+        }
+    }
+
     fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
 
     fun send(clientId: String, instructions: List<Instruction>) {

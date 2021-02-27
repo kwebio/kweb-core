@@ -10,7 +10,9 @@ import kweb.state.KVar
 import kweb.state.ReversibleFunction
 import kweb.util.pathQueryFragment
 import mu.KotlinLogging
+import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
@@ -40,6 +42,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
+    val cachedFunctions = ConcurrentHashMap<String, AtomicInteger>()
+
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
     }
@@ -61,6 +65,37 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun execute(js: String) {
         kweb.execute(sessionId, js)
+    }
+
+    fun executeFromCache(js: String, vararg args: Any?) {
+        cachedFunctions[js]?.toInt()?.let {
+            kweb.executeFromCache(sessionId, it, args)
+        } ?: run {
+            val rng = Random()
+            val cacheId = AtomicInteger(rng.nextInt())
+            val func = getJsFunction(js)
+            //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
+            cachedFunctions[js] = cacheId
+            //we send the modified js to the client to be cached there.
+            //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
+            kweb.cacheAndExecute(sessionId, cacheId.toInt(), func.js, func.params, args)
+        }
+    }
+
+    data class JSFunction(val js: String, val params: String)
+    //this function substitutes "{}" in user supplied javascript, for randomly generated variable names
+    private fun getJsFunction(rawJs: String): JSFunction {
+        val rng = Random()
+        var js = rawJs
+        val params = StringBuilder()
+        while (js.contains("{}")) {
+            //a few random letters, an underscore, and a randomly generated number should make a variable name that no one would ever come up with
+            val jsVarName = "rzd_${rng.nextInt(1000)}"
+            js = js.replaceFirst("{}", jsVarName)
+            params.append("$jsVarName,")
+        }
+        params.deleteCharAt(params.lastIndex)//delete the last trailing comma
+        return JSFunction(js, params.toString())
     }
 
     fun executeWithCallback(js: String, callbackId: Int, callback: (Any) -> Unit) {
