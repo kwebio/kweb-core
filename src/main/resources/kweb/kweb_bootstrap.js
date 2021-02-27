@@ -8,6 +8,8 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 
+let cachedFunctions = new Map()
+
 function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
@@ -20,6 +22,55 @@ function handleInboundMessage(msg) {
             kwebClientId
         );
     }
+
+    let func;
+    let js;
+    const args = msg["arguments"];
+    const cacheId = msg["jsId"];
+    const callbackId = msg["callbackId"];
+
+    if (cacheId !== undefined) {
+        if (cachedFunctions.get(cacheId) !== undefined) {
+            func = cachedFunctions.get(cacheId);
+        } else {
+            const params = msg["parameters"];
+            js = msg["js"];
+            if (params !== undefined) {
+                func = new Function(params, js);
+            } else {
+                func = new Function(js);
+            }
+            cachedFunctions.set(cacheId, func);
+        }
+    } else {
+        js = msg["js"];
+        const params = msg["parameters"];
+        if (params !== undefined) {
+            func = new Function(params, js);
+        } else {
+            func = new Function(js);
+        }
+    }
+
+    if (callbackId !== undefined) {
+        try {
+            const data = func.apply(this, args)
+            console.debug("Evaluated [ " + func.toString() + "]", data);
+            const callback = {callbackId: callbackId, data: data};
+            const message = {id: kwebClientId, callback: callback};
+            sendMessage(JSON.stringify(message));
+        } catch (err) {
+            debugErr(debugToken, err, "Error Evaluating `" + func.toString() + "`: " + err);
+        }
+    } else {
+        try {
+            func.apply(this, args);
+            console.debug("Executed Javascript", func.toString());
+        } catch (err) {
+            debugErr(debugToken, err, "Error Executing `" + func.toString() + "`: " + err);
+        }
+    }
+
     const execute = msg["execute"];
     if (execute !== undefined) {
         try {
@@ -105,6 +156,20 @@ function handleInboundMessage(msg) {
                 document.getElementById(id).textContent = text
             }
         }
+    }
+}
+
+function debugErr(debugToken, err, errMsg) {
+    if (debugToken !== undefined) {
+        console.error(errMsg);
+        const error = {
+            debugToken: debugToken,
+            error: {name: err.name, message: err.message}
+        };
+        const message = {id: kwebClientId, error: err};
+        sendMessage(JSON.stringify(message));
+    } else {
+        throw err;
     }
 }
 

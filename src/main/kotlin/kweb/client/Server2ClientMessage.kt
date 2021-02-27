@@ -5,7 +5,12 @@ data class Server2ClientMessage(
         val debugToken: String?,
         val execute: Execute? = null,
         val evaluate: Evaluate? = null,
-        val instructions: List<Instruction>? = null
+        val instructions: List<Instruction>? = null,
+        val jsId: Int? = null,
+        val js: String? = null,
+        val parameters: String? = null,
+        val callbackId: Int? = null,
+        val arguments: List<Any> = ArrayList()
 ) {
 
     data class Instruction(val type: Type, val parameters: List<Any?>) {
