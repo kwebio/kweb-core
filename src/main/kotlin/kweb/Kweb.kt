@@ -161,7 +161,6 @@ class Kweb private constructor(
         val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val outboundMessageCatcher = outboundMessageCatcher.get()
-        val argers = arrayOf('a', 'b', 'c')
         if (outboundMessageCatcher == null) {
             wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
                     jsId = cacheId, parameters = parameters, arguments = args.asList()))

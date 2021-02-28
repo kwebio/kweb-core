@@ -92,7 +92,8 @@ open class Element(
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendInstruction() -> {
-                    browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
+                    browser.executeFromCache("""document.getElementById({}).setAttribute({}, {});""",
+                            id, name, value)
                 }
                 else -> {
                     execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
