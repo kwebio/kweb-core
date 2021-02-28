@@ -304,7 +304,8 @@ open class Element(
                 element.appendText(value)
             }
             canSendInstruction() -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.AddText, listOf(id, value)))
+                val js = "const textNode = document.createTextNode({});document.getElementById({}).appendChild(textNode);"
+                browser.executeFromCache(js, value, id)
             }
             else -> {
                 execute("""

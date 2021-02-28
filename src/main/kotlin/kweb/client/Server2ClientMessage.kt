@@ -15,10 +15,8 @@ data class Server2ClientMessage(
 
     data class Instruction(val type: Type, val parameters: List<Any?>) {
         enum class Type {
-            SetAttribute,
             CreateElement,
             SetText,
-            AddText,
             RemoveAttribute
         }
     }
