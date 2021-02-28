@@ -120,7 +120,7 @@ open class Element(
 
     fun removeAttribute(name: String): Element {
         if (canSendInstruction()) {
-            browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.RemoveAttribute, listOf(id, name)))
+            browser.executeFromCache("document.getElementById({}).removeAttribute({})", id, name)
         } else {
             execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
         }

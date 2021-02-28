@@ -17,7 +17,6 @@ data class Server2ClientMessage(
         enum class Type {
             CreateElement,
             SetText,
-            RemoveAttribute
         }
     }
 
