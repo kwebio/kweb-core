@@ -8,7 +8,7 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 
-let cachedFunctions = new Map();
+let cachedFunctions = new Map()
 
 function handleInboundMessage(msg) {
     console.debug("")
@@ -30,9 +30,9 @@ function handleInboundMessage(msg) {
     const callbackId = msg["callbackId"];
 
     if (cacheId !== undefined) {
-        if (cachedFunctions.get(cacheId) !== undefined) { //our function has already been cached
+        if (cachedFunctions.get(cacheId) !== undefined) {
             func = cachedFunctions.get(cacheId);
-        } else {//our function has not yet been cached, and we need to cache it.
+        } else {
             const params = msg["parameters"];
             js = msg["js"];
             if (params !== undefined) {
@@ -43,11 +43,8 @@ function handleInboundMessage(msg) {
             cachedFunctions.set(cacheId, func);
         }
     } else {
-        //TODO this is a special case for a function with a null cacheId. This means we don't want to cache this function
-        //This will probably be removed
         js = msg["js"];
         const params = msg["parameters"];
-        js = msg["js"];
         if (params !== undefined) {
             func = new Function(params, js);
         } else {
@@ -55,7 +52,7 @@ function handleInboundMessage(msg) {
         }
     }
 
-    if (callbackId !== undefined) { //execute with callback
+    if (callbackId !== undefined) {
         try {
             const data = func.apply(this, args)
             console.debug("Evaluated [ " + func.toString() + "]", data);
@@ -65,12 +62,105 @@ function handleInboundMessage(msg) {
         } catch (err) {
             debugErr(debugToken, err, "Error Evaluating `" + func.toString() + "`: " + err);
         }
-    } else { //execute without callback
+    } else {
         try {
             func.apply(this, args);
             console.debug("Executed Javascript", func.toString());
         } catch (err) {
-            debugErr(debugToken, err, "Error executing `" + func.toString() + "`: " + err);
+            debugErr(debugToken, err, "Error Executing `" + func.toString() + "`: " + err);
+        }
+    }
+
+    const execute = msg["execute"];
+    if (execute !== undefined) {
+        try {
+            eval(execute["js"]);
+            console.debug("Executed JavaScript", execute["js"]);
+        } catch (err) {
+            if (debugToken != undefined) {
+                console.error("Error evaluating [" + execute["js"] + "] : " + err);
+                var error = {
+                    debugToken: debugToken,
+                    error: {name: err.name, message: err.message}
+                };
+                var message = {id: kwebClientId, error: error};
+                sendMessage(JSON.stringify(message));
+            } else {
+                throw err;
+            }
+        }
+    }
+    let evaluate = msg["evaluate"];
+    if (evaluate !== undefined) {
+        try {
+            let funcToEval = new Function(evaluate["js"]);
+            const data = funcToEval();
+            //const data = eval(evaluate["js"]);
+            console.debug("Evaluated [" + evaluate["js"] + "]");
+            const callback = {callbackId: evaluate["callbackId"], data: data};
+            const message = {id: kwebClientId, callback: callback};
+            sendMessage(JSON.stringify(message));
+        } catch (err) {
+            if (debugToken != undefined) {
+                console.error("Error evaluating `" + evaluate["js"] + "`: " + err);
+                const error = {
+                    debugToken: debugToken,
+                    error: {name: err.name, message: err.message}
+                };
+                const message = {id: kwebClientId, error: error};
+                sendMessage(JSON.stringify(message));
+            } else {
+                throw err;
+            }
+        }
+    }
+    const instructions = msg["instructions"];
+    if (instructions !== undefined) {
+        for (let i = 0; i < instructions.length; i++) {
+            const instruction = instructions[i];
+            if (instruction.type === "SetAttribute") {
+                document
+                    .getElementById(instruction.parameters[0])
+                    .setAttribute(instruction.parameters[1], instruction.parameters[2]);
+            } else if (instruction.type === "RemoveAttribute") {
+                const id = instruction.parameters[0];
+                const attribute = instruction.parameters[1];
+                document.getElementById(id).removeAttribute(attribute);
+            } else if (instruction.type === "CreateElement") {
+                const tag = instruction.parameters[0];
+                const attributes = instruction.parameters[1];
+                const myId = instruction.parameters[2];
+                const parentId = instruction.parameters[3];
+                const position = instruction.parameters[4];
+                const newEl = document.createElement(tag);
+                newEl.setAttribute("id", myId);
+                for (const key in attributes) {
+                    if (key !== "id") {
+                        newEl.setAttribute(key, attributes[key]);
+                    }
+                }
+
+                let parentElement = document.getElementById(parentId);
+
+                if (position > -1) {
+                    parentElement.insertBefore(newEl, parentElement.children[position]);
+                } else {
+                    parentElement.appendChild(newEl);
+                }
+            } else if (instruction.type === "AddText") {
+                const id = instruction.parameters[0];
+                const text = instruction.parameters[1];
+                const textNode = document.createTextNode(text);
+                document.getElementById(id).appendChild(textNode);
+            } else if (instruction.type === "SetText") {
+                const id = instruction.parameters[0];
+                const text = instruction.parameters[1];
+                let setText = new Function('a,b', 'document.getElementById(a).textContent = b');
+                console.debug(setText.toString());
+                let args = [id, text];
+                setText.apply(this, args);
+                //document.getElementById(id).textContent = text
+            }
         }
     }
 }
@@ -87,7 +177,7 @@ function debugErr(debugToken, err, errMsg) {
     } else {
         throw err;
     }
-} 
+}
 
 function connectWs() {
     var wsURL = toWSUrl("ws");
@@ -146,10 +236,10 @@ function sendMessage(msg) {
         console.debug("Sending WebSocket message", msg);
         socket.send(msg);
     } else {
-        console.debug(
+        /*console.debug(
             "Queueing WebSocket message as connection isn't established",
             msg
-        );
+        );*/
         preWSMsgQueue.push(msg);
     }
 }

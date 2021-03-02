@@ -3,14 +3,23 @@ package kweb.client
 data class Server2ClientMessage(
         val yourId: String,
         val debugToken: String?,
-        val jsId: Int? = null,//the int id used to either store or read the cached js function
-        val callbackId: Int? = null,//null if there is no callback
-        val js: String? = null, //the js string to cache, will be null if the function has already been cached
+        val execute: Execute? = null,
+        val evaluate: Evaluate? = null,
+        val instructions: List<Instruction>? = null,
+        val jsId: Int? = null,
+        val js: String? = null,
         val parameters: String? = null,
-        val arguments: List<Any> = ArrayList<Any>()//a list of arguments to pass to the js function
-)
+        val callbackId: Int? = null,
+        val arguments: List<Any> = ArrayList()
+) {
 
-/*
-parameters is a comma separated string of the js function parameters,
-will be null if already cached or if the function has no parameters
-*/
+    data class Instruction(val type: Type, val parameters: List<Any?>) {
+        enum class Type {
+            CreateElement,
+            SetText,
+        }
+    }
+
+    data class Execute(val js: String)
+    data class Evaluate(val js: String, val callbackId: Int)
+}

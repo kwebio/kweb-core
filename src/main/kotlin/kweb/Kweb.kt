@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
+import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
@@ -149,7 +150,7 @@ class Kweb private constructor(
         }
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript, jsId = 0))
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
         } else {
             logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.add(javascript)
@@ -160,10 +161,9 @@ class Kweb private constructor(
         val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val outboundMessageCatcher = outboundMessageCatcher.get()
-        val argers = arrayOf('a', 'b', 'c')
         if (outboundMessageCatcher == null) {
             wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
-                jsId = cacheId, parameters = parameters, arguments = args.asList()))
+                    jsId = cacheId, parameters = parameters, arguments = args.asList()))
         }
 
     }
@@ -174,8 +174,26 @@ class Kweb private constructor(
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
             wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
-            jsId = cacheId, arguments = args.asList()))
+                    jsId = cacheId, arguments = args.asList()))
         }
+    }
+
+    fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
+
+    fun send(clientId: String, instructions: List<Instruction>) {
+        if (outboundMessageCatcher.get() != null) {
+            error("""
+                Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
+                """.trimIndent())
+        }
+        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val debugToken: String? = if (!debug) null else {
+            val dt = Math.abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens.put(dt, DebugInfo(instructions.toString(), "instructions", Throwable()))
+            dt
+        }
+        wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
     }
 
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
@@ -187,7 +205,7 @@ class Kweb private constructor(
             dt
         }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
@@ -204,7 +222,7 @@ class Kweb private constructor(
         }
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = expression, callbackId = callbackId))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
     }
 
     override fun close() {
@@ -431,9 +449,7 @@ class Kweb private constructor(
         for (client in clientState.values) {
             val message = Server2ClientMessage(
                     yourId = client.id,
-                    debugToken = null,
-                    js = ("window.location.reload(true);")
-            )
+                    execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
             client.clientConnection.send(message.toJson())
         }
     }
