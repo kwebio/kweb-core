@@ -10,7 +10,7 @@ data class Server2ClientMessage(
         val js: String? = null,
         val parameters: String? = null,
         val callbackId: Int? = null,
-        val arguments: List<Any> = ArrayList()
+        val arguments: List<Any?>? = null
 ) {
 
     data class Instruction(val type: Type, val parameters: List<Any?>) {
