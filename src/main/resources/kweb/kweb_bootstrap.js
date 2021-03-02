@@ -93,8 +93,10 @@ function handleInboundMessage(msg) {
     let evaluate = msg["evaluate"];
     if (evaluate !== undefined) {
         try {
-            const data = eval(evaluate["js"]);
-            console.debug("Evaluated [" + evaluate["js"] + "]", data);
+            let funcToEval = new Function(evaluate["js"]);
+            const data = funcToEval();
+            //const data = eval(evaluate["js"]);
+            console.debug("Evaluated [" + evaluate["js"] + "]");
             const callback = {callbackId: evaluate["callbackId"], data: data};
             const message = {id: kwebClientId, callback: callback};
             sendMessage(JSON.stringify(message));
@@ -153,7 +155,11 @@ function handleInboundMessage(msg) {
             } else if (instruction.type === "SetText") {
                 const id = instruction.parameters[0];
                 const text = instruction.parameters[1];
-                document.getElementById(id).textContent = text
+                let setText = new Function('a,b', 'document.getElementById(a).textContent = b');
+                console.debug(setText.toString());
+                let args = [id, text];
+                setText.apply(this, args);
+                //document.getElementById(id).textContent = text
             }
         }
     }
@@ -230,10 +236,10 @@ function sendMessage(msg) {
         console.debug("Sending WebSocket message", msg);
         socket.send(msg);
     } else {
-        console.debug(
+        /*console.debug(
             "Queueing WebSocket message as connection isn't established",
             msg
-        );
+        );*/
         preWSMsgQueue.push(msg);
     }
 }

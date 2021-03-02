@@ -262,7 +262,10 @@ open class Element(
                 element.text(value)
             }
             canSendInstruction() -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.SetText, listOf(id, value)))
+                //browser.execute("""document.getElementById("$id").textContent = "$value"""")
+                //browser.execute("""$jsExpression.textContent = "$value"""")
+                browser.executeFromCache("""document.getElementById({}).textContent = {};""", id, value)
+                //browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.SetText, listOf(id, value)))
             }
             else -> {
                 execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
@@ -330,8 +333,8 @@ open class Element(
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
         val callbackId = abs(random.nextInt())
-        val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
-        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
+        val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
+        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
         val js = jsExpression + """
             .addEventListener(${eventName.toJson()}, function(event) {
                 callbackWs($callbackId, $eventObject);

@@ -152,7 +152,7 @@ class Kweb private constructor(
         if (outboundMessageCatcher == null) {
             wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
         } else {
-            logger.debug("Temporarily storing message for $clientId in threadloacal outboundMessageCatcher")
+            logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.add(javascript)
         }
     }
