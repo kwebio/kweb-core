@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
-import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
@@ -34,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
+import kotlin.math.exp
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
@@ -150,7 +150,7 @@ class Kweb private constructor(
         }
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript))
         } else {
             logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.add(javascript)
@@ -178,7 +178,7 @@ class Kweb private constructor(
         }
     }
 
-    fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
+    /*fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
 
     fun send(clientId: String, instructions: List<Instruction>) {
         if (outboundMessageCatcher.get() != null) {
@@ -194,7 +194,7 @@ class Kweb private constructor(
             dt
         }
         wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
-    }
+    }*/
 
     fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
         // TODO: Should return handle which can be used for cleanup of event listeners
@@ -205,7 +205,7 @@ class Kweb private constructor(
             dt
         }
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript))
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
@@ -222,7 +222,7 @@ class Kweb private constructor(
         }
         val callbackId = Math.abs(random.nextInt())
         wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
+        wsClientData.send(Server2ClientMessage(yourId = clientId, callbackId = callbackId, js = expression, debugToken = debugToken))
     }
 
     override fun close() {
@@ -449,7 +449,8 @@ class Kweb private constructor(
         for (client in clientState.values) {
             val message = Server2ClientMessage(
                     yourId = client.id,
-                    execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
+                    js = "window.location.reload(true);",
+                    debugToken = null)
             client.clientConnection.send(message.toJson())
         }
     }

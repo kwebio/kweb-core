@@ -74,22 +74,28 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 }
             }
             parent.canSendInstruction() -> {
-                val js = """const newEl = document.createElement({});
-                    newEl.setAttribute("id", {});
+                val js = """
+                    let tag = {};
                     let attributes = {};
+                    let myId = {};
+                    let parentId = {};
+                    let position = {};
+                    let newEl = document.createElement(tag);
+                    newEl.setAttribute("id", myId);
                     for (const key in attributes) {
-                        if(key !== "id") {
+                        if ( key !== "id") {
                             newEl.setAttribute(key, attributes[key]);
                         }
                     }
-                    let parentElement = document.getElementById({});
-                    if ({} > -1) {
+                    let parentElement = document.getElementById(parentId);
+                    
+                    if (position > -1) {
                         parentElement.insertBefore(newEl, parentElement.children[position]);
                     } else {
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.executeFromCache(js, tag, id, mutAttributes, parent.id, position ?: -1)
+                browser.executeFromCache(js, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             else -> {
                 parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))

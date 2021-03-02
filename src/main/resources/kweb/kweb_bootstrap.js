@@ -43,6 +43,7 @@ function handleInboundMessage(msg) {
             cachedFunctions.set(cacheId, func);
         }
     } else {
+        //this is a special case for executeCalls that don't supply a cacheId. This should be removed
         js = msg["js"];
         const params = msg["parameters"];
         if (params !== undefined) {
@@ -68,99 +69,6 @@ function handleInboundMessage(msg) {
             console.debug("Executed Javascript", func.toString());
         } catch (err) {
             debugErr(debugToken, err, "Error Executing `" + func.toString() + "`: " + err);
-        }
-    }
-
-    const execute = msg["execute"];
-    if (execute !== undefined) {
-        try {
-            eval(execute["js"]);
-            console.debug("Executed JavaScript", execute["js"]);
-        } catch (err) {
-            if (debugToken != undefined) {
-                console.error("Error evaluating [" + execute["js"] + "] : " + err);
-                var error = {
-                    debugToken: debugToken,
-                    error: {name: err.name, message: err.message}
-                };
-                var message = {id: kwebClientId, error: error};
-                sendMessage(JSON.stringify(message));
-            } else {
-                throw err;
-            }
-        }
-    }
-    let evaluate = msg["evaluate"];
-    if (evaluate !== undefined) {
-        try {
-            let funcToEval = new Function(evaluate["js"]);
-            const data = funcToEval();
-            //const data = eval(evaluate["js"]);
-            console.debug("Evaluated [" + evaluate["js"] + "]");
-            const callback = {callbackId: evaluate["callbackId"], data: data};
-            const message = {id: kwebClientId, callback: callback};
-            sendMessage(JSON.stringify(message));
-        } catch (err) {
-            if (debugToken != undefined) {
-                console.error("Error evaluating `" + evaluate["js"] + "`: " + err);
-                const error = {
-                    debugToken: debugToken,
-                    error: {name: err.name, message: err.message}
-                };
-                const message = {id: kwebClientId, error: error};
-                sendMessage(JSON.stringify(message));
-            } else {
-                throw err;
-            }
-        }
-    }
-    const instructions = msg["instructions"];
-    if (instructions !== undefined) {
-        for (let i = 0; i < instructions.length; i++) {
-            const instruction = instructions[i];
-            if (instruction.type === "SetAttribute") {
-                document
-                    .getElementById(instruction.parameters[0])
-                    .setAttribute(instruction.parameters[1], instruction.parameters[2]);
-            } else if (instruction.type === "RemoveAttribute") {
-                const id = instruction.parameters[0];
-                const attribute = instruction.parameters[1];
-                document.getElementById(id).removeAttribute(attribute);
-            } else if (instruction.type === "CreateElement") {
-                const tag = instruction.parameters[0];
-                const attributes = instruction.parameters[1];
-                const myId = instruction.parameters[2];
-                const parentId = instruction.parameters[3];
-                const position = instruction.parameters[4];
-                const newEl = document.createElement(tag);
-                newEl.setAttribute("id", myId);
-                for (const key in attributes) {
-                    if (key !== "id") {
-                        newEl.setAttribute(key, attributes[key]);
-                    }
-                }
-
-                let parentElement = document.getElementById(parentId);
-
-                if (position > -1) {
-                    parentElement.insertBefore(newEl, parentElement.children[position]);
-                } else {
-                    parentElement.appendChild(newEl);
-                }
-            } else if (instruction.type === "AddText") {
-                const id = instruction.parameters[0];
-                const text = instruction.parameters[1];
-                const textNode = document.createTextNode(text);
-                document.getElementById(id).appendChild(textNode);
-            } else if (instruction.type === "SetText") {
-                const id = instruction.parameters[0];
-                const text = instruction.parameters[1];
-                let setText = new Function('a,b', 'document.getElementById(a).textContent = b');
-                console.debug(setText.toString());
-                let args = [id, text];
-                setText.apply(this, args);
-                //document.getElementById(id).textContent = text
-            }
         }
     }
 }

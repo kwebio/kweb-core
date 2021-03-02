@@ -1,3 +1,4 @@
+import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kotlintest.shouldBe
 import kweb.*
@@ -14,8 +15,8 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumExtension::class)
-//class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
-class StringDiffTest(private var driver: WebDriver) {
+class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
+//class StringDiffTest(private var driver: WebDriver) {
 
     init {
 		//ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
