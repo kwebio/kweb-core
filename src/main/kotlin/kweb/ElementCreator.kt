@@ -73,7 +73,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     }
                 }
             }
-            parent.canSendInstruction() -> {
+            parent.canSendMessage() -> {
                 val js = """
                     let tag = {};
                     let attributes = {};

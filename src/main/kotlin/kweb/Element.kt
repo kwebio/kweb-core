@@ -1,7 +1,6 @@
 package kweb
 
 import com.github.salomonbrys.kotson.toJson
-import kweb.client.Server2ClientMessage
 import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -91,7 +90,7 @@ open class Element(
                 htmlDoc != null && this.id != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
-                canSendInstruction() -> {
+                canSendMessage() -> {
                     browser.executeFromCache("""document.getElementById({}).setAttribute({}, {});""",
                             id, name, value)
                 }
@@ -119,7 +118,7 @@ open class Element(
     }
 
     fun removeAttribute(name: String): Element {
-        if (canSendInstruction()) {
+        if (canSendMessage()) {
             browser.executeFromCache("document.getElementById({}).removeAttribute({})", id, name)
         } else {
             execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
@@ -261,11 +260,8 @@ open class Element(
                 val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
                 element.text(value)
             }
-            canSendInstruction() -> {
-                //browser.execute("""document.getElementById("$id").textContent = "$value"""")
-                //browser.execute("""$jsExpression.textContent = "$value"""")
+            canSendMessage() -> {
                 browser.executeFromCache("""document.getElementById({}).textContent = {};""", id, value)
-                //browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.SetText, listOf(id, value)))
             }
             else -> {
                 execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
@@ -306,7 +302,7 @@ open class Element(
                 val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
                 element.appendText(value)
             }
-            canSendInstruction() -> {
+            canSendMessage() -> {
                 val js = "const textNode = document.createTextNode({});document.getElementById({}).appendChild(textNode);"
                 browser.executeFromCache(js, value, id)
             }
@@ -364,7 +360,7 @@ open class Element(
 
     val flags = ConcurrentSkipListSet<String>()
 
-    fun canSendInstruction() = id != null && browser.kweb.isNotCatchingOutbound()
+    fun canSendMessage() = id != null && browser.kweb.isNotCatchingOutbound()
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
