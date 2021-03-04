@@ -41,7 +41,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
-    val cachedFunctions = ConcurrentHashMap<String, AtomicInteger>()
+    val cachedFunctions = ConcurrentHashMap<String, Int>()
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
@@ -62,7 +62,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
-    fun execute(js: String) {
+    fun execute(js: String, vararg args: Any?) {
         kweb.execute(sessionId, js)
     }
 
@@ -71,7 +71,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             kweb.executeFromCache(sessionId, it, listOf(*args))
         } ?: run {
             val rng = Random()
-            val cacheId = AtomicInteger(rng.nextInt())
+            val cacheId = rng.nextInt()
             val func = getJsFunction(js)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[js] = cacheId
