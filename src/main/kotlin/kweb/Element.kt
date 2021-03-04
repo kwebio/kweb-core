@@ -91,7 +91,7 @@ open class Element(
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendMessage() -> {
-                    browser.executeFromCache("""document.getElementById({}).setAttribute({}, {});""",
+                    browser.execute("""document.getElementById({}).setAttribute({}, {});""",
                             id, name, value)
                 }
                 else -> {
@@ -119,7 +119,7 @@ open class Element(
 
     fun removeAttribute(name: String): Element {
         if (canSendMessage()) {
-            browser.executeFromCache("document.getElementById({}).removeAttribute({})", id, name)
+            browser.execute("document.getElementById({}).removeAttribute({})", id, name)
         } else {
             execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
         }
@@ -261,7 +261,7 @@ open class Element(
                 element.text(value)
             }
             canSendMessage() -> {
-                browser.executeFromCache("""document.getElementById({}).textContent = {};""", id, value)
+                browser.execute("""document.getElementById({}).textContent = {};""", id, value)
             }
             else -> {
                 execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
@@ -304,7 +304,7 @@ open class Element(
             }
             canSendMessage() -> {
                 val js = "const textNode = document.createTextNode({});document.getElementById({}).appendChild(textNode);"
-                browser.executeFromCache(js, value, id)
+                browser.execute(js, value, id)
             }
             else -> {
                 execute("""

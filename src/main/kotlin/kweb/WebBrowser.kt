@@ -63,10 +63,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     fun execute(js: String, vararg args: Any?) {
-        kweb.execute(sessionId, js)
-    }
-
-    fun executeFromCache(js: String, vararg args: Any?) {
         cachedFunctions[js]?.toInt()?.let {
             kweb.executeFromCache(sessionId, it, listOf(*args))
         } ?: run {
@@ -93,7 +89,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             js = js.replaceFirst("{}", jsVarName)
             params.append("$jsVarName,")
         }
-        params.deleteCharAt(params.lastIndex)//delete the last trailing comma
+        if (params.isNotEmpty()) {
+            params.deleteCharAt(params.lastIndex)//delete the last trailing comma
+        }
         return JSFunction(js, params.toString())
     }
 

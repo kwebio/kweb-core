@@ -39,8 +39,8 @@ class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
     fun checkCacheSize() {
         driver.get("http://localhost:7659/")
         val browser = cacheJSApp.returnBrowser()
-        browser.executeFromCache("""alert("Hello " + {});""","Derek")
-        browser.executeFromCache("return {} * {}", 4, 4)
+        browser.execute("""alert("Hello " + {});""","Derek")
+        browser.execute("return {} * {}", 4, 4)
         browser.cachedFunctions.size.shouldBe(2)
     }
 
@@ -49,7 +49,7 @@ class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
     fun checkCacheTest() {
         driver.get("http://localhost:7659/")
         val browser = cacheJSApp.returnBrowser()
-        browser.executeFromCache("""return {} * {}""", 4, 4)
+        browser.execute("""return {} * {}""", 4, 4)
         val keys = browser.cachedFunctions.keys()
         keys.nextElement().shouldBe("return {} * {}")
     }
