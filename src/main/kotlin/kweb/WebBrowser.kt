@@ -62,21 +62,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
-    fun execute(js: String, vararg args: Any?) {
-        cachedFunctions[js]?.toInt()?.let {
-            kweb.executeFromCache(sessionId, it, listOf(*args))
-        } ?: run {
-            val rng = Random()
-            val cacheId = rng.nextInt()
-            val func = getJsFunction(js)
-            //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
-            cachedFunctions[js] = cacheId
-            //we send the modified js to the client to be cached there.
-            //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            kweb.cacheAndExecute(sessionId, cacheId.toInt(), func.js, func.params, listOf(*args))
-        }
-    }
-
     data class JSFunction(val js: String, val params: String)
     //this function substitutes "{}" in user supplied javascript, for randomly generated variable names
     private fun getJsFunction(rawJs: String): JSFunction {
@@ -93,6 +78,21 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             params.deleteCharAt(params.lastIndex)//delete the last trailing comma
         }
         return JSFunction(js, params.toString())
+    }
+
+    fun execute(js: String, vararg args: Any?) {
+        cachedFunctions[js]?.let {
+            kweb.executeFromCache(sessionId, it, listOf(*args))
+        } ?: run {
+            val rng = Random()
+            val cacheId = rng.nextInt()
+            val func = getJsFunction(js)
+            //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
+            cachedFunctions[js] = cacheId
+            //we send the modified js to the client to be cached there.
+            //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
+            kweb.cacheAndExecute(sessionId, cacheId.toInt(), func.js, func.params, listOf(*args))
+        }
     }
 
     fun executeWithCallback(js: String, callbackId: Int, callback: (Any) -> Unit) {

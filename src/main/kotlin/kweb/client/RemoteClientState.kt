@@ -10,5 +10,5 @@ data class RemoteClientState(val id: String, @Volatile var clientConnection: Cli
         clientConnection.send(gson.toJson(message))
     }
 
-    override fun toString() = "RemoteC2lientState(id = $id)"
+    override fun toString() = "Remote2ClientState(id = $id)"
 }
