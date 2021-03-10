@@ -140,7 +140,7 @@ class Kweb private constructor(
         return jsList
     }
 
-    fun callJs(clientId: String, javascript: String, parameters: String, args: List<Any?>,
+    fun callJs(clientId: String, javascript: String, parameters: String? = null, args: List<Any?>,
                jsCached: Boolean = false, cacheId: Int? = null) {
         val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
@@ -163,9 +163,9 @@ class Kweb private constructor(
         }
     }
 
-    fun callJsWithCallback(clientId: String, javascript: String, parameters: String, args: List<Any?>,
+    fun callJsWithCallback(clientId: String, javascript: String, parameters: String? = null, args: List<Any?>,
                            jsCached: Boolean = false, cacheId: Int? = null,
-                           callbackId: Int, callback: (Any?) -> Unit) {
+                           callbackId: Int, callback: (Any) -> Unit) {
         val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if(!debug) null else {
