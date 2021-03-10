@@ -91,7 +91,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             cachedFunctions[js] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            kweb.cacheAndExecute(sessionId, cacheId.toInt(), func.js, func.params, listOf(*args))
+            kweb.cacheAndExecute(sessionId, cacheId, func.js, func.params, listOf(*args))
         }
     }
 

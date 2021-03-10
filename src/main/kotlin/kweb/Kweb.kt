@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.math.exp
+import kotlin.math.abs
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
@@ -138,6 +138,49 @@ class Kweb private constructor(
         f()
         outboundMessageCatcher.set(null)
         return jsList
+    }
+
+    fun callJs(clientId: String, javascript: String, parameters: String, args: List<Any?>,
+               jsCached: Boolean = false, cacheId: Int? = null) {
+        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val debugToken: String? = if(!debug) null else {
+            val dt = abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
+            dt
+        }
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            if (jsCached) { //if the js is already cached we do not need to send the js string or the js function parameters.
+                wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, jsId = cacheId, arguments = args))
+            } else {
+                wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, js = javascript,
+                        parameters = parameters, jsId = cacheId, arguments = args))
+            }
+        } else {
+            logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
+            outboundMessageCatcher.add(javascript)
+        }
+    }
+
+    fun callJsWithCallback(clientId: String, javascript: String, parameters: String, args: List<Any?>,
+                           jsCached: Boolean = false, cacheId: Int? = null,
+                           callbackId: Int, callback: (Any?) -> Unit) {
+        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+        wsClientData.lastModified = Instant.now()
+        val debugToken: String? = if(!debug) null else {
+            val dt = abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
+            dt
+        }
+        wsClientData.handlers[callbackId] = callback
+        if (jsCached) { //if the js is already cached we do not need to send the js string or the js function parameters.
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, jsId = cacheId, arguments = args,
+                    callbackId = callbackId))
+        } else {
+            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, js = javascript,
+                    parameters = parameters, jsId = cacheId, arguments = args, callbackId = callbackId))
+        }
     }
 
     fun execute(clientId: String, javascript: String) {
