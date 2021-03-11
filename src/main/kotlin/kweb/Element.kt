@@ -336,9 +336,10 @@ open class Element(
                 callbackWs($callbackId, $eventObject);
             });
         """
-        browser.executeWithCallback(js, callbackId) { payload ->
+        browser.callJsWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }
+
+        })
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }

@@ -79,9 +79,12 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
                 callbackWs($callbackId, $eventObject);
             });
         """
-        receiver.executeWithCallback(js, callbackId) { payload ->
+        receiver.callJsWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }
+        })
+        /*receiver.executeWithCallback(js, callbackId) { payload ->
+            callback.invoke(payload)
+        }*/
         return this
     }
 

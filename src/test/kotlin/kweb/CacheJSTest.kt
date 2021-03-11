@@ -35,24 +35,24 @@ class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
     }
 
     //This test just makes sure our cache is populated with a couple sample functions.
-    @Test
+    /*@Test
     fun checkCacheSize() {
         driver.get("http://localhost:7659/")
         val browser = cacheJSApp.returnBrowser()
         browser.execute("""alert("Hello " + {});""","Derek")
         browser.execute("return {} * {}", 4, 4)
         browser.cachedFunctions.size.shouldBe(2)
-    }
+    }*/
 
     //This test checks to see if our server side cache has the user supplied js string.
-    @Test
+    /*@Test
     fun checkCacheTest() {
         driver.get("http://localhost:7659/")
         val browser = cacheJSApp.returnBrowser()
         browser.execute("""return {} * {}""", 4, 4)
         val keys = browser.cachedFunctions.keys()
         keys.nextElement().shouldBe("return {} * {}")
-    }
+    }*/
 }
 
 class CacheJSApp {

@@ -16,9 +16,10 @@ open class JQueryOnReceiver(val parent: JQueryReceiver) {
     fun event(event: String, returnEventFields: Set<String> = Collections.emptySet(), callback: (String) -> Unit): JQueryReceiver {
         val callbackId = Math.abs(random.nextInt())
         val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + "}"
-        parent.webBrowser.executeWithCallback("${parent.selectorExpression}.on(${event.toJson()}, function(event) {callbackWs($callbackId, $eventObject);})", callbackId) { payload ->
+        val js = "${parent.selectorExpression}.on(${event.toJson()}, function(event) {callbackWs($callbackId, $eventObject);})"
+        parent.webBrowser.callJsWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload.toString())
-        }
+        })
         return parent
     }
 
