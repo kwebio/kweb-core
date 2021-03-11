@@ -35,8 +35,8 @@ open class Element(
      * foundation upon which most other DOM modification functions in this class
      * are based.
      */
-    fun execute(js: String) {
-        browser.execute(js)
+    fun callJs(js: String) {
+        browser.callJs(js)
     }
 
     /**
@@ -91,11 +91,11 @@ open class Element(
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendMessage() -> {
-                    browser.execute("""document.getElementById({}).setAttribute({}, {});""",
+                    browser.callJs("""document.getElementById({}).setAttribute({}, {});""",
                             id, name, value)
                 }
                 else -> {
-                    execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+                    callJs("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
                 }
             }
             if (name.equals("id", ignoreCase = true)) {
@@ -119,9 +119,9 @@ open class Element(
 
     fun removeAttribute(name: String): Element {
         if (canSendMessage()) {
-            browser.execute("document.getElementById({}).removeAttribute({})", id, name)
+            browser.callJs("document.getElementById({}).removeAttribute({})", id, name)
         } else {
-            execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+            callJs("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
         }
         return this
     }
@@ -134,7 +134,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                execute("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+                callJs("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
             }
         }
         return this
@@ -152,12 +152,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        execute("$jsExpression.focus();")
+        callJs("$jsExpression.focus();")
         return this
     }
 
     fun blur(): Element {
-        execute("$jsExpression.blur();")
+        callJs("$jsExpression.blur();")
         return this
     }
 
@@ -174,7 +174,7 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                execute("addClass($jsExpression, ${class_.toJson()});")
+                callJs("addClass($jsExpression, ${class_.toJson()});")
             }
         }
         return this
@@ -186,7 +186,7 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                execute("removeClass($jsExpression, ${class_.toJson()});")
+                callJs("removeClass($jsExpression, ${class_.toJson()});")
             }
         }
         return this
@@ -221,7 +221,7 @@ open class Element(
                 }
             }
             else -> {
-                execute("""
+                callJs("""
         if ($jsExpression != null) {
             while ($jsExpression.firstChild) {
                 $jsExpression.removeChild($jsExpression.firstChild);
@@ -243,7 +243,7 @@ open class Element(
                 }
             }
             else -> {
-                execute("$jsExpression.removeChild($jsExpression.children[$position]);".trimIndent())
+                callJs("$jsExpression.removeChild($jsExpression.children[$position]);".trimIndent())
             }
         }
         return this
@@ -261,10 +261,10 @@ open class Element(
                 element.text(value)
             }
             canSendMessage() -> {
-                browser.execute("""document.getElementById({}).textContent = {};""", id, value)
+                browser.callJs("""document.getElementById({}).textContent = {};""", id, value)
             }
             else -> {
-                execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+                callJs("$jsExpression.textContent=\"${value.escapeEcma()}\"")
             }
         }
         return this
@@ -304,10 +304,10 @@ open class Element(
             }
             canSendMessage() -> {
                 val js = "const textNode = document.createTextNode({});document.getElementById({}).appendChild(textNode);"
-                browser.execute(js, value, id)
+                browser.callJs(js, value, id)
             }
             else -> {
-                execute("""
+                callJs("""
                 {
                     var ntn=document.createTextNode("${value.escapeEcma()}");
                     $jsExpression.appendChild(ntn);
@@ -348,11 +348,11 @@ open class Element(
 
 
     fun delete() {
-        execute("$jsExpression.parentNode.removeChild($jsExpression);")
+        callJs("$jsExpression.parentNode.removeChild($jsExpression);")
     }
 
     fun deleteIfExists() {
-        execute("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
+        callJs("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
     }
 
     fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)

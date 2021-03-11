@@ -1,6 +1,5 @@
 package kweb
 
-import com.github.salomonbrys.kotson.toJson
 import io.ktor.routing.*
 import io.mola.galimatias.URL
 import kotlinx.serialization.Serializable
@@ -307,11 +306,11 @@ open class InputElement(override val element: Element) : ValueElement(element) {
     fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
 
 
-    fun select() = element.execute("$jsExpression.select();")
+    fun select() = element.callJs("$jsExpression.select();")
 
-    fun setSelectionRange(start: Int, end: Int) = element.execute("$jsExpression.setSelectionRange($start, $end);")
+    fun setSelectionRange(start: Int, end: Int) = element.callJs("$jsExpression.setSelectionRange($start, $end);")
 
-    fun setReadOnly(ro: Boolean) = element.execute("$jsExpression.readOnly = $ro;")
+    fun setReadOnly(ro: Boolean) = element.callJs("$jsExpression.readOnly = $ro;")
 }
 
 enum class InputType {
@@ -409,7 +408,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     fun getValue(): CompletableFuture<String> = element.evaluate("return $jsExpression.value;") { it.toString() }
         ?: error("Not sure why .evaluate() would return null")
 
-    fun setValue(newValue: String) = element.browser.execute("""document.getElementById({}).value = {};""", element.id, newValue)
+    fun setValue(newValue: String) = element.browser.callJs("""document.getElementById({}).value = {};""", element.id, newValue)
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)

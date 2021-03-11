@@ -23,7 +23,7 @@ class JQueryReceiver(internal val webBrowser: WebBrowser, internal val selectorE
     val on: JQueryOnReceiver get() = JQueryOnReceiver(this)
 
     fun execute(js: String) {
-        webBrowser.execute("$selectorExpression.$js;")
+        webBrowser.callJs("$selectorExpression.$js;")
     }
 
     fun focus() {

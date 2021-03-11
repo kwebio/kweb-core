@@ -21,8 +21,8 @@ class FileFormInput {
         this._inputElement = e
     }
 
-    fun setAccept(acceptedTypes: String): Unit = inputElement.execute("${inputElement.jsExpression}.accept=\"$acceptedTypes\";")
-    fun isMultiSelect(isMultiple: Boolean): Unit = inputElement.execute("${inputElement.jsExpression}.multiple=\"$isMultiple\";")
+    fun setAccept(acceptedTypes: String): Unit = inputElement.callJs("${inputElement.jsExpression}.accept=\"$acceptedTypes\";")
+    fun isMultiSelect(isMultiple: Boolean): Unit = inputElement.callJs("${inputElement.jsExpression}.multiple=\"$isMultiple\";")
     fun onFileSelect(onFileSelectCallback: () -> Unit) {
         inputElement.on.change { evt ->
             logger.info(evt.retrieved)

@@ -42,7 +42,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     val origin = receiver.evaluate("document.origin")
 
     fun execCommand(command: String) {
-        receiver.execute("document.execCommand(\"$command\");")
+        receiver.callJs("document.execCommand(\"$command\");")
     }
 
     /**

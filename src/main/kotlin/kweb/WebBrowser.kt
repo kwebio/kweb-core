@@ -32,7 +32,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      * During page render, the initial HTML document will be available for modification as a
      * [JSoup Document](https://jsoup.org/) in this [AtomicReference].
      *
-     * Callers to [execute] may check for this being non-null, and if so edit the document
+     * Callers to [callJs] may check for this being non-null, and if so edit the document
      * *instead* of some or all of the JavaScript they must call.
      *
      * The purpose of this is to implement Server-Side Rendering.
@@ -97,7 +97,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun callJs(js: String, vararg args: Any?) {
         cachedFunctions[js]?.let {
-            kweb.executeFromCache(sessionId, it, listOf(*args))
             kweb.callJs(sessionId, cacheId = it, args = listOf(*args), javascript = js)
         } ?: run {
             val rng = Random()
@@ -170,7 +169,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         if (!url.startsWith('/')) {
             logger.warn("pushState should only be called with origin-relative URLs (ie. they should start with a /)")
         }
-        execute("""
+        callJs("""
         history.pushState({}, "", "$url");
         """.trimIndent())
     }

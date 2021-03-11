@@ -28,7 +28,7 @@ class CookieReceiver(val receiver: WebBrowser) {
             arguments.add(domain)
         }
 
-        receiver.execute("docCookies.setItem(${arguments.joinToString(separator = ", ")});")
+        receiver.callJs("docCookies.setItem(${arguments.joinToString(separator = ", ")});")
     }
 
     inline fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
@@ -50,6 +50,6 @@ class CookieReceiver(val receiver: WebBrowser) {
     }
 
     fun remove(name: String) {
-        receiver.execute("docCookies.removeItem(${name.toJson()});")
+        receiver.callJs("docCookies.removeItem(${name.toJson()});")
     }
 }

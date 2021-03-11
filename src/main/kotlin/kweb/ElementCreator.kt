@@ -95,10 +95,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.execute(js, tag, mutAttributes, id, parent.id, position ?: -1)
+                browser.callJs(js, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             else -> {
-                parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
+                parent.callJs(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
