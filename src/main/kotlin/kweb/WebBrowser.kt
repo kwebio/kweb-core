@@ -128,10 +128,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
-    fun executeWithCallback(js: String, callbackId: Int, callback: (Any) -> Unit) {
-        kweb.executeWithCallback(sessionId, js, callbackId, callback)
-    }
-
     fun removeCallback(callbackId: Int) {
         kweb.removeCallback(sessionId, callbackId)
     }

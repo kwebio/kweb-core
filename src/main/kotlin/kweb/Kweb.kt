@@ -221,18 +221,6 @@ class Kweb private constructor(
         }
     }
 
-    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
-        // TODO: Should return handle which can be used for cleanup of event listeners
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing with callback", Throwable()))
-            dt
-        }
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript))
-    }
-
     fun removeCallback(clientId: String, callbackId: Int) {
         clientState[clientId]?.handlers?.remove(callbackId)
     }
