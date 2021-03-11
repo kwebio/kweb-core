@@ -39,7 +39,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         return head
     }
 
-    val origin = receiver.evaluate("document.origin")
+    val origin = receiver.evaluate("return document.origin")
 
     fun execCommand(command: String) {
         receiver.callJs("document.execCommand(\"$command\");")
@@ -62,7 +62,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = """
-            document.addEventListener(${eventName.toJson()}, function(event) {
+            return document.addEventListener(${eventName.toJson()}, function(event) {
                 $jsCode
             });
         """.trimIndent()

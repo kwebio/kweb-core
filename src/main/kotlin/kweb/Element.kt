@@ -319,7 +319,7 @@ open class Element(
     }
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
-        val wrappedJS = jsExpression + """
+        val wrappedJS = "return $jsExpression" + """
             .addEventListener(${eventName.toJson()}, function(event) {
                 $jsCode
             });

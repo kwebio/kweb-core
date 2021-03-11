@@ -387,7 +387,7 @@ fun ElementCreator<Element>.textArea(
 }
 
 open class TextAreaElementReader(element: TextAreaElement) : ElementReader(element) {
-    val value get() = receiver.evaluate("($jsExpression.innerText);")
+    val value get() = receiver.evaluate("(return $jsExpression.innerText);")
 }
 
 open class LabelElement(wrapped: Element) : Element(wrapped)

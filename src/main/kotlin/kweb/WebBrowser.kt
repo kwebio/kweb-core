@@ -8,12 +8,14 @@ import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
 import kweb.util.pathQueryFragment
+import kweb.util.random
 import mu.KotlinLogging
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
@@ -131,17 +133,18 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    fun evaluate(js: String): CompletableFuture<Any> {
+    fun evaluate(js: String, vararg args: Any?): CompletableFuture<Any> {
         val cf = CompletableFuture<Any>()
-        evaluateWithCallback(js) { response ->
+        val callbackId = abs(random.nextInt())
+        callJsWithCallback(js, callbackId = callbackId, callback = { response ->
             cf.complete(response)
             false
-        }
+        }, args)
+        /*evaluateWithCallback(js) { response ->
+            cf.complete(response)
+            false
+        }*/
         return cf
-    }
-
-    fun evaluateWithCallback(js: String, returnHandler: (Any) -> Boolean) {
-        kweb.evaluate(sessionId, js) { returnHandler.invoke(it) }
     }
 
     val doc = Document(this)

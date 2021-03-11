@@ -19,15 +19,15 @@ open class ElementReader(protected val receiver: WebBrowser, internal val jsExpr
         }
     }
 
-    val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName").thenApply { it.toString() }
-    val attributes: CompletableFuture<Map<String, Any>> get() = receiver.evaluate("$jsExpression.attributes").thenApply { it as Map<String, Any> }
-    fun attribute(name: String): CompletableFuture<Any> = receiver.evaluate("($jsExpression.getAttribute(\"${name.escapeEcma()}\"));")
+    val tagName: CompletableFuture<String> get() = receiver.evaluate("return $jsExpression.tagName").thenApply { it.toString() }
+    val attributes: CompletableFuture<Map<String, Any>> get() = receiver.evaluate("return $jsExpression.attributes").thenApply { it as Map<String, Any> }
+    fun attribute(name: String): CompletableFuture<Any> = receiver.evaluate("(return $jsExpression.getAttribute(\"${name.escapeEcma()}\"));")
 
     val class_ get() = attribute("class")
     val classes get() = class_.thenApply { it.toString().split(' ') }
 
-    val innerHtml: CompletableFuture<String> get() = receiver.evaluate("($jsExpression.innerHTML);").thenApply { it.toString() }
-    val text: CompletableFuture<String> = receiver.evaluate("($jsExpression.innerText);").thenApply { it.toString() }
+    val innerHtml: CompletableFuture<String> get() = receiver.evaluate("(return $jsExpression.innerHTML);").thenApply { it.toString() }
+    val text: CompletableFuture<String> = receiver.evaluate("(return $jsExpression.innerText);").thenApply { it.toString() }
 
 
 }
