@@ -140,47 +140,38 @@ class Kweb private constructor(
         return jsList
     }
 
-    fun callJs(clientId: String, javascript: String, parameters: String? = null, args: List<Any?>,
-               jsCached: Boolean = false, cacheId: Int? = null) {
-        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+    fun callJs(server2ClientMessage: Server2ClientMessage, javascript: String) {
+        val wsClientData = clientState[server2ClientMessage.yourId]
+                ?: error("Client id ${server2ClientMessage.yourId} not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if(!debug) null else {
             val dt = abs(random.nextLong()).toString(16)
             wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
             dt
         }
+        server2ClientMessage.debugToken = debugToken
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
-            if (jsCached) { //if the js is already cached we do not need to send the js string or the js function parameters.
-                wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, jsId = cacheId, arguments = args))
-            } else {
-                wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, js = javascript,
-                        parameters = parameters, jsId = cacheId, arguments = args))
-            }
+            wsClientData.send(server2ClientMessage)
         } else {
-            logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
+            logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.add(javascript)
         }
     }
 
-    fun callJsWithCallback(clientId: String, javascript: String, parameters: String? = null, args: List<Any?>,
-                           jsCached: Boolean = false, cacheId: Int? = null,
-                           callbackId: Int, callback: (Any) -> Unit) {
-        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
+    fun callJsWithCallback(server2ClientMessage: Server2ClientMessage,
+                           javascript: String, callback: (Any) -> Unit) {
+        val wsClientData = clientState[server2ClientMessage.yourId]
+                ?: error("Client id ${server2ClientMessage.yourId} not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if(!debug) null else {
             val dt = abs(random.nextLong()).toString(16)
             wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
             dt
         }
-        wsClientData.handlers[callbackId] = callback
-        if (jsCached) { //if the js is already cached we do not need to send the js string or the js function parameters.
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, jsId = cacheId, arguments = args,
-                    callbackId = callbackId))
-        } else {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken, js = javascript,
-                    parameters = parameters, jsId = cacheId, arguments = args, callbackId = callbackId))
-        }
+        server2ClientMessage.debugToken = debugToken
+        wsClientData.handlers[server2ClientMessage.callbackId!!] = callback
+        wsClientData.send(server2ClientMessage)
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
@@ -350,7 +341,8 @@ class Kweb private constructor(
                 logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
             }
             for (plugin in plugins) {
-                callJs(kwebSessionId, javascript = plugin.executeAfterPageCreation(), args = emptyList())
+                val js = plugin.executeAfterPageCreation()
+                callJs(Server2ClientMessage(yourId = kwebSessionId, js = js), javascript = js)
             }
 
             webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
