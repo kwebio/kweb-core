@@ -183,59 +183,8 @@ class Kweb private constructor(
         }
     }
 
-    fun execute(clientId: String, javascript: String) {
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
-        wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
-            dt
-        }
-        val outboundMessageCatcher = outboundMessageCatcher.get()
-        if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, js = javascript))
-        } else {
-            logger.debug("Temporarily storing message for $clientId in threadlocal outboundMessageCatcher")
-            outboundMessageCatcher.add(javascript)
-        }
-    }
-
-    fun cacheAndExecute(clientId: String, cacheId: Int, js: String, parameters: String, args: List<Any?>) {
-        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
-        wsClientData.lastModified = Instant.now()
-        val outboundMessageCatcher = outboundMessageCatcher.get()
-        if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null, js = js,
-                    jsId = cacheId, parameters = parameters, arguments = args))
-        }
-
-    }
-
-    fun executeFromCache(clientId: String, cacheId: Int, args: List<Any?>) {
-        val wsClientData = clientState[clientId] ?: error("Client id $clientId not found")
-        wsClientData.lastModified = Instant.now()
-        val outboundMessageCatcher = outboundMessageCatcher.get()
-        if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = null,
-                    jsId = cacheId, arguments = args))
-        }
-    }
-
     fun removeCallback(clientId: String, callbackId: Int) {
         clientState[clientId]?.handlers?.remove(callbackId)
-    }
-
-    fun evaluate(clientId: String, expression: String, handler: (Any) -> Unit) {
-        val wsClientData = clientState.get(clientId)
-                ?: error("Failed to evaluate JavaScript because client id $clientId not found")
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(expression, "evaluating", Throwable()))
-            dt
-        }
-        val callbackId = Math.abs(random.nextInt())
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, callbackId = callbackId, js = expression, debugToken = debugToken))
     }
 
     override fun close() {
@@ -401,7 +350,7 @@ class Kweb private constructor(
                 logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
             }
             for (plugin in plugins) {
-                execute(kwebSessionId, plugin.executeAfterPageCreation())
+                callJs(kwebSessionId, javascript = plugin.executeAfterPageCreation(), args = emptyList())
             }
 
             webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
