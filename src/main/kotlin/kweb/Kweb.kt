@@ -140,6 +140,11 @@ class Kweb private constructor(
         return jsList
     }
 
+    /*TODO
+    I think callJs and callJsWithCallback are simplified a good bit by moving the message creation to WebBrowser.callJs()
+    There is a bit of duplication here, because we have to pass in the javascript string separately.
+    We need it to create the debugToken. Some server2ClientMessages will contain the javascript,
+     but messages that call cached functions will not have it. So we have to make sure we pass it in separately.*/
     fun callJs(server2ClientMessage: Server2ClientMessage, javascript: String) {
         val wsClientData = clientState[server2ClientMessage.yourId]
                 ?: error("Client id ${server2ClientMessage.yourId} not found")
@@ -341,6 +346,7 @@ class Kweb private constructor(
                 logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
             }
             for (plugin in plugins) {
+                //this code block looks a little funny now, but I still think moving the message creation out of Kweb.callJs() was the right move
                 val js = plugin.executeAfterPageCreation()
                 callJs(Server2ClientMessage(yourId = kwebSessionId, js = js), javascript = js)
             }

@@ -124,6 +124,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
+    /*TODO
+    I'm not 100% sure what to do with this function. I think it'd be too complicated to merge it into
+    one of the callJs functions.
+    Maybe it should just be named something like 'callJsWithResult' or something.*/
     fun evaluate(js: String, vararg args: Any?): CompletableFuture<Any> {
         val cf = CompletableFuture<Any>()
         val callbackId = abs(random.nextInt())

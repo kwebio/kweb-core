@@ -43,7 +43,8 @@ function handleInboundMessage(msg) {
             cachedFunctions.set(cacheId, func);
         }
     } else {
-        //this is a special case for executeCalls that don't supply a cacheId. This should be removed
+        //This is a special case that doesn't bother reading the cache, or trying to cache the function.
+        //It will just run the javascript supplied to it. This special case is currently only used by Kweb.refreshPages()
         js = msg["js"];
         const params = msg["parameters"];
         if (params !== undefined) {
