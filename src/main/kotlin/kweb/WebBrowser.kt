@@ -70,17 +70,14 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     private fun getJsFunction(rawJs: String): JSFunction {
         val rng = Random()
         var js = rawJs
-        val params = StringBuilder()
+        val params = mutableListOf<String>()
         while (js.contains("{}")) {
             //a few random letters, an underscore, and a randomly generated number should make a variable name that no one would ever come up with
             val jsVarName = "rzd_${rng.nextInt(1000)}"
             js = js.replaceFirst("{}", jsVarName)
-            params.append("$jsVarName,")
+            params.add(jsVarName)
         }
-        if (params.isNotEmpty()) {
-            params.deleteCharAt(params.lastIndex)//delete the last trailing comma
-        }
-        return JSFunction(js, params.toString())
+        return JSFunction(js, params.joinToString(separator = ","))
     }
 
     fun callJs(js: String, vararg args: Any?) {
