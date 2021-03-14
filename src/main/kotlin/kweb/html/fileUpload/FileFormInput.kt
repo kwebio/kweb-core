@@ -42,7 +42,7 @@ class FileFormInput {
                 }
             """.trimIndent()
 
-        inputElement.browser.callJsWithCallback(js, callbackId, callback = { result ->
+        inputElement.browser.callJsFunctionWithCallback(js, callbackId, callback = { result ->
             logger.info("Result is $result")
             onFileRetrieveCallback(Json.decodeFromString(FileUpload.serializer(), result.toString()))
         })

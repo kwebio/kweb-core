@@ -17,7 +17,7 @@ open class JQueryOnReceiver(val parent: JQueryReceiver) {
         val callbackId = Math.abs(random.nextInt())
         val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + "}"
         val js = "${parent.selectorExpression}.on(${event.toJson()}, function(event) {callbackWs($callbackId, $eventObject);})"
-        parent.webBrowser.callJsWithCallback(js, callbackId, callback = { payload ->
+        parent.webBrowser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload.toString())
         })
         return parent

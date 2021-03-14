@@ -387,7 +387,7 @@ fun ElementCreator<Element>.textArea(
 }
 
 open class TextAreaElementReader(element: TextAreaElement) : ElementReader(element) {
-    val value get() = receiver.evaluate("(return $jsExpression.innerText);")
+    val value get() = receiver.callJsFunctionWithResult("(return $jsExpression.innerText);")
 }
 
 open class LabelElement(wrapped: Element) : Element(wrapped)
@@ -408,7 +408,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     fun getValue(): CompletableFuture<String> = element.evaluate("return $jsExpression.value;") { it.toString() }
         ?: error("Not sure why .evaluate() would return null")
 
-    fun setValue(newValue: String) = element.browser.callJs("""document.getElementById({}).value = {};""", element.id, newValue)
+    fun setValue(newValue: String) = element.browser.callJsFunction("""document.getElementById({}).value = {};""", element.id, newValue)
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)

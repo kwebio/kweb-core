@@ -35,7 +35,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      * During page render, the initial HTML document will be available for modification as a
      * [JSoup Document](https://jsoup.org/) in this [AtomicReference].
      *
-     * Callers to [callJs] may check for this being non-null, and if so edit the document
+     * Callers to [callJsFunction] may check for this being non-null, and if so edit the document
      * *instead* of some or all of the JavaScript they must call.
      *
      * The purpose of this is to implement Server-Side Rendering.
@@ -82,40 +82,40 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return JSFunction(js, params.joinToString(separator = ","))
     }
 
-    fun callJs(js: String, vararg args: Any?) {
-        cachedFunctions[js]?.let {
-            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args), js = js)
-            kweb.callJs(server2ClientMessage, js)
+    fun callJsFunction(jsBody: String, vararg args: Any?) {
+        cachedFunctions[jsBody]?.let {
+            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args), js = jsBody)
+            kweb.callJs(server2ClientMessage, jsBody)
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
-            val func = getJsFunction(js)
+            val func = getJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
-            cachedFunctions[js] = cacheId
+            cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
                 parameters = func.params, arguments = listOf(*args))
-            kweb.callJs(server2ClientMessage, js)
+            kweb.callJs(server2ClientMessage, jsBody)
         }
     }
 
-    fun callJsWithCallback(js: String, callbackId: Int, callback: (Any) -> Unit, vararg args: Any?) {
-        cachedFunctions[js]?.let {
+    fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (Any) -> Unit, vararg args: Any?) {
+        cachedFunctions[jsBody]?.let {
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
-            callbackId = callbackId, js = js)
-            kweb.callJsWithCallback(server2ClientMessage, js, callback)
+            callbackId = callbackId, js = jsBody)
+            kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
-            val func = getJsFunction(js)
+            val func = getJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
-            cachedFunctions[js] = cacheId
+            cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
                     parameters = func.params, arguments = listOf(*args), callbackId = callbackId)
-            kweb.callJsWithCallback(server2ClientMessage, js, callback)
+            kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
         }
     }
 
@@ -123,14 +123,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    /*TODO
-    I'm not 100% sure what to do with this function. I think it'd be too complicated to merge it into
-    one of the callJs functions.
-    Maybe it should just be named something like 'callJsWithResult' or something.*/
-    fun evaluate(js: String, vararg args: Any?): CompletableFuture<Any> {
+    fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): CompletableFuture<Any> {
         val cf = CompletableFuture<Any>()
         val callbackId = abs(random.nextInt())
-        callJsWithCallback(js, callbackId = callbackId, callback = { response ->
+        callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
             cf.complete(response)
             false
         }, args)
@@ -162,7 +158,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         if (!url.startsWith('/')) {
             logger.warn("pushState should only be called with origin-relative URLs (ie. they should start with a /)")
         }
-        callJs("""
+        callJsFunction("""
         history.pushState({}, "", "$url");
         """.trimIndent())
     }

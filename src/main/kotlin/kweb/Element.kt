@@ -36,7 +36,7 @@ open class Element(
      * are based.
      */
     fun callJs(js: String) {
-        browser.callJs(js)
+        browser.callJsFunction(js)
     }
 
     /**
@@ -45,7 +45,7 @@ open class Element(
      * are based.
      */
     fun <O> evaluate(js: String, outputMapper: (Any) -> O): CompletableFuture<O>? {
-        return browser.evaluate(js).thenApply(outputMapper)
+        return browser.callJsFunctionWithResult(js).thenApply(outputMapper)
     }
 
     /*********
@@ -91,7 +91,7 @@ open class Element(
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendMessage() -> {
-                    browser.callJs("""document.getElementById({}).setAttribute({}, {});""",
+                    browser.callJsFunction("""document.getElementById({}).setAttribute({}, {});""",
                             id, name, value)
                 }
                 else -> {
@@ -119,7 +119,7 @@ open class Element(
 
     fun removeAttribute(name: String): Element {
         if (canSendMessage()) {
-            browser.callJs("document.getElementById({}).removeAttribute({})", id, name)
+            browser.callJsFunction("document.getElementById({}).removeAttribute({})", id, name)
         } else {
             callJs("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
         }
@@ -261,7 +261,7 @@ open class Element(
                 element.text(value)
             }
             canSendMessage() -> {
-                browser.callJs("""document.getElementById({}).textContent = {};""", id, value)
+                browser.callJsFunction("""document.getElementById({}).textContent = {};""", id, value)
             }
             else -> {
                 callJs("$jsExpression.textContent=\"${value.escapeEcma()}\"")
@@ -304,7 +304,7 @@ open class Element(
             }
             canSendMessage() -> {
                 val js = "const textNode = document.createTextNode({});document.getElementById({}).appendChild(textNode);"
-                browser.callJs(js, value, id)
+                browser.callJsFunction(js, value, id)
             }
             else -> {
                 callJs("""
@@ -324,7 +324,7 @@ open class Element(
                 $jsCode
             });
         """.trimIndent()
-        browser.evaluate(wrappedJS)
+        browser.callJsFunctionWithResult(wrappedJS)
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
@@ -336,7 +336,7 @@ open class Element(
                 callbackWs($callbackId, $eventObject);
             });
         """
-        browser.callJsWithCallback(js, callbackId, callback = { payload ->
+        browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 
         })

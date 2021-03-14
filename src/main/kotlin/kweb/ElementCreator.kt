@@ -95,7 +95,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJs(js, tag, mutAttributes, id, parent.id, position ?: -1)
+                browser.callJsFunction(js, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             else -> {
                 parent.callJs(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))

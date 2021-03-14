@@ -22,7 +22,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
         if (value == "") {
             throw IllegalArgumentException("$obj cannot store the value \"\"")
         }
-        receiver.callJs("$obj.setItem(${key.toJson()}, ${value.toJson()});")
+        receiver.callJsFunction("$obj.setItem(${key.toJson()}, ${value.toJson()});")
     }
 
     inline operator fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
@@ -32,7 +32,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
         }
     }
 
-    fun getString(key: String): CompletableFuture<String?> = receiver.evaluate("return $obj.getItem(${key.toJson()})").thenApply {
+    fun getString(key: String): CompletableFuture<String?> = receiver.callJsFunctionWithResult("return $obj.getItem(${key.toJson()})").thenApply {
         when (it) {
             "" -> null
             else -> it.toString()
@@ -40,7 +40,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     }
 
     fun remove(key: String) {
-        receiver.callJs("$obj.removeItem(${key.toJson()});")
+        receiver.callJsFunction("$obj.removeItem(${key.toJson()});")
 
     }
 
