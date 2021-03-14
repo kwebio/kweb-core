@@ -306,11 +306,11 @@ open class InputElement(override val element: Element) : ValueElement(element) {
     fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
 
 
-    fun select() = element.callJs("$jsExpression.select();")
+    fun select() = element.callJsFunction("$jsExpression.select();")
 
-    fun setSelectionRange(start: Int, end: Int) = element.callJs("$jsExpression.setSelectionRange($start, $end);")
+    fun setSelectionRange(start: Int, end: Int) = element.callJsFunction("$jsExpression.setSelectionRange($start, $end);")
 
-    fun setReadOnly(ro: Boolean) = element.callJs("$jsExpression.readOnly = $ro;")
+    fun setReadOnly(ro: Boolean) = element.callJsFunction("$jsExpression.readOnly = $ro;")
 }
 
 enum class InputType {

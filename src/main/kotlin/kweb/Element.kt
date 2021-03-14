@@ -35,8 +35,8 @@ open class Element(
      * foundation upon which most other DOM modification functions in this class
      * are based.
      */
-    fun callJs(js: String) {
-        browser.callJsFunction(js)
+    fun callJsFunction(js: String, vararg args: Any?) {
+        browser.callJsFunction(js, *args)
     }
 
     /**
@@ -95,7 +95,7 @@ open class Element(
                             id, name, value)
                 }
                 else -> {
-                    callJs("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+                    callJsFunction("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
                 }
             }
             if (name.equals("id", ignoreCase = true)) {
@@ -121,7 +121,7 @@ open class Element(
         if (canSendMessage()) {
             browser.callJsFunction("document.getElementById({}).removeAttribute({})", id, name)
         } else {
-            callJs("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+            callJsFunction("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
         }
         return this
     }
@@ -134,7 +134,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                callJs("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+                callJsFunction("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
             }
         }
         return this
@@ -152,12 +152,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        callJs("$jsExpression.focus();")
+        callJsFunction("$jsExpression.focus();")
         return this
     }
 
     fun blur(): Element {
-        callJs("$jsExpression.blur();")
+        callJsFunction("$jsExpression.blur();")
         return this
     }
 
@@ -174,7 +174,7 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                callJs("addClass($jsExpression, ${class_.toJson()});")
+                callJsFunction("addClass($jsExpression, ${class_.toJson()});")
             }
         }
         return this
@@ -186,7 +186,7 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                callJs("removeClass($jsExpression, ${class_.toJson()});")
+                callJsFunction("removeClass($jsExpression, ${class_.toJson()});")
             }
         }
         return this
@@ -221,7 +221,7 @@ open class Element(
                 }
             }
             else -> {
-                callJs("""
+                callJsFunction("""
         if ($jsExpression != null) {
             while ($jsExpression.firstChild) {
                 $jsExpression.removeChild($jsExpression.firstChild);
@@ -243,7 +243,7 @@ open class Element(
                 }
             }
             else -> {
-                callJs("$jsExpression.removeChild($jsExpression.children[$position]);".trimIndent())
+                callJsFunction("$jsExpression.removeChild($jsExpression.children[$position]);".trimIndent())
             }
         }
         return this
@@ -264,7 +264,7 @@ open class Element(
                 browser.callJsFunction("""document.getElementById({}).textContent = {};""", id, value)
             }
             else -> {
-                callJs("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+                callJsFunction("$jsExpression.textContent=\"${value.escapeEcma()}\"")
             }
         }
         return this
@@ -307,12 +307,12 @@ open class Element(
                 browser.callJsFunction(js, value, id)
             }
             else -> {
-                callJs("""
+                callJsFunction("""
                 {
-                    var ntn=document.createTextNode("${value.escapeEcma()}");
+                    var ntn=document.createTextNode({});
                     $jsExpression.appendChild(ntn);
                 }
-        """)
+                """, value.escapeEcma())
             }
         }
         return this
@@ -320,11 +320,11 @@ open class Element(
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = "return $jsExpression" + """
-            .addEventListener(${eventName.toJson()}, function(event) {
+            .addEventListener({}, function(event) {
                 $jsCode
             });
         """.trimIndent()
-        browser.callJsFunctionWithResult(wrappedJS)
+        browser.callJsFunctionWithResult(wrappedJS, eventName.toJson())
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
@@ -348,11 +348,11 @@ open class Element(
 
 
     fun delete() {
-        callJs("$jsExpression.parentNode.removeChild($jsExpression);")
+        callJsFunction("$jsExpression.parentNode.removeChild($jsExpression);")
     }
 
     fun deleteIfExists() {
-        callJs("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
+        callJsFunction("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
     }
 
     fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)

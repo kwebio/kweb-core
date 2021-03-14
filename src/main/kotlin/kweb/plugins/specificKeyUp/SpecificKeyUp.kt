@@ -21,7 +21,7 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
     require(keys.isNotEmpty()) { "You must supply at least one key" }
     require(ENTER_PRESSED_EVENT_ATTACHED_FLAG !in flags) { "KeySpecificKeyupEvent may only be attached once per element" }
     flags += ENTER_PRESSED_EVENT_ATTACHED_FLAG
-    this.callJs("""
+    this.callJsFunction("""
         $jsExpression.addEventListener("keyup", function(origEvent) {
             var keys = [${keys.joinToString(separator = ",") { "\"$it\"" }}]
             if (keys.includes(origEvent.key)) {

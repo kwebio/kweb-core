@@ -30,5 +30,5 @@ val jqueryCore = JQueryCorePlugin()
  * @sample table().executeOnSelf(".tablesort()")
  */
 fun Element.executeOnSelf(js: String) {
-    callJs("$('#$id')$js")
+    callJsFunction("$('#' + {})$js", id)
 }

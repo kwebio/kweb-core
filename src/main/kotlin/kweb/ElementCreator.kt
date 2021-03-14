@@ -98,7 +98,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 browser.callJsFunction(js, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             else -> {
-                parent.callJs(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
+                parent.callJsFunction(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
