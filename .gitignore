@@ -83,3 +83,7 @@ data/
 
 .kotlintest
 phantomjsdriver.log
+
+# used to clean up the logs while working on kweb
+src/main/resources/logback.xml
+

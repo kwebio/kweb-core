@@ -66,7 +66,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     data class JSFunction(val js: String, val params: String)
-    //this function substitutes "{}" in user supplied javascript, for randomly generated variable names
+    /**
+     * this function substitutes "{}" in user supplied javascript, for randomly generated variable names
+     */
     private fun getJsFunction(rawJs: String): JSFunction {
         val rng = Random()
         var js = rawJs
