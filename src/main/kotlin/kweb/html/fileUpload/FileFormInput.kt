@@ -23,7 +23,8 @@ class FileFormInput {
 
     fun setAccept(acceptedTypes: String): Unit = inputElement.callJsFunction(
             """document.getElementById({}).accept = {};""", inputElement.id, acceptedTypes)
-    fun isMultiSelect(isMultiple: Boolean): Unit = inputElement.callJsFunction("${inputElement.jsExpression}.multiple=\"$isMultiple\";")
+    fun isMultiSelect(isMultiple: Boolean): Unit = inputElement.callJsFunction(
+            "${inputElement.jsExpression}.multiple=\"$isMultiple\";")
     fun onFileSelect(onFileSelectCallback: () -> Unit) {
         inputElement.on.change { evt ->
             logger.info(evt.retrieved)
@@ -35,11 +36,13 @@ class FileFormInput {
         val callbackId = abs(random.nextInt())
 
         val js = """
-                let fd = document.getElementById({}).files[0]
+                let id = {}
+                let callbackId = {}
+                let fd = document.getElementById(id).files[0]
                 let fr = new FileReader()
                 fr.readAsDataURL(fd)
                 fr.onload = function(){
-                    callbackWs({},{base64Content: fr.result, fileSize: fd.size, fileName: fd.name});
+                    callbackWs(callbackId,{base64Content: fr.result, fileSize: fd.size, fileName: fd.name});
                 }
             """.trimIndent()
 
