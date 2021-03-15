@@ -1,14 +1,9 @@
 package kweb.client
 
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlin.reflect.typeOf
 
-@Serializable(with = Server2ClientMsgSerializer::class)
+@Serializable//(with = Server2ClientMsgSerializer::class)
 @SerialName("Server2ClientMessage")
 data class Server2ClientMessage(
         val yourId: String,
@@ -18,10 +13,10 @@ data class Server2ClientMessage(
         val js: String? = null, //the js function
         val parameters: String? = null, //null if we are executing a cached function
         val callbackId: Int? = null, //null if we are executing a function without a callback
-        val arguments: List<Any?>? = null //null if we are executing a function with no arguments
+        val arguments: List<kotlinx.serialization.json.JsonElement>? = null //null if we are executing a function with no arguments
 )//parameters is a comma separated string of parameters for the js function
 
-@Serializable
+/*@Serializable
 private class Server2ClientMsgSurrogate(
     val yourId: String,
     var debugToken: String? = null,
@@ -83,4 +78,4 @@ object Server2ClientMsgSerializer : KSerializer<Server2ClientMessage> {
     override fun deserialize(decoder: Decoder): Server2ClientMessage {
         TODO("Not yet implemented")
     }
-}
+}*/
