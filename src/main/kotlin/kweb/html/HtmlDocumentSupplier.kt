@@ -2,10 +2,12 @@ package kweb.html
 
 import io.ktor.routing.Routing
 import kweb.plugins.KwebPlugin
+import kweb.util.random
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.DocumentType
 import org.jsoup.nodes.Element
 import java.util.*
+import kotlin.math.abs
 
 internal object HtmlDocumentSupplier {
     val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
@@ -23,6 +25,7 @@ internal object HtmlDocumentSupplier {
             html.appendElement("head").let { head: Element ->
 
                 head.appendElement("meta")
+                    .attr("id", generateId())
                     .attr("name", "viewport")
                     .attr("content", "width=device-width, initial-scale=1.0")
             }
@@ -30,6 +33,7 @@ internal object HtmlDocumentSupplier {
             html.appendElement("body").let { body: Element ->
 
                 body.attr("onload", "buildPage()")
+                body.attr("id", generateId())
                 body.appendElement("noscript")
                     .html(
                         """
@@ -42,6 +46,10 @@ internal object HtmlDocumentSupplier {
             // The document will be modified here!
             applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = docTemplate, routeHandler = routing)
         }
+    }
+
+    fun generateId() : String {
+        return "B" + abs(random.nextInt()).toString(36)
     }
 
     /**

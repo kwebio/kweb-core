@@ -26,7 +26,7 @@ open class Element(
         val creator: ElementCreator<*>?,
         @Volatile open var jsExpression: String,
         val tag: String? = null,
-        @Volatile var id: String?
+        @Volatile var id: String
 ) :
         EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
@@ -88,12 +88,11 @@ open class Element(
         if (value != null) {
             val htmlDoc = browser.htmlDocument.get()
             when {
-                htmlDoc != null && this.id != null -> {
+                htmlDoc != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendInstruction() -> {
-                    browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
-                }
+                    browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))                }
                 else -> {
                     execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
                 }
@@ -130,7 +129,7 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                val thisEl = htmlDoc.getElementById(this.id!!)
+                val thisEl = htmlDoc.getElementById(this.id)
                 thisEl.html(html)
             }
             else -> {
@@ -216,9 +215,7 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).let { jsoupElement ->
-                    jsoupElement.children().remove()
-                }
+                htmlDoc.getElementById(this.id).children().remove()
             }
             else -> {
                 execute("""
@@ -257,7 +254,7 @@ open class Element(
         val jsoupDoc = browser.htmlDocument.get()
         when {
             jsoupDoc != null -> {
-                val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
+                val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             canSendInstruction() -> {
@@ -299,7 +296,7 @@ open class Element(
         val jsoupDoc = browser.htmlDocument.get()
         when {
             jsoupDoc != null -> {
-                val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
+                val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             canSendInstruction() -> {
@@ -359,7 +356,7 @@ open class Element(
 
     val flags = ConcurrentSkipListSet<String>()
 
-    fun canSendInstruction() = id != null && browser.kweb.isNotCatchingOutbound()
+    fun canSendInstruction() = browser.kweb.isNotCatchingOutbound()
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).

@@ -9,4 +9,4 @@ import kweb.WebBrowser
  *
  * @sample document_sample
  */
-class BodyElement(webBrowser: WebBrowser, id: String? = null) : Element(webBrowser, null, "document.body", "body", id)
+class BodyElement(webBrowser: WebBrowser, id: String) : Element(webBrowser, null, "document.body", "body", id)
