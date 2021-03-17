@@ -67,15 +67,13 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     data class JSFunction(val js: String, val params: String)
     /**
-     * this function substitutes "{}" in user supplied javascript, for randomly generated variable names
+     * this function replaces "{}" tokens with variable names for creating client side js Function objects
      */
-    private fun getJsFunction(rawJs: String): JSFunction {
-        val rng = Random()
+    private fun makeJsFunction(rawJs: String): JSFunction {
         var js = rawJs
         val params = mutableListOf<String>()
         while (js.contains("{}")) {
-            //a few random letters, an underscore, and a randomly generated number should make a variable name that no one would ever come up with
-            val jsVarName = "rzd_${rng.nextInt(1000)}"
+            val jsVarName = "auto_var_${params.size+1}"
             js = js.replaceFirst("{}", jsVarName)
             params.add(jsVarName)
         }
@@ -89,7 +87,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
-            val func = getJsFunction(jsBody)
+            val func = makeJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
@@ -108,7 +106,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
-            val func = getJsFunction(jsBody)
+            val func = makeJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
