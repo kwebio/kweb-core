@@ -25,7 +25,7 @@ internal object HtmlDocumentSupplier {
             html.appendElement("head").let { head: Element ->
 
                 head.appendElement("meta")
-                    .attr("id", generateId())
+                    .attr("id", "K_head")
                     .attr("name", "viewport")
                     .attr("content", "width=device-width, initial-scale=1.0")
             }
@@ -33,7 +33,7 @@ internal object HtmlDocumentSupplier {
             html.appendElement("body").let { body: Element ->
 
                 body.attr("onload", "buildPage()")
-                body.attr("id", generateId())
+                body.attr("id", "K_body")
                 body.appendElement("noscript")
                     .html(
                         """
@@ -46,10 +46,6 @@ internal object HtmlDocumentSupplier {
             // The document will be modified here!
             applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = docTemplate, routeHandler = routing)
         }
-    }
-
-    fun generateId() : String {
-        return "B" + abs(random.nextInt()).toString(36)
     }
 
     /**
