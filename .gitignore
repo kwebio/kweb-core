@@ -83,3 +83,4 @@ data/
 
 .kotlintest
 phantomjsdriver.log
+/src/main/resources/logback.xml
