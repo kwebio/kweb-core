@@ -25,7 +25,7 @@ open class Element(
         val creator: ElementCreator<*>?,
         @Volatile open var jsExpression: String,
         val tag: String? = null,
-        @Volatile var id: String?
+        @Volatile var id: String
 ) :
         EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
