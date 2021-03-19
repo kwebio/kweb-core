@@ -21,7 +21,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     val cookie = CookieReceiver(receiver)
 
-    val body = BodyElement(receiver)
+    val body = BodyElement(receiver, "K_body")
 
     fun body(new: (ElementCreator<BodyElement>.() -> Unit)? = null) : BodyElement {
         if (new != null) {
@@ -30,7 +30,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         return body
     }
 
-    val head = HeadElement(receiver)
+    val head = HeadElement(receiver, "K_head")
 
     fun head(new: (ElementCreator<HeadElement>.() -> Unit)? = null) : HeadElement {
         if (new != null) {
