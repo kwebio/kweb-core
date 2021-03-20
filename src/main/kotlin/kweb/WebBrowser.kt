@@ -3,8 +3,6 @@ package kweb
 import io.mola.galimatias.URL
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
@@ -13,6 +11,7 @@ import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
 import kweb.util.pathQueryFragment
+import kweb.util.primitiveToJson
 import kweb.util.random
 import mu.KotlinLogging
 import java.util.*
@@ -20,7 +19,6 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.collections.HashMap
 import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
@@ -87,35 +85,16 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return JSFunction(js, params.joinToString(separator = ","))
     }
 
-    private fun getArguments(args: Array<out Any?>) : List<JsonElement>{
+    private fun argumentsToJsonElement(args: Array<out Any?>) : List<JsonElement>{
         val argList = mutableListOf<JsonElement>()
         args.forEach {
             when (it) {
-                is String -> argList.add(JsonPrimitive(it))
-                is Boolean -> argList.add(JsonPrimitive(it))
-                is Int -> argList.add(JsonPrimitive(it))
-                is Float -> argList.add(JsonPrimitive(it))
-                is Double -> argList.add(JsonPrimitive(it))
-                is Long -> argList.add(JsonPrimitive(it))
-                is Short -> argList.add(JsonPrimitive(it))
-                is Byte -> argList.add(JsonPrimitive(it))
-                is Char -> argList.add(JsonPrimitive(it.toString()))
+                is String, is Int, is Boolean, is Float, is Double,
+                is Short, is Long, is Byte, is Char -> argList.add(primitiveToJson(it))
                 is Array<*> -> argList.add(JsonArray(it.map { arrayElement ->
-                    when(arrayElement) {
-                        is String -> JsonPrimitive(arrayElement)
-                        is Boolean -> JsonPrimitive(arrayElement)
-                        is Int -> JsonPrimitive(arrayElement)
-                        is Float -> JsonPrimitive(arrayElement)
-                        is Double -> JsonPrimitive(arrayElement)
-                        is Long -> JsonPrimitive(arrayElement)
-                        is Short -> JsonPrimitive(arrayElement)
-                        is Byte -> JsonPrimitive(arrayElement)
-                        is Char -> JsonPrimitive(arrayElement.toString())
-                        else -> error("You may only use primitives or Strings in array arguments - arrayElement is a ${arrayElement!!::class.simpleName}")
-                    }
+                    primitiveToJson(arrayElement, "You may only use primitives or Strings in array arguments")
                 }))
-                is JsonObject -> argList.add(it)
-                //else -> error("You may only use primitives or strings as JS Function arguments")
+                is JsonElement -> argList.add(it)
                 else -> error("It is ${it!!::class.simpleName}")
             }
         }
@@ -125,7 +104,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun callJsFunction(jsBody: String, vararg args: Any?) {
         cachedFunctions[jsBody]?.let {
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, js = jsBody,
-                    arguments = getArguments(args))
+                    arguments = argumentsToJsonElement(args))
             kweb.callJs(server2ClientMessage, jsBody)
         } ?: run {
             val rng = Random()
@@ -136,14 +115,14 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
-                parameters = func.params, arguments = getArguments(args))
+                parameters = func.params, arguments = argumentsToJsonElement(args))
             kweb.callJs(server2ClientMessage, jsBody)
         }
     }
 
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (Any) -> Unit, vararg args: Any?) {
         cachedFunctions[jsBody]?.let {
-            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = getArguments(args),
+            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = argumentsToJsonElement(args),
             callbackId = callbackId, js = jsBody)
             kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
         } ?: run {
@@ -155,7 +134,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
-                    parameters = func.params, arguments = getArguments(args), callbackId = callbackId)
+                    parameters = func.params, arguments = argumentsToJsonElement(args), callbackId = callbackId)
             kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
         }
     }

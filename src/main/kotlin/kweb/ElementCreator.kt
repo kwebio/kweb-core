@@ -7,6 +7,7 @@ import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.util.KWebDSL
+import kweb.util.primitiveToJson
 import kweb.util.toJson
 import mu.KLogging
 import java.util.*
@@ -100,7 +101,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 """.trimIndent()
                 val attributeArg = HashMap<String, kotlinx.serialization.json.JsonElement>()
                 mutAttributes.forEach {
-                    attributeArg[it.key] = primitiveToJson(it.value)
+                    attributeArg[it.key] = primitiveToJson(it.value,
+                            "You may only put a primitive or a string into the attributes hashMap")
                 }
                 val jsonObject = JsonObject(attributeArg)
                 browser.callJsFunction(js, tag, jsonObject, id, parent.id, position ?: -1)
@@ -121,20 +123,12 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         return newElement
     }
 
-    fun primitiveToJson(primitive: Any) : kotlinx.serialization.json.JsonElement {
+    /*fun primitiveToJson(primitive: Any) : kotlinx.serialization.json.JsonElement {
         return when(primitive) {
-            is String -> JsonPrimitive(primitive)
-            is Boolean -> JsonPrimitive(primitive)
-            is Int -> JsonPrimitive(primitive)
-            is Short -> JsonPrimitive(primitive)
-            is Long -> JsonPrimitive(primitive)
-            is Float -> JsonPrimitive(primitive)
-            is Double -> JsonPrimitive(primitive)
-            is Char -> JsonPrimitive(primitive.toString())
-            is Byte -> JsonPrimitive(primitive)
+            is String, Boolean, Int, Short, Long, Float, Double, Char, Byte -> primitiveToJson(primitive)
             else -> error("Tried to put a non primitive in a hashmap")
         }
-    }
+    }*/
 
     private fun renderJavaScriptToCreateNewElement(tag: String, attributes: Map<String, Any>, id: String): String {
         val javaScript = StringBuilder()

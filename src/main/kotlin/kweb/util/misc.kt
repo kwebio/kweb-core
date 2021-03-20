@@ -2,6 +2,8 @@ package kweb.util
 
 import com.google.gson.Gson
 import io.mola.galimatias.URL
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
@@ -29,6 +31,23 @@ val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledT
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
 fun Any.toJson(): String = gson.toJson(this)
+
+fun primitiveToJson(value: Any?, errorMsg: String = "Argument is required to be String or primitive type"): JsonElement {
+    return when(value) {
+        is String -> JsonPrimitive(value)
+        is Boolean -> JsonPrimitive(value)
+        is Int -> JsonPrimitive(value)
+        is Short -> JsonPrimitive(value)
+        is Long -> JsonPrimitive(value)
+        is Float -> JsonPrimitive(value)
+        is Double -> JsonPrimitive(value)
+        is Char -> JsonPrimitive(value.toString())
+        is Byte -> JsonPrimitive(value)
+        is JsonElement -> value
+        value == null -> error("You are using a null object as a JS argument")
+        else -> error(errorMsg)
+    }
+} 
 
 fun <T> warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -> Unit, f: () -> T): T {
     val runningThread = Thread.currentThread()
