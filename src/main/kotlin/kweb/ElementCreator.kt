@@ -1,5 +1,7 @@
 package kweb
 
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
@@ -9,6 +11,7 @@ import kweb.util.toJson
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
 /**
@@ -95,7 +98,12 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJsFunction(js, tag, mutAttributes, id, parent.id, position ?: -1)
+                val attributeArg = HashMap<String, kotlinx.serialization.json.JsonElement>()
+                mutAttributes.forEach {
+                    attributeArg[it.key] = primitiveToJson(it.value)
+                }
+                val jsonObject = JsonObject(attributeArg)
+                browser.callJsFunction(js, tag, jsonObject, id, parent.id, position ?: -1)
             }
             else -> {
                 parent.callJsFunction(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
@@ -111,6 +119,21 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             newElement.deleteIfExists()
         }
         return newElement
+    }
+
+    fun primitiveToJson(primitive: Any) : kotlinx.serialization.json.JsonElement {
+        return when(primitive) {
+            is String -> JsonPrimitive(primitive)
+            is Boolean -> JsonPrimitive(primitive)
+            is Int -> JsonPrimitive(primitive)
+            is Short -> JsonPrimitive(primitive)
+            is Long -> JsonPrimitive(primitive)
+            is Float -> JsonPrimitive(primitive)
+            is Double -> JsonPrimitive(primitive)
+            is Char -> JsonPrimitive(primitive.toString())
+            is Byte -> JsonPrimitive(primitive)
+            else -> error("Tried to put a non primitive in a hashmap")
+        }
     }
 
     private fun renderJavaScriptToCreateNewElement(tag: String, attributes: Map<String, Any>, id: String): String {
