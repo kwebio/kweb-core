@@ -25,7 +25,7 @@ open class Element(
         val creator: ElementCreator<*>?,
         @Volatile open var jsExpression: String,
         val tag: String? = null,
-        @Volatile var id: String?
+        @Volatile var id: String
 ) :
         EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
@@ -87,7 +87,7 @@ open class Element(
         if (value != null) {
             val htmlDoc = browser.htmlDocument.get()
             when {
-                htmlDoc != null && this.id != null -> {
+                htmlDoc != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 canSendMessage() -> {
@@ -95,7 +95,7 @@ open class Element(
                             id, name, value)
                 }
                 else -> {
-                    callJsFunction("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+                    callJsFunction("document.getElementById({}).setAttribute({}, {});", id, name.escapeEcma(), value.toJson())
                 }
             }
             if (name.equals("id", ignoreCase = true)) {
@@ -121,7 +121,7 @@ open class Element(
         if (canSendMessage()) {
             browser.callJsFunction("document.getElementById({}).removeAttribute({})", id, name)
         } else {
-            callJsFunction("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+            callJsFunction("document.getElementById({}).removeAttribute({});", id, name.escapeEcma())
         }
         return this
     }
@@ -130,11 +130,11 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                val thisEl = htmlDoc.getElementById(this.id!!)
+                val thisEl = htmlDoc.getElementById(this.id)
                 thisEl.html(html)
             }
             else -> {
-                callJsFunction("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+                callJsFunction("document.getElementById({}).innerHTML={};", id, html.escapeEcma())
             }
         }
         return this
@@ -152,12 +152,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        callJsFunction("$jsExpression.focus();")
+        callJsFunction("document.getElementById({}).focus();", id)
         return this
     }
 
     fun blur(): Element {
-        callJsFunction("$jsExpression.blur();")
+        callJsFunction("document.getElementById({}).blur();", id)
         return this
     }
 
@@ -222,12 +222,14 @@ open class Element(
             }
             else -> {
                 callJsFunction("""
-        if ($jsExpression != null) {
-            while ($jsExpression.firstChild) {
-                $jsExpression.removeChild($jsExpression.firstChild);
-            }
-        }
-     """.trimIndent())
+                    
+                    if (document.getElementById({}) != null) {
+                        let element = document.getElementById({});
+                        while (element.firstChild) {
+                            element.removeChild(element.firstChild);
+                        }
+                    }
+                """.trimIndent(), id)
             }
         }
 
@@ -243,7 +245,10 @@ open class Element(
                 }
             }
             else -> {
-                callJsFunction("$jsExpression.removeChild($jsExpression.children[$position]);".trimIndent())
+                callJsFunction("""
+                        let element = document.getElementById({});
+                        element.removeChild(element.children[{}]);
+                """.trimIndent(), id, position)
             }
         }
         return this
@@ -257,14 +262,14 @@ open class Element(
         val jsoupDoc = browser.htmlDocument.get()
         when {
             jsoupDoc != null -> {
-                val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
+                val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             canSendMessage() -> {
                 browser.callJsFunction("""document.getElementById({}).textContent = {};""", id, value)
             }
             else -> {
-                callJsFunction("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+                callJsFunction("document.getElementById({}).textContent = {};", id, value.escapeEcma())
             }
         }
         return this
@@ -299,7 +304,7 @@ open class Element(
         val jsoupDoc = browser.htmlDocument.get()
         when {
             jsoupDoc != null -> {
-                val element = jsoupDoc.getElementById(this.id ?: error("Can't find id $id in jsoupDoc"))
+                val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             canSendMessage() -> {
@@ -348,11 +353,20 @@ open class Element(
 
 
     fun delete() {
-        callJsFunction("$jsExpression.parentNode.removeChild($jsExpression);")
+        callJsFunction("""
+            let element = document.getElementById({});
+            element.parentNode.removeChild(element);
+        """.trimIndent(), id)
     }
 
     fun deleteIfExists() {
-        callJsFunction("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
+        callJsFunction("""
+            let id = {}
+            if (document.getElementById(id)) {
+                let element = document.getElementById(id);
+                element.parentNode.removeChild(element);
+            }
+        """.trimIndent(), id)
     }
 
     fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)
@@ -361,7 +375,7 @@ open class Element(
 
     val flags = ConcurrentSkipListSet<String>()
 
-    fun canSendMessage() = id != null && browser.kweb.isNotCatchingOutbound()
+    fun canSendMessage() = browser.kweb.isNotCatchingOutbound()
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).

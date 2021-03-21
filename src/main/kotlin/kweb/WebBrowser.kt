@@ -156,9 +156,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         if (!url.startsWith('/')) {
             logger.warn("pushState should only be called with origin-relative URLs (ie. they should start with a /)")
         }
+        //{ } is used to initialize an empty map here. Without the space, it would be treated
+        //as a variable using Kweb's template syntax
         callJsFunction("""
-        history.pushState({}, "", "$url");
-        """.trimIndent())
+        history.pushState({ }, "", {});
+        """.trimIndent(), url)
     }
 
     /**
