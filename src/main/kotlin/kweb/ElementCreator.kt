@@ -99,13 +99,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                val attributeArg = HashMap<String, kotlinx.serialization.json.JsonElement>()
-                mutAttributes.forEach {
-                    attributeArg[it.key] = primitiveToJson(it.value,
-                            "You may only put a primitive or a string into the attributes hashMap")
-                }
-                val jsonObject = JsonObject(attributeArg)
-                browser.callJsFunction(js, tag, jsonObject, id, parent.id, position ?: -1)
+                browser.callJsFunction(js, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             else -> {
                 parent.callJsFunction(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))

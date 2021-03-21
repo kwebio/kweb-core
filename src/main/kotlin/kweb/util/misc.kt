@@ -1,14 +1,18 @@
 package kweb.util
 
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import io.mola.galimatias.URL
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
+import javax.print.attribute.HashPrintJobAttributeSet
+import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
 /**
@@ -44,10 +48,19 @@ fun primitiveToJson(value: Any?, errorMsg: String = "Argument is required to be 
         is Char -> JsonPrimitive(value.toString())
         is Byte -> JsonPrimitive(value)
         is JsonElement -> value
-        value == null -> error("You are using a null object as a JS argument")
+        value == null -> JsonNull
         else -> error(errorMsg)
     }
-} 
+}
+
+fun hashMapToJson(hashMap: HashMap<*, *>) : JsonElement {
+    val jsonHashMap = HashMap<String, JsonElement>()
+    hashMap.forEach {
+        jsonHashMap[it.key.toString()] = primitiveToJson(it.value,
+                "You may only put a String or primitive type into a hashmap used as a JS function argument")
+    }
+    return kotlinx.serialization.json.JsonObject(jsonHashMap)
+}
 
 fun <T> warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -> Unit, f: () -> T): T {
     val runningThread = Thread.currentThread()

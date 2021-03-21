@@ -3,6 +3,8 @@ package kweb
 import io.mola.galimatias.URL
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
@@ -10,6 +12,7 @@ import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
+import kweb.util.hashMapToJson
 import kweb.util.pathQueryFragment
 import kweb.util.primitiveToJson
 import kweb.util.random
@@ -19,6 +22,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.HashMap
 import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
@@ -94,6 +98,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
                 is Array<*> -> argList.add(JsonArray(it.map { arrayElement ->
                     primitiveToJson(arrayElement, "You may only use primitives or Strings in array arguments")
                 }))
+                is HashMap<*, *> -> argList.add(hashMapToJson(it))
+                it == null -> JsonNull
                 is JsonElement -> argList.add(it)
                 else -> error("It is ${it!!::class.simpleName}")
             }
