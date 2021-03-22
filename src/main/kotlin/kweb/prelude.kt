@@ -2,6 +2,7 @@ package kweb
 
 import io.ktor.routing.*
 import io.mola.galimatias.URL
+import kotlinx.coroutines.selects.whileSelect
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -306,11 +307,12 @@ open class InputElement(override val element: Element) : ValueElement(element) {
     fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
 
 
-    fun select() = element.callJsFunction("$jsExpression.select();")
+    fun select() = element.callJsFunction("document.getElementById({}).select();", id)
 
-    fun setSelectionRange(start: Int, end: Int) = element.callJsFunction("$jsExpression.setSelectionRange($start, $end);")
+    fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
+            "document.getElementById({}).setSelectionRange({}, {});", id, start, end)
 
-    fun setReadOnly(ro: Boolean) = element.callJsFunction("$jsExpression.readOnly = $ro;")
+    fun setReadOnly(ro: Boolean) = element.callJsFunction("document.getElementById({}).readOnly = {};", id, ro)
 }
 
 enum class InputType {
@@ -386,8 +388,8 @@ fun ElementCreator<Element>.textArea(
     }
 }
 
-open class TextAreaElementReader(element: TextAreaElement) : ElementReader(element) {
-    val value get() = receiver.callJsFunctionWithResult("(return $jsExpression.innerText);")
+open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(element) {
+    val value get() = receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id)
 }
 
 open class LabelElement(wrapped: Element) : Element(wrapped)
@@ -405,10 +407,11 @@ fun ElementCreator<Element>.label(
  * Abstract class for the various elements that have a `value` attribute and which support `change` and `input` events.
  */
 abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
-    fun getValue(): CompletableFuture<String> = element.evaluate("return $jsExpression.value;") { it.toString() }
+    fun getValue(): CompletableFuture<String> = element.
+    callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { it.toString() }, id)
         ?: error("Not sure why .evaluate() would return null")
 
-    fun setValue(newValue: String) = element.browser.callJsFunction("""document.getElementById({}).value = {};""", element.id, newValue)
+    fun setValue(newValue: String) = element.browser.callJsFunction("document.getElementById({}).value = {};", element.id, newValue)
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)

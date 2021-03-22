@@ -44,8 +44,8 @@ open class Element(
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
      */
-    fun <O> evaluate(js: String, outputMapper: (Any) -> O): CompletableFuture<O>? {
-        return browser.callJsFunctionWithResult(js).thenApply(outputMapper)
+    fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: Any?): CompletableFuture<O>? {
+        return browser.callJsFunctionWithResult(js, *args).thenApply(outputMapper)
     }
 
     /*********
@@ -336,15 +336,15 @@ open class Element(
         val callbackId = abs(random.nextInt())
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
-        val js = jsExpression + """
-            .addEventListener(${eventName.toJson()}, function(event) {
+        val js = """
+            document.getElementById({}).addEventListener(${eventName.toJson()}, function(event) {
                 callbackWs($callbackId, $eventObject);
             });
         """
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 
-        })
+        }, id)
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }

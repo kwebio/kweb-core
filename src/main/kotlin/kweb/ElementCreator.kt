@@ -74,7 +74,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 }
             }
             parent.canSendMessage() -> {
-                val js = """
+                val createElementJs = """
                     let tag = {};
                     let attributes = {};
                     let myId = {};
@@ -95,10 +95,31 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJsFunction(js, tag, mutAttributes, id, parent.id, position ?: -1)
+                browser.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             else -> {
-                parent.callJsFunction(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
+                val createElementJs = """
+                    let tag = {};
+                    let attributes = {};
+                    let myId = {};
+                    let parentId = {};
+                    let position = {};
+                    let newEl = document.createElement(tag);
+                    if (attributes.get("id") === undefined) {
+                        newEl.setAttribute("id", myId);
+                    }
+                    for (const key in attributes) {
+                            newEl.setAttribute(key, attributes[key]);
+                    }
+                    let parentElement = document.getElementById(parentId);
+                    
+                    if (position == null) {
+                        parentElement.appendChild(newEl);
+                    } else {
+                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                    }
+                """.trimIndent()
+                parent.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position)
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
@@ -111,28 +132,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             newElement.deleteIfExists()
         }
         return newElement
-    }
-
-    private fun renderJavaScriptToCreateNewElement(tag: String, attributes: Map<String, Any>, id: String): String {
-        val javaScript = StringBuilder()
-        with(javaScript) {
-            appendln("{")
-            appendln("var newEl = document.createElement(\"$tag\");")
-            if (!attributes.containsKey("id")) {
-                appendln("newEl.setAttribute(\"id\", \"$id\");")
-            }
-            for ((name, value) in attributes) {
-                appendln("newEl.setAttribute(\"$name\", ${value.toJson()});")
-            }
-            if (position == null) {
-                appendln("${parent.jsExpression}.appendChild(newEl);")
-            } else {
-                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.children[$position]);")
-            }
-            appendln("}")
-        }
-        val js = javaScript.toString()
-        return js
     }
 
     fun require(vararg plugins: KClass<out KwebPlugin>) = parent.browser.require(*plugins)

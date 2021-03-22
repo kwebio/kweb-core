@@ -127,7 +127,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
             cf.complete(response)
             false
-        }, args)
+        }, *args)
         return cf
     }
 
