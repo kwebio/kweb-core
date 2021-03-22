@@ -23,12 +23,11 @@ import kotlin.reflect.KClass
 open class Element(
         override val browser: WebBrowser,
         val creator: ElementCreator<*>?,
-        @Volatile open var jsExpression: String,
         val tag: String? = null,
         @Volatile var id: String
 ) :
         EventGenerator<Element> {
-    constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
+    constructor(element: Element) : this(element.browser, element.creator, tag = element.tag, id = element.id)
 
     /**
      * Execute some JavaScript in the browser.  This is the
@@ -100,7 +99,6 @@ open class Element(
             }
             if (name.equals("id", ignoreCase = true)) {
                 this.id = value.toString()
-                jsExpression = "document.getElementById(${value.toJson()})"
             }
         }
         return this
@@ -174,7 +172,7 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                callJsFunction("addClass($jsExpression, ${class_.toJson()});")
+                callJsFunction("addClass(document.getElementById({}), {});", id, class_.toJson())
             }
         }
         return this
@@ -186,7 +184,7 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                callJsFunction("removeClass($jsExpression, ${class_.toJson()});")
+                callJsFunction("removeClass(document.getElementById({}), {});", id, class_.toJson())
             }
         }
         return this
@@ -313,23 +311,23 @@ open class Element(
             }
             else -> {
                 callJsFunction("""
-                {
-                    var ntn=document.createTextNode({});
-                    $jsExpression.appendChild(ntn);
-                }
-                """, value.escapeEcma())
+                    let id = {}
+                    let value = {}
+                    var ntn=document.createTextNode(value);
+                    document.getElementById(id).appendChild(ntn);
+                """, id, value.escapeEcma())
             }
         }
         return this
     }
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
-        val wrappedJS = "return $jsExpression" + """
+        val wrappedJS = "return document.getElementById({})" + """
             .addEventListener({}, function(event) {
                 $jsCode
             });
         """.trimIndent()
-        browser.callJsFunctionWithResult(wrappedJS, eventName.toJson())
+        browser.callJsFunctionWithResult(wrappedJS, id, eventName.toJson())
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {

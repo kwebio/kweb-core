@@ -122,7 +122,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 parent.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position)
             }
         }
-        val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
+        val newElement = Element(parent.browser, this, tag = tag, id = id)
         elementsCreated += newElement
         for (plugin in parent.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)

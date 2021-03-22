@@ -76,11 +76,13 @@ class RenderCleanupTestApp {
                             val ta = textArea()
                             ta.setValue(taskList.value.joinToString(separator = "\n"))
                             div(fomantic.ui.buttons) {
-                                button(fomantic.ui.button, type = ButtonType.submit).text("Save").on("${ta.jsExpression}.value").click { event ->
+                                button(fomantic.ui.button, type = ButtonType.submit).text("Save").
+                                    on("document.getElementById(${ta.id})").click { event ->
                                     taskList.value = event.retrieved!!.split('\n').map { it.trim() }.toList()
                                     editing.value = false
                                 }
-                                button(fomantic.ui.button, type = ButtonType.submit).text("Cancel").on("${ta.jsExpression}.value").click { event ->
+                                button(fomantic.ui.button, type = ButtonType.submit).text("Cancel").
+                                    on("document.getElementById(${ta.id}).value").click { event ->
                                     editing.value = false
                                 }
                             }
