@@ -315,7 +315,7 @@ open class Element(
                     let value = {}
                     var ntn=document.createTextNode(value);
                     document.getElementById(id).appendChild(ntn);
-                """, id, value.escapeEcma())
+                """.trimIndent(), id, value.escapeEcma())
             }
         }
         return this
@@ -336,13 +336,13 @@ open class Element(
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
         val js = """
             document.getElementById({}).addEventListener(${eventName.toJson()}, function(event) {
-                callbackWs($callbackId, $eventObject);
+                callbackWs({}, {});
             });
         """.trimIndent()
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 
-        }, id)
+        }, id, callbackId, eventObject)
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }
