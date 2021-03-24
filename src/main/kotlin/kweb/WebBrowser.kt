@@ -82,7 +82,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun callJsFunction(jsBody: String, vararg args: Any?) {
         cachedFunctions[jsBody]?.let {
-            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args), js = jsBody)
+            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args))
             kweb.callJs(server2ClientMessage, jsBody)
         } ?: run {
             val rng = Random()
@@ -101,7 +101,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (Any) -> Unit, vararg args: Any?) {
         cachedFunctions[jsBody]?.let {
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
-            callbackId = callbackId, js = jsBody)
+            callbackId = callbackId)
             kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
         } ?: run {
             val rng = Random()
