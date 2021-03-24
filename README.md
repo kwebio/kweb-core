@@ -17,7 +17,7 @@ import kweb.*
 
 fun main() {
   Kweb(port = 16097) {
-    doc.body.new {
+    doc.body {
       h1().text("Hello World!")
     }
  }
