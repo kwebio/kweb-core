@@ -8,7 +8,8 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 
-let cachedFunctions = new Map()
+//let cachedFunctions = new Map()
+<!-- FUNCTION CACHE PLACEHOLDER -->
 
 function handleInboundMessage(msg) {
     console.debug("")
@@ -30,8 +31,8 @@ function handleInboundMessage(msg) {
     const callbackId = msg["callbackId"];
 
     if (cacheId !== undefined) {
-        if (cachedFunctions.get(cacheId) !== undefined) {
-            func = cachedFunctions.get(cacheId);
+        if (cachedFunctions[cacheId] !== undefined) {
+            func = cachedFunctions[cacheId];
         } else {
             const params = msg["parameters"];
             js = msg["js"];
@@ -40,7 +41,7 @@ function handleInboundMessage(msg) {
             } else {
                 func = new Function(js);
             }
-            cachedFunctions.set(cacheId, func);
+            cachedFunctions[cacheId] = func;
         }
     } else {
         //This is a special case that doesn't bother reading the cache, or trying to cache the function.

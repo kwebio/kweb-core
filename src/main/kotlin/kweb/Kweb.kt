@@ -357,10 +357,27 @@ class Kweb private constructor(
 
             remoteClientState.clientConnection = Caching()
 
+            val initialMessages = initialCachedMessages.read()//the initialCachedMessages queue can only be read once
+
+            val initialFunctions = mutableListOf<String>()
+            for (msg in initialMessages) {
+                val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
+                //For some reason the final msg in initialMessages looks like this,
+                //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
+                //I'm not sure what the point of this message is, and I can't find what is sending it.
+                //But, it causes problems if we try to add that to the cache, so we just make sure the jsId isn't null
+                //This is a useful check anyway, because we do let Server2ClientMessages have null jsId's, and trying to add
+                //a function from one of those messages wouldn't work.
+                if (deserialedMsg.jsId != null) {
+                    initialFunctions.add("""'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }""")
+                }
+
+            }
+
             val bootstrapJS = BootstrapJs.hydrate(
                     kwebSessionId,
-                    initialCachedMessages
-                            .read().joinToString(separator = "\n") { "handleInboundMessage($it);" })
+                    initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
+            "let cachedFunctions = { \n${initialFunctions.joinToString(separator = ",\n")} };")
 
             htmlDocument.head().appendElement("script")
                     .attr("language", "JavaScript")

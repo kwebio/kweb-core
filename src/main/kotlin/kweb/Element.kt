@@ -338,7 +338,7 @@ open class Element(
             document.getElementById({}).addEventListener(${eventName.toJson()}, function(event) {
                 callbackWs($callbackId, $eventObject);
             });
-        """
+        """.trimIndent()
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 

@@ -14,7 +14,8 @@ import kotlin.reflect.full.memberProperties
 class OnReceiver<T : EventGenerator<T>>(internal val source: T, private val retrieveJs: String? = null) {
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: String) -> Unit): T {
-        source.addEventListener(eventName, returnEventFields = returnEventFields, callback = { callback(it.toString()) }, retrieveJs = retrieveJs)
+        source.addEventListener(eventName, returnEventFields = returnEventFields,
+                callback = { callback(it.toString()) }, retrieveJs = retrieveJs)
         return source
     }
 
