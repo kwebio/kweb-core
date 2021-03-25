@@ -8,7 +8,6 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 
-//let cachedFunctions = new Map()
 <!-- FUNCTION CACHE PLACEHOLDER -->
 
 function handleInboundMessage(msg) {

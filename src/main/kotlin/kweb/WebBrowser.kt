@@ -131,14 +131,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): CompletableFuture<Any> {
-        val cf = CompletableFuture<Any>()
+    suspend fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): Any {
         val callbackId = abs(random.nextInt())
-        callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
-            cf.complete(response)
-            false
+        return callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
+            response
         }, *args)
-        return cf
     }
 
     val doc = Document(this)
