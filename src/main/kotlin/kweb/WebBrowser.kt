@@ -80,7 +80,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
                 stringBuilder.append(jsVarName)
                 params.add(jsVarName)
                 variableCount++
-                i++
+                i++//Since we matched the right bracket, we have to do an extra increment here,
+            // to avoid checking the right bracket a second time.
             } else {
                 stringBuilder.append(rawJs[i])
             }
