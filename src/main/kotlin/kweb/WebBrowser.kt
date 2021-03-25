@@ -70,14 +70,23 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      * this function replaces "{}" tokens with variable names for creating client side js Function objects
      */
     private fun makeJsFunction(rawJs: String): JSFunction {
-        var js = rawJs
+        val stringBuilder = StringBuilder()
+        var variableCount = 1
         val params = mutableListOf<String>()
-        while (js.contains("{}")) {
-            val jsVarName = "auto_var_${params.size+1}"
-            js = js.replaceFirst("{}", jsVarName)
-            params.add(jsVarName)
+        var i = 0
+        while (i < rawJs.length) {
+            if (rawJs[i] == '{' && rawJs[i+1] == '}'){
+                val jsVarName = "auto_var_$variableCount"
+                stringBuilder.append(jsVarName)
+                params.add(jsVarName)
+                variableCount++
+                i++
+            } else {
+                stringBuilder.append(rawJs[i])
+            }
+            i++
         }
-        return JSFunction(js, params.joinToString(separator = ","))
+        return JSFunction(stringBuilder.toString(), params.joinToString(separator = ","))
     }
 
     fun callJsFunction(jsBody: String, vararg args: Any?) {

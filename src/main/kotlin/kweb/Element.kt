@@ -335,14 +335,14 @@ open class Element(
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
         val js = """
-            document.getElementById({}).addEventListener(${eventName.toJson()}, function(event) {
-                callbackWs({}, {});
+            document.getElementById({}).addEventListener({}, function(event) {
+                callbackWs($callbackId, $eventObject);
             });
         """.trimIndent()
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 
-        }, id, callbackId, eventObject)
+        }, id, eventName.toJson())
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }
