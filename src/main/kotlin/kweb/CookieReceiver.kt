@@ -31,22 +31,21 @@ class CookieReceiver(val receiver: WebBrowser) {
         receiver.callJsFunction("docCookies.setItem({});", arguments.joinToString(separator = ", "))
     }
 
-    inline fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
-        when (it) {
+    suspend inline fun <reified V : Any> get(name: String): V? {
+        val result = getString(name)
+        return when(result) {
             null -> null
-            else -> gson.fromJson<V>(it)
+            else -> gson.fromJson<V>(result)
         }
     }
 
-    fun getString(name: String): CompletableFuture<String?> {
-        return receiver.callJsFunctionWithResult("return docCookies.getItem({});", name.toJson())
-                .thenApply {
-                    if (it == "__COOKIE_NOT_FOUND_TOKEN__") {
-                        null
-                    } else {
-                        it.toString()
-                    }
-                }
+    suspend fun getString(name: String): String? {
+        val result = receiver.callJsFunctionWithResult("return docCookies.getItem({});", name.toJson())
+        return if (result == "__COOKIE_NOT_FOUND_TOKEN__") {
+            null
+        } else {
+            result.toString()
+        }
     }
 
     fun remove(name: String) {

@@ -1,6 +1,10 @@
 package kweb
 
 import io.mola.galimatias.URL
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.launch
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
@@ -56,7 +60,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     internal fun require(vararg requiredPlugins: KClass<out KwebPlugin>) {
-        val missing = java.util.HashSet<String>()
+        val missing = HashSet<String>()
         for (requiredPlugin in requiredPlugins) {
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
@@ -133,9 +137,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     suspend fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): Any {
         val callbackId = abs(random.nextInt())
-        return callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
-            response
+        val cf = CompletableFuture<Any>()
+        callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
+            cf.complete(response)
         }, *args)
+        return cf.await()
     }
 
     val doc = Document(this)

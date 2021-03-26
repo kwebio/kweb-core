@@ -1,6 +1,9 @@
+/*
 import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kotlintest.shouldBe
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kweb.*
 import kweb.state.KVar
 import kweb.state.render
@@ -127,7 +130,9 @@ class StringDiffTestApp {
         }
     }
 
-    fun getValue(): String {
-        return input.getValue().get()
+    suspend fun getValue(): String {
+            return input.getValue()
     }
 }
+*/
+

@@ -43,8 +43,9 @@ open class Element(
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
      */
-    fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: Any?): CompletableFuture<O>? {
-        return browser.callJsFunctionWithResult(js, *args).thenApply(outputMapper)
+    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: Any?): O? {
+        val result = browser.callJsFunctionWithResult(js, *args)
+        return outputMapper.invoke(result)
     }
 
     /*********
@@ -327,7 +328,8 @@ open class Element(
                 $jsCode
             });
         """.trimIndent()
-        browser.callJsFunctionWithResult(wrappedJS, id, eventName.toJson())
+        browser.callJsFunction(wrappedJS, id, eventName.toJson())
+        /*browser.callJsFunctionWithResult(wrappedJS, id, eventName.toJson())*/
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {

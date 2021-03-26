@@ -389,7 +389,12 @@ fun ElementCreator<Element>.textArea(
 }
 
 open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(element) {
-    val value get() = receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id)
+    suspend fun getValue() : String {
+        //A TextArea should only ever contain a String. So using toString() here should be safe.
+        // We could add some error handling here if we wanted to though.
+        return receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id).toString()
+    }
+    //val value get() = receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id)
 }
 
 open class LabelElement(wrapped: Element) : Element(wrapped)
@@ -407,7 +412,7 @@ fun ElementCreator<Element>.label(
  * Abstract class for the various elements that have a `value` attribute and which support `change` and `input` events.
  */
 abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
-    fun getValue(): CompletableFuture<String> = element.
+    suspend fun getValue():String = element.
     callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { it.toString() }, id)
         ?: error("Not sure why .evaluate() would return null")
 

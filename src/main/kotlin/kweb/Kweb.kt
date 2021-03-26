@@ -360,6 +360,7 @@ class Kweb private constructor(
             val initialMessages = initialCachedMessages.read()//the initialCachedMessages queue can only be read once
 
             val initialFunctions = mutableListOf<String>()
+            val cachedIds = mutableListOf<String>()
             for (msg in initialMessages) {
                 val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
                 //For some reason the final msg in initialMessages looks like this,
@@ -369,7 +370,10 @@ class Kweb private constructor(
                 //This is a useful check anyway, because we do let Server2ClientMessages have null jsId's, and trying to add
                 //a function from one of those messages wouldn't work.
                 if (deserialedMsg.jsId != null) {
-                    initialFunctions.add("""'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }""")
+                    if (!cachedIds.contains(deserialedMsg.jsId)) {
+                        initialFunctions.add("""'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }""")
+                    }
+
                 }
 
             }

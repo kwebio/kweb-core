@@ -1,6 +1,8 @@
 package kweb.html
 
 import com.github.salomonbrys.kotson.toJson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kweb.*
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -39,7 +41,9 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         return head
     }
 
-    val origin = receiver.callJsFunctionWithResult("return document.origin")
+    suspend fun getOrigin(): Any {
+        return receiver.callJsFunctionWithResult("return document.origin")
+    }
 
     fun execCommand(command: String) {
         receiver.callJsFunction("document.execCommand({});", command)
@@ -66,7 +70,9 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
                 $jsCode
             });
         """.trimIndent()
-        receiver.callJsFunctionWithResult(wrappedJS, eventName.toJson())
+        GlobalScope.launch {
+            receiver.callJsFunctionWithResult(wrappedJS, eventName.toJson())
+        }
     }
 
 
