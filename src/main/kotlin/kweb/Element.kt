@@ -173,7 +173,13 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                callJsFunction("addClass(document.getElementById({}), {});", id, class_.toJson())
+                callJsFunction("""
+                    let id = {};
+                    let className = {};
+                    let el = document.getElementById(id);
+                    if (el.classList) el.classList.remove(className);
+                    else if (hasClass(el, className)) el.className += " " + className;
+                """.trimIndent(), id, class_.toJson())
             }
         }
         return this
@@ -185,7 +191,16 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                callJsFunction("removeClass(document.getElementById({}), {});", id, class_.toJson())
+                callJsFunction("""
+                    let id = {};
+                    let className = {};
+                    let el = document.getElementById(id);
+                    if (el.classList) el.classList.remove(className);
+                    else if (hasClass(el, className)) {
+                        var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
+                        el.className = el.className.replace(reg, " ");
+                    }
+                """.trimIndent(), id, class_.toJson())
             }
         }
         return this
@@ -215,15 +230,14 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).let { jsoupElement ->
+                val jsoupElement = htmlDoc.getElementById(this.id)
                     jsoupElement.children().remove()
-                }
             }
             else -> {
                 callJsFunction("""
-                    
-                    if (document.getElementById({}) != null) {
-                        let element = document.getElementById({});
+                    let id = {};
+                    if (document.getElementById(id) != null) {
+                        let element = document.getElementById(id);
                         while (element.firstChild) {
                             element.removeChild(element.firstChild);
                         }
