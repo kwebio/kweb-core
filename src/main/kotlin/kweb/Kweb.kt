@@ -126,9 +126,10 @@ class Kweb private constructor(
 
     private var server: JettyApplicationEngine? = null
 
+    /**
+     * Are outbound messages being cached for this thread (for example, because we're inside an immediateEvent callback block)?
+     */
     fun isCatchingOutbound() = outboundMessageCatcher.get() != null
-
-    fun isNotCatchingOutbound() = !isCatchingOutbound()
 
     fun catchOutbound(f: () -> Unit): List<String> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }

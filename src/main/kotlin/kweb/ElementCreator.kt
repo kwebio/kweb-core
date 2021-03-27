@@ -21,9 +21,10 @@ typealias Cleaner = () -> Unit
 
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
-        val parent: PARENT_TYPE,
-        val parentCreator: ElementCreator<*>? = parent.creator,
-        val position: Int? = null) {
+    val parent: PARENT_TYPE,
+    val parentCreator: ElementCreator<*>? = parent.creator,
+    val position: Int? = null
+) {
 
     companion object : KLogging()
 
@@ -57,6 +58,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val id: String = (mutAttributes.computeIfAbsent("id") { "K" + browser.generateId() }.toString())
         val htmlDoc = browser.htmlDocument.get()
         when {
+            parent.browser.kweb.isCatchingOutbound() -> {
+                parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
+            }
             htmlDoc != null -> {
                 val jsElement = when (parent) {
                     is HeadElement -> {
@@ -75,12 +79,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     }
                 }
             }
-            parent.canSendInstruction() -> {
+            else -> {
                 browser.send(Instruction(CreateElement, listOf(tag, mutAttributes, id, parent.id, position ?: -1)))
             }
-            else -> {
-                parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
-            }
+
         }
         val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
         elementsCreated += newElement
@@ -142,11 +144,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
     }
 
-    fun text(text : String) {
+    fun text(text: String) {
         this.parent.text(text)
     }
 
-    fun text(text : KVal<String>) {
+    fun text(text: KVal<String>) {
         this.parent.text(text)
     }
 }
