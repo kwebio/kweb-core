@@ -1,5 +1,7 @@
 package kweb.html.events
 
+import kweb.Kweb
+import kweb.h1
 import kweb.util.KWebDSL
 
 @KWebDSL
@@ -108,4 +110,16 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
     fun animationstart(callback: () -> Unit) = event("animationstart", callback)
     fun transitionend(callback: () -> Unit) = event("transitionend", callback)
      */
+}
+
+fun main() {
+    val server: Kweb = Kweb(port= 7660) {
+        doc.body {
+            val label = h1()
+            label.text("Click Me")
+            label.onImmediate.click {
+                label.text("Clicked!")
+            }
+        }
+    }
 }

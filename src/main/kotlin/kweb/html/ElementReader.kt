@@ -11,7 +11,7 @@ open class ElementReader(protected val receiver: WebBrowser, internal val elemen
     constructor(element: Element) : this(element.browser, element.id)
 
     init {
-        require(receiver.kweb.isNotCatchingOutbound()) {
+        require(!receiver.kweb.isCatchingOutbound()) {
             """
             Reading the DOM when an outboundMessageCatcher is set is likely to have unintended consequences.
             Most likely you are trying to read the DOM within an `immediatelyOn {...}` block.

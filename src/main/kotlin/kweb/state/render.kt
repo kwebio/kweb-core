@@ -90,7 +90,7 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
     val value = shoebox[key] ?: throw NoSuchElementException("Key $key not found")
     val w = KVar(value)
     w.addListener { _, n ->
-        require(this.browser.kweb.isNotCatchingOutbound()) {
+        require(!this.browser.kweb.isCatchingOutbound()) {
             """You appear to be modifying Shoebox state from within an onImmediate callback, which
                 |should only make simple modifications to the DOM.""".trimMargin()
         }

@@ -126,10 +126,18 @@ class Kweb private constructor(
 
     private var server: JettyApplicationEngine? = null
 
+    /**
+     * Are outbound messages being cached for this thread (for example, because we're inside an immediateEvent callback block)?
+     */
     fun isCatchingOutbound() = outboundMessageCatcher.get() != null
 
-    fun isNotCatchingOutbound() = !isCatchingOutbound()
-
+    /**
+     * Execute a block of code in which any JavaScript sent to the browser during the execution of the block will be stored
+     * and returned by this function.
+     *
+     * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
+     * replayed in the browser when an event is triggered without a server round-trip.
+     */
     fun catchOutbound(f: () -> Unit): List<String> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
 

@@ -1,5 +1,7 @@
 package kweb
 
+import kweb.client.Server2ClientMessage.Instruction
+import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
@@ -19,9 +21,10 @@ typealias Cleaner = () -> Unit
 
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
-        val parent: PARENT_TYPE,
-        val parentCreator: ElementCreator<*>? = parent.creator,
-        val position: Int? = null) {
+    val parent: PARENT_TYPE,
+    val parentCreator: ElementCreator<*>? = parent.creator,
+    val position: Int? = null
+) {
 
     companion object : KLogging()
 
@@ -55,6 +58,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val id: String = (mutAttributes.computeIfAbsent("id") { "K" + browser.generateId() }.toString())
         val htmlDoc = browser.htmlDocument.get()
         when {
+            parent.browser.kweb.isCatchingOutbound() -> {
+                parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
+            }
             htmlDoc != null -> {
                 val jsElement = when (parent) {
                     is HeadElement -> {
@@ -122,7 +128,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 parent.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position)
             }
         }
-        val newElement = Element(parent.browser, this, tag = tag, id = id)
+        val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
         elementsCreated += newElement
         for (plugin in parent.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)
@@ -132,6 +138,28 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             newElement.deleteIfExists()
         }
         return newElement
+    }
+
+    private fun renderJavaScriptToCreateNewElement(tag: String, attributes: Map<String, Any>, id: String): String {
+        val javaScript = StringBuilder()
+        with(javaScript) {
+            appendln("{")
+            appendln("var newEl = document.createElement(\"$tag\");")
+            if (!attributes.containsKey("id")) {
+                appendln("newEl.setAttribute(\"id\", \"$id\");")
+            }
+            for ((name, value) in attributes) {
+                appendln("newEl.setAttribute(\"$name\", ${value.toJson()});")
+            }
+            if (position == null) {
+                appendln("${parent.jsExpression}.appendChild(newEl);")
+            } else {
+                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.children[$position]);")
+            }
+            appendln("}")
+        }
+        val js = javaScript.toString()
+        return js
     }
 
     fun require(vararg plugins: KClass<out KwebPlugin>) = parent.browser.require(*plugins)
@@ -160,11 +188,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
     }
 
-    fun text(text : String) {
+    fun text(text: String) {
         this.parent.text(text)
     }
 
-    fun text(text : KVal<String>) {
+    fun text(text: KVal<String>) {
         this.parent.text(text)
     }
 }
