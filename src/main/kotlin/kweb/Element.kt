@@ -89,13 +89,15 @@ open class Element(
             val htmlDoc = browser.htmlDocument.get()
             when {
                 browser.kweb.isCatchingOutbound() -> {
-                    execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                            id, name.escapeEcma(), value.toJson())
                 }
                 htmlDoc != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 else -> {
-                    execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                            id, name.escapeEcma(), value.toJson())
                 }
             }
             if (name.equals("id", ignoreCase = true)) {
@@ -119,10 +121,10 @@ open class Element(
     fun removeAttribute(name: String): Element {
         when {
             browser.kweb.isCatchingOutbound() -> {
-                execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+                callJsFunction("document.getElementById({}).removeAttribute", id, name.escapeEcma())
             }
             else -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.RemoveAttribute, listOf(id, name)))
+                callJsFunction("document.getElementById({}).removeAttribute", id, name.escapeEcma())
             }
 
         }
@@ -137,7 +139,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                execute("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+                callJsFunction("document.getElementById({}).innerHTML = {}", id, html.escapeEcma())
             }
         }
         return this
@@ -155,12 +157,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        execute("$jsExpression.focus();")
+        callJsFunction("document.getElementById({}).focus();")
         return this
     }
 
     fun blur(): Element {
-        execute("$jsExpression.blur();")
+        callJsFunction("document.getElementById({}).blur();")
         return this
     }
 
@@ -277,19 +279,18 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        println("Text id = $id")
+        val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
             browser.kweb.isCatchingOutbound() -> {
-                execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+                callJsFunction(setTextJS, id, value.escapeEcma())
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
-            canSendMessage() -> {
-                browser.callJsFunction("""document.getElementById({}).textContent = {};""", id, value)
-            }
             else -> {
-                callJsFunction("document.getElementById({}).textContent = {};", id, value.escapeEcma())
+                callJsFunction(setTextJS, id, value.escapeEcma())
             }
         }
         return this
@@ -322,31 +323,20 @@ open class Element(
 
     fun addText(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        val createTextNodeJs = """
+            var ntn = document.createTextNode({});
+            document.getElementById({}).appendChild(ntn);
+        """.trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
-                execute(
-                    """
-                {
-                    var ntn=document.createTextNode("${value.escapeEcma()}");
-                    $jsExpression.appendChild(ntn);
-                }
-        """.trimIndent()
-                )
+                callJsFunction(createTextNodeJs, value.escapeEcma(), id)
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
-            canSendInstruction() -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.AddText, listOf(id, value)))
-            }
             else -> {
-                execute("""
-                {
-                    var ntn=document.createTextNode("${value.escapeEcma()}");
-                    $jsExpression.appendChild(ntn);
-                }
-        """)
+                callJsFunction(createTextNodeJs, value.escapeEcma(), id)
             }
         }
         return this
@@ -404,8 +394,6 @@ open class Element(
     val style get() = StyleReceiver(this)
 
     val flags = ConcurrentSkipListSet<String>()
-
-    fun canSendInstruction() = browser.kweb.isNotCatchingOutbound()
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
