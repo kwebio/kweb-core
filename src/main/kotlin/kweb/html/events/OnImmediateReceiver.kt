@@ -7,10 +7,23 @@ import kweb.util.KWebDSL
 @KWebDSL
 class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
     fun event(eventName: String, callback: () -> Unit): T {
-        val immediateJS = source.browser.kweb.catchOutbound {
+        val caughtJsFunctions = source.browser.kweb.catchOutbound {
             callback()
         }
-        source.addImmediateEventCode(eventName, immediateJS.joinToString(separator = ""))
+        val immediateJs = mutableListOf<String>()
+        for (jsFunction in caughtJsFunctions) {
+            if (jsFunction.arguments.isNotEmpty()) {
+                val argStrings = mutableListOf<String>()
+                for (arg in jsFunction.arguments) {
+                    argStrings.add(""""${arg.toString()}"""")
+                }
+                immediateJs.add("cachedFunctions[${jsFunction.jsId}](${argStrings.joinToString(",")})")
+            } else {
+                immediateJs.add("cachedFunctions[${jsFunction.jsId}]()")
+            }
+
+        }
+        source.addImmediateEventCode(eventName, immediateJs.joinToString(separator = ""))
         return source
     }
 

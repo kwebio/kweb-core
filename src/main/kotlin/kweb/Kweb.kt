@@ -138,10 +138,10 @@ class Kweb private constructor(
      * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
      * replayed in the browser when an event is triggered without a server round-trip.
      */
-    fun catchOutbound(f: () -> Unit): List<String> {
+    fun catchOutbound(f: () -> Unit): List<JsFunction> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
 
-        val jsList = ArrayList<String>()
+        val jsList = ArrayList<JsFunction>()
         outboundMessageCatcher.set(jsList)
         f()
         outboundMessageCatcher.set(null)
@@ -168,12 +168,17 @@ class Kweb private constructor(
             wsClientData.send(server2ClientMessage)
         } else {
             logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
-            outboundMessageCatcher.add(javascript)
+            val jsFunction = JsFunction(server2ClientMessage.jsId!!, server2ClientMessage.arguments!!)
+            outboundMessageCatcher.add(jsFunction)
+            server2ClientMessage.arguments = null
+            wsClientData.send(server2ClientMessage)
         }
     }
 
     fun callJsWithCallback(server2ClientMessage: Server2ClientMessage,
                            javascript: String, callback: (Any) -> Unit) {
+        //TODO I'm not sure what the error message should be here
+        require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
         val wsClientData = clientState[server2ClientMessage.yourId]
                 ?: error("Client id ${server2ClientMessage.yourId} not found")
         wsClientData.lastModified = Instant.now()
@@ -371,6 +376,7 @@ class Kweb private constructor(
             val cachedIds = mutableListOf<String>()
             for (msg in initialMessages) {
                 val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
+                println(deserialedMsg)
                 //For some reason the final msg in initialMessages looks like this,
                 //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
                 //I'm not sure what the point of this message is, and I can't find what is sending it.
@@ -379,17 +385,29 @@ class Kweb private constructor(
                 //a function from one of those messages wouldn't work.
                 if (deserialedMsg.jsId != null) {
                     if (!cachedIds.contains(deserialedMsg.jsId)) {
-                        initialFunctions.add("""'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }""")
+                        val cachedFunction = """'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
+                        println("Caching $cachedFunction")
+                        initialFunctions.add(cachedFunction)
+                        /*if (deserialedMsg.arguments != null) {
+                            initialFunctions.add(cachedFunction)
+                        }*/
                     }
 
                 }
 
             }
 
+            val letString = "let cachedFunctions = { \n${initialFunctions.joinToString(separator = ",\n")} };"
+
+            println("Cache = $letString")
+            println("Printing functions")
+            for (msg in initialFunctions) {
+                println(msg)
+            }
             val bootstrapJS = BootstrapJs.hydrate(
                     kwebSessionId,
-                    initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
-            "let cachedFunctions = { \n${initialFunctions.joinToString(separator = ",\n")} };")
+                    initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" }, letString
+            )
 
             htmlDocument.head().appendElement("script")
                     .attr("language", "JavaScript")
@@ -448,7 +466,7 @@ class Kweb private constructor(
      * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
      * execution of event handlers, see `Element.immediatelyOn`
      */
-    private val outboundMessageCatcher: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
+    private val outboundMessageCatcher: ThreadLocal<MutableList<JsFunction>?> = ThreadLocal.withInitial { null }
 
     private fun cleanUpOldClientStates() {
         val now = Instant.now()

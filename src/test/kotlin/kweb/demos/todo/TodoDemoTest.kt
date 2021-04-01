@@ -43,7 +43,7 @@ class TodoDemoTest {
         //https://bonigarcia.github.io/selenium-jupiter/#generic-driver
         @Options
         var chromeOptions = ChromeOptions().apply {
-            setHeadless(true)
+            //setHeadless(true)
         }
 
         @Options

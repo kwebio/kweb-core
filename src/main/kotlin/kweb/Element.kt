@@ -343,8 +343,9 @@ open class Element(
     }
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
-        val wrappedJS = "return document.getElementById({})" + """
-            .addEventListener({}, function(event) {
+        println("adding ImmediateEvent with code = $jsCode")
+        val wrappedJS = """
+            return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
             });
         """.trimIndent()
@@ -358,13 +359,13 @@ open class Element(
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
         val js = """
             document.getElementById({}).addEventListener({}, function(event) {
-                callbackWs($callbackId, $eventObject);
+                callbackWs({}, $eventObject);
             });
         """.trimIndent()
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 
-        }, id, eventName.toJson())
+        }, id, eventName.toJson(), callbackId)
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }

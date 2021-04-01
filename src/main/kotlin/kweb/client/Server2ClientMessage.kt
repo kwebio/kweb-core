@@ -8,7 +8,7 @@ data class Server2ClientMessage(
         val js: String? = null, //the js function
         val parameters: String? = null, //null if we are executing a cached function
         val callbackId: Int? = null, //null if we are executing a function without a callback
-        val arguments: List<Any?>? = null //null if we are executing a function with no arguments
+        var arguments: List<Any?>? = null //null if we are not executing a js function on the server. empty if we execute js without args.
 )
 
 //parameters is a comma separated string of parameters for the js function

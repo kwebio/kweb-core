@@ -30,6 +30,8 @@ fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
 fun Any.toJson(): String = gson.toJson(this)
 
+data class JsFunction(val jsId: Int, val arguments: List<Any?> = emptyList())
+
 fun <T> warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -> Unit, f: () -> T): T {
     val runningThread = Thread.currentThread()
     val watcher = scheduledExecutorService.schedule({ onBlock(runningThread) }, maxTimeMs, TimeUnit.MILLISECONDS)

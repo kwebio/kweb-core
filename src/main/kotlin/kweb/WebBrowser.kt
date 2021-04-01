@@ -49,6 +49,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
     val cachedFunctions = ConcurrentHashMap<String, Int>()
+    val modifiedFunctions = ConcurrentHashMap<Int, String>()
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
@@ -104,6 +105,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             val func = makeJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[jsBody] = cacheId
+            modifiedFunctions[cacheId] = func.js
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
             val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
