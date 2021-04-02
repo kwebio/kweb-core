@@ -357,6 +357,12 @@ open class Element(
         val callbackId = abs(random.nextInt())
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
+        /*It'd be nice to make eventObject a parameter, but it doesn't work.
+            eventObject is a map that has entries that look like { "buttons" : event.buttons }
+            the event field accessed here is the event parameter from the "function(event)" in the javascript
+            There is no way to reference that event object from the server, so we use eventObject, and insert properly
+            formatted JavaScript directly in the code sent to the client.
+        */
         val js = """
             document.getElementById({}).addEventListener({}, function(event) {
                 callbackWs({}, $eventObject);
