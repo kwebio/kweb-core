@@ -170,6 +170,9 @@ class Kweb private constructor(
             logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
             val jsFunction = JsFunction(server2ClientMessage.jsId!!, server2ClientMessage.arguments!!)
             outboundMessageCatcher.add(jsFunction)
+            //If we have an outboundMessageCatcher, we do not want to execute the jsCode in this message.
+            //We still need to send the Server2ClientMessage, to cache the jsCode.
+            //So, we take the message, and set arguments to null, so the server knows not to run this code.
             server2ClientMessage.arguments = null
             wsClientData.send(server2ClientMessage)
         }
@@ -177,7 +180,7 @@ class Kweb private constructor(
 
     fun callJsWithCallback(server2ClientMessage: Server2ClientMessage,
                            javascript: String, callback: (Any) -> Unit) {
-        //TODO I'm not sure what the error message should be here
+        //TODO I could use some help improving this error message
         require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
         val wsClientData = clientState[server2ClientMessage.yourId]
                 ?: error("Client id ${server2ClientMessage.yourId} not found")
@@ -372,11 +375,17 @@ class Kweb private constructor(
 
             val initialMessages = initialCachedMessages.read()//the initialCachedMessages queue can only be read once
 
+            val pageBuildInstructions = mutableListOf<String>()
             val initialFunctions = mutableListOf<String>()
-            val cachedIds = mutableListOf<String>()
+            val cachedIds = mutableListOf<Int>()
             for (msg in initialMessages) {
                 val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
-                println(deserialedMsg)
+
+                println("Thinking about caching $deserialedMsg")
+                //println(deserialedMsg)
+                if (deserialedMsg.arguments != null) {
+                    pageBuildInstructions.add(msg)
+                }
                 //For some reason the final msg in initialMessages looks like this,
                 //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
                 //I'm not sure what the point of this message is, and I can't find what is sending it.
@@ -388,6 +397,7 @@ class Kweb private constructor(
                         val cachedFunction = """'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
                         println("Caching $cachedFunction")
                         initialFunctions.add(cachedFunction)
+                        cachedIds.add(deserialedMsg.jsId)
                         /*if (deserialedMsg.arguments != null) {
                             initialFunctions.add(cachedFunction)
                         }*/
@@ -399,14 +409,12 @@ class Kweb private constructor(
 
             val letString = "let cachedFunctions = { \n${initialFunctions.joinToString(separator = ",\n")} };"
 
-            println("Cache = $letString")
-            println("Printing functions")
-            for (msg in initialFunctions) {
-                println(msg)
-            }
+            //println("Cache = $letString")
+            //println("Printing functions")
             val bootstrapJS = BootstrapJs.hydrate(
                     kwebSessionId,
-                    initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" }, letString
+                    pageBuildInstructions.joinToString(separator = "\n") { "handleInboundMessage($it);" },
+                    letString
             )
 
             htmlDocument.head().appendElement("script")
