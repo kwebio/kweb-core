@@ -1,7 +1,6 @@
 package kweb
 
 import com.github.salomonbrys.kotson.toJson
-import kweb.client.Server2ClientMessage
 import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -12,10 +11,7 @@ import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.state.KVar
 import kweb.util.KWebDSL
-import kweb.util.escapeEcma
 import kweb.util.random
-import kweb.util.toJson
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.math.abs
 import kotlin.reflect.KClass
@@ -90,14 +86,14 @@ open class Element(
             when {
                 browser.kweb.isCatchingOutbound() -> {
                     callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            id, name.escapeEcma(), value.toJson())
+                            id, name, value)
                 }
                 htmlDoc != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 else -> {
                     callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            id, name.escapeEcma(), value.toJson())
+                            id, name, value)
                 }
             }
             if (name.equals("id", ignoreCase = true)) {
@@ -121,10 +117,10 @@ open class Element(
     fun removeAttribute(name: String): Element {
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction("document.getElementById({}).removeAttribute", id, name.escapeEcma())
+                callJsFunction("document.getElementById({}).removeAttribute", id, name)
             }
             else -> {
-                callJsFunction("document.getElementById({}).removeAttribute", id, name.escapeEcma())
+                callJsFunction("document.getElementById({}).removeAttribute", id, name)
             }
 
         }
@@ -139,7 +135,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                callJsFunction("document.getElementById({}).innerHTML = {}", id, html.escapeEcma())
+                callJsFunction("document.getElementById({}).innerHTML = {}", id, html)
             }
         }
         return this
@@ -185,7 +181,7 @@ open class Element(
                     let el = document.getElementById(id);
                     if (el.classList) el.classList.remove(className);
                     else if (hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), id, class_.toJson())
+                """.trimIndent(), id, class_)
             }
         }
         return this
@@ -206,7 +202,7 @@ open class Element(
                         var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
                         el.className = el.className.replace(reg, " ");
                     }
-                """.trimIndent(), id, class_.toJson())
+                """.trimIndent(), id, class_)
             }
         }
         return this
@@ -278,7 +274,6 @@ open class Element(
      * a `h1` element and set its text as follows: `<h1>Hello World</h1>`.
      */
     fun text(value: String): Element {
-        println("Setting text : $value")
         val jsoupDoc = browser.htmlDocument.get()
         val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
@@ -329,14 +324,14 @@ open class Element(
         """.trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction(createTextNodeJs, value.escapeEcma(), id)
+                callJsFunction(createTextNodeJs, value, id)
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             else -> {
-                callJsFunction(createTextNodeJs, value.escapeEcma(), id)
+                callJsFunction(createTextNodeJs, value, id)
             }
         }
         return this
@@ -347,8 +342,8 @@ open class Element(
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
             });""".trimIndent()
-        browser.callJsFunction(wrappedJS, id, eventName.toJson())
-        /*browser.callJsFunctionWithResult(wrappedJS, id, eventName.toJson())*/
+        browser.callJsFunction(wrappedJS, id, eventName)
+        /*browser.callJsFunctionWithResult(wrappedJS, id, eventName)*/
         //TODO this function used to call evaluate, which had a return type. I have it set to use callJsFunction
         //which doesn't return anything. I don't know if I'm missing something and we should use callJsFunctionWithResult,
         //or it was a mistake to use evaluate() instead of execute() here. It seems to work just using callJsFunction()
@@ -372,7 +367,7 @@ open class Element(
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 
-        }, id, eventName.toJson(), callbackId)
+        }, id, eventName, callbackId)
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }

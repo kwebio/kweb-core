@@ -27,11 +27,12 @@ open class ElementReader(protected val receiver: WebBrowser, internal val elemen
     suspend fun getAttributes(): Map<String, Any> {
         return receiver.callJsFunctionWithResult(
             "return document.getElementById({}).attributes", elementId) as Map<String, Any>
+        //TODO we could probably use a little error handling on this cast.
     }
 
     suspend fun getAttribute(name: String): Any {
         return receiver.callJsFunctionWithResult(
-            "return document.getElementById({}).getAttribute({})", elementId, name.escapeEcma()).toString()
+            "return document.getElementById({}).getAttribute({})", elementId, ).toString()
     }
 
     suspend fun getInnerHtml(): String {
