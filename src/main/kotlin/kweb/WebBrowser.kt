@@ -1,10 +1,7 @@
 package kweb
 
 import io.mola.galimatias.URL
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
@@ -97,8 +94,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun callJsFunction(jsBody: String, vararg args: Any?) {
         cachedFunctions[jsBody]?.let {
-            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args))
-            kweb.callJs(server2ClientMessage, jsBody)
+            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args))
+            kweb.callJs(callCachedFuncMessage, jsBody)
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
@@ -108,17 +105,17 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             modifiedFunctions[cacheId] = func.js
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
+            val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
                 parameters = func.params, arguments = listOf(*args))
-            kweb.callJs(server2ClientMessage, jsBody)
+            kweb.callJs(cacheAndExecuteMessage, jsBody)
         }
     }
 
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (Any) -> Unit, vararg args: Any?) {
         cachedFunctions[jsBody]?.let {
-            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
+            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
             callbackId = callbackId)
-            kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
+            kweb.callJsWithCallback(callCachedFuncMessage, jsBody, callback)
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
@@ -127,9 +124,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
+            val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
                     parameters = func.params, arguments = listOf(*args), callbackId = callbackId)
-            kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
+            kweb.callJsWithCallback(cacheAndExecuteMessage, jsBody, callback)
         }
     }
 
