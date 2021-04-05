@@ -8,11 +8,11 @@ import kweb.Element
 
 class StyleReceiver(private val parent: Element) {
     fun setDisplay(value: DisplayValues) {
-        parent.execute("${parent.jsExpression}.style.display=\"$value\";")
+        parent.callJsFunction("document.getElementById({}).style.display = {}", parent.id, value)
     }
 
     fun setWidth(value: String) {
-        parent.execute("${parent.jsExpression}.style.width=\"$value\";")
+        parent.callJsFunction("document.getElementById({}).style.width = {}", parent.id, value)
     }
 
     fun remove() {

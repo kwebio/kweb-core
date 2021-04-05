@@ -21,21 +21,22 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
     require(keys.isNotEmpty()) { "You must supply at least one key" }
     require(ENTER_PRESSED_EVENT_ATTACHED_FLAG !in flags) { "KeySpecificKeyupEvent may only be attached once per element" }
     flags += ENTER_PRESSED_EVENT_ATTACHED_FLAG
-    this.execute("""
-        $jsExpression.addEventListener("keyup", function(origEvent) {
-            var keys = [${keys.joinToString(separator = ",") { "\"$it\"" }}]
+    this.callJsFunction("""
+        let id = {};
+        var keys = {};
+        let element = document.getElementById(id);
+        element.addEventListener("keyup", function(origEvent) {
             if (keys.includes(origEvent.key)) {
-                if (window.CustomEvent) {
-                  var keySpecificKeyUpEvent = new CustomEvent('keySpecificKeyUpEvent');
-                } else {
-                  var keySpecificKeyUpEvent = document.createEvent('keySpecificKeyUpEvent');
-                  enterPressedEvent.initCustomEvent('keySpecificKeyUpEvent', true, true, origEvent);
-                }
-
-                $jsExpression.dispatchEvent(keySpecificKeyUpEvent);
+                    if (window.CustomEvent) {
+                      var keySpecificKeyUpEvent = new CustomEvent('keySpecificKeyUpEvent');
+                    } else {
+                    var keySpecificKeyUpEvent = document.createEvent('keySpecificKeyUpEvent');
+                    enterPressedEvent.initCustomEvent('keySpecificKeyUpEvent', true, true, origEvent);
+                    }
+                element.dispatchEvent(keySpecificKeyUpEvent);
             }
         });
-    """.trimIndent())
+    """.trimIndent(), id, keys.joinToString(separator = ","))
 }
 
 fun OnReceiver<Element>.keySpecificKeyup(callback: (event: KeyboardEvent) -> Unit): Element {

@@ -1,18 +1,23 @@
 package kweb
 
 import io.mola.galimatias.URL
+import kotlinx.coroutines.future.await
 import kweb.client.HttpRequestInfo
-import kweb.client.Server2ClientMessage.Instruction
+import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
 import kweb.util.pathQueryFragment
+import kweb.util.random
 import mu.KotlinLogging
+import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
@@ -31,7 +36,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      * During page render, the initial HTML document will be available for modification as a
      * [JSoup Document](https://jsoup.org/) in this [AtomicReference].
      *
-     * Callers to [execute] may check for this being non-null, and if so edit the document
+     * Callers to [callJsFunction] may check for this being non-null, and if so edit the document
      * *instead* of some or all of the JavaScript they must call.
      *
      * The purpose of this is to implement Server-Side Rendering.
@@ -39,6 +44,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     val htmlDocument = AtomicReference<org.jsoup.nodes.Document?>(null)
 
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
+
+    val cachedFunctions = ConcurrentHashMap<String, Int>()
+    val modifiedFunctions = ConcurrentHashMap<Int, String>()
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
@@ -50,7 +58,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     internal fun require(vararg requiredPlugins: KClass<out KwebPlugin>) {
-        val missing = java.util.HashSet<String>()
+        val missing = HashSet<String>()
         for (requiredPlugin in requiredPlugins) {
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
@@ -59,35 +67,80 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
-    fun execute(js: String) {
-        kweb.execute(sessionId, js)
+    data class JSFunction(val js: String, val params: String)
+    /**
+     * this function replaces "{}" tokens with variable names for creating client side js Function objects
+     */
+    private fun makeJsFunction(rawJs: String): JSFunction {
+        val stringBuilder = StringBuilder()
+        var variableCount = 1
+        val params = mutableListOf<String>()
+        var i = 0
+        while (i < rawJs.length) {
+            if (rawJs[i] == '{' && rawJs[i+1] == '}'){
+                val jsVarName = "auto_var_$variableCount"
+                stringBuilder.append(jsVarName)
+                params.add(jsVarName)
+                variableCount++
+                i++//Since we matched the right bracket, we have to do an extra increment here,
+            // to avoid checking the right bracket a second time.
+            } else {
+                stringBuilder.append(rawJs[i])
+            }
+            i++
+        }
+        return JSFunction(stringBuilder.toString(), params.joinToString(separator = ","))
     }
 
-    fun executeWithCallback(js: String, callbackId: Int, callback: (Any) -> Unit) {
-        kweb.executeWithCallback(sessionId, js, callbackId, callback)
+    fun callJsFunction(jsBody: String, vararg args: Any?) {
+        cachedFunctions[jsBody]?.let {
+            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args))
+            kweb.callJs(callCachedFuncMessage, jsBody)
+        } ?: run {
+            val rng = Random()
+            val cacheId = rng.nextInt()
+            val func = makeJsFunction(jsBody)
+            //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
+            cachedFunctions[jsBody] = cacheId
+            modifiedFunctions[cacheId] = func.js
+            //we send the modified js to the client to be cached there.
+            //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
+            val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
+                parameters = func.params, arguments = listOf(*args))
+            kweb.callJs(cacheAndExecuteMessage, jsBody)
+        }
+    }
+
+    fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (Any) -> Unit, vararg args: Any?) {
+        cachedFunctions[jsBody]?.let {
+            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
+            callbackId = callbackId)
+            kweb.callJsWithCallback(callCachedFuncMessage, jsBody, callback)
+        } ?: run {
+            val rng = Random()
+            val cacheId = rng.nextInt()
+            val func = makeJsFunction(jsBody)
+            //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
+            cachedFunctions[jsBody] = cacheId
+            //we send the modified js to the client to be cached there.
+            //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
+            val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
+                    parameters = func.params, arguments = listOf(*args), callbackId = callbackId)
+            kweb.callJsWithCallback(cacheAndExecuteMessage, jsBody, callback)
+        }
     }
 
     fun removeCallback(callbackId: Int) {
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    fun evaluate(js: String): CompletableFuture<Any> {
+    suspend fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): Any {
+        val callbackId = abs(random.nextInt())
         val cf = CompletableFuture<Any>()
-        evaluateWithCallback(js) { response ->
+        callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
             cf.complete(response)
-            false
-        }
-        return cf
-    }
-
-    fun evaluateWithCallback(js: String, rh: (Any) -> Boolean) {
-        kweb.evaluate(sessionId, js) { rh.invoke(it) }
-    }
-
-    fun send(instruction: Instruction) = send(listOf(instruction))
-
-    fun send(instructions: List<Instruction>) {
-        kweb.send(sessionId, instructions)
+        }, *args)
+        return cf.await()
     }
 
     val doc = Document(this)
@@ -115,9 +168,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         if (!url.startsWith('/')) {
             logger.warn("pushState should only be called with origin-relative URLs (ie. they should start with a /)")
         }
-        execute("""
-        history.pushState({}, "", "$url");
-        """.trimIndent())
+        //{ } is used to initialize an empty map here. Without the space, it would be treated
+        //as a variable using Kweb's template syntax
+        callJsFunction("""
+        history.pushState({ }, "", {});
+        """.trimIndent(), url)
     }
 
     /**

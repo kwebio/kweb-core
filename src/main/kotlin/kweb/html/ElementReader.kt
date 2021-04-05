@@ -7,8 +7,8 @@ import kweb.util.escapeEcma
 import java.util.concurrent.CompletableFuture
 
 @KWebDSL
-open class ElementReader(protected val receiver: WebBrowser, internal val jsExpression: String) {
-    constructor(element: Element) : this(element.browser, element.jsExpression)
+open class ElementReader(protected val receiver: WebBrowser, internal val elementId: String) {
+    constructor(element: Element) : this(element.browser, element.id)
 
     init {
         require(!receiver.kweb.isCatchingOutbound()) {
@@ -19,15 +19,29 @@ open class ElementReader(protected val receiver: WebBrowser, internal val jsExpr
         }
     }
 
-    val tagName: CompletableFuture<String> get() = receiver.evaluate("$jsExpression.tagName").thenApply { it.toString() }
-    val attributes: CompletableFuture<Map<String, Any>> get() = receiver.evaluate("$jsExpression.attributes").thenApply { it as Map<String, Any> }
-    fun attribute(name: String): CompletableFuture<Any> = receiver.evaluate("($jsExpression.getAttribute(\"${name.escapeEcma()}\"));")
+    suspend fun getTagName(): String {
+        return receiver.callJsFunctionWithResult(
+            "return document.getElementById({}).tagName", elementId).toString()
+    }
 
-    val class_ get() = attribute("class")
-    val classes get() = class_.thenApply { it.toString().split(' ') }
+    suspend fun getAttributes(): Map<String, Any> {
+        return receiver.callJsFunctionWithResult(
+            "return document.getElementById({}).attributes", elementId) as Map<String, Any>
+        //TODO we could probably use a little error handling on this cast.
+    }
 
-    val innerHtml: CompletableFuture<String> get() = receiver.evaluate("($jsExpression.innerHTML);").thenApply { it.toString() }
-    val text: CompletableFuture<String> = receiver.evaluate("($jsExpression.innerText);").thenApply { it.toString() }
+    suspend fun getAttribute(name: String): Any {
+        return receiver.callJsFunctionWithResult(
+            "return document.getElementById({}).getAttribute({})", elementId, ).toString()
+    }
 
+    suspend fun getInnerHtml(): String {
+        return receiver.callJsFunctionWithResult(
+            "return document.getElementById({}).innerHTML", elementId).toString()
+    }
 
+    suspend fun getText(): String {
+        return receiver.callJsFunctionWithResult(
+            "return document.getElementById({}).innerText", elementId).toString()
+    }
 }

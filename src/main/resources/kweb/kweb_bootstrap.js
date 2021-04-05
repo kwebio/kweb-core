@@ -8,6 +8,8 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 
+<!-- FUNCTION CACHE PLACEHOLDER -->
+
 function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
@@ -20,91 +22,72 @@ function handleInboundMessage(msg) {
             kwebClientId
         );
     }
-    const execute = msg["execute"];
-    if (execute !== undefined) {
-        try {
-            eval(execute["js"]);
-            console.debug("Executed JavaScript", execute["js"]);
-        } catch (err) {
-            if (debugToken != undefined) {
-                console.error("Error evaluating [" + execute["js"] + "] : " + err);
-                var error = {
-                    debugToken: debugToken,
-                    error: {name: err.name, message: err.message}
-                };
-                var message = {id: kwebClientId, error: error};
-                sendMessage(JSON.stringify(message));
+
+    let func;
+    let js;
+    const args = msg["arguments"];
+    const cacheId = msg["jsId"];
+    const callbackId = msg["callbackId"];
+
+    if (cacheId !== undefined) {
+        if (cachedFunctions[cacheId] !== undefined) {
+            func = cachedFunctions[cacheId];
+        } else {
+            const params = msg["parameters"];
+            js = msg["js"];
+            if (params !== undefined) {
+                func = new Function(params, js);
             } else {
-                throw err;
+                func = new Function(js);
             }
+            cachedFunctions[cacheId] = func;
+        }
+    } else {
+        //This is a special case that doesn't bother reading the cache, or trying to cache the function.
+        //It will just run the javascript supplied to it. This special case is currently only used by Kweb.refreshPages()
+        js = msg["js"];
+        const params = msg["parameters"];
+        if (params !== undefined) {
+            func = new Function(params, js);
+        } else {
+            func = new Function(js);
         }
     }
-    let evaluate = msg["evaluate"];
-    if (evaluate !== undefined) {
+
+    //if arguments is null, do not execute the function in this inbound message
+    if (args === undefined) return
+
+    if (callbackId !== undefined) {
         try {
-            const data = eval(evaluate["js"]);
-            console.debug("Evaluated [" + evaluate["js"] + "]", data);
-            const callback = {callbackId: evaluate["callbackId"], data: data};
+            const data = func.apply(this, args)
+            console.debug("Evaluated [ " + func.toString() + "]", data);
+            const callback = {callbackId: callbackId, data: data};
             const message = {id: kwebClientId, callback: callback};
             sendMessage(JSON.stringify(message));
         } catch (err) {
-            if (debugToken != undefined) {
-                console.error("Error evaluating `" + evaluate["js"] + "`: " + err);
-                const error = {
-                    debugToken: debugToken,
-                    error: {name: err.name, message: err.message}
-                };
-                const message = {id: kwebClientId, error: error};
-                sendMessage(JSON.stringify(message));
-            } else {
-                throw err;
-            }
+            debugErr(debugToken, err, "Error Evaluating `" + func.toString() + "`: " + err);
+        }
+    } else {
+        try {
+            func.apply(this, args);
+            console.debug("Executed Javascript", func.toString());
+        } catch (err) {
+            debugErr(debugToken, err, "Error Executing `" + func.toString() + "`: " + err);
         }
     }
-    const instructions = msg["instructions"];
-    if (instructions !== undefined) {
-        for (let i = 0; i < instructions.length; i++) {
-            const instruction = instructions[i];
-            if (instruction.type === "SetAttribute") {
-                document
-                    .getElementById(instruction.parameters[0])
-                    .setAttribute(instruction.parameters[1], instruction.parameters[2]);
-            } else if (instruction.type === "RemoveAttribute") {
-                const id = instruction.parameters[0];
-                const attribute = instruction.parameters[1];
-                document.getElementById(id).removeAttribute(attribute);
-            } else if (instruction.type === "CreateElement") {
-                const tag = instruction.parameters[0];
-                const attributes = instruction.parameters[1];
-                const myId = instruction.parameters[2];
-                const parentId = instruction.parameters[3];
-                const position = instruction.parameters[4];
-                const newEl = document.createElement(tag);
-                newEl.setAttribute("id", myId);
-                for (const key in attributes) {
-                    if (key !== "id") {
-                        newEl.setAttribute(key, attributes[key]);
-                    }
-                }
+}
 
-                let parentElement = document.getElementById(parentId);
-
-                if (position > -1) {
-                    parentElement.insertBefore(newEl, parentElement.children[position]);
-                } else {
-                    parentElement.appendChild(newEl);
-                }
-            } else if (instruction.type === "AddText") {
-                const id = instruction.parameters[0];
-                const text = instruction.parameters[1];
-                const textNode = document.createTextNode(text);
-                document.getElementById(id).appendChild(textNode);
-            } else if (instruction.type === "SetText") {
-                const id = instruction.parameters[0];
-                const text = instruction.parameters[1];
-                document.getElementById(id).textContent = text
-            }
-        }
+function debugErr(debugToken, err, errMsg) {
+    if (debugToken !== undefined) {
+        console.error(errMsg);
+        const error = {
+            debugToken: debugToken,
+            error: {name: err.name, message: err.message}
+        };
+        const message = {id: kwebClientId, error: err};
+        sendMessage(JSON.stringify(message));
+    } else {
+        throw err;
     }
 }
 
@@ -165,10 +148,10 @@ function sendMessage(msg) {
         console.debug("Sending WebSocket message", msg);
         socket.send(msg);
     } else {
-        console.debug(
+        /*console.debug(
             "Queueing WebSocket message as connection isn't established",
             msg
-        );
+        );*/
         preWSMsgQueue.push(msg);
     }
 }
@@ -188,19 +171,6 @@ function hasClass(el, className) {
     if (el.classList) return el.classList.contains(className);
     else
         return !!el.className.render(new RegExp("(\\s|^)" + className + "(\\s|$)"));
-}
-
-function addClass(el, className) {
-    if (el.classList) el.classList.add(className);
-    else if (!hasClass(el, className)) el.className += " " + className;
-}
-
-function removeClass(el, className) {
-    if (el.classList) el.classList.remove(className);
-    else if (hasClass(el, className)) {
-        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
-        el.className = el.className.replace(reg, " ");
-    }
 }
 
 class DiffPatchData {

@@ -1,7 +1,6 @@
 package kweb
 
 import com.github.salomonbrys.kotson.toJson
-import kweb.client.Server2ClientMessage
 import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -12,32 +11,28 @@ import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.state.KVar
 import kweb.util.KWebDSL
-import kweb.util.escapeEcma
 import kweb.util.random
-import kweb.util.toJson
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.math.abs
 import kotlin.reflect.KClass
 
 @KWebDSL
 open class Element(
-    override val browser: WebBrowser,
-    val creator: ElementCreator<*>?,
-    @Volatile open var jsExpression: String,
-    val tag: String? = null,
-    @Volatile var id: String
+        override val browser: WebBrowser,
+        val creator: ElementCreator<*>?,
+        val tag: String? = null,
+        @Volatile var id: String
 ) :
-    EventGenerator<Element> {
-    constructor(element: Element) : this(element.browser, element.creator, jsExpression = element.jsExpression, tag = element.tag, id = element.id)
+        EventGenerator<Element> {
+    constructor(element: Element) : this(element.browser, element.creator, tag = element.tag, id = element.id)
 
     /**
      * Execute some JavaScript in the browser.  This is the
      * foundation upon which most other DOM modification functions in this class
      * are based.
      */
-    fun execute(js: String) {
-        browser.execute(js)
+    fun callJsFunction(js: String, vararg args: Any?) {
+        browser.callJsFunction(js, *args)
     }
 
     /**
@@ -45,8 +40,9 @@ open class Element(
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
      */
-    fun <O> evaluate(js: String, outputMapper: (Any) -> O): CompletableFuture<O>? {
-        return browser.evaluate(js).thenApply(outputMapper)
+    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: Any?): O? {
+        val result = browser.callJsFunctionWithResult(js, *args)
+        return outputMapper.invoke(result)
     }
 
     /*********
@@ -89,18 +85,19 @@ open class Element(
             val htmlDoc = browser.htmlDocument.get()
             when {
                 browser.kweb.isCatchingOutbound() -> {
-                    execute("$jsExpression.setAttribute(\"${name.escapeEcma()}\", ${value.toJson()});")
+                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                            id, name, value)
                 }
                 htmlDoc != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 else -> {
-                    browser.send(Server2ClientMessage.Instruction(type = Server2ClientMessage.Instruction.Type.SetAttribute, parameters = listOf(id, name, value)))
+                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                            id, name, value)
                 }
             }
             if (name.equals("id", ignoreCase = true)) {
                 this.id = value.toString()
-                jsExpression = "document.getElementById(${value.toJson()})"
             }
         }
         return this
@@ -120,10 +117,10 @@ open class Element(
     fun removeAttribute(name: String): Element {
         when {
             browser.kweb.isCatchingOutbound() -> {
-                execute("$jsExpression.removeAttribute(\"${name.escapeEcma()}\");")
+                callJsFunction("document.getElementById({}).removeAttribute", id, name)
             }
             else -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.RemoveAttribute, listOf(id, name)))
+                callJsFunction("document.getElementById({}).removeAttribute", id, name)
             }
 
         }
@@ -138,7 +135,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                execute("$jsExpression.innerHTML=\"${html.escapeEcma()}\";")
+                callJsFunction("document.getElementById({}).innerHTML = {}", id, html)
             }
         }
         return this
@@ -156,12 +153,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        execute("$jsExpression.focus();")
+        callJsFunction("document.getElementById({}).focus();")
         return this
     }
 
     fun blur(): Element {
-        execute("$jsExpression.blur();")
+        callJsFunction("document.getElementById({}).blur();")
         return this
     }
 
@@ -178,7 +175,13 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                execute("addClass($jsExpression, ${class_.toJson()});")
+                callJsFunction("""
+                    let id = {};
+                    let className = {};
+                    let el = document.getElementById(id);
+                    if (el.classList) el.classList.remove(className);
+                    else if (hasClass(el, className)) el.className += " " + className;
+                """.trimIndent(), id, class_)
             }
         }
         return this
@@ -190,7 +193,16 @@ open class Element(
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
-                execute("removeClass($jsExpression, ${class_.toJson()});")
+                callJsFunction("""
+                    let id = {};
+                    let className = {};
+                    let el = document.getElementById(id);
+                    if (el.classList) el.classList.remove(className);
+                    else if (hasClass(el, className)) {
+                        var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
+                        el.className = el.className.replace(reg, " ");
+                    }
+                """.trimIndent(), id, class_)
             }
         }
         return this
@@ -220,18 +232,19 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).children().remove()
+                val jsoupElement = htmlDoc.getElementById(this.id)
+                    jsoupElement.children().remove()
             }
             else -> {
-                execute(
-                    """
-        if ($jsExpression != null) {
-            while ($jsExpression.firstChild) {
-                $jsExpression.removeChild($jsExpression.firstChild);
-            }
-        }
-     """.trimIndent()
-                )
+                callJsFunction("""
+                    let id = {};
+                    if (document.getElementById(id) != null) {
+                        let element = document.getElementById(id);
+                        while (element.firstChild) {
+                            element.removeChild(element.firstChild);
+                        }
+                    }
+                """.trimIndent(), id)
             }
         }
 
@@ -247,7 +260,10 @@ open class Element(
                 }
             }
             else -> {
-                execute("$jsExpression.removeChild($jsExpression.children[$position]);".trimIndent())
+                callJsFunction("""
+                        let element = document.getElementById({});
+                        element.removeChild(element.children[{}]);
+                """.trimIndent(), id, position)
             }
         }
         return this
@@ -259,18 +275,18 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
             browser.kweb.isCatchingOutbound() -> {
-                execute("$jsExpression.textContent=\"${value.escapeEcma()}\"")
+                callJsFunction(setTextJS, id, value)
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             else -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.SetText, listOf(id, value)))
+                callJsFunction(setTextJS, id, value)
             }
-
         }
         return this
     }
@@ -302,50 +318,56 @@ open class Element(
 
     fun addText(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        val createTextNodeJs = """
+            var ntn = document.createTextNode({});
+            document.getElementById({}).appendChild(ntn);
+        """.trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
-                execute(
-                    """
-                {
-                    var ntn=document.createTextNode("${value.escapeEcma()}");
-                    $jsExpression.appendChild(ntn);
-                }
-        """.trimIndent()
-                )
+                callJsFunction(createTextNodeJs, value, id)
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             else -> {
-                browser.send(Server2ClientMessage.Instruction(Server2ClientMessage.Instruction.Type.AddText, listOf(id, value)))
+                callJsFunction(createTextNodeJs, value, id)
             }
-
         }
         return this
     }
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
-        val wrappedJS = jsExpression + """
-            .addEventListener(${eventName.toJson()}, function(event) {
+        val wrappedJS = """
+            return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
-            });
-        """.trimIndent()
-        browser.evaluate(wrappedJS)
+            });""".trimIndent()
+        browser.callJsFunction(wrappedJS, id, eventName)
+        /*browser.callJsFunctionWithResult(wrappedJS, id, eventName)*/
+        //TODO this function used to call evaluate, which had a return type. I have it set to use callJsFunction
+        //which doesn't return anything. I don't know if I'm missing something and we should use callJsFunctionWithResult,
+        //or it was a mistake to use evaluate() instead of execute() here. It seems to work just using callJsFunction()
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
         val callbackId = abs(random.nextInt())
-        val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
-        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
-        val js = jsExpression + """
-            .addEventListener(${eventName.toJson()}, function(event) {
-                callbackWs($callbackId, $eventObject);
+        val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
+        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
+        /*It'd be nice to make eventObject a parameter, but it doesn't work.
+            eventObject is a map that has entries that look like { "buttons" : event.buttons }
+            the event field accessed here is the event parameter from the "function(event)" in the javascript
+            There is no way to reference that event object from the server, so we use eventObject, and insert properly
+            formatted JavaScript directly in the code sent to the client.
+        */
+        val js = """
+            document.getElementById({}).addEventListener({}, function(event) {
+                callbackWs({}, $eventObject);
             });
-        """
-        browser.executeWithCallback(js, callbackId) { payload ->
+        """.trimIndent()
+        browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }
+
+        }, id, eventName, callbackId)
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }
@@ -354,11 +376,20 @@ open class Element(
 
 
     fun delete() {
-        execute("$jsExpression.parentNode.removeChild($jsExpression);")
+        callJsFunction("""
+            let element = document.getElementById({});
+            element.parentNode.removeChild(element);
+        """.trimIndent(), id)
     }
 
     fun deleteIfExists() {
-        execute("if ($jsExpression) $jsExpression.parentNode.removeChild($jsExpression);")
+        callJsFunction("""
+            let id = {}
+            if (document.getElementById(id)) {
+                let element = document.getElementById(id);
+                element.parentNode.removeChild(element);
+            }
+        """.trimIndent(), id)
     }
 
     fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)

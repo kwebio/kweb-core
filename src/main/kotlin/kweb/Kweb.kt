@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
-import kweb.client.Server2ClientMessage.Instruction
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
@@ -34,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
 import kotlin.collections.component1
 import kotlin.collections.component2
+import kotlin.math.abs
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
 private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
@@ -138,78 +138,65 @@ class Kweb private constructor(
      * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
      * replayed in the browser when an event is triggered without a server round-trip.
      */
-    fun catchOutbound(f: () -> Unit): List<String> {
+    fun catchOutbound(f: () -> Unit): List<JsFunction> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
 
-        val jsList = ArrayList<String>()
+        val jsList = ArrayList<JsFunction>()
         outboundMessageCatcher.set(jsList)
         f()
         outboundMessageCatcher.set(null)
         return jsList
     }
 
-    fun execute(clientId: String, javascript: String) {
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
+    /*TODO
+    I think callJs and callJsWithCallback are simplified a good bit by moving the message creation to WebBrowser.callJs()
+    There is a bit of duplication here, because we have to pass in the javascript string separately.
+    We need it to create the debugToken. Some server2ClientMessages will contain the javascript,
+     but messages that call cached functions will not have it. So we have to make sure we pass it in separately.*/
+    fun callJs(server2ClientMessage: Server2ClientMessage, javascript: String) {
+        val wsClientData = clientState[server2ClientMessage.yourId]
+                ?: error("Client id ${server2ClientMessage.yourId} not found")
         wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing", Throwable()))
+        val debugToken: String? = if(!debug) null else {
+            val dt = abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
             dt
         }
+        server2ClientMessage.debugToken = debugToken
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+            wsClientData.send(server2ClientMessage)
         } else {
-            logger.debug("Temporarily storing message for $clientId in threadloacal outboundMessageCatcher")
-            outboundMessageCatcher.add(javascript)
+            logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
+            val jsFunction = JsFunction(server2ClientMessage.jsId!!, server2ClientMessage.arguments!!)
+            outboundMessageCatcher.add(jsFunction)
+            //If we have an outboundMessageCatcher, we do not want to execute the jsCode in this message.
+            //We still need to send the Server2ClientMessage, to cache the jsCode.
+            //So, we take the message, and set arguments to null, so the server knows not to run this code.
+            server2ClientMessage.arguments = null
+            wsClientData.send(server2ClientMessage)
         }
     }
 
-    fun send(clientId: String, instruction: Instruction) = send(clientId, listOf(instruction))
-
-    fun send(clientId: String, instructions: List<Instruction>) {
-        if (outboundMessageCatcher.get() != null) {
-            error("""
-                Can't send instruction because there is an outboundMessageCatcher.  You should check for this with
-                """.trimIndent())
-        }
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
+    fun callJsWithCallback(server2ClientMessage: Server2ClientMessage,
+                           javascript: String, callback: (Any) -> Unit) {
+        //TODO I could use some help improving this error message
+        require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
+        val wsClientData = clientState[server2ClientMessage.yourId]
+                ?: error("Client id ${server2ClientMessage.yourId} not found")
         wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(instructions.toString(), "instructions", Throwable()))
+        val debugToken: String? = if(!debug) null else {
+            val dt = abs(random.nextLong()).toString(16)
+            wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
             dt
         }
-        wsClientData.send(Server2ClientMessage(yourId = clientId, instructions = instructions, debugToken = debugToken))
-    }
-
-    fun executeWithCallback(clientId: String, javascript: String, callbackId: Int, handler: (Any) -> Unit) {
-        // TODO: Should return handle which can be used for cleanup of event listeners
-        val wsClientData = clientState.get(clientId) ?: error("Client id $clientId not found")
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(javascript, "executing with callback", Throwable()))
-            dt
-        }
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, debugToken = debugToken, execute = Server2ClientMessage.Execute(javascript)))
+        server2ClientMessage.debugToken = debugToken
+        wsClientData.handlers[server2ClientMessage.callbackId!!] = callback
+        wsClientData.send(server2ClientMessage)
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
         clientState[clientId]?.handlers?.remove(callbackId)
-    }
-
-    fun evaluate(clientId: String, expression: String, handler: (Any) -> Unit) {
-        val wsClientData = clientState.get(clientId)
-                ?: error("Failed to evaluate JavaScript because client id $clientId not found")
-        val debugToken: String? = if (!debug) null else {
-            val dt = Math.abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens.put(dt, DebugInfo(expression, "evaluating", Throwable()))
-            dt
-        }
-        val callbackId = Math.abs(random.nextInt())
-        wsClientData.handlers.put(callbackId, handler)
-        wsClientData.send(Server2ClientMessage(yourId = clientId, evaluate = Server2ClientMessage.Evaluate(expression, callbackId), debugToken = debugToken))
     }
 
     override fun close() {
@@ -375,7 +362,9 @@ class Kweb private constructor(
                 logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
             }
             for (plugin in plugins) {
-                execute(kwebSessionId, plugin.executeAfterPageCreation())
+                //this code block looks a little funny now, but I still think moving the message creation out of Kweb.callJs() was the right move
+                val js = plugin.executeAfterPageCreation()
+                callJs(Server2ClientMessage(yourId = kwebSessionId, js = js), javascript = js)
             }
 
             webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
@@ -384,10 +373,36 @@ class Kweb private constructor(
 
             remoteClientState.clientConnection = Caching()
 
+            val initialMessages = initialCachedMessages.read()//the initialCachedMessages queue can only be read once
+
+            val cachedFunctions = mutableListOf<String>()
+            val cachedIds = mutableListOf<Int>()
+            for (msg in initialMessages) {
+                val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
+
+                //For some reason the final msg in initialMessages looks like this,
+                //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
+                //I'm not sure what the point of this message is, and I can't find what is sending it.
+                //But, it causes problems if we try to add that to the cache, so we just make sure the jsId isn't null
+                //This is a useful check anyway, because we do let Server2ClientMessages have null jsId's, and trying to add
+                //a function from one of those messages wouldn't work.
+                if (deserialedMsg.jsId != null) {
+                    if (!cachedIds.contains(deserialedMsg.jsId)) {
+                        val cachedFunction = """'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
+                        cachedFunctions.add(cachedFunction)
+                        cachedIds.add(deserialedMsg.jsId)
+                    }
+
+                }
+            }
+
+            val functionCacheString = "let cachedFunctions = { \n${cachedFunctions.joinToString(separator = ",\n")} };"
+
             val bootstrapJS = BootstrapJs.hydrate(
                     kwebSessionId,
-                    initialCachedMessages
-                            .read().joinToString(separator = "\n") { "handleInboundMessage($it);" })
+                    initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
+                    functionCacheString
+            )
 
             htmlDocument.head().appendElement("script")
                     .attr("language", "JavaScript")
@@ -436,7 +451,8 @@ class Kweb private constructor(
         for (client in clientState.values) {
             val message = Server2ClientMessage(
                     yourId = client.id,
-                    execute = Server2ClientMessage.Execute("window.location.reload(true);"), debugToken = null)
+                    js = "window.location.reload(true);",
+                    debugToken = null)
             client.clientConnection.send(message.toJson())
         }
     }
@@ -445,7 +461,7 @@ class Kweb private constructor(
      * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
      * execution of event handlers, see `Element.immediatelyOn`
      */
-    private val outboundMessageCatcher: ThreadLocal<MutableList<String>?> = ThreadLocal.withInitial { null }
+    private val outboundMessageCatcher: ThreadLocal<MutableList<JsFunction>?> = ThreadLocal.withInitial { null }
 
     private fun cleanUpOldClientStates() {
         val now = Instant.now()

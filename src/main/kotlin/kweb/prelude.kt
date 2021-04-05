@@ -1,8 +1,8 @@
 package kweb
 
-import com.github.salomonbrys.kotson.toJson
 import io.ktor.routing.*
 import io.mola.galimatias.URL
+import kotlinx.coroutines.selects.whileSelect
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -307,11 +307,12 @@ open class InputElement(override val element: Element) : ValueElement(element) {
     fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
 
 
-    fun select() = element.execute("$jsExpression.select();")
+    fun select() = element.callJsFunction("document.getElementById({}).select();", id)
 
-    fun setSelectionRange(start: Int, end: Int) = element.execute("$jsExpression.setSelectionRange($start, $end);")
+    fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
+            "document.getElementById({}).setSelectionRange({}, {});", id, start, end)
 
-    fun setReadOnly(ro: Boolean) = element.execute("$jsExpression.readOnly = $ro;")
+    fun setReadOnly(ro: Boolean) = element.callJsFunction("document.getElementById({}).readOnly = {};", id, ro)
 }
 
 enum class InputType {
@@ -387,8 +388,13 @@ fun ElementCreator<Element>.textArea(
     }
 }
 
-open class TextAreaElementReader(element: TextAreaElement) : ElementReader(element) {
-    val value get() = receiver.evaluate("($jsExpression.innerText);")
+open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(element) {
+    suspend fun getValue() : String {
+        //A TextArea should only ever contain a String. So using toString() here should be safe.
+        // We could add some error handling here if we wanted to though.
+        return receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id).toString()
+    }
+    //val value get() = receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id)
 }
 
 open class LabelElement(wrapped: Element) : Element(wrapped)
@@ -406,10 +412,11 @@ fun ElementCreator<Element>.label(
  * Abstract class for the various elements that have a `value` attribute and which support `change` and `input` events.
  */
 abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
-    fun getValue(): CompletableFuture<String> = element.evaluate("$jsExpression.value;") { it.toString() }
+    suspend fun getValue():String = element.
+    callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { it.toString() }, id)
         ?: error("Not sure why .evaluate() would return null")
 
-    fun setValue(newValue: String) = element.browser.execute("$jsExpression.value=${newValue.toJson()};")
+    fun setValue(newValue: String) = element.browser.callJsFunction("document.getElementById({}).value = {};", element.id, newValue)
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)
@@ -466,7 +473,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
-        on(retrieveJs = "get_diff_changes(${jsExpression})").event(updateOn, Event::class) {
+        on(retrieveJs = "get_diff_changes(document.getElementById(${element.id}))").event(updateOn, Event::class) {
             val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
             val diffData = Json.decodeFromString<DiffData>(diffDataJson)
             toBind.value = applyDiff(toBind.value, diffData)

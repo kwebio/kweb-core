@@ -1,6 +1,8 @@
 package kweb.html
 
 import com.github.salomonbrys.kotson.toJson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kweb.*
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -17,7 +19,7 @@ import kweb.util.random
  * @sample document_sample
  */
 class Document(val receiver: WebBrowser) : EventGenerator<Document> {
-    fun getElementById(id: String) = Element(receiver, null, """document.getElementById("$id")""", id = id)
+    fun getElementById(id: String) = Element(receiver, null, "return document.getElementById(\"$id\")", id = id)
 
     val cookie = CookieReceiver(receiver)
 
@@ -39,10 +41,12 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         return head
     }
 
-    val origin = receiver.evaluate("document.origin")
+    suspend fun getOrigin(): Any {
+        return receiver.callJsFunctionWithResult("return document.origin")
+    }
 
     fun execCommand(command: String) {
-        receiver.execute("document.execCommand(\"$command\");")
+        receiver.callJsFunction("document.execCommand({});", command)
     }
 
     /**
@@ -62,11 +66,13 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = """
-            document.addEventListener(${eventName.toJson()}, function(event) {
+            return document.addEventListener({}, function(event) {
                 $jsCode
             });
         """.trimIndent()
-        receiver.evaluate(wrappedJS)
+        GlobalScope.launch {
+            receiver.callJsFunctionWithResult(wrappedJS, eventName.toJson())
+        }
     }
 
 
@@ -75,13 +81,13 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
-            document.addEventListener(${eventName.toJson()}, function(event) {
-                callbackWs($callbackId, $eventObject);
+            document.addEventListener({}, function(event) {
+                callbackWs({}, {});
             });
         """
-        receiver.executeWithCallback(js, callbackId) { payload ->
+        receiver.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }
+        }, eventName.toJson(), callbackId, eventObject)
         return this
     }
 

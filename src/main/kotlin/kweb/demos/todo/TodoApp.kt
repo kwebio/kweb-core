@@ -157,7 +157,7 @@ class TodoApp {
 
     private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>) {
         GlobalScope.launch {
-            val newItemText = input.getValue().await()
+            val newItemText = input.getValue()
             input.setValue("")
             val newItem = ToDoState.Item(generateNewUid(), System.currentTimeMillis(), list.value.uid, newItemText)
             state.items[newItem.uid] = newItem

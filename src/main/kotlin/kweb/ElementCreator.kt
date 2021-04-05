@@ -1,13 +1,10 @@
 package kweb
 
-import kweb.client.Server2ClientMessage.Instruction
-import kweb.client.Server2ClientMessage.Instruction.Type.CreateElement
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.util.KWebDSL
-import kweb.util.toJson
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -59,7 +56,28 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val htmlDoc = browser.htmlDocument.get()
         when {
             parent.browser.kweb.isCatchingOutbound() -> {
-                parent.execute(renderJavaScriptToCreateNewElement(tag, mutAttributes, id))
+                val createElementJs = """
+                    let tag = {};
+                    let attributes = {};
+                    let myId = {};
+                    let parentId = {};
+                    let position = {};
+                    let newEl = document.createElement(tag);
+                    newEl.setAttribute("id", myId);
+                    for (const key in attributes) {
+                        if ( key !== "id") {
+                            newEl.setAttribute(key, attributes[key]);
+                        }
+                    }
+                    let parentElement = document.getElementById(parentId);
+                    
+                    if (position > -1) {
+                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                    } else {
+                        parentElement.appendChild(newEl);
+                    }
+                """.trimIndent()
+                browser.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             htmlDoc != null -> {
                 val jsElement = when (parent) {
@@ -80,11 +98,32 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 }
             }
             else -> {
-                browser.send(Instruction(CreateElement, listOf(tag, mutAttributes, id, parent.id, position ?: -1)))
+                //The way I have written this function, instead of attributes.get(), we now use attributes[].
+                val createElementJs = """
+                    let tag = {};
+                    let attributes = {};
+                    let myId = {};
+                    let parentId = {};
+                    let position = {};
+                    let newEl = document.createElement(tag);
+                    if (attributes["id"] === undefined) {
+                        newEl.setAttribute("id", myId);
+                    }
+                    for (const key in attributes) {
+                            newEl.setAttribute(key, attributes[key]);
+                    }
+                    let parentElement = document.getElementById(parentId);
+                    
+                    if (position == null) {
+                        parentElement.appendChild(newEl);
+                    } else {
+                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                    }
+                """.trimIndent()
+                parent.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position)
             }
-
         }
-        val newElement = Element(parent.browser, this, tag = tag, jsExpression = """document.getElementById("$id")""", id = id)
+        val newElement = Element(parent.browser, this, tag = tag, id = id)
         elementsCreated += newElement
         for (plugin in parent.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)
@@ -94,28 +133,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             newElement.deleteIfExists()
         }
         return newElement
-    }
-
-    private fun renderJavaScriptToCreateNewElement(tag: String, attributes: Map<String, Any>, id: String): String {
-        val javaScript = StringBuilder()
-        with(javaScript) {
-            appendln("{")
-            appendln("var newEl = document.createElement(\"$tag\");")
-            if (!attributes.containsKey("id")) {
-                appendln("newEl.setAttribute(\"id\", \"$id\");")
-            }
-            for ((name, value) in attributes) {
-                appendln("newEl.setAttribute(\"$name\", ${value.toJson()});")
-            }
-            if (position == null) {
-                appendln("${parent.jsExpression}.appendChild(newEl);")
-            } else {
-                appendln("${parent.jsExpression}.insertBefore(newEl, ${parent.jsExpression}.children[$position]);")
-            }
-            appendln("}")
-        }
-        val js = javaScript.toString()
-        return js
     }
 
     fun require(vararg plugins: KClass<out KwebPlugin>) = parent.browser.require(*plugins)

@@ -10,11 +10,13 @@ class Chart(canvas: CanvasElement, chartConfig: ChartConfig) {
 
     init {
         canvas.creator?.require(ChartJsPlugin::class)
-        canvas.execute("""
-            var $chartVarName = new Chart(${canvas.jsExpression}.getContext('2d'), ${chartConfig.toJson()})
-        """.trimIndent())
+        canvas.callJsFunction("""
+            let canvasId = {}
+            let chartVarName = {}
+            let chartConfig = {}
+            var chartVarName = new Chart(document.getElementById(canvasId).getContext('2d'), chartConfig
+        """.trimIndent(), canvas.id, chartVarName, chartConfig.toJson())
     }
-
 
 }
 

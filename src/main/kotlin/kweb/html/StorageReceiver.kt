@@ -22,26 +22,27 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
         if (value == "") {
             throw IllegalArgumentException("$obj cannot store the value \"\"")
         }
-        receiver.execute("$obj.setItem(${key.toJson()}, ${value.toJson()});")
+        receiver.callJsFunction("{}.setItem({}, {});", obj, key.toJson(), value.toJson())
     }
 
-    inline operator fun <reified V : Any> get(name: String): CompletableFuture<V?> = getString(name).thenApply {
-        when (it) {
+    suspend inline fun <reified V : Any> get(name: String): V? {
+        val result = getString(name)
+        return when(result) {
             null -> null
-            else -> gson.fromJson<V>(it)
+            else -> gson.fromJson<V>(result)
         }
     }
 
-    fun getString(key: String): CompletableFuture<String?> = receiver.evaluate("$obj.getItem(${key.toJson()})").thenApply {
-        when (it) {
+    suspend fun getString(key: String): String? {
+        val result = receiver.callJsFunctionWithResult("return $obj.getItem({});", key.toJson())
+        return when (result) {
             "" -> null
-            else -> it.toString()
+            else -> result.toString()
         }
     }
 
     fun remove(key: String) {
-        receiver.execute("$obj.removeItem(${key.toJson()});")
-
+        receiver.callJsFunction("{}.removeItem({});", obj, key.toJson())
     }
 
 }
