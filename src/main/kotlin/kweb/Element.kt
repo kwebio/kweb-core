@@ -278,18 +278,19 @@ open class Element(
      * a `h1` element and set its text as follows: `<h1>Hello World</h1>`.
      */
     fun text(value: String): Element {
+        println("Setting text : $value")
         val jsoupDoc = browser.htmlDocument.get()
         val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction(setTextJS, id, value.escapeEcma())
+                callJsFunction(setTextJS, id, value)
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             else -> {
-                callJsFunction(setTextJS, id, value.escapeEcma())
+                callJsFunction(setTextJS, id, value)
             }
         }
         return this
