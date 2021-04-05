@@ -375,17 +375,11 @@ class Kweb private constructor(
 
             val initialMessages = initialCachedMessages.read()//the initialCachedMessages queue can only be read once
 
-            val pageBuildInstructions = mutableListOf<String>()
-            val initialFunctions = mutableListOf<String>()
+            val cachedFunctions = mutableListOf<String>()
             val cachedIds = mutableListOf<Int>()
             for (msg in initialMessages) {
                 val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
 
-                println("Thinking about caching $deserialedMsg")
-                //println(deserialedMsg)
-                if (deserialedMsg.arguments != null) {
-                    pageBuildInstructions.add(msg)
-                }
                 //For some reason the final msg in initialMessages looks like this,
                 //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
                 //I'm not sure what the point of this message is, and I can't find what is sending it.
@@ -395,26 +389,19 @@ class Kweb private constructor(
                 if (deserialedMsg.jsId != null) {
                     if (!cachedIds.contains(deserialedMsg.jsId)) {
                         val cachedFunction = """'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
-                        println("Caching $cachedFunction")
-                        initialFunctions.add(cachedFunction)
+                        cachedFunctions.add(cachedFunction)
                         cachedIds.add(deserialedMsg.jsId)
-                        /*if (deserialedMsg.arguments != null) {
-                            initialFunctions.add(cachedFunction)
-                        }*/
                     }
 
                 }
-
             }
 
-            val letString = "let cachedFunctions = { \n${initialFunctions.joinToString(separator = ",\n")} };"
+            val functionCacheString = "let cachedFunctions = { \n${cachedFunctions.joinToString(separator = ",\n")} };"
 
-            //println("Cache = $letString")
-            //println("Printing functions")
             val bootstrapJS = BootstrapJs.hydrate(
                     kwebSessionId,
-                    pageBuildInstructions.joinToString(separator = "\n") { "handleInboundMessage($it);" },
-                    letString
+                    initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
+                    functionCacheString
             )
 
             htmlDocument.head().appendElement("script")

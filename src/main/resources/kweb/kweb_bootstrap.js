@@ -54,7 +54,8 @@ function handleInboundMessage(msg) {
         }
     }
 
-    if (args === undefined) return null;
+    //if arguments is null, do not execute the function in this inbound message
+    if (args === undefined) return
 
     if (callbackId !== undefined) {
         try {

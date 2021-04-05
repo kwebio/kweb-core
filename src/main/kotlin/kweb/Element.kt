@@ -279,7 +279,6 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
-        println("Text id = $id")
         val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
             browser.kweb.isCatchingOutbound() -> {
@@ -343,14 +342,15 @@ open class Element(
     }
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
-        println("adding ImmediateEvent with code = $jsCode")
         val wrappedJS = """
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
-            });
-        """.trimIndent()
+            });""".trimIndent()
         browser.callJsFunction(wrappedJS, id, eventName.toJson())
         /*browser.callJsFunctionWithResult(wrappedJS, id, eventName.toJson())*/
+        //TODO this function used to call evaluate, which had a return type. I have it set to use callJsFunction
+        //which doesn't return anything. I don't know if I'm missing something and we should use callJsFunctionWithResult,
+        //or it was a mistake to use evaluate() instead of execute() here. It seems to work just using callJsFunction()
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
