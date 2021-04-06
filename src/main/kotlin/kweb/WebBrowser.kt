@@ -1,7 +1,7 @@
 package kweb
 
 import io.mola.galimatias.URL
-import kotlinx.coroutines.future.await
+import kotlinx.coroutines.CompletableDeferred
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
@@ -13,7 +13,6 @@ import kweb.util.pathQueryFragment
 import kweb.util.random
 import mu.KotlinLogging
 import java.util.*
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
@@ -136,11 +135,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     suspend fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): Any {
         val callbackId = abs(random.nextInt())
-        val cf = CompletableFuture<Any>()
+        val cd = CompletableDeferred<Any>()
         callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
-            cf.complete(response)
+            cd.complete(response)
         }, *args)
-        return cf.await()
+        return cd.await()
     }
 
     val doc = Document(this)

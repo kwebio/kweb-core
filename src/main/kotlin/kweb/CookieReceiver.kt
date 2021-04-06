@@ -6,7 +6,6 @@ import kweb.util.gson
 import kweb.util.toJson
 import java.time.Duration
 import java.util.*
-import java.util.concurrent.CompletableFuture
 
 @KWebDSL
 class CookieReceiver(val receiver: WebBrowser) {
