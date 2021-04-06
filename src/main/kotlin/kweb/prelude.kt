@@ -2,7 +2,6 @@ package kweb
 
 import io.ktor.routing.*
 import io.mola.galimatias.URL
-import kotlinx.coroutines.selects.whileSelect
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -16,7 +15,6 @@ import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF
 import kweb.state.*
 import kweb.util.pathQueryFragment
-import java.util.concurrent.CompletableFuture
 import kotlin.collections.set
 
 /*

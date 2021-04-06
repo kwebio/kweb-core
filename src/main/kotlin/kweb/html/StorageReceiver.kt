@@ -5,7 +5,6 @@ import kweb.WebBrowser
 import kweb.util.KWebDSL
 import kweb.util.gson
 import kweb.util.toJson
-import java.util.concurrent.CompletableFuture
 
 /**
  * Created by ian on 1/14/17.
