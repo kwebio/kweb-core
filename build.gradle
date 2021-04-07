@@ -21,11 +21,11 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.4.3'
+    ktor_version = '1.5.2'
 }
 
 group 'com.github.kwebio'
-version '0.8.8'
+version '0.8.9'
 
 repositories {
     mavenCentral()
@@ -45,8 +45,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.11'
     compile 'commons-io:commons-io:2.8.0'
     compile 'org.jsoup:jsoup:1.13.1'
-    compile 'com.github.kwebio:shoebox:0.4.9'
-
+    compile 'com.github.kwebio:shoebox:0.4.12'
 
     //////////////////////////////
     // Kotlin library dependencies

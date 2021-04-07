@@ -123,6 +123,10 @@ open class KVal<T : Any?>(value: T) {
         }
     }
 
+    protected fun finalize() {
+        this.close(CloseReason("Garbage Collected"))
+    }
+
 }
 
 data class CloseReason(val explanation: String, val cause: Throwable? = null)
