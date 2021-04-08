@@ -2,9 +2,8 @@ package kweb.client
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
-@Serializable//(with = Server2ClientMsgSerializer::class)
-@SerialName("Server2ClientMessage")
 /**
  * Server2client message
  *
@@ -19,6 +18,8 @@ import kotlinx.serialization.Serializable
  * When set to null, the client will take the javascript function and cache it, but not actually run/execute the code.
  * This special case is used to cache functions on page render before they are to be called
  */
+@Serializable
+@SerialName("Server2ClientMessage")
 data class Server2ClientMessage(
         val yourId: String,
         var debugToken: String? = null,
@@ -26,7 +27,7 @@ data class Server2ClientMessage(
         val js: String? = null,
         val parameters: String? = null,
         val callbackId: Int? = null,
-        var arguments: List<Any?>? = emptyList()
+        var arguments: List<JsonElement?>? = emptyList()
 )
 
 //parameters is a comma separated string of parameters for the js function

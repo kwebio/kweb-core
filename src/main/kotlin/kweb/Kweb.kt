@@ -17,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
 import kweb.html.HtmlDocumentSupplier
@@ -378,7 +380,8 @@ class Kweb private constructor(
             val cachedFunctions = mutableListOf<String>()
             val cachedIds = mutableListOf<Int>()
             for (msg in initialMessages) {
-                val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
+                val deserialedMsg = Json.decodeFromString<Server2ClientMessage>(msg)
+                //val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
 
                 //For some reason the final msg in initialMessages looks like this,
                 //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
