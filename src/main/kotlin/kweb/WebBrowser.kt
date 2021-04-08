@@ -1,7 +1,6 @@
 package kweb
 
 import io.mola.galimatias.URL
-import kotlinx.coroutines.CompletableDeferred
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
@@ -13,6 +12,7 @@ import kweb.util.pathQueryFragment
 import kweb.util.random
 import mu.KotlinLogging
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
@@ -45,7 +45,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
     val cachedFunctions = ConcurrentHashMap<String, Int>()
-    val modifiedFunctions = ConcurrentHashMap<Int, String>()
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
@@ -57,7 +56,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     internal fun require(vararg requiredPlugins: KClass<out KwebPlugin>) {
-        val missing = HashSet<String>()
+        val missing = java.util.HashSet<String>()
         for (requiredPlugin in requiredPlugins) {
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
@@ -68,7 +67,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     data class JSFunction(val js: String, val params: String)
     /**
-     * this function replaces "{}" tokens with variable names for creating client side js Function objects
+     * this function substitutes "{}" in user supplied javascript, for randomly generated variable names
      */
     private fun makeJsFunction(rawJs: String): JSFunction {
         val stringBuilder = StringBuilder()
@@ -91,10 +90,31 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return JSFunction(stringBuilder.toString(), params.joinToString(separator = ","))
     }
 
+    private fun argumentsToJsonElement(args: Array<out Any?>) : List<JsonElement>{
+        val argList = mutableListOf<JsonElement>()
+        args.forEach {
+            when (it) {
+                is String, is Int, is Boolean, is Float, is Double,
+                is Short, is Long, is Byte, is Char -> argList.add(primitiveToJson(it))
+                is Array<*> -> argList.add(JsonArray(it.map { arrayElement ->
+                    primitiveToJson(arrayElement, "You may only use primitives or Strings in array arguments")
+                }))
+                is HashMap<*, *> -> argList.add(hashMapToJson(it))
+                it == null -> JsonNull
+                is JsonElement -> argList.add(it)
+                else -> error("It is ${it!!::class.simpleName}")
+            }
+        }
+        return argList
+    }
+
     fun callJsFunction(jsBody: String, vararg args: Any?) {
         cachedFunctions[jsBody]?.let {
             val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args))
             kweb.callJs(callCachedFuncMessage, jsBody)
+            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, js = jsBody,
+                    arguments = argumentsToJsonElement(args))
+            kweb.callJs(server2ClientMessage, jsBody)
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
@@ -104,9 +124,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             modifiedFunctions[cacheId] = func.js
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
-                parameters = func.params, arguments = listOf(*args))
-            kweb.callJs(cacheAndExecuteMessage, jsBody)
+            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
+                parameters = func.params, arguments = argumentsToJsonElement(args))
+            kweb.callJs(server2ClientMessage, jsBody)
         }
     }
 
@@ -115,6 +135,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
             callbackId = callbackId)
             kweb.callJsWithCallback(callCachedFuncMessage, jsBody, callback)
+            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = argumentsToJsonElement(args),
+            callbackId = callbackId, js = jsBody)
+            kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
         } ?: run {
             val rng = Random()
             val cacheId = rng.nextInt()
@@ -126,6 +149,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
                     parameters = func.params, arguments = listOf(*args), callbackId = callbackId)
             kweb.callJsWithCallback(cacheAndExecuteMessage, jsBody, callback)
+            val server2ClientMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
+                    parameters = func.params, arguments = argumentsToJsonElement(args), callbackId = callbackId)
+            kweb.callJsWithCallback(server2ClientMessage, jsBody, callback)
         }
     }
 
@@ -133,7 +159,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    suspend fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): Any {
+    fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): CompletableFuture<Any> {
+        val cf = CompletableFuture<Any>()
         val callbackId = abs(random.nextInt())
         val cd = CompletableDeferred<Any>()
         callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->

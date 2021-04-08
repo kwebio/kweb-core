@@ -1,5 +1,10 @@
 package kweb.client
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable//(with = Server2ClientMsgSerializer::class)
+@SerialName("Server2ClientMessage")
 /**
  * Server2client message
  *
@@ -23,3 +28,5 @@ data class Server2ClientMessage(
         val callbackId: Int? = null,
         var arguments: List<Any?>? = emptyList()
 )
+
+//parameters is a comma separated string of parameters for the js function
