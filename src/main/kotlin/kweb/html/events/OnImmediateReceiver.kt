@@ -15,7 +15,7 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
             if (jsFunction.arguments.isNotEmpty()) {
                 val argStrings = mutableListOf<String>()
                 for (arg in jsFunction.arguments) {
-                    argStrings.add(""""${arg.toString()}"""")
+                    argStrings.add(arg.toString())
                 }
                 immediateJs.add("cachedFunctions[${jsFunction.jsId}](${argStrings.joinToString(",")})")
             } else {
