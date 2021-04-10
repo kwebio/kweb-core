@@ -49,7 +49,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun generateId(): String = idCounter.getAndIncrement().toString(36)
 
-    val cachedFunctions = ConcurrentHashMap<String, Int>()
+    private val cachedFunctions = ConcurrentHashMap<String, Int>()
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()

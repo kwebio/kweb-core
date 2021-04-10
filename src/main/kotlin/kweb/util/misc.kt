@@ -25,12 +25,12 @@ fun createNonce(length: Int = 6): String {
     return Base64.getUrlEncoder().encodeToString(ar).substring(0, length)
 }
 
-val gson = Gson()
-
 val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledThreadPool(5)
 
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
+val gson = Gson()
+//TODO I'm not sure what the best way to deal with this is.
 fun Any.toJson(): String = gson.toJson(this)
 
 data class JsFunction(val jsId: Int, val arguments: List<Any?> = emptyList())
