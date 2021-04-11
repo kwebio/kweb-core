@@ -2,9 +2,7 @@ package kweb.util
 
 import com.google.gson.Gson
 import io.mola.galimatias.URL
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonNull
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.*
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
@@ -31,11 +29,12 @@ fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
 val gson = Gson()
 //TODO I'm not sure what the best way to deal with this is.
-fun Any.toJson(): String = gson.toJson(this)
+fun Any.toJson(): String = Json.encodeToJsonElement(this).toString()
 
 data class JsFunction(val jsId: Int, val arguments: List<Any?> = emptyList())
 
 fun primitiveToJson(value: Any?, errorMsg: String = "Argument is required to be String or primitive type"): JsonElement {
+    //return Json.encodeToJsonElement(value)
     return when(value) {
         is String -> JsonPrimitive(value)
         is Boolean -> JsonPrimitive(value)
