@@ -366,7 +366,11 @@ class Kweb private constructor(
             for (plugin in plugins) {
                 //this code block looks a little funny now, but I still think moving the message creation out of Kweb.callJs() was the right move
                 val js = plugin.executeAfterPageCreation()
-                callJs(Server2ClientMessage(yourId = kwebSessionId, js = js), javascript = js)
+                //A plugin with an empty js string was breaking functionality.
+                if (js != "") {
+                    val pluginMessage = Server2ClientMessage(yourId = kwebSessionId, js = js)
+                    callJs(pluginMessage, js)
+                }
             }
 
             webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
