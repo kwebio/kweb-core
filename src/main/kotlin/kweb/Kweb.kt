@@ -385,14 +385,8 @@ class Kweb private constructor(
             val cachedIds = mutableListOf<Int>()
             for (msg in initialMessages) {
                 val deserialedMsg = Json.decodeFromString<Server2ClientMessage>(msg)
-                //val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
 
-                //For some reason the final msg in initialMessages looks like this,
-                //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
-                //I'm not sure what the point of this message is, and I can't find what is sending it.
-                //But, it causes problems if we try to add that to the cache, so we just make sure the jsId isn't null
-                //This is a useful check anyway, because we do let Server2ClientMessages have null jsId's, and trying to add
-                //a function from one of those messages wouldn't work.
+                //We have a special case where some functions do not have jsId's. Trying to add one of those to the cache would cause problems.
                 if (deserialedMsg.jsId != null) {
                     if (!cachedIds.contains(deserialedMsg.jsId)) {
                         val cachedFunction = """'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
