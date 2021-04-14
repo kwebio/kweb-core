@@ -35,9 +35,6 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.math.abs
 
-private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
-
 private val logger = KotlinLogging.logger {}
 
 class Kweb private constructor(
@@ -70,6 +67,8 @@ class Kweb private constructor(
         if (debug) {
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
+
+
 
         server = createServer(port, httpsConfig, buildPage)
 
@@ -336,11 +335,11 @@ class Kweb private constructor(
             val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
             webBrowser.htmlDocument.set(htmlDocument)
             if (debug) {
-                warnIfBlocking(maxTimeMs = MAX_PAGE_BUILD_TIME.toMillis(), onBlock = { thread ->
-                    logger.warn { "buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME.  More info at DEBUG loglevel" }
+                warnIfBlocking(maxTimeMs = KwebConfiguration.BUILDPAGE_TIMEOUT.toMillis(), onBlock = { thread ->
+                    logger.warn { "buildPage lambda must return immediately but has taken > ${KwebConfiguration.BUILDPAGE_TIMEOUT}.  More info at DEBUG loglevel" }
 
                     val logStatementBuilder = StringBuilder()
-                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME, appears to be blocking here:")
+                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > ${KwebConfiguration.BUILDPAGE_TIMEOUT}, appears to be blocking here:")
 
                     thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
                     val logStatement = logStatementBuilder.toString()
@@ -466,7 +465,7 @@ class Kweb private constructor(
     private fun cleanUpOldClientStates() {
         val now = Instant.now()
         val toRemove = clientState.entries.mapNotNull { (id: String, state: RemoteClientState) ->
-            if (Duration.between(state.lastModified, now) > CLIENT_STATE_TIMEOUT) {
+            if (Duration.between(state.lastModified, now) > KwebConfiguration.CLIENT_STATE_TIMEOUT) {
                 id
             } else {
                 null
