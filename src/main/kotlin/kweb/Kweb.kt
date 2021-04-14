@@ -68,7 +68,7 @@ class Kweb private constructor(
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-
+        KwebConfiguration.validate()
 
         server = createServer(port, httpsConfig, buildPage)
 
@@ -98,6 +98,7 @@ class Kweb private constructor(
      * @see kweb.demos.feature.kwebFeature for an example
      */
     companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
+        // Note that this is not KwebConfiguration, which is a different thing
         class Configuration {
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
@@ -109,6 +110,7 @@ class Kweb private constructor(
 
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
+            KwebConfiguration.validate()
             val feature = Kweb(configuration.debug, configuration.plugins)
 
             configuration.buildPage?.let {

@@ -33,7 +33,7 @@ object KwebConfiguration {
      * We can also add some smarter validation here later if needed
      */
     fun validate() {
-        logger.debug("Configuration has been initialized successfully")
+        logger.debug { "Configuration has been initialized successfully" }
     }
 
     private object Accessor {
