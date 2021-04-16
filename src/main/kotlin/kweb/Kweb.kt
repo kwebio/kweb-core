@@ -39,7 +39,7 @@ import kotlin.collections.component2
 import kotlin.math.abs
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofMinutes(20)
+private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(4)
 
 private val logger = KotlinLogging.logger {}
 
