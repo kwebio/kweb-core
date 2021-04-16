@@ -317,7 +317,7 @@ class Kweb private constructor(
             }
         } finally {
             logger.info("WS session disconnected for client id: ${remoteClientState.id}")
-            remoteClientState.clientConnection = Caching()
+            clientState.invalidate(remoteClientState.id)
         }
     }
 
