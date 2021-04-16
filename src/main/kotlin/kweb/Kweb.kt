@@ -1,6 +1,9 @@
 package kweb
 
 import com.github.salomonbrys.kotson.fromJson
+import com.google.common.cache.CacheBuilder
+import com.google.common.cache.CacheLoader
+import com.google.common.cache.LoadingCache
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -123,7 +126,11 @@ class Kweb private constructor(
         }
     }
 
-    private val clientState: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
+    private val clientState = CacheBuilder.newBuilder()
+        .expireAfterAccess(KwebConfiguration.CLIENT_STATE_TIMEOUT)
+        .build<String, RemoteClientState>()
+
+    //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
 
     private var server: JettyApplicationEngine? = null
 
@@ -155,7 +162,7 @@ class Kweb private constructor(
     We need it to create the debugToken. Some server2ClientMessages will contain the javascript,
      but messages that call cached functions will not have it. So we have to make sure we pass it in separately.*/
     fun callJs(server2ClientMessage: Server2ClientMessage, javascript: String) {
-        val wsClientData = clientState[server2ClientMessage.yourId]
+        val wsClientData = clientState.getIfPresent(server2ClientMessage.yourId)
                 ?: error("Client id ${server2ClientMessage.yourId} not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if(!debug) null else {
@@ -183,7 +190,7 @@ class Kweb private constructor(
                            javascript: String, callback: (Any) -> Unit) {
         //TODO I could use some help improving this error message
         require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
-        val wsClientData = clientState[server2ClientMessage.yourId]
+        val wsClientData = clientState.getIfPresent(server2ClientMessage.yourId)
                 ?: error("Client id ${server2ClientMessage.yourId} not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if(!debug) null else {
@@ -197,7 +204,7 @@ class Kweb private constructor(
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
-        clientState[clientId]?.handlers?.remove(callbackId)
+        clientState.getIfPresent(clientId)?.handlers?.remove(callbackId)
     }
 
     override fun close() {
@@ -260,13 +267,6 @@ class Kweb private constructor(
                 listenForWebsocketConnection()
             }
         }
-
-        GlobalScope.launch {
-            while (true) {
-                delay(Duration.ofMinutes(1))
-                cleanUpOldClientStates()
-            }
-        }
     }
 
     private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
@@ -276,7 +276,7 @@ class Kweb private constructor(
             error("First message from client isn't 'hello'")
         }
 
-        val remoteClientState = clientState.get(hello.id)
+        val remoteClientState = clientState.getIfPresent(hello.id)
                 ?: error("Unable to find server state corresponding to client id ${hello.id}")
 
         assert(remoteClientState.clientConnection is Caching)
@@ -318,7 +318,7 @@ class Kweb private constructor(
             }
         } finally {
             logger.info("WS session disconnected for client id: ${remoteClientState.id}")
-            remoteClientState.clientConnection = Caching()
+            clientState.invalidate(remoteClientState.id)
         }
     }
 
@@ -327,7 +327,7 @@ class Kweb private constructor(
 
         val kwebSessionId = createNonce()
 
-        val remoteClientState = clientState.getOrPut(kwebSessionId) {
+        val remoteClientState = clientState.get(kwebSessionId) {
             RemoteClientState(id = kwebSessionId, clientConnection = Caching())
         }
 
@@ -449,7 +449,7 @@ class Kweb private constructor(
      * unexpected page refresh may also confuse website visitors.
      */
     fun refreshAllPages() = GlobalScope.launch(Dispatchers.Default) {
-        for (client in clientState.values) {
+        for (client in clientState.asMap().values) {
             val message = Server2ClientMessage(
                     yourId = client.id,
                     js = "window.location.reload(true);",
@@ -463,23 +463,6 @@ class Kweb private constructor(
      * execution of event handlers, see `Element.immediatelyOn`
      */
     private val outboundMessageCatcher: ThreadLocal<MutableList<JsFunction>?> = ThreadLocal.withInitial { null }
-
-    private fun cleanUpOldClientStates() {
-        val now = Instant.now()
-        val toRemove = clientState.entries.mapNotNull { (id: String, state: RemoteClientState) ->
-            if (Duration.between(state.lastModified, now) > KwebConfiguration.CLIENT_STATE_TIMEOUT) {
-                id
-            } else {
-                null
-            }
-        }
-        if (toRemove.isNotEmpty()) {
-            logger.info("Cleaning up client states for ids: $toRemove")
-        }
-        for (id in toRemove) {
-            clientState.remove(id)
-        }
-    }
 
 }
 
