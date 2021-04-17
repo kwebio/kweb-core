@@ -1,30 +1,34 @@
-package kweb
+package kweb.config
 
 import mu.KotlinLogging
 import java.time.Duration
 
 /**
- * A central configuration class for Kweb parameterization
+ * A configuration class for Kweb parameterization. Extend this if you have custom needs
+ * on how to inject configuration values, otherwise [KwebDefaultConfiguration] is probably
+ * good enough for your use case
  *
  * Please note this is not [Kweb.Feature.Configuration], which is a Ktor specific config block
- *
  */
-object KwebConfiguration {
+abstract class KwebConfiguration {
     private val logger = KotlinLogging.logger {}
 
     /**
+     * If [Kweb.debug] is enabled, then pages that take longer than [buildpageTimeout]
+     * to load will display a warning message
+     *
      * See [Duration.parse] for valid formats, e.g PT5S, or PT48H
      */
-    val BUILDPAGE_TIMEOUT: Duration =
-        Accessor.getProperty("kweb.buildpage.timeout")?.let { Duration.parse(it) }
-            ?: Duration.ofSeconds(5)
+    abstract val buildpageTimeout: Duration
 
     /**
-     * Don't put this too low, you may end up cleaning semi-active clients
+     * Clients that last connected more than [clientStateTimeout] will be cleaned
+     * up every minute.
+     *
+     * Don't put this too low, you may end up cleaning semi-active clients, e.g someone
+     * who left a page open for a long duration without actions, such as a monitoring page.
      */
-    val CLIENT_STATE_TIMEOUT: Duration =
-        Accessor.getProperty("kweb.client.state.timeout")?.let { Duration.parse(it) }
-            ?: Duration.ofHours(48)
+    abstract val clientStateTimeout: Duration
 
     /**
      * Values are initialized eagerly, but objects are not, so be sure to "touch" this class
@@ -36,7 +40,7 @@ object KwebConfiguration {
         logger.debug { "Configuration has been initialized successfully" }
     }
 
-    private object Accessor {
+    protected object Accessor {
         private val env = System.getenv()
 
         /**

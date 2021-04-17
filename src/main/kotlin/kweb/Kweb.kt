@@ -22,6 +22,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
+import kweb.config.KwebConfiguration
+import kweb.config.KwebDefaultConfiguration
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
@@ -42,7 +44,8 @@ private val logger = KotlinLogging.logger {}
 
 class Kweb private constructor(
         val debug: Boolean,
-        val plugins: List<KwebPlugin>
+        val plugins: List<KwebPlugin>,
+        val kwebConfig: KwebConfiguration,
 ) : Closeable {
 
     /**
@@ -63,15 +66,20 @@ class Kweb private constructor(
             debug: Boolean = true,
             plugins: List<KwebPlugin> = Collections.emptyList(),
             httpsConfig: EngineSSLConnectorConfig? = null,
-            buildPage: WebBrowser.() -> Unit
-    ) : this(debug, plugins) {
+            kwebConfig: KwebConfiguration = KwebDefaultConfiguration,
+            buildPage: WebBrowser.() -> Unit,
+    ) : this(
+            debug = debug,
+            plugins = plugins,
+            kwebConfig = kwebConfig,
+    ) {
         logger.info("Initializing Kweb listening on port $port")
 
         if (debug) {
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
 
-        KwebConfiguration.validate()
+        kwebConfig.validate()
 
         server = createServer(port, httpsConfig, buildPage)
 
@@ -105,6 +113,7 @@ class Kweb private constructor(
         class Configuration {
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
+            var kwebConfig: KwebConfiguration = KwebDefaultConfiguration
             @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
             var buildPage: (WebBrowser.() -> Unit)? = null
         }
@@ -113,8 +122,8 @@ class Kweb private constructor(
 
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
-            KwebConfiguration.validate()
-            val feature = Kweb(configuration.debug, configuration.plugins)
+            configuration.kwebConfig.validate()
+            val feature = Kweb(configuration.debug, configuration.plugins, configuration.kwebConfig)
 
             configuration.buildPage?.let {
                 logger.info { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
@@ -127,7 +136,7 @@ class Kweb private constructor(
     }
 
     private val clientState = CacheBuilder.newBuilder()
-        .expireAfterAccess(KwebConfiguration.CLIENT_STATE_TIMEOUT)
+        .expireAfterAccess(kwebConfig.clientStateTimeout)
         .build<String, RemoteClientState>()
 
     //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
@@ -337,11 +346,11 @@ class Kweb private constructor(
             val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
             webBrowser.htmlDocument.set(htmlDocument)
             if (debug) {
-                warnIfBlocking(maxTimeMs = KwebConfiguration.BUILDPAGE_TIMEOUT.toMillis(), onBlock = { thread ->
-                    logger.warn { "buildPage lambda must return immediately but has taken > ${KwebConfiguration.BUILDPAGE_TIMEOUT}.  More info at DEBUG loglevel" }
+                warnIfBlocking(maxTimeMs = kwebConfig.buildpageTimeout.toMillis(), onBlock = { thread ->
+                    logger.warn { "buildPage lambda must return immediately but has taken > ${kwebConfig.buildpageTimeout}.  More info at DEBUG loglevel" }
 
                     val logStatementBuilder = StringBuilder()
-                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > ${KwebConfiguration.BUILDPAGE_TIMEOUT}, appears to be blocking here:")
+                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > ${kwebConfig.buildpageTimeout}, appears to be blocking here:")
 
                     thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
                     val logStatement = logStatementBuilder.toString()
