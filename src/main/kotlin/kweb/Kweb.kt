@@ -2,8 +2,6 @@ package kweb
 
 import com.github.salomonbrys.kotson.fromJson
 import com.google.common.cache.CacheBuilder
-import com.google.common.cache.CacheLoader
-import com.google.common.cache.LoadingCache
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -19,7 +17,6 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
 import kweb.config.KwebConfiguration
@@ -34,10 +31,7 @@ import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
-import kotlin.collections.component1
-import kotlin.collections.component2
 import kotlin.math.abs
 
 private val logger = KotlinLogging.logger {}
