@@ -2,8 +2,6 @@ package kweb
 
 import com.github.salomonbrys.kotson.fromJson
 import com.google.common.cache.CacheBuilder
-import com.google.common.cache.CacheLoader
-import com.google.common.cache.LoadingCache
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -19,9 +17,10 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
+import kweb.config.KwebConfiguration
+import kweb.config.KwebDefaultConfiguration
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.util.*
@@ -32,20 +31,15 @@ import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.ArrayList
-import kotlin.collections.component1
-import kotlin.collections.component2
 import kotlin.math.abs
-
-private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(4)
 
 private val logger = KotlinLogging.logger {}
 
 class Kweb private constructor(
         val debug: Boolean,
-        val plugins: List<KwebPlugin>
+        val plugins: List<KwebPlugin>,
+        val kwebConfig: KwebConfiguration,
 ) : Closeable {
 
     /**
@@ -66,13 +60,20 @@ class Kweb private constructor(
             debug: Boolean = true,
             plugins: List<KwebPlugin> = Collections.emptyList(),
             httpsConfig: EngineSSLConnectorConfig? = null,
-            buildPage: WebBrowser.() -> Unit
-    ) : this(debug, plugins) {
+            kwebConfig: KwebConfiguration = KwebDefaultConfiguration,
+            buildPage: WebBrowser.() -> Unit,
+    ) : this(
+            debug = debug,
+            plugins = plugins,
+            kwebConfig = kwebConfig,
+    ) {
         logger.info("Initializing Kweb listening on port $port")
 
         if (debug) {
             logger.warn("Debug mode enabled, if in production use KWeb(debug = false)")
         }
+
+        kwebConfig.validate()
 
         server = createServer(port, httpsConfig, buildPage)
 
@@ -102,9 +103,11 @@ class Kweb private constructor(
      * @see kweb.demos.feature.kwebFeature for an example
      */
     companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
+        // Note that this is not KwebConfiguration, which is a different thing
         class Configuration {
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
+            var kwebConfig: KwebConfiguration = KwebDefaultConfiguration
             @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
             var buildPage: (WebBrowser.() -> Unit)? = null
         }
@@ -113,7 +116,8 @@ class Kweb private constructor(
 
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kweb {
             val configuration = Configuration().apply(configure)
-            val feature = Kweb(configuration.debug, configuration.plugins)
+            configuration.kwebConfig.validate()
+            val feature = Kweb(configuration.debug, configuration.plugins, configuration.kwebConfig)
 
             configuration.buildPage?.let {
                 logger.info { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
@@ -126,7 +130,7 @@ class Kweb private constructor(
     }
 
     private val clientState = CacheBuilder.newBuilder()
-        .expireAfterAccess(CLIENT_STATE_TIMEOUT)
+        .expireAfterAccess(kwebConfig.clientStateTimeout)
         .build<String, RemoteClientState>()
 
     //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
@@ -336,11 +340,11 @@ class Kweb private constructor(
             val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
             webBrowser.htmlDocument.set(htmlDocument)
             if (debug) {
-                warnIfBlocking(maxTimeMs = MAX_PAGE_BUILD_TIME.toMillis(), onBlock = { thread ->
-                    logger.warn { "buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME.  More info at DEBUG loglevel" }
+                warnIfBlocking(maxTimeMs = kwebConfig.buildpageTimeout.toMillis(), onBlock = { thread ->
+                    logger.warn { "buildPage lambda must return immediately but has taken > ${kwebConfig.buildpageTimeout}.  More info at DEBUG loglevel" }
 
                     val logStatementBuilder = StringBuilder()
-                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > $MAX_PAGE_BUILD_TIME, appears to be blocking here:")
+                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > ${kwebConfig.buildpageTimeout}, appears to be blocking here:")
 
                     thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
                     val logStatement = logStatementBuilder.toString()
