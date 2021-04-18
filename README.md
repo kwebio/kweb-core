@@ -32,4 +32,5 @@ fun main() {
 * [Template Repo](https://github.com/kwebio/kweb-template)
 * [Example Projects](https://github.com/kwebio/kweb-demos)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
+* [Chat with us](https://gitter.im/kwebio/Lobby)
 * [Frequently Asked Questions](http://docs.kweb.io/en/latest/faq.html)
