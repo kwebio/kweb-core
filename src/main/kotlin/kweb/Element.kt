@@ -165,7 +165,7 @@ open class Element(
     fun classes(vararg value: String) = setClasses(*value)
 
     fun setClasses(vararg value: String): Element {
-        setAttributeRaw("class", value.joinToString(separator = " ").toJson())
+        setAttributeRaw("class", value.joinToString(separator = " "))
         return this
     }
 
