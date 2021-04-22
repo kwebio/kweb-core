@@ -1,6 +1,7 @@
 package kweb
 
 import com.github.salomonbrys.kotson.fromJson
+import kotlinx.serialization.json.JsonElement
 import kweb.util.KWebDSL
 import kweb.util.gson
 import kweb.util.toJson
@@ -9,8 +10,45 @@ import java.util.*
 
 @KWebDSL
 class CookieReceiver(val receiver: WebBrowser) {
-    fun set(name: String, value: Any, expires: Duration? = null, path: String? = null, domain: String? = null) {
+    fun set(name: String, value: String, expires: Duration? = null, path: String? = null, domain: String? = null) {
         setString(name, value.toJson(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Int, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Float, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Double, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Short, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Long, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Boolean, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Char, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    fun set(name: String, value: Byte, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
+    }
+
+    //This might have a potential use, I'm not sure.
+    fun set(name: String, value: JsonElement, expires: Duration? = null, path: String? = null, domain: String? = null) {
+        setString(name, value.toString(), expires, path, domain)
     }
 
     fun setString(name: String, value: String, expires: Duration? = null, path: String? = null, domain: String? = null) {

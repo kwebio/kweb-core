@@ -1,6 +1,7 @@
 package kweb.html
 
 import com.github.salomonbrys.kotson.fromJson
+import kotlinx.serialization.json.JsonElement
 import kweb.WebBrowser
 import kweb.util.KWebDSL
 import kweb.util.gson
@@ -13,8 +14,45 @@ import kweb.util.toJson
 class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     private val obj = "${type.name}Storage"
 
-    operator fun set(name: String, value: Any) {
-        setString(name, value.toJson())
+    operator fun set(name: String, value: String) {
+        setString(name, value)
+    }
+
+    operator fun set(name: String, value: Int) {
+        setString(name, value.toString())
+    }
+
+    operator fun set(name: String, value: Float) {
+        setString(name, value.toString())
+    }
+
+    operator fun set(name: String, value: Double) {
+        setString(name, value.toString())
+    }
+
+    operator fun set(name: String, value: Short) {
+        setString(name, value.toString())
+    }
+
+    operator fun set(name: String, value: Long) {
+        setString(name, value.toString())
+    }
+
+    operator fun set(name: String, value: Boolean) {
+        setString(name, value.toString())
+    }
+
+    operator fun set(name: String, value: Char) {
+        setString(name, value.toString())
+    }
+
+    operator fun set(name: String, value: Byte) {
+        setString(name, value.toString())
+    }
+
+    //I don't know if we actually need this one, but it seems like it might be useful at some point.
+    operator fun set(name: String, value: JsonElement) {
+        setString(name, value.toString())
     }
 
     fun setString(key: String, value: String) {

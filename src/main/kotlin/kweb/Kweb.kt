@@ -18,6 +18,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
@@ -456,7 +457,8 @@ class Kweb private constructor(
                     yourId = client.id,
                     js = "window.location.reload(true);",
                     debugToken = null)
-            client.clientConnection.send(message.toJson())
+            client.clientConnection.send(Json.encodeToString(message))
+            //client.clientConnection.send(message.toJson())
         }
     }
 
