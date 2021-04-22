@@ -29,5 +29,3 @@ data class Server2ClientMessage(
         val callbackId: Int? = null,
         var arguments: List<JsonElement?>? = emptyList()
 )
-
-//parameters is a comma separated string of parameters for the js function

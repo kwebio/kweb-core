@@ -271,7 +271,8 @@ class Kweb private constructor(
     }
 
     private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
-        val hello = gson.fromJson<Client2ServerMessage>((incoming.receive() as Text).readText())
+        //val hello = gson.fromJson<Client2ServerMessage>((incoming.receive() as Text).readText())
+        val hello = Json.decodeFromString<Client2ServerMessage>((incoming.receive() as Text).readText())
 
         if (hello.hello == null) {
             error("First message from client isn't 'hello'")
@@ -295,7 +296,8 @@ class Kweb private constructor(
                     logger.debug { "Message received from client" }
 
                     if (frame is Text) {
-                        val message = gson.fromJson<Client2ServerMessage>(frame.readText())
+                        //val message = gson.fromJson<Client2ServerMessage>(frame.readText())
+                        val message = Json.decodeFromString<Client2ServerMessage>(frame.readText())
                         logger.debug { "Message received: $message" }
                         if (message.error != null) {
                             handleError(message.error, remoteClientState)
