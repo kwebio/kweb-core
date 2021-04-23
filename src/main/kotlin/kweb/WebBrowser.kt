@@ -5,6 +5,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
@@ -199,7 +200,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         //as a variable using Kweb's template syntax
         callJsFunction("""
         history.pushState({ }, "", {});
-        """.trimIndent(), url)
+        """.trimIndent(), JsonPrimitive(url))
     }
 
     /**

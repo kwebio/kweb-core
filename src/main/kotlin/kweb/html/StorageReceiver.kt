@@ -2,6 +2,7 @@ package kweb.html
 
 import com.github.salomonbrys.kotson.fromJson
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.WebBrowser
 import kweb.util.KWebDSL
 import kweb.util.gson
@@ -59,13 +60,14 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
         if (value == "") {
             throw IllegalArgumentException("$obj cannot store the value \"\"")
         }
-        receiver.callJsFunction("{}.setItem({}, {});", obj, key.toJson(), value.toJson())
+        receiver.callJsFunction("$obj.setItem({}, {});", JsonPrimitive(key), JsonPrimitive(value))
     }
 
     suspend inline fun <reified V : Any> get(name: String): V? {
         val result = getString(name)
         return when(result) {
             null -> null
+            //TODO gson usage
             else -> gson.fromJson<V>(result)
         }
     }
@@ -79,7 +81,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     }
 
     fun remove(key: String) {
-        receiver.callJsFunction("{}.removeItem({});", obj, key.toJson())
+        receiver.callJsFunction("$obj.removeItem({});", JsonPrimitive(key))
     }
 
 }

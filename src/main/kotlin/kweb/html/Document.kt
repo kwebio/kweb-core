@@ -3,6 +3,7 @@ package kweb.html
 import com.github.salomonbrys.kotson.toJson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -46,7 +47,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     }
 
     fun execCommand(command: String) {
-        receiver.callJsFunction("document.execCommand({});", command)
+        receiver.callJsFunction("document.execCommand({});", JsonPrimitive(command))
     }
 
     /**

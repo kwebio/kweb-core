@@ -1,6 +1,8 @@
 package kweb
 
 import com.github.salomonbrys.kotson.toJson
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -31,7 +33,7 @@ open class Element(
      * foundation upon which most other DOM modification functions in this class
      * are based.
      */
-    fun callJsFunction(js: String, vararg args: Any?) {
+    fun callJsFunction(js: String, vararg args: JsonElement) {
         browser.callJsFunction(js, *args)
     }
 
@@ -86,14 +88,14 @@ open class Element(
             when {
                 browser.kweb.isCatchingOutbound() -> {
                     callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            id, name, value)
+                            JsonPrimitive(id), JsonPrimitive(name), JsonPrimitive(value))
                 }
                 htmlDoc != null -> {
                     htmlDoc.getElementById(this.id).attr(name, value.toString())
                 }
                 else -> {
                     callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            id, name, value)
+                            JsonPrimitive(id), JsonPrimitive(name), JsonPrimitive(value))
                 }
             }
             if (name.equals("id", ignoreCase = true)) {
@@ -117,10 +119,10 @@ open class Element(
     fun removeAttribute(name: String): Element {
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction("document.getElementById({}).removeAttribute", id, name)
+                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
             }
             else -> {
-                callJsFunction("document.getElementById({}).removeAttribute", id, name)
+                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
             }
 
         }
@@ -135,7 +137,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                callJsFunction("document.getElementById({}).innerHTML = {}", id, html)
+                callJsFunction("document.getElementById({}).innerHTML = {}", JsonPrimitive(id), JsonPrimitive(html))
             }
         }
         return this
@@ -181,7 +183,7 @@ open class Element(
                     let el = document.getElementById(id);
                     if (el.classList) el.classList.remove(className);
                     else if (hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), id, class_)
+                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
             }
         }
         return this
@@ -202,7 +204,7 @@ open class Element(
                         var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
                         el.className = el.className.replace(reg, " ");
                     }
-                """.trimIndent(), id, class_)
+                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
             }
         }
         return this
@@ -244,7 +246,7 @@ open class Element(
                             element.removeChild(element.firstChild);
                         }
                     }
-                """.trimIndent(), id)
+                """.trimIndent(), JsonPrimitive(id))
             }
         }
 
@@ -263,7 +265,7 @@ open class Element(
                 callJsFunction("""
                         let element = document.getElementById({});
                         element.removeChild(element.children[{}]);
-                """.trimIndent(), id, position)
+                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(position))
             }
         }
         return this
@@ -278,14 +280,14 @@ open class Element(
         val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction(setTextJS, id, value)
+                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             else -> {
-                callJsFunction(setTextJS, id, value)
+                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
             }
         }
         return this
@@ -324,14 +326,14 @@ open class Element(
         """.trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction(createTextNodeJs, value, id)
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             else -> {
-                callJsFunction(createTextNodeJs, value, id)
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
             }
         }
         return this
@@ -342,7 +344,7 @@ open class Element(
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
             });""".trimIndent()
-        browser.callJsFunction(wrappedJS, id, eventName)
+        browser.callJsFunction(wrappedJS, JsonPrimitive(id), JsonPrimitive(eventName))
         /*browser.callJsFunctionWithResult(wrappedJS, id, eventName)*/
         //TODO this function used to call evaluate, which had a return type. I have it set to use callJsFunction
         //which doesn't return anything. I don't know if I'm missing something and we should use callJsFunctionWithResult,
@@ -379,7 +381,7 @@ open class Element(
         callJsFunction("""
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
-        """.trimIndent(), id)
+        """.trimIndent(), JsonPrimitive(id))
     }
 
     fun deleteIfExists() {
@@ -389,7 +391,7 @@ open class Element(
                 let element = document.getElementById(id);
                 element.parentNode.removeChild(element);
             }
-        """.trimIndent(), id)
+        """.trimIndent(), JsonPrimitive(id))
     }
 
     fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)

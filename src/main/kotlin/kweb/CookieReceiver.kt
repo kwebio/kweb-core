@@ -2,6 +2,7 @@ package kweb
 
 import com.github.salomonbrys.kotson.fromJson
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.util.KWebDSL
 import kweb.util.gson
 import kweb.util.toJson
@@ -65,7 +66,7 @@ class CookieReceiver(val receiver: WebBrowser) {
             arguments.add(domain)
         }
 
-        receiver.callJsFunction("docCookies.setItem({});", arguments.joinToString(separator = ", "))
+        receiver.callJsFunction("docCookies.setItem({});", JsonPrimitive(arguments.joinToString(separator = ", ")))
     }
 
     suspend inline fun <reified V : Any> get(name: String): V? {
@@ -86,6 +87,6 @@ class CookieReceiver(val receiver: WebBrowser) {
     }
 
     fun remove(name: String) {
-        receiver.callJsFunction("docCookies.removeItem({});", name.toJson())
+        receiver.callJsFunction("docCookies.removeItem({});", JsonPrimitive(name))
     }
 }

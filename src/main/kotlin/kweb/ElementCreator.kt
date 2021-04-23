@@ -1,5 +1,8 @@
 package kweb
 
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
@@ -38,7 +41,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     val browser: WebBrowser get() = parent.browser
 
-    fun element(tag: String, attributes: Map<String, Any> = attr): Element {
+    fun element(tag: String, attributes: Map<String, JsonElement> = attr): Element {
 
         val mutAttributes = HashMap(attributes)
 
@@ -52,7 +55,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
 
-        val id: String = (mutAttributes.computeIfAbsent("id") { "K" + browser.generateId() }.toString())
+        val id: String = (mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.toString())
         val htmlDoc = browser.htmlDocument.get()
         when {
             parent.browser.kweb.isCatchingOutbound() -> {
@@ -77,6 +80,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
+                val JsonMap = mutAttributes.mapValues {
+                    JsonPrimitive(it.value)
+                }
+                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
+                        JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
                 browser.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             htmlDoc != null -> {
@@ -120,7 +128,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.insertBefore(newEl, parentElement.children[position]);
                     }
                 """.trimIndent()
-                parent.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position)
+                parent.callJsFunction(createElementJs, JsonPrimitive(tag), mutAttributes, JsonPrimitive(id),
+                        JsonPrimitive(parent.id), JsonPrimitive(parent.id))
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
