@@ -304,7 +304,7 @@ fun ElementCreator<Element>.meta(
 }
 
 open class InputElement(override val element: Element) : ValueElement(element) {
-    fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
+    fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", JsonPrimitive(checked)) else removeAttribute("checked")
 
 
     fun select() = element.callJsFunction("document.getElementById({}).select();", JsonPrimitive(id))

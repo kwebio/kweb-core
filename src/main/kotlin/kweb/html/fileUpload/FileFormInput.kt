@@ -2,6 +2,7 @@ package kweb.html.fileUpload
 
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.util.random
 import mu.KotlinLogging
@@ -22,9 +23,9 @@ class FileFormInput {
     }
 
     fun setAccept(acceptedTypes: String): Unit = inputElement.callJsFunction(
-            """document.getElementById({}).accept = {};""", inputElement.id, acceptedTypes)
+            """document.getElementById({}).accept = {};""", JsonPrimitive(inputElement.id), JsonPrimitive(acceptedTypes))
     fun isMultiSelect(isMultiple: Boolean): Unit = inputElement.callJsFunction(
-            "document.getElementById({}).multiple = {}", inputElement.id, isMultiple )
+            "document.getElementById({}).multiple = {}", JsonPrimitive(inputElement.id), JsonPrimitive(isMultiple))
     fun onFileSelect(onFileSelectCallback: () -> Unit) {
         inputElement.on.change { evt ->
             logger.info(evt.retrieved)

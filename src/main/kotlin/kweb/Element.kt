@@ -82,33 +82,42 @@ open class Element(
      *
      * Will be ignored if `value` is `null`.
      */
-    fun setAttributeRaw(name: String, value: Any?): Element {
-        if (value != null) {
-            val htmlDoc = browser.htmlDocument.get()
-            when {
-                browser.kweb.isCatchingOutbound() -> {
-                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            JsonPrimitive(id), JsonPrimitive(name), JsonPrimitive(value))
-                }
-                htmlDoc != null -> {
-                    htmlDoc.getElementById(this.id).attr(name, value.toString())
-                }
-                else -> {
-                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            JsonPrimitive(id), JsonPrimitive(name), JsonPrimitive(value))
-                }
+    fun setAttributeRaw(name: String, value: JsonPrimitive): Element {
+        val htmlDoc = browser.htmlDocument.get()
+        when {
+            browser.kweb.isCatchingOutbound() -> {
+                callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                        JsonPrimitive(id), JsonPrimitive(name), value)
             }
-            if (name.equals("id", ignoreCase = true)) {
-                this.id = value.toString()
+            htmlDoc != null -> {
+                htmlDoc.getElementById(this.id).attr(name, value.toString())
             }
+            else -> {
+                callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                        JsonPrimitive(id), JsonPrimitive(name), value)
+            }
+        }
+        if (name.equals("id", ignoreCase = true)) {
+            this.id = value.toString()
         }
         return this
     }
 
-    fun setAttribute(name: String, oValue: KVal<out Any>): Element {
+    fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
         setAttributeRaw(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
             setAttributeRaw(name, newValue)
+        }
+        this.creator?.onCleanup(true) {
+            oValue.removeListener(handle)
+        }
+        return this
+    }
+
+    fun setAttribute(name: String, oValue: KVar<String>) : Element {
+        setAttributeRaw(name, JsonPrimitive(oValue.value))
+        val handle = oValue.addListener { _, newValue ->
+            setAttributeRaw(name, JsonPrimitive(newValue))
         }
         this.creator?.onCleanup(true) {
             oValue.removeListener(handle)
@@ -167,7 +176,7 @@ open class Element(
     fun classes(vararg value: String) = setClasses(*value)
 
     fun setClasses(vararg value: String): Element {
-        setAttributeRaw("class", value.joinToString(separator = " ").toJson())
+        setAttributeRaw("class", JsonPrimitive(value.joinToString(separator = " ")))
         return this
     }
 
@@ -221,7 +230,7 @@ open class Element(
     }
 
     fun disable(): Element {
-        setAttributeRaw("disabled", true)
+        setAttributeRaw("disabled", JsonPrimitive(true))
         return this
     }
 
@@ -345,10 +354,6 @@ open class Element(
                 $jsCode
             });""".trimIndent()
         browser.callJsFunction(wrappedJS, JsonPrimitive(id), JsonPrimitive(eventName))
-        /*browser.callJsFunctionWithResult(wrappedJS, id, eventName)*/
-        //TODO this function used to call evaluate, which had a return type. I have it set to use callJsFunction
-        //which doesn't return anything. I don't know if I'm missing something and we should use callJsFunctionWithResult,
-        //or it was a mistake to use evaluate() instead of execute() here. It seems to work just using callJsFunction()
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
@@ -394,7 +399,7 @@ open class Element(
         """.trimIndent(), JsonPrimitive(id))
     }
 
-    fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)
+    fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", JsonPrimitive(spellcheck))
 
     val style get() = StyleReceiver(this)
 

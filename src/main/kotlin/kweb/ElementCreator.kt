@@ -80,12 +80,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                val JsonMap = mutAttributes.mapValues {
-                    JsonPrimitive(it.value)
-                }
                 browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
                         JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
-                browser.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position ?: -1)
             }
             htmlDoc != null -> {
                 val jsElement = when (parent) {
@@ -98,11 +94,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     else -> htmlDoc.getElementById(parent.id).appendElement(tag)
                 }!!
                 for ((k, v) in mutAttributes) {
-                    if (v is Boolean) {
-                        jsElement.attr(k, v)
-                    } else {
-                        jsElement.attr(k, v.toString())
-                    }
+                    jsElement.attr(k, v.toString())
                 }
             }
             else -> {
@@ -128,7 +120,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.insertBefore(newEl, parentElement.children[position]);
                     }
                 """.trimIndent()
-                parent.callJsFunction(createElementJs, JsonPrimitive(tag), mutAttributes, JsonPrimitive(id),
+                parent.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
                         JsonPrimitive(parent.id), JsonPrimitive(parent.id))
             }
         }

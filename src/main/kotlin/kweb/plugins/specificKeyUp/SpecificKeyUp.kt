@@ -1,5 +1,6 @@
 package kweb.plugins.specificKeyUp
 
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.InputElement
 import kweb.html.events.KeyboardEvent
@@ -36,7 +37,7 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
                 element.dispatchEvent(keySpecificKeyUpEvent);
             }
         });
-    """.trimIndent(), id, keys.joinToString(separator = ","))
+    """.trimIndent(), JsonPrimitive(id), JsonPrimitive(keys.joinToString(separator = ",")))
 }
 
 fun OnReceiver<Element>.keySpecificKeyup(callback: (event: KeyboardEvent) -> Unit): Element {

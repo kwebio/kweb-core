@@ -3,7 +3,6 @@ package kweb.util
 import com.google.gson.Gson
 import io.mola.galimatias.URL
 import kotlinx.serialization.json.*
-import kweb.plugins.chartJs.ChartConfig
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
@@ -29,21 +28,11 @@ val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledT
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
 val gson = Gson()
-fun ChartConfig.toJson() : String = gson.toJson(this).toString()
 fun String.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Int.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Float.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Double.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Short.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Long.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Boolean.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Char.toJson(): String = Json.encodeToJsonElement(this).toString()
-fun Byte.toJson(): String = Json.encodeToJsonElement(this).toString()
 
 data class JsFunction(val jsId: Int, val arguments: List<Any?> = emptyList())
 
 fun primitiveToJson(value: Any?, errorMsg: String = "Argument is required to be String or primitive type"): JsonElement {
-    //return Json.encodeToJsonElement(value)
     return when(value) {
         is String -> JsonPrimitive(value)
         is Boolean -> JsonPrimitive(value)
