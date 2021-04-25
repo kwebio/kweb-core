@@ -5,57 +5,56 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.util.KWebDSL
 import kweb.util.gson
-import kweb.util.toJson
 import java.time.Duration
 import java.util.*
 
 @KWebDSL
 class CookieReceiver(val receiver: WebBrowser) {
     fun set(name: String, value: String, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toJson(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     fun set(name: String, value: Int, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     fun set(name: String, value: Float, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     fun set(name: String, value: Double, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     fun set(name: String, value: Short, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     fun set(name: String, value: Long, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     fun set(name: String, value: Boolean, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     fun set(name: String, value: Char, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value.toString()), expires, path, domain)
     }
 
     fun set(name: String, value: Byte, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, JsonPrimitive(value), expires, path, domain)
     }
 
     //This might have a potential use, I'm not sure.
     fun set(name: String, value: JsonElement, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        setString(name, value.toString(), expires, path, domain)
+        setJson(name, value, expires, path, domain)
     }
 
-    fun setString(name: String, value: String, expires: Duration? = null, path: String? = null, domain: String? = null) {
+    private fun setJson(name: String, value: JsonElement, expires: Duration? = null, path: String? = null, domain: String? = null) {
         val arguments = LinkedList<String>()
-        arguments.add(name.toJson())
-        arguments.add(value.toJson())
+        arguments.add(name)
+        arguments.add(value.toString())
         if (expires != null) {
             arguments.add(expires.seconds.toString())
         }
@@ -78,7 +77,7 @@ class CookieReceiver(val receiver: WebBrowser) {
     }
 
     suspend fun getString(name: String): String? {
-        val result = receiver.callJsFunctionWithResult("return docCookies.getItem({});", name.toJson())
+        val result = receiver.callJsFunctionWithResult("return docCookies.getItem({});", JsonPrimitive(name))
         return if (result == "__COOKIE_NOT_FOUND_TOKEN__") {
             null
         } else {

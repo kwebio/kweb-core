@@ -28,7 +28,6 @@ val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledT
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
 val gson = Gson()
-fun String.toJson(): String = Json.encodeToJsonElement(this).toString()
 
 data class JsFunction(val jsId: Int, val arguments: List<Any?> = emptyList())
 

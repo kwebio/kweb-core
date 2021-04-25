@@ -1,10 +1,10 @@
 package kweb.plugins.jqueryCore
 
 import com.github.salomonbrys.kotson.fromJson
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.events.MouseEvent
 import kweb.util.gson
 import kweb.util.random
-import kweb.util.toJson
 import java.util.*
 import kotlin.reflect.full.memberProperties
 
@@ -16,7 +16,7 @@ open class JQueryOnReceiver(val parent: JQueryReceiver) {
     fun event(event: String, returnEventFields: Set<String> = Collections.emptySet(), callback: (String) -> Unit): JQueryReceiver {
         val callbackId = Math.abs(random.nextInt())
         val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + "}"
-        val js = "${parent.selectorExpression}.on(${event.toJson()}, function(event) {callbackWs($callbackId, $eventObject);})"
+        val js = "${parent.selectorExpression}.on(${JsonPrimitive(event)}, function(event) {callbackWs($callbackId, $eventObject);})"
         parent.webBrowser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload.toString())
         })
