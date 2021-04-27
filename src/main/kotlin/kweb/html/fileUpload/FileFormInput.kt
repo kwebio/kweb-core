@@ -48,7 +48,7 @@ class FileFormInput {
         inputElement.browser.callJsFunctionWithCallback(js, callbackId, callback = { result ->
             logger.info("Result is $result")
             onFileRetrieveCallback(Json.decodeFromString(FileUpload.serializer(), result.toString()))
-        }, inputElement.id, callbackId)
+        }, JsonPrimitive(inputElement.id), JsonPrimitive(callbackId))
         inputElement.creator?.onCleanup(true) {
             inputElement.browser.removeCallback(callbackId)
         }

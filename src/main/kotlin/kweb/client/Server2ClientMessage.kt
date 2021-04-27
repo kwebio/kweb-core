@@ -27,5 +27,5 @@ data class Server2ClientMessage(
         val js: String? = null,
         val parameters: String? = null,
         val callbackId: Int? = null,
-        var arguments: List<JsonElement?>? = emptyList()
+        var arguments: List<JsonElement>? = emptyList()
 )

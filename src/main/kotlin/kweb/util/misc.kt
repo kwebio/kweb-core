@@ -29,7 +29,7 @@ fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
 val gson = Gson()
 
-data class JsFunction(val jsId: Int, val arguments: List<Any?> = emptyList())
+data class JsFunction(val jsId: Int, val arguments: List<JsonElement> = emptyList())
 
 fun primitiveToJson(value: Any?, errorMsg: String = "Argument is required to be String or primitive type"): JsonElement {
     return when(value) {

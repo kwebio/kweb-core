@@ -120,7 +120,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return argList
     }
 
-    fun callJsFunction(jsBody: String, vararg args: Any?) {
+    fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         cachedFunctions[jsBody]?.let {
             val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, js = jsBody,
                     arguments = argumentsToJsonElement(args))
@@ -139,7 +139,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
-    fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (Any) -> Unit, vararg args: Any?) {
+    fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (JsonElement) -> Unit, vararg args: JsonElement) {
         cachedFunctions[jsBody]?.let {
             val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = argumentsToJsonElement(args),
             callbackId = callbackId, js = jsBody)
@@ -162,9 +162,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         kweb.removeCallback(sessionId, callbackId)
     }
 
-    suspend fun callJsFunctionWithResult(jsBody: String, vararg args: Any?): Any {
+    suspend fun callJsFunctionWithResult(jsBody: String, vararg args: JsonElement): JsonElement {
         val callbackId = abs(random.nextInt())
-        val cd = CompletableDeferred<Any>()
+        val cd = CompletableDeferred<JsonElement>()
         callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
             cd.complete(response)
         }, *args)

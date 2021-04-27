@@ -1,5 +1,7 @@
 package kweb.html.events
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 import kweb.Kweb
 import kweb.h1
 import kweb.util.KWebDSL
@@ -15,7 +17,7 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
             if (jsFunction.arguments.isNotEmpty()) {
                 val argStrings = mutableListOf<String>()
                 for (arg in jsFunction.arguments) {
-                    argStrings.add(arg.toString())
+                    argStrings.add(Json.decodeFromJsonElement<String>(arg))
                 }
                 immediateJs.add("cachedFunctions[${jsFunction.jsId}](${argStrings.joinToString(",")})")
             } else {

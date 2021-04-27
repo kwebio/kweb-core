@@ -72,7 +72,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
             });
         """.trimIndent()
         GlobalScope.launch {
-            receiver.callJsFunctionWithResult(wrappedJS, eventName.toJson())
+            receiver.callJsFunctionWithResult(wrappedJS, JsonPrimitive(eventName))
         }
     }
 
@@ -88,7 +88,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         """
         receiver.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }, eventName.toJson(), callbackId, eventObject)
+        }, JsonPrimitive(eventName), JsonPrimitive(callbackId), JsonPrimitive(eventObject))
         return this
     }
 

@@ -42,7 +42,7 @@ open class Element(
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
      */
-    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: Any?): O? {
+    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: JsonElement): O? {
         val result = browser.callJsFunctionWithResult(js, *args)
         return outputMapper.invoke(result)
     }
@@ -374,7 +374,7 @@ open class Element(
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
 
-        }, id, eventName, callbackId)
+        }, JsonPrimitive(id), JsonPrimitive(eventName), JsonPrimitive(callbackId))
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }

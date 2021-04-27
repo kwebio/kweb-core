@@ -20,6 +20,8 @@ import kotlinx.coroutines.time.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
 import kweb.html.HtmlDocumentSupplier
@@ -182,7 +184,7 @@ class Kweb private constructor(
     }
 
     fun callJsWithCallback(server2ClientMessage: Server2ClientMessage,
-                           javascript: String, callback: (Any) -> Unit) {
+                           javascript: String, callback: (JsonElement) -> Unit) {
         //TODO I could use some help improving this error message
         require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
         val wsClientData = clientState[server2ClientMessage.yourId]
@@ -304,10 +306,12 @@ class Kweb private constructor(
                         } else {
                             when {
                                 message.callback != null -> {
+                                    //val resultId = message.callback.callbackId
+                                    //val result = message.callback.data
                                     val (resultId, result) = message.callback
                                     val resultHandler = remoteClientState.handlers[resultId]
                                             ?: error("No data handler for $resultId for client ${remoteClientState.id}")
-                                    resultHandler(result ?: "")
+                                    resultHandler(result)
                                 }
                                 message.historyStateChange != null -> {
 

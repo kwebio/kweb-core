@@ -1,9 +1,8 @@
 package kweb
 
 import com.github.salomonbrys.kotson.fromJson
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonNull
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json.Default.decodeFromJsonElement
 import kweb.util.KWebDSL
 import kweb.util.gson
 import java.time.Duration
@@ -76,7 +75,7 @@ class CookieReceiver(val receiver: WebBrowser) {
     }
 
     suspend fun getString(name: String): String? {
-        val result = receiver.callJsFunctionWithResult("return docCookies.getItem({});", JsonPrimitive(name))
+        val result = Json.decodeFromJsonElement<String>(receiver.callJsFunctionWithResult("return docCookies.getItem({});", JsonPrimitive(name)))
         return if (result == "__COOKIE_NOT_FOUND_TOKEN__") {
             null
         } else {

@@ -394,7 +394,7 @@ open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(e
     suspend fun getValue() : String {
         //A TextArea should only ever contain a String. So using toString() here should be safe.
         // We could add some error handling here if we wanted to though.
-        return receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id).toString()
+        return receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", JsonPrimitive(element.id)).toString()
     }
     //val value get() = receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id)
 }

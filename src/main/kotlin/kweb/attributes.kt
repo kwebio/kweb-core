@@ -46,4 +46,4 @@ fun Map<String, JsonElement>.classes(classes: Iterable<String>, condition: Boole
 
 val Map<String, JsonElement>.disabled get() = this.set("disabled", JsonPrimitive(true))
 
-fun Map<String, JsonElement>.classes(vararg classes: String, onlyIf: Boolean = true): Map<String, Any> = classes(classes.asIterable(), onlyIf)
+fun Map<String, JsonElement>.classes(vararg classes: String, onlyIf: Boolean = true): Map<String, JsonElement> = classes(classes.asIterable(), onlyIf)

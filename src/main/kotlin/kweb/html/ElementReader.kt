@@ -1,5 +1,7 @@
 package kweb.html
 
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.WebBrowser
 import kweb.util.KWebDSL
@@ -19,27 +21,27 @@ open class ElementReader(protected val receiver: WebBrowser, internal val elemen
 
     suspend fun getTagName(): String {
         return receiver.callJsFunctionWithResult(
-            "return document.getElementById({}).tagName", elementId).toString()
+            "return document.getElementById({}).tagName", JsonPrimitive(elementId)).toString()
     }
 
-    suspend fun getAttributes(): Map<String, Any> {
+    suspend fun getAttributes(): Map<String, JsonElement> {
         return receiver.callJsFunctionWithResult(
-            "return document.getElementById({}).attributes", elementId) as Map<String, Any>
+            "return document.getElementById({}).attributes", JsonPrimitive(elementId)) as Map<String, JsonElement>
         //TODO we could probably use a little error handling on this cast.
     }
 
     suspend fun getAttribute(name: String): Any {
         return receiver.callJsFunctionWithResult(
-            "return document.getElementById({}).getAttribute({})", elementId, ).toString()
+            "return document.getElementById({}).getAttribute({})", JsonPrimitive(elementId), ).toString()
     }
 
     suspend fun getInnerHtml(): String {
         return receiver.callJsFunctionWithResult(
-            "return document.getElementById({}).innerHTML", elementId).toString()
+            "return document.getElementById({}).innerHTML", JsonPrimitive(elementId)).toString()
     }
 
     suspend fun getText(): String {
         return receiver.callJsFunctionWithResult(
-            "return document.getElementById({}).innerText", elementId).toString()
+            "return document.getElementById({}).innerText", JsonPrimitive(elementId)).toString()
     }
 }
