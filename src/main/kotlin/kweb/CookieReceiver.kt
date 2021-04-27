@@ -2,11 +2,13 @@ package kweb
 
 import com.github.salomonbrys.kotson.fromJson
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.util.KWebDSL
 import kweb.util.gson
 import java.time.Duration
 import java.util.*
+import kotlin.math.exp
 
 @KWebDSL
 class CookieReceiver(val receiver: WebBrowser) {
@@ -52,20 +54,17 @@ class CookieReceiver(val receiver: WebBrowser) {
     }
 
     private fun setJson(name: String, value: JsonElement, expires: Duration? = null, path: String? = null, domain: String? = null) {
-        val arguments = LinkedList<String>()
-        arguments.add(name)
-        arguments.add(value.toString())
-        if (expires != null) {
-            arguments.add(expires.seconds.toString())
-        }
-        if (path != null) {
-            arguments.add(path)
-        }
-        if (domain != null) {
-            arguments.add(domain)
-        }
+        val nameArg = JsonPrimitive(name)
+        val expiresArg = if (expires != null) JsonPrimitive(expires.seconds.toString()) else JsonNull
+        val pathArg = if (path != null) JsonPrimitive(path) else JsonNull
+        val domain = if (domain != null) JsonPrimitive(domain) else JsonNull
 
-        receiver.callJsFunction("docCookies.setItem({});", JsonPrimitive(arguments.joinToString(separator = ", ")))
+        // Calls kweb_bootstrap.js setItem function
+        //setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure)
+        //TODO this setJson function didn't have an argument for bSecure, so I decided to just explicitly pass a JsonNull,
+        //Maybe we should add a parameter to the kotlin function for bSecure?
+        receiver.callJsFunction("docCookies.setItem({});", nameArg, value, expiresArg, pathArg, domain, JsonNull)
+
     }
 
     suspend inline fun <reified V : Any> get(name: String): V? {
