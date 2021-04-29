@@ -2,9 +2,7 @@ package kweb
 
 import io.mola.galimatias.URL
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
@@ -13,9 +11,7 @@ import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
-import kweb.util.hashMapToJson
 import kweb.util.pathQueryFragment
-import kweb.util.primitiveToJson
 import kweb.util.random
 import mu.KotlinLogging
 import java.util.*
@@ -96,34 +92,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return JSFunction(stringBuilder.toString(), params.joinToString(separator = ","))
     }
 
-    private fun argumentsToJsonElement(args: Array<out Any?>) : List<JsonElement>{
-        val argList = mutableListOf<JsonElement>()
-        args.forEach {
-            if (it == null) {
-                argList.add(JsonNull)
-            } else {
-                when (it) {
-                    is String, is Int, is Boolean, is Float, is Double,
-                    is Short, is Long, is Byte, is Char -> argList.add(primitiveToJson(it))
-                    is Array<*> -> argList.add(JsonArray(it.map { arrayElement ->
-                        primitiveToJson(arrayElement, "You may only use primitives or Strings in array arguments")
-                    }))
-                    is HashMap<*, *> -> argList.add(hashMapToJson(it))
-                    is JsonElement -> argList.add(it)
-                    else -> {
-                        println("It is ${it!!::class.simpleName}")
-                        error("It is ${it!!::class.simpleName}")
-                    }
-                }
-            }
-        }
-        return argList
-    }
-
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         cachedFunctions[jsBody]?.let {
             val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, js = jsBody,
-                    arguments = argumentsToJsonElement(args))
+                    arguments = listOf(*args))
             kweb.callJs(callCachedFuncMessage, jsBody)
         } ?: run {
             val rng = Random()
@@ -134,14 +106,14 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
             val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
-                parameters = func.params, arguments = argumentsToJsonElement(args))
+                parameters = func.params, arguments = listOf(*args))
             kweb.callJs(cacheAndExecuteMessage, jsBody)
         }
     }
 
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (JsonElement) -> Unit, vararg args: JsonElement) {
         cachedFunctions[jsBody]?.let {
-            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = argumentsToJsonElement(args),
+            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
             callbackId = callbackId, js = jsBody)
             kweb.callJsWithCallback(callCachedFuncMessage, jsBody, callback)
         } ?: run {
@@ -153,7 +125,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
             val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
-                    parameters = func.params, arguments = argumentsToJsonElement(args), callbackId = callbackId)
+                    parameters = func.params, arguments = listOf(*args), callbackId = callbackId)
             kweb.callJsWithCallback(cacheAndExecuteMessage, jsBody, callback)
         }
     }

@@ -31,32 +31,6 @@ val gson = Gson()
 
 data class JsFunction(val jsId: Int, val arguments: List<JsonElement> = emptyList())
 
-fun primitiveToJson(value: Any?, errorMsg: String = "Argument is required to be String or primitive type"): JsonElement {
-    return when(value) {
-        is String -> JsonPrimitive(value)
-        is Boolean -> JsonPrimitive(value)
-        is Int -> JsonPrimitive(value)
-        is Short -> JsonPrimitive(value)
-        is Long -> JsonPrimitive(value)
-        is Float -> JsonPrimitive(value)
-        is Double -> JsonPrimitive(value)
-        is Char -> JsonPrimitive(value.toString())
-        is Byte -> JsonPrimitive(value)
-        is JsonElement -> value
-        value == null -> JsonNull
-        else -> error(errorMsg)
-    }
-}
-
-fun hashMapToJson(hashMap: HashMap<*, *>) : JsonElement {
-    val jsonHashMap = HashMap<String, JsonElement>()
-    hashMap.forEach {
-        jsonHashMap[it.key.toString()] = primitiveToJson(it.value,
-                "You may only put a String or primitive type into a hashmap used as a JS function argument")
-    }
-    return kotlinx.serialization.json.JsonObject(jsonHashMap)
-}
-
 fun <T> warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -> Unit, f: () -> T): T {
     val runningThread = Thread.currentThread()
     val watcher = scheduledExecutorService.schedule({ onBlock(runningThread) }, maxTimeMs, TimeUnit.MILLISECONDS)
