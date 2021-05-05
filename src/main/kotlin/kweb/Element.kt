@@ -90,7 +90,7 @@ open class Element(
                         JsonPrimitive(id), JsonPrimitive(name), value)
             }
             htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).attr(name, value.toString())
+                htmlDoc.getElementById(this.id).attr(name, value.content)
             }
             else -> {
                 callJsFunction("document.getElementById({}).setAttribute({}, {})",
@@ -286,7 +286,9 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
-        val setTextJS = """document.getElementById({}).textContent = {};"""
+        val setTextJS = """let id = {};
+            console.log("Trying to find " + id);
+            document.getElementById(id).textContent = {};""".trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
                 callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))

@@ -170,6 +170,7 @@ class Kweb private constructor(
         server2ClientMessage.debugToken = debugToken
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
+            println("Sending message $server2ClientMessage")
             wsClientData.send(server2ClientMessage)
         } else {
             logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
@@ -179,6 +180,7 @@ class Kweb private constructor(
             //We still need to send the Server2ClientMessage, to cache the jsCode.
             //So, we take the message, and set arguments to null, so the server knows not to run this code.
             server2ClientMessage.arguments = null
+            println("Caching message $server2ClientMessage")
             wsClientData.send(server2ClientMessage)
         }
     }
@@ -197,6 +199,7 @@ class Kweb private constructor(
         }
         server2ClientMessage.debugToken = debugToken
         wsClientData.handlers[server2ClientMessage.callbackId!!] = callback
+        println("Sending callback message $server2ClientMessage")
         wsClientData.send(server2ClientMessage)
     }
 

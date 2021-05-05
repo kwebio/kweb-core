@@ -41,7 +41,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     val browser: WebBrowser get() = parent.browser
 
-    fun element(tag: String, attributes: Map<String, JsonElement> = attr): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr): Element {
 
         val mutAttributes = HashMap(attributes)
 
@@ -55,7 +55,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
 
-        val id: String = (mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.toString())
+        val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
         when {
             parent.browser.kweb.isCatchingOutbound() -> {
@@ -66,9 +66,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let parentId = {};
                     let position = {};
                     let newEl = document.createElement(tag);
+                    console.log("Setting id = " + myId); 
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
                         if ( key !== "id") {
+                            console.log("Setting key : " + key + " and value : " attributes[key]);
                             newEl.setAttribute(key, attributes[key]);
                         }
                     }
@@ -94,7 +96,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     else -> htmlDoc.getElementById(parent.id).appendElement(tag)
                 }!!
                 for ((k, v) in mutAttributes) {
-                    jsElement.attr(k, v.toString())
+                    jsElement.attr(k, v.content)
                 }
             }
             else -> {
@@ -110,6 +112,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         newEl.setAttribute("id", myId);
                     }
                     for (const key in attributes) {
+                            console.log("Setting key : " + key + " and value : " attributes[key]);
                             newEl.setAttribute(key, attributes[key]);
                     }
                     let parentElement = document.getElementById(parentId);

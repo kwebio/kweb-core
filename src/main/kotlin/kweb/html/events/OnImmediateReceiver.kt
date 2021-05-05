@@ -3,7 +3,9 @@ package kweb.html.events
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kweb.Kweb
+import kweb.div
 import kweb.h1
+import kweb.plugins.fomanticUI.fomantic
 import kweb.util.KWebDSL
 
 @KWebDSL
@@ -17,7 +19,11 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
             if (jsFunction.arguments.isNotEmpty()) {
                 val argStrings = mutableListOf<String>()
                 for (arg in jsFunction.arguments) {
-                    argStrings.add(Json.decodeFromJsonElement<String>(arg))
+                    val argument = arg.toString()
+                    println("Argument is $argument")
+                    argStrings.add(argument)
+
+
                 }
                 immediateJs.add("cachedFunctions[${jsFunction.jsId}](${argStrings.joinToString(",")})")
             } else {
@@ -25,6 +31,7 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
             }
 
         }
+
         source.addImmediateEventCode(eventName, immediateJs.joinToString(separator = ""))
         return source
     }
@@ -130,10 +137,12 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
 fun main() {
     val server: Kweb = Kweb(port= 7660) {
         doc.body {
-            val label = h1()
-            label.text("Click Me")
-            label.onImmediate.click {
-                label.text("Clicked!")
+            div(fomantic.content) {
+                val label = h1(fomantic.ui)
+                label.text("Click Me")
+                label.onImmediate.click {
+                    label.text("Clicked!")
+                }
             }
         }
     }
