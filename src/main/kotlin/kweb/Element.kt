@@ -286,9 +286,7 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
-        val setTextJS = """let id = {};
-            console.log("Trying to find " + id);
-            document.getElementById(id).textContent = {};""".trimIndent()
+        val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
                 callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))

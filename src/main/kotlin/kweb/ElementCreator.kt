@@ -66,11 +66,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let parentId = {};
                     let position = {};
                     let newEl = document.createElement(tag);
-                    console.log("Setting id = " + myId); 
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
                         if ( key !== "id") {
-                            console.log("Setting key : " + key + " and value : " attributes[key]);
                             newEl.setAttribute(key, attributes[key]);
                         }
                     }
@@ -112,7 +110,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         newEl.setAttribute("id", myId);
                     }
                     for (const key in attributes) {
-                            console.log("Setting key : " + key + " and value : " attributes[key]);
                             newEl.setAttribute(key, attributes[key]);
                     }
                     let parentElement = document.getElementById(parentId);

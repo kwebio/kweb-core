@@ -10,8 +10,6 @@ let socket;
 
 <!-- FUNCTION CACHE PLACEHOLDER -->
 
-
-
 function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
@@ -57,7 +55,7 @@ function handleInboundMessage(msg) {
     }
 
     //if arguments is null, do not execute the function in this inbound message
-    if (args === undefined) return
+    if (args == null) return
 
     if (callbackId !== undefined) {
         try {
