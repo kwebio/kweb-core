@@ -170,7 +170,6 @@ class Kweb private constructor(
         server2ClientMessage.debugToken = debugToken
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
-            println("Sending message $server2ClientMessage")
             wsClientData.send(server2ClientMessage)
         } else {
             logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
@@ -180,7 +179,6 @@ class Kweb private constructor(
             //We still need to send the Server2ClientMessage, to cache the jsCode.
             //So, we take the message, and set arguments to null, so the server knows not to run this code.
             server2ClientMessage.arguments = null
-            println("Caching message $server2ClientMessage")
             wsClientData.send(server2ClientMessage)
         }
     }
@@ -199,7 +197,6 @@ class Kweb private constructor(
         }
         server2ClientMessage.debugToken = debugToken
         wsClientData.handlers[server2ClientMessage.callbackId!!] = callback
-        println("Sending callback message $server2ClientMessage")
         wsClientData.send(server2ClientMessage)
     }
 
@@ -302,15 +299,12 @@ class Kweb private constructor(
 
                     if (frame is Text) {
                         val message = Json.decodeFromString<Client2ServerMessage>(frame.readText())
-                        println(message)
                         logger.debug { "Message received: $message" }
                         if (message.error != null) {
                             handleError(message.error, remoteClientState)
                         } else {
                             when {
                                 message.callback != null -> {
-                                    //val resultId = message.callback.callbackId
-                                    //val result = message.callback.data
                                     val (resultId, result) = message.callback
                                     val resultHandler = remoteClientState.handlers[resultId]
                                             ?: error("No data handler for $resultId for client ${remoteClientState.id}")

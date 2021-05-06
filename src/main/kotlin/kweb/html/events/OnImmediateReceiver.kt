@@ -20,7 +20,6 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
                 val argStrings = mutableListOf<String>()
                 for (arg in jsFunction.arguments) {
                     val argument = arg.toString()
-                    println("Argument is $argument")
                     argStrings.add(argument)
 
 
