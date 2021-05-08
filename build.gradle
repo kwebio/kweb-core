@@ -45,7 +45,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.11'
     compile 'commons-io:commons-io:2.8.0'
     compile 'org.jsoup:jsoup:1.13.1'
-    compile 'com.github.kwebio:shoebox:0.4.12'
+    compile 'com.github.kwebio:shoebox:0.4.5'
 
     //////////////////////////////
     // Kotlin library dependencies
