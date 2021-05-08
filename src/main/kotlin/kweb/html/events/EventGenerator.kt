@@ -1,5 +1,6 @@
 package kweb.html.events
 
+import kotlinx.serialization.json.JsonElement
 import kweb.WebBrowser
 import java.util.*
 

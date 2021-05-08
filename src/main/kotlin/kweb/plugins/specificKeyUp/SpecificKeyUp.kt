@@ -42,7 +42,7 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
 
 fun OnReceiver<Element>.keySpecificKeyup(callback: (event: KeyboardEvent) -> Unit): Element {
     require(source.flags.contains(ENTER_PRESSED_EVENT_ATTACHED_FLAG)) { "InputElement.attachKeySpecificKeyupEvent() must be called before listening for keySpecificKeyup" }
-    return this.event("keySpecificKeyUpEvent", eventType = KeyboardEvent::class, callback = callback)
+    return this.event("keySpecificKeyUpEvent", callback = callback)
 }
 
 fun OnImmediateReceiver<Element>.keySpecificKeyup(callback: () -> Unit): Element {

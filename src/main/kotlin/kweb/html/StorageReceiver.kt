@@ -2,6 +2,7 @@ package kweb.html
 
 import com.github.salomonbrys.kotson.fromJson
 import kotlinx.serialization.json.*
+import kotlinx.serialization.serializer
 import kweb.WebBrowser
 import kweb.util.KWebDSL
 import kweb.util.gson
@@ -63,12 +64,21 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
 
     suspend inline fun <reified V : Any> get(name: String): V? {
         val result = getString(name)
+        val serializer = serializer<V>()
+        return when(result) {
+            null -> null
+            else -> Json.decodeFromString(serializer, result)
+        }
+    }
+
+    /*suspend inline fun <reified V : Any> get(name: String): V? {
+        val result = getString(name)
         return when(result) {
             null -> null
             //TODO gson usage
             else -> gson.fromJson<V>(result)
         }
-    }
+    }*/
 
     suspend fun getString(key: String): String? {
         val result = Json.decodeFromJsonElement<String>(receiver.callJsFunctionWithResult("return $obj.getItem({});", JsonPrimitive(key)))

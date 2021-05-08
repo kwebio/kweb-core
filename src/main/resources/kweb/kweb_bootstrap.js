@@ -159,7 +159,7 @@ function sendMessage(msg) {
 function callbackWs(callbackId, data) {
     var msg = JSON.stringify({
         id: kwebClientId,
-        callback: {callbackId: callbackId, data: JSON.stringify(data)}
+        callback: {callbackId: callbackId, data: data}
     });
     sendMessage(msg);
 }

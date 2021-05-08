@@ -476,7 +476,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
-        on(retrieveJs = "get_diff_changes(document.getElementById(${element.id}))").event(updateOn, Event::class) {
+        on(retrieveJs = "get_diff_changes(document.getElementById(${element.id}))").event<Event>(updateOn) {
             val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
             val diffData = Json.decodeFromString<DiffData>(diffDataJson)
             toBind.value = applyDiff(toBind.value, diffData)
