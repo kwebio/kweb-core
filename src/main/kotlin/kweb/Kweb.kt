@@ -392,7 +392,7 @@ class Kweb private constructor(
                 //We have a special case where some functions do not have jsId's. Trying to add one of those to the cache would cause problems.
                 if (deserialedMsg.jsId != null) {
                     if (!cachedIds.contains(deserialedMsg.jsId)) {
-                        val cachedFunction = """'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
+                        val cachedFunction = """${deserialedMsg.jsId} : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
                         cachedFunctions.add(cachedFunction)
                         cachedIds.add(deserialedMsg.jsId)
                     }

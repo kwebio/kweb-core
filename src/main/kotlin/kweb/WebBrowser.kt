@@ -92,14 +92,17 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return JSFunction(stringBuilder.toString(), params.joinToString(separator = ","))
     }
 
+    private fun generateCacheId() : Int {
+        return abs(random.nextInt())
+    }
+
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         cachedFunctions[jsBody]?.let {
             val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, js = jsBody,
                     arguments = listOf(*args))
             kweb.callJs(callCachedFuncMessage, jsBody)
         } ?: run {
-            val rng = Random()
-            val cacheId = rng.nextInt()
+            val cacheId = generateCacheId()
             val func = makeJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[jsBody] = cacheId
@@ -117,8 +120,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             callbackId = callbackId, js = jsBody)
             kweb.callJsWithCallback(callCachedFuncMessage, jsBody, callback)
         } ?: run {
-            val rng = Random()
-            val cacheId = rng.nextInt()
+            val cacheId = random.nextInt()
             val func = makeJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[jsBody] = cacheId
