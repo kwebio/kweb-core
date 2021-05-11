@@ -2,6 +2,8 @@ package kweb.html.events
 
 import com.github.salomonbrys.kotson.fromJson
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.serializer
 import kweb.util.KWebDSL
@@ -16,9 +18,9 @@ import kotlin.reflect.full.memberProperties
 @KWebDSL
 class OnReceiver<T : EventGenerator<T>>(internal val source: T, private val retrieveJs: String? = null) {
 
-    fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: String) -> Unit): T {
+    fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: JsonElement) -> Unit): T {
         source.addEventListener(eventName, returnEventFields = returnEventFields,
-                callback = { callback(it.toString()) }, retrieveJs = retrieveJs)
+                callback = { callback(it) }, retrieveJs = retrieveJs)
         return source
     }
 
@@ -27,9 +29,8 @@ class OnReceiver<T : EventGenerator<T>>(internal val source: T, private val retr
         val eventPropertyNames = memberProperties(U::class)
 
         val serializer = serializer<U>()
-        return event(eventName, eventPropertyNames) { propertiesAsString ->
-            //val props: U = gson.fromJson(propertiesAsString)
-            val props = Json.decodeFromString(serializer, propertiesAsString)
+        return event(eventName, eventPropertyNames) { propertiesAsElement ->
+            val props = Json.decodeFromJsonElement(serializer, propertiesAsElement)
             try {
                 callback(props)
             } catch (e: Exception) {

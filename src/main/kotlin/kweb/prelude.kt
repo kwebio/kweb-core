@@ -415,7 +415,10 @@ fun ElementCreator<Element>.label(
  */
 abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
     suspend fun getValue():String = element.
-    callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { it.toString() }, JsonPrimitive(id))
+    callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { when (it) {
+        is JsonPrimitive -> it.content
+        else -> error("Needs to be JsonPrimitive")
+    } }, JsonPrimitive(id))
         ?: error("Not sure why .evaluate() would return null")
 
     fun setValue(newValue: String) = element.browser.callJsFunction("document.getElementById({}).value = {};",
@@ -473,7 +476,6 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
     fun setValue(toBind: KVar<String>, updateOn: String = "input") {
         setValue(toBind as KVal<String>)
-
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
         on(retrieveJs = "get_diff_changes(document.getElementById(${element.id}))").event<Event>(updateOn) {

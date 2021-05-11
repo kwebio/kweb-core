@@ -42,7 +42,7 @@ open class Element(
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
      */
-    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: JsonElement): O? {
+    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (JsonElement) -> O, vararg args: JsonElement): O? {
         val result = browser.callJsFunctionWithResult(js, *args)
         return outputMapper.invoke(result)
     }
@@ -356,7 +356,7 @@ open class Element(
         browser.callJsFunction(wrappedJS, JsonPrimitive(id), JsonPrimitive(eventName))
     }
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Element {
         val callbackId = abs(random.nextInt())
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
