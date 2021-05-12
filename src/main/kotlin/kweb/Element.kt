@@ -1,8 +1,7 @@
 package kweb
 
 import com.github.salomonbrys.kotson.toJson
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.*
 import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -370,10 +369,15 @@ open class Element(
             document.getElementById({}).addEventListener({}, function(event) {
                 callbackWs({}, $eventObject);
             });
+            return true;
         """.trimIndent()
+        //Adding event listener was causing the client to send a Client2ServerMessage with a null data field. This caused an error
+        //We make the client return true to avoid that issue.
+        //Then on the server we only invoke our callback on eventObjects, by checking that payload is a JsonObject.
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
-            callback.invoke(payload)
-
+            if (payload is JsonObject) {
+                callback.invoke(payload)
+            }
         }, JsonPrimitive(id), JsonPrimitive(eventName), JsonPrimitive(callbackId))
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)

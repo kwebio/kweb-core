@@ -27,8 +27,7 @@ class FileFormInput {
     fun isMultiSelect(isMultiple: Boolean): Unit = inputElement.callJsFunction(
             "document.getElementById({}).multiple = {}", JsonPrimitive(inputElement.id), JsonPrimitive(isMultiple))
     fun onFileSelect(onFileSelectCallback: () -> Unit) {
-        inputElement.on.change { evt ->
-            logger.info(evt.retrieved)
+        inputElement.on.change { _ ->
             onFileSelectCallback()
         }
     }

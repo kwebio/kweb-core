@@ -3,9 +3,7 @@ package kweb
 import io.ktor.routing.*
 import io.mola.galimatias.URL
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.ElementReader
 import kweb.html.HeadElement
@@ -478,9 +476,10 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
         setValue(toBind as KVal<String>)
         // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
         //       entire value each time PARTICULARLY for large inputs
-        on(retrieveJs = "get_diff_changes(document.getElementById(${element.id}))").event<Event>(updateOn) {
-            val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
-            val diffData = Json.decodeFromString<DiffData>(diffDataJson)
+        on(retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))").event<Event>(updateOn) {
+            val diffDataJson = it.retrieved //?: error("No diff data was retrieved")
+            val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
+            //val diffData = Json.decodeFromJsonElement<DiffData>(diffDataJson)
             toBind.value = applyDiff(toBind.value, diffData)
         }
     }

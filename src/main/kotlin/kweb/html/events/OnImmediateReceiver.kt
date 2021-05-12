@@ -2,11 +2,10 @@ package kweb.html.events
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
-import kweb.Kweb
-import kweb.button
-import kweb.div
-import kweb.h1
+import kweb.*
 import kweb.plugins.fomanticUI.fomantic
+import kweb.state.KVar
+import kweb.state.render
 import kweb.util.KWebDSL
 
 @KWebDSL
