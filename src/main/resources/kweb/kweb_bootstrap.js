@@ -181,14 +181,14 @@ class DiffPatchData {
     }
 }
 
-//Used by setValue() in prelude.kt to compare 2 strings and return the difference between the 2.
+//Used by setValue() in prelude.kt to return the difference between 2 strings
 function get_diff_changes(htmlInputElement) {
-    let newString = htmlInputElement.value;//reads the new string value from data-attribute data-vale
+    let newString = htmlInputElement.value;//reads the new string value from data-attribute data-value
     let oldString = htmlInputElement.dataset.previousInput;//reads the oldString from the data-attribute data-previous-input
 
     savePreviousInput(newString, htmlInputElement)//put the newString into the data attribute so it can be used as the oldString the next time this method is run
 
-    if (oldString === undefined) {//the first time this is run previous-input should be undefined so we just return the new string
+    if (oldString == undefined) {//the first time this is run previous-input should be undefined so we just return the new string
         return new DiffPatchData(0, 0, newString);
     }
     let commonPrefixEnd = 0;
