@@ -10,7 +10,8 @@ buildscript {
 
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version '1.4.32'
+    id "org.jetbrains.kotlin.jvm" version '1.4.30'
+    id 'maven'
     id 'org.jetbrains.dokka' version '1.4.20'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.github.ben-manes.versions" version "0.36.0"
@@ -20,7 +21,7 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.5.3'
+    ktor_version = '1.5.2'
 }
 
 group 'com.github.kwebio'
@@ -28,9 +29,10 @@ version '0.8.9'
 
 repositories {
     mavenCentral()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
+    maven { url "http://dl.bintray.com/kotlin/ktor" }
     maven { url 'https://jitpack.io' }
     maven { url 'https://plugins.gradle.org/m2' }
+    jcenter()
 }
 
 test {
@@ -49,12 +51,11 @@ dependencies {
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.4.32"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.4.30"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.30"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.2'
     compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC'
-    compile 'org.jetbrains.kotlin:kotlin-reflect:1.4.32'
 
     ////////////////////
     // Ktor dependencies
@@ -97,4 +98,13 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+shadowJar {
+    archiveBaseName = project.name
+    archiveClassifier = 'all'
+    manifest {
+        attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
+    }
+    mergeServiceFiles()
 }

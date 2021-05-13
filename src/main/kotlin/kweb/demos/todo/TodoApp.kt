@@ -21,7 +21,7 @@ class TodoApp {
 
     private val logger = KotlinLogging.logger {}
 
-    val state = ToDoState()
+    val state = ToDoState(Paths.get("data"))
     val plugins = listOf(fomanticUIPlugin)
     val server: Kweb
 
