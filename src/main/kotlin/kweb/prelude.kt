@@ -4,6 +4,7 @@ import io.ktor.routing.*
 import io.mola.galimatias.URL
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.ElementReader
 import kweb.html.HeadElement
@@ -454,33 +455,35 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
      */
 
     @Serializable
-    data class DiffData(val prefixEnd: Int, val postFixOffset: Int, val diff: String)
+    data class DiffData(val prefixEndIndex: Int, val postfixOffset: Int, val diffString: String)
 
     private fun applyDiff(oldString: String, diffData: DiffData) : String {
         return when {
-            diffData.postFixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
+            diffData.postfixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
                 // repeated when you append text to the beginning of the text or the end of the text
-                oldString.substring(0, diffData.prefixEnd) + diffData.diff
+                oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString
             }
-            diffData.prefixEnd == 0 -> {
-                diffData.diff + oldString.substring(oldString.length - diffData.postFixOffset)
+            diffData.prefixEndIndex == 0 -> {
+                diffData.diffString + oldString.substring(oldString.length - diffData.postfixOffset)
             }
             else -> {
-                oldString.substring(0, diffData.prefixEnd) + diffData.diff +
-                        oldString.substring(oldString.length - diffData.postFixOffset)
+                oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString +
+                        oldString.substring(oldString.length - diffData.postfixOffset)
             }
         }
     }
 
     fun setValue(toBind: KVar<String>, updateOn: String = "input") {
         setValue(toBind as KVal<String>)
-        // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
-        //       entire value each time PARTICULARLY for large inputs
+
         on(retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))").event<Event>(updateOn) {
-            val diffDataJson = it.retrieved //?: error("No diff data was retrieved")
-            val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
-            //val diffData = Json.decodeFromJsonElement<DiffData>(diffDataJson)
-            toBind.value = applyDiff(toBind.value, diffData)
+            //TODO, this check shouldn't be necessary. It should be impossible for get_diff_changes() to return a null,
+            //but we had a null check previously, so I went ahead and added it.
+            if (it.retrieved != JsonNull) {
+                val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
+                val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
+                toBind.value = applyDiff(toBind.value, diffData)
+            }
         }
     }
 }

@@ -2,6 +2,8 @@ package kweb.state.render
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
 import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
@@ -78,7 +80,9 @@ class RenderCleanupTestApp {
                             div(fomantic.ui.buttons) {
                                 button(fomantic.ui.button, type = ButtonType.submit).text("Save").
                                     on("document.getElementById(${ta.id})").click { event ->
-                                    taskList.value = event.retrieved!!.split('\n').map { it.trim() }.toList()
+                                    //TODO, I'm not sure about this change
+                                    taskList.value = Json.decodeFromJsonElement<List<String>>(event.retrieved!!)
+                                    //taskList.value = event.retrieved!!//.split('\n').map { it.trim() }.toList()
                                     editing.value = false
                                 }
                                 button(fomantic.ui.button, type = ButtonType.submit).text("Cancel").
