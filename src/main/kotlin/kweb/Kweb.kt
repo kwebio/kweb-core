@@ -1,6 +1,5 @@
 package kweb
 
-import com.github.salomonbrys.kotson.fromJson
 import com.google.common.cache.CacheBuilder
 import io.ktor.application.*
 import io.ktor.features.*
@@ -17,7 +16,6 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -36,9 +34,6 @@ import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.collections.component1
-import kotlin.collections.component2
 import kotlin.math.abs
 
 private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
@@ -278,13 +273,6 @@ class Kweb private constructor(
         application.routing {
             webSocket("/ws") {
                 listenForWebsocketConnection()
-            }
-        }
-
-        GlobalScope.launch {
-            while (true) {
-                delay(Duration.ofMinutes(1))
-                cleanUpOldClientStates()
             }
         }
     }

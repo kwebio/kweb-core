@@ -480,7 +480,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
             //TODO, this check shouldn't be necessary. It should be impossible for get_diff_changes() to return a null,
             //but we had a null check previously, so I went ahead and added it.
             if (it.retrieved != JsonNull) {
-                val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
+                val diffDataJson = it.retrieved
                 val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
                 toBind.value = applyDiff(toBind.value, diffData)
             }
