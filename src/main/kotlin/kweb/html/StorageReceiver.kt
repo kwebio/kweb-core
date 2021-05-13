@@ -12,48 +12,43 @@ import kweb.util.KWebDSL
 class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     private val obj = "${type.name}Storage"
 
-    operator fun set(name: String, value: String) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: String) {
+        set(key, JsonPrimitive(value))
     }
 
-    operator fun set(name: String, value: Int) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: Int) {
+        set(key, JsonPrimitive(value))
     }
 
-    operator fun set(name: String, value: Float) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: Float) {
+        set(key, JsonPrimitive(value))
     }
 
-    operator fun set(name: String, value: Double) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: Double) {
+        set(key, JsonPrimitive(value))
     }
 
-    operator fun set(name: String, value: Short) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: Short) {
+        set(key, JsonPrimitive(value))
     }
 
-    operator fun set(name: String, value: Long) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: Long) {
+        set(key, JsonPrimitive(value))
     }
 
-    operator fun set(name: String, value: Boolean) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: Boolean) {
+        set(key, JsonPrimitive(value))
     }
 
-    operator fun set(name: String, value: Char) {
-        setJson(name, JsonPrimitive(value.toString()))
+    operator fun set(key: String, value: Char) {
+        set(key, JsonPrimitive(value.toString()))
     }
 
-    operator fun set(name: String, value: Byte) {
-        setJson(name, JsonPrimitive(value))
+    operator fun set(key: String, value: Byte) {
+        set(key, JsonPrimitive(value))
     }
 
-    //I don't know if we actually need this one, but it seems like it might be useful at some point.
-    operator fun set(name: String, value: JsonElement) {
-        setJson(name, value)
-    }
-
-    fun setJson(key: String, value: JsonElement) {
+    operator fun set(key: String, value: JsonElement) {
         if (value == JsonNull || value.toString() == "") {
             throw IllegalArgumentException("$obj cannot store the value \"\"")
         }
@@ -68,15 +63,6 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
             else -> Json.decodeFromString(serializer, result)
         }
     }
-
-    /*suspend inline fun <reified V : Any> get(name: String): V? {
-        val result = getString(name)
-        return when(result) {
-            null -> null
-            //TODO gson usage
-            else -> gson.fromJson<V>(result)
-        }
-    }*/
 
     suspend fun getString(key: String): String? {
         val result = Json.decodeFromJsonElement<String>(receiver.callJsFunctionWithResult("return $obj.getItem({});", JsonPrimitive(key)))

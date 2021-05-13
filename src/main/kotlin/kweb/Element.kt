@@ -1,6 +1,5 @@
 package kweb
 
-import com.github.salomonbrys.kotson.toJson
 import kotlinx.serialization.json.*
 import kweb.html.ElementReader
 import kweb.html.events.Event
@@ -365,7 +364,7 @@ open class Element(
             There is no way to reference that event object from the server, so we use eventObject, and insert properly
             formatted JavaScript directly in the code sent to the client.
         */
-        val js = """
+        val addEventJs = """
             document.getElementById({}).addEventListener({}, function(event) {
                 callbackWs({}, $eventObject);
             });
@@ -374,7 +373,9 @@ open class Element(
         //Adding event listener was causing the client to send a Client2ServerMessage with a null data field. This caused an error
         //We make the client return true to avoid that issue.
         //Then on the server we only invoke our callback on eventObjects, by checking that payload is a JsonObject.
-        browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
+        //TODO we may want to fix this issue. It will probably require adding a new parameter to Server2ClientMessage
+        //that will tell the client to run addEventJs, without expecting a return.
+        browser.callJsFunctionWithCallback(addEventJs, callbackId, callback = { payload ->
             if (payload is JsonObject) {
                 callback.invoke(payload)
             }
