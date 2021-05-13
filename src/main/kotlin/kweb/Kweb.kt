@@ -1,6 +1,5 @@
 package kweb
 
-import com.github.salomonbrys.kotson.fromJson
 import com.google.common.cache.CacheBuilder
 import io.ktor.application.*
 import io.ktor.features.*
@@ -17,6 +16,10 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kweb.client.*
 import kweb.client.ClientConnection.Caching
 import kweb.config.KwebConfiguration
@@ -31,8 +34,10 @@ import java.io.Closeable
 import java.time.Duration
 import java.time.Instant
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.abs
+
+private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
+private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
 
 private val logger = KotlinLogging.logger {}
 
@@ -190,7 +195,7 @@ class Kweb private constructor(
     }
 
     fun callJsWithCallback(server2ClientMessage: Server2ClientMessage,
-                           javascript: String, callback: (Any) -> Unit) {
+                           javascript: String, callback: (JsonElement) -> Unit) {
         //TODO I could use some help improving this error message
         require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
         val wsClientData = clientState.getIfPresent(server2ClientMessage.yourId)
@@ -273,7 +278,7 @@ class Kweb private constructor(
     }
 
     private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
-        val hello = gson.fromJson<Client2ServerMessage>((incoming.receive() as Text).readText())
+        val hello = Json.decodeFromString<Client2ServerMessage>((incoming.receive() as Text).readText())
 
         if (hello.hello == null) {
             error("First message from client isn't 'hello'")
@@ -297,7 +302,7 @@ class Kweb private constructor(
                     logger.debug { "Message received from client" }
 
                     if (frame is Text) {
-                        val message = gson.fromJson<Client2ServerMessage>(frame.readText())
+                        val message = Json.decodeFromString<Client2ServerMessage>(frame.readText())
                         logger.debug { "Message received: $message" }
                         if (message.error != null) {
                             handleError(message.error, remoteClientState)
@@ -307,7 +312,7 @@ class Kweb private constructor(
                                     val (resultId, result) = message.callback
                                     val resultHandler = remoteClientState.handlers[resultId]
                                             ?: error("No data handler for $resultId for client ${remoteClientState.id}")
-                                    resultHandler(result ?: "")
+                                    resultHandler(result)
                                 }
                                 message.historyStateChange != null -> {
 
@@ -368,7 +373,11 @@ class Kweb private constructor(
             for (plugin in plugins) {
                 //this code block looks a little funny now, but I still think moving the message creation out of Kweb.callJs() was the right move
                 val js = plugin.executeAfterPageCreation()
-                callJs(Server2ClientMessage(yourId = kwebSessionId, js = js), javascript = js)
+                //A plugin with an empty js string was breaking functionality.
+                if (js != "") {
+                    val pluginMessage = Server2ClientMessage(yourId = kwebSessionId, js = js)
+                    callJs(pluginMessage, js)
+                }
             }
 
             webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
@@ -382,17 +391,12 @@ class Kweb private constructor(
             val cachedFunctions = mutableListOf<String>()
             val cachedIds = mutableListOf<Int>()
             for (msg in initialMessages) {
-                val deserialedMsg = gson.fromJson<Server2ClientMessage>(msg)
+                val deserialedMsg = Json.decodeFromString<Server2ClientMessage>(msg)
 
-                //For some reason the final msg in initialMessages looks like this,
-                //{"yourId":"gkUd4k","debugToken":"1446aab757c06931","js":""}
-                //I'm not sure what the point of this message is, and I can't find what is sending it.
-                //But, it causes problems if we try to add that to the cache, so we just make sure the jsId isn't null
-                //This is a useful check anyway, because we do let Server2ClientMessages have null jsId's, and trying to add
-                //a function from one of those messages wouldn't work.
+                //We have a special case where some functions do not have jsId's. Trying to add one of those to the cache would cause problems.
                 if (deserialedMsg.jsId != null) {
                     if (!cachedIds.contains(deserialedMsg.jsId)) {
-                        val cachedFunction = """'${deserialedMsg.jsId}' : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
+                        val cachedFunction = """${deserialedMsg.jsId} : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
                         cachedFunctions.add(cachedFunction)
                         cachedIds.add(deserialedMsg.jsId)
                     }
@@ -457,7 +461,7 @@ class Kweb private constructor(
                     yourId = client.id,
                     js = "window.location.reload(true);",
                     debugToken = null)
-            client.clientConnection.send(message.toJson())
+            client.clientConnection.send(Json.encodeToString(message))
         }
     }
 

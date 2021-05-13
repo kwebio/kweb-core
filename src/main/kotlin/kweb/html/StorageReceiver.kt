@@ -1,10 +1,9 @@
 package kweb.html
 
-import com.github.salomonbrys.kotson.fromJson
+import kotlinx.serialization.json.*
+import kotlinx.serialization.serializer
 import kweb.WebBrowser
 import kweb.util.KWebDSL
-import kweb.util.gson
-import kweb.util.toJson
 
 /**
  * Created by ian on 1/14/17.
@@ -13,27 +12,60 @@ import kweb.util.toJson
 class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     private val obj = "${type.name}Storage"
 
-    operator fun set(name: String, value: Any) {
-        setString(name, value.toJson())
+    operator fun set(key: String, value: String) {
+        set(key, JsonPrimitive(value))
     }
 
-    fun setString(key: String, value: String) {
-        if (value == "") {
+    operator fun set(key: String, value: Int) {
+        set(key, JsonPrimitive(value))
+    }
+
+    operator fun set(key: String, value: Float) {
+        set(key, JsonPrimitive(value))
+    }
+
+    operator fun set(key: String, value: Double) {
+        set(key, JsonPrimitive(value))
+    }
+
+    operator fun set(key: String, value: Short) {
+        set(key, JsonPrimitive(value))
+    }
+
+    operator fun set(key: String, value: Long) {
+        set(key, JsonPrimitive(value))
+    }
+
+    operator fun set(key: String, value: Boolean) {
+        set(key, JsonPrimitive(value))
+    }
+
+    operator fun set(key: String, value: Char) {
+        set(key, JsonPrimitive(value.toString()))
+    }
+
+    operator fun set(key: String, value: Byte) {
+        set(key, JsonPrimitive(value))
+    }
+
+    operator fun set(key: String, value: JsonElement) {
+        if (value == JsonNull || value.toString() == "") {
             throw IllegalArgumentException("$obj cannot store the value \"\"")
         }
-        receiver.callJsFunction("{}.setItem({}, {});", obj, key.toJson(), value.toJson())
+        receiver.callJsFunction("$obj.setItem({}, {});", JsonPrimitive(key), value)
     }
 
     suspend inline fun <reified V : Any> get(name: String): V? {
         val result = getString(name)
+        val serializer = serializer<V>()
         return when(result) {
             null -> null
-            else -> gson.fromJson<V>(result)
+            else -> Json.decodeFromString(serializer, result)
         }
     }
 
     suspend fun getString(key: String): String? {
-        val result = receiver.callJsFunctionWithResult("return $obj.getItem({});", key.toJson())
+        val result = Json.decodeFromJsonElement<String>(receiver.callJsFunctionWithResult("return $obj.getItem({});", JsonPrimitive(key)))
         return when (result) {
             "" -> null
             else -> result.toString()
@@ -41,7 +73,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     }
 
     fun remove(key: String) {
-        receiver.callJsFunction("{}.removeItem({});", obj, key.toJson())
+        receiver.callJsFunction("$obj.removeItem({});", JsonPrimitive(key))
     }
 
 }

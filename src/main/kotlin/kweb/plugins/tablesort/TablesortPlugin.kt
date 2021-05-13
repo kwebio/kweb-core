@@ -53,7 +53,7 @@ fun tablesortSample() {
                         tr().new {
                             td().text(person)
                             td().text("$age")
-                            td(mapOf("data-sort-value" to net)).text("$net")
+                            //td(mapOf("data-sort-value" to net)).text("$net")
                         }
 
                 tbody().new {

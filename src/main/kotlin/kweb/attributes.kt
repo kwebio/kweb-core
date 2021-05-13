@@ -1,22 +1,25 @@
 package kweb
 
+ import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonNull
+
 /**
  * Created by ian on 1/14/17.
  */
 
-val attr: MutableMap<String, Any> get() = AttributeBuilder()
+val attr: MutableMap<String, JsonPrimitive> get() = AttributeBuilder()
 
-open class AttributeBuilder : MutableMap<String, Any> by LinkedHashMap()
+open class AttributeBuilder : MutableMap<String, JsonPrimitive> by LinkedHashMap()
 
-fun Map<String, Any>.set(key: String, value: Any?): Map<String, Any> {
-    if (value != null) {
+fun Map<String, JsonPrimitive>.set(key: String, value: JsonPrimitive): Map<String, JsonPrimitive> {
+    if (value != JsonNull) {
         if (this is AttributeBuilder) {
             put(key, value)
             return this
         } else {
             val clonedAttributes = AttributeBuilder()
             clonedAttributes.putAll(this)
-            clonedAttributes.put(key, value)
+            clonedAttributes.put(key, JsonPrimitive(value.content))
             return clonedAttributes
         }
     } else {
@@ -24,22 +27,33 @@ fun Map<String, Any>.set(key: String, value: Any?): Map<String, Any> {
     }
 }
 
-fun Map<String, Any>.id(id: String): Map<String, Any> = set("id", id)
+fun Map<String, JsonPrimitive>.id(id: String): Map<String, JsonPrimitive> = set("id", JsonPrimitive(id))
 
-fun Map<String, Any>.classes(classes: Iterable<String>, condition: Boolean = true): Map<String, Any> {
+fun Map<String, JsonPrimitive>.classes(classes: Iterable<String>, condition: Boolean = true): Map<String, JsonPrimitive> {
     if (condition) {
-        val classAttributeValue = get("class")
-        val existing: List<String> = when (classAttributeValue) {
+        var existing: List<String>? = null
+        val classAttributeValue = if (get("class") != null) {
+            get("class")!!.content
+        } else {
+            ""
+        }
+        existing = when (classAttributeValue) {
+            "" -> listOf()
             is String -> classAttributeValue.split(' ')
             else -> listOf()
         }
         // TODO: This is inefficient when classes() is called multiple times
-        return set("class", (existing + classes).joinToString(separator = " "))
+        val classString = if (existing != null) {
+            JsonPrimitive((existing + classes).joinToString(separator = " "))
+        } else {
+            JsonPrimitive(classes.joinToString(separator = ""))
+        }
+        return set("class", classString)
     } else {
         return this
     }
 }
 
-val Map<String, Any>.disabled get() = this.set("disabled", true)
+val Map<String, JsonPrimitive>.disabled get() = this.set("disabled", JsonPrimitive(true))
 
-fun Map<String, Any>.classes(vararg classes: String, onlyIf: Boolean = true): Map<String, Any> = classes(classes.asIterable(), onlyIf)
+fun Map<String, JsonPrimitive>.classes(vararg classes: String, onlyIf: Boolean = true): Map<String, JsonPrimitive> = classes(classes.asIterable(), onlyIf)

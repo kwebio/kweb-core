@@ -3,8 +3,9 @@ package kweb
 import io.ktor.routing.*
 import io.mola.galimatias.URL
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
@@ -23,8 +24,8 @@ import kotlin.collections.set
  */
 
 fun ElementCreator<HeadElement>.title(
-    attributes: Map<String, Any> = emptyMap(),
-    new: (ElementCreator<TitleElement>.() -> Unit)? = null
+        attributes: Map<String, JsonPrimitive> = emptyMap(),
+        new: (ElementCreator<TitleElement>.() -> Unit)? = null
 ): TitleElement {
     return TitleElement(element("title", attributes)).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
@@ -34,7 +35,7 @@ fun ElementCreator<HeadElement>.title(
 open class ULElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.ul(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<ULElement>.() -> Unit)? = null
 ): ULElement {
     return ULElement(element("ul", attributes)).also {
@@ -45,7 +46,7 @@ fun ElementCreator<Element>.ul(
 open class OLElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.ol(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<OLElement>.() -> Unit)? = null
 ): OLElement {
     return OLElement(element("ol", attributes)).also {
@@ -56,7 +57,7 @@ fun ElementCreator<Element>.ol(
 open class LIElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.li(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<LIElement>.() -> Unit)? = null
 ): LIElement {
     return LIElement(element("li", attributes)).also {
@@ -70,7 +71,7 @@ enum class ButtonType {
 }
 
 fun ElementCreator<Element>.button(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     type: ButtonType? = ButtonType.button,
     autofocus: Boolean? = null,
     new: (ElementCreator<ButtonElement>.() -> Unit)? = null,
@@ -78,8 +79,8 @@ fun ElementCreator<Element>.button(
     return ButtonElement(
         element(
             "button", attributes
-                .set("type", type?.name)
-                .set("autofocus", autofocus)
+                .set("type", JsonPrimitive(type?.name))
+                .set("autofocus", JsonPrimitive(autofocus))
         )
     ).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
@@ -89,7 +90,7 @@ fun ElementCreator<Element>.button(
 open class SpanElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.span(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<SpanElement>.() -> Unit)? = null
 ): SpanElement {
     return SpanElement(element("span", attributes)).also {
@@ -100,7 +101,7 @@ fun ElementCreator<Element>.span(
 open class DivElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.div(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<DivElement>.() -> Unit)? = null
 ): DivElement {
     return DivElement(element("div", attributes)).also {
@@ -111,7 +112,7 @@ fun ElementCreator<Element>.div(
 open class IElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.i(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<IElement>.() -> Unit)? = null
 ): IElement {
     return IElement(element("i", attributes)).also {
@@ -122,7 +123,7 @@ fun ElementCreator<Element>.i(
 open class FormElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.form(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<FormElement>.() -> Unit)? = null
 ): FormElement {
     return FormElement(element("form", attributes)).also {
@@ -133,11 +134,11 @@ fun ElementCreator<Element>.form(
 open class AElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.a(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     href: String? = null,
     new: (ElementCreator<AElement>.() -> Unit)? = null
 ): AElement {
-    return AElement(element("a", attributes.set("href", href))).also {
+    return AElement(element("a", attributes.set("href", JsonPrimitive(href)))).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
     }
 }
@@ -146,7 +147,7 @@ fun ElementCreator<Element>.a(
 open class OptionElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.option(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<OptionElement>.() -> Unit)? = null
 ): OptionElement {
     return OptionElement(element("option", attributes)).also {
@@ -157,7 +158,7 @@ fun ElementCreator<Element>.option(
 open class H1Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h1(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<H1Element>.() -> Unit)? = null
 ): H1Element {
     return H1Element(element("h1", attributes)).also {
@@ -168,7 +169,7 @@ fun ElementCreator<Element>.h1(
 open class H2Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h2(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<H2Element>.() -> Unit)? = null
 ): H2Element {
     return H2Element(element("h2", attributes)).also {
@@ -179,7 +180,7 @@ fun ElementCreator<Element>.h2(
 open class H3Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h3(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<H3Element>.() -> Unit)? = null
 ): H3Element {
     return H3Element(element("h3", attributes)).also {
@@ -190,7 +191,7 @@ fun ElementCreator<Element>.h3(
 open class H4Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h4(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<H4Element>.() -> Unit)? = null
 ): H4Element {
     return H4Element(element("h4", attributes)).also {
@@ -201,7 +202,7 @@ fun ElementCreator<Element>.h4(
 open class H5Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h5(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<H5Element>.() -> Unit)? = null
 ): H5Element {
     return H5Element(element("h5", attributes)).also {
@@ -212,7 +213,7 @@ fun ElementCreator<Element>.h5(
 open class PElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.p(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<PElement>.() -> Unit)? = null
 ): PElement {
     return PElement(element("p", attributes)).also {
@@ -223,7 +224,7 @@ fun ElementCreator<Element>.p(
 open class NavElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.nav(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<NavElement>.() -> Unit)? = null
 ): NavElement {
     return NavElement(element("nav", attributes)).also {
@@ -234,7 +235,7 @@ fun ElementCreator<Element>.nav(
 open class SectionElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.section(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<SectionElement>.() -> Unit)? = null
 ): SectionElement {
     return SectionElement(element("section", attributes)).also {
@@ -245,7 +246,7 @@ fun ElementCreator<Element>.section(
 open class ImageElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.img(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<ImageElement>.() -> Unit)? = null
 ): ImageElement {
     return ImageElement(element("img", attributes)).also {
@@ -256,7 +257,7 @@ fun ElementCreator<Element>.img(
 open class CanvasElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.canvas(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     width: Int, height: Int,
     new: (ElementCreator<CanvasElement>.() -> Unit)? = null
 ): CanvasElement {
@@ -264,7 +265,7 @@ fun ElementCreator<Element>.canvas(
         element(
             "canvas",
             attributes
-                .set("width", width).set("height", height)
+                .set("width", JsonPrimitive(width)).set("height", JsonPrimitive(height))
         )
     ).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
@@ -274,7 +275,7 @@ fun ElementCreator<Element>.canvas(
 open class BrElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.br(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<BrElement>.() -> Unit)? = null
 ): BrElement {
     return BrElement(element("br", attributes)).also {
@@ -285,16 +286,16 @@ fun ElementCreator<Element>.br(
 open class MetaElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.meta(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     name: String, content: String, httpEquiv: String? = null, charset: String? = null,
     new: (ElementCreator<MetaElement>.() -> Unit)? = null
 ): MetaElement {
     return MetaElement(
         element(
-            "meta", attributes.set("name", name)
-                .set("content", content)
-                .set("http-equiv", httpEquiv)
-                .set("charset", charset)
+            "meta", attributes.set("name", JsonPrimitive(name))
+                .set("content", JsonPrimitive(content))
+                .set("http-equiv", JsonPrimitive(httpEquiv))
+                .set("charset", JsonPrimitive(charset))
         )
     ).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
@@ -302,15 +303,17 @@ fun ElementCreator<Element>.meta(
 }
 
 open class InputElement(override val element: Element) : ValueElement(element) {
-    fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", checked) else removeAttribute("checked")
+    fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", JsonPrimitive(checked)) else removeAttribute("checked")
 
 
-    fun select() = element.callJsFunction("document.getElementById({}).select();", id)
+    fun select() = element.callJsFunction("document.getElementById({}).select();", JsonPrimitive(id))
 
     fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
-            "document.getElementById({}).setSelectionRange({}, {});", id, start, end)
+            "document.getElementById({}).setSelectionRange({}, {});",
+            JsonPrimitive(id), JsonPrimitive(start), JsonPrimitive(end))
 
-    fun setReadOnly(ro: Boolean) = element.callJsFunction("document.getElementById({}).readOnly = {};", id, ro)
+    fun setReadOnly(ro: Boolean) = element.callJsFunction("document.getElementById({}).readOnly = {};",
+            JsonPrimitive(id), JsonPrimitive(ro))
 }
 
 enum class InputType {
@@ -318,7 +321,7 @@ enum class InputType {
 }
 
 fun ElementCreator<Element>.input(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     type: InputType? = null,
     name: String? = null,
     initialValue: String? = null,
@@ -328,11 +331,11 @@ fun ElementCreator<Element>.input(
 ): InputElement {
     return InputElement(
         element(
-            "input", attributes.set("type", type?.name)
-                .set("name", name)
-                .set("value", initialValue)
-                .set("placeholder", placeholder)
-                .set("size", size)
+            "input", attributes.set("type", JsonPrimitive(type?.name))
+                .set("name", JsonPrimitive(name))
+                .set("value", JsonPrimitive(initialValue))
+                .set("placeholder", JsonPrimitive(initialValue))
+                .set("size", JsonPrimitive(initialValue))
         )
     ).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
@@ -340,15 +343,15 @@ fun ElementCreator<Element>.input(
 }
 
 fun ElementCreator<Element>.textArea(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     rows: Int? = null, cols: Int? = null, required: Boolean? = null,
     new: (ElementCreator<TextAreaElement>.() -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(
         element(
-            "textArea", attributes.set("rows", rows)
-                .set("cols", cols)
-                .set("required", required)
+            "textArea", attributes.set("rows", JsonPrimitive(rows))
+                .set("cols", JsonPrimitive(cols))
+                .set("required", JsonPrimitive(required))
         )
     ).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
@@ -358,15 +361,15 @@ fun ElementCreator<Element>.textArea(
 open class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
 
 fun ElementCreator<Element>.select(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     name: String? = null, required: Boolean? = null,
     new: (ElementCreator<SelectElement>.() -> Unit)? = null
 ): SelectElement {
     return SelectElement(
         element(
             "select", attributes
-                .set("name", name)
-                .set("required", required)
+                .set("name", JsonPrimitive(name))
+                .set("required", JsonPrimitive(required))
         )
     ).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
@@ -378,7 +381,7 @@ open class TextAreaElement(parent: Element) : ValueElement(parent) {
 }
 
 fun ElementCreator<Element>.textArea(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<TextAreaElement>.() -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(element("textArea", attributes)).also {
@@ -390,7 +393,7 @@ open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(e
     suspend fun getValue() : String {
         //A TextArea should only ever contain a String. So using toString() here should be safe.
         // We could add some error handling here if we wanted to though.
-        return receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id).toString()
+        return receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", JsonPrimitive(element.id)).toString()
     }
     //val value get() = receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id)
 }
@@ -398,7 +401,7 @@ open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(e
 open class LabelElement(wrapped: Element) : Element(wrapped)
 
 fun ElementCreator<Element>.label(
-    attributes: Map<String, Any> = emptyMap(),
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<LabelElement>.() -> Unit)? = null
 ): LabelElement {
     return LabelElement(element("label", attributes)).also {
@@ -411,10 +414,14 @@ fun ElementCreator<Element>.label(
  */
 abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
     suspend fun getValue():String = element.
-    callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { it.toString() }, id)
+    callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { when (it) {
+        is JsonPrimitive -> it.content
+        else -> error("Needs to be JsonPrimitive")
+    } }, JsonPrimitive(id))
         ?: error("Not sure why .evaluate() would return null")
 
-    fun setValue(newValue: String) = element.browser.callJsFunction("document.getElementById({}).value = {};", element.id, newValue)
+    fun setValue(newValue: String) = element.browser.callJsFunction("document.getElementById({}).value = {};",
+            JsonPrimitive(element.id), JsonPrimitive(newValue))
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)
@@ -448,20 +455,20 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
      */
 
     @Serializable
-    data class DiffData(val prefixEnd: Int, val postFixOffset: Int, val diff: String)
+    data class DiffData(val prefixEndIndex: Int, val postfixOffset: Int, val diffString: String)
 
     private fun applyDiff(oldString: String, diffData: DiffData) : String {
         return when {
-            diffData.postFixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
+            diffData.postfixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
                 // repeated when you append text to the beginning of the text or the end of the text
-                oldString.substring(0, diffData.prefixEnd) + diffData.diff
+                oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString
             }
-            diffData.prefixEnd == 0 -> {
-                diffData.diff + oldString.substring(oldString.length - diffData.postFixOffset)
+            diffData.prefixEndIndex == 0 -> {
+                diffData.diffString + oldString.substring(oldString.length - diffData.postfixOffset)
             }
             else -> {
-                oldString.substring(0, diffData.prefixEnd) + diffData.diff +
-                        oldString.substring(oldString.length - diffData.postFixOffset)
+                oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString +
+                        oldString.substring(oldString.length - diffData.postfixOffset)
             }
         }
     }
@@ -469,12 +476,14 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     fun setValue(toBind: KVar<String>, updateOn: String = "input") {
         setValue(toBind as KVal<String>)
 
-        // TODO: Would be really nice if it just did a diff on the value and sent that, rather than the
-        //       entire value each time PARTICULARLY for large inputs
-        on(retrieveJs = "get_diff_changes(document.getElementById(${element.id}))").event(updateOn, Event::class) {
-            val diffDataJson = it.retrieved ?: error("No diff data was retrieved")
-            val diffData = Json.decodeFromString<DiffData>(diffDataJson)
-            toBind.value = applyDiff(toBind.value, diffData)
+        on(retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))").event<Event>(updateOn) {
+            //TODO, this check shouldn't be necessary. It should be impossible for get_diff_changes() to return a null,
+            //but we had a null check previously, so I went ahead and added it.
+            if (it.retrieved != JsonNull) {
+                val diffDataJson = it.retrieved
+                val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
+                toBind.value = applyDiff(toBind.value, diffData)
+            }
         }
     }
 }
@@ -670,7 +679,7 @@ fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCr
  *
  * @sample fileReaderSample
  */
-fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, Any> = attr): FileFormInput {
+fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, JsonPrimitive> = attr): FileFormInput {
     val inputElement = input(attributes, InputType.file, name, initialValue, size, placeholder)
     val formInput = FileFormInput()
     formInput.setInputElement(inputElement)

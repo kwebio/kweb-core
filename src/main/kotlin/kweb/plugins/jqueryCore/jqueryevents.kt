@@ -1,10 +1,11 @@
 package kweb.plugins.jqueryCore
 
-import com.github.salomonbrys.kotson.fromJson
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.serializer
 import kweb.html.events.MouseEvent
-import kweb.util.gson
 import kweb.util.random
-import kweb.util.toJson
 import java.util.*
 import kotlin.reflect.full.memberProperties
 
@@ -13,21 +14,23 @@ import kotlin.reflect.full.memberProperties
  */
 
 open class JQueryOnReceiver(val parent: JQueryReceiver) {
-    fun event(event: String, returnEventFields: Set<String> = Collections.emptySet(), callback: (String) -> Unit): JQueryReceiver {
+    fun event(event: String, returnEventFields: Set<String> = Collections.emptySet(), callback: (JsonElement) -> Unit): JQueryReceiver {
         val callbackId = Math.abs(random.nextInt())
         val eventObject = "{" + returnEventFields.map { "\"$it\" : event.$it" }.joinToString(separator = ", ") + "}"
-        val js = "${parent.selectorExpression}.on(${event.toJson()}, function(event) {callbackWs($callbackId, $eventObject);})"
+        val js = "${parent.selectorExpression}.on(${JsonPrimitive(event)}, function(event) {callbackWs({}, $eventObject);})"
         parent.webBrowser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
-            callback.invoke(payload.toString())
-        })
+            callback.invoke(payload)
+        }, JsonPrimitive(callbackId))
         return parent
     }
 
     inline fun <reified T : Any> event(eventName: String, crossinline callback: (T) -> Unit): JQueryReceiver {
         // TODO: Should probably cache this rather than do the reflection every time
         val eventPropertyNames = T::class.memberProperties.map { it.name }.toSet()
-        event(eventName, eventPropertyNames) { propertiesAsString ->
-            val props: T = gson.fromJson(propertiesAsString)
+
+        val deserializer = serializer<T>()
+        event(eventName, eventPropertyNames) { propertiesAsElement ->
+            val props: T = Json.decodeFromJsonElement(deserializer, propertiesAsElement)
             callback(props)
         }
         return parent

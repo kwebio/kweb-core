@@ -1,5 +1,8 @@
 package kweb
 
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
@@ -38,7 +41,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     val browser: WebBrowser get() = parent.browser
 
-    fun element(tag: String, attributes: Map<String, Any> = attr): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr): Element {
 
         val mutAttributes = HashMap(attributes)
 
@@ -52,7 +55,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
 
-        val id: String = (mutAttributes.computeIfAbsent("id") { "K" + browser.generateId() }.toString())
+        val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
         when {
             parent.browser.kweb.isCatchingOutbound() -> {
@@ -77,7 +80,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position ?: -1)
+                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
+                        JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
             }
             htmlDoc != null -> {
                 val jsElement = when (parent) {
@@ -90,11 +94,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     else -> htmlDoc.getElementById(parent.id).appendElement(tag)
                 }!!
                 for ((k, v) in mutAttributes) {
-                    if (v is Boolean) {
-                        jsElement.attr(k, v)
-                    } else {
-                        jsElement.attr(k, v.toString())
-                    }
+                    jsElement.attr(k, v.content)
                 }
             }
             else -> {
@@ -120,7 +120,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.insertBefore(newEl, parentElement.children[position]);
                     }
                 """.trimIndent()
-                parent.callJsFunction(createElementJs, tag, mutAttributes, id, parent.id, position)
+                parent.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
+                        JsonPrimitive(parent.id), JsonPrimitive(parent.id))
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)

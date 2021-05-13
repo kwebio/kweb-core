@@ -3,6 +3,8 @@ package kweb.html
 import com.github.salomonbrys.kotson.toJson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -46,7 +48,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     }
 
     fun execCommand(command: String) {
-        receiver.callJsFunction("document.execCommand({});", command)
+        receiver.callJsFunction("document.execCommand({});", JsonPrimitive(command))
     }
 
     /**
@@ -71,12 +73,12 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
             });
         """.trimIndent()
         GlobalScope.launch {
-            receiver.callJsFunctionWithResult(wrappedJS, eventName.toJson())
+            receiver.callJsFunctionWithResult(wrappedJS, JsonPrimitive(eventName))
         }
     }
 
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Document {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Document {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
@@ -87,7 +89,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         """
         receiver.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }, eventName.toJson(), callbackId, eventObject)
+        }, JsonPrimitive(eventName), JsonPrimitive(callbackId), JsonPrimitive(eventObject))
         return this
     }
 

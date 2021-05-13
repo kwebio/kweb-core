@@ -1,5 +1,6 @@
 package kweb.html.style
 
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 
 /**
@@ -8,11 +9,11 @@ import kweb.Element
 
 class StyleReceiver(private val parent: Element) {
     fun setDisplay(value: DisplayValues) {
-        parent.callJsFunction("document.getElementById({}).style.display = {}", parent.id, value)
+        parent.callJsFunction("document.getElementById({}).style.display = {}", JsonPrimitive(parent.id), JsonPrimitive(value.toString()))
     }
 
     fun setWidth(value: String) {
-        parent.callJsFunction("document.getElementById({}).style.width = {}", parent.id, value)
+        parent.callJsFunction("document.getElementById({}).style.width = {}", JsonPrimitive(parent.id), JsonPrimitive(value))
     }
 
     fun remove() {

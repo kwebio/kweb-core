@@ -2,6 +2,7 @@ package kweb.html.fileUpload
 
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.util.random
 import mu.KotlinLogging
@@ -22,12 +23,11 @@ class FileFormInput {
     }
 
     fun setAccept(acceptedTypes: String): Unit = inputElement.callJsFunction(
-            """document.getElementById({}).accept = {};""", inputElement.id, acceptedTypes)
+            """document.getElementById({}).accept = {};""", JsonPrimitive(inputElement.id), JsonPrimitive(acceptedTypes))
     fun isMultiSelect(isMultiple: Boolean): Unit = inputElement.callJsFunction(
-            "document.getElementById({}).multiple = {}", inputElement.id, isMultiple )
+            "document.getElementById({}).multiple = {}", JsonPrimitive(inputElement.id), JsonPrimitive(isMultiple))
     fun onFileSelect(onFileSelectCallback: () -> Unit) {
-        inputElement.on.change { evt ->
-            logger.info(evt.retrieved)
+        inputElement.on.change { _ ->
             onFileSelectCallback()
         }
     }
@@ -47,7 +47,7 @@ class FileFormInput {
         inputElement.browser.callJsFunctionWithCallback(js, callbackId, callback = { result ->
             logger.info("Result is $result")
             onFileRetrieveCallback(Json.decodeFromString(FileUpload.serializer(), result.toString()))
-        }, inputElement.id, callbackId)
+        }, JsonPrimitive(inputElement.id), JsonPrimitive(callbackId))
         inputElement.creator?.onCleanup(true) {
             inputElement.browser.removeCallback(callbackId)
         }

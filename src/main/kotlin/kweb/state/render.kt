@@ -1,5 +1,6 @@
 package kweb.state
 
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
@@ -19,7 +20,7 @@ private val logger = KotlinLogging.logger {}
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
     container: ElementCreator<*>.() -> Element
-        = { span().setAttributeRaw("style", "display: contents;") },
+        = { span().setAttributeRaw("style", JsonPrimitive("display: contents;")) },
     block: ElementCreator<Element>.(T) -> Unit
 ) {
 

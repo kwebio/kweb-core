@@ -1,6 +1,6 @@
 package kweb
 
-import com.github.salomonbrys.kotson.toJson
+import kotlinx.serialization.json.*
 import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -31,7 +31,7 @@ open class Element(
      * foundation upon which most other DOM modification functions in this class
      * are based.
      */
-    fun callJsFunction(js: String, vararg args: Any?) {
+    fun callJsFunction(js: String, vararg args: JsonElement) {
         browser.callJsFunction(js, *args)
     }
 
@@ -40,7 +40,7 @@ open class Element(
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
      */
-    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (Any) -> O, vararg args: Any?): O? {
+    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (JsonElement) -> O, vararg args: JsonElement): O? {
         val result = browser.callJsFunctionWithResult(js, *args)
         return outputMapper.invoke(result)
     }
@@ -80,30 +80,28 @@ open class Element(
      *
      * Will be ignored if `value` is `null`.
      */
-    fun setAttributeRaw(name: String, value: Any?): Element {
-        if (value != null) {
-            val htmlDoc = browser.htmlDocument.get()
-            when {
-                browser.kweb.isCatchingOutbound() -> {
-                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            id, name, value)
-                }
-                htmlDoc != null -> {
-                    htmlDoc.getElementById(this.id).attr(name, value.toString())
-                }
-                else -> {
-                    callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                            id, name, value)
-                }
+    fun setAttributeRaw(name: String, value: JsonPrimitive): Element {
+        val htmlDoc = browser.htmlDocument.get()
+        when {
+            browser.kweb.isCatchingOutbound() -> {
+                callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                        JsonPrimitive(id), JsonPrimitive(name), value)
             }
-            if (name.equals("id", ignoreCase = true)) {
-                this.id = value.toString()
+            htmlDoc != null -> {
+                htmlDoc.getElementById(this.id).attr(name, value.content)
             }
+            else -> {
+                callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                        JsonPrimitive(id), JsonPrimitive(name), value)
+            }
+        }
+        if (name.equals("id", ignoreCase = true)) {
+            this.id = value.toString()
         }
         return this
     }
 
-    fun setAttribute(name: String, oValue: KVal<out Any>): Element {
+    fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
         setAttributeRaw(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
             setAttributeRaw(name, newValue)
@@ -114,13 +112,24 @@ open class Element(
         return this
     }
 
+    fun setAttribute(name: String, oValue: KVar<String>) : Element {
+        setAttributeRaw(name, JsonPrimitive(oValue.value))
+        val handle = oValue.addListener { _, newValue ->
+            setAttributeRaw(name, JsonPrimitive(newValue))
+        }
+        this.creator?.onCleanup(true) {
+            oValue.removeListener(handle)
+        }
+        return this
+    }
+
     fun removeAttribute(name: String): Element {
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction("document.getElementById({}).removeAttribute", id, name)
+                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
             }
             else -> {
-                callJsFunction("document.getElementById({}).removeAttribute", id, name)
+                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
             }
 
         }
@@ -135,7 +144,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                callJsFunction("document.getElementById({}).innerHTML = {}", id, html)
+                callJsFunction("document.getElementById({}).innerHTML = {}", JsonPrimitive(id), JsonPrimitive(html))
             }
         }
         return this
@@ -165,7 +174,7 @@ open class Element(
     fun classes(vararg value: String) = setClasses(*value)
 
     fun setClasses(vararg value: String): Element {
-        setAttributeRaw("class", value.joinToString(separator = " "))
+        setAttributeRaw("class", JsonPrimitive(value.joinToString(separator = " ")))
         return this
     }
 
@@ -181,7 +190,7 @@ open class Element(
                     let el = document.getElementById(id);
                     if (el.classList) el.classList.remove(className);
                     else if (hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), id, class_)
+                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
             }
         }
         return this
@@ -202,7 +211,7 @@ open class Element(
                         var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
                         el.className = el.className.replace(reg, " ");
                     }
-                """.trimIndent(), id, class_)
+                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
             }
         }
         return this
@@ -219,7 +228,7 @@ open class Element(
     }
 
     fun disable(): Element {
-        setAttributeRaw("disabled", true)
+        setAttributeRaw("disabled", JsonPrimitive(true))
         return this
     }
 
@@ -244,7 +253,7 @@ open class Element(
                             element.removeChild(element.firstChild);
                         }
                     }
-                """.trimIndent(), id)
+                """.trimIndent(), JsonPrimitive(id))
             }
         }
 
@@ -263,7 +272,7 @@ open class Element(
                 callJsFunction("""
                         let element = document.getElementById({});
                         element.removeChild(element.children[{}]);
-                """.trimIndent(), id, position)
+                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(position))
             }
         }
         return this
@@ -275,17 +284,17 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
-        val setTextJS = """document.getElementById({}).textContent = {};"""
+        val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction(setTextJS, id, value)
+                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             else -> {
-                callJsFunction(setTextJS, id, value)
+                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
             }
         }
         return this
@@ -324,14 +333,14 @@ open class Element(
         """.trimIndent()
         when {
             browser.kweb.isCatchingOutbound() -> {
-                callJsFunction(createTextNodeJs, value, id)
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             else -> {
-                callJsFunction(createTextNodeJs, value, id)
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
             }
         }
         return this
@@ -342,14 +351,10 @@ open class Element(
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
             });""".trimIndent()
-        browser.callJsFunction(wrappedJS, id, eventName)
-        /*browser.callJsFunctionWithResult(wrappedJS, id, eventName)*/
-        //TODO this function used to call evaluate, which had a return type. I have it set to use callJsFunction
-        //which doesn't return anything. I don't know if I'm missing something and we should use callJsFunctionWithResult,
-        //or it was a mistake to use evaluate() instead of execute() here. It seems to work just using callJsFunction()
+        browser.callJsFunction(wrappedJS, JsonPrimitive(id), JsonPrimitive(eventName))
     }
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (Any) -> Unit): Element {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Element {
         val callbackId = abs(random.nextInt())
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
@@ -359,15 +364,22 @@ open class Element(
             There is no way to reference that event object from the server, so we use eventObject, and insert properly
             formatted JavaScript directly in the code sent to the client.
         */
-        val js = """
+        val addEventJs = """
             document.getElementById({}).addEventListener({}, function(event) {
                 callbackWs({}, $eventObject);
             });
+            return true;
         """.trimIndent()
-        browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
-            callback.invoke(payload)
-
-        }, id, eventName, callbackId)
+        //Adding event listener was causing the client to send a Client2ServerMessage with a null data field. This caused an error
+        //We make the client return true to avoid that issue.
+        //Then on the server we only invoke our callback on eventObjects, by checking that payload is a JsonObject.
+        //TODO we may want to fix this issue. It will probably require adding a new parameter to Server2ClientMessage
+        //that will tell the client to run addEventJs, without expecting a return.
+        browser.callJsFunctionWithCallback(addEventJs, callbackId, callback = { payload ->
+            if (payload is JsonObject) {
+                callback.invoke(payload)
+            }
+        }, JsonPrimitive(id), JsonPrimitive(eventName), JsonPrimitive(callbackId))
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }
@@ -379,7 +391,7 @@ open class Element(
         callJsFunction("""
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
-        """.trimIndent(), id)
+        """.trimIndent(), JsonPrimitive(id))
     }
 
     fun deleteIfExists() {
@@ -389,10 +401,10 @@ open class Element(
                 let element = document.getElementById(id);
                 element.parentNode.removeChild(element);
             }
-        """.trimIndent(), id)
+        """.trimIndent(), JsonPrimitive(id))
     }
 
-    fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", spellcheck)
+    fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", JsonPrimitive(spellcheck))
 
     val style get() = StyleReceiver(this)
 

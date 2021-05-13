@@ -3,6 +3,7 @@ package kweb
 import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kotlintest.shouldBe
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.state.KVar
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -62,7 +63,7 @@ class CacheJSApp {
         doc.body.new {
             button = button()
             button.text("Alert")
-            button.setAttributeRaw("autofocus", true)
+            button.setAttributeRaw("autofocus", JsonPrimitive(true))
             button.on.click {
             }
         }

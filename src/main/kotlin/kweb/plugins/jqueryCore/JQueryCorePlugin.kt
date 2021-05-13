@@ -1,5 +1,6 @@
 package kweb.plugins.jqueryCore
 
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.plugins.KwebPlugin
 import kweb.plugins.staticFiles.ResourceFolder
@@ -30,5 +31,5 @@ val jqueryCore = JQueryCorePlugin()
  * @sample table().executeOnSelf(".tablesort()")
  */
 fun Element.executeOnSelf(js: String) {
-    callJsFunction("$('#' + {})$js", id)
+    callJsFunction("$('#' + {})$js", JsonPrimitive(id))
 }

@@ -1,9 +1,9 @@
 package kweb.plugins.jqueryCore
 
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.WebBrowser
 import kweb.util.KWebDSL
-import kweb.util.toJson
 
 /**
  * Created by ian on 2/22/17.
@@ -14,7 +14,7 @@ import kweb.util.toJson
 // I just use jquery()
 fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
     assertPluginLoaded(JQueryCorePlugin::class)
-    return JQueryReceiver(this.browser, "$(${selector.toJson()})")
+    return JQueryReceiver(this.browser, "$(${JsonPrimitive(selector)})")
 }
 
 // And here we can implement all of the useful JQuery functions
