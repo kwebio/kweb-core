@@ -1,14 +1,9 @@
 package kweb
 
-import com.github.salomonbrys.kotson.fromJson
 import kotlinx.serialization.json.*
-import kotlinx.serialization.json.Json.Default.decodeFromJsonElement
 import kotlinx.serialization.serializer
 import kweb.util.KWebDSL
-import kweb.util.gson
 import java.time.Duration
-import java.util.*
-import kotlin.math.exp
 
 @KWebDSL
 class CookieReceiver(val receiver: WebBrowser) {

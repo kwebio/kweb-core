@@ -1,8 +1,7 @@
 package kweb.util
 
-import com.google.gson.Gson
 import io.mola.galimatias.URL
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonElement
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
@@ -26,8 +25,6 @@ fun createNonce(length: Int = 6): String {
 val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledThreadPool(5)
 
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
-
-val gson = Gson()
 
 data class JsFunction(val jsId: Int, val arguments: List<JsonElement> = emptyList())
 
