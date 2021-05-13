@@ -46,6 +46,7 @@ dependencies {
     compile 'commons-io:commons-io:2.8.0'
     compile 'org.jsoup:jsoup:1.13.1'
     compile 'com.github.kwebio:shoebox:0.4.5'
+    implementation 'com.google.guava:guava:30.1.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
@@ -55,7 +56,7 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-RC'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.0-RC'
     compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.5.0'
+    //implementation 'org.jetbrains.kotlin:kotlin-reflect:1.5.0'
 
     ////////////////////
     // Ktor dependencies
