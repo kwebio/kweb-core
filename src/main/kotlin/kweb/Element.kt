@@ -101,6 +101,15 @@ open class Element(
         return this
     }
 
+    fun setAttributeRaw(name : String, value : String)
+        = setAttributeRaw(name, JsonPrimitive(value))
+
+    fun setAttributeRaw(name : String, value : Boolean)
+        = setAttributeRaw(name, JsonPrimitive(value))
+
+    fun setAttributeRaw(name : String, value : Number)
+        = setAttributeRaw(name, JsonPrimitive(value))
+
     fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
         setAttributeRaw(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
