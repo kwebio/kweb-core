@@ -1,6 +1,7 @@
 package kweb.html.events
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromJsonElement
 import kweb.*
 import kweb.plugins.fomanticUI.fomantic
@@ -138,11 +139,6 @@ fun main() {
                 label.text("Click Me")
                 label.onImmediate.click {
                     label.text("Clicked!")
-                }
-                val clickButton = button(fomantic.ui.button).text("Click").apply {
-                    on.click {
-                        label.text("Button was clicked")
-                    }
                 }
             }
         }

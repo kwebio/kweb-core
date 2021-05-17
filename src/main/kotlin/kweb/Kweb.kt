@@ -186,10 +186,9 @@ class Kweb private constructor(
             logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
             val jsFunction = JsFunction(server2ClientMessage.jsId!!, server2ClientMessage.arguments!!)
             outboundMessageCatcher.add(jsFunction)
-            //If we have an outboundMessageCatcher, we do not want to execute the jsCode in this message.
-            //We still need to send the Server2ClientMessage, to cache the jsCode.
-            //So, we take the message, and set arguments to null, so the server knows not to run this code.
-            server2ClientMessage.arguments = null
+            //Setting `shouldExecute` to false tells the server not to add this jsFunction to the client's cache,
+            //but to not actually run the code. This is used to pre-cache functions on initial page render.
+            server2ClientMessage.shouldExecute = false
             wsClientData.send(server2ClientMessage)
         }
     }
