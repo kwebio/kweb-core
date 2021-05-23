@@ -317,8 +317,11 @@ class Kweb private constructor(
 
                                 }
                                 message.terminateConnection -> {
-                                    logger.debug { "Notified of client termination for ${message.id}, invalidating cached ClientState" }
-                                    clientState.invalidate(message.id)
+                                    // This was disabled because apparently it was causing premature deletion of client state
+                                    // in Firefox per https://github.com/kwebio/kweb-core/issues/199#issuecomment-846631791
+
+                                    // logger.debug { "Notified of client termination for ${message.id}, invalidating cached ClientState" }
+                                    // clientState.invalidate(message.id)
                                 }
 
                             }
