@@ -29,7 +29,7 @@ version '0.9.3'
 
 repositories {
     mavenCentral()
-    maven { url "http://dl.bintray.com/kotlin/ktor" }
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
     maven { url 'https://jitpack.io' }
     maven { url 'https://plugins.gradle.org/m2' }
     jcenter()
