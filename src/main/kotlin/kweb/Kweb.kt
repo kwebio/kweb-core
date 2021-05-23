@@ -316,6 +316,11 @@ class Kweb private constructor(
                                 message.historyStateChange != null -> {
 
                                 }
+                                message.terminateConnection -> {
+                                    logger.debug { "Notified of client termination for ${message.id}, invalidating cached ClientState" }
+                                    clientState.invalidate(message.id)
+                                }
+
                             }
                         }
                     }

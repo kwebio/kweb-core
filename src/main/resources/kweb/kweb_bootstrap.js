@@ -147,21 +147,25 @@ function sendMessage(msg) {
         console.debug("Sending WebSocket message", msg);
         socket.send(msg);
     } else {
-        /*console.debug(
-            "Queueing WebSocket message as connection isn't established",
-            msg
-        );*/
         preWSMsgQueue.push(msg);
     }
 }
 
 function callbackWs(callbackId, data) {
-    var msg = JSON.stringify({
+    const msg = JSON.stringify({
         id: kwebClientId,
         callback: {callbackId: callbackId, data: data}
     });
     sendMessage(msg);
 }
+
+window.addEventListener("beforeunload", function (event) {
+    const msg = JSON.stringify({
+        id: kwebClientId,
+        terminateConnection: true
+    });
+    sendMessage(msg);
+})
 
 /*
  * Utility functions

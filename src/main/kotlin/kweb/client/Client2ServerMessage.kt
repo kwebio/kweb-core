@@ -10,6 +10,7 @@ data class Client2ServerMessage(
         val hello: Boolean? = true,
         val error: ErrorMessage? = null,
         val callback: C2SCallback? = null,
+        val terminateConnection : Boolean = false,
         val historyStateChange: C2SHistoryStateChange? = null
 ) {
 
