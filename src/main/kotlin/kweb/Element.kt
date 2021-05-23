@@ -197,8 +197,8 @@ open class Element(
                     let id = {};
                     let className = {};
                     let el = document.getElementById(id);
-                    if (el.classList) el.classList.remove(className);
-                    else if (hasClass(el, className)) el.className += " " + className;
+                    if (el.classList) el.classList.add(className);
+                    else if (!hasClass(el, className)) el.className += " " + className;
                 """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
             }
         }
