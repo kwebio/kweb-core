@@ -334,8 +334,8 @@ fun ElementCreator<Element>.input(
             "input", attributes.set("type", JsonPrimitive(type?.name))
                 .set("name", JsonPrimitive(name))
                 .set("value", JsonPrimitive(initialValue))
-                .set("placeholder", JsonPrimitive(initialValue))
-                .set("size", JsonPrimitive(initialValue))
+                .set("placeholder", JsonPrimitive(placeholder))
+                .set("size", JsonPrimitive(size))
         )
     ).also {
         if (new != null) new(ElementCreator(parent = it, position = null))
