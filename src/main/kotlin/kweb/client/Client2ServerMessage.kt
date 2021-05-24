@@ -6,12 +6,12 @@ import kotlinx.serialization.json.JsonNull
 
 @Serializable
 data class Client2ServerMessage(
-        val id: String,
-        val hello: Boolean? = true,
-        val error: ErrorMessage? = null,
-        val callback: C2SCallback? = null,
-        val terminateConnection : Boolean = false,
-        val historyStateChange: C2SHistoryStateChange? = null
+    val id: String,
+    val hello: Boolean? = true,
+    val error: ErrorMessage? = null,
+    val callback: C2SCallback? = null,
+    val keepalive : Boolean = false,
+    val historyStateChange: C2SHistoryStateChange? = null
 ) {
 
     @Serializable

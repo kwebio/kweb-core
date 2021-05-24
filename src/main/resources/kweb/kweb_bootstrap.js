@@ -159,13 +159,15 @@ function callbackWs(callbackId, data) {
     sendMessage(msg);
 }
 
-window.addEventListener("beforeunload", function (event) {
+function sendKeepalive() {
     const msg = JSON.stringify({
         id: kwebClientId,
-        terminateConnection: true
+        keepalive: true
     });
     sendMessage(msg);
-})
+}
+
+setInterval(sendKeepalive, 60*1000);
 
 /*
  * Utility functions

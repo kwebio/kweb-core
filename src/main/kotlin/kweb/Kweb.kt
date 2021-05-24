@@ -297,11 +297,19 @@ class Kweb private constructor(
 
         try {
             for (frame in incoming) {
+
+                logger.debug { "WebSocket frame of type ${frame.frameType} received" }
+
+                // Retrieve the clientState so that it doesn't expire, replace it if it
+                // has expired.
+                clientState.get(hello.id) { remoteClientState }
+
                 try {
                     logger.debug { "Message received from client" }
 
                     if (frame is Text) {
                         val message = Json.decodeFromString<Client2ServerMessage>(frame.readText())
+
                         logger.debug { "Message received: $message" }
                         if (message.error != null) {
                             handleError(message.error, remoteClientState)
@@ -316,12 +324,8 @@ class Kweb private constructor(
                                 message.historyStateChange != null -> {
 
                                 }
-                                message.terminateConnection -> {
-                                    // This was disabled because apparently it was causing premature deletion of client state
-                                    // in Firefox per https://github.com/kwebio/kweb-core/issues/199#issuecomment-846631791
-
-                                    // logger.debug { "Notified of client termination for ${message.id}, invalidating cached ClientState" }
-                                    // clientState.invalidate(message.id)
+                                message.keepalive -> {
+                                    logger.debug { "keepalive received from client ${hello.id}" }
                                 }
 
                             }

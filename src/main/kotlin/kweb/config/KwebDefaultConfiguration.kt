@@ -13,5 +13,5 @@ internal object KwebDefaultConfiguration : KwebConfiguration() {
 
     override val clientStateTimeout: Duration =
             Accessor.getProperty("kweb.client.state.timeout")?.let { Duration.parse(it) }
-                    ?: Duration.ofHours(4)
+                    ?: Duration.ofMinutes(5)
 }
