@@ -25,7 +25,7 @@ ext {
 }
 
 group 'com.github.kwebio'
-version '0.9.7'
+version '0.9.9'
 
 repositories {
     mavenCentral()
@@ -41,7 +41,6 @@ test {
 }
 
 dependencies {
-    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile 'org.apache.commons:commons-lang3:3.11'
     compile 'commons-io:commons-io:2.8.0'
     compile 'org.jsoup:jsoup:1.13.1'

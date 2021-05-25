@@ -1,6 +1,5 @@
 package kweb.html
 
-import com.github.salomonbrys.kotson.toJson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonElement
