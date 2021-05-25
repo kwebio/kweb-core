@@ -121,7 +121,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     }
                 """.trimIndent()
                 parent.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
-                        JsonPrimitive(parent.id), JsonPrimitive(parent.id))
+                        JsonPrimitive(parent.id), JsonPrimitive(position))
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
