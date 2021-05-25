@@ -7,9 +7,9 @@ package kweb.util
  * [.apply]. The order of tokens supplied in the constructor
  * corresponds to the order of strings supplied in apply().
  *
- * The io.kweb.util.Template will api your string into an executable stack, which
+ * The io.kweb.util.Template will compile your string into an executable stack, which
  * generates output with extreme efficiency; the only string-matching performed
- * is during io.kweb.util.Template api, and it processes all tokens in a single,
+ * is during io.kweb.util.Template compile, and it processes all tokens in a single,
  * efficient iteration of the template String.
  *
  * This ensures an absolute minimum of processing, and allows large templates
@@ -42,7 +42,7 @@ class Template(template: String, vararg replaceables: String) : Stack("") {
     /**
      * Translates a template string into a stack of .toStringable() nodes.
      */
-    private fun api(template: String, replaceables: Array<out String>) {
+    private fun compile(template: String, replaceables: Array<out String>) {
         var numLive = 0
         // These are the only two arrays created by the io.kweb.util.Template
         val tokenPositions = IntArray(replaceables.size)
@@ -116,7 +116,7 @@ class Template(template: String, vararg replaceables: String) : Stack("") {
          * A simple adaptation of the quicksort algorithm; the only difference is that
          * the values of the array being sorted are pointers to a separate array.
          *
-         * This method is only performed once per api,
+         * This method is only performed once per compile,
          * and then we just keep the pointers sorted as we go.
          *
          * @param pointers
@@ -142,12 +142,12 @@ class Template(template: String, vararg replaceables: String) : Stack("") {
     }
 
     init {
-        api(template, replaceables)
+        compile(template, replaceables)
     }
 }
 
 /**
- * This is the base stack object used in the apid io.kweb.util.Template.
+ * This is the base stack object used in the compiled io.kweb.util.Template.
  *
  * This superclass is used only for the head and tail node, which allows us to
  * limit the number of null checks by ensuring regular nodes never have null pointers.
