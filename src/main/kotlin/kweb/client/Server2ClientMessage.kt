@@ -22,6 +22,11 @@ import kotlinx.serialization.json.JsonElement
 @SerialName("Server2ClientMessage")
 data class Server2ClientMessage(
         val yourId: String,
+        val functionCalls : List<FunctionCall>
+)
+
+@Serializable
+data class FunctionCall(
         var debugToken: String? = null,
         val jsId: Int? = null,
         val js: String? = null,
