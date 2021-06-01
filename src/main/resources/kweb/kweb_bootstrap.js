@@ -13,65 +13,69 @@ let socket;
 function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
-    const debugToken = msg["debugToken"];
-    if (kwebClientId != yourId) {
-        console.error(
-            "Received message from incorrect clientId, was " +
-            yourId +
-            ", should be " +
-            kwebClientId
-        );
-    }
+    const funcCalls = msg["functionCalls"]
+    for (let funcCall in funcCalls) {
+        const funcCall = msg["functionCall"]
+        const debugToken = funcCall["debugToken"];
+        if (kwebClientId != yourId) {
+            console.error(
+                "Received message from incorrect clientId, was " +
+                yourId +
+                ", should be " +
+                kwebClientId
+            );
+        }
 
-    let func;
-    let js;
-    const args = msg["arguments"];
-    const cacheId = msg["jsId"];
-    const callbackId = msg["callbackId"];
+        let func;
+        let js;
+        const args = funcCall["arguments"];
+        const cacheId = funcCall["jsId"];
+        const callbackId = funcCall["callbackId"];
 
-    if (cacheId !== undefined) {
-        if (cachedFunctions[cacheId] !== undefined) {
-            func = cachedFunctions[cacheId];
+        if (cacheId !== undefined) {
+            if (cachedFunctions[cacheId] !== undefined) {
+                func = cachedFunctions[cacheId];
+            } else {
+                const params = funcCall["parameters"];
+                js = funcCall["js"];
+                if (params !== undefined) {
+                    func = new Function(params, js);
+                } else {
+                    func = new Function(js);
+                }
+                cachedFunctions[cacheId] = func;
+            }
         } else {
-            const params = msg["parameters"];
-            js = msg["js"];
+            //This is a special case that doesn't bother reading the cache, or trying to cache the function.
+            //It will just run the javascript supplied to it. This special case is currently only used by Kweb.refreshPages()
+            js = funcCall["js"];
+            const params = funcCall["parameters"];
             if (params !== undefined) {
                 func = new Function(params, js);
             } else {
                 func = new Function(js);
             }
-            cachedFunctions[cacheId] = func;
         }
-    } else {
-        //This is a special case that doesn't bother reading the cache, or trying to cache the function.
-        //It will just run the javascript supplied to it. This special case is currently only used by Kweb.refreshPages()
-        js = msg["js"];
-        const params = msg["parameters"];
-        if (params !== undefined) {
-            func = new Function(params, js);
+
+        if (funcCall["shouldExecute"] === false) return
+
+        if (callbackId !== undefined) {
+            try {
+                const data = func.apply(this, args)
+                console.debug("Evaluated [ " + func.toString() + "]", data);
+                const callback = {callbackId: callbackId, data: data};
+                const message = {id: kwebClientId, callback: callback};
+                sendMessage(JSON.stringify(message));
+            } catch (err) {
+                debugErr(debugToken, err, "Error Evaluating `" + func.toString() + "`: " + err);
+            }
         } else {
-            func = new Function(js);
-        }
-    }
-
-    if (msg["shouldExecute"] === false) return
-
-    if (callbackId !== undefined) {
-        try {
-            const data = func.apply(this, args)
-            console.debug("Evaluated [ " + func.toString() + "]", data);
-            const callback = {callbackId: callbackId, data: data};
-            const message = {id: kwebClientId, callback: callback};
-            sendMessage(JSON.stringify(message));
-        } catch (err) {
-            debugErr(debugToken, err, "Error Evaluating `" + func.toString() + "`: " + err);
-        }
-    } else {
-        try {
-            func.apply(this, args);
-            console.debug("Executed Javascript", func.toString());
-        } catch (err) {
-            debugErr(debugToken, err, "Error Executing `" + func.toString() + "`: " + err);
+            try {
+                func.apply(this, args);
+                console.debug("Executed Javascript", func.toString());
+            } catch (err) {
+                debugErr(debugToken, err, "Error Executing `" + func.toString() + "`: " + err);
+            }
         }
     }
 }
