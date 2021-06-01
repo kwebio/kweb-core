@@ -3,6 +3,7 @@ package kweb.client
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
+import java.lang.reflect.Constructor
 
 /**
  * Server2client message
@@ -23,7 +24,10 @@ import kotlinx.serialization.json.JsonElement
 data class Server2ClientMessage(
         val yourId: String,
         val functionCalls : List<FunctionCall>
-)
+) {
+    constructor(yourId : String, functionCall : FunctionCall) : this(yourId, listOf(functionCall))
+    constructor(yourId : String, vararg args : FunctionCall) : this(yourId, listOf(*args))
+}
 
 @Serializable
 data class FunctionCall(
