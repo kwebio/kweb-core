@@ -29,7 +29,7 @@ import kotlin.reflect.jvm.jvmName
 
 private val logger = KotlinLogging.logger {}
 
-class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
+class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
 
     private val idCounter = AtomicInteger(0)
 

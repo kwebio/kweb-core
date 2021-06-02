@@ -134,7 +134,7 @@ class Kweb private constructor(
         }
     }
 
-    private val clientState = CacheBuilder.newBuilder()
+    val clientState = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
         .build<String, RemoteClientState>()
 

@@ -3,6 +3,7 @@ package kweb.client
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
+import kweb.util.JsFunction
 import java.lang.reflect.Constructor
 
 /**
@@ -38,4 +39,6 @@ data class FunctionCall(
         val callbackId: Int? = null,
         val arguments: List<JsonElement> = emptyList(),
         var shouldExecute: Boolean = true
-)
+) {
+    constructor(jsFunction : JsFunction) : this(jsId = jsFunction.jsId, arguments = jsFunction.arguments)
+}
