@@ -2,10 +2,13 @@ package kweb.state
 
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
+import kweb.client.FunctionCall
+import kweb.client.Server2ClientMessage
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
 import kweb.state.RenderState.*
+import kweb.util.JsFunction
 import mu.KotlinLogging
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
@@ -33,15 +36,48 @@ fun <T : Any?> ElementCreator<*>.render(
 
     fun eraseAndRender() {
         do {
-            containerElement.removeChildren()
-            containerElement.new {
-                previousElementCreator.getAndSet(this)?.cleanup()
-                renderState.set(RENDERING_NO_PENDING_CHANGE)
-                block(value.value)
-                if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-                    renderState.set(NOT_RENDERING)
+            val outboundMessages: List<JsFunction>? = if (parent.browser.kweb.isCatchingOutbound() == false) {
+                parent.browser.kweb.catchOutbound {
+                    containerElement.removeChildren()
+                    containerElement.new {
+                        previousElementCreator.getAndSet(this)?.cleanup()
+                        renderState.set(RENDERING_NO_PENDING_CHANGE)
+                        block(value.value)
+                        if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+                            renderState.set(NOT_RENDERING)
+                        }
+                    }
                 }
+            } else {
+                containerElement.removeChildren()
+                containerElement.new {
+                    previousElementCreator.getAndSet(this)?.cleanup()
+                    renderState.set(RENDERING_NO_PENDING_CHANGE)
+                    block(value.value)
+                    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+                        renderState.set(NOT_RENDERING)
+                    }
+                }
+                null
             }
+            if (outboundMessages != null) {
+                /*TODO to make this work I had to make WebBrowser.sessionId and Kweb.clientState public instead of private
+                  I think we may want to write a send() method in Kweb that we can call here, and set those vals back to private
+                  */
+                val sessionId = parent.browser.sessionId
+                val wsClientData = parent.browser.kweb.clientState.getIfPresent(sessionId)
+                        ?: error("Client id $sessionId not found")
+                val funcCalls = mutableListOf<FunctionCall>()
+                for (msg in outboundMessages) {
+                    //creates a FunctionCall object with the clientSide cacheId of a javascript function, and the
+                        //arguments to run the function with
+                    val funcCall = FunctionCall(jsId = msg.jsId, arguments = msg.arguments)
+                    funcCalls.add(funcCall)
+                }
+                val server2ClientMessage = Server2ClientMessage(sessionId, funcCalls)
+                wsClientData.send(server2ClientMessage)
+            }
+
         } while (renderState.get() != NOT_RENDERING)
     }
 
