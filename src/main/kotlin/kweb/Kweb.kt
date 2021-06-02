@@ -169,45 +169,45 @@ class Kweb private constructor(
     There is a bit of duplication here, because we have to pass in the javascript string separately.
     We need it to create the debugToken. Some server2ClientMessages will contain the javascript,
      but messages that call cached functions will not have it. So we have to make sure we pass it in separately.*/
-    fun callJs(server2ClientMessage: Server2ClientMessage, javascript: String) {
-        val wsClientData = clientState.getIfPresent(server2ClientMessage.yourId)
-                ?: error("Client id ${server2ClientMessage.yourId} not found")
+    fun callJs(sessionId: String, funcCall: FunctionCall, javascript: String) {
+        val wsClientData = clientState.getIfPresent(sessionId)
+                ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if(!debug) null else {
             val dt = abs(random.nextLong()).toString(16)
             wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
             dt
         }
-        server2ClientMessage.debugToken = debugToken
+        funcCall.debugToken = debugToken
         val outboundMessageCatcher = outboundMessageCatcher.get()
         if (outboundMessageCatcher == null) {
-            wsClientData.send(server2ClientMessage)
+            wsClientData.send(Server2ClientMessage(sessionId, funcCall))
         } else {
-            logger.debug("Temporarily storing message for ${server2ClientMessage.yourId} in threadlocal outboundMessageCatcher")
-            val jsFunction = JsFunction(server2ClientMessage.jsId!!, server2ClientMessage.arguments!!)
+            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
+            val jsFunction = JsFunction(funcCall.jsId!!, funcCall.arguments)
             outboundMessageCatcher.add(jsFunction)
             //Setting `shouldExecute` to false tells the server not to add this jsFunction to the client's cache,
             //but to not actually run the code. This is used to pre-cache functions on initial page render.
-            server2ClientMessage.shouldExecute = false
-            wsClientData.send(server2ClientMessage)
+            funcCall.shouldExecute = false
+            wsClientData.send(Server2ClientMessage(sessionId, funcCall))
         }
     }
 
-    fun callJsWithCallback(server2ClientMessage: Server2ClientMessage,
+    fun callJsWithCallback(sessionId: String, funcCall: FunctionCall,
                            javascript: String, callback: (JsonElement) -> Unit) {
         //TODO I could use some help improving this error message
         require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
-        val wsClientData = clientState.getIfPresent(server2ClientMessage.yourId)
-                ?: error("Client id ${server2ClientMessage.yourId} not found")
+        val wsClientData = clientState.getIfPresent(sessionId)
+                ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
         val debugToken: String? = if(!debug) null else {
             val dt = abs(random.nextLong()).toString(16)
             wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
             dt
         }
-        server2ClientMessage.debugToken = debugToken
-        wsClientData.handlers[server2ClientMessage.callbackId!!] = callback
-        wsClientData.send(server2ClientMessage)
+        funcCall.debugToken = debugToken
+        wsClientData.handlers[funcCall.callbackId!!] = callback
+        wsClientData.send(Server2ClientMessage(sessionId, funcCall))
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
@@ -386,8 +386,8 @@ class Kweb private constructor(
                 val js = plugin.executeAfterPageCreation()
                 //A plugin with an empty js string was breaking functionality.
                 if (js != "") {
-                    val pluginMessage = Server2ClientMessage(yourId = kwebSessionId, js = js)
-                    callJs(pluginMessage, js)
+                    val pluginFunction = FunctionCall(js = js)
+                    callJs(kwebSessionId, pluginFunction, js)
                 }
             }
 
@@ -405,13 +405,15 @@ class Kweb private constructor(
                 val deserialedMsg = Json.decodeFromString<Server2ClientMessage>(msg)
 
                 //We have a special case where some functions do not have jsId's. Trying to add one of those to the cache would cause problems.
-                if (deserialedMsg.jsId != null) {
-                    if (!cachedIds.contains(deserialedMsg.jsId)) {
-                        val cachedFunction = """${deserialedMsg.jsId} : function(${deserialedMsg.parameters}) { ${deserialedMsg.js} }"""
-                        cachedFunctions.add(cachedFunction)
-                        cachedIds.add(deserialedMsg.jsId)
-                    }
+                for (funcCall in deserialedMsg.functionCalls) {
+                    if (funcCall.jsId != null) {
+                        if (!cachedIds.contains(funcCall.jsId)) {
+                            val cachedFunction = """${funcCall.jsId} : function(${funcCall.parameters}) { ${funcCall.js} }"""
+                            cachedFunctions.add(cachedFunction)
+                            cachedIds.add(funcCall.jsId)
+                        }
 
+                    }
                 }
             }
 
@@ -468,10 +470,8 @@ class Kweb private constructor(
      */
     fun refreshAllPages() = GlobalScope.launch(Dispatchers.Default) {
         for (client in clientState.asMap().values) {
-            val message = Server2ClientMessage(
-                    yourId = client.id,
-                    js = "window.location.reload(true);",
-                    debugToken = null)
+            val refreshCall = FunctionCall(js = "window.location.reload(true);")
+            val message = Server2ClientMessage(client.id, refreshCall)
             client.clientConnection.send(Json.encodeToString(message))
         }
     }
