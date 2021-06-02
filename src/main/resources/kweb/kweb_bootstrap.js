@@ -14,8 +14,8 @@ function handleInboundMessage(msg) {
     console.debug("")
     const yourId = msg["yourId"];
     const funcCalls = msg["functionCalls"]
-    for (let funcCall in funcCalls) {
-        const funcCall = msg["functionCall"]
+    for (let i = 0; i < funcCalls.length; i++) {
+        const funcCall = funcCalls[i];
         const debugToken = funcCall["debugToken"];
         if (kwebClientId != yourId) {
             console.error(
@@ -27,8 +27,9 @@ function handleInboundMessage(msg) {
         }
 
         let func;
-        let js;
+        let js = funcCall["js"];
         const args = funcCall["arguments"];
+        const params = funcCall["parameters"];
         const cacheId = funcCall["jsId"];
         const callbackId = funcCall["callbackId"];
 
@@ -36,8 +37,6 @@ function handleInboundMessage(msg) {
             if (cachedFunctions[cacheId] !== undefined) {
                 func = cachedFunctions[cacheId];
             } else {
-                const params = funcCall["parameters"];
-                js = funcCall["js"];
                 if (params !== undefined) {
                     func = new Function(params, js);
                 } else {
@@ -48,8 +47,6 @@ function handleInboundMessage(msg) {
         } else {
             //This is a special case that doesn't bother reading the cache, or trying to cache the function.
             //It will just run the javascript supplied to it. This special case is currently only used by Kweb.refreshPages()
-            js = funcCall["js"];
-            const params = funcCall["parameters"];
             if (params !== undefined) {
                 func = new Function(params, js);
             } else {
