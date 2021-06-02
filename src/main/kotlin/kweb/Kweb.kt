@@ -196,18 +196,12 @@ class Kweb private constructor(
     fun callJsWithCallback(sessionId: String, funcCall: FunctionCall,
                            javascript: String, callback: (JsonElement) -> Unit) {
         //TODO I could use some help improving this error message
-        require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
+        //require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if(!debug) null else {
-            val dt = abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
-            dt
-        }
-        funcCall.debugToken = debugToken
         wsClientData.handlers[funcCall.callbackId!!] = callback
-        wsClientData.send(Server2ClientMessage(sessionId, funcCall))
+        callJs(sessionId, funcCall, javascript)
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
