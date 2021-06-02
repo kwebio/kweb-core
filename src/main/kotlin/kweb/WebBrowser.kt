@@ -6,7 +6,6 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.client.FunctionCall
 import kweb.client.HttpRequestInfo
-import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
@@ -68,11 +67,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
-    data class JSFunction(val js: String, val params: String)
+    data class FuncDeclaration(val js: String, val params: String)
     /**
      * this function substitutes "{}" in user supplied javascript, for randomly generated variable names
      */
-    private fun makeJsFunction(rawJs: String): JSFunction {
+    private fun makeJsFunction(rawJs: String): FuncDeclaration {
         val stringBuilder = StringBuilder()
         var variableCount = 1
         val params = mutableListOf<String>()
@@ -90,7 +89,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             }
             i++
         }
-        return JSFunction(stringBuilder.toString(), params.joinToString(separator = ","))
+        return FuncDeclaration(stringBuilder.toString(), params.joinToString(separator = ","))
     }
 
     private fun generateCacheId() : Int {
