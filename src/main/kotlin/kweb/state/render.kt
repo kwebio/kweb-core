@@ -35,8 +35,8 @@ fun <T : Any?> ElementCreator<*>.render(
 
     fun eraseAndRender() {
         do {
-            val outboundMessages: List<FunctionCall>? = if (parent.browser.kweb.isCatchingOutbound() == false) {
-                parent.browser.kweb.catchOutbound {
+            val outboundMessages: List<FunctionCall>? = if (parent.browser.kweb.isCatchingOutbound() == null) {
+                parent.browser.kweb.catchOutbound(Kweb.CatcherType.BATCH) {
                     containerElement.removeChildren()
                     containerElement.new {
                         previousElementCreator.getAndSet(this)?.cleanup()
@@ -119,7 +119,7 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
     val value = shoebox[key] ?: throw NoSuchElementException("Key $key not found")
     val w = KVar(value)
     w.addListener { _, n ->
-        require(!this.browser.kweb.isCatchingOutbound()) {
+        require(this.browser.kweb.isCatchingOutbound() != Kweb.CatcherType.IMMEDIATE_EVENT) {
             """You appear to be modifying Shoebox state from within an onImmediate callback, which
                 |should only make simple modifications to the DOM.""".trimMargin()
         }

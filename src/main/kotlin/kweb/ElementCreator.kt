@@ -58,7 +58,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
         when {
-            parent.browser.kweb.isCatchingOutbound() -> {
+            parent.browser.kweb.isCatchingOutbound() != null -> {
                 val createElementJs = """
                     let tag = {};
                     let attributes = {};
