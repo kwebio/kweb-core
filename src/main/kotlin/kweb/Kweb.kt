@@ -154,10 +154,10 @@ class Kweb private constructor(
      * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
      * replayed in the browser when an event is triggered without a server round-trip.
      */
-    fun catchOutbound(f: () -> Unit): List<JsFunction> {
+    fun catchOutbound(f: () -> Unit): List<FunctionCall> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
 
-        val jsList = ArrayList<JsFunction>()
+        val jsList = ArrayList<FunctionCall>()
         outboundMessageCatcher.set(jsList)
         f()
         outboundMessageCatcher.set(null)
@@ -186,8 +186,7 @@ class Kweb private constructor(
             wsClientData.send(Server2ClientMessage(sessionId, jsFuncCall))
         } else {
             logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
-            val jsFunction = JsFunction(funcCall.jsId!!, funcCall.arguments)
-            outboundMessageCatcher.add(jsFunction)
+            outboundMessageCatcher.add(funcCall)
             //Setting `shouldExecute` to false tells the server not to add this jsFunction to the client's cache,
             //but to not actually run the code. This is used to pre-cache functions on initial page render.
             val jsFuncCall = FunctionCall(debugToken, shouldExecute = false, funcCall)
@@ -477,7 +476,7 @@ class Kweb private constructor(
      * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
      * execution of event handlers, see `Element.immediatelyOn`
      */
-    private val outboundMessageCatcher: ThreadLocal<MutableList<JsFunction>?> = ThreadLocal.withInitial { null }
+    private val outboundMessageCatcher: ThreadLocal<MutableList<FunctionCall>?> = ThreadLocal.withInitial { null }
 
 }
 

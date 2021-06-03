@@ -8,7 +8,6 @@ import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
 import kweb.state.RenderState.*
-import kweb.util.JsFunction
 import mu.KotlinLogging
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
@@ -36,7 +35,7 @@ fun <T : Any?> ElementCreator<*>.render(
 
     fun eraseAndRender() {
         do {
-            val outboundMessages: List<JsFunction>? = if (parent.browser.kweb.isCatchingOutbound() == false) {
+            val outboundMessages: List<FunctionCall>? = if (parent.browser.kweb.isCatchingOutbound() == false) {
                 parent.browser.kweb.catchOutbound {
                     containerElement.removeChildren()
                     containerElement.new {
@@ -69,10 +68,7 @@ fun <T : Any?> ElementCreator<*>.render(
                         ?: error("Client id $sessionId not found")
                 val funcCalls = mutableListOf<FunctionCall>()
                 for (msg in outboundMessages) {
-                    //creates a FunctionCall object with the clientSide cacheId of a javascript function, and the
-                        //arguments to run the function with
-                    val funcCall = FunctionCall(jsId = msg.jsId, arguments = msg.arguments)
-                    funcCalls.add(funcCall)
+                    funcCalls.add(msg)
                 }
                 val server2ClientMessage = Server2ClientMessage(sessionId, funcCalls)
                 wsClientData.send(server2ClientMessage)
