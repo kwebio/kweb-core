@@ -4,8 +4,8 @@ import io.mola.galimatias.URL
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
+import kweb.client.FunctionCall
 import kweb.client.HttpRequestInfo
-import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
@@ -29,7 +29,7 @@ import kotlin.reflect.jvm.jvmName
 
 private val logger = KotlinLogging.logger {}
 
-class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
+class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
 
     private val idCounter = AtomicInteger(0)
 
@@ -67,11 +67,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
-    data class JSFunction(val js: String, val params: String)
+    data class FuncDeclaration(val js: String, val params: String)
     /**
      * this function substitutes "{}" in user supplied javascript, for randomly generated variable names
      */
-    private fun makeJsFunction(rawJs: String): JSFunction {
+    private fun makeJsFunction(rawJs: String): FuncDeclaration {
         val stringBuilder = StringBuilder()
         var variableCount = 1
         val params = mutableListOf<String>()
@@ -89,7 +89,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             }
             i++
         }
-        return JSFunction(stringBuilder.toString(), params.joinToString(separator = ","))
+        return FuncDeclaration(stringBuilder.toString(), params.joinToString(separator = ","))
     }
 
     private fun generateCacheId() : Int {
@@ -98,9 +98,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         cachedFunctions[jsBody]?.let {
-            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it,
-                    arguments = listOf(*args))
-            kweb.callJs(callCachedFuncMessage, jsBody)
+            val cachedFunctionCall = FunctionCall(jsId = it, arguments = listOf(*args))
+            kweb.callJs(sessionId, cachedFunctionCall, jsBody)
         } ?: run {
             val cacheId = generateCacheId()
             val func = makeJsFunction(jsBody)
@@ -108,17 +107,16 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
-                parameters = func.params, arguments = listOf(*args))
-            kweb.callJs(cacheAndExecuteMessage, jsBody)
+            val cacheAndCallFunction = FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
+                    arguments = listOf(*args))
+            kweb.callJs(sessionId, cacheAndCallFunction, jsBody)
         }
     }
 
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (JsonElement) -> Unit, vararg args: JsonElement) {
         cachedFunctions[jsBody]?.let {
-            val callCachedFuncMessage = Server2ClientMessage(yourId = sessionId, jsId = it, arguments = listOf(*args),
-            callbackId = callbackId)
-            kweb.callJsWithCallback(callCachedFuncMessage, jsBody, callback)
+            val cachedFunctionCall = FunctionCall(jsId = it, arguments = listOf(*args), callbackId = callbackId)
+            kweb.callJsWithCallback(sessionId, cachedFunctionCall, jsBody, callback)
         } ?: run {
             val cacheId = generateCacheId()
             val func = makeJsFunction(jsBody)
@@ -126,9 +124,9 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            val cacheAndExecuteMessage = Server2ClientMessage(yourId = sessionId, jsId = cacheId, js = func.js,
-                    parameters = func.params, arguments = listOf(*args), callbackId = callbackId)
-            kweb.callJsWithCallback(cacheAndExecuteMessage, jsBody, callback)
+            val cacheAndCallFunction = FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
+            arguments = listOf(*args), callbackId = callbackId)
+            kweb.callJsWithCallback(sessionId, cacheAndCallFunction, jsBody, callback)
         }
     }
 

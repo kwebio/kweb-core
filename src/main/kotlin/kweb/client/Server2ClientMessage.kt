@@ -22,11 +22,25 @@ import kotlinx.serialization.json.JsonElement
 @SerialName("Server2ClientMessage")
 data class Server2ClientMessage(
         val yourId: String,
-        var debugToken: String? = null,
+        val functionCalls : List<FunctionCall>
+) {
+    constructor(yourId : String, functionCall : FunctionCall) : this(yourId, listOf(functionCall))
+}
+
+@Serializable
+data class FunctionCall(
+        val debugToken: String? = null,
         val jsId: Int? = null,
         val js: String? = null,
         val parameters: String? = null,
         val callbackId: Int? = null,
         val arguments: List<JsonElement> = emptyList(),
-        var shouldExecute: Boolean = true
-)
+        val shouldExecute: Boolean = true
+) {
+    constructor(debugToken: String?, funcCall: FunctionCall) : this(debugToken = debugToken, jsId = funcCall.jsId,
+        js = funcCall.js, parameters = funcCall.parameters, callbackId = funcCall.callbackId,
+            arguments = funcCall.arguments, shouldExecute = funcCall.shouldExecute)
+    constructor(debugToken: String?, shouldExecute: Boolean, funcCall: FunctionCall) : this(debugToken = debugToken,
+            jsId = funcCall.jsId, js = funcCall.js, parameters = funcCall.parameters, callbackId = funcCall.callbackId,
+            arguments = funcCall.arguments, shouldExecute = shouldExecute)
+}

@@ -26,8 +26,6 @@ val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledT
 
 fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
 
-data class JsFunction(val jsId: Int, val arguments: List<JsonElement> = emptyList())
-
 fun <T> warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -> Unit, f: () -> T): T {
     val runningThread = Thread.currentThread()
     val watcher = scheduledExecutorService.schedule({ onBlock(runningThread) }, maxTimeMs, TimeUnit.MILLISECONDS)
