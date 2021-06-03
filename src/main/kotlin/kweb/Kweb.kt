@@ -164,11 +164,10 @@ class Kweb private constructor(
         return jsList
     }
 
-    /*TODO
-    I think callJs and callJsWithCallback are simplified a good bit by moving the message creation to WebBrowser.callJs()
-    There is a bit of duplication here, because we have to pass in the javascript string separately.
-    We need it to create the debugToken. Some server2ClientMessages will contain the javascript,
-     but messages that call cached functions will not have it. So we have to make sure we pass it in separately.*/
+    /*
+    FunctionCalls that point to functions already in the cache will not contain the jsCode needed to create the debugToken
+    So we have to pass it separately here.
+     */
     fun callJs(sessionId: String, funcCall: FunctionCall, javascript: String) {
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
@@ -178,29 +177,33 @@ class Kweb private constructor(
             wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
             dt
         }
-        funcCall.debugToken = debugToken
         val outboundMessageCatcher = outboundMessageCatcher.get()
+        //TODO to make debugToken and shouldExecute in Server2ClientMessage vals instead of vars I decided to
+        //make new functionCall objects. I don't know if changing these vals to vars is worth the overhead of creating
+        //a new object though. So we may want to revert this change.
         if (outboundMessageCatcher == null) {
-            wsClientData.send(Server2ClientMessage(sessionId, funcCall))
+            val jsFuncCall = FunctionCall(debugToken, funcCall)
+            wsClientData.send(Server2ClientMessage(sessionId, jsFuncCall))
         } else {
             logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
             val jsFunction = JsFunction(funcCall.jsId!!, funcCall.arguments)
             outboundMessageCatcher.add(jsFunction)
             //Setting `shouldExecute` to false tells the server not to add this jsFunction to the client's cache,
             //but to not actually run the code. This is used to pre-cache functions on initial page render.
-            funcCall.shouldExecute = false
-            wsClientData.send(Server2ClientMessage(sessionId, funcCall))
+            val jsFuncCall = FunctionCall(debugToken, shouldExecute = false, funcCall)
+            wsClientData.send(Server2ClientMessage(sessionId, jsFuncCall))
         }
     }
 
     fun callJsWithCallback(sessionId: String, funcCall: FunctionCall,
                            javascript: String, callback: (JsonElement) -> Unit) {
         //TODO I could use some help improving this error message
-        //require(outboundMessageCatcher.get() == null) { "Can not use callback while page is rendering" }
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
-        wsClientData.handlers[funcCall.callbackId!!] = callback
+        funcCall.callbackId?.let {
+            wsClientData.handlers[it] = callback
+        } ?: error("Javascript function callback wasn't given a callbackId")
         callJs(sessionId, funcCall, javascript)
     }
 
