@@ -66,11 +66,7 @@ fun <T : Any?> ElementCreator<*>.render(
                 val sessionId = parent.browser.sessionId
                 val wsClientData = parent.browser.kweb.clientState.getIfPresent(sessionId)
                         ?: error("Client id $sessionId not found")
-                val funcCalls = mutableListOf<FunctionCall>()
-                for (msg in outboundMessages) {
-                    funcCalls.add(msg)
-                }
-                val server2ClientMessage = Server2ClientMessage(sessionId, funcCalls)
+                val server2ClientMessage = Server2ClientMessage(sessionId, outboundMessages)
                 wsClientData.send(server2ClientMessage)
             }
 
