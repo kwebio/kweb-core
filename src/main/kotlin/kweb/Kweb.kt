@@ -145,7 +145,7 @@ class Kweb private constructor(
     /**
      * Are outbound messages being cached for this thread (for example, because we're inside an immediateEvent callback block)?
      */
-    fun isCatchingOutbound() = outboundMessageCatcher.get() != null
+    fun isCatchingOutbound() = outboundMessageCatcher.get()?.catcherType
 
     /**
      * Execute a block of code in which any JavaScript sent to the browser during the execution of the block will be stored
@@ -154,11 +154,11 @@ class Kweb private constructor(
      * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
      * replayed in the browser when an event is triggered without a server round-trip.
      */
-    fun catchOutbound(f: () -> Unit): List<FunctionCall> {
+    fun catchOutbound(catchingType: CatcherType, f: () -> Unit): List<FunctionCall> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
 
         val jsList = ArrayList<FunctionCall>()
-        outboundMessageCatcher.set(jsList)
+        outboundMessageCatcher.set(OutboundMessageCatcher(catchingType, jsList))
         f()
         outboundMessageCatcher.set(null)
         return jsList
@@ -186,7 +186,7 @@ class Kweb private constructor(
             wsClientData.send(Server2ClientMessage(sessionId, jsFuncCall))
         } else {
             logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
-            outboundMessageCatcher.add(funcCall)
+            outboundMessageCatcher.functionList.add(funcCall)
             //Setting `shouldExecute` to false tells the server not to add this jsFunction to the client's cache,
             //but to not actually run the code. This is used to pre-cache functions on initial page render.
             val jsFuncCall = FunctionCall(debugToken, shouldExecute = false, funcCall)
@@ -472,11 +472,17 @@ class Kweb private constructor(
         }
     }
 
+    enum class CatcherType {
+        BATCH, IMMEDIATE_EVENT
+    }
+    private data class OutboundMessageCatcher(var catcherType: CatcherType, val functionList: MutableList<FunctionCall>)
+
     /**
      * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
      * execution of event handlers, see `Element.immediatelyOn`
      */
-    private val outboundMessageCatcher: ThreadLocal<MutableList<FunctionCall>?> = ThreadLocal.withInitial { null }
+    private val outboundMessageCatcher: ThreadLocal<OutboundMessageCatcher?> = ThreadLocal.withInitial { null }
+    //private val outboundMessageCatcher: ThreadLocal<MutableList<FunctionCall>?> = ThreadLocal.withInitial { null }
 
 }
 
