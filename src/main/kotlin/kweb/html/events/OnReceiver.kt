@@ -35,7 +35,9 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
                         callback(props)
                     }
                 }
-                callback(props)
+                else {
+                    callback(props)
+                }
             } catch (e: Exception) {
                 logger.error(e) { "Exception thrown by callback in response to $eventName event" }
             }

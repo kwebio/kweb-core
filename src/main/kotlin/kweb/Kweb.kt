@@ -472,6 +472,7 @@ class Kweb private constructor(
         }
     }
 
+    //TODO I think some of these things could be renamed for clarity. I think it is understandable as is, but there is room for improvement
     enum class CatcherType {
         BATCH, IMMEDIATE_EVENT
     }
@@ -479,7 +480,7 @@ class Kweb private constructor(
 
     /**
      * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
-     * execution of event handlers, see `Element.immediatelyOn`
+     * execution of event handlers, see `Element.onImmediate`
      */
     private val outboundMessageCatcher: ThreadLocal<OutboundMessageCatcher?> = ThreadLocal.withInitial { null }
     //private val outboundMessageCatcher: ThreadLocal<MutableList<FunctionCall>?> = ThreadLocal.withInitial { null }
