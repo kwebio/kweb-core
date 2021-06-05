@@ -196,7 +196,9 @@ class Kweb private constructor(
 
     fun callJsWithCallback(sessionId: String, funcCall: FunctionCall,
                            javascript: String, callback: (JsonElement) -> Unit) {
-        //TODO I could use some help improving this error message
+        //TODO This error has room for improvement
+        require(outboundMessageCatcher.get() == null) {
+            "Can not use callbacks inside of a ${outboundMessageCatcher.get()!!.catcherType} code block"}
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
@@ -474,7 +476,7 @@ class Kweb private constructor(
 
     //TODO I think some of these things could be renamed for clarity. I think it is understandable as is, but there is room for improvement
     enum class CatcherType {
-        BATCH, IMMEDIATE_EVENT
+        EVENT, IMMEDIATE_EVENT, RENDER
     }
     private data class OutboundMessageCatcher(var catcherType: CatcherType, val functionList: MutableList<FunctionCall>)
 

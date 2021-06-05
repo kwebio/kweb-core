@@ -36,7 +36,7 @@ fun <T : Any?> ElementCreator<*>.render(
     fun eraseAndRender() {
         do {
             val outboundMessages: List<FunctionCall>? = if (parent.browser.kweb.isCatchingOutbound() == null) {
-                parent.browser.kweb.catchOutbound(Kweb.CatcherType.BATCH) {
+                parent.browser.kweb.catchOutbound(Kweb.CatcherType.RENDER) {
                     containerElement.removeChildren()
                     containerElement.new {
                         previousElementCreator.getAndSet(this)?.cleanup()

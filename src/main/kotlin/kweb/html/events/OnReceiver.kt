@@ -31,7 +31,7 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
             val props = Json.decodeFromJsonElement(serializer, propertiesAsElement)
             try {
                 if (source.browser.kweb.isCatchingOutbound() != null) {
-                    source.browser.kweb.catchOutbound(Kweb.CatcherType.BATCH) {
+                    source.browser.kweb.catchOutbound(Kweb.CatcherType.EVENT) {
                         callback(props)
                     }
                 }
