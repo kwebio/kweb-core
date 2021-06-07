@@ -26,12 +26,11 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
         val eventPropertyNames = memberProperties(U::class)
 
         val serializer = serializer<U>()
-        source.browser.kweb.isCatchingOutbound()
         return event(eventName, eventPropertyNames) { propertiesAsElement ->
             val props = Json.decodeFromJsonElement(serializer, propertiesAsElement)
             try {
-                if (source.browser.kweb.isCatchingOutbound() != null) {
-                    source.browser.kweb.catchOutbound(Kweb.CatcherType.EVENT) {
+                if (source.browser.kweb.isCatchingOutbound() == null) {
+                    source.browser.kweb.batch(source.browser.sessionId, Kweb.CatcherType.EVENT) {
                         callback(props)
                     }
                 }

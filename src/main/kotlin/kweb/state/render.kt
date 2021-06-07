@@ -35,9 +35,9 @@ fun <T : Any?> ElementCreator<*>.render(
 
     fun eraseAndRender() {
         do {
-            val outboundMessages: List<FunctionCall>? = if (parent.browser.kweb.isCatchingOutbound() == null) {
-                parent.browser.kweb.catchOutbound(Kweb.CatcherType.RENDER) {
-                    containerElement.removeChildren()
+            if (parent.browser.kweb.isCatchingOutbound() == null) {
+                parent.browser.kweb.batch(parent.browser.sessionId, Kweb.CatcherType.RENDER) {
+                    containerElement.removeChildren() // REMOVE ALL ELEMENTS BETWEEN startSpan and endSpan
                     containerElement.new {
                         previousElementCreator.getAndSet(this)?.cleanup()
                         renderState.set(RENDERING_NO_PENDING_CHANGE)
@@ -57,19 +57,7 @@ fun <T : Any?> ElementCreator<*>.render(
                         renderState.set(NOT_RENDERING)
                     }
                 }
-                null
             }
-            if (outboundMessages != null) {
-                /*TODO to make this work I had to make WebBrowser.sessionId and Kweb.clientState public instead of private
-                  I think we may want to write a send() method in Kweb that we can call here, and set those vals back to private
-                  */
-                val sessionId = parent.browser.sessionId
-                val wsClientData = parent.browser.kweb.clientState.getIfPresent(sessionId)
-                        ?: error("Client id $sessionId not found")
-                val server2ClientMessage = Server2ClientMessage(sessionId, outboundMessages)
-                wsClientData.send(server2ClientMessage)
-            }
-
         } while (renderState.get() != NOT_RENDERING)
     }
 

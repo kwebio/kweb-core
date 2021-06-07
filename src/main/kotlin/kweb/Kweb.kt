@@ -134,7 +134,7 @@ class Kweb private constructor(
         }
     }
 
-    val clientState = CacheBuilder.newBuilder()
+    private val clientState = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
         .build<String, RemoteClientState>()
 
@@ -162,6 +162,15 @@ class Kweb private constructor(
         f()
         outboundMessageCatcher.set(null)
         return jsList
+    }
+
+    fun batch(sessionId: String, catchingType: CatcherType, f: () -> Unit) {
+        val caughtMessages = catchOutbound(catchingType, f)
+        val wsClientData = clientState.getIfPresent(sessionId) ?: error("Client id $sessionId not found")
+        //TODO, do we need to change lastModified here? callJs will set it when the functionCall is originally created.
+        wsClientData.lastModified = Instant.now()
+        val server2ClientMessage = Server2ClientMessage(sessionId, caughtMessages)
+        wsClientData.send(server2ClientMessage)
     }
 
     /*
