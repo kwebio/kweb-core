@@ -83,12 +83,12 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
             document.addEventListener({}, function(event) {
-                callbackWs({}, {});
+                callbackWs({}, $eventObject);
             });
         """
         receiver.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }, JsonPrimitive(eventName), JsonPrimitive(callbackId), JsonPrimitive(eventObject))
+        }, JsonPrimitive(eventName), JsonPrimitive(callbackId))
         return this
     }
 
