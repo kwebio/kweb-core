@@ -135,6 +135,9 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
     }
 
     suspend fun callJsFunctionWithResult(jsBody: String, vararg args: JsonElement): JsonElement {
+        require(kweb.isCatchingOutbound() == null) {
+            "You can not read the DOM inside a batched code block"
+        }
         val callbackId = abs(random.nextInt())
         val cd = CompletableDeferred<JsonElement>()
         callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
