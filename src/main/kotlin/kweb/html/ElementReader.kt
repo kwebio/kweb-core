@@ -3,18 +3,22 @@ package kweb.html
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
+import kweb.Kweb
 import kweb.WebBrowser
 import kweb.util.KWebDSL
 
+@Deprecated("")
 @KWebDSL
 open class ElementReader(protected val receiver: WebBrowser, internal val elementId: String) {
     constructor(element: Element) : this(element.browser, element.id)
 
     init {
-        require(!receiver.kweb.isCatchingOutbound()) {
+        //TODO I'm not sure if we want to allow reading the DOM during a render or non immediate event
+        //require(receiver.kweb.isCatchingOutbound() != Kweb.CatcherType.IMMEDIATE_EVENT)
+        require(receiver.kweb.isCatchingOutbound() == null) {
             """
             Reading the DOM when an outboundMessageCatcher is set is likely to have unintended consequences.
-            Most likely you are trying to read the DOM within an `immediatelyOn {...}` block.
+            Most likely you are trying to read the DOM within an `onImmediate {...}` block.
         """.trimIndent()
         }
     }

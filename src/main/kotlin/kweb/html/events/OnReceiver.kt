@@ -3,6 +3,7 @@ package kweb.html.events
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
+import kweb.Kweb
 import kweb.util.KWebDSL
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
@@ -12,7 +13,7 @@ import kotlin.reflect.full.memberProperties
 @PublishedApi internal val logger = KotlinLogging.logger {}
 
 @KWebDSL
-class OnReceiver<T : EventGenerator<T>>(internal val source: T, private val retrieveJs: String? = null) {
+class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: String? = null) {
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: JsonElement) -> Unit): T {
         source.addEventListener(eventName, returnEventFields = returnEventFields,
@@ -28,7 +29,14 @@ class OnReceiver<T : EventGenerator<T>>(internal val source: T, private val retr
         return event(eventName, eventPropertyNames) { propertiesAsElement ->
             val props = Json.decodeFromJsonElement(serializer, propertiesAsElement)
             try {
-                callback(props)
+                if (source.browser.kweb.isCatchingOutbound() == null) {
+                    source.browser.kweb.batch(source.browser.sessionId, Kweb.CatcherType.EVENT) {
+                        callback(props)
+                    }
+                }
+                else {
+                    callback(props)
+                }
             } catch (e: Exception) {
                 logger.error(e) { "Exception thrown by callback in response to $eventName event" }
             }

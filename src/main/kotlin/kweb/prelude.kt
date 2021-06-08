@@ -377,6 +377,8 @@ fun ElementCreator<Element>.select(
 }
 
 open class TextAreaElement(parent: Element) : ValueElement(parent) {
+    //TODO ValueElement already provides a way to get the value of an element. I'm not sure why this function is here.
+    //But, something needs to be done with it.
     override val read get() = TextAreaElementReader(this)
 }
 
@@ -389,6 +391,9 @@ fun ElementCreator<Element>.textArea(
     }
 }
 
+//TODO I'm not quite sure how much information I should be putting in this message, or how an end user should replace this
+//It seems like we should rewrite TextAreaElement.get() so they can use that, or tell them to just use Kvars.
+@Deprecated("ElementReader has been deprecated. Use TextAreaElement.get() instead")
 open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(element) {
     suspend fun getValue() : String {
         //A TextArea should only ever contain a String. So using toString() here should be safe.

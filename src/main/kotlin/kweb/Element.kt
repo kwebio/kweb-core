@@ -68,6 +68,9 @@ open class Element(
     /**
      * Obtain an [ElementReader] that can be used to read various properties of this element.
      */
+    //TODO, since ElementReader has been deprecated, I'm not sure if we need to mark this val as deprecated or not.
+    //The IDE also complains about not supplying a replaceWith argument for this annotation.
+    @Deprecated("ElementReader has been deprecated")
     open val read: ElementReader get() = ElementReader(this)
 
     /*********
@@ -83,7 +86,7 @@ open class Element(
     fun setAttributeRaw(name: String, value: JsonPrimitive): Element {
         val htmlDoc = browser.htmlDocument.get()
         when {
-            browser.kweb.isCatchingOutbound() -> {
+            browser.kweb.isCatchingOutbound() != null -> {
                 callJsFunction("document.getElementById({}).setAttribute({}, {})",
                         JsonPrimitive(id), JsonPrimitive(name), value)
             }
@@ -134,7 +137,7 @@ open class Element(
 
     fun removeAttribute(name: String): Element {
         when {
-            browser.kweb.isCatchingOutbound() -> {
+            browser.kweb.isCatchingOutbound() != null -> {
                 callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
             }
             else -> {
@@ -295,7 +298,7 @@ open class Element(
         val jsoupDoc = browser.htmlDocument.get()
         val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
-            browser.kweb.isCatchingOutbound() -> {
+            browser.kweb.isCatchingOutbound() != null -> {
                 callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
             }
             jsoupDoc != null -> {
@@ -341,7 +344,7 @@ open class Element(
             document.getElementById({}).appendChild(ntn);
         """.trimIndent()
         when {
-            browser.kweb.isCatchingOutbound() -> {
+            browser.kweb.isCatchingOutbound() != null -> {
                 callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
             }
             jsoupDoc != null -> {

@@ -29,7 +29,7 @@ import kotlin.reflect.jvm.jvmName
 
 private val logger = KotlinLogging.logger {}
 
-class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, internal val kweb: Kweb) {
+class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, val kweb: Kweb) {
 
     private val idCounter = AtomicInteger(0)
 
@@ -135,6 +135,9 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, in
     }
 
     suspend fun callJsFunctionWithResult(jsBody: String, vararg args: JsonElement): JsonElement {
+        require(kweb.isCatchingOutbound() == null) {
+            "You can not read the DOM inside a batched code block"
+        }
         val callbackId = abs(random.nextInt())
         val cd = CompletableDeferred<JsonElement>()
         callJsFunctionWithCallback(jsBody, callbackId = callbackId, callback = { response ->
