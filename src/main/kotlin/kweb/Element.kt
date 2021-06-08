@@ -30,7 +30,7 @@ open class Element(
      * Execute some JavaScript in the browser.  This is the
      * foundation upon which most other DOM modification functions in this class
      * are based. `{}`s in the js String will be replaced by the `args` values
-     * in the order in which they're present in the string.
+     * in the order in which they're present in the js String.
      * 
      * Note that this will cache functions in the browser to avoid unnecessary
      * re-interpretation, making this fairly efficient.
