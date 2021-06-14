@@ -1,9 +1,7 @@
 package kweb.demos.todo
-
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
@@ -143,25 +141,26 @@ class TodoApp {
         }
         div(fomantic.ui.action.input) {
             val input = input(type = InputType.text, placeholder = "Add Item")
-            // Note that an event can optionally evaluate a javascript expression and retrieve the
-            // result, which is supplied to the event handler in event.retrieved.
-            input.on(retrieveJs = input.valueJsExpression).keypress { event ->
-                if (event.code == "Enter") {
-                    handleAddItem(input, list, event.retrieved.jsonPrimitive.content)
+            input.on.keypress { ke ->
+                if (ke.code == "Enter") {
+                    handleAddItem(input, list)
                 }
             }
             button(fomantic.ui.button).text("Add").apply {
-                on(retrieveJs = input.valueJsExpression).click { event ->
-                    handleAddItem(input, list, event.retrieved.jsonPrimitive.content)
+                on.click {
+                    handleAddItem(input, list)
                 }
             }
         }
     }
 
-    private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>, newItemText: String) {
-        input.setValue("")
-        val newItem = ToDoState.Item(generateNewUid(), System.currentTimeMillis(), list.value.uid, newItemText)
-        state.items[newItem.uid] = newItem
+    private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>) {
+        GlobalScope.launch {
+            val newItemText = input.getValue()
+            input.setValue("")
+            val newItem = ToDoState.Item(generateNewUid(), System.currentTimeMillis(), list.value.uid, newItemText)
+            state.items[newItem.uid] = newItem
+        }
     }
 
     private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<ToDoState.Item>) {
