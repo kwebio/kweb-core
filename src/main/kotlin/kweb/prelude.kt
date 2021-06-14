@@ -438,8 +438,8 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
         }
     }
 
-    private @Volatile
-    var _valueKvar: KVar<String>? = null
+    @Volatile
+    private var _valueKvar: KVar<String>? = null
 
     var value: KVar<String>
         get() {

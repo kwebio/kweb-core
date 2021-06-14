@@ -108,6 +108,22 @@ open class Element(
         return this
     }
 
+    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    fun setAttributeRaw(name : String, value : JsonPrimitive)
+            = setAttribute(name, value)
+
+    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    fun setAttributeRaw(name : String, value : String)
+            = setAttribute(name, JsonPrimitive(value))
+
+    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    fun setAttributeRaw(name : String, value : Boolean)
+            = setAttribute(name, JsonPrimitive(value))
+
+    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    fun setAttributeRaw(name : String, value : Number)
+            = setAttribute(name, JsonPrimitive(value))
+
     fun setAttribute(name : String, value : String)
         = setAttribute(name, JsonPrimitive(value))
 
