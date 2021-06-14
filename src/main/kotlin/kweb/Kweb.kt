@@ -142,34 +142,10 @@ class Kweb private constructor(
 
     private var server: JettyApplicationEngine? = null
 
-    /**
-     * Are outbound messages being cached for this thread (for example, because we're inside an immediateEvent callback block)?
-     */
-    fun isCatchingOutbound() = outboundMessageCatcher.get()?.catcherType
-
-    /**
-     * Execute a block of code in which any JavaScript sent to the browser during the execution of the block will be stored
-     * and returned by this function.
-     *
-     * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
-     * replayed in the browser when an event is triggered without a server round-trip.
-     */
-    fun catchOutbound(catchingType: CatcherType, f: () -> Unit): List<FunctionCall> {
-        require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
-
-        val jsList = ArrayList<FunctionCall>()
-        outboundMessageCatcher.set(OutboundMessageCatcher(catchingType, jsList))
-        f()
-        outboundMessageCatcher.set(null)
-        return jsList
-    }
-
-    fun batch(sessionId: String, catchingType: CatcherType, f: () -> Unit) {
-        val caughtMessages = catchOutbound(catchingType, f)
+    fun sendMessage(sessionId: String, server2ClientMessage: Server2ClientMessage) {
         val wsClientData = clientState.getIfPresent(sessionId) ?: error("Client id $sessionId not found")
         //TODO, do we need to change lastModified here? callJs will set it when the functionCall is originally created.
         wsClientData.lastModified = Instant.now()
-        val server2ClientMessage = Server2ClientMessage(sessionId, caughtMessages)
         wsClientData.send(server2ClientMessage)
     }
 
@@ -177,41 +153,28 @@ class Kweb private constructor(
     FunctionCalls that point to functions already in the cache will not contain the jsCode needed to create the debugToken
     So we have to pass it separately here.
      */
-    fun callJs(sessionId: String, funcCall: FunctionCall, javascript: String) {
+    fun callJs(sessionId: String, funcCall: FunctionCall, debugInfo: DebugInfo?) {
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
-        val debugToken: String? = if(!debug) null else {
+        if(debug) {
             val dt = abs(random.nextLong()).toString(16)
-            wsClientData.debugTokens[dt] = DebugInfo(javascript, "executing", Throwable())
-            dt
+            debugInfo?.let {
+                wsClientData.debugTokens[dt] = it
+            }
         }
-        val outboundMessageCatcher = outboundMessageCatcher.get()
-        //TODO to make debugToken and shouldExecute in Server2ClientMessage vals instead of vars I decided to
-        //make new functionCall objects. I don't know if changing these vals to vars is worth the overhead of creating
-        //a new object though. So we may want to revert this change.
-        if (outboundMessageCatcher == null) {
-            val jsFuncCall = FunctionCall(debugToken, funcCall)
-            wsClientData.send(Server2ClientMessage(sessionId, jsFuncCall))
-        } else {
-            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
-            outboundMessageCatcher.functionList.add(funcCall)
-            //Setting `shouldExecute` to false tells the server not to add this jsFunction to the client's cache,
-            //but to not actually run the code. This is used to pre-cache functions on initial page render.
-            val jsFuncCall = FunctionCall(debugToken, shouldExecute = false, funcCall)
-            wsClientData.send(Server2ClientMessage(sessionId, jsFuncCall))
-        }
+        wsClientData.send(Server2ClientMessage(sessionId, funcCall))
     }
 
     fun callJsWithCallback(sessionId: String, funcCall: FunctionCall,
-                           javascript: String, callback: (JsonElement) -> Unit) {
+                           debugInfo: DebugInfo?, callback: (JsonElement) -> Unit) {
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
         funcCall.callbackId?.let {
             wsClientData.handlers[it] = callback
         } ?: error("Javascript function callback wasn't given a callbackId")
-        callJs(sessionId, funcCall, javascript)
+        callJs(sessionId, funcCall, debugInfo)
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
@@ -480,17 +443,7 @@ class Kweb private constructor(
         }
     }
 
-    //TODO I think some of these things could be renamed for clarity. I think it is understandable as is, but there is room for improvement
-    enum class CatcherType {
-        EVENT, IMMEDIATE_EVENT, RENDER
-    }
-    data class OutboundMessageCatcher(var catcherType: CatcherType, val functionList: MutableList<FunctionCall>)
 
-    /**
-     * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
-     * execution of event handlers, see `Element.onImmediate`
-     */
-    val outboundMessageCatcher: ThreadLocal<OutboundMessageCatcher?> = ThreadLocal.withInitial { null }
 
 }
 
