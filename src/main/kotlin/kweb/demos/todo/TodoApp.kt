@@ -3,6 +3,7 @@ package kweb.demos.todo
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
@@ -98,7 +99,7 @@ class TodoApp {
                 div(fomantic.ui.vertical.segment) {
                     div(fomantic.ui.message) {
                         p().innerHTML(
-                                """
+                            """
                             A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
                             to do list.
                             <p/>
@@ -107,7 +108,7 @@ class TodoApp {
                             You may find the source code for this app
                          5   <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
                             """
-                                        .trimIndent()
+                                .trimIndent()
                         )
                     }
                 }
@@ -142,26 +143,25 @@ class TodoApp {
         }
         div(fomantic.ui.action.input) {
             val input = input(type = InputType.text, placeholder = "Add Item")
-            input.on.keypress { ke ->
-                if (ke.code == "Enter") {
-                    handleAddItem(input, list)
+            // Note that an event can optionally evaluate a javascript expression and retrieve the
+            // result, which is supplied to the event handler in event.retrieved.
+            input.on(retrieveJs = input.valueJsExpression).keypress { event ->
+                if (event.code == "Enter") {
+                    handleAddItem(input, list, event.retrieved.jsonPrimitive.content)
                 }
             }
             button(fomantic.ui.button).text("Add").apply {
-                on.click {
-                    handleAddItem(input, list)
+                on(retrieveJs = input.valueJsExpression).click { event ->
+                    handleAddItem(input, list, event.retrieved.jsonPrimitive.content)
                 }
             }
         }
     }
 
-    private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>) {
-        GlobalScope.launch {
-            val newItemText = input.getValue()
-            input.setValue("")
-            val newItem = ToDoState.Item(generateNewUid(), System.currentTimeMillis(), list.value.uid, newItemText)
-            state.items[newItem.uid] = newItem
-        }
+    private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>, newItemText: String) {
+        input.setValue("")
+        val newItem = ToDoState.Item(generateNewUid(), System.currentTimeMillis(), list.value.uid, newItemText)
+        state.items[newItem.uid] = newItem
     }
 
     private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<ToDoState.Item>) {
