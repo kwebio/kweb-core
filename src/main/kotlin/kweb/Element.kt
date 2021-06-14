@@ -187,6 +187,8 @@ open class Element(
         return this
     }
 
+    fun classes(value : KVar<String>) = setAttribute("class", value)
+
     fun classes(vararg value: String) = setClasses(*value)
 
     fun setClasses(vararg value: String): Element {
