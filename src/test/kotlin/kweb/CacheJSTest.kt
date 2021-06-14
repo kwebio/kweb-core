@@ -63,7 +63,7 @@ class CacheJSApp {
         doc.body.new {
             button = button()
             button.text("Alert")
-            button.setAttributeRaw("autofocus", JsonPrimitive(true))
+            button.setAttribute("autofocus", JsonPrimitive(true))
             button.on.click {
             }
         }

@@ -87,7 +87,7 @@ open class Element(
      *
      * Will be ignored if `value` is `null`.
      */
-    fun setAttributeRaw(name: String, value: JsonPrimitive): Element {
+    fun setAttribute(name: String, value: JsonPrimitive): Element {
         val htmlDoc = browser.htmlDocument.get()
         when {
             browser.kweb.isCatchingOutbound() != null -> {
@@ -108,30 +108,19 @@ open class Element(
         return this
     }
 
-    fun setAttributeRaw(name : String, value : String)
-        = setAttributeRaw(name, JsonPrimitive(value))
+    fun setAttribute(name : String, value : String)
+        = setAttribute(name, JsonPrimitive(value))
 
-    fun setAttributeRaw(name : String, value : Boolean)
-        = setAttributeRaw(name, JsonPrimitive(value))
+    fun setAttribute(name : String, value : Boolean)
+        = setAttribute(name, JsonPrimitive(value))
 
-    fun setAttributeRaw(name : String, value : Number)
-        = setAttributeRaw(name, JsonPrimitive(value))
+    fun setAttribute(name : String, value : Number)
+        = setAttribute(name, JsonPrimitive(value))
 
     fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
-        setAttributeRaw(name, oValue.value)
+        setAttribute(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
-            setAttributeRaw(name, newValue)
-        }
-        this.creator?.onCleanup(true) {
-            oValue.removeListener(handle)
-        }
-        return this
-    }
-
-    fun setAttribute(name: String, oValue: KVar<String>) : Element {
-        setAttributeRaw(name, JsonPrimitive(oValue.value))
-        val handle = oValue.addListener { _, newValue ->
-            setAttributeRaw(name, JsonPrimitive(newValue))
+            setAttribute(name, newValue)
         }
         this.creator?.onCleanup(true) {
             oValue.removeListener(handle)
@@ -187,12 +176,12 @@ open class Element(
         return this
     }
 
-    fun classes(value : KVar<String>) = setAttribute("class", value)
+    fun classes(value : KVal<String>) = setAttribute("class", value.map { JsonPrimitive(it) })
 
     fun classes(vararg value: String) = setClasses(*value)
 
     fun setClasses(vararg value: String): Element {
-        setAttributeRaw("class", JsonPrimitive(value.joinToString(separator = " ")))
+        setAttribute("class", JsonPrimitive(value.joinToString(separator = " ")))
         return this
     }
 
@@ -246,7 +235,7 @@ open class Element(
     }
 
     fun disable(): Element {
-        setAttributeRaw("disabled", JsonPrimitive(true))
+        setAttribute("disabled", JsonPrimitive(true))
         return this
     }
 
@@ -422,7 +411,7 @@ open class Element(
         """.trimIndent(), JsonPrimitive(id))
     }
 
-    fun spellcheck(spellcheck: Boolean = true) = setAttributeRaw("spellcheck", JsonPrimitive(spellcheck))
+    fun spellcheck(spellcheck: Boolean = true) = setAttribute("spellcheck", JsonPrimitive(spellcheck))
 
     val style get() = StyleReceiver(this)
 

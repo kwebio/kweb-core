@@ -22,7 +22,7 @@ private val logger = KotlinLogging.logger {}
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
     container: ElementCreator<*>.() -> Element
-        = { span().setAttributeRaw("style", JsonPrimitive("display: contents;")) },
+        = { span().setAttribute("style", JsonPrimitive("display: contents;")) },
     block: ElementCreator<Element>.(T) -> Unit
 ) {
 

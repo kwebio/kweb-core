@@ -303,7 +303,7 @@ fun ElementCreator<Element>.meta(
 }
 
 open class InputElement(override val element: Element) : ValueElement(element) {
-    fun checked(checked: Boolean) = if (checked) setAttributeRaw("checked", JsonPrimitive(checked)) else removeAttribute("checked")
+    fun checked(checked: Boolean) = if (checked) setAttribute("checked", JsonPrimitive(checked)) else removeAttribute("checked")
 
 
     fun select() = element.callJsFunction("document.getElementById({}).select();", JsonPrimitive(id))
@@ -692,13 +692,13 @@ fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = nu
 }
 
 fun fileReaderSample() {
-    val imageString = KVar("")
+    val imageString = KVar(JsonPrimitive(""))
     Kweb(port = 123) {
         doc.body.new {
             val input = fileInput()
             input.onFileSelect {
                 input.retrieveFile {
-                    imageString.value = it.base64Content
+                    imageString.value = JsonPrimitive(it.base64Content)
                 }
             }
             img().setAttribute("src", imageString)
