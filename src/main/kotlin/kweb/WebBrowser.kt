@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.client.FunctionCall
 import kweb.client.HttpRequestInfo
+import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
@@ -14,6 +15,7 @@ import kweb.state.ReversibleFunction
 import kweb.util.pathQueryFragment
 import kweb.util.random
 import mu.KotlinLogging
+import java.time.Instant
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
@@ -29,7 +31,7 @@ import kotlin.reflect.jvm.jvmName
 
 private val logger = KotlinLogging.logger {}
 
-class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, val kweb: Kweb) {
+class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, val kweb: Kweb) {
 
     private val idCounter = AtomicInteger(0)
 
@@ -50,6 +52,46 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
 
     private val plugins: Map<KClass<out KwebPlugin>, KwebPlugin> by lazy {
         HtmlDocumentSupplier.appliedPlugins.map { it::class to it }.toMap()
+    }
+
+    //TODO I think some of these things could be renamed for clarity. I think it is understandable as is, but there is room for improvement
+    enum class CatcherType {
+        EVENT, IMMEDIATE_EVENT, RENDER
+    }
+    data class OutboundMessageCatcher(var catcherType: CatcherType, val functionList: MutableList<FunctionCall>)
+
+    /**
+     * Allow us to catch outbound messages temporarily and only for this thread.  This is used for immediate
+     * execution of event handlers, see `Element.onImmediate`
+     */
+    val outboundMessageCatcher: ThreadLocal<OutboundMessageCatcher?> = ThreadLocal.withInitial { null }
+
+    /**
+     * Are outbound messages being cached for this thread (for example, because we're inside an immediateEvent callback block)?
+     */
+    fun isCatchingOutbound() = outboundMessageCatcher.get()?.catcherType
+
+    /**
+     * Execute a block of code in which any JavaScript sent to the browser during the execution of the block will be stored
+     * and returned by this function.
+     *
+     * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
+     * replayed in the browser when an event is triggered without a server round-trip.
+     */
+    fun catchOutbound(catchingType: CatcherType, f: () -> Unit): List<FunctionCall> {
+        require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
+
+        val jsList = ArrayList<FunctionCall>()
+        outboundMessageCatcher.set(OutboundMessageCatcher(catchingType, jsList))
+        f()
+        outboundMessageCatcher.set(null)
+        return jsList
+    }
+
+    fun batch(catchingType: CatcherType, f: () -> Unit) {
+        val caughtMessages = catchOutbound(catchingType, f)
+        val server2ClientMessage = Server2ClientMessage(sessionId, caughtMessages)
+        kweb.sendMessage(sessionId, server2ClientMessage)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -97,37 +139,35 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
     }
 
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
-        cachedFunctions[jsBody]?.let {
-            val cachedFunctionCall = FunctionCall(jsId = it, arguments = listOf(*args))
-            kweb.callJs(sessionId, cachedFunctionCall, jsBody)
-        } ?: run {
+        val server2ClientMessage = if (cachedFunctions[jsBody] != null) {
+            FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args))
+        } else {
             val cacheId = generateCacheId()
             val func = makeJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            val cacheAndCallFunction = FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
+            FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
                     arguments = listOf(*args))
-            kweb.callJs(sessionId, cacheAndCallFunction, jsBody)
         }
+        kweb.callJs(sessionId, server2ClientMessage, jsBody)
     }
 
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (JsonElement) -> Unit, vararg args: JsonElement) {
-        cachedFunctions[jsBody]?.let {
-            val cachedFunctionCall = FunctionCall(jsId = it, arguments = listOf(*args), callbackId = callbackId)
-            kweb.callJsWithCallback(sessionId, cachedFunctionCall, jsBody, callback)
-        } ?: run {
+        val server2ClientMessage = if (cachedFunctions[jsBody] != null) {
+            FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args), callbackId = callbackId)
+        } else {
             val cacheId = generateCacheId()
             val func = makeJsFunction(jsBody)
             //we add the user's unmodified js as a key and the cacheId as it's value in the hashmap
             cachedFunctions[jsBody] = cacheId
             //we send the modified js to the client to be cached there.
             //we don't cache the modified js on the server, because then we'd have to modify JS on the server, everytime we want to check the server's cache
-            val cacheAndCallFunction = FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
-            arguments = listOf(*args), callbackId = callbackId)
-            kweb.callJsWithCallback(sessionId, cacheAndCallFunction, jsBody, callback)
+            FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
+                    arguments = listOf(*args), callbackId = callbackId)
         }
+        kweb.callJsWithCallback(sessionId, server2ClientMessage, jsBody, callback)
     }
 
     fun removeCallback(callbackId: Int) {
@@ -135,7 +175,7 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
     }
 
     suspend fun callJsFunctionWithResult(jsBody: String, vararg args: JsonElement): JsonElement {
-        require(kweb.isCatchingOutbound() == null) {
+        require(isCatchingOutbound() == null) {
             "You can not read the DOM inside a batched code block"
         }
         val callbackId = abs(random.nextInt())
@@ -190,6 +230,5 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
             return change.pathQueryFragment
         }
     } )
-
 }
 
