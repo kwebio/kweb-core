@@ -4,6 +4,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
 import kweb.Kweb
+import kweb.WebBrowser
 import kweb.util.KWebDSL
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
@@ -29,8 +30,8 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
         return event(eventName, eventPropertyNames) { propertiesAsElement ->
             val props = Json.decodeFromJsonElement(serializer, propertiesAsElement)
             try {
-                if (source.browser.kweb.isCatchingOutbound() == null) {
-                    source.browser.kweb.batch(source.browser.sessionId, Kweb.CatcherType.EVENT) {
+                if (source.browser.isCatchingOutbound() == null) {
+                    source.browser.batch(WebBrowser.CatcherType.EVENT) {
                         callback(props)
                     }
                 }

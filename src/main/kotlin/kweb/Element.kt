@@ -90,7 +90,7 @@ open class Element(
     fun setAttribute(name: String, value: JsonPrimitive): Element {
         val htmlDoc = browser.htmlDocument.get()
         when {
-            browser.kweb.isCatchingOutbound() != null -> {
+            browser.isCatchingOutbound() != null -> {
                 callJsFunction("document.getElementById({}).setAttribute({}, {})",
                         JsonPrimitive(id), JsonPrimitive(name), value)
             }
@@ -146,7 +146,7 @@ open class Element(
 
     fun removeAttribute(name: String): Element {
         when {
-            browser.kweb.isCatchingOutbound() != null -> {
+            browser.isCatchingOutbound() != null -> {
                 callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
             }
             else -> {
@@ -309,7 +309,7 @@ open class Element(
         val jsoupDoc = browser.htmlDocument.get()
         val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
-            browser.kweb.isCatchingOutbound() != null -> {
+            browser.isCatchingOutbound() != null -> {
                 callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
             }
             jsoupDoc != null -> {
@@ -355,7 +355,7 @@ open class Element(
             document.getElementById({}).appendChild(ntn);
         """.trimIndent()
         when {
-            browser.kweb.isCatchingOutbound() != null -> {
+            browser.isCatchingOutbound() != null -> {
                 callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
             }
             jsoupDoc != null -> {

@@ -15,7 +15,7 @@ open class ElementReader(protected val receiver: WebBrowser, internal val elemen
     init {
         //TODO I'm not sure if we want to allow reading the DOM during a render or non immediate event
         //require(receiver.kweb.isCatchingOutbound() != Kweb.CatcherType.IMMEDIATE_EVENT)
-        require(receiver.kweb.isCatchingOutbound() == null) {
+        require(receiver.isCatchingOutbound() == null) {
             """
             Reading the DOM when an outboundMessageCatcher is set is likely to have unintended consequences.
             Most likely you are trying to read the DOM within an `onImmediate {...}` block.
