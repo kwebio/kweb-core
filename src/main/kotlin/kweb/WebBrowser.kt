@@ -15,7 +15,6 @@ import kweb.state.ReversibleFunction
 import kweb.util.pathQueryFragment
 import kweb.util.random
 import mu.KotlinLogging
-import java.time.Instant
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
@@ -139,7 +138,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
-        val server2ClientMessage = if (cachedFunctions[jsBody] != null) {
+        val functionCall  = if (cachedFunctions[jsBody] != null) {
             FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args))
         } else {
             val cacheId = generateCacheId()
@@ -151,11 +150,22 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
                     arguments = listOf(*args))
         }
-        kweb.callJs(sessionId, server2ClientMessage, jsBody)
+        val debugInfo: DebugInfo? = if(!kweb.debug) null else {
+            DebugInfo(jsBody, "executing", Throwable())
+        }
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            kweb.callJs(sessionId, functionCall, debugInfo)
+        } else {
+            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
+            outboundMessageCatcher.functionList.add(functionCall)
+            val dontExecute = FunctionCall(debugToken = functionCall.debugToken, shouldExecute = false, functionCall)
+            kweb.callJs(sessionId, dontExecute, debugInfo)
+        }
     }
 
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (JsonElement) -> Unit, vararg args: JsonElement) {
-        val server2ClientMessage = if (cachedFunctions[jsBody] != null) {
+        val functionCall = if (cachedFunctions[jsBody] != null) {
             FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args), callbackId = callbackId)
         } else {
             val cacheId = generateCacheId()
@@ -167,7 +177,18 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
             FunctionCall(jsId = cacheId, js = func.js, parameters = func.params,
                     arguments = listOf(*args), callbackId = callbackId)
         }
-        kweb.callJsWithCallback(sessionId, server2ClientMessage, jsBody, callback)
+        val debugInfo: DebugInfo? = if(!kweb.debug) null else {
+            DebugInfo(jsBody, "executing", Throwable())
+        }
+        val outboundMessageCatcher = outboundMessageCatcher.get()
+        if (outboundMessageCatcher == null) {
+            kweb.callJsWithCallback(sessionId, functionCall, debugInfo, callback)
+        } else {
+            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
+            outboundMessageCatcher.functionList.add(functionCall)
+            val dontExecute = FunctionCall(debugToken = functionCall.debugToken, shouldExecute = false, functionCall)
+            kweb.callJsWithCallback(sessionId, dontExecute, debugInfo, callback)
+        }
     }
 
     fun removeCallback(callbackId: Int) {

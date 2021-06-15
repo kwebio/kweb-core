@@ -153,7 +153,7 @@ class Kweb private constructor(
     FunctionCalls that point to functions already in the cache will not contain the jsCode needed to create the debugToken
     So we have to pass it separately here.
      */
-    fun callJs(sessionId: String, funcCall: FunctionCall, debugInfo: DebugInfo?) {
+    fun callJs(sessionId: String, funcCall: FunctionCall, debugInfo: DebugInfo? = null) {
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
@@ -167,7 +167,7 @@ class Kweb private constructor(
     }
 
     fun callJsWithCallback(sessionId: String, funcCall: FunctionCall,
-                           debugInfo: DebugInfo?, callback: (JsonElement) -> Unit) {
+                           debugInfo: DebugInfo? = null, callback: (JsonElement) -> Unit) {
         val wsClientData = clientState.getIfPresent(sessionId)
                 ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
@@ -354,7 +354,7 @@ class Kweb private constructor(
                 //A plugin with an empty js string was breaking functionality.
                 if (js != "") {
                     val pluginFunction = FunctionCall(js = js)
-                    callJs(kwebSessionId, pluginFunction, js)
+                    callJs(kwebSessionId, pluginFunction)
                 }
             }
 
