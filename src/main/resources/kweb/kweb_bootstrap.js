@@ -54,8 +54,6 @@ function handleInboundMessage(msg) {
             }
         }
 
-        if (funcCall["shouldExecute"] === false) return
-
         if (callbackId !== undefined) {
             try {
                 const data = func.apply(this, args)

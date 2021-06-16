@@ -162,20 +162,9 @@ class Kweb private constructor(
         wsClientData.send(Server2ClientMessage(sessionId, funcCall))
     }
 
-    /*fun callJsWithCallback(sessionId: String, funcCall: FunctionCall,
-                           debugInfo: DebugInfo? = null, callback: (JsonElement) -> Unit) {
+    fun addCallback(sessionId: String, callbackId: Int, callback: (JsonElement) -> Unit) {
         val wsClientData = clientState.getIfPresent(sessionId)
-                ?: error("Client id $sessionId not found")
-        wsClientData.lastModified = Instant.now()
-        funcCall.callbackId?.let {
-            wsClientData.handlers[it] = callback
-        } ?: error("Javascript function callback wasn't given a callbackId")
-        callJs(sessionId, funcCall, debugInfo)
-    }*/
-
-    fun setupCallback(sessionId: String, callbackId: Int, callback: (JsonElement) -> Unit) {
-        val wsClientData = clientState.getIfPresent(sessionId)
-                ?: error("Client id $sessionId not found")
+                ?: error("Can not add callback because: Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
         wsClientData.handlers[callbackId] = callback
     }

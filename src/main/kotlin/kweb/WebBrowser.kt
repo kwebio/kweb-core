@@ -159,11 +159,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         } else {
             logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.functionList.add(functionCall)
-            //funcToCache is a functionCall object with the shouldExecute parameter set to false
-            //This tells the client to cache the function call, but to not run the code.
-            //I believe this is used to cache js code that is called in events.
-            //val funcToCache = FunctionCall(debugToken = functionCall.debugToken, shouldExecute = false, functionCall)
-            //kweb.callJs(sessionId, funcToCache, debugInfo)
         }
     }
 
@@ -189,13 +184,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         } else {
             logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.functionList.add(functionCall)
-            //funcToCache is a functionCall object with the shouldExecute parameter set to false
-            //This tells the client to cache the function call, but to not run the code.
-            //I believe this is used to cache js code that is called in events.
-            //val funcToCache = FunctionCall(debugToken = functionCall.debugToken, shouldExecute = false, functionCall)
-            //kweb.callJsWithCallback(sessionId, funcToCache, debugInfo, callback)
         }
-        kweb.setupCallback(sessionId, functionCall.callbackId!!, callback)
+        kweb.addCallback(sessionId, functionCall.callbackId!!, callback)
     }
 
     fun removeCallback(callbackId: Int) {
