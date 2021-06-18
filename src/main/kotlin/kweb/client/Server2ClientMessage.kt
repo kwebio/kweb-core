@@ -35,12 +35,4 @@ data class FunctionCall(
         val parameters: String? = null,
         val callbackId: Int? = null,
         val arguments: List<JsonElement> = emptyList(),
-        val shouldExecute: Boolean = true
-) {
-    constructor(debugToken: String?, funcCall: FunctionCall) : this(debugToken = debugToken, jsId = funcCall.jsId,
-        js = funcCall.js, parameters = funcCall.parameters, callbackId = funcCall.callbackId,
-            arguments = funcCall.arguments, shouldExecute = funcCall.shouldExecute)
-    constructor(debugToken: String?, shouldExecute: Boolean, funcCall: FunctionCall) : this(debugToken = debugToken,
-            jsId = funcCall.jsId, js = funcCall.js, parameters = funcCall.parameters, callbackId = funcCall.callbackId,
-            arguments = funcCall.arguments, shouldExecute = shouldExecute)
-}
+)

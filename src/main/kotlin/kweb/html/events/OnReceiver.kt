@@ -3,7 +3,6 @@ package kweb.html.events
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
-import kweb.Kweb
 import kweb.WebBrowser
 import kweb.util.KWebDSL
 import mu.KotlinLogging
