@@ -283,6 +283,26 @@ open class Element(
         return this
     }
 
+    fun removeChildrenAt(start: Int, end: Int): Element {
+        val htmlDoc = browser.htmlDocument.get()
+        when {
+            htmlDoc != null -> {
+                for (i in start..end) {
+                    removeChildAt(i)
+                }
+            }
+            else -> {
+                callJsFunction("""
+                    let element = document.getElementById({});
+                    for (var i = $start; i <= $end; i++) {
+                        element.removeChild(element.children[i]);
+                    }
+                """.trimIndent())
+            }
+        }
+        return this
+    }
+
     fun removeChildAt(position: Int): Element {
         val htmlDoc = browser.htmlDocument.get()
         when {
