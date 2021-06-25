@@ -283,21 +283,24 @@ open class Element(
         return this
     }
 
-    fun removeChildrenAt(start: Int, end: Int): Element {
+    fun removeChildrenBetweenSpans(startSpanId : String, endSpanId: String) : Element{
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                for (i in start..end) {
-                    removeChildAt(i)
+                htmlDoc.getElementById(this.id).let { jsoupElement ->
+                    //jsoupElement.
                 }
             }
             else -> {
                 callJsFunction("""
-                    let element = document.getElementById({});
-                    for (var i = $start; i <= $end; i++) {
-                        element.removeChild(element.children[i]);
+                    let startSpan = document.getElementById({});
+                    let endSpan = document.getElementById({});
+                    let dummy = startSpan.nextSibling;
+                    while(dummy != endSpan) {
+                        startSpan.parentNode.removeChild(startSpan.nextSibling);
+                        dummy = startSpan.nextSibling;
                     }
-                """.trimIndent())
+                """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId))
             }
         }
         return this
