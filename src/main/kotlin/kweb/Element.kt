@@ -317,9 +317,10 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).let { jsoupElement ->
-                    jsoupElement.children()[position]
-                }
+                htmlDoc
+                    .getElementById(this.id)
+                    .children()[position]
+                    .remove()
             }
             else -> {
                 callJsFunction("""
