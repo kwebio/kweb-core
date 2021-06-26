@@ -33,18 +33,37 @@ fun <T : Any?> ElementCreator<*>.render(
 
     val renderState = AtomicReference(NOT_RENDERING)
 
+    //TODO this could be improved
+    var startSpanId = ""
+    var endSpanId = ""
+    if (parent.browser.isCatchingOutbound() == null) {
+        parent.browser.batch(WebBrowser.CatcherType.RENDER) {
+            val startSpan = span()
+            val endSpan = span()
+            startSpanId = startSpan.id
+            endSpanId = endSpan.id
+        }
+    } else {
+        val startSpan = span()
+        val endSpan = span()
+        startSpanId = startSpan.id
+        endSpanId = endSpan.id
+    }
+
     fun eraseAndRender() {
         do {
             if (parent.browser.isCatchingOutbound() == null) {
                 parent.browser.batch(WebBrowser.CatcherType.RENDER) {
-                    containerElement.removeChildren() // REMOVE ALL ELEMENTS BETWEEN startSpan and endSpan
-                    containerElement.new {
-                        previousElementCreator.getAndSet(this)?.cleanup()
-                        renderState.set(RENDERING_NO_PENDING_CHANGE)
-                        block(value.value)
-                        if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-                            renderState.set(NOT_RENDERING)
-                        }
+
+                    containerElement.removeChildrenBetweenSpans(startSpan.id, endSpan.id)
+                    // SCRATCH
+                    previousElementCreator.get()?.cleanup()
+
+                    previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertAfter = startSpan.id))
+                    renderState.set(RENDERING_NO_PENDING_CHANGE)
+                    previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
+                    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+                        renderState.set(NOT_RENDERING)
                     }
                 }
             } else {
