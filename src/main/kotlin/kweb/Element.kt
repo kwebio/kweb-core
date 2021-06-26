@@ -287,18 +287,25 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
+                //TODO this will only run during initial page render, and is currently untested.
                 htmlDoc.getElementById(this.id).let { jsoupElement ->
-                    //jsoupElement.
+                    val startSpan = jsoupElement.getElementById(startSpanId)
+                    val endSpan = jsoupElement.getElementById(endSpanId)
+                    var nextSibling = startSpan.nextElementSibling()
+                    while (nextSibling != endSpan) {
+                        nextSibling.remove()
+                        nextSibling = startSpan.nextElementSibling()
+                    }
                 }
             }
             else -> {
                 callJsFunction("""
                     let startSpan = document.getElementById({});
                     let endSpan = document.getElementById({});
-                    let dummy = startSpan.nextSibling;
-                    while(dummy != endSpan) {
+                    let nextSibling = startSpan.nextSibling;
+                    while(nextSibling != endSpan) {
                         startSpan.parentNode.removeChild(startSpan.nextSibling);
-                        dummy = startSpan.nextSibling;
+                        nextSibling = startSpan.nextSibling;
                     }
                 """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId))
             }
