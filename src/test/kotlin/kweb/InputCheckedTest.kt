@@ -73,9 +73,6 @@ class InputCheckedTestApp {
         doc.body {
             val i = input(type = InputType.checkbox)
             checkKVar = i.checked()
-            checkKVar.addListener { old, new ->
-                println("$old -> $new")
-            }
         }
     }
 
