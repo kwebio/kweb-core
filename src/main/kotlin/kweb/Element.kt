@@ -8,6 +8,7 @@ import kweb.html.events.OnImmediateReceiver
 import kweb.html.events.OnReceiver
 import kweb.html.style.StyleReceiver
 import kweb.plugins.KwebPlugin
+import kweb.state.CloseReason
 import kweb.state.KVal
 import kweb.state.KVar
 import kweb.util.KWebDSL
@@ -409,6 +410,47 @@ open class Element(
         return this
     }
 
+    /**
+     * Return a KVar that is tied to a property related to an element, which will update when an specified
+     * event fires on this element. This is a convenience wrapper around [bind]
+     *
+     * See implementation of [InputElement.checked] for a usage example
+     *
+     * @param accessor Function that takes an element id and returns a JavaScript expression to access that element
+     * @param updateOnEvent The event to listen for that signifies this element has been updated
+     * @param initialValue The initial value of the KVar
+     */
+    fun bind(accessor : (elementId : String) -> String, updateOnEvent: String, initialValue : JsonElement = JsonPrimitive("")) : KVar<JsonElement> {
+        return bind(reader = { accessor(it) }, writer = { id, value -> "${accessor(id)} = $value" }, updateOnEvent = updateOnEvent, initialValue = initialValue)
+    }
+
+    /**
+     * Return a KVar that is tied to a property related to an element, which will update when an specified
+     * event fires on this element.
+     *
+     * See implementation of [InputElement.checked] for a usage example
+     *
+     * @param reader Function that takes an element id and returns a JavaScript expression to read that element
+     * @param writer Function that takes an element id and a new value, and returns a JavaScript expression to
+     *               write that value.
+     * @param updateOnEvent The event to listen for that signifies this element has been updated
+     * @param initialValue The initial value of the KVar
+     */
+    fun bind(reader : (elementId : String) -> String, writer : (elementId : String, value : String) -> String, updateOnEvent : String, initialValue : JsonElement = JsonPrimitive("")) : KVar<JsonElement> {
+        val kv = KVar(initialValue)
+        on(retrieveJs = reader(this.id)).event<Event>(updateOnEvent) { event ->
+            kv.value = event.retrieved
+        }
+        val kvChangeHandler = kv.addListener { old, new ->
+            callJsFunction(writer(this.id, "{}")+";", new)
+        }
+        creator?.onCleanup(true) {
+            kv.removeListener(kvChangeHandler)
+            kv.close(CloseReason("Ancestor ElementCreator cleaned up"))
+        }
+        callJsFunction(writer(this.id, "{}")+";", initialValue)
+        return kv
+    }
 
     fun delete() {
         callJsFunction("""
@@ -440,7 +482,7 @@ open class Element(
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
-     * be available via [Event.retrieveJs]
+     * be available via [Event.retrieved]
      */
     fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
 

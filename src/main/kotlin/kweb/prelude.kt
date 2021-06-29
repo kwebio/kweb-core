@@ -3,9 +3,7 @@ package kweb
 import io.ktor.routing.*
 import io.mola.galimatias.URL
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNull
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.*
 import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
@@ -303,9 +301,6 @@ fun ElementCreator<Element>.meta(
 }
 
 open class InputElement(override val element: Element) : ValueElement(element) {
-    fun checked(checked: Boolean) = if (checked) setAttribute("checked", JsonPrimitive(checked)) else removeAttribute("checked")
-
-
     fun select() = element.callJsFunction("document.getElementById({}).select();", JsonPrimitive(id))
 
     fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
@@ -314,6 +309,15 @@ open class InputElement(override val element: Element) : ValueElement(element) {
 
     fun setReadOnly(ro: Boolean) = element.callJsFunction("document.getElementById({}).readOnly = {};",
             JsonPrimitive(id), JsonPrimitive(ro))
+
+    fun checked(initialValue : Boolean = false) : KVar<Boolean> {
+        val kv = bind(accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change", initialValue = JsonPrimitive(initialValue))
+        return kv.map(object : ReversibleFunction<JsonElement, Boolean>("") {
+            override fun invoke(from: JsonElement) = from.jsonPrimitive.boolean
+
+            override fun reverse(original: JsonElement, change: Boolean) = JsonPrimitive(change)
+        })
+    }
 }
 
 enum class InputType {
@@ -446,7 +450,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     var value: KVar<String>
         get() {
             if (_valueKvar == null) {
-                _valueKvar = KVar("")
+                value = KVar("")
             }
             return _valueKvar!!
         }
@@ -493,6 +497,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
             }
         }
     }
+
 }
 
 /******************************
