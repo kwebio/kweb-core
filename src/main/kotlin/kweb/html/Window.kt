@@ -19,55 +19,13 @@ import kweb.util.random
  *
  * @sample document_sample
  */
-class Document(val receiver: WebBrowser) : EventGenerator<Document> {
-    fun getElementById(id: String) = Element(receiver, null, "return document.getElementById(\"$id\")", id = id)
-
-    val cookie = CookieReceiver(receiver)
-
-    val body = BodyElement(receiver, "K_body")
-
-    fun body(new: (ElementCreator<BodyElement>.() -> Unit)? = null) : BodyElement {
-        if (new != null) {
-            new(ElementCreator(parent = body, position = null))
-        }
-        return body
-    }
-
-    val head = HeadElement(receiver, "K_head")
-
-    fun head(new: (ElementCreator<HeadElement>.() -> Unit)? = null) : HeadElement {
-        if (new != null) {
-            new(ElementCreator(parent = head, position = null))
-        }
-        return head
-    }
-
-    suspend fun getOrigin(): Any {
-        return receiver.callJsFunctionWithResult("return document.origin")
-    }
-
-    fun execCommand(command: String) {
-        receiver.callJsFunction("document.execCommand({});", JsonPrimitive(command))
-    }
-
-    /**
-     * Allows data to be stored in and retrieved from the browser's [local storage](https://www.w3schools.com/html/html5_webstorage.as).
-     *
-     * @sample local_storage_sample
-     */
-    val localStorage get() = StorageReceiver(receiver, StorageType.local)
-
-
-    /**
-     * Allows data to be stored in and retrieved from the browser's [session storage](https://www.w3schools.com/html/html5_webstorage.as).
-     */
-    val sessionStorage get() = StorageReceiver(receiver, StorageType.session)
+class Window(val receiver: WebBrowser) : EventGenerator<Window> {
 
     override val browser = receiver
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = """
-            return document.addEventListener({}, function(event) {
+            return window.addEventListener({}, function(event) {
                 $jsCode
             });
         """.trimIndent()
@@ -77,12 +35,12 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     }
 
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Document {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Window {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
-            document.addEventListener({}, function(event) {
+            window.addEventListener({}, function(event) {
                 callbackWs({}, $eventObject);
             });
         """
@@ -95,7 +53,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: OnReceiver<Document> get() = OnReceiver(this)
+    val on: OnReceiver<Window> get() = OnReceiver(this)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
