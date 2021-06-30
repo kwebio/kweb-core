@@ -9,6 +9,7 @@ import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
+import kweb.html.Window
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
@@ -227,6 +228,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     val doc = Document(this)
+
+    val window = Window(this)
 
     /**
      * The URL of the page, relative to the origin - so for the page `http://foo/bar?baz#1`, the value would be
