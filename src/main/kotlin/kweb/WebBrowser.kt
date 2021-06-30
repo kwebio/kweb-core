@@ -9,7 +9,6 @@ import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
-import kweb.html.Window
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
@@ -26,7 +25,7 @@ import kotlin.reflect.jvm.jvmName
 
 /**
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
- * expressions and retrieve the result.
+ * expressions and retrieveJs the result.
  */
 
 private val logger = KotlinLogging.logger {}
@@ -228,8 +227,6 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
     }
 
     val doc = Document(this)
-
-    val window = Window(this)
 
     /**
      * The URL of the page, relative to the origin - so for the page `http://foo/bar?baz#1`, the value would be

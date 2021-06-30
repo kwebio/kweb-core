@@ -99,7 +99,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
-     * be available via [Event.retrieved]
+     * be available via [Event.retrieveJs]
      */
     fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
 

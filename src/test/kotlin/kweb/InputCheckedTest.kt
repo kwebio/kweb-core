@@ -40,7 +40,7 @@ class InputCheckedTest(@Arguments("--headless") private var driver: WebDriver) {
 
     @Test
     fun checkBeforeAndAfterClick() {
-        driver.get("http://localhost:7667/")
+        driver.get("http://localhost:7660/")
         val input = driver.findElement<WebElement>(By.tagName("input"))
         inputCheckedTestApp.checkKVar.value shouldBe false
         input.click()
@@ -69,7 +69,7 @@ class InputCheckedTestApp {
 
     internal lateinit var checkKVar : KVar<Boolean>
 
-    val server: Kweb = Kweb(port= 7667) {
+    val server: Kweb = Kweb(port= 7660) {
         doc.body {
             val i = input(type = InputType.checkbox)
             checkKVar = i.checked()
