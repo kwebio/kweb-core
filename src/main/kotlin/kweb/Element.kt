@@ -371,6 +371,7 @@ open class Element(
     }
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
+        //language=JavaScript
         val wrappedJS = """
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode

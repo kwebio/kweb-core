@@ -52,6 +52,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
         if (value == JsonNull || value.toString() == "") {
             throw IllegalArgumentException("$obj cannot store the value \"\"")
         }
+        //language=JavaScript
         receiver.callJsFunction("$obj.setItem({}, {});", JsonPrimitive(key), value)
     }
 
@@ -73,6 +74,7 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     }
 
     fun remove(key: String) {
+        //language=JavaScript
         receiver.callJsFunction("$obj.removeItem({});", JsonPrimitive(key))
     }
 

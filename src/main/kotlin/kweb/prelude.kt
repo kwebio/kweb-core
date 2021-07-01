@@ -431,6 +431,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     } }, JsonPrimitive(id))
         ?: error("Not sure why .evaluate() would return null")
 
+    //language=JavaScript
     fun setValue(newValue: String) = element.browser.callJsFunction("document.getElementById({}).value = {};",
             JsonPrimitive(element.id), JsonPrimitive(newValue))
     fun setValue(newValue: KVal<String>) {

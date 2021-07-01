@@ -53,6 +53,7 @@ class CookieReceiver(val receiver: WebBrowser) {
         //setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure)
         //TODO this setJson function didn't have an argument for bSecure, so I decided to just explicitly pass a JsonNull,
         //Maybe we should add a parameter to the kotlin function for bSecure?
+        //language=JavaScript
         receiver.callJsFunction("docCookies.setItem({},{},{},{},{},{});", keyArg, value, expiresArg, pathArg, domainArg, JsonNull)
 
     }
@@ -76,6 +77,7 @@ class CookieReceiver(val receiver: WebBrowser) {
     }
 
     fun remove(name: String) {
+        //language=JavaScript
         receiver.callJsFunction("docCookies.removeItem({});", JsonPrimitive(name))
     }
 }

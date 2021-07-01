@@ -47,6 +47,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     }
 
     fun execCommand(command: String) {
+        //language=JavaScript
         receiver.callJsFunction("document.execCommand({});", JsonPrimitive(command))
     }
 

@@ -206,8 +206,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     private fun createCacheFunctionJs(cacheId: Int, functionBody: String, params: String? = null) : String {
         params?.let {
+            //language=JavaScript
             return """cachedFunctions[$cacheId] = new Function("$params", "$functionBody");"""
         }
+        //language=JavaScript
         return """cachedFunctions[$cacheId] = new Function("$functionBody");"""
     }
 
@@ -256,6 +258,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
         //{ } is used to initialize an empty map here. Without the space, it would be treated
         //as a variable using Kweb's template syntax
+        //language=JavaScript
         callJsFunction("""
         history.pushState({ }, "", {});
         """.trimIndent(), JsonPrimitive(url))

@@ -59,6 +59,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val htmlDoc = browser.htmlDocument.get()
         when {
             parent.browser.isCatchingOutbound() != null -> {
+                //language=JavaScript
                 val createElementJs = """
                     let tag = {};
                     let attributes = {};
