@@ -7,7 +7,7 @@ import kweb.Kweb
 import kweb.WebBrowser
 import kweb.util.KWebDSL
 
-@Deprecated("")
+@Deprecated("This class will be removed in a future Kweb version")
 @KWebDSL
 open class ElementReader(protected val receiver: WebBrowser, internal val elementId: String) {
     constructor(element: Element) : this(element.browser, element.id)
