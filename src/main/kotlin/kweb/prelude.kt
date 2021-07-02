@@ -488,7 +488,10 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     fun setValue(toBind: KVar<String>, updateOn: String = "input") {
         setValue(toBind as KVal<String>)
 
-        on(retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))").event<Event>(updateOn) {
+        on(
+            //language=JavaScript
+            retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))")
+            .event<Event>(updateOn) {
             //TODO, this check shouldn't be necessary. It should be impossible for get_diff_changes() to return a null,
             //but we had a null check previously, so I went ahead and added it.
             if (it.retrieved != JsonNull) {

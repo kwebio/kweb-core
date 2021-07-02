@@ -10,6 +10,7 @@ import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
 import kweb.html.Window
+import kweb.html.events.Event
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
@@ -239,6 +240,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      *
      * When this KVar is modified the browser will automatically update the URL in the browser along with any DOM
      * elements based on this [url] (this will be handled automatically by [kweb.routing.route]).
+     *
+     * If the [popstate event](https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event) fires
+     * in the browser, for example if the Back button is pressed, then this URL will also update - potentially
+     * triggering re-renders of any DOM elements that depend on the URL.
      */
     val url: KVar<String>
             by lazy {
@@ -247,6 +252,18 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
                 url.addListener { _, newState ->
                     pushState(newState)
+                }
+
+
+                window.on(
+                    //language=JavaScript
+                    retrieveJs = "document.location.href"
+                ).popstate { event : Event ->
+                    if (event.retrieved is JsonPrimitive && event.retrieved.isString) {
+                        url.value = URL.parse(event.retrieved.content).pathQueryFragment
+                    } else {
+                        error("event.retrieved isn't a string")
+                    }
                 }
 
                 url

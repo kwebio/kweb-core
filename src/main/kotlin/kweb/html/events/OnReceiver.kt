@@ -47,7 +47,7 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
         val memberPropertiesCache: ConcurrentHashMap<KClass<*>, Set<String>> = ConcurrentHashMap()
         inline fun <reified T : Any> memberProperties(clazz: KClass<T>) =
                 memberPropertiesCache.get(clazz)
-                        ?: T::class.memberProperties.map { it.name }.toSet().also { memberPropertiesCache.put(clazz, it) }
+                        ?: T::class.memberProperties.map { it.name }.toSet().minus("retrieved").also { memberPropertiesCache.put(clazz, it) }
     }
 
     // Mouse events
@@ -116,6 +116,10 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
     // Selection Events TODO: define eventtype
     fun selectstart(callback: (event: Event) -> Unit) = event("selectstart",  callback = callback)
     fun selectionchange(callback: (event: Event) -> Unit) = event("selectionchange",  callback = callback)
+
+    // Window events
+    fun popstate(callback: (event: Event) -> Unit) = event("popstate",  callback = callback)
+
 
     /*
     // Media Events TODO: define eventtype

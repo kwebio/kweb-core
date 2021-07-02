@@ -5,7 +5,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
 
 @Serializable
-open class Event(open val type: String, val retrieved: JsonElement = JsonNull)
+data class Event(val type: String, val retrieved: JsonElement = JsonNull)
 
 @Serializable
 data class KeyboardEvent(val type: String, val detail: Long,
