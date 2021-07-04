@@ -1,11 +1,11 @@
 package kweb.html.events
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.*
 import kotlinx.serialization.serializer
 import kweb.WebBrowser
 import kweb.util.KWebDSL
 import mu.KotlinLogging
+import java.util.Collections.emptySet
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
@@ -27,18 +27,25 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
 
         val serializer = serializer<U>()
         return event(eventName, eventPropertyNames) { propertiesAsElement ->
-            val props = Json.decodeFromJsonElement(serializer, propertiesAsElement)
-            try {
-                if (source.browser.isCatchingOutbound() == null) {
-                    source.browser.batch(WebBrowser.CatcherType.EVENT) {
+            if (propertiesAsElement == JsonNull) {
+                /*
+                 * Couldn't figure out why this was happening, but it doesn't appear to have any
+                 * negative effect. TODO: Figure out why it's happening and fix
+                 */
+                logger.warn { "Received event callback with JsonNull where data is expected, disregarding" }
+            } else {
+                val props = Json.decodeFromJsonElement(serializer, propertiesAsElement)
+                try {
+                    if (source.browser.isCatchingOutbound() == null) {
+                        source.browser.batch(WebBrowser.CatcherType.EVENT) {
+                            callback(props)
+                        }
+                    } else {
                         callback(props)
                     }
+                } catch (e: Exception) {
+                    logger.error(e) { "Exception thrown by callback in response to $eventName event" }
                 }
-                else {
-                    callback(props)
-                }
-            } catch (e: Exception) {
-                logger.error(e) { "Exception thrown by callback in response to $eventName event" }
             }
         }
     }
