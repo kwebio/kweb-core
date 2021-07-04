@@ -1,5 +1,6 @@
 package kweb.html.events
 
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.serialization.json.*
 import kotlinx.serialization.serializer
 import kweb.WebBrowser
@@ -53,7 +54,7 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
     companion object {
         val memberPropertiesCache: ConcurrentHashMap<KClass<*>, Set<String>> = ConcurrentHashMap()
         inline fun <reified T : Any> memberProperties(clazz: KClass<T>) =
-                memberPropertiesCache.get(clazz)
+                memberPropertiesCache[clazz]
                         ?: T::class.memberProperties.map { it.name }.toSet().minus("retrieved").also { memberPropertiesCache.put(clazz, it) }
     }
 
