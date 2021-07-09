@@ -511,14 +511,24 @@ open class Element(
         return kv
     }
 
+    /**
+     * Remove this element by calling [removeChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild)
+     * on its parent element. An error will occur in the browser if the element doesn't exist.
+     */
     fun delete() {
+        //language=JavaScript
         callJsFunction("""
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
         """.trimIndent(), JsonPrimitive(id))
     }
 
+    /**
+     * Remove this element by calling [removeChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild)
+     * on its parent element if it exists.
+     */
     fun deleteIfExists() {
+        //language=JavaScript
         callJsFunction("""
             let id = {}
             if (document.getElementById(id)) {
@@ -528,8 +538,14 @@ open class Element(
         """.trimIndent(), JsonPrimitive(id))
     }
 
+    /**
+     * Determines whether this element will be [spellchecked](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck).
+     */
     fun spellcheck(spellcheck: Boolean = true) = setAttribute("spellcheck", JsonPrimitive(spellcheck))
 
+    /**
+     * Some convenience functions for modifying an element's [style attribute](https://www.w3schools.com/tags/att_style.asp).
+     */
     val style get() = StyleReceiver(this)
 
     val flags = ConcurrentSkipListSet<String>()
@@ -540,8 +556,12 @@ open class Element(
     val on: OnReceiver<Element> get() = OnReceiver(this)
 
     /**
-     * You can supply a javascript expression `retrieveJs` which will
-     * be available via [Event.retrieved]
+     * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
+     *
+     * @param retrieveJs A JavaScript expression that will be returned to the server
+     * in [Event.retrieved] when an event fires in the browser.
+     *
+     * @sample ValueElement.getValue
      */
     fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
 
