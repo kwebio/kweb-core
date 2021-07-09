@@ -16,8 +16,6 @@ import kweb.util.random
  * [document](https://www.w3schools.com/jsref/dom_obj_document.asp) object.
  *
  * Passed in as `doc` to the `buildPage` lambda of the [Kweb] constructor.
- *
- * @sample document_sample
  */
 class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     fun getElementById(id: String) = Element(receiver, null, "return document.getElementById(\"$id\")", id = id)
