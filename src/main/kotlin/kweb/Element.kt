@@ -144,6 +144,10 @@ open class Element(
     fun setAttribute(name : String, value : Number)
         = setAttribute(name, JsonPrimitive(value))
 
+    /**
+     * Set an attribute to the value in a [KVal], if the value changes the attribute
+     * value will be updated automatically.
+     */
     fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
         setAttribute(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
@@ -158,10 +162,10 @@ open class Element(
     fun removeAttribute(name: String): Element {
         when {
             browser.isCatchingOutbound() != null -> {
-                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
+                callJsFunction("document.getElementById({}).removeAttribute({})", JsonPrimitive(id), JsonPrimitive(name))
             }
             else -> {
-                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
+                callJsFunction("document.getElementById({}).removeAttribute({})", JsonPrimitive(id), JsonPrimitive(name))
             }
 
         }
