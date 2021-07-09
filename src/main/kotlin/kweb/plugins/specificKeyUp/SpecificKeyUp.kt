@@ -7,6 +7,7 @@ import kweb.html.events.KeyboardEvent
 import kweb.html.events.OnImmediateReceiver
 import kweb.html.events.OnReceiver
 import kweb.plugins.KwebPlugin
+import kweb.util.json
 
 /**
  * @author sanity
@@ -37,7 +38,7 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
                 element.dispatchEvent(keySpecificKeyUpEvent);
             }
         });
-    """.trimIndent(), JsonPrimitive(id), JsonPrimitive(keys.joinToString(separator = ",")))
+    """.trimIndent(), id.json, JsonPrimitive(keys.joinToString(separator = ",")))
 }
 
 fun OnReceiver<Element>.keySpecificKeyup(callback: (event: KeyboardEvent) -> Unit): Element {

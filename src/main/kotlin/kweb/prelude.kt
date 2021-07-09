@@ -13,6 +13,7 @@ import kweb.routing.PathTemplate
 import kweb.routing.RouteReceiver
 import kweb.routing.UrlToPathSegmentsRF
 import kweb.state.*
+import kweb.util.json
 import kweb.util.pathQueryFragment
 import kotlin.collections.set
 
@@ -290,8 +291,8 @@ fun ElementCreator<Element>.meta(
 ): MetaElement {
     return MetaElement(
         element(
-            "meta", attributes.set("name", JsonPrimitive(name))
-                .set("content", JsonPrimitive(content))
+            "meta", attributes.set("name", name.json)
+                .set("content", content.json)
                 .set("http-equiv", JsonPrimitive(httpEquiv))
                 .set("charset", JsonPrimitive(charset))
         )
@@ -301,14 +302,14 @@ fun ElementCreator<Element>.meta(
 }
 
 open class InputElement(override val element: Element) : ValueElement(element) {
-    fun select() = element.callJsFunction("document.getElementById({}).select();", JsonPrimitive(id))
+    fun select() = element.callJsFunction("document.getElementById({}).select();", id.json)
 
     fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
             "document.getElementById({}).setSelectionRange({}, {});",
-            JsonPrimitive(id), JsonPrimitive(start), JsonPrimitive(end))
+            id.json, start.json, end.json)
 
     fun setReadOnly(ro: Boolean) = element.callJsFunction("document.getElementById({}).readOnly = {};",
-            JsonPrimitive(id), JsonPrimitive(ro))
+            id.json, ro.json)
 
     fun checked(initialValue : Boolean = false) : KVar<Boolean> {
         val kv = bind(accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change", initialValue = JsonPrimitive(initialValue))
@@ -458,12 +459,12 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { when (it) {
         is JsonPrimitive -> it.content
         else -> error("Needs to be JsonPrimitive")
-    } }, JsonPrimitive(id))
+    } }, id.json)
         ?: error("Not sure why .evaluate() would return null")
 
     //language=JavaScript
-    fun setValue(newValue: String) = element.browser.callJsFunction("document.getElementById({}).value = {};",
-            JsonPrimitive(element.id), JsonPrimitive(newValue))
+    fun setValue(newValue: String) = element.callJsFunction("document.getElementById({}).value = {};",
+            element.id.json, newValue.json)
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)
@@ -690,18 +691,6 @@ val KVar<URL>.pathQueryFragment
             return original.resolve(change)
         }
     })
-
-fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
-    val newKVar = KVar(this.first.value to this.second.value)
-    this.first.addListener { _, n -> newKVar.value = n to this.second.value }
-    this.second.addListener { _, n -> newKVar.value = this.first.value to n }
-
-    newKVar.addListener { o, n ->
-        this.first.value = n.first
-        this.second.value = n.second
-    }
-    return newKVar
-}
 
 infix operator fun KVar<String>.plus(s: String) = this.map { it + s }
 infix operator fun String.plus(sKV: KVar<String>) = sKV.map { this + it }

@@ -2,7 +2,7 @@ package kweb.state
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
-import kweb.combine
+import kweb.util.combine
 
 class KVarSpec : FreeSpec({
     "a KVar with value `dog`" - {

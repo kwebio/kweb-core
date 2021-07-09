@@ -7,6 +7,7 @@ import kweb.plugins.staticFiles.ResourceFolder
 import kweb.plugins.staticFiles.StaticFilesPlugin
 import kweb.plugins.staticFiles.internalStaticFilePath
 import kweb.table
+import kweb.util.json
 import org.jsoup.nodes.Document
 
 private const val resourceFolder = "kweb/plugins/jqueryCore/static"
@@ -31,5 +32,5 @@ val jqueryCore = JQueryCorePlugin()
  * @sample table().executeOnSelf(".tablesort()")
  */
 fun Element.executeOnSelf(js: String) {
-    callJsFunction("$('#' + {})$js", JsonPrimitive(id))
+    callJsFunction("$('#' + {})$js", id.json)
 }

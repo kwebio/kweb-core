@@ -12,6 +12,7 @@ import kweb.state.CloseReason
 import kweb.state.KVal
 import kweb.state.KVar
 import kweb.util.KWebDSL
+import kweb.util.json
 import kweb.util.random
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.math.abs
@@ -112,14 +113,14 @@ open class Element(
         when {
             browser.isCatchingOutbound() != null -> {
                 callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                        JsonPrimitive(id), JsonPrimitive(name), value)
+                        id.json, name.json, value)
             }
             htmlDoc != null -> {
                 htmlDoc.getElementById(this.id).attr(name, value.content)
             }
             else -> {
                 callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                        JsonPrimitive(id), JsonPrimitive(name), value)
+                        id.json, name.json, value)
             }
         }
         if (name.equals("id", ignoreCase = true)) {
@@ -175,7 +176,7 @@ open class Element(
                 htmlDoc.getElementById(id).removeAttr(name)
             }
             else -> {
-                callJsFunction("document.getElementById({}).removeAttribute({})", JsonPrimitive(id), JsonPrimitive(name))
+                callJsFunction("document.getElementById({}).removeAttribute({})", id.json, JsonPrimitive(name))
             }
 
         }
@@ -194,7 +195,7 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                callJsFunction("document.getElementById({}).innerHTML = {}", JsonPrimitive(id), JsonPrimitive(html))
+                callJsFunction("document.getElementById({}).innerHTML = {}", id.json, JsonPrimitive(html))
             }
         }
         return this
@@ -216,12 +217,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        callJsFunction("document.getElementById({}).focus();", JsonPrimitive(id))
+        callJsFunction("document.getElementById({}).focus();", id.json)
         return this
     }
 
     fun blur(): Element {
-        callJsFunction("document.getElementById({}).blur();", JsonPrimitive(id))
+        callJsFunction("document.getElementById({}).blur();", id.json)
         return this
     }
 
@@ -229,7 +230,7 @@ open class Element(
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
      * this is a wrapper around [setAttribute].
      */
-    fun classes(value : KVal<String>) = setAttribute("class", value.map { JsonPrimitive(it) })
+    fun classes(value : KVal<String>) = setAttribute("class", value.map { it.json })
 
     /**
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
@@ -242,7 +243,7 @@ open class Element(
      * this is a wrapper around [setAttribute].
      */
     fun setClasses(vararg value: String): Element {
-        setAttribute("class", JsonPrimitive(value.joinToString(separator = " ")))
+        setAttribute("class", value.joinToString(separator = " ").json)
         return this
     }
 
@@ -262,7 +263,7 @@ open class Element(
                     let el = document.getElementById(id);
                     if (el.classList) el.classList.add(className);
                     else if (!hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
+                """.trimIndent(), id.json, JsonPrimitive(class_))
             }
         }
         return this
@@ -289,7 +290,7 @@ open class Element(
                         var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
                         el.className = el.className.replace(reg, " ");
                     }
-                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
+                """.trimIndent(), id.json, JsonPrimitive(class_))
             }
         }
         return this
@@ -332,7 +333,7 @@ open class Element(
                             element.removeChild(element.firstChild);
                         }
                     }
-                """.trimIndent(), JsonPrimitive(id))
+                """.trimIndent(), id.json)
             }
         }
 
@@ -352,7 +353,7 @@ open class Element(
                 callJsFunction("""
                         let element = document.getElementById({});
                         element.removeChild(element.children[{}]);
-                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(position))
+                """.trimIndent(), id.json, position.json)
             }
         }
         return this
@@ -368,14 +369,14 @@ open class Element(
         val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
             browser.isCatchingOutbound() != null -> {
-                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
+                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             else -> {
-                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
+                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
         }
         return this
@@ -415,14 +416,14 @@ open class Element(
         """.trimIndent()
         when {
             browser.isCatchingOutbound() != null -> {
-                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             else -> {
-                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
             }
         }
         return this
@@ -434,7 +435,7 @@ open class Element(
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
             });""".trimIndent()
-        browser.callJsFunction(wrappedJS, JsonPrimitive(id), JsonPrimitive(eventName))
+        browser.callJsFunction(wrappedJS, id.json, JsonPrimitive(eventName))
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Element {
@@ -462,7 +463,7 @@ open class Element(
             if (payload is JsonObject) {
                 callback.invoke(payload)
             }
-        }, JsonPrimitive(id), JsonPrimitive(eventName), JsonPrimitive(callbackId))
+        }, id.json, JsonPrimitive(eventName), JsonPrimitive(callbackId))
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }
@@ -520,7 +521,7 @@ open class Element(
         callJsFunction("""
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
-        """.trimIndent(), JsonPrimitive(id))
+        """.trimIndent(), id.json)
     }
 
     /**
@@ -535,7 +536,7 @@ open class Element(
                 let element = document.getElementById(id);
                 element.parentNode.removeChild(element);
             }
-        """.trimIndent(), JsonPrimitive(id))
+        """.trimIndent(), id.json)
     }
 
     /**

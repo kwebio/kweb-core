@@ -7,6 +7,7 @@ import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.util.KWebDSL
+import kweb.util.json
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -89,7 +90,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
+                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
                         JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
             }
             htmlDoc != null -> {
@@ -130,8 +131,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.insertBefore(newEl, parentElement.children[position]);
                     }
                 """.trimIndent()
-                parent.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
-                        JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
+                parent.callJsFunction(createElementJs, tag.json, JsonObject(mutAttributes), id.json,
+                        parent.id.json, (position ?: -1).json)
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)

@@ -2,6 +2,7 @@ package kweb
 
  import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.JsonNull
+ import kweb.util.json
 
 /**
  * Created by ian on 1/14/17.
@@ -27,7 +28,7 @@ fun Map<String, JsonPrimitive>.set(key: String, value: JsonPrimitive): Map<Strin
     }
 }
 
-fun Map<String, JsonPrimitive>.id(id: String): Map<String, JsonPrimitive> = set("id", JsonPrimitive(id))
+fun Map<String, JsonPrimitive>.id(id: String): Map<String, JsonPrimitive> = set("id", id.json)
 
 fun Map<String, JsonPrimitive>.classes(classes: Iterable<String>, condition: Boolean = true): Map<String, JsonPrimitive> {
     if (condition) {
