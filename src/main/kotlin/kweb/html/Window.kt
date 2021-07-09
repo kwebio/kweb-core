@@ -28,7 +28,6 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
         browser.callJsFunction(wrappedJS, eventName.json)
     }
 
-
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Window {
         val callbackId = abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
