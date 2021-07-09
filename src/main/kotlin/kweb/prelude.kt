@@ -362,7 +362,7 @@ fun ElementCreator<Element>.textArea(
     }
 }
 
-open class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "input")
+open class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
 
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
