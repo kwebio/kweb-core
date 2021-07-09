@@ -273,13 +273,13 @@ open class Element(
      * [class attribute](https://www.w3schools.com/html/html_classes.asp). This will
      * be ignored if [onlyIf] is false.
      */
-    //language=JavaScript
     fun removeClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
             for (class_ in classes) {
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
+                //language=JavaScript
                 callJsFunction("""
                     let id = {};
                     let className = {};
