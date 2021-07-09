@@ -22,15 +22,11 @@ fun Element.jquery(selector: String = "#${this.id}"): JQueryReceiver {
 class JQueryReceiver(internal val webBrowser: WebBrowser, internal val selectorExpression: String) {
     val on: JQueryOnReceiver get() = JQueryOnReceiver(this)
 
-    fun execute(js: String) {
-        webBrowser.callJsFunction("$selectorExpression.$js;")
-    }
-
     fun focus() {
-        execute("focus()")
+        webBrowser.callJsFunction("$selectorExpression.${"focus()"};")
     }
 
     fun remove() {
-        execute("remove()")
+        webBrowser.callJsFunction("$selectorExpression.${"remove()"};")
     }
 }

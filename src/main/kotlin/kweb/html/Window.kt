@@ -9,14 +9,13 @@ import kweb.html.events.OnImmediateReceiver
 import kweb.html.events.OnReceiver
 import kweb.util.json
 import kweb.util.random
+import kotlin.math.abs
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
  * [document](https://www.w3schools.com/jsref/dom_obj_document.asp) object.
  *
  * Passed in as `doc` to the `buildPage` lambda of the [Kweb] constructor.
- *
- * @sample document_sample
  */
 class Window(override val browser: WebBrowser) : EventGenerator<Window> {
 
@@ -31,7 +30,7 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
 
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Window {
-        val callbackId = Math.abs(random.nextInt())
+        val callbackId = abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
@@ -41,7 +40,7 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
         """
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
-        }, JsonPrimitive(eventName), JsonPrimitive(callbackId))
+        }, eventName.json, callbackId.json)
         return this
     }
 
