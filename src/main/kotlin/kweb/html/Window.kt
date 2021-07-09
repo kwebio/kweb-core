@@ -1,7 +1,5 @@
 package kweb.html
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
@@ -9,6 +7,7 @@ import kweb.html.events.Event
 import kweb.html.events.EventGenerator
 import kweb.html.events.OnImmediateReceiver
 import kweb.html.events.OnReceiver
+import kweb.util.json
 import kweb.util.random
 
 /**
@@ -19,9 +18,7 @@ import kweb.util.random
  *
  * @sample document_sample
  */
-class Window(val receiver: WebBrowser) : EventGenerator<Window> {
-
-    override val browser = receiver
+class Window(override val browser: WebBrowser) : EventGenerator<Window> {
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = """
@@ -29,9 +26,7 @@ class Window(val receiver: WebBrowser) : EventGenerator<Window> {
                 $jsCode
             });
         """.trimIndent()
-        GlobalScope.launch {
-            receiver.callJsFunctionWithResult(wrappedJS, JsonPrimitive(eventName))
-        }
+        browser.callJsFunction(wrappedJS, eventName.json)
     }
 
 
@@ -44,7 +39,7 @@ class Window(val receiver: WebBrowser) : EventGenerator<Window> {
                 callbackWs({}, $eventObject);
             });
         """
-        receiver.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
+        browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
         }, JsonPrimitive(eventName), JsonPrimitive(callbackId))
         return this
