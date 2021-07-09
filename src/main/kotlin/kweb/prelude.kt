@@ -449,7 +449,7 @@ fun ElementCreator<Element>.label(
 /**
  * Abstract class for the various elements that have a `value` attribute and which support `change` and `input` events.
  *
- * @param kvarUpdateEvent The [value] of this element will update on this event, defaults to [input]()https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event
+ * @param kvarUpdateEvent The [value] of this element will update on this event, defaults to [input](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event)
  */
 abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
     val valueJsExpression : String by lazy { "document.getElementById(\"$id\").value" }
