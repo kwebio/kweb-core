@@ -363,12 +363,12 @@ fun ElementCreator<Element>.textArea(
 }
 
 /**
- * https://www.w3schools.com/tags/tag_select.asp
+ * [<SELECT>](]https://www.w3schools.com/tags/tag_select.asp)
  */
 class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
 
 /**
- * https://www.w3schools.com/tags/tag_select.asp
+ * [<SELECT>](]https://www.w3schools.com/tags/tag_select.asp)
  *
  * @sample select_sample
  */
@@ -478,15 +478,17 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
     /**
      * A KVar bidirectionally synchronized with the [value of a select element](https://www.w3schools.com/jsref/prop_select_value.asp).
-     * This KVar will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
+     * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
      * if the KVar is changed.
      *
      * @sample select_sample
      */
     var value: KVar<String>
         get() {
-            if (_valueKvar == null) {
-                value = KVar("")
+            synchronized(this) {
+                if (_valueKvar == null) {
+                    value = KVar("")
+                }
             }
             return _valueKvar!!
         }
