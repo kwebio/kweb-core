@@ -363,12 +363,12 @@ fun ElementCreator<Element>.textArea(
 }
 
 /**
- * [<SELECT>](]https://www.w3schools.com/tags/tag_select.asp)
+ * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
  */
 class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
 
 /**
- * [<SELECT>](]https://www.w3schools.com/tags/tag_select.asp)
+ * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
  *
  * @sample select_sample
  */
