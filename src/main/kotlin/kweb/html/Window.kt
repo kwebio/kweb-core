@@ -15,7 +15,7 @@ import kotlin.math.abs
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
  * [document](https://www.w3schools.com/jsref/dom_obj_document.asp) object.
  *
- * Passed in as `doc` to the `buildPage` lambda of the [Kweb] constructor.
+ * Passed in as `window` to the `buildPage` receiver of the [Kweb] constructor.
  */
 class Window(override val browser: WebBrowser) : EventGenerator<Window> {
 
