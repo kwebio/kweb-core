@@ -362,8 +362,16 @@ fun ElementCreator<Element>.textArea(
     }
 }
 
-open class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
+/**
+ * https://www.w3schools.com/tags/tag_select.asp
+ */
+class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
 
+/**
+ * https://www.w3schools.com/tags/tag_select.asp
+ *
+ * @sample select_sample
+ */
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     name: String? = null, required: Boolean? = null,
@@ -380,12 +388,32 @@ fun ElementCreator<Element>.select(
     }
 }
 
+private fun select_sample() {
+    val server: Kweb = Kweb(port= 7668) {
+        doc.body {
+            val select = select(name = "pets") {
+                option().setAttribute("value", "dog").text("Dog")
+                option().setAttribute("value", "cat").text("Cat")
+            }
+            select.value.addListener { old, new ->
+                println("Value of select changed from $old to $new")
+            }
+        }
+    }
+}
+
+/**
+ * https://www.w3schools.com/tags/tag_textarea.asp
+ */
 open class TextAreaElement(parent: Element) : ValueElement(parent) {
     //TODO ValueElement already provides a way to get the value of an element. I'm not sure why this function is here.
     //But, something needs to be done with it.
     override val read get() = TextAreaElementReader(this)
 }
 
+/**
+ * https://www.w3schools.com/tags/tag_textarea.asp
+ */
 fun ElementCreator<Element>.textArea(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<TextAreaElement>.() -> Unit)? = null
@@ -448,6 +476,13 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     @Volatile
     private var _valueKvar: KVar<String>? = null
 
+    /**
+     * A KVar bidirectionally synchronized with the [value of a select element](https://www.w3schools.com/jsref/prop_select_value.asp).
+     * This KVar will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
+     * if the KVar is changed.
+     *
+     * @sample select_sample
+     */
     var value: KVar<String>
         get() {
             if (_valueKvar == null) {

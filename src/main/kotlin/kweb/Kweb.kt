@@ -49,14 +49,14 @@ class Kweb private constructor(
 
     /**
      *
-     * The core kwebserver, and the starting point for almost any Kweb app.  This will element a HTTP server and respond
-     * with a javascript page which will establish a websocket connection to retrieveJs and send instructions and data
+     * The core kwebserver, and the starting point for almost any Kweb app. This will create a HTTP server and respond
+     * with a javascript page which will establish a websocket connection to retrieve and send instructions and data
      * between browser and server.
      *
      * @property port  The TCP port on which the HTTP server should listen
      * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
      *                 but false during production because it is inefficient at scale
-     * @property plugins A list of Kweb plugins to be loaded by Kweb
+     * @property plugins A list of Kweb plugins to be loaded by this Kweb instance
      * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
      *                     go
      */
