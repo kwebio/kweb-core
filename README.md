@@ -27,7 +27,7 @@ fun main() {
 ## Learn More
 
 * [User Manual](http://docs.kweb.io/)
-* [API Documentation](https://dokka.kweb.io/kweb-core/)
+* [API Documentation](https://dokka.kweb.io/index.html)
 * [Live Example](http://demo.kweb.io:7659/)
 * [Template Repo](https://github.com/kwebio/kweb-template)
 * [Example Projects](https://github.com/kwebio/kweb-demos)
