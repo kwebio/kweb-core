@@ -158,7 +158,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      *                   any ancestor element of this ElementCreator is cleaned up.  Otherwise it will
      *                   only be cleaned up if this ElementCreator is cleaned up specifically.
      *
-     *                   As a rule-of-thumb, use 'true' for anything except deleting DOM elements
+     *                   As a rule-of-thumb, use 'true' for anything except deleting DOM elements.
      */
     fun onCleanup(withParent: Boolean, f: Cleaner) {
         if (withParent) {

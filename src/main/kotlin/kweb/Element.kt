@@ -17,6 +17,11 @@ import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.math.abs
 import kotlin.reflect.KClass
 
+/**
+ * Represents a [DOM Element](https://www.w3schools.com/jsref/dom_obj_all.asp) in a
+ * remote browser window.
+ */
+
 @KWebDSL
 open class Element(
         override val browser: WebBrowser,
@@ -73,7 +78,7 @@ open class Element(
     fun <P : KwebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
 
 
-    val children: List<Element> = ArrayList()
+    //val children: List<Element> = ArrayList()
 
     /**
      * Obtain an [ElementReader] that can be used to read various properties of this element.
