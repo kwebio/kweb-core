@@ -93,6 +93,15 @@ open class Element(
      *********/
 
     /**
+     * A utility function to set multiple attributes in a single call, in the
+     * style of [mapOf]. This is a wrapper around [setAttribute].
+     */
+    fun setAttributes(vararg pair : Pair<String, JsonPrimitive>) : Element {
+        pair.forEach { (k, v) -> setAttribute(k, v) }
+        return this
+    }
+
+    /**
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
      * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
      *
@@ -216,21 +225,37 @@ open class Element(
         return this
     }
 
+    /**
+     * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
+     * this is a wrapper around [setAttribute].
+     */
     fun classes(value : KVal<String>) = setAttribute("class", value.map { JsonPrimitive(it) })
 
+    /**
+     * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
+     * this is a wrapper around [setAttribute].
+     */
     fun classes(vararg value: String) = setClasses(*value)
 
+    /**
+     * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
+     * this is a wrapper around [setAttribute].
+     */
     fun setClasses(vararg value: String): Element {
         setAttribute("class", JsonPrimitive(value.joinToString(separator = " ")))
         return this
     }
 
+    /**
+     * A convenience function to append a class to an existing [class attribute](https://www.w3schools.com/html/html_classes.asp).
+     */
     fun addClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
             for (class_ in classes) {
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
+                //language=JavaScript
                 callJsFunction("""
                     let id = {};
                     let className = {};
@@ -243,6 +268,12 @@ open class Element(
         return this
     }
 
+    /**
+     * A convenience function to remove one or more classes from an existing
+     * [class attribute](https://www.w3schools.com/html/html_classes.asp). This will
+     * be ignored if [onlyIf] is false.
+     */
+    //language=JavaScript
     fun removeClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
             for (class_ in classes) {
@@ -292,6 +323,7 @@ open class Element(
                     jsoupElement.children().remove()
             }
             else -> {
+                //language=JavaScript
                 callJsFunction("""
                     let id = {};
                     if (document.getElementById(id) != null) {
@@ -316,6 +348,7 @@ open class Element(
                 }
             }
             else -> {
+                //language=JavaScript
                 callJsFunction("""
                         let element = document.getElementById({});
                         element.removeChild(element.children[{}]);
@@ -331,6 +364,7 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        //language=JavaScript
         val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
             browser.isCatchingOutbound() != null -> {
@@ -374,6 +408,7 @@ open class Element(
 
     fun addText(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        //language=JavaScript
         val createTextNodeJs = """
             var ntn = document.createTextNode({});
             document.getElementById({}).appendChild(ntn);
@@ -436,9 +471,9 @@ open class Element(
 
     /**
      * Return a KVar that is tied to a property related to an element, which will update when an specified
-     * event fires on this element. This is a convenience wrapper around [bind]
+     * event fires on this element. This is a convenience wrapper around [bind].
      *
-     * See implementation of [InputElement.checked] for a usage example
+     * @sample InputElement.checked
      *
      * @param accessor Function that takes an element id and returns a JavaScript expression to access that element
      * @param updateOnEvent The event to listen for that signifies this element has been updated
@@ -452,7 +487,7 @@ open class Element(
      * Return a KVar that is tied to a property related to an element, which will update when an specified
      * event fires on this element.
      *
-     * See implementation of [InputElement.checked] for a usage example
+     * @sample InputElement.checked
      *
      * @param reader Function that takes an element id and returns a JavaScript expression to read that element
      * @param writer Function that takes an element id and a new value, and returns a JavaScript expression to
