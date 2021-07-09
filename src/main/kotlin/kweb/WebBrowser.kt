@@ -100,8 +100,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return (plugins[plugin] ?: error("Plugin $plugin is missing")) as P
     }
 
+    /**
+     * Specify that a specific plugin be provided in [Kweb.plugins], throws an exception if not.
+     */
     internal fun require(vararg requiredPlugins: KClass<out KwebPlugin>) {
-        val missing = java.util.HashSet<String>()
+        val missing = HashSet<String>()
         for (requiredPlugin in requiredPlugins) {
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
@@ -139,6 +142,15 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return abs(random.nextInt())
     }
 
+    /**
+     * Calls a JavaScript function in the browser passing it the supplied arguments, which
+     * will be substituted into [jsBody] wherever a `{}` is present.
+     *
+     * If your JavaScript needs to use an empty JavaScript map, just insert a space
+     * between the {}s, eg. `{ }`
+     *
+     * @sample callJsFunction_sample
+     */
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         val functionCall  = if (cachedFunctions[jsBody] != null) {
             FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args))
@@ -173,6 +185,15 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
+    private fun callJsFunction_sample() {
+        callJsFunction("alert({});", JsonPrimitive("Hello, I'm an alert box!"))
+    }
+
+    /**
+     * Calls a JavaScript function that can return a value via a [callback]
+     *
+     * @see callJsFunction
+     */
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (JsonElement) -> Unit, vararg args: JsonElement) {
         val functionCall = if (cachedFunctions[jsBody] != null) {
             FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args), callbackId = callbackId)

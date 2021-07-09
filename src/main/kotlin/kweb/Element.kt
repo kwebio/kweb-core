@@ -35,6 +35,8 @@ open class Element(
      * 
      * Note that this will cache functions in the browser to avoid unnecessary
      * re-interpretation, making this fairly efficient.
+     *
+     * This is a convenience wrapper for [WebBrowser.callJsFunction]
      */
     fun callJsFunction(js: String, vararg args: JsonElement) {
         browser.callJsFunction(js, *args)
@@ -44,6 +46,8 @@ open class Element(
      * Evaluate some JavaScript in the browser and return the result via a Future.
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
+     *
+     * This uses the same template mechanism as [callJsFunction]
      */
     suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (JsonElement) -> O, vararg args: JsonElement): O? {
         val result = browser.callJsFunctionWithResult(js, *args)
@@ -65,6 +69,7 @@ open class Element(
     /**
      * Obtain the instance of a plugin by its [KClass].
      */
+    // TODO: Does this prevent the use of multiple plugins of the same class?
     fun <P : KwebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
 
 
@@ -72,9 +77,9 @@ open class Element(
 
     /**
      * Obtain an [ElementReader] that can be used to read various properties of this element.
+     *
+     * This has been deprecated, functions like [ValueElement.value] should be used instead.
      */
-    //TODO, since ElementReader has been deprecated, I'm not sure if we need to mark this val as deprecated or not.
-    //The IDE also complains about not supplying a replaceWith argument for this annotation.
     @Deprecated("ElementReader has been deprecated")
     open val read: ElementReader get() = ElementReader(this)
 
@@ -158,6 +163,10 @@ open class Element(
         return this
     }
 
+    /**
+     * Sets the [innerHTML](https://www.w3schools.com/jsref/prop_html_innerhtml.asp) property
+     * of a DOM element.
+     */
     fun innerHTML(html: String): Element {
         val htmlDoc = browser.htmlDocument.get()
         when {
@@ -172,6 +181,10 @@ open class Element(
         return this
     }
 
+    /**
+     * Sets the [innerHTML](https://www.w3schools.com/jsref/prop_html_innerhtml.asp) property
+     * of a DOM element. This will be updated automatically if the value of [html] changes.
+     */
     fun innerHTML(html: KVal<String>): Element {
         this.innerHTML(html.value)
         val handle = html.addListener { _, new ->
@@ -184,12 +197,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        callJsFunction("document.getElementById({}).focus();")
+        callJsFunction("document.getElementById({}).focus();", JsonPrimitive(id))
         return this
     }
 
     fun blur(): Element {
-        callJsFunction("document.getElementById({}).blur();")
+        callJsFunction("document.getElementById({}).blur();", JsonPrimitive(id))
         return this
     }
 
