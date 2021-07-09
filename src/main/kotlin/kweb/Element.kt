@@ -160,9 +160,10 @@ open class Element(
     }
 
     fun removeAttribute(name: String): Element {
+        val htmlDoc = browser.htmlDocument.get()
         when {
-            browser.isCatchingOutbound() != null -> {
-                callJsFunction("document.getElementById({}).removeAttribute({})", JsonPrimitive(id), JsonPrimitive(name))
+            htmlDoc != null -> {
+                htmlDoc.getElementById(id).removeAttr(name)
             }
             else -> {
                 callJsFunction("document.getElementById({}).removeAttribute({})", JsonPrimitive(id), JsonPrimitive(name))
