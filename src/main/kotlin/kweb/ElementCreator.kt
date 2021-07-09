@@ -17,6 +17,9 @@ typealias Cleaner = () -> Unit
 /**
  * Responsible for creating new DOM elements, and cleaning up [Cleaner]s, [KVar]s, and other
  * related objects when DOM elements are deleted.
+ *
+ * [ElementCreator] is typically used as a [receiver](https://stackoverflow.com/a/45875492)
+ * for element creation functions like [p] or [element].
  */
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
