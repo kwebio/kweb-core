@@ -10,7 +10,7 @@ val JQueryReceiver.sUI get() = JQuerySUIReceiver(this)
 
 class JQuerySUIReceiver(val jqueryReceiver: JQueryReceiver) {
     fun dimmer(action: DimmerAction) {
-        jqueryReceiver.execute("""dimmer('$action')""")
+        jqueryReceiver.webBrowser.callJsFunction("${jqueryReceiver.selectorExpression}.${"""dimmer('$action')"""};")
     }
 
     enum class DimmerAction {

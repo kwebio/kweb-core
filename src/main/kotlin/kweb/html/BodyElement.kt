@@ -6,7 +6,5 @@ import kweb.WebBrowser
 /**
  * Represents the `body` element of the in-browser Document Object Model, corresponding to
  * the JavaScript [body](https://www.w3schools.com/tags/tag_body.asp) tag.
- *
- * @sample document_sample
  */
 class BodyElement(webBrowser: WebBrowser, id: String) : Element(webBrowser, null, "body", id)

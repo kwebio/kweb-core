@@ -9,6 +9,8 @@ import kweb.client.HttpRequestInfo
 import kweb.client.Server2ClientMessage
 import kweb.html.Document
 import kweb.html.HtmlDocumentSupplier
+import kweb.html.Window
+import kweb.html.events.Event
 import kweb.plugins.KwebPlugin
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
@@ -25,7 +27,7 @@ import kotlin.reflect.jvm.jvmName
 
 /**
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
- * expressions and retrieveJs the result.
+ * expressions and retrieve the result.
  */
 
 private val logger = KotlinLogging.logger {}
@@ -98,8 +100,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return (plugins[plugin] ?: error("Plugin $plugin is missing")) as P
     }
 
+    /**
+     * Specify that a specific plugin be provided in [Kweb.plugins], throws an exception if not.
+     */
     internal fun require(vararg requiredPlugins: KClass<out KwebPlugin>) {
-        val missing = java.util.HashSet<String>()
+        val missing = HashSet<String>()
         for (requiredPlugin in requiredPlugins) {
             if (!plugins.contains(requiredPlugin)) missing.add(requiredPlugin.simpleName ?: requiredPlugin.jvmName)
         }
@@ -137,6 +142,15 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         return abs(random.nextInt())
     }
 
+    /**
+     * Calls a JavaScript function in the browser passing it the supplied arguments, which
+     * will be substituted into [jsBody] wherever a `{}` is present.
+     *
+     * If your JavaScript needs to use an empty JavaScript map, just insert a space
+     * between the {}s, eg. `{ }`
+     *
+     * @sample callJsFunction_sample
+     */
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         val functionCall  = if (cachedFunctions[jsBody] != null) {
             FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args))
@@ -171,6 +185,15 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
     }
 
+    private fun callJsFunction_sample() {
+        callJsFunction("alert({});", JsonPrimitive("Hello, I'm an alert box!"))
+    }
+
+    /**
+     * Calls a JavaScript function that can return a value via a [callback]
+     *
+     * @see callJsFunction
+     */
     fun callJsFunctionWithCallback(jsBody: String, callbackId: Int, callback: (JsonElement) -> Unit, vararg args: JsonElement) {
         val functionCall = if (cachedFunctions[jsBody] != null) {
             FunctionCall(jsId = cachedFunctions[jsBody], arguments = listOf(*args), callbackId = callbackId)
@@ -205,8 +228,10 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     private fun createCacheFunctionJs(cacheId: Int, functionBody: String, params: String? = null) : String {
         params?.let {
+            //language=JavaScript
             return """cachedFunctions[$cacheId] = new Function("$params", "$functionBody");"""
         }
+        //language=JavaScript
         return """cachedFunctions[$cacheId] = new Function("$functionBody");"""
     }
 
@@ -228,12 +253,18 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     val doc = Document(this)
 
+    val window = Window(this)
+
     /**
      * The URL of the page, relative to the origin - so for the page `http://foo/bar?baz#1`, the value would be
      * `/bar?baz#1`.
      *
      * When this KVar is modified the browser will automatically update the URL in the browser along with any DOM
      * elements based on this [url] (this will be handled automatically by [kweb.routing.route]).
+     *
+     * If the [popstate event](https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event) fires
+     * in the browser, for example if the Back button is pressed, then this URL will also update - potentially
+     * triggering re-renders of any DOM elements that depend on the URL.
      */
     val url: KVar<String>
             by lazy {
@@ -242,6 +273,18 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
                 url.addListener { _, newState ->
                     pushState(newState)
+                }
+
+
+                window.on(
+                    //language=JavaScript
+                    retrieveJs = "document.location.href"
+                ).popstate { event : Event ->
+                    if (event.retrieved is JsonPrimitive && event.retrieved.isString) {
+                        url.value = URL.parse(event.retrieved.content).pathQueryFragment
+                    } else {
+                        error("event.retrieved isn't a string")
+                    }
                 }
 
                 url
@@ -253,6 +296,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         }
         //{ } is used to initialize an empty map here. Without the space, it would be treated
         //as a variable using Kweb's template syntax
+        //language=JavaScript
         callJsFunction("""
         history.pushState({ }, "", {});
         """.trimIndent(), JsonPrimitive(url))

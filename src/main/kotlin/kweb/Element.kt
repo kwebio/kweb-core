@@ -8,13 +8,20 @@ import kweb.html.events.OnImmediateReceiver
 import kweb.html.events.OnReceiver
 import kweb.html.style.StyleReceiver
 import kweb.plugins.KwebPlugin
+import kweb.state.CloseReason
 import kweb.state.KVal
 import kweb.state.KVar
 import kweb.util.KWebDSL
+import kweb.util.json
 import kweb.util.random
 import java.util.concurrent.ConcurrentSkipListSet
 import kotlin.math.abs
 import kotlin.reflect.KClass
+
+/**
+ * Represents a [DOM Element](https://www.w3schools.com/jsref/dom_obj_all.asp) in a
+ * remote browser window.
+ */
 
 @KWebDSL
 open class Element(
@@ -34,6 +41,8 @@ open class Element(
      * 
      * Note that this will cache functions in the browser to avoid unnecessary
      * re-interpretation, making this fairly efficient.
+     *
+     * This is a convenience wrapper for [WebBrowser.callJsFunction]
      */
     fun callJsFunction(js: String, vararg args: JsonElement) {
         browser.callJsFunction(js, *args)
@@ -43,6 +52,8 @@ open class Element(
      * Evaluate some JavaScript in the browser and return the result via a Future.
      * This the foundation upon which most DOM-querying functions in this class
      * are based.
+     *
+     * This uses the same template mechanism as [callJsFunction]
      */
     suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (JsonElement) -> O, vararg args: JsonElement): O? {
         val result = browser.callJsFunctionWithResult(js, *args)
@@ -64,22 +75,32 @@ open class Element(
     /**
      * Obtain the instance of a plugin by its [KClass].
      */
+    // TODO: Does this prevent the use of multiple plugins of the same class?
     fun <P : KwebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
 
 
-    val children: List<Element> = ArrayList()
+    //val children: List<Element> = ArrayList()
 
     /**
      * Obtain an [ElementReader] that can be used to read various properties of this element.
+     *
+     * This has been deprecated, functions like [ValueElement.value] should be used instead.
      */
-    //TODO, since ElementReader has been deprecated, I'm not sure if we need to mark this val as deprecated or not.
-    //The IDE also complains about not supplying a replaceWith argument for this annotation.
     @Deprecated("ElementReader has been deprecated")
     open val read: ElementReader get() = ElementReader(this)
 
     /*********
      ********* Utilities for modifying this element
      *********/
+
+    /**
+     * A utility function to set multiple attributes in a single call, in the
+     * style of [mapOf]. This is a wrapper around [setAttribute].
+     */
+    fun setAttributes(vararg pair : Pair<String, JsonPrimitive>) : Element {
+        pair.forEach { (k, v) -> setAttribute(k, v) }
+        return this
+    }
 
     /**
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
@@ -92,14 +113,14 @@ open class Element(
         when {
             browser.isCatchingOutbound() != null -> {
                 callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                        JsonPrimitive(id), JsonPrimitive(name), value)
+                        id.json, name.json, value)
             }
             htmlDoc != null -> {
                 htmlDoc.getElementById(this.id).attr(name, value.content)
             }
             else -> {
                 callJsFunction("document.getElementById({}).setAttribute({}, {})",
-                        JsonPrimitive(id), JsonPrimitive(name), value)
+                        id.json, name.json, value)
             }
         }
         if (name.equals("id", ignoreCase = true)) {
@@ -133,6 +154,10 @@ open class Element(
     fun setAttribute(name : String, value : Number)
         = setAttribute(name, JsonPrimitive(value))
 
+    /**
+     * Set an attribute to the value in a [KVal], if the value changes the attribute
+     * value will be updated automatically.
+     */
     fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
         setAttribute(name, oValue.value)
         val handle = oValue.addListener { _, newValue ->
@@ -145,18 +170,23 @@ open class Element(
     }
 
     fun removeAttribute(name: String): Element {
+        val htmlDoc = browser.htmlDocument.get()
         when {
-            browser.isCatchingOutbound() != null -> {
-                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
+            htmlDoc != null -> {
+                htmlDoc.getElementById(id).removeAttr(name)
             }
             else -> {
-                callJsFunction("document.getElementById({}).removeAttribute", JsonPrimitive(id), JsonPrimitive(name))
+                callJsFunction("document.getElementById({}).removeAttribute({})", id.json, JsonPrimitive(name))
             }
 
         }
         return this
     }
 
+    /**
+     * Sets the [innerHTML](https://www.w3schools.com/jsref/prop_html_innerhtml.asp) property
+     * of a DOM element.
+     */
     fun innerHTML(html: String): Element {
         val htmlDoc = browser.htmlDocument.get()
         when {
@@ -165,12 +195,16 @@ open class Element(
                 thisEl.html(html)
             }
             else -> {
-                callJsFunction("document.getElementById({}).innerHTML = {}", JsonPrimitive(id), JsonPrimitive(html))
+                callJsFunction("document.getElementById({}).innerHTML = {}", id.json, JsonPrimitive(html))
             }
         }
         return this
     }
 
+    /**
+     * Sets the [innerHTML](https://www.w3schools.com/jsref/prop_html_innerhtml.asp) property
+     * of a DOM element. This will be updated automatically if the value of [html] changes.
+     */
     fun innerHTML(html: KVal<String>): Element {
         this.innerHTML(html.value)
         val handle = html.addListener { _, new ->
@@ -183,48 +217,70 @@ open class Element(
     }
 
     fun focus(): Element {
-        callJsFunction("document.getElementById({}).focus();")
+        callJsFunction("document.getElementById({}).focus();", id.json)
         return this
     }
 
     fun blur(): Element {
-        callJsFunction("document.getElementById({}).blur();")
+        callJsFunction("document.getElementById({}).blur();", id.json)
         return this
     }
 
-    fun classes(value : KVal<String>) = setAttribute("class", value.map { JsonPrimitive(it) })
+    /**
+     * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
+     * this is a wrapper around [setAttribute].
+     */
+    fun classes(value : KVal<String>) = setAttribute("class", value.map { it.json })
 
+    /**
+     * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
+     * this is a wrapper around [setAttribute].
+     */
     fun classes(vararg value: String) = setClasses(*value)
 
+    /**
+     * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
+     * this is a wrapper around [setAttribute].
+     */
     fun setClasses(vararg value: String): Element {
-        setAttribute("class", JsonPrimitive(value.joinToString(separator = " ")))
+        setAttribute("class", value.joinToString(separator = " ").json)
         return this
     }
 
+    /**
+     * A convenience function to append a class to an existing [class attribute](https://www.w3schools.com/html/html_classes.asp).
+     */
     fun addClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
             for (class_ in classes) {
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
+                //language=JavaScript
                 callJsFunction("""
                     let id = {};
                     let className = {};
                     let el = document.getElementById(id);
                     if (el.classList) el.classList.add(className);
                     else if (!hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
+                """.trimIndent(), id.json, JsonPrimitive(class_))
             }
         }
         return this
     }
 
+    /**
+     * A convenience function to remove one or more classes from an existing
+     * [class attribute](https://www.w3schools.com/html/html_classes.asp). This will
+     * be ignored if [onlyIf] is false.
+     */
     fun removeClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
             for (class_ in classes) {
                 if (class_.contains(' ')) {
                     error("Class names must not contain spaces")
                 }
+                //language=JavaScript
                 callJsFunction("""
                     let id = {};
                     let className = {};
@@ -234,7 +290,7 @@ open class Element(
                         var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
                         el.className = el.className.replace(reg, " ");
                     }
-                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(class_))
+                """.trimIndent(), id.json, JsonPrimitive(class_))
             }
         }
         return this
@@ -268,6 +324,7 @@ open class Element(
                     jsoupElement.children().remove()
             }
             else -> {
+                //language=JavaScript
                 callJsFunction("""
                     let id = {};
                     if (document.getElementById(id) != null) {
@@ -276,7 +333,7 @@ open class Element(
                             element.removeChild(element.firstChild);
                         }
                     }
-                """.trimIndent(), JsonPrimitive(id))
+                """.trimIndent(), id.json)
             }
         }
 
@@ -299,6 +356,7 @@ open class Element(
                 }
             }
             else -> {
+                //language=JavaScript
                 callJsFunction("""
                     let startSpan = document.getElementById({});
                     let endSpan = document.getElementById({});
@@ -326,7 +384,7 @@ open class Element(
                 callJsFunction("""
                         let element = document.getElementById({});
                         element.removeChild(element.children[{}]);
-                """.trimIndent(), JsonPrimitive(id), JsonPrimitive(position))
+                """.trimIndent(), id.json, position.json)
             }
         }
         return this
@@ -338,17 +396,18 @@ open class Element(
      */
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        //language=JavaScript
         val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
             browser.isCatchingOutbound() != null -> {
-                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
+                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.text(value)
             }
             else -> {
-                callJsFunction(setTextJS, JsonPrimitive(id), JsonPrimitive(value))
+                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
         }
         return this
@@ -381,31 +440,33 @@ open class Element(
 
     fun addText(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
+        //language=JavaScript
         val createTextNodeJs = """
             var ntn = document.createTextNode({});
             document.getElementById({}).appendChild(ntn);
         """.trimIndent()
         when {
             browser.isCatchingOutbound() != null -> {
-                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element.appendText(value)
             }
             else -> {
-                callJsFunction(createTextNodeJs, JsonPrimitive(value), JsonPrimitive(id))
+                callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
             }
         }
         return this
     }
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
+        //language=JavaScript
         val wrappedJS = """
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
             });""".trimIndent()
-        browser.callJsFunction(wrappedJS, JsonPrimitive(id), JsonPrimitive(eventName))
+        browser.callJsFunction(wrappedJS, id.json, JsonPrimitive(eventName))
     }
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Element {
@@ -433,33 +494,90 @@ open class Element(
             if (payload is JsonObject) {
                 callback.invoke(payload)
             }
-        }, JsonPrimitive(id), JsonPrimitive(eventName), JsonPrimitive(callbackId))
+        }, id.json, JsonPrimitive(eventName), JsonPrimitive(callbackId))
         this.creator?.onCleanup(true) {
             browser.removeCallback(callbackId)
         }
         return this
     }
 
+    /**
+     * Return a KVar that is tied to a property related to an element, which will update when an specified
+     * event fires on this element. This is a convenience wrapper around [bind].
+     *
+     * @sample InputElement.checked
+     *
+     * @param accessor Function that takes an element id and returns a JavaScript expression to access that element
+     * @param updateOnEvent The event to listen for that signifies this element has been updated
+     * @param initialValue The initial value of the KVar
+     */
+    fun bind(accessor : (elementId : String) -> String, updateOnEvent: String, initialValue : JsonElement = JsonPrimitive("")) : KVar<JsonElement> {
+        return bind(reader = { accessor(it) }, writer = { id, value -> "${accessor(id)} = $value" }, updateOnEvent = updateOnEvent, initialValue = initialValue)
+    }
 
+    /**
+     * Return a KVar that is tied to a property related to an element, which will update when an specified
+     * event fires on this element.
+     *
+     * @sample InputElement.checked
+     *
+     * @param reader Function that takes an element id and returns a JavaScript expression to read that element
+     * @param writer Function that takes an element id and a new value, and returns a JavaScript expression to
+     *               write that value.
+     * @param updateOnEvent The event to listen for that signifies this element has been updated
+     * @param initialValue The initial value of the KVar
+     */
+    fun bind(reader : (elementId : String) -> String, writer : (elementId : String, value : String) -> String, updateOnEvent : String, initialValue : JsonElement = JsonPrimitive("")) : KVar<JsonElement> {
+        val kv = KVar(initialValue)
+        on(retrieveJs = reader(this.id)).event<Event>(updateOnEvent) { event ->
+            kv.value = event.retrieved
+        }
+        val kvChangeHandler = kv.addListener { old, new ->
+            callJsFunction(writer(this.id, "{}")+";", new)
+        }
+        creator?.onCleanup(true) {
+            kv.removeListener(kvChangeHandler)
+            kv.close(CloseReason("Ancestor ElementCreator cleaned up"))
+        }
+        callJsFunction(writer(this.id, "{}")+";", initialValue)
+        return kv
+    }
+
+    /**
+     * Remove this element by calling [removeChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild)
+     * on its parent element. An error will occur in the browser if the element doesn't exist.
+     */
     fun delete() {
+        //language=JavaScript
         callJsFunction("""
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
-        """.trimIndent(), JsonPrimitive(id))
+        """.trimIndent(), id.json)
     }
 
+    /**
+     * Remove this element by calling [removeChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild)
+     * on its parent element if it exists.
+     */
     fun deleteIfExists() {
+        //language=JavaScript
         callJsFunction("""
             let id = {}
             if (document.getElementById(id)) {
                 let element = document.getElementById(id);
                 element.parentNode.removeChild(element);
             }
-        """.trimIndent(), JsonPrimitive(id))
+        """.trimIndent(), id.json)
     }
 
+    /**
+     * Determines whether this element will be [spellchecked](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck).
+     */
     fun spellcheck(spellcheck: Boolean = true) = setAttribute("spellcheck", JsonPrimitive(spellcheck))
 
+    /**
+     * Some convenience functions for modifying an element's [style attribute](https://www.w3schools.com/tags/att_style.asp).
+     */
     val style get() = StyleReceiver(this)
 
     val flags = ConcurrentSkipListSet<String>()
@@ -470,8 +588,12 @@ open class Element(
     val on: OnReceiver<Element> get() = OnReceiver(this)
 
     /**
-     * You can supply a javascript expression `retrieveJs` which will
-     * be available via [Event.retrieveJs]
+     * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
+     *
+     * @param retrieveJs A JavaScript expression that will be returned to the server
+     * in [Event.retrieved] when an event fires in the browser.
+     *
+     * @sample ValueElement.getValue
      */
     fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
 

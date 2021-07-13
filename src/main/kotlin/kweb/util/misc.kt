@@ -2,6 +2,7 @@ package kweb.util
 
 import io.mola.galimatias.URL
 import kotlinx.serialization.json.JsonElement
+import kweb.state.KVar
 import org.apache.commons.lang3.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
@@ -74,5 +75,17 @@ val URL.pathQueryFragment: String
         return sb.toString()
     }
 
+
+fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
+    val newKVar = KVar(this.first.value to this.second.value)
+    this.first.addListener { _, n -> newKVar.value = n to this.second.value }
+    this.second.addListener { _, n -> newKVar.value = this.first.value to n }
+
+    newKVar.addListener { o, n ->
+        this.first.value = n.first
+        this.second.value = n.second
+    }
+    return newKVar
+}
 @DslMarker
 annotation class KWebDSL

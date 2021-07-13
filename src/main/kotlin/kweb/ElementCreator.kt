@@ -1,6 +1,5 @@
 package kweb
 
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.BodyElement
@@ -8,17 +7,21 @@ import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
 import kweb.state.KVal
 import kweb.util.KWebDSL
+import kweb.util.json
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.reflect.KClass
 
-/**
- * Created by ian on 1/13/17.
- */
-
 typealias Cleaner = () -> Unit
 
+/**
+ * Responsible for creating new DOM elements, and cleaning up [Cleaner]s, [KVar]s, and other
+ * related objects when DOM elements are deleted.
+ *
+ * [ElementCreator] is typically used as a [receiver](https://stackoverflow.com/a/45875492)
+ * for element creation functions like [p] or [element].
+ */
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
     val parent: PARENT_TYPE,
@@ -28,7 +31,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     companion object : KLogging()
 
-    //private val cleanupListeners = LinkedList<(Cleaner) -> Unit>()
     private val cleanupListeners: MutableCollection<Cleaner> = ConcurrentLinkedQueue<Cleaner>()
 
     @Volatile
@@ -41,6 +43,13 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     val browser: WebBrowser get() = parent.browser
 
+    /**
+     * Create a new element, specifying its [tag](https://www.javatpoint.com/html-tags) and
+     * [attributes](https://www.javatpoint.com/html-attributes).
+     *
+     * Tag-specific functions like [p], [select], and others call this function and should
+     * be used in preference to it if available.
+     */
     fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr): Element {
 
         val mutAttributes = HashMap(attributes)
@@ -59,6 +68,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         val htmlDoc = browser.htmlDocument.get()
         when {
             parent.browser.isCatchingOutbound() != null -> {
+                //language=JavaScript
                 val createElementJs = """
                     let tag = {};
                     let attributes = {};
@@ -80,7 +90,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
+                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
                         JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
             }
             htmlDoc != null -> {
@@ -99,6 +109,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
             else -> {
                 //The way I have written this function, instead of attributes.get(), we now use attributes[].
+                //language=JavaScript
                 val createElementJs = """
                     let tag = {};
                     let attributes = {};
@@ -120,8 +131,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.insertBefore(newEl, parentElement.children[position]);
                     }
                 """.trimIndent()
-                parent.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
-                        JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
+                parent.callJsFunction(createElementJs, tag.json, JsonObject(mutAttributes), id.json,
+                        parent.id.json, (position ?: -1).json)
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
@@ -136,6 +147,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         return newElement
     }
 
+    /**
+     * Specify that a specific plugin be provided in [Kweb.plugins], throws an exception if not.
+     */
     fun require(vararg plugins: KClass<out KwebPlugin>) = parent.browser.require(*plugins)
 
     /**
@@ -145,7 +159,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      *                   any ancestor element of this ElementCreator is cleaned up.  Otherwise it will
      *                   only be cleaned up if this ElementCreator is cleaned up specifically.
      *
-     *                   As a rule-of-thumb, use 'true' for anything except deleting DOM elements
+     *                   As a rule-of-thumb, use 'true' for anything except deleting DOM elements.
      */
     fun onCleanup(withParent: Boolean, f: Cleaner) {
         if (withParent) {

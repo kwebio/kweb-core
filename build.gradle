@@ -10,12 +10,12 @@ buildscript {
 
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version '1.5.0'
+    id "org.jetbrains.kotlin.jvm" version '1.5.20'
     id 'maven'
-    id 'org.jetbrains.dokka' version '1.4.20'
+    id 'org.jetbrains.dokka' version '1.5.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.github.ben-manes.versions" version "0.36.0"
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.30'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
 }
 
 apply plugin: "com.github.ben-manes.versions"
@@ -25,7 +25,7 @@ ext {
 }
 
 group 'com.github.kwebio'
-version '0.10.4'
+version '0.10.8'
 
 repositories {
     mavenCentral()
