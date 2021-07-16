@@ -100,7 +100,7 @@ class TodoApp {
                             Try visiting this URL in another browser window and make some changes.
                             <p/>
                             You may find the source code for this app
-                         5   <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
+                            <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
                             """
                                 .trimIndent()
                         )
