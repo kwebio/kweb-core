@@ -577,7 +577,8 @@ open class Element(
  *
  * @param position What position among the parent's children should the new element have?
  * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
- *                  with the specified namespace. Child elements will inherit their parent's namespace.
+ *                  with the specified namespace. Child elements will inherit their parent's namespace. If this is null
+ *                  then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
  * @param receiver A code block in which any created elements will be children of this element.
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
