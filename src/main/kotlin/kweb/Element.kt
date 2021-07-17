@@ -438,7 +438,7 @@ open class Element(
         browser.callJsFunction(wrappedJS, id.json, JsonPrimitive(eventName))
     }
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Element {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Element {
         val callbackId = abs(random.nextInt())
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
@@ -450,6 +450,7 @@ open class Element(
         */
         val addEventJs = """
             document.getElementById({}).addEventListener({}, function(event) {
+                ${if (preventDefault) "event.preventDefault();" else ""}
                 callbackWs({}, $eventObject);
             });
             return true;
@@ -554,17 +555,19 @@ open class Element(
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: OnReceiver<Element> get() = OnReceiver(this)
+    val on: OnReceiver<Element> get() = OnReceiver(this, preventDefault = false)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      *
      * @param retrieveJs A JavaScript expression that will be returned to the server
      * in [Event.retrieved] when an event fires in the browser.
+     * @param preventDefault Whether [preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
+     *                       will be called on the event object.
      *
      * @sample ValueElement.getValue
      */
-    fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
+    fun on(retrieveJs: String? = null, preventDefault: Boolean = false) = OnReceiver(this, retrieveJs, preventDefault)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).

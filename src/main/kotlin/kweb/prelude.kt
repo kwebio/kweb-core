@@ -130,7 +130,29 @@ fun ElementCreator<Element>.form(
     }
 }
 
-open class AElement(parent: Element) : Element(parent)
+open class AElement(parent: Element) : Element(parent) {
+
+    /**
+     * A convenience property to set the href attribute of this anchor element. If the value begins with
+     * "/" (a relative URL) then this will override the default click behavior and set the [WebBrowser.url]
+     * to the appropriate value, avoiding a page refresh.
+     *
+     * *Note:* This property may only be set, attempting to read this property will throw an error.
+     */
+    var href : String? get() {
+        error("The href property may only be set, but not read")
+    }
+    set(hrefValue) {
+        if (hrefValue != null) {
+            setAttribute("href", hrefValue)
+            if (hrefValue.startsWith('/')) {
+                this.on(preventDefault = true).click {
+                    this.browser.url.value = hrefValue
+                }
+            }
+        }
+    }
+}
 
 fun ElementCreator<Element>.a(
     attributes: Map<String, JsonPrimitive> = emptyMap(),

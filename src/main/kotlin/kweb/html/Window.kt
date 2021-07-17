@@ -28,12 +28,13 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
         browser.callJsFunction(wrappedJS, eventName.json)
     }
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Window {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Window {
         val callbackId = abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
             window.addEventListener({}, function(event) {
+                ${if (preventDefault) "event.preventDefault();" else ""}
                 callbackWs({}, $eventObject);
             });
         """
@@ -46,13 +47,13 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: OnReceiver<Window> get() = OnReceiver(this)
+    val on: OnReceiver<Window> get() = OnReceiver(this, preventDefault = false)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
      * be available via [Event.retrieved]
      */
-    fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
+    fun on(retrieveJs: String? = null, preventDefault: Boolean = false) = OnReceiver(this, retrieveJs, preventDefault)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).

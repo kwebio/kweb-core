@@ -14,11 +14,11 @@ import kotlin.reflect.full.memberProperties
 @PublishedApi internal val logger = KotlinLogging.logger {}
 
 @KWebDSL
-class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: String? = null) {
+class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: String? = null, val preventDefault : Boolean) {
 
     fun event(eventName: String, returnEventFields: Set<String> = emptySet(), callback: (event: JsonElement) -> Unit): T {
         source.addEventListener(eventName, returnEventFields = returnEventFields,
-                callback = { callback(it) }, retrieveJs = retrieveJs)
+                callback = { callback(it) }, retrieveJs = retrieveJs, preventDefault = preventDefault)
         return source
     }
 
