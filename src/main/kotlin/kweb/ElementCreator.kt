@@ -26,7 +26,6 @@ typealias Cleaner = () -> Unit
 open class ElementCreator<out PARENT_TYPE : Element>(
     val parent: PARENT_TYPE,
     val parentCreator: ElementCreator<*>? = parent.creator,
-    val namespace : String? = parentCreator?.namespace,
     val position: Int? = null
 ) {
 
@@ -50,8 +49,13 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      *
      * Tag-specific functions like [p], [select], and others call this function and should
      * be used in preference to it if available.
+     *
+     * @param tag The HTML tag, eg. "p", "select", "a", etc
+     * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
+     *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
+     * @param attributes The HTML element's attributes
      */
-    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr): Element {
+    fun element(tag: String, namespace : String? = null, attributes: Map<String, JsonPrimitive> = attr): Element {
 
         val mutAttributes = HashMap(attributes)
 
