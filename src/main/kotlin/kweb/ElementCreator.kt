@@ -51,11 +51,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      * be used in preference to it if available.
      *
      * @param tag The HTML tag, eg. "p", "select", "a", etc
+     * @param attributes The HTML element's attributes
      * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
      *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
-     * @param attributes The HTML element's attributes
      */
-    fun element(tag: String, namespace : String? = null, attributes: Map<String, JsonPrimitive> = attr): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace : String? = null): Element {
 
         val mutAttributes = HashMap(attributes)
 
