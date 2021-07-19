@@ -49,8 +49,13 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      *
      * Tag-specific functions like [p], [select], and others call this function and should
      * be used in preference to it if available.
+     *
+     * @param tag The HTML tag, eg. "p", "select", "a", etc
+     * @param attributes The HTML element's attributes
+     * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
+     *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
      */
-    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace : String? = null): Element {
 
         val mutAttributes = HashMap(attributes)
 
@@ -66,6 +71,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
+        val createElementStatement = when(namespace) {
+            null -> "document.createElement(tag);"
+            else -> "document.createElementNS(\"${namespace}\", tag);"
+        }
         when {
             parent.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
@@ -75,7 +84,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let myId = {};
                     let parentId = {};
                     let position = {};
-                    let newEl = document.createElement(tag);
+                    let newEl = $createElementStatement
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
                         if ( key !== "id") {
