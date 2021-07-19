@@ -41,10 +41,13 @@ class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
     fun testClick() {
         driver.get("http://localhost:7665/")
         val aElement = driver.findElement<WebElement>(By.tagName("a"))
-        hrefTestApp.clicked.value shouldBe false
+        hrefTestApp.appUrl.value shouldBe "/"
+        hrefTestApp.renderCount.value shouldBe 1
         aElement.click()
         Thread.sleep(100)
-        hrefTestApp.clicked.value shouldBe true
+        hrefTestApp.appUrl.value shouldBe "/two"
+        // Page shouldn't have been re-rendered for a relative link
+        hrefTestApp.renderCount.value shouldBe 1
     }
 
 
@@ -56,10 +59,14 @@ fun main() {
 
 class HrefTestApp {
 
-    internal val clicked: KVar<Boolean> = KVar(false)
+    lateinit var appUrl: KVar<String>
+
+    val renderCount = KVar(0)
 
     val server: Kweb = Kweb(port = 7665) {
+        appUrl = this.url
         doc.body {
+            renderCount.value++
             route {
                 path("/") {
                     a().let { a ->
