@@ -278,7 +278,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
                 window.on(
                     //language=JavaScript
-                    retrieveJs = "document.location.href"
+                    retrieveJs = "window.location.href"
                 ).popstate { event : Event ->
                     if (event.retrieved is JsonPrimitive && event.retrieved.isString) {
                         url.value = URL.parse(event.retrieved.content).pathQueryFragment
