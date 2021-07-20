@@ -40,7 +40,7 @@ class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
 
     @Test
     fun testBackButton() {
-        driver.get("http://localhost:7665/")
+        driver.get("http://localhost:7665/0")
         val aElement = driver.findElement<WebElement>(By.tagName("a"))
         historyTestApp.url.value shouldBe "/"
         aElement.click()
@@ -64,14 +64,11 @@ class HistoryTestApp {
         this@HistoryTestApp.url = this.url
         doc.body {
             route {
-                path("/") {
-                    a().text("one").on.click {
-                        url.value = "/one"
-                    }
-                }
-                path("/one") {
-                    a().text("none").on.click {
-                        url.value = "/"
+
+                path("/{num}") { p ->
+                    a().apply {
+                        text(p["num"]!!.map { "Next ($it)" })
+                        href = "/${p["num"]!!.value.toInt()+1}"
                     }
                 }
             }

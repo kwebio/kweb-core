@@ -280,9 +280,6 @@ class Kweb private constructor(
                                             ?: error("No data handler for $resultId for client ${remoteClientState.id}")
                                     resultHandler(result)
                                 }
-                                message.historyStateChange != null -> {
-
-                                }
                                 message.keepalive -> {
                                     logger.debug { "keepalive received from client ${hello.id}" }
                                 }
