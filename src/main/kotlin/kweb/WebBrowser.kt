@@ -25,12 +25,12 @@ import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
+private val logger = KotlinLogging.logger {}
+
 /**
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
  * expressions and retrieve the result.
  */
-
-private val logger = KotlinLogging.logger {}
 
 class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, val kweb: Kweb) {
 
