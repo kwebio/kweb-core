@@ -272,7 +272,8 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
         val originRelativeURL = URL.parse(httpRequestInfo.requestedUrl).pathQueryFragment
         val urlSource = KVar(UrlSource(originRelativeURL, UrlSource.Source.Initial))
 
-        urlSource.addListener { _, newState ->
+        urlSource.addListener { oldState, newState ->
+            logger.debug { "urlSource $oldState -> $newState" }
             if (newState.source == UrlSource.Source.Server) {
                 pushState(newState.url)
             }
@@ -311,7 +312,11 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
                 urlSource.map(object : ReversibleFunction<UrlSource, String>("urlSource") {
                     override fun invoke(from: UrlSource) = from.url
                     override fun reverse(original: UrlSource, change: String) =
-                        UrlSource(change, UrlSource.Source.Server)
+                        if (change != original.url) {
+                            UrlSource(change, UrlSource.Source.Server)
+                        } else {
+                            UrlSource(change, original.source)
+                        }
                 })
             }
 

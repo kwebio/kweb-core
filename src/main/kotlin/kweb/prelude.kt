@@ -138,6 +138,8 @@ open class AElement(parent: Element) : Element(parent) {
      * to the appropriate value, avoiding a page refresh.
      *
      * *Note:* This property may only be set, attempting to read this property will throw an error.
+     *
+     * TODO: Should this be a KVar rather than a String?
      */
     var href : String? get() {
         error("The href property may only be set, but not read")

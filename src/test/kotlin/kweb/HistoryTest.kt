@@ -4,6 +4,7 @@ import io.kotlintest.shouldBe
 import kotlinx.coroutines.delay
 import kweb.*
 import kweb.state.KVar
+import kweb.state.render
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -17,8 +18,8 @@ import org.openqa.selenium.support.ThreadGuard
 class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
-		//ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-		//This should make this test thread safe.
+        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
+        //This should make this test thread safe.
         driver = ThreadGuard.protect(driver)
     }
 
@@ -40,14 +41,30 @@ class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
 
     @Test
     fun testBackButton() {
+        historyTestApp.reloadCount.value shouldBe 0
         driver.get("http://localhost:7665/0")
-        val aElement = driver.findElement<WebElement>(By.tagName("a"))
-        historyTestApp.url.value shouldBe "/"
-        aElement.click()
+        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+            historyTestApp.url.value shouldBe "/0"
+            aElement.click()
+            Thread.sleep(100)
+            historyTestApp.url.value shouldBe "/1"
+        }
+        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+            aElement.click()
+            Thread.sleep(100)
+            historyTestApp.url.value shouldBe "/2"
+            historyTestApp.reloadCount.value shouldBe 1
+        }
+        driver.navigate().back()
         Thread.sleep(100)
-        historyTestApp.url.value shouldBe "/one"
-    }
+        historyTestApp.url.value shouldBe "/1"
+        historyTestApp.reloadCount.value shouldBe 1
 
+        driver.navigate().forward()
+        Thread.sleep(100)
+        historyTestApp.url.value shouldBe "/2"
+        historyTestApp.reloadCount.value shouldBe 1
+    }
 
 
 }
@@ -58,17 +75,21 @@ fun main() {
 
 class HistoryTestApp {
 
-    internal lateinit var url : KVar<String>
+    internal lateinit var url: KVar<String>
 
-    val server: Kweb = Kweb(port= 7665) {
+    val reloadCount = KVar(0)
+
+    val server: Kweb = Kweb(port = 7665) {
+        reloadCount.value++
         this@HistoryTestApp.url = this.url
         doc.body {
             route {
-
                 path("/{num}") { p ->
-                    a().apply {
-                        text(p["num"]!!.map { "Next ($it)" })
-                        href = "/${p["num"]!!.value.toInt()+1}"
+                    render(p["num"]!!.toInt()) { num ->
+                        a().apply {
+                            text("Next ($num)")
+                            href = "/${num + 1}"
+                        }
                     }
                 }
             }
