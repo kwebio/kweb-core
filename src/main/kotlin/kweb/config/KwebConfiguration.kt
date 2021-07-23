@@ -89,11 +89,12 @@ abstract class KwebConfiguration {
     }
 
     private fun faviconSample() {
+        val faviconBytes = this::class.java.getResourceAsStream("favicon.ico").readAllBytes()
         val config = object : KwebDefaultConfiguration() {
             override suspend fun faviconIco(call: ApplicationCall) {
                 call.respondBytes(
                     // Here the favicon.ico file is read from a resource
-                    this::class.java.getResourceAsStream("favicon.ico").readAllBytes(),
+                    faviconBytes,
                     ContentType("image", "x-icon"),
                     status = HttpStatusCode.OK
                 )
