@@ -5,7 +5,7 @@ import java.time.Duration
 /**
  * A default [KwebConfiguration] using runtime arguments
  */
-internal object KwebDefaultConfiguration : KwebConfiguration() {
+open class KwebDefaultConfiguration : KwebConfiguration() {
 
     override val buildpageTimeout: Duration =
             Accessor.getProperty("kweb.buildpage.timeout")?.let { Duration.parse(it) }

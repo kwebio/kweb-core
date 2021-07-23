@@ -1,5 +1,9 @@
 package kweb.config
 
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.response.*
+import kweb.Kweb
 import mu.KotlinLogging
 import java.time.Duration
 
@@ -38,6 +42,67 @@ abstract class KwebConfiguration {
      */
     fun validate() {
         logger.debug { "Configuration has been initialized successfully" }
+    }
+
+    /**
+     * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
+     * which may be used to return whatever you wish.
+     *
+     * @sample robotsTxtSample
+     */
+    open suspend fun robotsTxt(call: ApplicationCall) {
+        call.response.status(HttpStatusCode.NotFound)
+        call.respondText("robots.txt has not been specified)")
+    }
+
+    private fun robotsTxtSample() {
+        val config = object : KwebDefaultConfiguration() {
+            override suspend fun robotsTxt(call: ApplicationCall) {
+                call.respondText(
+                    ContentType("text", "plain"),
+                    HttpStatusCode.OK
+                ) {
+                    """
+                    User-agent: Googlebot
+                    Disallow: /nogooglebot/
+
+                    User-agent: *
+                    Allow: /
+
+                """.trimIndent()
+                }
+            }
+        }
+        Kweb(port = 1245, kwebConfig = config) {
+            // ...
+        }
+    }
+
+    /**
+     * Override the default favicon.ico behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
+     * which may be used to return whatever you wish.
+     *
+     * @sample faviconSample
+     **/
+    open suspend fun faviconIco(call: ApplicationCall) {
+        call.respondText("favicons not currently supported by kweb", status = HttpStatusCode.NotFound)
+    }
+
+    private fun faviconSample() {
+        val config = object : KwebDefaultConfiguration() {
+            override suspend fun faviconIco(call: ApplicationCall) {
+                call.respondBytes(
+                    // Here the favicon.ico file is read from a resource
+                    this::class.java.getResourceAsStream("favicon.ico").readAllBytes(),
+                    ContentType("image", "x-icon"),
+                    status = HttpStatusCode.OK
+                )
+            }
+        }
+
+        Kweb(port = 1245, kwebConfig = config) {
+            // ...
+        }
     }
 
     protected object Accessor {
