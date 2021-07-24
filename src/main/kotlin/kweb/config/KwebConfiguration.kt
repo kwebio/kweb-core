@@ -89,7 +89,8 @@ abstract class KwebConfiguration {
     }
 
     private fun faviconSample() {
-        val faviconBytes = this::class.java.getResourceAsStream("favicon.ico").readAllBytes()
+        // We should cache faviconBytes rather than re-loading for every function call
+        val faviconBytes = this::class.java.getResourceAsStream("favicon.ico")!!.readAllBytes()
         val config = object : KwebDefaultConfiguration() {
             override suspend fun faviconIco(call: ApplicationCall) {
                 call.respondBytes(
