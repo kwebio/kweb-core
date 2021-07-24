@@ -48,63 +48,21 @@ abstract class KwebConfiguration {
      * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
      * which may be used to return whatever you wish.
      *
-     * @sample kweb.config.KwebConfiguration.robots_txt_sample
+     * // @sample robots_txt_sample
      */
     open suspend fun robotsTxt(call: ApplicationCall) {
         call.response.status(HttpStatusCode.NotFound)
         call.respondText("robots.txt has not been specified)")
     }
 
-    fun robots_txt_sample() {
-        val config = object : KwebDefaultConfiguration() {
-            override suspend fun robotsTxt(call: ApplicationCall) {
-                call.respondText(
-                    ContentType("text", "plain"),
-                    HttpStatusCode.OK
-                ) {
-                    """
-                    User-agent: Googlebot
-                    Disallow: /nogooglebot/
-
-                    User-agent: *
-                    Allow: /
-
-                """.trimIndent()
-                }
-            }
-        }
-        Kweb(port = 1245, kwebConfig = config) {
-            // ...
-        }
-    }
-
     /**
-     * Override the default favicon.ico behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
+     * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
      * which may be used to return whatever you wish.
      *
-     * @sample kweb.config.KwebConfiguration.favicon_sample
-     **/
+     * // @sample favicon_sample
+     */
     open suspend fun faviconIco(call: ApplicationCall) {
         call.respondText("favicons not currently supported by kweb", status = HttpStatusCode.NotFound)
-    }
-
-    fun favicon_sample() {
-        // We should cache faviconBytes rather than re-loading for every function call
-        val faviconBytes = this::class.java.getResourceAsStream("favicon.ico")!!.readAllBytes()
-        val config = object : KwebDefaultConfiguration() {
-            override suspend fun faviconIco(call: ApplicationCall) {
-                call.respondBytes(
-                    // Here the favicon.ico file is read from a resource
-                    faviconBytes,
-                    ContentType("image", "x-icon"),
-                    status = HttpStatusCode.OK
-                )
-            }
-        }
-
-        Kweb(port = 1245, kwebConfig = config) {
-            // ...
-        }
     }
 
     protected object Accessor {

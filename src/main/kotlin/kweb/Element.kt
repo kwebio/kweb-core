@@ -483,7 +483,7 @@ open class Element(
      * Return a KVar that is tied to a property related to an element, which will update when an specified
      * event fires on this element. This is a convenience wrapper around [bind].
      *
-     * @sample kweb.InputElement.checked
+     * // @sample kweb.InputElement.checked
      *
      * @param accessor Function that takes an element id and returns a JavaScript expression to access that element
      * @param updateOnEvent The event to listen for that signifies this element has been updated
@@ -497,7 +497,7 @@ open class Element(
      * Return a KVar that is tied to a property related to an element, which will update when an specified
      * event fires on this element.
      *
-     * @sample kweb.InputElement.checked
+     * // @sample kweb.InputElement.checked
      *
      * @param reader Function that takes an element id and returns a JavaScript expression to read that element
      * @param writer Function that takes an element id and a new value, and returns a JavaScript expression to
@@ -573,7 +573,7 @@ open class Element(
      * @param preventDefault Whether [preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
      *                       will be called on the event object.
      *
-     * @sample kweb.ValueElement.getValue
+     * // @sample kweb.ValueElement.getValue
      */
     fun on(retrieveJs: String? = null, preventDefault: Boolean = false) = OnReceiver(this, retrieveJs, preventDefault)
 

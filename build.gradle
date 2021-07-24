@@ -110,3 +110,11 @@ shadowJar {
     }
     mergeServiceFiles()
 }
+
+dokkaHtml {
+    dokkaSourceSets {
+        configureEach {
+            samples.from(files("src/main/kotlin/samples.kt"))
+        }
+    }
+}

@@ -395,7 +395,7 @@ class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "c
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
  *
- * @sample select_sample
+ * // @sample select_sample
  */
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
@@ -508,7 +508,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
      * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
      * if the KVar is changed.
      *
-     * @sample select_sample
+     * // @sample select_sample
      */
     var value: KVar<String>
         get() {
@@ -745,7 +745,7 @@ fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCr
 /**
  * Create a [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
  *
- * @sample fileReaderSample
+ * // @sample fileReaderSample
  */
 fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, JsonPrimitive> = attr): FileFormInput {
     val inputElement = input(attributes, InputType.file, name, initialValue, size, placeholder)

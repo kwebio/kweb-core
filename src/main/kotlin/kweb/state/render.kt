@@ -128,7 +128,7 @@ data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 /**
  *
  *
- * @sample ordered_view_set_sample
+ * // @sample ordered_view_set_sample
  */
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit) {
     val items = CopyOnWriteArrayList<ItemInfo<ITEM>>()
@@ -200,7 +200,7 @@ private enum class RenderState {
     NOT_RENDERING, RENDERING_NO_PENDING_CHANGE, RENDERING_WITH_PENDING_CHANGE
 }
 
-fun ordered_view_set_sample() {
+private fun ordered_view_set_sample() {
     data class Cat(val name: String, val color: String)
 
     val cats = Shoebox<Cat>()

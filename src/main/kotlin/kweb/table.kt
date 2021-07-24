@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonPrimitive
 /**
  * Create tables
  *
- * @sample table_example
+ * // @sample table_example
  */
 fun ElementCreator<Element>.table(attributes: Map<String, JsonPrimitive> = attr) = TableElement(element("table", attributes))
 open class TableElement(parent: Element) : Element(parent)
@@ -26,7 +26,7 @@ open class TrElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.td(attributes: Map<String, JsonPrimitive> = attr) = TdElement(element("td", attributes))
 class TdElement(parent: Element) : Element(parent)
 
-fun table_example() {
+private fun table_example() {
     Kweb(port = 2314, buildPage = {
         doc.body.new {
             table().new {
