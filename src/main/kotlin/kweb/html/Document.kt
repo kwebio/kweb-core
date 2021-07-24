@@ -51,8 +51,6 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     /**
      * Allows data to be stored in and retrieved from the browser's [local storage](https://www.w3schools.com/html/html5_webstorage.as).
-     *
-     * @sample local_storage_sample
      */
     val localStorage get() = StorageReceiver(receiver, StorageType.local)
 
