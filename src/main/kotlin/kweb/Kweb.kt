@@ -1,5 +1,6 @@
 package kweb
 
+import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import io.ktor.application.*
 import io.ktor.features.*
@@ -35,9 +36,6 @@ import java.time.Duration
 import java.time.Instant
 import java.util.*
 import kotlin.math.abs
-
-private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
 
 private val logger = KotlinLogging.logger {}
 
@@ -135,9 +133,10 @@ class Kweb private constructor(
         }
     }
 
-    private val clientState = CacheBuilder.newBuilder()
+    val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
-        .build<String, RemoteClientState>()
+        .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
+        .build()
 
     //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
 
