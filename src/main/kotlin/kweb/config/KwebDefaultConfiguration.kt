@@ -11,6 +11,10 @@ open class KwebDefaultConfiguration : KwebConfiguration() {
             Accessor.getProperty("kweb.buildpage.timeout")?.let { Duration.parse(it) }
                     ?: Duration.ofSeconds(5)
 
+    override val clientStateStats: Boolean =
+        Accessor.getProperty("kweb.client.state.stats")?.toBooleanStrictOrNull()
+            ?: false
+
     override val clientStateTimeout: Duration =
             Accessor.getProperty("kweb.client.state.timeout")?.let { Duration.parse(it) }
                     ?: Duration.ofMinutes(5)

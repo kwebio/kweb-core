@@ -6,6 +6,7 @@ import io.ktor.response.*
 import kweb.Kweb
 import mu.KotlinLogging
 import java.time.Duration
+import java.util.*
 
 /**
  * A configuration class for Kweb parameterization. Extend this if you have custom needs
@@ -24,6 +25,12 @@ abstract class KwebConfiguration {
      * See [Duration.parse] for valid formats, e.g PT5S, or PT48H
      */
     abstract val buildpageTimeout: Duration
+
+    /**
+     * Enable stats for the client state cache. Small performance penalty per operation,
+     * large gains in observability. Consider this in production.
+     */
+    abstract val clientStateStats: Boolean
 
     /**
      * Clients that last connected more than [clientStateTimeout] will be cleaned
@@ -79,6 +86,6 @@ abstract class KwebConfiguration {
          * - Then null is returned
          */
         fun getProperty(key: String): String? =
-            System.getProperty(key, env[key] ?: env[key.toUpperCase().replace('.', '_')])
+            System.getProperty(key, env[key] ?: env[key.uppercase(Locale.getDefault()).replace('.', '_')])
     }
 }

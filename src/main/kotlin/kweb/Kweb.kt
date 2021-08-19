@@ -1,5 +1,6 @@
 package kweb
 
+import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import io.ktor.application.*
 import io.ktor.features.*
@@ -132,9 +133,10 @@ class Kweb private constructor(
         }
     }
 
-    private val clientState = CacheBuilder.newBuilder()
+    val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
-        .build<String, RemoteClientState>()
+        .apply { if (kwebConfig.clientStateStats) recordStats() }
+        .build()
 
     //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
 
