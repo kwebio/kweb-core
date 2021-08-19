@@ -36,9 +36,6 @@ import java.time.Instant
 import java.util.*
 import kotlin.math.abs
 
-private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
-
 private val logger = KotlinLogging.logger {}
 
 class Kweb private constructor(
