@@ -135,7 +135,7 @@ class Kweb private constructor(
 
     val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
-        .apply { if (kwebConfig.clientStateStats) recordStats() }
+        .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
         .build()
 
     //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()

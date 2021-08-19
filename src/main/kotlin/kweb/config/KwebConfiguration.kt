@@ -30,7 +30,7 @@ abstract class KwebConfiguration {
      * Enable stats for the client state cache. Small performance penalty per operation,
      * large gains in observability. Consider this in production.
      */
-    abstract val clientStateStats: Boolean
+    abstract val clientStateStatsEnabled: Boolean
 
     /**
      * Clients that last connected more than [clientStateTimeout] will be cleaned
