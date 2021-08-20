@@ -31,15 +31,16 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     companion object : KLogging()
 
-    private val cleanupListeners: MutableCollection<Cleaner> = ConcurrentLinkedQueue<Cleaner>()
+    private var cleanupListeners: MutableCollection<Cleaner>? = null
 
     @Volatile
     private var isCleanedUp = false
 
     val elementsCreatedCount: Int get() = elementsCreated.size
 
-    internal
-    val elementsCreated = ConcurrentLinkedQueue<Element>()
+    internal val elementsCreated: ConcurrentLinkedQueue<Element> by lazy {
+        ConcurrentLinkedQueue()
+    }
 
     val browser: WebBrowser get() = parent.browser
 
@@ -174,14 +175,17 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         if (withParent) {
             parentCreator?.onCleanup(true, f)
         }
-        cleanupListeners += f
+        if (cleanupListeners == null)
+            cleanupListeners = ConcurrentLinkedQueue()
+
+        cleanupListeners?.add(f)
     }
 
     fun cleanup() {
         // TODO: Warn if called twice?
         if (!isCleanedUp) {
             isCleanedUp = true
-            cleanupListeners.forEach { it() }
+            cleanupListeners?.forEach { it() }
         }
     }
 
