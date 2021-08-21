@@ -7,6 +7,8 @@ let kwebClientId = "--CLIENT-ID-PLACEHOLDER--";
 let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
+let bannerId = "CkU6vMWzW0Hbp"  // Random id to avoid conflicts
+let reconnectTimeout = 1000
 
 <!-- FUNCTION CACHE PLACEHOLDER -->
 
@@ -102,6 +104,7 @@ function connectWs() {
             console.debug("socket.onopen event received");
             websocketEstablished = true;
             console.debug("Websocket established", wsURL);
+            removeElementByIdIfExists(bannerId);
             sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
             while (preWSMsgQueue.length > 0) {
                 sendMessage(preWSMsgQueue.shift());
@@ -124,20 +127,42 @@ function connectWs() {
 
             console.error("WebSocket was closed", explanation, evt);
             websocketEstablished = false;
-            if (evt.wasClean) {
-                console.warn("Attempting reconnect...")
-                connectWs()
-            } else {
-                console.warn("Forcing page reload");
-                location.reload(true);
-            }
+            reconnectLoopWs();
         };
         socket.onerror = function (evt) {
             console.error("WebSocket error", evt);
             websocketEstablished = false;
-            console.warn("Forcing page reload");
-            location.reload(true);
         };
+    }
+}
+
+function reconnectLoopWs() {
+    reconnectTimeout *= 2
+    createBannerIfNotExists();
+
+    setTimeout(function() {
+        if (websocketEstablished == false) {
+            if (reconnectTimeout < 600_000) {
+                console.log("Attempting to reconnect")
+                connectWs();
+            } else {
+                console.warn("Forcing page reload because the server is unresponsive for too long");
+                location.reload(true);
+            }
+        }
+    }, reconnectTimeout);
+}
+
+function createBannerIfNotExists() {
+    var banner = document.getElementById(bannerId);
+    if (typeof(banner) == 'undefined' || banner == null) {
+        banner = document.createElement("h1");
+        banner.id = bannerId
+        banner.innerHTML = `Connection to server lost, attempting to reconnect in ${reconnectTimeout/1000} seconds`;
+        banner.style = "background-color: yellow; text-align: center;";
+        document.body.insertBefore(banner,document.body.childNodes[0]);
+    } else {
+        banner.innerHTML = `Connection to server lost, attempting to reconnect in ${reconnectTimeout/1000} seconds`;
     }
 }
 
