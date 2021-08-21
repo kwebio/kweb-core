@@ -11,6 +11,7 @@ import kweb.util.json
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
 
 typealias Cleaner = () -> Unit
@@ -37,11 +38,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     @Volatile
     private var isCleanedUp = false
 
-    val elementsCreatedCount: Int get() = elementsCreated.size
-
-    internal val elementsCreated: ConcurrentLinkedQueue<Element> by lazy {
-        ConcurrentLinkedQueue()
-    }
+    val elementsCreatedCount: Int get() = elementsCreatedCountAtomic.get()
+    private val elementsCreatedCountAtomic = AtomicInteger(0)
 
     val browser: WebBrowser get() = parent.browser
 
@@ -147,7 +145,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
-        elementsCreated += newElement
+        elementsCreatedCountAtomic.incrementAndGet()
         for (plugin in parent.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)
         }
