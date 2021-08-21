@@ -31,6 +31,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     companion object : KLogging()
 
+    @Volatile
     private var cleanupListeners: MutableCollection<Cleaner>? = null
 
     @Volatile
