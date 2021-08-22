@@ -187,7 +187,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
          */
         error(
             """
-            Only one element may be created per item but ${itemElementCreator.elementsCreated} were created for
+            Only one element may be created per item but ${itemElementCreator.elementsCreatedCount} were created for
             item key ${keyValue.key}.  Note that this element may have as many children as you like, so you may just need
             to wrap the elements in a <DIV> or other element type.
 """.trimIndent()
