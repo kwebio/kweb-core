@@ -23,27 +23,3 @@ object BootstrapJs {
         return template.apply(clientId, pageBuildInstructions, functionCache)
     }
 }
-
-fun tmp() {
-    Kweb(port = 1234) {
-        doc.body.new {
-            ul().new {
-                li().text("One")
-                li().text("Two")
-                li().text("Three")
-            }
-        }
-    }
-}
-
-fun tmp2() {
-    Kweb(port = 1234) {
-        doc.body {
-            ul {
-                li().text("One")
-                li().text("Two")
-                li().text("Three")
-            }
-        }
-    }
-}
