@@ -21,8 +21,8 @@ private val logger = KotlinLogging.logger {}
 
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
-    container: ElementCreator<*>.() -> Element
-        = { span().setAttribute("style", JsonPrimitive("display: contents;")) },
+    container: ElementCreator<*>.() -> Element // TODO: REMOVE THIS
+    = { span().setAttribute("style", JsonPrimitive("display: contents;")) },
     block: ElementCreator<Element>.(T) -> Unit
 ) {
 
@@ -149,7 +149,10 @@ data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
  *
  * @sample ordered_view_set_sample
  */
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(orderedViewSet: OrderedViewSet<ITEM>, renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit) {
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
+    orderedViewSet: OrderedViewSet<ITEM>,
+    renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit
+) {
     val items = CopyOnWriteArrayList<ItemInfo<ITEM>>()
     for (keyValue in orderedViewSet.keyValueEntries) {
         items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
