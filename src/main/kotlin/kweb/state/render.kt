@@ -2,8 +2,6 @@ package kweb.state
 
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
-import kweb.client.FunctionCall
-import kweb.client.Server2ClientMessage
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
@@ -24,7 +22,7 @@ fun <T : Any?> ElementCreator<*>.render(
     container: ElementCreator<*>.() -> Element // TODO: REMOVE THIS
     = { span().setAttribute("style", JsonPrimitive("display: contents;")) },
     block: ElementCreator<Element>.(T) -> Unit
-) {
+) : RenderFragment {
 
     // NOTE: Per https://github.com/kwebio/kweb-core/issues/151 eventually render() won't rely on a container element.
     val containerElement: Element = container(this)
@@ -34,20 +32,18 @@ fun <T : Any?> ElementCreator<*>.render(
     val renderState = AtomicReference(NOT_RENDERING)
 
     //TODO this could be improved
-    var startSpanId = ""
-    var endSpanId = ""
-    if (parent.browser.isCatchingOutbound() == null) {
+ //   var startSpanId = ""
+ //   var endSpanId = ""
+    val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
         parent.browser.batch(WebBrowser.CatcherType.RENDER) {
             val startSpan = span()
             val endSpan = span()
-            startSpanId = startSpan.id
-            endSpanId = endSpan.id
+            RenderFragment(startSpan.id, endSpan.id)
         }
     } else {
         val startSpan = span()
         val endSpan = span()
-        startSpanId = startSpan.id
-        endSpanId = endSpan.id
+        RenderFragment(startSpan.id, endSpan.id)
     }
 
     fun eraseAndRender() {
@@ -55,11 +51,11 @@ fun <T : Any?> ElementCreator<*>.render(
             if (parent.browser.isCatchingOutbound() == null) {
                 parent.browser.batch(WebBrowser.CatcherType.RENDER) {
 
-                    containerElement.removeChildrenBetweenSpans(startSpan.id, endSpan.id)
-                    // SCRATCH
+                    parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
                     previousElementCreator.get()?.cleanup()
 
-                    previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertAfter = startSpan.id))
+
+                    previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
                     renderState.set(RENDERING_NO_PENDING_CHANGE)
                     previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
                     if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
@@ -114,6 +110,8 @@ fun <T : Any?> ElementCreator<*>.render(
         previousElementCreator.getAndSet(null)?.cleanup()
         value.removeListener(listenerHandle)
     }
+
+    return renderFragment
 }
 
 fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
@@ -141,6 +139,8 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
 }
 
 private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, val KVar: KVar<ITEM>)
+
+class RenderFragment(val startId : String, val endId : String)
 
 data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
@@ -187,7 +187,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
     orderedViewSet: OrderedViewSet<ITEM>,
     keyValue: KeyValue<ITEM>,
     renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit,
-    insertAtPosition: Int?
+    insertAtPosition: String?
 )
         : ItemInfo<ITEM> {
     val itemElementCreator = ElementCreator(this.parent, this, insertAtPosition)
