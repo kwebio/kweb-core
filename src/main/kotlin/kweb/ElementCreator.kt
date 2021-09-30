@@ -69,11 +69,13 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             parent.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
                 val createElementJs = """
+                    console.log("Creating new element")
                     let tag = {};
                     let attributes = {};
                     let myId = {};
                     let parentId = {};
                     let insertBefore = {};
+                    console.log("insertBefore = " + insertBefore)
                     let newEl = $createElementStatement
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
@@ -111,6 +113,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 //The way I have written this function, instead of attributes.get(), we now use attributes[].
                 //language=JavaScript
                 val createElementJs = """
+                    console.log("Creating new element in other place")
                     let tag = {};
                     let attributes = {};
                     let myId = {};
