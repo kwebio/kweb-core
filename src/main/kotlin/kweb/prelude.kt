@@ -130,7 +130,31 @@ fun ElementCreator<Element>.form(
     }
 }
 
-open class AElement(parent: Element) : Element(parent)
+open class AElement(parent: Element) : Element(parent) {
+
+    /**
+     * A convenience property to set the href attribute of this anchor element. If the value begins with
+     * "/" (a relative URL) then this will override the default click behavior and set the [WebBrowser.url]
+     * to the appropriate value, avoiding a page refresh.
+     *
+     * *Note:* This property may only be set, attempting to read this property will throw an error.
+     *
+     * TODO: Should this be a KVar rather than a String?
+     */
+    var href : String? get() {
+        error("The href property may only be set, but not read")
+    }
+    set(hrefValue) {
+        if (hrefValue != null) {
+            setAttribute("href", hrefValue)
+            if (hrefValue.startsWith('/')) {
+                this.on(preventDefault = true).click {
+                    this.browser.url.value = hrefValue
+                }
+            }
+        }
+    }
+}
 
 fun ElementCreator<Element>.a(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
@@ -371,7 +395,7 @@ class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "c
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
  *
- * @sample select_sample
+ * // @sample select_sample
  */
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
@@ -484,7 +508,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
      * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
      * if the KVar is changed.
      *
-     * @sample select_sample
+     * // @sample select_sample
      */
     var value: KVar<String>
         get() {
@@ -721,7 +745,7 @@ fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCr
 /**
  * Create a [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
  *
- * @sample fileReaderSample
+ * // @sample fileReaderSample
  */
 fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, JsonPrimitive> = attr): FileFormInput {
     val inputElement = input(attributes, InputType.file, name, initialValue, size, placeholder)

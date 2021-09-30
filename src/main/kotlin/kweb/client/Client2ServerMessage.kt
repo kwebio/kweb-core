@@ -11,7 +11,6 @@ data class Client2ServerMessage(
     val error: ErrorMessage? = null,
     val callback: C2SCallback? = null,
     val keepalive : Boolean = false,
-    val historyStateChange: C2SHistoryStateChange? = null
 ) {
 
     @Serializable
@@ -22,7 +21,4 @@ data class Client2ServerMessage(
 
     @Serializable
     data class C2SCallback(val callbackId: Int, val data: JsonElement = JsonNull)
-
-    @Serializable
-    data class C2SHistoryStateChange(val newState: String)
 }

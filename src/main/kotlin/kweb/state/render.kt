@@ -137,7 +137,7 @@ data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 /**
  *
  *
- * @sample ordered_view_set_sample
+ * // @sample ordered_view_set_sample
  */
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
     orderedViewSet: OrderedViewSet<ITEM>,
@@ -180,7 +180,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
     insertAtPosition: String?
 )
         : ItemInfo<ITEM> {
-    val itemElementCreator = ElementCreator(this.parent, this, insertAtPosition)
+    val itemElementCreator = ElementCreator(this.parent, this, position = insertAtPosition)
     val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
     try {
         renderer(itemElementCreator, itemVar)
@@ -199,7 +199,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
          */
         error(
             """
-            Only one element may be created per item but ${itemElementCreator.elementsCreated} were created for
+            Only one element may be created per item but ${itemElementCreator.elementsCreatedCount} were created for
             item key ${keyValue.key}.  Note that this element may have as many children as you like, so you may just need
             to wrap the elements in a <DIV> or other element type.
 """.trimIndent()
@@ -212,7 +212,7 @@ private enum class RenderState {
     NOT_RENDERING, RENDERING_NO_PENDING_CHANGE, RENDERING_WITH_PENDING_CHANGE
 }
 
-fun ordered_view_set_sample() {
+private fun ordered_view_set_sample() {
     data class Cat(val name: String, val color: String)
 
     val cats = Shoebox<Cat>()

@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 class FileUpload(
         val fileName: String,
-        val fileSize: String,
+        val fileSize: Int,
         val base64Content: String
 )

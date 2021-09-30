@@ -10,22 +10,22 @@ buildscript {
 
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version '1.5.20'
+    id "org.jetbrains.kotlin.jvm" version '1.5.21'
     id 'maven'
     id 'org.jetbrains.dokka' version '1.5.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id "com.github.ben-manes.versions" version "0.36.0"
+    id "com.github.ben-manes.versions" version "0.39.0"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
 }
 
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.5.2'
+    ktor_version = '1.6.1'
 }
 
 group 'com.github.kwebio'
-version '0.10.8'
+version '0.10.17'
 
 repositories {
     mavenCentral()
@@ -110,4 +110,12 @@ shadowJar {
         attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
     }
     mergeServiceFiles()
+}
+
+dokkaHtml {
+    dokkaSourceSets {
+        configureEach {
+            samples.from(files("src/main/kotlin/samples.kt"))
+        }
+    }
 }

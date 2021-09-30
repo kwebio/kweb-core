@@ -51,8 +51,6 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     /**
      * Allows data to be stored in and retrieved from the browser's [local storage](https://www.w3schools.com/html/html5_webstorage.as).
-     *
-     * @sample local_storage_sample
      */
     val localStorage get() = StorageReceiver(receiver, StorageType.local)
 
@@ -76,12 +74,13 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     }
 
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Document {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Document {
         val callbackId = Math.abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
             document.addEventListener({}, function(event) {
+                ${if (preventDefault) "event.preventDefault();" else ""}
                 callbackWs({}, $eventObject);
             });
         """
@@ -94,13 +93,13 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: OnReceiver<Document> get() = OnReceiver(this)
+    val on: OnReceiver<Document> get() = OnReceiver(this, preventDefault = false)
 
     /**
      * You can supply a javascript expression `retrieveJs` which will
      * be available via [Event.retrieveJs]
      */
-    fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
+    fun on(retrieveJs: String? = null, preventDefault: Boolean = false) = OnReceiver(this, retrieveJs, preventDefault)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).

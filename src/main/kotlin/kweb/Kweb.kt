@@ -1,5 +1,6 @@
 package kweb
 
+import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import io.ktor.application.*
 import io.ktor.features.*
@@ -36,15 +37,12 @@ import java.time.Instant
 import java.util.*
 import kotlin.math.abs
 
-private val MAX_PAGE_BUILD_TIME: Duration = Duration.ofSeconds(5)
-private val CLIENT_STATE_TIMEOUT: Duration = Duration.ofHours(48)
-
 private val logger = KotlinLogging.logger {}
 
 class Kweb private constructor(
-        val debug: Boolean,
-        val plugins: List<KwebPlugin>,
-        val kwebConfig: KwebConfiguration,
+    val debug: Boolean,
+    val plugins: List<KwebPlugin>,
+    val kwebConfig: KwebConfiguration,
 ) : Closeable {
 
     /**
@@ -61,16 +59,16 @@ class Kweb private constructor(
      *                     go
      */
     constructor(
-            port: Int,
-            debug: Boolean = true,
-            plugins: List<KwebPlugin> = Collections.emptyList(),
-            httpsConfig: EngineSSLConnectorConfig? = null,
-            kwebConfig: KwebConfiguration = KwebDefaultConfiguration,
-            buildPage: WebBrowser.() -> Unit,
+        port: Int,
+        debug: Boolean = true,
+        plugins: List<KwebPlugin> = Collections.emptyList(),
+        httpsConfig: EngineSSLConnectorConfig? = null,
+        kwebConfig: KwebConfiguration = KwebDefaultConfiguration(),
+        buildPage: WebBrowser.() -> Unit,
     ) : this(
-            debug = debug,
-            plugins = plugins,
-            kwebConfig = kwebConfig,
+        debug = debug,
+        plugins = plugins,
+        kwebConfig = kwebConfig,
     ) {
         logger.info("Initializing Kweb listening on port $port")
 
@@ -112,7 +110,8 @@ class Kweb private constructor(
         class Configuration {
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
-            var kwebConfig: KwebConfiguration = KwebDefaultConfiguration
+            var kwebConfig: KwebConfiguration = KwebDefaultConfiguration()
+
             @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
             var buildPage: (WebBrowser.() -> Unit)? = null
         }
@@ -134,9 +133,10 @@ class Kweb private constructor(
         }
     }
 
-    private val clientState = CacheBuilder.newBuilder()
+    val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
-        .build<String, RemoteClientState>()
+        .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
+        .build()
 
     //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
 
@@ -151,9 +151,9 @@ class Kweb private constructor(
 
     fun callJs(sessionId: String, funcCall: FunctionCall, debugInfo: DebugInfo? = null) {
         val wsClientData = clientState.getIfPresent(sessionId)
-                ?: error("Client id $sessionId not found")
+            ?: error("Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
-        if(debug) {
+        if (debug) {
             val dt = abs(random.nextLong()).toString(16)
             debugInfo?.let {
                 wsClientData.debugTokens[dt] = it
@@ -164,7 +164,7 @@ class Kweb private constructor(
 
     fun addCallback(sessionId: String, callbackId: Int, callback: (JsonElement) -> Unit) {
         val wsClientData = clientState.getIfPresent(sessionId)
-                ?: error("Can not add callback because: Client id $sessionId not found")
+            ?: error("Can not add callback because: Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
         wsClientData.handlers[callbackId] = callback
     }
@@ -178,7 +178,11 @@ class Kweb private constructor(
         server?.stop(0, 0)
     }
 
-    private fun createServer(port: Int, httpsConfig: EngineSSLConnectorConfig?, buildPage: WebBrowser.() -> Unit): JettyApplicationEngine {
+    private fun createServer(
+        port: Int,
+        httpsConfig: EngineSSLConnectorConfig?,
+        buildPage: WebBrowser.() -> Unit
+    ): JettyApplicationEngine {
         return embeddedServer(Jetty, applicationEngineEnvironment {
             this.module {
                 install(DefaultHeaders)
@@ -206,13 +210,11 @@ class Kweb private constructor(
         application.routing {
 
             get("/robots.txt") {
-                call.response.status(HttpStatusCode.NotFound)
-                call.respondText("robots.txt not currently supported by kweb")
+                kwebConfig.robotsTxt(call)
             }
 
             get("/favicon.ico") {
-                call.response.status(HttpStatusCode.NotFound)
-                call.respondText("favicons not currently supported by kweb")
+                kwebConfig.faviconIco(call)
             }
 
             get("/{visitedUrl...}") {
@@ -226,7 +228,7 @@ class Kweb private constructor(
 
     // We can't convert this param to receiver because it's called on receiver in the companion Feature
     private fun installRequiredKwebComponents(application: Application) {
-        HtmlDocumentSupplier.createDocTemplate(plugins, application.routing {  })
+        HtmlDocumentSupplier.createDocTemplate(plugins, application.routing { })
 
         application.routing {
             webSocket("/ws") {
@@ -243,7 +245,7 @@ class Kweb private constructor(
         }
 
         val remoteClientState = clientState.getIfPresent(hello.id)
-                ?: error("Unable to find server state corresponding to client id ${hello.id}")
+            ?: error("Unable to find server state corresponding to client id ${hello.id}")
 
         assert(remoteClientState.clientConnection is Caching)
         logger.debug { "Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache" }
@@ -277,11 +279,8 @@ class Kweb private constructor(
                                 message.callback != null -> {
                                     val (resultId, result) = message.callback
                                     val resultHandler = remoteClientState.handlers[resultId]
-                                            ?: error("No data handler for $resultId for client ${remoteClientState.id}")
+                                        ?: error("No data handler for $resultId for client ${remoteClientState.id}")
                                     resultHandler(result)
-                                }
-                                message.historyStateChange != null -> {
-
                                 }
                                 message.keepalive -> {
                                     logger.debug { "keepalive received from client ${hello.id}" }
@@ -367,7 +366,8 @@ class Kweb private constructor(
                 for (funcCall in deserialedMsg.functionCalls) {
                     if (funcCall.jsId != null) {
                         if (!cachedIds.contains(funcCall.jsId)) {
-                            val cachedFunction = """${funcCall.jsId} : function(${funcCall.parameters}) { ${funcCall.js} }"""
+                            val cachedFunction =
+                                """${funcCall.jsId} : function(${funcCall.parameters}) { ${funcCall.js} }"""
                             cachedFunctions.add(cachedFunction)
                             cachedIds.add(funcCall.jsId)
                         }
@@ -379,14 +379,14 @@ class Kweb private constructor(
             val functionCacheString = "let cachedFunctions = { \n${cachedFunctions.joinToString(separator = ",\n")} };"
 
             val bootstrapJS = BootstrapJs.hydrate(
-                    kwebSessionId,
-                    initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
-                    functionCacheString
+                kwebSessionId,
+                initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
+                functionCacheString
             )
 
             htmlDocument.head().appendElement("script")
-                    .attr("language", "JavaScript")
-                    .appendChild(DataNode(bootstrapJS))
+                .attr("language", "JavaScript")
+                .appendChild(DataNode(bootstrapJS))
             htmlDocument.outputSettings().prettyPrint(debug)
 
 
@@ -400,17 +400,19 @@ class Kweb private constructor(
             logger.error(e) { "Exception thrown while rendering page, code $logToken" }
 
             call.response.status(HttpStatusCode.InternalServerError)
-            call.respondText("""
+            call.respondText(
+                """
                         Internal Server Error.
 
                         Please include code $logToken in any error report to help us track it down.
-""".trimIndent())
+""".trimIndent()
+            )
         }
     }
 
     private fun handleError(error: Client2ServerMessage.ErrorMessage, remoteClientState: RemoteClientState) {
         val debugInfo = remoteClientState.debugTokens[error.debugToken]
-                ?: error("DebugInfo message not found")
+            ?: error("DebugInfo message not found")
         val logStatementBuilder = StringBuilder()
         logStatementBuilder.appendln("JavaScript message: '${error.error.message}'")
         logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
@@ -434,7 +436,6 @@ class Kweb private constructor(
             client.clientConnection.send(Json.encodeToString(message))
         }
     }
-
 
 
 }

@@ -31,15 +31,14 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     companion object : KLogging()
 
-    private val cleanupListeners: MutableCollection<Cleaner> = ConcurrentLinkedQueue<Cleaner>()
+    @Volatile
+    private var cleanupListeners: MutableCollection<Cleaner>? = null
 
     @Volatile
     private var isCleanedUp = false
 
-    val elementsCreatedCount: Int get() = elementsCreated.size
-
-    internal
-    val elementsCreated = ConcurrentLinkedQueue<Element>()
+    val elementsCreatedCount: Int get() = elementsCreatedCountAtomic.get()
+    private val elementsCreatedCountAtomic = AtomicInteger(0)
 
     val browser: WebBrowser get() = parent.browser
 
@@ -49,8 +48,13 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      *
      * Tag-specific functions like [p], [select], and others call this function and should
      * be used in preference to it if available.
+     *
+     * @param tag The HTML tag, eg. "p", "select", "a", etc
+     * @param attributes The HTML element's attributes
+     * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
+     *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
      */
-    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace : String? = null): Element {
 
         val mutAttributes = HashMap(attributes)
 
@@ -66,6 +70,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
+        val createElementStatement = when(namespace) {
+            null -> "document.createElement(tag);"
+            else -> "document.createElementNS(\"${namespace}\", tag);"
+        }
         when {
             parent.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
@@ -76,7 +84,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let parentId = {};
                     let insertBefore = {};
                     let elementCount = {};
-                    let newEl = document.createElement(tag);
+                    let newEl = $createElementStatement
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
                         if ( key !== "id") {
@@ -140,7 +148,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
-        elementsCreated += newElement
+        elementsCreatedCountAtomic.incrementAndGet()
         for (plugin in parent.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)
         }
@@ -169,14 +177,17 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         if (withParent) {
             parentCreator?.onCleanup(true, f)
         }
-        cleanupListeners += f
+        if (cleanupListeners == null)
+            cleanupListeners = ConcurrentLinkedQueue()
+
+        cleanupListeners?.add(f)
     }
 
     fun cleanup() {
         // TODO: Warn if called twice?
         if (!isCleanedUp) {
             isCleanedUp = true
-            cleanupListeners.forEach { it() }
+            cleanupListeners?.forEach { it() }
         }
     }
 

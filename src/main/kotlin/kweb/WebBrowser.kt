@@ -26,12 +26,12 @@ import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
+private val logger = KotlinLogging.logger {}
+
 /**
  * A conduit for communicating with a remote web browser, can be used to execute JavaScript and evaluate JavaScript
  * expressions and retrieve the result.
  */
-
-private val logger = KotlinLogging.logger {}
 
 class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, val kweb: Kweb) {
 
@@ -152,7 +152,7 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      * If your JavaScript needs to use an empty JavaScript map, just insert a space
      * between the {}s, eg. `{ }`
      *
-     * @sample callJsFunction_sample
+     * // @sample kweb.callJsFunction_sample
      */
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         val functionCall  = if (cachedFunctions[jsBody] != null) {
@@ -258,6 +258,47 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
 
     val window = Window(this)
 
+    private data class UrlSource(val url : String, val source : Source) {
+        enum class Source {
+            Initial, Client, Server
+        }
+    }
+
+    /*
+     * We must keep track of whether a URL change was initiated on the client or on the
+     * server to avoid unnecessarily pushing a new URL state back to the client when
+     * that's where it originated.
+     *
+     * Suspect this was the cause of https://github.com/kwebio/kweb-core/issues/219
+     */
+    private val urlSource : KVar<UrlSource> by lazy {
+        val originRelativeURL = URL.parse(httpRequestInfo.requestedUrl).pathQueryFragment
+        val urlSource = KVar(UrlSource(originRelativeURL, UrlSource.Source.Initial))
+
+        urlSource.addListener { oldState, newState ->
+            logger.debug { "urlSource $oldState -> $newState" }
+            if (newState.source == UrlSource.Source.Server) {
+                pushState(newState.url)
+            }
+        }
+
+        window.on(
+            //language=JavaScript
+            retrieveJs = "window.location.href"
+        ).popstate { event : Event ->
+            if (event.retrieved is JsonPrimitive && event.retrieved.isString) {
+                urlSource.value = UrlSource(
+                    URL.parse(event.retrieved.content).pathQueryFragment,
+                    UrlSource.Source.Client
+                )
+            } else {
+                error("event.retrieved isn't a string")
+            }
+        }
+
+        urlSource
+    }
+
     /**
      * The URL of the page, relative to the origin - so for the page `http://foo/bar?baz#1`, the value would be
      * `/bar?baz#1`.
@@ -271,26 +312,15 @@ class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequest
      */
     val url: KVar<String>
             by lazy {
-                val originRelativeURL = URL.parse(httpRequestInfo.requestedUrl).pathQueryFragment
-                val url = KVar(originRelativeURL)
-
-                url.addListener { _, newState ->
-                    pushState(newState)
-                }
-
-
-                window.on(
-                    //language=JavaScript
-                    retrieveJs = "document.location.href"
-                ).popstate { event : Event ->
-                    if (event.retrieved is JsonPrimitive && event.retrieved.isString) {
-                        url.value = URL.parse(event.retrieved.content).pathQueryFragment
-                    } else {
-                        error("event.retrieved isn't a string")
-                    }
-                }
-
-                url
+                urlSource.map(object : ReversibleFunction<UrlSource, String>("urlSource") {
+                    override fun invoke(from: UrlSource) = from.url
+                    override fun reverse(original: UrlSource, change: String) =
+                        if (change != original.url) {
+                            UrlSource(change, UrlSource.Source.Server)
+                        } else {
+                            UrlSource(change, original.source)
+                        }
+                })
             }
 
     private fun pushState(url: String) {

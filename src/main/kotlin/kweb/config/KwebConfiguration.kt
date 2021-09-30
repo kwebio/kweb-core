@@ -1,7 +1,12 @@
 package kweb.config
 
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.response.*
+import kweb.Kweb
 import mu.KotlinLogging
 import java.time.Duration
+import java.util.*
 
 /**
  * A configuration class for Kweb parameterization. Extend this if you have custom needs
@@ -22,6 +27,12 @@ abstract class KwebConfiguration {
     abstract val buildpageTimeout: Duration
 
     /**
+     * Enable stats for the client state cache. Small performance penalty per operation,
+     * large gains in observability. Consider this in production.
+     */
+    abstract val clientStateStatsEnabled: Boolean
+
+    /**
      * Clients that last connected more than [clientStateTimeout] will be cleaned
      * up every minute.
      *
@@ -40,6 +51,27 @@ abstract class KwebConfiguration {
         logger.debug { "Configuration has been initialized successfully" }
     }
 
+    /**
+     * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
+     * which may be used to return whatever you wish.
+     *
+     * // @sample robots_txt_sample
+     */
+    open suspend fun robotsTxt(call: ApplicationCall) {
+        call.response.status(HttpStatusCode.NotFound)
+        call.respondText("robots.txt has not been specified)")
+    }
+
+    /**
+     * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
+     * which may be used to return whatever you wish.
+     *
+     * // @sample favicon_sample
+     */
+    open suspend fun faviconIco(call: ApplicationCall) {
+        call.respondText("favicons not currently supported by kweb", status = HttpStatusCode.NotFound)
+    }
+
     protected object Accessor {
         private val env = System.getenv()
 
@@ -54,6 +86,6 @@ abstract class KwebConfiguration {
          * - Then null is returned
          */
         fun getProperty(key: String): String? =
-            System.getProperty(key, env[key] ?: env[key.toUpperCase().replace('.', '_')])
+            System.getProperty(key, env[key] ?: env[key.uppercase(Locale.getDefault()).replace('.', '_')])
     }
 }

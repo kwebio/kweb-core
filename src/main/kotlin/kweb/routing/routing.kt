@@ -8,7 +8,7 @@ import kweb.route
 import kweb.state.KVar
 
 /**
- * @sample testSampleForRouting
+ * // @sample testSampleForRouting
  */
 
 // TODO: Handle back button https://www.webdesignerdepot.com/2013/03/how-to-manage-the-back-button-with-javascript/

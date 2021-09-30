@@ -38,7 +38,7 @@ open class Element(
      * foundation upon which most other DOM modification functions in this class
      * are based. `{}`s in the js String will be replaced by the `args` values
      * in the order in which they're present in the js String.
-     * 
+     *
      * Note that this will cache functions in the browser to avoid unnecessary
      * re-interpretation, making this fairly efficient.
      *
@@ -106,20 +106,28 @@ open class Element(
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
      * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
      *
-     * Will be ignored if `value` is `null`.
+     * @param namespace If non-null elements will be created with [Element.setAttributeNS()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttributeNS)
+     *                  with the specified namespace. If null then Kweb will use [Element.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
+
      */
-    fun setAttribute(name: String, value: JsonPrimitive): Element {
+    fun setAttribute(name: String, value: JsonPrimitive, namespace : String? = null): Element {
         val htmlDoc = browser.htmlDocument.get()
+        val setAttributeJavaScript = when(namespace) {
+            null -> "document.getElementById({}).setAttribute({}, {});"
+            else -> "document.getElementById({}).setAttributeNS(\"$namespace\", {}, {});"
+        }
         when {
             browser.isCatchingOutbound() != null -> {
-                callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                callJsFunction(
+                    setAttributeJavaScript,
                         id.json, name.json, value)
             }
             htmlDoc != null -> {
                 htmlDoc.getElementById(this.id).attr(name, value.content)
             }
             else -> {
-                callJsFunction("document.getElementById({}).setAttribute({}, {})",
+                callJsFunction(
+                    setAttributeJavaScript,
                         id.json, name.json, value)
             }
         }
@@ -469,7 +477,7 @@ open class Element(
         browser.callJsFunction(wrappedJS, id.json, JsonPrimitive(eventName))
     }
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, callback: (JsonElement) -> Unit): Element {
+    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Element {
         val callbackId = abs(random.nextInt())
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
@@ -481,6 +489,7 @@ open class Element(
         */
         val addEventJs = """
             document.getElementById({}).addEventListener({}, function(event) {
+                ${if (preventDefault) "event.preventDefault();" else ""}
                 callbackWs({}, $eventObject);
             });
             return true;
@@ -505,7 +514,7 @@ open class Element(
      * Return a KVar that is tied to a property related to an element, which will update when an specified
      * event fires on this element. This is a convenience wrapper around [bind].
      *
-     * @sample InputElement.checked
+     * // @sample kweb.InputElement.checked
      *
      * @param accessor Function that takes an element id and returns a JavaScript expression to access that element
      * @param updateOnEvent The event to listen for that signifies this element has been updated
@@ -519,7 +528,7 @@ open class Element(
      * Return a KVar that is tied to a property related to an element, which will update when an specified
      * event fires on this element.
      *
-     * @sample InputElement.checked
+     * // @sample kweb.InputElement.checked
      *
      * @param reader Function that takes an element id and returns a JavaScript expression to read that element
      * @param writer Function that takes an element id and a new value, and returns a JavaScript expression to
@@ -580,22 +589,24 @@ open class Element(
      */
     val style get() = StyleReceiver(this)
 
-    val flags = ConcurrentSkipListSet<String>()
+    val flags : ConcurrentSkipListSet<String> by lazy { ConcurrentSkipListSet() }
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      */
-    val on: OnReceiver<Element> get() = OnReceiver(this)
+    val on: OnReceiver<Element> get() = OnReceiver(this, preventDefault = false)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
      *
      * @param retrieveJs A JavaScript expression that will be returned to the server
      * in [Event.retrieved] when an event fires in the browser.
+     * @param preventDefault Whether [preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
+     *                       will be called on the event object.
      *
-     * @sample ValueElement.getValue
+     * // @sample kweb.ValueElement.getValue
      */
-    fun on(retrieveJs: String) = OnReceiver(this, retrieveJs)
+    fun on(retrieveJs: String? = null, preventDefault: Boolean = false) = OnReceiver(this, retrieveJs, preventDefault)
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
@@ -606,7 +617,8 @@ open class Element(
 /**
  * A convenience wrapper around [new] which allows a nested DSL-style syntax
  *
- * @Param position What position among the parent's children should the new element have?
+ * @param position What position among the parent's children should the new element have?
+ * @param receiver A code block in which any created elements will be children of this element.
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
     insertBefore: String? = null,
