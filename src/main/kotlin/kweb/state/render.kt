@@ -39,16 +39,15 @@ fun <T : Any?> ElementCreator<*>.render(
         RenderFragment(startSpan.id, endSpan.id)
     }
 
+    //TODO something can probably be done about the code duplication in this do while loop
     fun eraseAndRender() {
         do {
             if (parent.browser.isCatchingOutbound() == null) {
                 parent.browser.batch(WebBrowser.CatcherType.RENDER) {
-                println("First Block")
                     parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
                     previousElementCreator.get()?.cleanup()
 
                     previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-                    println("InsertBefore = ${renderFragment.endId}")
                     renderState.set(RENDERING_NO_PENDING_CHANGE)
                     previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
                     if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
@@ -56,11 +55,10 @@ fun <T : Any?> ElementCreator<*>.render(
                     }
                 }
             } else {
-                println("Second Block")
                 parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
                 previousElementCreator.get()?.cleanup()
+
                 previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-                println("InsertBefore = ${renderFragment.endId}")
                 renderState.set(RENDERING_NO_PENDING_CHANGE)
                 previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
                 if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
@@ -84,9 +82,7 @@ fun <T : Any?> ElementCreator<*>.render(
         }
     }
 
-    println("Third Block")
     previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-    println("InsertBefore = ${renderFragment.endId}")
     renderState.set(RENDERING_NO_PENDING_CHANGE)
     previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
     if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {

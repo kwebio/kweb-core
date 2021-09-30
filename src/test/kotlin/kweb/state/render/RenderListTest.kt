@@ -2,6 +2,7 @@ package kweb.state.render
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
+import io.kotlintest.matchers.types.shouldNotBeNull
 import kweb.*
 import kweb.state.KVar
 import kweb.state.render
@@ -9,7 +10,9 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 
@@ -39,16 +42,14 @@ class RenderListTest {
 
         @Options
         var firefoxOptions = FirefoxOptions().apply {
-            setHeadless(true)
+            //setHeadless(true)
         }
     }
 
     @Test
     fun initialRender(driver : WebDriver) {
         driver.get("http://localhost:7659/")
-        while(true) {
-
-        }
+        Thread.sleep(20000)
     }
 }
 
@@ -65,7 +66,7 @@ class RenderListTestApp {
             }
             val button = button().text("Hello")
             button.on.click {
-                changeNum(17)
+                changeNum(numEl.value + 1)
             }
         }
     }
