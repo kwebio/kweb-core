@@ -28,7 +28,8 @@ internal object HtmlDocumentSupplier {
                     .attr("id", "K_head")
                     .attr("name", "viewport")
                     .attr("content", "width=device-width, initial-scale=1.0")
-            }
+
+            } //TODO append CSS to document to mark spans with class "RenderMarker" invisible
 
             html.appendElement("body").let { body: Element ->
 
