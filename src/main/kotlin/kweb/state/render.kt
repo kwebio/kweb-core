@@ -19,8 +19,13 @@ private val logger = KotlinLogging.logger {}
 
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
+    container: ElementCreator<*>.() -> Element
+        = { span().setAttribute("style", JsonPrimitive("display: contents;")) },
     block: ElementCreator<Element>.(T) -> Unit
 ) : RenderFragment {
+
+    // NOTE: Per https://github.com/kwebio/kweb-core/issues/151 eventually render() won't rely on a container element.
+    val containerElement: Element = container(this)
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
@@ -55,14 +60,14 @@ fun <T : Any?> ElementCreator<*>.render(
                     }
                 }
             } else {
-                parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
-                previousElementCreator.get()?.cleanup()
-
-                previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-                renderState.set(RENDERING_NO_PENDING_CHANGE)
-                previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
-                if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-                    renderState.set(NOT_RENDERING)
+                containerElement.removeChildren()
+                containerElement.new {
+                    previousElementCreator.getAndSet(this)?.cleanup()
+                    renderState.set(RENDERING_NO_PENDING_CHANGE)
+                    block(value.value)
+                    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+                        renderState.set(NOT_RENDERING)
+                    }
                 }
             }
         } while (renderState.get() != NOT_RENDERING)
@@ -82,18 +87,20 @@ fun <T : Any?> ElementCreator<*>.render(
         }
     }
 
-    parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
-    previousElementCreator.get()?.cleanup()
+    containerElement.new {
+        previousElementCreator.getAndSet(this)?.cleanup()
+        renderState.set(RENDERING_NO_PENDING_CHANGE)
+        block(value.value)
+        if (renderState.get() == RENDERING_WITH_PENDING_CHANGE) {
+            eraseAndRender()
+        } else {
+            renderState.set(NOT_RENDERING)
+        }
 
-    previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-    renderState.set(RENDERING_NO_PENDING_CHANGE)
-    previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
-    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-        renderState.set(NOT_RENDERING)
     }
 
     this.onCleanup(false) {
-        //TODO not sure what cleanup work needs to be done
+        containerElement.deleteIfExists()
     }
 
     this.onCleanup(true) {
@@ -180,7 +187,7 @@ private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
     insertAtPosition: String?
 )
         : ItemInfo<ITEM> {
-    val itemElementCreator = ElementCreator(this.parent, this, position = insertAtPosition)
+    val itemElementCreator = ElementCreator(this.parent, this, insertBefore = insertAtPosition)
     val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
     try {
         renderer(itemElementCreator, itemVar)
