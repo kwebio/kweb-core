@@ -11,6 +11,7 @@ import kweb.util.json
 import mu.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.reflect.KClass
 
 typealias Cleaner = () -> Unit
@@ -58,16 +59,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
         val mutAttributes = HashMap(attributes)
 
-        /*if (position != null && elementsCreatedCount == 2) {
-            logger.warn {
-                """
-                It's unwise to create multiple elements using the same ElementCreator when position is specified,
-                because each element will be added at the same position among its siblings, which will result in them
-                being inserted in reverse-order.
-                """.trimIndent().trim()
-            }
-        }*/
-
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
         val createElementStatement = when(namespace) {
@@ -83,7 +74,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let myId = {};
                     let parentId = {};
                     let insertBefore = {};
-                    let elementCount = {};
                     let newEl = $createElementStatement
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
@@ -126,7 +116,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let myId = {};
                     let parentId = {};
                     let insertBefore = {};
-                    let elementCount = {};
                     let newEl = document.createElement(tag);
                     if (attributes["id"] === undefined) {
                         newEl.setAttribute("id", myId);
