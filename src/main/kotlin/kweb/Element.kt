@@ -609,7 +609,7 @@ open class Element(
  * @Param position What position among the parent's children should the new element have?
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
-    position: Int? = null,
+    insertBefore: String? = null,
     receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE
 )
         : RETURN_VALUE_TYPE {
@@ -622,7 +622,7 @@ fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
          *           [ElementCreator]
          * @Param position What position among the parent's children should the new element have?
          */
-        ElementCreator(parent = this, position = position)
+        ElementCreator(parent = this, insertBefore = insertBefore)
     )
 }
 

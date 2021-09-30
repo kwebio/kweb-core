@@ -19,21 +19,14 @@ private val logger = KotlinLogging.logger {}
 
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
-    container: ElementCreator<*>.() -> Element // TODO: REMOVE THIS
-    = { span().setAttribute("style", JsonPrimitive("display: contents;")) },
     block: ElementCreator<Element>.(T) -> Unit
 ) : RenderFragment {
-
-    // NOTE: Per https://github.com/kwebio/kweb-core/issues/151 eventually render() won't rely on a container element.
-    val containerElement: Element = container(this)
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
     val renderState = AtomicReference(NOT_RENDERING)
 
-    //TODO this could be improved
- //   var startSpanId = ""
- //   var endSpanId = ""
+    //TODO this could possibly be improved
     val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
         parent.browser.batch(WebBrowser.CatcherType.RENDER) {
             val startSpan = span()
@@ -54,7 +47,6 @@ fun <T : Any?> ElementCreator<*>.render(
                     parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
                     previousElementCreator.get()?.cleanup()
 
-
                     previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
                     renderState.set(RENDERING_NO_PENDING_CHANGE)
                     previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
@@ -63,14 +55,14 @@ fun <T : Any?> ElementCreator<*>.render(
                     }
                 }
             } else {
-                containerElement.removeChildren()
-                containerElement.new {
-                    previousElementCreator.getAndSet(this)?.cleanup()
-                    renderState.set(RENDERING_NO_PENDING_CHANGE)
-                    block(value.value)
-                    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-                        renderState.set(NOT_RENDERING)
-                    }
+                parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
+                previousElementCreator.get()?.cleanup()
+
+                previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
+                renderState.set(RENDERING_NO_PENDING_CHANGE)
+                previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
+                if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+                    renderState.set(NOT_RENDERING)
                 }
             }
         } while (renderState.get() != NOT_RENDERING)
@@ -90,20 +82,18 @@ fun <T : Any?> ElementCreator<*>.render(
         }
     }
 
-    containerElement.new {
-        previousElementCreator.getAndSet(this)?.cleanup()
-        renderState.set(RENDERING_NO_PENDING_CHANGE)
-        block(value.value)
-        if (renderState.get() == RENDERING_WITH_PENDING_CHANGE) {
-            eraseAndRender()
-        } else {
-            renderState.set(NOT_RENDERING)
-        }
+    parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
+    previousElementCreator.get()?.cleanup()
 
+    previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
+    renderState.set(RENDERING_NO_PENDING_CHANGE)
+    previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
+    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+        renderState.set(NOT_RENDERING)
     }
 
     this.onCleanup(false) {
-        containerElement.deleteIfExists()
+        //TODO not sure what cleanup work needs to be done
     }
 
     this.onCleanup(true) {
@@ -160,7 +150,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
 
     val onInsertHandler = orderedViewSet.onInsert { index, inserted ->
         if (index < items.size) {
-            items.add(index, createItem(orderedViewSet, inserted, renderer, index))
+            items.add(index, createItem(orderedViewSet, inserted, renderer, "index"))//TODO I broke this line so the project would compile
         } else {
             items.add(createItem(orderedViewSet, inserted, renderer, insertAtPosition = null))
         }

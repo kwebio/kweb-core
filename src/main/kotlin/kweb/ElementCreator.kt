@@ -26,7 +26,7 @@ typealias Cleaner = () -> Unit
 open class ElementCreator<out PARENT_TYPE : Element>(
     val parent: PARENT_TYPE,
     val parentCreator: ElementCreator<*>? = parent.creator,
-    val position: Int? = null
+    val insertBefore: String? = null
 ) {
 
     companion object : KLogging()
@@ -54,7 +54,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
         val mutAttributes = HashMap(attributes)
 
-        if (position != null && elementsCreatedCount == 2) {
+        /*if (position != null && elementsCreatedCount == 2) {
             logger.warn {
                 """
                 It's unwise to create multiple elements using the same ElementCreator when position is specified,
@@ -62,7 +62,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 being inserted in reverse-order.
                 """.trimIndent().trim()
             }
-        }
+        }*/
 
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
@@ -74,7 +74,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let attributes = {};
                     let myId = {};
                     let parentId = {};
-                    let position = {};
+                    let insertBefore = {};
+                    let elementCount = {};
                     let newEl = document.createElement(tag);
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
@@ -83,15 +84,16 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         }
                     }
                     let parentElement = document.getElementById(parentId);
+                    let startNode = document.getElementById(insertBefore)
                     
-                    if (position > -1) {
-                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                    if (insertBefore !== undefined) {
+                        parentElement.insertBefore(newEl, startNode)
                     } else {
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
                 browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
-                        JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
+                        JsonPrimitive(parent.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount))
             }
             htmlDoc != null -> {
                 val jsElement = when (parent) {
@@ -115,7 +117,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let attributes = {};
                     let myId = {};
                     let parentId = {};
-                    let position = {};
+                    let insertBefore = {};
+                    let elementCount = {};
                     let newEl = document.createElement(tag);
                     if (attributes["id"] === undefined) {
                         newEl.setAttribute("id", myId);
@@ -124,15 +127,16 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                             newEl.setAttribute(key, attributes[key]);
                     }
                     let parentElement = document.getElementById(parentId);
+                    let startNode = document.getElementById(insertBefore)
                     
-                    if (position == null) {
-                        parentElement.appendChild(newEl);
+                    if (insertBefore !== undefined) {
+                        parentElement.insertBefore(newEl, startNode)
                     } else {
-                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                        parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
                 parent.callJsFunction(createElementJs, tag.json, JsonObject(mutAttributes), id.json,
-                        parent.id.json, (position ?: -1).json)
+                        parent.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount))
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
