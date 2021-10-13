@@ -55,13 +55,13 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
      *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
      */
-    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace : String? = null): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace: String? = null): Element {
 
         val mutAttributes = HashMap(attributes)
 
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
-        val createElementStatement = when(namespace) {
+        val createElementStatement = when (namespace) {
             null -> "document.createElement(tag);"
             else -> "document.createElementNS(\"${namespace}\", tag);"
         }
@@ -92,8 +92,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
-                        JsonPrimitive(parent.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount))
+                browser.callJsFunction(
+                    createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
+                    JsonPrimitive(parent.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                )
             }
             htmlDoc != null -> {
                 val jsElement = when (parent) {
@@ -135,8 +137,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                parent.callJsFunction(createElementJs, tag.json, JsonObject(mutAttributes), id.json,
-                        parent.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount))
+                parent.callJsFunction(
+                    createElementJs, tag.json, JsonObject(mutAttributes), id.json,
+                    parent.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                )
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
