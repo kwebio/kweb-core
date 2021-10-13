@@ -117,13 +117,13 @@ open class Element(
             else -> "document.getElementById({}).setAttributeNS(\"$namespace\", {}, {});"
         }
         when {
+            htmlDoc != null -> {
+                htmlDoc.getElementById(this.id).attr(name, value.content)
+            }
             browser.isCatchingOutbound() != null -> {
                 callJsFunction(
                     setAttributeJavaScript,
                         id.json, name.json, value)
-            }
-            htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).attr(name, value.content)
             }
             else -> {
                 callJsFunction(

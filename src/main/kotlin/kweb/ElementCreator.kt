@@ -66,6 +66,22 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             else -> "document.createElementNS(\"${namespace}\", tag);"
         }
         when {
+            htmlDoc != null -> {
+                val parentElement = when (parent) {
+                    is HeadElement -> htmlDoc.head()
+                    is BodyElement -> htmlDoc.body()
+                    else -> htmlDoc.getElementById(parent.id)
+                } ?: error("Can't find element with id ${parent.id}")
+                val jsElement =
+                    if (insertBefore != null) {
+                        htmlDoc.getElementById(insertBefore).before(htmlDoc.createElement(tag))
+                    } else {
+                        parentElement.appendElement(tag)
+                    }
+                for ((k, v) in mutAttributes) {
+                    jsElement.attr(k, v.content)
+                }
+            }
             parent.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
                 val createElementJs = """
@@ -96,20 +112,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
                     JsonPrimitive(parent.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
                 )
-            }
-            htmlDoc != null -> {
-                val jsElement = when (parent) {
-                    is HeadElement -> {
-                        htmlDoc.head().appendElement(tag)
-                    }
-                    is BodyElement -> {
-                        htmlDoc.body().appendElement(tag)
-                    }
-                    else -> htmlDoc.getElementById(parent.id).appendElement(tag)
-                }!!
-                for ((k, v) in mutAttributes) {
-                    jsElement.attr(k, v.content)
-                }
             }
             else -> {
                 //The way I have written this function, instead of attributes.get(), we now use attributes[].
