@@ -74,7 +74,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 } ?: error("Can't find element with id ${parent.id}")
                 val jsElement =
                     if (insertBefore != null) {
-                        htmlDoc.getElementById(insertBefore).before(htmlDoc.createElement(tag))
+                        val ne = htmlDoc.createElement(tag)
+                        htmlDoc.getElementById(insertBefore).before(ne)
+                        ne
                     } else {
                         parentElement.appendElement(tag)
                     }
