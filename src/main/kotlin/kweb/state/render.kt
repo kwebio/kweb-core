@@ -1,6 +1,5 @@
 package kweb.state
 
-import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
@@ -31,41 +30,37 @@ fun <T : Any?> ElementCreator<*>.render(
     //TODO this could possibly be improved
     val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
         parent.browser.batch(WebBrowser.CatcherType.RENDER) {
-            val startSpan = span().classes("RenderMarker")
-            val endSpan = span().classes("RenderMarker")
+            val startSpan = span().classes("RenderMarkerStart")
+            val endSpan = span().classes("RenderMarkerEnd")
             RenderFragment(startSpan.id, endSpan.id)
         }
     } else {
-        val startSpan = span().classes("RenderMarker")
-        val endSpan = span().classes("RenderMarker")
+        val startSpan = span().classes("RenderMarkerStart")
+        val endSpan = span().classes("RenderMarkerEnd")
         RenderFragment(startSpan.id, endSpan.id)
     }
 
-    //TODO something can probably be done about the code duplication in this do while loop
     fun eraseAndRender() {
+        parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
+        previousElementCreator.get()?.cleanup()
+
+        previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
+        renderState.set(RENDERING_NO_PENDING_CHANGE)
+        previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
+        if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+            renderState.set(NOT_RENDERING)
+        }
+    }
+
+    //TODO rename this function
+    fun renderLogic() {
         do {
             if (parent.browser.isCatchingOutbound() == null) {
                 parent.browser.batch(WebBrowser.CatcherType.RENDER) {
-                    parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
-                    previousElementCreator.get()?.cleanup()
-
-                    previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-                    renderState.set(RENDERING_NO_PENDING_CHANGE)
-                    previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
-                    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-                        renderState.set(NOT_RENDERING)
-                    }
+                    eraseAndRender()
                 }
             } else {
-                parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
-                previousElementCreator.get()?.cleanup()
-
-                previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-                renderState.set(RENDERING_NO_PENDING_CHANGE)
-                previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
-                if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-                    renderState.set(NOT_RENDERING)
-                }
+                eraseAndRender()
             }
         } while (renderState.get() != NOT_RENDERING)
     }
@@ -73,7 +68,7 @@ fun <T : Any?> ElementCreator<*>.render(
     val listenerHandle = value.addListener { _, _ ->
         when (renderState.get()) {
             NOT_RENDERING -> {
-                eraseAndRender()
+                renderLogic()
             }
             RENDERING_NO_PENDING_CHANGE -> {
                 renderState.set(RENDERING_WITH_PENDING_CHANGE)

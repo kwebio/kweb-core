@@ -49,7 +49,7 @@ class RenderListTest {
     @Test
     fun initialRender(driver : WebDriver) {
         driver.get("http://localhost:7659/")
-        Thread.sleep(20000)
+        Thread.sleep(300000)
     }
 }
 
