@@ -123,6 +123,12 @@ class TodoApp {
 
     private fun ElementCreator<*>.renderList(list: KVar<ToDoState.List>) {
         h3().text(list.property(ToDoState.List::title))
+
+        // val items = KVar<List<Item>>(emptyList())
+        //items.add(newItem)
+        // items.value.add(newItem) <--- BAD!
+        // items.value = items.value + newItem <--- Correct
+
         div(fomantic.ui.middle.aligned.divided.list) {
             renderEach(state.itemsByList(list.value.uid)) { item ->
                 div(fomantic.item) {

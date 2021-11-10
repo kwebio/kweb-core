@@ -6,8 +6,10 @@ import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
 import kweb.state.RenderState.*
+import kweb.util.random
 import mu.KotlinLogging
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
 
@@ -130,6 +132,203 @@ private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, va
 class RenderFragment(val startId : String, val endId : String)
 
 data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
+
+/* Possible APIs for renderEach
+ * Need to do a "diff" on `items` to figure out what has been added/removed
+ */
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach1(
+    items: KVal<Collection<ITEM>>,
+    renderer: ElementCreator<EL>.(KVal<ITEM>) -> Unit
+) {
+    TODO()
+}
+
+/* Candidate #2
+ * We pass an ITEM in to the renderer rather than a KVal<ITEM>, so now diff needs to identify changed elements too
+*/
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach2(
+    items: KVal<Collection<ITEM>>,
+    renderer: ElementCreator<EL>.(ITEM) -> Unit
+) {
+    TODO()
+}
+
+/* Candidate #3
+ * Rather than a normal Collection wrapped in a KVal we pass some kind of observable collection, similar to
+ * OrderedViewSet but not tied to Shoebox.
+ *
+ * PROS:
+ * * No expensive diff for large collections
+ */
+
+class ObservableList<ITEM : Any>(val initialItems : MutableList<ITEM>) {
+
+    val items = ArrayList(initialItems)
+
+    private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
+
+    fun insert(position : Int, item : ITEM) = applyModifications(listOf(Modification.Insertion<ITEM>(position, item)))
+
+    fun applyModifications(modifications : List<Modification<ITEM>>) {
+        synchronized(items) {
+            for (change in modifications) {
+                when(change) {
+                    is Modification.Change -> {
+                        items[change.position] = change.newItem
+                    }
+                    is Modification.Deletion -> {
+                        items.removeAt(change.position)
+                    }
+                    is Modification.Insertion -> {
+                        items.add(change.position, change.item)
+                    }
+                    is Modification.Move -> {
+                        if (change.oldPosition == change.newPosition) {
+                            continue
+                        }
+                        val item = items[change.oldPosition]
+                        if (change.oldPosition > change.newPosition) {
+                            items.add(change.newPosition, item)
+                            items.removeAt(change.oldPosition+1)
+                        }
+                        else { //change.newPosition > change.oldPosition
+                            items.removeAt(change.oldPosition)
+                            items.add(change.newPosition, item)
+                        }
+                    }
+                }
+            }
+        }
+        listeners.values.forEach { it(modifications) }
+    }
+
+    sealed class Modification<ITEM> {
+        class Insertion<ITEM>(val position : Int, val item : ITEM) : Modification<ITEM>()
+        class Change<ITEM>(val position : Int, val newItem : ITEM) : Modification<ITEM>()
+        class Move<ITEM>(val oldPosition : Int, val newPosition : Int) : Modification<ITEM>()
+        class Deletion<ITEM>(val position : Int) : Modification<ITEM>()
+    }
+
+    fun addListener(changes : (List<Modification<ITEM>>) -> Unit) : Long {
+        val handle = random.nextLong()
+        listeners[handle] = changes
+        return handle
+    }
+
+    fun removeListener(handle : Long) {
+        listeners.remove(handle)
+    }
+}
+
+/*
+
+
+   <span START-1>
+   1
+   <span END-1>
+   <span START-2>
+   2
+   <span END-2>
+
+   // to insert something between 1 and 2 create new ElementCreator where insertBefore is <span START-2>, then call
+   // render ON THIS ELEMENT CREATOR. NOTE these new ElementCreators may require cleanup
+ */
+
+/*
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
+    itemCollection: KVal<out Collection<ITEM>>,
+    itemRenderer: ElementCreator<EL>.(ITEM) -> Unit
+) {
+
+    val observableList : ObservableList<ITEM> = ObservableList(itemCollection.value.toList())
+
+    renderEachWIP(observableList, itemRenderer)
+
+    // Listen for changes to the collection
+    val collectionListenerHandle = itemCollection.addListener { old, new ->
+        // Do diff on collection then apply modifications to ObservableList which will be
+        // rendered by lower-level renderEach
+
+            val diff : List<ObservableList.Modification<ITEM>> = listOf() // <--- do diff between old and new
+
+            observableList.applyModifications(diff)
+
+    }
+
+    this.onCleanup(true) {
+        itemCollection.removeListener(collectionListenerHandle)
+    }
+}
+*/
+
+/// Lower level interface to renderEach
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
+    observableList: ObservableList<ITEM>,
+    itemRenderer: ElementCreator<EL>.(ITEM) -> Unit
+) {
+
+    // These renderFragments must be kept in sync with the items in observableList that they're rendering
+    val renderFragments = ArrayList<RenderFragment>()
+
+    synchronized(renderFragments) {
+        //render the initial observableList to the DOM storing the fragments in renderFragments
+        for (item in observableList.items) {
+            val kvar = KVar(item)
+            val fragment = render(kvar) { fragItem ->
+                this@renderEachWIP.itemRenderer(fragItem)
+            }
+            renderFragments += fragment
+        }
+    }
+
+    val handle = observableList.addListener { changes ->
+        synchronized(renderFragments) {
+            for (change in changes) {
+                // Apply change to DOM using renderFragments, and update renderFragments to keep it in sync with observableList
+                when(change) {
+                    is ObservableList.Modification.Change -> {
+                        val kvar = KVar(change.newItem)
+                        renderFragments[change.position] = render(kvar) { item ->
+                            this@renderEachWIP.itemRenderer(item)
+                        }
+                    }
+                    is ObservableList.Modification.Deletion -> {
+                        val kvar = KVar(change.position)
+                        renderFragments.removeAt(change.position)
+                    }
+                    is ObservableList.Modification.Insertion -> {
+                        val kvar = KVar(change.item)
+                        val newFragment = render(kvar) { item ->
+                            this@renderEachWIP.itemRenderer(item)
+                        }
+                        renderFragments.add(change.position, newFragment)
+                    }
+                    is ObservableList.Modification.Move -> {
+                        if (change.oldPosition == change.newPosition) {
+                            continue
+                        }
+                        val kvar = KVar(observableList.items[change.oldPosition])
+                        val newFragment = render(kvar) { item ->
+                            this@renderEachWIP.itemRenderer(item)
+                        }
+                        if (change.oldPosition > change.newPosition) {
+                            renderFragments.add(change.newPosition, newFragment)
+                            renderFragments.removeAt(change.oldPosition + 1)
+                        }
+                        if (change.newPosition > change.oldPosition) {
+                            renderFragments.removeAt(change.oldPosition)
+                            renderFragments.add(change.newPosition, newFragment)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    onCleanup(true) {
+        observableList.removeListener(handle)
+    }
+}
 
 /**
  *
