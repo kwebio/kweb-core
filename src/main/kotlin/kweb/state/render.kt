@@ -46,8 +46,7 @@ fun <T : Any?> ElementCreator<*>.render(
     }
 
     fun eraseAndRender() {
-        parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
-        previousElementCreator.get()?.cleanup()
+        eraseBetweenSpans()
 
         previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
         renderState.set(RENDERING_NO_PENDING_CHANGE)
@@ -286,7 +285,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
 /// Lower level interface to renderEach
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     observableList: ObservableList<ITEM>,
-    itemRenderer: ElementCreator<EL>.(ITEM) -> Unit
+    itemRenderer: ElementCreator<Element>.(ITEM) -> Unit
 ) {
 
     // These renderFragments must be kept in sync with the items in observableList that they're rendering
