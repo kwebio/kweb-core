@@ -21,23 +21,23 @@ private val logger = KotlinLogging.logger {}
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
     block: ElementCreator<Element>.(T) -> Unit
-) : RenderFragment {
+) : RenderHandle {
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
     val renderState = AtomicReference(NOT_RENDERING)
 
     //TODO this could possibly be improved
-    val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
+    val renderHandle: RenderHandle = if (parent.browser.isCatchingOutbound() == null) {
         parent.browser.batch(WebBrowser.CatcherType.RENDER) {
             val startSpan = span().classes("RenderMarkerStart")
             val endSpan = span().classes("RenderMarkerEnd")
-            RenderFragment(startSpan.id, endSpan.id)
+            RenderHandle(startSpan.id, endSpan.id)
         }
     } else {
         val startSpan = span().classes("RenderMarkerStart")
         val endSpan = span().classes("RenderMarkerEnd")
-        RenderFragment(startSpan.id, endSpan.id)
+        RenderHandle(startSpan.id, endSpan.id)
     }
 
     fun eraseAndRender() {
@@ -78,6 +78,9 @@ fun <T : Any?> ElementCreator<*>.render(
             }
         }
     }
+    renderHandle.addDeletionListener {
+        value.removeListener(listenerHandle)
+    }
 
     previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
     renderState.set(RENDERING_NO_PENDING_CHANGE)
@@ -95,7 +98,7 @@ fun <T : Any?> ElementCreator<*>.render(
         value.removeListener(listenerHandle)
     }
 
-    return renderFragment
+    return renderHandle
 }
 
 fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
