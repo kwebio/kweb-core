@@ -40,12 +40,12 @@ class RenderEachTest {
                 button()
                     .text("Add Moose")
                     .on.click {
-                        animals.items += "Moose"
+                        animals.insert(animals.getItems().count(), "Moose")
                     }
             }
         })
         Thread.sleep(20000)
-        println(animals.items)
+        println(animals.getItems())
     }
 
     @Test
@@ -63,22 +63,57 @@ class RenderEachTest {
                 button()
                     .text("Change Cat to Moose")
                     .on.click {
-                        animals.items[1] = "Moose"
+                        animals.change(1, "Moose")
                     }
             }
         })
         Thread.sleep(20000)
-        println(animals.items)
+        println(animals.getItems())
     }
 
     @Test
     fun moveItemTest() {
         val items = listOf("Dog", "Cat", "Bear")
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
+
+        Kweb(port = 1234, buildPage = {
+            doc.body.new {
+                renderEachWIP(animals) { animal ->
+                    div().new {
+                        h1().text(animal)
+                    }
+                }
+                button()
+                    .text("Change Cat to Moose")
+                    .on.click {
+                        animals.move(0, 1)
+                        //animals.items[1] = "Moose"
+                    }
+            }
+        })
+        Thread.sleep(20000)
     }
 
     @Test
     fun deleteItemTest() {
         val items = listOf("Dog", "Cat", "Bear")
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
+
+        Kweb(port = 1234, buildPage = {
+            doc.body.new {
+                renderEachWIP(animals) { animal ->
+                    div().new {
+                        h1().text(animal)
+                    }
+                }
+                button()
+                    .text("Delete Cat")
+                    .on.click {
+                        animals.delete(1)
+                    }
+            }
+        })
+        Thread.sleep(20000)
     }
 
 }

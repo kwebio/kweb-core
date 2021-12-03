@@ -21,23 +21,28 @@ private val logger = KotlinLogging.logger {}
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
     block: ElementCreator<Element>.(T) -> Unit
-) : RenderHandle {
+) : RenderFragment {
 
     val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
 
     val renderState = AtomicReference(NOT_RENDERING)
 
     //TODO this could possibly be improved
-    val renderHandle: RenderHandle = if (parent.browser.isCatchingOutbound() == null) {
+    val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
         parent.browser.batch(WebBrowser.CatcherType.RENDER) {
             val startSpan = span().classes("RenderMarkerStart")
             val endSpan = span().classes("RenderMarkerEnd")
-            RenderHandle(startSpan.id, endSpan.id)
+            RenderFragment(startSpan.id, endSpan.id)
         }
     } else {
         val startSpan = span().classes("RenderMarkerStart")
         val endSpan = span().classes("RenderMarkerEnd")
-        RenderHandle(startSpan.id, endSpan.id)
+        RenderFragment(startSpan.id, endSpan.id)
+    }
+
+    fun eraseBetweenSpans() {
+        parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
+        previousElementCreator.getAndSet(null)?.cleanup()
     }
 
     fun eraseAndRender() {
@@ -51,7 +56,7 @@ fun <T : Any?> ElementCreator<*>.render(
             renderState.set(NOT_RENDERING)
         }
     }
-
+0
     //TODO rename this function
     fun renderLogic() {
         do {
@@ -78,7 +83,7 @@ fun <T : Any?> ElementCreator<*>.render(
             }
         }
     }
-    renderHandle.addDeletionListener {
+    renderFragment.addDeletionListener {
         value.removeListener(listenerHandle)
     }
 
@@ -98,7 +103,7 @@ fun <T : Any?> ElementCreator<*>.render(
         value.removeListener(listenerHandle)
     }
 
-    return renderHandle
+    return renderFragment
 }
 
 fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
@@ -127,29 +132,45 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
 
 private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, val KVar: KVar<ITEM>)
 
-class RenderFragment(val startId : String, val endId : String)
+class RenderFragment(val startId: String, val endId : String) {
+    private val deletionListeners = ArrayList<() -> Unit>()
+
+    internal fun addDeletionListener(listener : () -> Unit) {
+        synchronized(deletionListeners) {
+            deletionListeners += listener
+        }
+    }
+
+    fun delete() {
+        synchronized(deletionListeners) {
+            deletionListeners.forEach { it.invoke() }
+        }
+    }
+}
+
+class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar : KVar<ITEM>)
 
 data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
 /* Possible APIs for renderEach
  * Need to do a "diff" on `items` to figure out what has been added/removed
  */
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach1(
+/*fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach1(
     items: KVal<Collection<ITEM>>,
     renderer: ElementCreator<EL>.(KVal<ITEM>) -> Unit
 ) {
     TODO()
 }
 
-/* Candidate #2
+*//* Candidate #2
  * We pass an ITEM in to the renderer rather than a KVal<ITEM>, so now diff needs to identify changed elements too
-*/
+*//*
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach2(
     items: KVal<Collection<ITEM>>,
     renderer: ElementCreator<EL>.(ITEM) -> Unit
 ) {
     TODO()
-}
+}*/
 
 /* Candidate #3
  * Rather than a normal Collection wrapped in a KVal we pass some kind of observable collection, similar to
@@ -165,7 +186,10 @@ class ObservableList<ITEM : Any>(val initialItems : MutableList<ITEM>) {
 
     private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
 
-    fun insert(position : Int, item : ITEM) = applyModifications(listOf(Modification.Insertion<ITEM>(position, item)))
+    fun insert(position : Int, item : ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
+    fun change(position : Int, newItem : ITEM) = applyModifications(listOf(Modification.Change(position, newItem)))
+    fun move(oldPosition: Int, newPosition: Int) = applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
+    fun delete(position : Int) = applyModifications(listOf(Modification.Deletion<ITEM>(position)))
 
     fun applyModifications(modifications : List<Modification<ITEM>>) {
         synchronized(items) {
@@ -268,54 +292,57 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     // These renderFragments must be kept in sync with the items in observableList that they're rendering
     val renderFragments = ArrayList<RenderFragment>()
 
-    synchronized(renderFragments) {
-        //render the initial observableList to the DOM storing the fragments in renderFragments
-        for (item in observableList.items) {
+    synchronized(renderHandles) {
+        //render the initial observableList to the DOM storing the Handles in renderHandles
+        for (item in observableList.getItems()) {
             val kvar = KVar(item)
             val fragment = render(kvar) { fragItem ->
-                this@renderEachWIP.itemRenderer(fragItem)
+                itemRenderer(fragItem)
             }
-            renderFragments += fragment
+            renderHandles += RenderHandle(fragment, kvar)
         }
     }
 
     val handle = observableList.addListener { changes ->
-        synchronized(renderFragments) {
+        synchronized(renderHandles) {
             for (change in changes) {
-                // Apply change to DOM using renderFragments, and update renderFragments to keep it in sync with observableList
+                // Apply change to DOM using renderHandles, and update renderHandles to keep it in sync with observableList
                 when(change) {
                     is ObservableList.Modification.Change -> {
+                        // TODO: Don't do a new render, get the KVar<ITEM> from `renderHandles` and update it,
+                        // TODO: render() should take care of the rest
                         val kvar = KVar(change.newItem)
-                        renderFragments[change.position] = render(kvar) { item ->
-                            this@renderEachWIP.itemRenderer(item)
-                        }
+
+
+
+
+
+                        renderHandles[change.position].kvar.value = kvar.value
                     }
                     is ObservableList.Modification.Deletion -> {
                         val kvar = KVar(change.position)
-                        renderFragments.removeAt(change.position)
+                        renderHandles[change.position].renderFragment.delete()
+                        renderHandles.removeAt(change.position)
                     }
                     is ObservableList.Modification.Insertion -> {
                         val kvar = KVar(change.item)
                         val newFragment = render(kvar) { item ->
                             this@renderEachWIP.itemRenderer(item)
                         }
-                        renderFragments.add(change.position, newFragment)
+                        renderHandles.add(change.position, RenderHandle(newFragment, kvar))
                     }
                     is ObservableList.Modification.Move -> {
                         if (change.oldPosition == change.newPosition) {
                             continue
                         }
-                        val kvar = KVar(observableList.items[change.oldPosition])
-                        val newFragment = render(kvar) { item ->
-                            this@renderEachWIP.itemRenderer(item)
-                        }
+                        val kvar = KVar(observableList.getItems()[change.oldPosition])
                         if (change.oldPosition > change.newPosition) {
-                            renderFragments.add(change.newPosition, newFragment)
-                            renderFragments.removeAt(change.oldPosition + 1)
+                            renderHandles[change.newPosition].kvar.value = kvar.value
+                            renderHandles.removeAt(change.oldPosition + 1)
                         }
                         if (change.newPosition > change.oldPosition) {
-                            renderFragments.removeAt(change.oldPosition)
-                            renderFragments.add(change.newPosition, newFragment)
+                            renderHandles.removeAt(change.oldPosition)
+                            renderHandles[change.newPosition].kvar.value = kvar.value
                         }
                     }
                 }
