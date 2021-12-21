@@ -361,6 +361,29 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     }
 }
 
+fun <ITEM : Any> deleteItem(change : ObservableList.Modification.Deletion<ITEM>, renderHandles: ArrayList<RenderHandle<ITEM>>,
+               browser : WebBrowser) {
+    renderHandles[change.position].renderFragment.delete()
+    renderHandles.removeAt(change.position)
+    browser.callJsFunction("""
+            var start_id = {};
+            var end_id = {};
+            var start_element = document.getElementById(start_id);
+            var end_element = document.getElementById(end_id);
+            var parent = start_element.parentNode;
+            while (start_element.nextSibling != end_element) {
+                parent.removeChild(start_element.nextSibling);
+            }
+            start_element.delete();
+            end_element.delete();
+            """.trimIndent(), JsonPrimitive(renderHandles[change.position].renderFragment.startId),
+        JsonPrimitive(renderHandles[change.position].renderFragment.endId))
+}
+
+/*fun insertItem(change : ObservableList.Modification.Insertion<Any>, renderHandles: ArrayList<RenderHandle<Any>>) {
+
+}*/
+
 /**
  *
  *
