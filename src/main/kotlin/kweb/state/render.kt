@@ -1,5 +1,6 @@
 package kweb.state
 
+import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
@@ -55,7 +56,7 @@ fun <T : Any?> ElementCreator<*>.render(
             renderState.set(NOT_RENDERING)
         }
     }
-0
+
     //TODO rename this function
     fun renderLogic() {
         do {
@@ -129,6 +130,7 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
     return w
 }
 
+
 private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, val KVar: KVar<ITEM>)
 
 class RenderFragment(val startId: String, val endId : String) {
@@ -166,6 +168,8 @@ data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 *//*
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach2(
     items: KVal<Collection<ITEM>>,
+
+
     renderer: ElementCreator<EL>.(ITEM) -> Unit
 ) {
     TODO()
@@ -244,6 +248,8 @@ class ObservableList<ITEM : Any>(val initialItems : MutableList<ITEM>) {
 /*
 
 
+
+
    <span START-1>
    1
    <span END-1>
@@ -254,6 +260,7 @@ class ObservableList<ITEM : Any>(val initialItems : MutableList<ITEM>) {
    // to insert something between 1 and 2 create new ElementCreator where insertBefore is <span START-2>, then call
    // render ON THIS ELEMENT CREATOR. NOTE these new ElementCreators may require cleanup
  */
+
 
 /*
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
