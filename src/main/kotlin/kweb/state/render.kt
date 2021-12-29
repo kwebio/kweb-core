@@ -295,8 +295,51 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     itemRenderer: ElementCreator<Element>.(ITEM) -> Unit
 ) {
 
-    // These renderFragments must be kept in sync with the items in observableList that they're rendering
-    val renderFragments = ArrayList<RenderFragment>()
+    val listFragment = RenderFragment(
+        span().classes("RenderListStart").id,
+        span().classes("RenderListEnd").id
+    )
+
+    fun insertItem(position: Int, newItem: ITEM,
+                   renderHandles: ArrayList<RenderHandle<ITEM>>,) {
+        val nextElementRenderMarkerStartId: String = if (position == renderHandles.size) {
+            listFragment.endId
+        } else {
+            renderHandles[position].renderFragment.startId
+        }
+        val itemElementCreator =
+            ElementCreator<Element>(this.parent, this, nextElementRenderMarkerStartId)
+        val kvar = KVar(newItem)
+        val newFragment = itemElementCreator.render(kvar) { item ->
+            itemRenderer(item)
+        }
+        renderHandles.add(position, RenderHandle(newFragment, kvar))
+    }
+
+    fun <ITEM : Any> deleteItem(position: Int, renderHandles: ArrayList<RenderHandle<ITEM>>) {
+        val renderHandleToRemove = renderHandles[position].renderFragment
+        renderHandles.removeAt(position)
+        browser.callJsFunction("""
+            var start_id = {};
+            var end_id = {};
+            var start_element = document.getElementById(start_id);
+            var end_element = document.getElementById(end_id);
+            var parent = start_element.parentNode;
+            while (start_element.nextSibling != end_element) {
+                parent.removeChild(start_element.nextSibling);
+            }
+            parent.removeChild(start_element);
+            parent.removeChild(end_element);
+            """.trimIndent(), JsonPrimitive(renderHandleToRemove.startId),
+            JsonPrimitive(renderHandleToRemove.endId))
+        renderHandleToRemove.delete()
+    }
+
+    ElementCreator<Element>(this.parent, this.parentCreator, insertBefore = listFragment.endId).apply {
+
+        // TODO: These renderFragments must be kept in sync with the items in observableList that they're rendering
+        // TODO: We should also store the KVar<ITEM>
+        val renderHandles = ArrayList<RenderHandle<ITEM>>()
 
     synchronized(renderHandles) {
         //render the initial observableList to the DOM storing the Handles in renderHandles
@@ -361,27 +404,22 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     }
 }
 
-fun <ITEM : Any> deleteItem(change : ObservableList.Modification.Deletion<ITEM>, renderHandles: ArrayList<RenderHandle<ITEM>>,
-               browser : WebBrowser) {
-    renderHandles[change.position].renderFragment.delete()
-    renderHandles.removeAt(change.position)
-    browser.callJsFunction("""
-            var start_id = {};
-            var end_id = {};
-            var start_element = document.getElementById(start_id);
-            var end_element = document.getElementById(end_id);
-            var parent = start_element.parentNode;
-            while (start_element.nextSibling != end_element) {
-                parent.removeChild(start_element.nextSibling);
-            }
-            start_element.delete();
-            end_element.delete();
-            """.trimIndent(), JsonPrimitive(renderHandles[change.position].renderFragment.startId),
-        JsonPrimitive(renderHandles[change.position].renderFragment.endId))
-}
-
-/*fun insertItem(change : ObservableList.Modification.Insertion<Any>, renderHandles: ArrayList<RenderHandle<Any>>) {
-
+/*fun <ITEM : Any> insertItem(elementCreator: ElementCreator<Element>,
+                            change : ObservableList.Modification.Insertion<ITEM>,
+                            renderHandles: ArrayList<RenderHandle<ITEM>>,
+                            ) {
+    val nextElementRenderMarkerStartId: String = if (change.position == renderHandles.size) {
+        listFragment.endId
+    } else {
+        renderHandles[change.position].renderFragment.startId
+    }
+    val itemElementCreator =
+        ElementCreator<Element>(this.parent, this, nextElementRenderMarkerStartId)
+    val kvar = KVar(change.item)
+    val newFragment = itemElementCreator.render(kvar) { item ->
+        itemRenderer(item)
+    }
+    renderHandles.add(change.position, RenderHandle(newFragment, kvar))
 }*/
 
 /**
