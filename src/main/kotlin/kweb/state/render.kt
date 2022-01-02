@@ -70,6 +70,11 @@ fun <T : Any?> ElementCreator<*>.render(
         } while (renderState.get() != NOT_RENDERING)
     }
 
+    // TODO: RenderFragment should have delete() function with deletion listeners
+    // TODO: that:
+    // TODO:   * Remove this listenerHandle
+    // TODO:   * Delete the spans and anything between them
+    // TODO: Consider renaming RenderFragment to RenderHandle
     val listenerHandle = value.addListener { _, _ ->
         when (renderState.get()) {
             NOT_RENDERING -> {
@@ -86,6 +91,9 @@ fun <T : Any?> ElementCreator<*>.render(
     renderFragment.addDeletionListener {
         value.removeListener(listenerHandle)
     }
+
+    // TODO: Also add a deletion listener to remove <span>s and everything between them, this should also
+    // TODO: call previousElementCreator.get()?.cleanup() as in eraseAndRender()
 
     previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
     renderState.set(RENDERING_NO_PENDING_CHANGE)
@@ -133,10 +141,23 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
 
 private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, val KVar: KVar<ITEM>)
 
-class RenderFragment(val startId: String, val endId : String) {
+/*
+function delete_elements_between_elements(start_id, end_id) {
+    var start_element = document.getElementById(start_id);
+    var end_element = document.getElementById(end_id);
+    var parent = start_element.parentNode;
+    while (start_element.nextSibling != end_element) {
+        parent.removeChild(start_element.nextSibling);
+    }
+    start_element.delete()
+    end_element.delete()
+}
+ */
+
+class RenderFragment(val startId: String, val endId: String) {
     private val deletionListeners = ArrayList<() -> Unit>()
 
-    internal fun addDeletionListener(listener : () -> Unit) {
+    internal fun addDeletionListener(listener: () -> Unit) {
         synchronized(deletionListeners) {
             deletionListeners += listener
         }
@@ -149,7 +170,7 @@ class RenderFragment(val startId: String, val endId : String) {
     }
 }
 
-class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar : KVar<ITEM>)
+class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar: KVar<ITEM>)
 
 data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
@@ -183,21 +204,28 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach2(
  * * No expensive diff for large collections
  */
 
-class ObservableList<ITEM : Any>(val initialItems : MutableList<ITEM>) {
+// TODO: Make this implement MutableList
+class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
 
-    val items = ArrayList(initialItems)
+
+    private val items = ArrayList(initialItems)
+    fun getItems(): ArrayList<ITEM> {
+        return items
+    }
 
     private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
+intellij git not tracking file
+    fun insert(position: Int, item: ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
+    fun change(position: Int, newItem: ITEM) = applyModifications(listOf(Modification.Change(position, newItem)))
+    fun move(oldPosition: Int, newPosition: Int) =
+        applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
 
-    fun insert(position : Int, item : ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
-    fun change(position : Int, newItem : ITEM) = applyModifications(listOf(Modification.Change(position, newItem)))
-    fun move(oldPosition: Int, newPosition: Int) = applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
-    fun delete(position : Int) = applyModifications(listOf(Modification.Deletion<ITEM>(position)))
+    fun delete(position: Int) = applyModifications(listOf(Modification.Deletion<ITEM>(position)))
 
-    fun applyModifications(modifications : List<Modification<ITEM>>) {
+    fun applyModifications(modifications: List<Modification<ITEM>>) {
         synchronized(items) {
             for (change in modifications) {
-                when(change) {
+                when (change) {
                     is Modification.Change -> {
                         items[change.position] = change.newItem
                     }
@@ -214,9 +242,8 @@ class ObservableList<ITEM : Any>(val initialItems : MutableList<ITEM>) {
                         val item = items[change.oldPosition]
                         if (change.oldPosition > change.newPosition) {
                             items.add(change.newPosition, item)
-                            items.removeAt(change.oldPosition+1)
-                        }
-                        else { //change.newPosition > change.oldPosition
+                            items.removeAt(change.oldPosition + 1)
+                        } else { //change.newPosition > change.oldPosition
                             items.removeAt(change.oldPosition)
                             items.add(change.newPosition, item)
                         }
@@ -228,19 +255,19 @@ class ObservableList<ITEM : Any>(val initialItems : MutableList<ITEM>) {
     }
 
     sealed class Modification<ITEM> {
-        class Insertion<ITEM>(val position : Int, val item : ITEM) : Modification<ITEM>()
-        class Change<ITEM>(val position : Int, val newItem : ITEM) : Modification<ITEM>()
-        class Move<ITEM>(val oldPosition : Int, val newPosition : Int) : Modification<ITEM>()
-        class Deletion<ITEM>(val position : Int) : Modification<ITEM>()
+        class Insertion<ITEM>(val position: Int, val item: ITEM) : Modification<ITEM>()
+        class Change<ITEM>(val position: Int, val newItem: ITEM) : Modification<ITEM>()
+        class Move<ITEM>(val oldPosition: Int, val newPosition: Int) : Modification<ITEM>()
+        class Deletion<ITEM>(val position: Int) : Modification<ITEM>()
     }
 
-    fun addListener(changes : (List<Modification<ITEM>>) -> Unit) : Long {
+    fun addListener(changes: (List<Modification<ITEM>>) -> Unit): Long {
         val handle = random.nextLong()
         listeners[handle] = changes
         return handle
     }
 
-    fun removeListener(handle : Long) {
+    fun removeListener(handle: Long) {
         listeners.remove(handle)
     }
 }
@@ -341,66 +368,100 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
         // TODO: We should also store the KVar<ITEM>
         val renderHandles = ArrayList<RenderHandle<ITEM>>()
 
-    synchronized(renderHandles) {
-        //render the initial observableList to the DOM storing the Handles in renderHandles
-        for (item in observableList.getItems()) {
-            val kvar = KVar(item)
-            val fragment = render(kvar) { fragItem ->
-                itemRenderer(fragItem)
-            }
-            renderHandles += RenderHandle(fragment, kvar)
-        }
-    }
-
-    val handle = observableList.addListener { changes ->
         synchronized(renderHandles) {
-            for (change in changes) {
-                // Apply change to DOM using renderHandles, and update renderHandles to keep it in sync with observableList
-                when(change) {
-                    is ObservableList.Modification.Change -> {
-                        // TODO: Don't do a new render, get the KVar<ITEM> from `renderHandles` and update it,
-                        // TODO: render() should take care of the rest
-                        val kvar = KVar(change.newItem)
+            //render the initial observableList to the DOM storing the Handles in renderHandles
+            for (item in observableList.getItems()) {
+                val kvar = KVar(item)
+                val fragment = render(kvar) { fragItem ->
+                    itemRenderer(fragItem)
+                }
+                renderHandles += RenderHandle(fragment, kvar)
+            }
+        }
 
-
-
-
-
-                        renderHandles[change.position].kvar.value = kvar.value
-                    }
-                    is ObservableList.Modification.Deletion -> {
-                        val kvar = KVar(change.position)
-                        renderHandles[change.position].renderFragment.delete()
-                        renderHandles.removeAt(change.position)
-                    }
-                    is ObservableList.Modification.Insertion -> {
-                        val kvar = KVar(change.item)
-                        val newFragment = render(kvar) { item ->
-                            this@renderEachWIP.itemRenderer(item)
+        val handle = observableList.addListener { changes ->
+            synchronized(renderHandles) {
+                // TODO: Consider replacing change in changes with, "mods in modifications", to remove confusion between change, and Modification.Change
+                for (change in changes) {
+                    // Apply change to DOM using renderHandles, and update renderHandles to keep it in sync with observableList
+                    when (change) {
+                        is ObservableList.Modification.Change -> {
+                            renderHandles[change.position].kvar.value = KVar(change.newItem).value
                         }
-                        renderHandles.add(change.position, RenderHandle(newFragment, kvar))
-                    }
-                    is ObservableList.Modification.Move -> {
-                        if (change.oldPosition == change.newPosition) {
-                            continue
+                        is ObservableList.Modification.Deletion -> {
+                            deleteItem(change.position, renderHandles)
                         }
-                        val kvar = KVar(observableList.getItems()[change.oldPosition])
-                        if (change.oldPosition > change.newPosition) {
-                            renderHandles[change.newPosition].kvar.value = kvar.value
-                            renderHandles.removeAt(change.oldPosition + 1)
+                        is ObservableList.Modification.Insertion -> {
+                            insertItem(change.position, change.item, renderHandles)
                         }
-                        if (change.newPosition > change.oldPosition) {
-                            renderHandles.removeAt(change.oldPosition)
-                            renderHandles[change.newPosition].kvar.value = kvar.value
+                        is ObservableList.Modification.Move -> {
+                            if (change.oldPosition == change.newPosition) {
+                                continue
+                            }
+                            val kvar = KVar(observableList.getItems()[change.oldPosition])
+                            if (change.oldPosition > change.newPosition) {
+                                //language=JavaScript
+                                val moveItemCode = """
+                                    var itemToMoveStartMarker = document.getElementById({});
+                                    var itemToMoveEndMarker = document.getElementById({});
+                                    var elementsToMove = [];
+                                    while (itemToMoveStartMarker.nextSibling != itemToMoveEndMarker) {
+                                        elementsToMove.push(itemToMoveStartMarker.nextSibling.cloneNode());
+                                        itemToMoveStartMarker.parentNode.removeChild(itemToMoveStartMarker.nextSibling);
+                                    }
+                                    var itemToPrependTo = document.getElementById({});
+                                    console.log("itemToMove Id = " + itemToMoveStartMarker.id);
+                                    console.log("itemToPrependTo Id = " + itemToPrependTo.id);
+                                    var listParent = itemToMoveStartMarker.parentNode;
+                                    console.log("listParent.id = " + listParent.id);
+                                    listParent.insertBefore(itemToMoveStartMarker, itemToPrependTo);
+                                    listParent.insertBefore(itemToMoveEndMarker, itemToPrependTo);
+                                    elementsToMove.forEach(function(item){
+                                        listParent.insertBefore(item, itemToMoveEndMarker);
+                                    });
+                                """.trimIndent()
+                                browser.callJsFunction(moveItemCode, JsonPrimitive(renderHandles[change.oldPosition].renderFragment.startId),
+                                    JsonPrimitive(renderHandles[change.oldPosition].renderFragment.endId),
+                                    JsonPrimitive(renderHandles[change.newPosition].renderFragment.startId))
+                                insertItem(change.newPosition, renderHandles[change.oldPosition].kvar.value, renderHandles)
+                                renderHandles.removeAt(change.oldPosition+1)
+                            }
+                            if (change.newPosition > change.oldPosition) {
+                                val itemToMove = renderHandles[change.oldPosition]
+                                //language=JavaScript
+                                val moveItemCode = """
+                                    var itemToMoveStartMarker = document.getElementById({});
+                                    var itemToMoveEndMarker = document.getElementById({});
+                                    var elementsToMove = [];
+                                    while(itemToMoveStartMarker.nextSibling != itemToMoveEndMarker) {
+                                        elementsToMove.push(itemToMoveStartMarker.nextSibling.cloneNode());
+                                        itemToMoveStartMarker.parentNode.removeChild(itemToMoveStartMarker.nextSibling)
+                                    }
+                                    var itemToPrependTo = document.getElementById({});
+                                    var listParent = itemToMoveStartMarker.parentNode;
+                                    listParent.insertBefore(itemToMoveStartMarker, itemToPrependTo);
+                                    listParent.insertBefore(itemToMoveEndMarker, itemToPrependTo);
+                                    elementsToMove.forEach(function (item){
+                                        listParent.insertBefore(item, itemToMoveEndMarker);
+                                    });
+                                """.trimIndent()
+                                browser.callJsFunction(moveItemCode, JsonPrimitive(itemToMove.renderFragment.startId),
+                                    JsonPrimitive(itemToMove.renderFragment.endId),
+                                    JsonPrimitive(renderHandles[change.newPosition].renderFragment.startId)
+                                )
+                                renderHandles.removeAt(change.oldPosition)
+                                //renderHandles[change.newPosition].kvar.value = kvar.value
+                                insertItem(change.newPosition, itemToMove.kvar.value, renderHandles)
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    onCleanup(true) {
-        observableList.removeListener(handle)
+        onCleanup(true) {
+            observableList.removeListener(handle)
+        }
     }
 }
 
@@ -438,7 +499,10 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
 
     val onInsertHandler = orderedViewSet.onInsert { index, inserted ->
         if (index < items.size) {
-            items.add(index, createItem(orderedViewSet, inserted, renderer, "index"))//TODO I broke this line so the project would compile
+            items.add(
+                index,
+                createItem(orderedViewSet, inserted, renderer, "index")
+            )//TODO I broke this line so the project would compile
         } else {
             items.add(createItem(orderedViewSet, inserted, renderer, insertAtPosition = null))
         }
