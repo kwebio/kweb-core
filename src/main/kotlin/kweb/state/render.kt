@@ -141,19 +141,6 @@ fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T>
 
 private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, val KVar: KVar<ITEM>)
 
-/*
-function delete_elements_between_elements(start_id, end_id) {
-    var start_element = document.getElementById(start_id);
-    var end_element = document.getElementById(end_id);
-    var parent = start_element.parentNode;
-    while (start_element.nextSibling != end_element) {
-        parent.removeChild(start_element.nextSibling);
-    }
-    start_element.delete()
-    end_element.delete()
-}
- */
-
 class RenderFragment(val startId: String, val endId: String) {
     private val deletionListeners = ArrayList<() -> Unit>()
 
@@ -174,36 +161,6 @@ class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar: KVa
 
 data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
-/* Possible APIs for renderEach
- * Need to do a "diff" on `items` to figure out what has been added/removed
- */
-/*fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach1(
-    items: KVal<Collection<ITEM>>,
-    renderer: ElementCreator<EL>.(KVal<ITEM>) -> Unit
-) {
-    TODO()
-}
-
-*//* Candidate #2
- * We pass an ITEM in to the renderer rather than a KVal<ITEM>, so now diff needs to identify changed elements too
-*//*
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach2(
-    items: KVal<Collection<ITEM>>,
-
-
-    renderer: ElementCreator<EL>.(ITEM) -> Unit
-) {
-    TODO()
-}*/
-
-/* Candidate #3
- * Rather than a normal Collection wrapped in a KVal we pass some kind of observable collection, similar to
- * OrderedViewSet but not tied to Shoebox.
- *
- * PROS:
- * * No expensive diff for large collections
- */
-
 // TODO: Make this implement MutableList
 class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
 
@@ -214,7 +171,6 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
     }
 
     private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
-intellij git not tracking file
     fun insert(position: Int, item: ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
     fun change(position: Int, newItem: ITEM) = applyModifications(listOf(Modification.Change(position, newItem)))
     fun move(oldPosition: Int, newPosition: Int) =
@@ -271,23 +227,6 @@ intellij git not tracking file
         listeners.remove(handle)
     }
 }
-
-/*
-
-
-
-
-   <span START-1>
-   1
-   <span END-1>
-   <span START-2>
-   2
-   <span END-2>
-
-   // to insert something between 1 and 2 create new ElementCreator where insertBefore is <span START-2>, then call
-   // render ON THIS ELEMENT CREATOR. NOTE these new ElementCreators may require cleanup
- */
-
 
 /*
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
@@ -464,24 +403,6 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
         }
     }
 }
-
-/*fun <ITEM : Any> insertItem(elementCreator: ElementCreator<Element>,
-                            change : ObservableList.Modification.Insertion<ITEM>,
-                            renderHandles: ArrayList<RenderHandle<ITEM>>,
-                            ) {
-    val nextElementRenderMarkerStartId: String = if (change.position == renderHandles.size) {
-        listFragment.endId
-    } else {
-        renderHandles[change.position].renderFragment.startId
-    }
-    val itemElementCreator =
-        ElementCreator<Element>(this.parent, this, nextElementRenderMarkerStartId)
-    val kvar = KVar(change.item)
-    val newFragment = itemElementCreator.render(kvar) { item ->
-        itemRenderer(item)
-    }
-    renderHandles.add(change.position, RenderHandle(newFragment, kvar))
-}*/
 
 /**
  *
