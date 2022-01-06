@@ -1,5 +1,6 @@
 package kweb.state
 
+import io.ktor.utils.io.*
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.shoebox.KeyValue
@@ -301,10 +302,34 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
         renderHandleToRemove.delete()
     }
 
+    fun moveItemServerSide(itemStartMarker : String, itemEndMarker : String, newPosMarker : String) {
+        //This JavaScript takes all elements from one start span to another, denoted by startMarker and endMarker,
+        //and inserts them before the element that's ID is passed to the 'newPos' variable.
+        //language=JavaScript
+        val moveItemCode = """
+            var startMarker = document.getElementById({});
+            var endMarker = document.getElementById({});
+            var elementsToMove = [];
+            while(startMarker.nextSibling !== endMarker) {
+                elementsToMove.push(startMarker.nextSibling.cloneNode());
+                startMarker.parentNode.removeChild(startMarker.nextSibling)
+            }
+            var newPos = document.getElementById({});
+            var listParent = startMarker.parentNode;
+            listParent.insertBefore(startMarker, newPos);
+            listParent.insertBefore(endMarker, newPos);
+            elementsToMove.forEach(function (item){
+                listParent.insertBefore(item, endMarker);
+            });
+            """.trimIndent()
+        browser.callJsFunction(moveItemCode, JsonPrimitive(itemStartMarker),
+            JsonPrimitive(itemEndMarker), JsonPrimitive(newPosMarker)
+        )
+    }
+
     ElementCreator<Element>(this.parent, this.parentCreator, insertBefore = listFragment.endId).apply {
 
         // TODO: These renderFragments must be kept in sync with the items in observableList that they're rendering
-        // TODO: We should also store the KVar<ITEM>
         val renderHandles = ArrayList<RenderHandle<ITEM>>()
 
         synchronized(renderHandles) {
@@ -337,59 +362,19 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
                             if (change.oldPosition == change.newPosition) {
                                 continue
                             }
-                            val kvar = KVar(observableList.getItems()[change.oldPosition])
                             if (change.oldPosition > change.newPosition) {
-                                //language=JavaScript
-                                val moveItemCode = """
-                                    var itemToMoveStartMarker = document.getElementById({});
-                                    var itemToMoveEndMarker = document.getElementById({});
-                                    var elementsToMove = [];
-                                    while (itemToMoveStartMarker.nextSibling != itemToMoveEndMarker) {
-                                        elementsToMove.push(itemToMoveStartMarker.nextSibling.cloneNode());
-                                        itemToMoveStartMarker.parentNode.removeChild(itemToMoveStartMarker.nextSibling);
-                                    }
-                                    var itemToPrependTo = document.getElementById({});
-                                    console.log("itemToMove Id = " + itemToMoveStartMarker.id);
-                                    console.log("itemToPrependTo Id = " + itemToPrependTo.id);
-                                    var listParent = itemToMoveStartMarker.parentNode;
-                                    console.log("listParent.id = " + listParent.id);
-                                    listParent.insertBefore(itemToMoveStartMarker, itemToPrependTo);
-                                    listParent.insertBefore(itemToMoveEndMarker, itemToPrependTo);
-                                    elementsToMove.forEach(function(item){
-                                        listParent.insertBefore(item, itemToMoveEndMarker);
-                                    });
-                                """.trimIndent()
-                                browser.callJsFunction(moveItemCode, JsonPrimitive(renderHandles[change.oldPosition].renderFragment.startId),
-                                    JsonPrimitive(renderHandles[change.oldPosition].renderFragment.endId),
-                                    JsonPrimitive(renderHandles[change.newPosition].renderFragment.startId))
+                                moveItemServerSide(renderHandles[change.oldPosition].renderFragment.startId,
+                                    renderHandles[change.oldPosition].renderFragment.endId,
+                                    renderHandles[change.newPosition].renderFragment.startId)
                                 insertItem(change.newPosition, renderHandles[change.oldPosition].kvar.value, renderHandles)
                                 renderHandles.removeAt(change.oldPosition+1)
                             }
                             if (change.newPosition > change.oldPosition) {
                                 val itemToMove = renderHandles[change.oldPosition]
-                                //language=JavaScript
-                                val moveItemCode = """
-                                    var itemToMoveStartMarker = document.getElementById({});
-                                    var itemToMoveEndMarker = document.getElementById({});
-                                    var elementsToMove = [];
-                                    while(itemToMoveStartMarker.nextSibling != itemToMoveEndMarker) {
-                                        elementsToMove.push(itemToMoveStartMarker.nextSibling.cloneNode());
-                                        itemToMoveStartMarker.parentNode.removeChild(itemToMoveStartMarker.nextSibling)
-                                    }
-                                    var itemToPrependTo = document.getElementById({});
-                                    var listParent = itemToMoveStartMarker.parentNode;
-                                    listParent.insertBefore(itemToMoveStartMarker, itemToPrependTo);
-                                    listParent.insertBefore(itemToMoveEndMarker, itemToPrependTo);
-                                    elementsToMove.forEach(function (item){
-                                        listParent.insertBefore(item, itemToMoveEndMarker);
-                                    });
-                                """.trimIndent()
-                                browser.callJsFunction(moveItemCode, JsonPrimitive(itemToMove.renderFragment.startId),
-                                    JsonPrimitive(itemToMove.renderFragment.endId),
-                                    JsonPrimitive(renderHandles[change.newPosition].renderFragment.startId)
-                                )
+                                moveItemServerSide(renderHandles[change.oldPosition].renderFragment.startId,
+                                    renderHandles[change.oldPosition].renderFragment.endId,
+                                    renderHandles[change.newPosition].renderFragment.startId)
                                 renderHandles.removeAt(change.oldPosition)
-                                //renderHandles[change.newPosition].kvar.value = kvar.value
                                 insertItem(change.newPosition, itemToMove.kvar.value, renderHandles)
                             }
                         }
