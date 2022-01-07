@@ -93,9 +93,6 @@ fun <T : Any?> ElementCreator<*>.render(
         value.removeListener(listenerHandle)
     }
 
-    // TODO: Also add a deletion listener to remove <span>s and everything between them, this should also
-    // TODO: call previousElementCreator.get()?.cleanup() as in eraseAndRender()
-
     previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
     renderState.set(RENDERING_NO_PENDING_CHANGE)
     previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
@@ -165,7 +162,6 @@ data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 // TODO: Make this implement MutableList
 class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
 
-
     private val items = ArrayList(initialItems)
     fun getItems(): ArrayList<ITEM> {
         return items
@@ -197,7 +193,7 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
                             continue
                         }
                         val item = items[change.oldPosition]
-                        if (change.oldPosition > change.newPosition) {
+                        if (change.oldPosition >= change.newPosition) {
                             items.add(change.newPosition, item)
                             items.removeAt(change.oldPosition + 1)
                         } else { //change.newPosition > change.oldPosition
@@ -362,14 +358,14 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
                             if (change.oldPosition == change.newPosition) {
                                 continue
                             }
-                            if (change.oldPosition > change.newPosition) {
+                            if (change.oldPosition >= change.newPosition) {
                                 moveItemServerSide(renderHandles[change.oldPosition].renderFragment.startId,
                                     renderHandles[change.oldPosition].renderFragment.endId,
                                     renderHandles[change.newPosition].renderFragment.startId)
                                 insertItem(change.newPosition, renderHandles[change.oldPosition].kvar.value, renderHandles)
                                 renderHandles.removeAt(change.oldPosition+1)
                             }
-                            if (change.newPosition > change.oldPosition) {
+                            else { //change.newPosition > change.oldPosition
                                 val itemToMove = renderHandles[change.oldPosition]
                                 moveItemServerSide(renderHandles[change.oldPosition].renderFragment.startId,
                                     renderHandles[change.oldPosition].renderFragment.endId,
