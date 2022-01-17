@@ -1,11 +1,11 @@
 package kweb.state
 
-import io.ktor.utils.io.*
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 import kweb.shoebox.KeyValue
 import kweb.shoebox.OrderedViewSet
 import kweb.shoebox.Shoebox
+import kweb.shoebox.toArrayList
 import kweb.state.RenderState.*
 import kweb.util.random
 import mu.KotlinLogging
@@ -13,6 +13,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.ArrayList
 
 /**
  * Created by ian on 6/18/17.
@@ -159,12 +160,16 @@ class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar: KVa
 
 data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
+ /*TODO: This list is only used to handle updating and rendering a list of HTML elements. It should probably be renamed
+ to something more specific to render, e.g. RenderableList or RenderedList. ObservableList sounds too generic sounding a name I think*/
 // TODO: Make this implement MutableList
-class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
+class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override val size: Int = initialItems.size) : MutableList<ITEM>{
 
     private val items = ArrayList(initialItems)
     fun getItems(): ArrayList<ITEM> {
-        return items
+        synchronized(items) {
+            return ArrayList(items)
+        }
     }
 
     private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
@@ -173,7 +178,7 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
     fun move(oldPosition: Int, newPosition: Int) =
         applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
 
-    fun delete(position: Int) = applyModifications(listOf(Modification.Deletion<ITEM>(position)))
+    fun delete(position: Int) = applyModifications(listOf(Modification.Deletion(position)))
 
     fun applyModifications(modifications: List<Modification<ITEM>>) {
         synchronized(items) {
@@ -223,15 +228,122 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>) {
     fun removeListener(handle: Long) {
         listeners.remove(handle)
     }
-}
 
-/*
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
+     override fun contains(element: ITEM): Boolean {
+         return items.contains(element)
+     }
+
+     override fun containsAll(elements: Collection<ITEM>): Boolean {
+         return items.containsAll(elements)
+     }
+
+     override fun get(index: Int): ITEM {
+         return items[index]
+     }
+
+     override fun indexOf(element: ITEM): Int {
+         return items.indexOf(element)
+     }
+
+     override fun isEmpty(): Boolean {
+         return items.isEmpty()
+     }
+
+     override fun iterator(): MutableIterator<ITEM> {
+         return items.iterator()
+     }
+
+     override fun lastIndexOf(element: ITEM): Int {
+         return items.lastIndexOf(element)
+     }
+
+     override fun add(element: ITEM): Boolean {
+         insert(items.size, element)
+         return true
+     }
+
+     override fun add(index: Int, element: ITEM) {
+         insert(index, element)
+     }
+
+     override fun addAll(index: Int, elements: Collection<ITEM>): Boolean {
+         for ((i, element) in elements.withIndex()) {
+             insert(index + i, element)
+         }
+         return true
+     }
+
+     override fun addAll(elements: Collection<ITEM>): Boolean {
+         elements.forEach { element ->
+             insert(items.size, element)
+         }
+         return true
+     }
+
+     override fun clear() {
+         items.clear()
+     }
+
+     override fun listIterator(): MutableListIterator<ITEM> {
+         return items.listIterator()
+     }
+
+     override fun listIterator(index: Int): MutableListIterator<ITEM> {
+         return items.listIterator(index)
+     }
+
+     override fun remove(element: ITEM): Boolean {
+         val position = items.indexOf(element)
+         return if (position == -1) {
+             false
+         } else {
+             delete(items.indexOf(element))
+             true
+         }
+     }
+
+     override fun removeAll(elements: Collection<ITEM>): Boolean {
+         return if (containsAll(elements)) {
+             for (element in elements) {
+                 remove(element)
+             }
+             true
+         } else {
+             false
+         }
+     }
+
+     override fun removeAt(index: Int): ITEM {
+         val itemToRemove = items[index]
+         delete(index)
+         return itemToRemove
+     }
+
+     override fun retainAll(elements: Collection<ITEM>): Boolean {
+         items.forEach { item ->
+             remove(item)
+         }
+         addAll(elements)
+         return true
+     }
+
+     override fun set(index: Int, element: ITEM): ITEM {
+         val previousElement = items[index]
+         change(index, element)
+         return previousElement
+     }
+
+     override fun subList(fromIndex: Int, toIndex: Int): MutableList<ITEM> {
+         return items.subList(fromIndex, toIndex)
+     }
+ }
+
+/*fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     itemCollection: KVal<out Collection<ITEM>>,
     itemRenderer: ElementCreator<EL>.(ITEM) -> Unit
 ) {
 
-    val observableList : ObservableList<ITEM> = ObservableList(itemCollection.value.toList())
+    val observableList : ObservableList<ITEM> = ObservableList(itemCollection.value.toMutableList())
 
     renderEachWIP(observableList, itemRenderer)
 
@@ -249,8 +361,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     this.onCleanup(true) {
         itemCollection.removeListener(collectionListenerHandle)
     }
-}
-*/
+}*/
 
 /// Lower level interface to renderEach
 fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
@@ -264,7 +375,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     )
 
     fun insertItem(position: Int, newItem: ITEM,
-                   renderHandles: ArrayList<RenderHandle<ITEM>>,) {
+                   renderHandles: ArrayList<RenderHandle<ITEM>>) {
         val nextElementRenderMarkerStartId: String = if (position == renderHandles.size) {
             listFragment.endId
         } else {
@@ -298,7 +409,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
         renderHandleToRemove.delete()
     }
 
-    fun moveItemServerSide(itemStartMarker : String, itemEndMarker : String, newPosMarker : String) {
+    fun moveItemClientSide(itemStartMarker : String, itemEndMarker : String, newPosMarker : String) {
         //This JavaScript takes all elements from one start span to another, denoted by startMarker and endMarker,
         //and inserts them before the element that's ID is passed to the 'newPos' variable.
         //language=JavaScript
@@ -306,9 +417,10 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
             var startMarker = document.getElementById({});
             var endMarker = document.getElementById({});
             var elementsToMove = [];
-            while(startMarker.nextSibling !== endMarker) {
-                elementsToMove.push(startMarker.nextSibling.cloneNode());
-                startMarker.parentNode.removeChild(startMarker.nextSibling)
+            var currentElement = startMarker.nextSibling;
+            while(currentElement !== endMarker) {
+                elementsToMove.push(currentElement);
+                currentElement = currentElement.nextSibling;
             }
             var newPos = document.getElementById({});
             var listParent = startMarker.parentNode;
@@ -358,16 +470,19 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
                             if (change.oldPosition == change.newPosition) {
                                 continue
                             }
-                            if (change.oldPosition >= change.newPosition) {
-                                moveItemServerSide(renderHandles[change.oldPosition].renderFragment.startId,
+                            if (change.oldPosition > change.newPosition) {
+                                moveItemClientSide(renderHandles[change.oldPosition].renderFragment.startId,
                                     renderHandles[change.oldPosition].renderFragment.endId,
                                     renderHandles[change.newPosition].renderFragment.startId)
-                                insertItem(change.newPosition, renderHandles[change.oldPosition].kvar.value, renderHandles)
+                                //renderHandles.add(change.newPosition, renderHandles[change.oldPosition])
+                                renderHandles.add(change.newPosition, RenderHandle(renderHandles[change.oldPosition].renderFragment, renderHandles[change.oldPosition].kvar))
+                                //moveItemClientSide(change.newPosition, renderHandles[change.oldPosition], renderHandles)
+                                //insertItem(change.newPosition, renderHandles[change.oldPosition].kvar.value, renderHandles)
                                 renderHandles.removeAt(change.oldPosition+1)
                             }
                             else { //change.newPosition > change.oldPosition
                                 val itemToMove = renderHandles[change.oldPosition]
-                                moveItemServerSide(renderHandles[change.oldPosition].renderFragment.startId,
+                                moveItemClientSide(renderHandles[change.oldPosition].renderFragment.startId,
                                     renderHandles[change.oldPosition].renderFragment.endId,
                                     renderHandles[change.newPosition].renderFragment.startId)
                                 renderHandles.removeAt(change.oldPosition)

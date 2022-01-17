@@ -40,7 +40,7 @@ class RenderEachTest {
                 button()
                     .text("Add Moose")
                     .on.click {
-                        animals.insert(animals.getItems().count(), "Moose")
+                        animals.insert(animals.getItems().size, "Moose")
                     }
             }
         })
@@ -50,7 +50,6 @@ class RenderEachTest {
 
     @Test
     fun changeItemTest() {
-        val items = listOf("Dog", "Cat", "Bear")
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
 
         Kweb(port = 1234, buildPage = {
@@ -63,7 +62,8 @@ class RenderEachTest {
                 button()
                     .text("Change Cat to Moose")
                     .on.click {
-                        animals.change(1, "Moose")
+                        animals.set(1, "Horse")
+                        //animals.change(1, "Moose")
                     }
             }
         })
@@ -73,8 +73,7 @@ class RenderEachTest {
 
     @Test
     fun moveItemTest() {
-        val items = listOf("Dog", "Cat", "Bear")
-        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         Kweb(port = 1234, buildPage = {
             doc.body.new {
@@ -84,19 +83,18 @@ class RenderEachTest {
                     }
                 }
                 button()
-                    .text("Change Cat to Moose")
+                    .text("Move Item")
                     .on.click {
-                        animals.move(0, 1)
-                        //animals.items[1] = "Moose"
+                        animals.move(4, 2)
+                        println(animals.getItems())
                     }
             }
         })
-        Thread.sleep(20000)
+        Thread.sleep(100000)
     }
 
     @Test
     fun deleteItemTest() {
-        val items = listOf("Dog", "Cat", "Bear")
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
 
         Kweb(port = 1234, buildPage = {
@@ -110,10 +108,12 @@ class RenderEachTest {
                     .text("Delete Cat")
                     .on.click {
                         animals.delete(1)
+                        println(animals.getItems())
                     }
             }
         })
         Thread.sleep(20000)
+        println(animals.getItems())
     }
 
 }
