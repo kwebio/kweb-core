@@ -9,26 +9,9 @@ import org.junit.jupiter.api.Test
 
 class RenderEachTest {
 
-    /*@Test
-    fun initialRenderEachTest() {
-        val animals = listOf("Dog", "Cat", "Bear")
-        val collection = KVal(animals)
-
-        Kweb(port = 1234, buildPage = {
-            doc.body.new {
-                renderEachWIP(collection) { animal ->
-                    div().new {
-                        h1().text(animal)
-                    }
-                }
-            }
-        })
-    }*/
-
-
     @Test
-    fun insertItemTest() {
-        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
+    fun prependItemTest() {
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
         Kweb(port = 1234, buildPage = {
             doc.body.new {
@@ -38,9 +21,53 @@ class RenderEachTest {
                     }
                 }
                 button()
-                    .text("Add Moose")
+                    .text("Prepend Moose to list")
                     .on.click {
-                        animals.insert(animals.getItems().size, "Moose")
+                        animals.add(0, "Moose")
+                    }
+            }
+        })
+        Thread.sleep(20000)
+        println(animals.getItems())
+    }
+
+    @Test
+    fun appendItemTest() {
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
+
+        Kweb(port = 1234, buildPage = {
+            doc.body.new {
+                renderEachWIP(animals) { animal ->
+                    div().new {
+                        h1().text(animal)
+                    }
+                }
+                button()
+                    .text("Append Moose to list")
+                    .on.click {
+                        animals.add("Moose")
+                    }
+            }
+        })
+        Thread.sleep(20000)
+        println(animals.getItems())
+    }
+
+    @Test
+    fun insertItemTest() {
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
+
+        Kweb(port = 1234, buildPage = {
+            doc.body.new {
+                renderEachWIP(animals) { animal ->
+                    div().new {
+                        h1().text(animal)
+                    }
+                }
+                button()
+                    .text("Insert Moose into center")
+                    .on.click {
+                        animals.add(2, "Moose")
                     }
             }
         })
@@ -60,10 +87,32 @@ class RenderEachTest {
                     }
                 }
                 button()
-                    .text("Change Cat to Moose")
+                    .text("Change Cat to Horse")
                     .on.click {
                         animals.set(1, "Horse")
-                        //animals.change(1, "Moose")
+                    }
+            }
+        })
+        Thread.sleep(20000)
+        println(animals.getItems())
+    }
+
+    @Test
+    fun deleteItemTest() {
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
+
+        Kweb(port = 1234, buildPage = {
+            doc.body.new {
+                renderEachWIP(animals) { animal ->
+                    div().new {
+                        h1().text(animal)
+                    }
+                }
+                button()
+                    .text("Delete Cat")
+                    .on.click {
+                        animals.removeAt(1)
+                        println(animals.getItems())
                     }
             }
         })
@@ -83,7 +132,7 @@ class RenderEachTest {
                     }
                 }
                 button()
-                    .text("Move Item")
+                    .text("Move Horse to center")
                     .on.click {
                         animals.move(4, 2)
                         println(animals.getItems())
@@ -91,29 +140,6 @@ class RenderEachTest {
             }
         })
         Thread.sleep(100000)
-    }
-
-    @Test
-    fun deleteItemTest() {
-        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
-
-        Kweb(port = 1234, buildPage = {
-            doc.body.new {
-                renderEachWIP(animals) { animal ->
-                    div().new {
-                        h1().text(animal)
-                    }
-                }
-                button()
-                    .text("Delete Cat")
-                    .on.click {
-                        animals.delete(1)
-                        println(animals.getItems())
-                    }
-            }
-        })
-        Thread.sleep(20000)
-        println(animals.getItems())
     }
 
 }

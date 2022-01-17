@@ -72,11 +72,6 @@ fun <T : Any?> ElementCreator<*>.render(
         } while (renderState.get() != NOT_RENDERING)
     }
 
-    // TODO: RenderFragment should have delete() function with deletion listeners
-    // TODO: that:
-    // TODO:   * Remove this listenerHandle
-    // TODO:   * Delete the spans and anything between them
-    // TODO: Consider renaming RenderFragment to RenderHandle
     val listenerHandle = value.addListener { _, _ ->
         when (renderState.get()) {
             NOT_RENDERING -> {
@@ -319,6 +314,7 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
          return itemToRemove
      }
 
+     //TODO: I'm not sure if there is a better/more performant way to implement this function. This was the simplest to write.
      override fun retainAll(elements: Collection<ITEM>): Boolean {
          items.forEach { item ->
              remove(item)
@@ -333,6 +329,8 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
          return previousElement
      }
 
+     //TODO: Should we return an ObservableList here? if subList() is only used to read a subset of items, this method will work as is
+     //TODO: If a user tries to use this method to get a subset of DOM elements and wants to make changes in the DOM, that will not work
      override fun subList(fromIndex: Int, toIndex: Int): MutableList<ITEM> {
          return items.subList(fromIndex, toIndex)
      }
