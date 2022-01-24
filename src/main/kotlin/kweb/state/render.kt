@@ -155,9 +155,6 @@ class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar: KVa
 
 data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
- /*TODO: This list is only used to handle updating and rendering a list of HTML elements. It should probably be renamed
- to something more specific to render, e.g. RenderableList or RenderedList. ObservableList sounds too generic sounding a name I think*/
-// TODO: Make this implement MutableList
 class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override val size: Int = initialItems.size) : MutableList<ITEM>{
 
     private val items = ArrayList(initialItems)
@@ -276,7 +273,9 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
      }
 
      override fun clear() {
-         items.clear()
+         while(items.size > 0) {
+             delete(0)
+         }
      }
 
      override fun listIterator(): MutableListIterator<ITEM> {
@@ -292,16 +291,14 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
          return if (position == -1) {
              false
          } else {
-             delete(items.indexOf(element))
+             delete(position)
              true
          }
      }
 
      override fun removeAll(elements: Collection<ITEM>): Boolean {
          return if (containsAll(elements)) {
-             for (element in elements) {
-                 remove(element)
-             }
+             items.clear()
              true
          } else {
              false
@@ -314,11 +311,8 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
          return itemToRemove
      }
 
-     //TODO: I'm not sure if there is a better/more performant way to implement this function. This was the simplest to write.
      override fun retainAll(elements: Collection<ITEM>): Boolean {
-         items.forEach { item ->
-             remove(item)
-         }
+         items.clear()
          addAll(elements)
          return true
      }
@@ -329,8 +323,7 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
          return previousElement
      }
 
-     //TODO: Should we return an ObservableList here? if subList() is only used to read a subset of items, this method will work as is
-     //TODO: If a user tries to use this method to get a subset of DOM elements and wants to make changes in the DOM, that will not work
+     //TODO: Documentation will need a note explaining that any modifications to the returned sublist will not propagate in the DOM
      override fun subList(fromIndex: Int, toIndex: Int): MutableList<ITEM> {
          return items.subList(fromIndex, toIndex)
      }
