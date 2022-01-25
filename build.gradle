@@ -21,7 +21,7 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.6.1'
+    ktor_version = '1.6.7'
 }
 
 group 'com.github.kwebio'
