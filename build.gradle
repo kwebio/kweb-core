@@ -65,7 +65,7 @@ dependencies {
 
     compile 'io.mola.galimatias:galimatias:0.2.1'
 
-    compile 'io.github.microutils:kotlin-logging:2.0.3'
+    compile 'io.github.microutils:kotlin-logging:2.1.21'
     compile "org.reflections:reflections:0.10.2"
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
