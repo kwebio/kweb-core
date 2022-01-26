@@ -41,7 +41,7 @@ test {
 
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.12.0'
-    compile 'commons-io:commons-io:2.8.0'
+    compile 'commons-io:commons-io:2.11.0'
     compile 'org.jsoup:jsoup:1.13.1'
     compile 'com.github.kwebio:shoebox:0.4.35'
     implementation 'com.google.guava:guava:31.0.1-jre'
