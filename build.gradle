@@ -14,7 +14,7 @@ plugins {
     id 'maven'
     id 'org.jetbrains.dokka' version '1.5.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id "com.github.ben-manes.versions" version "0.39.0"
+    id "com.github.ben-manes.versions" version "0.41.0"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
 }
 
@@ -52,7 +52,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.0"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-RC'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.0-RC'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0'
     compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2'
 
     ////////////////////
