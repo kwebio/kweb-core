@@ -29,7 +29,6 @@ version '0.10.17'
 
 repositories {
     mavenCentral()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
     maven { url 'https://jitpack.io' }
     maven { url 'https://plugins.gradle.org/m2' }
     jcenter()
@@ -45,7 +44,7 @@ dependencies {
     compile 'commons-io:commons-io:2.8.0'
     compile 'org.jsoup:jsoup:1.13.1'
     compile 'com.github.kwebio:shoebox:0.4.35'
-    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'com.google.guava:guava:31.0.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
