@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.github.ben-manes:gradle-versions-plugin:0.36.0"
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.41.0"
     }
 }
 
@@ -40,11 +40,11 @@ test {
 }
 
 dependencies {
-    compile 'org.apache.commons:commons-lang3:3.11'
+    compile 'org.apache.commons:commons-lang3:3.12.0'
     compile 'commons-io:commons-io:2.8.0'
     compile 'org.jsoup:jsoup:1.13.1'
     compile 'com.github.kwebio:shoebox:0.4.35'
-    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'com.google.guava:guava:31.0.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
@@ -65,7 +65,7 @@ dependencies {
 
     compile 'io.mola.galimatias:galimatias:0.2.1'
 
-    compile 'io.github.microutils:kotlin-logging:2.0.3'
+    compile 'io.github.microutils:kotlin-logging:2.1.21'
     compile "org.reflections:reflections:0.9.12"
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
