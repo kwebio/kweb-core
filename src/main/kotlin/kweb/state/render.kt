@@ -1,19 +1,26 @@
 package kweb.state
 
 import kotlinx.serialization.json.JsonPrimitive
-import kweb.*
-import kweb.shoebox.KeyValue
-import kweb.shoebox.OrderedViewSet
-import kweb.shoebox.Shoebox
-import kweb.shoebox.toArrayList
+import kweb.Element
+import kweb.ElementCreator
+import kweb.WebBrowser
+import kweb.span
 import kweb.state.RenderState.*
 import kweb.util.random
 import mu.KotlinLogging
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.ArrayList
+import kotlin.collections.Collection
+import kotlin.collections.List
+import kotlin.collections.MutableIterator
+import kotlin.collections.MutableList
+import kotlin.collections.MutableListIterator
+import kotlin.collections.forEach
+import kotlin.collections.listOf
+import kotlin.collections.plusAssign
+import kotlin.collections.set
+import kotlin.collections.withIndex
 
 /**
  * Created by ian on 6/18/17.
@@ -114,27 +121,6 @@ fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
     }
 }
 
-fun <T : Any> ElementCreator<*>.toVar(shoebox: Shoebox<T>, key: String): KVar<T> {
-    val value = shoebox[key] ?: throw NoSuchElementException("Key $key not found")
-    val w = KVar(value)
-    w.addListener { _, n ->
-        require(this.browser.isCatchingOutbound() != WebBrowser.CatcherType.IMMEDIATE_EVENT) {
-            """You appear to be modifying Shoebox state from within an onImmediate callback, which
-                |should only make simple modifications to the DOM.""".trimMargin()
-        }
-        shoebox[key] = n
-    }
-    val changeHandle = shoebox.onChange(key) { _, n, _ -> w.value = n }
-    w.onClose { shoebox.deleteChangeListener(key, changeHandle) }
-    this.onCleanup(withParent = true) {
-        w.close(CloseReason("Closed because parent ElementCreator was cleaned up"))
-    }
-    return w
-}
-
-
-private data class ItemInfo<ITEM : Any>(val creator: ElementCreator<Element>, val KVar: KVar<ITEM>)
-
 class RenderFragment(val startId: String, val endId: String) {
     private val deletionListeners = ArrayList<() -> Unit>()
 
@@ -152,8 +138,6 @@ class RenderFragment(val startId: String, val endId: String) {
 }
 
 class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar: KVar<ITEM>)
-
-data class IndexedItem<I>(val index: Int, val total: Int, val item: I)
 
 class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override val size: Int = initialItems.size) : MutableList<ITEM>{
 
@@ -332,33 +316,7 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
      }
  }
 
-/*fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
-    itemCollection: KVal<out Collection<ITEM>>,
-    itemRenderer: ElementCreator<EL>.(ITEM) -> Unit
-) {
-
-    val observableList : ObservableList<ITEM> = ObservableList(itemCollection.value.toMutableList())
-
-    renderEachWIP(observableList, itemRenderer)
-center
-    // Listen for changes to the collection
-    val collectionListenerHandle = itemCollection.addListener { old, new ->
-        // Do diff on collection then apply modifications to ObservableList which will be
-        // rendered by lower-level renderEach
-
-            val diff : List<ObservableList.Modification<ITEM>> = listOf() // <--- do diff between old and new
-
-            observableList.applyModifications(diff)
-
-    }
-
-    this.onCleanup(true) {
-        itemCollection.removeListener(collectionListenerHandle)
-    }
-}*/
-
-/// Lower level interface to renderEach
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
+fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
     observableList: ObservableList<ITEM>,
     itemRenderer: ElementCreator<Element>.(ITEM) -> Unit
 ) {
@@ -465,23 +423,14 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
                                 continue
                             }
                             if (change.oldPosition > change.newPosition) {
-                                println("Start : renderHandles.size ========= ${renderHandles.size}")
                                 moveItemClientSide(renderHandles[change.oldPosition].renderFragment.startId,
                                     renderHandles[change.oldPosition].renderFragment.endId,
                                     renderHandles[change.newPosition].renderFragment.startId)
-                                //renderHandles.add(change.newPosition, renderHandles[change.oldPosition])
                                 renderHandles.add(change.newPosition, RenderHandle(renderHandles[change.oldPosition].renderFragment, renderHandles[change.oldPosition].kvar))
-                                //moveItemClientSide(change.newPosition, renderHandles[change.oldPosition], renderHandles)
-                                //insertItem(change.newPosition, renderHandles[change.oldPosition].kvar.value, renderHandles)
                                 renderHandles.removeAt(change.oldPosition+1)
-                                println("renderHandles.size ========= ${renderHandles.size}")
                             }
                             else { //change.newPosition > change.oldPosition
-                                println("Start : renderHandles.size ========= ${renderHandles.size}")
                                 val newRenderHandle = RenderHandle(renderHandles[change.oldPosition].renderFragment, renderHandles[change.oldPosition].kvar)
-                                //val itemToMove = renderHandles[change.oldPosition]
-                                println("Current : renderHandles.size ========= ${renderHandles.size}")
-                                println("Current Item = ${renderHandles[change.newPosition].kvar.value}")
                                 val startId = if (change.newPosition == renderHandles.size-1) {
                                     listFragment.endId
                                 } else {
@@ -496,12 +445,6 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
                                     renderHandles.add(change.newPosition+1, newRenderHandle)
                                 }
                                 renderHandles.removeAt(change.oldPosition)
-                                //insertItem(change.newPosition, itemToMove.kvar.value, renderHandles)
-                                println("Renderhandles content:")
-                                renderHandles.forEach {
-                                    println(it.kvar.value)
-                                }
-                                println("renderHandles.size ========= ${renderHandles.size}")
                             }
                         }
                     }
@@ -515,100 +458,6 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
     }
 }
 
-/**
- *
- *
- * // @sample ordered_view_set_sample
- */
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
-    orderedViewSet: OrderedViewSet<ITEM>,
-    renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit
-) {
-    val items = CopyOnWriteArrayList<ItemInfo<ITEM>>()
-    for (keyValue in orderedViewSet.keyValueEntries) {
-        items += createItem(orderedViewSet, keyValue, renderer, insertAtPosition = null)
-    }
-
-    val onInsertHandler = orderedViewSet.onInsert { index, inserted ->
-        if (index < items.size) {
-            items.add(
-                index,
-                createItem(orderedViewSet, inserted, renderer, "index")
-            )//TODO I broke this line so the mirror galleryproject would compile
-        } else {
-            items.add(createItem(orderedViewSet, inserted, renderer, insertAtPosition = null))
-        }
-    }
-    this.onCleanup(true) { orderedViewSet.deleteInsertListener(onInsertHandler) }
-
-    val onRemoveHandler = orderedViewSet.onRemove { index, keyValue ->
-        if (index >= items.size) {
-            logger.warn("Invalid index $index to retrieve item from items list of size ${items.size} for key ${keyValue.key} and item ${keyValue.value}, ignoring.")
-        } else {
-            val removed = items.removeAt(index)
-            removed.creator.cleanup()
-            removed.KVar.close(CloseReason("Closed because associated item was removed from OrderedViewSet"))
-        }
-    }
-
-    this.onCleanup(true) {
-
-        orderedViewSet.deleteRemoveListener(onRemoveHandler)
-    }
-}
-
-private fun <ITEM : Any, EL : Element> ElementCreator<EL>.createItem(
-    orderedViewSet: OrderedViewSet<ITEM>,
-    keyValue: KeyValue<ITEM>,
-    renderer: ElementCreator<EL>.(KVar<ITEM>) -> Unit,
-    insertAtPosition: String?
-)
-        : ItemInfo<ITEM> {
-    val itemElementCreator = ElementCreator(this.parent, this, insertBefore = insertAtPosition)
-    val itemVar = itemElementCreator.toVar(orderedViewSet.view.viewOf, keyValue.key)
-    try {
-        renderer(itemElementCreator, itemVar)
-    } catch (e: Exception) {
-        logger.error("Error rendering item", e)
-    }
-
-    if (itemElementCreator.elementsCreatedCount > 1) {
-        /*
-         * Only one element may be created per-item because otherwise it would be much more complicated to figure
-         * out where new items should be inserted by the onInsert handler below.  onRemove would be easier because
-         * we could just call itemElementCreator.cleanup() to delete that item's elements.
-         *
-         * This shouldn't be an onerous requirement because typically with lists of things there is just one
-          * root <ol> or <ul> per item.  If it does turn out to be a problem we'll need to find another approach.
-         */
-        error(
-            """
-            Only one element may be created per item but ${itemElementCreator.elementsCreatedCount} were created for
-            item key ${keyValue.key}.  Note that this element may have as many children as you like, so you may just need
-            to wrap the elements in a <DIV> or other element type.
-""".trimIndent()
-        )
-    }
-    return ItemInfo(itemElementCreator, itemVar)
-}
-
 private enum class RenderState {
     NOT_RENDERING, RENDERING_NO_PENDING_CHANGE, RENDERING_WITH_PENDING_CHANGE
 }
-
-private fun ordered_view_set_sample() {
-    data class Cat(val name: String, val color: String)
-
-    val cats = Shoebox<Cat>()
-    val catColorView = cats.view("catColors", Cat::color)
-    Kweb(port = 1234, buildPage = {
-        doc.body.new {
-            renderEach(catColorView.orderedSet("brown")) { brownCat ->
-                div().new {
-                    h1().text(brownCat.map(Cat::name))
-                }
-            }
-        }
-    })
-}
-

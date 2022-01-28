@@ -1,24 +1,16 @@
 package kweb.state.render
 
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kotlintest.shouldBe
 import kweb.*
-import kweb.demos.todo.TodoApp
-import kweb.state.KVal
-import kweb.state.KVar
 import kweb.state.ObservableList
-import kweb.state.renderEachWIP
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
+import kweb.state.renderEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.chrome.ChromeOptions
-import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumExtension::class)
@@ -42,7 +34,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
@@ -74,7 +66,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
@@ -106,7 +98,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
@@ -138,7 +130,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
@@ -166,7 +158,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
@@ -220,7 +212,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
@@ -252,7 +244,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
@@ -284,7 +276,7 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
         val server = Kweb(port = 1234, buildPage = {
             doc.body.new {
-                renderEachWIP(animals) { animal ->
+                renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
                     }
