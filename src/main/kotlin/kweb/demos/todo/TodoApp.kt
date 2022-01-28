@@ -18,7 +18,7 @@ class TodoApp {
 
     class TodoList(var title: String, val todoItems: ObservableList<String>)
 
-    val todoLists = mutableMapOf<String, TodoList>()
+    private val todoLists = mutableMapOf<String, TodoList>()
     val plugins = listOf(fomanticUIPlugin)
     val server: Kweb
 
@@ -114,7 +114,7 @@ class TodoApp {
 
     private fun createNewList(): String {
         val newListId = generateNewUid()
-        todoLists[newListId] = TodoList("", ObservableList<String>(mutableListOf()))
+        todoLists[newListId] = TodoList(newListId, ObservableList<String>(mutableListOf()))
         return newListId
     }
 
