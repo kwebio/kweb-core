@@ -18,7 +18,6 @@ class TodoApp {
 
     class TodoList(var title: String, val todoItems: ObservableList<String>)
 
-    val state = ToDoState()
     val todoLists = mutableMapOf<String, TodoList>()
     val plugins = listOf(fomanticUIPlugin)
     val server: Kweb
