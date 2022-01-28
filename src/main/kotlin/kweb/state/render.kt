@@ -193,9 +193,12 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
                         if (change.oldPosition >= change.newPosition) {
                             items.add(change.newPosition, item)
                             items.removeAt(change.oldPosition + 1)
+                            println("Items size: ${items.size}")
                         } else { //change.newPosition > change.oldPosition
                             items.removeAt(change.oldPosition)
                             items.add(change.newPosition, item)
+                            println("Items size: ${items.size}" +
+                                    "\nItems Contents: $items")
                         }
                     }
                 }
@@ -337,7 +340,7 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
     val observableList : ObservableList<ITEM> = ObservableList(itemCollection.value.toMutableList())
 
     renderEachWIP(observableList, itemRenderer)
-
+center
     // Listen for changes to the collection
     val collectionListenerHandle = itemCollection.addListener { old, new ->
         // Do diff on collection then apply modifications to ObservableList which will be
@@ -428,7 +431,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
 
     ElementCreator<Element>(this.parent, this.parentCreator, insertBefore = listFragment.endId).apply {
 
-        // TODO: These renderFragments must be kept in sync with the items in observableList that they're rendering
+        //These renderFragments must be kept in sync with the items in observableList that they're rendering
         val renderHandles = ArrayList<RenderHandle<ITEM>>()
 
         synchronized(renderHandles) {
@@ -462,6 +465,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
                                 continue
                             }
                             if (change.oldPosition > change.newPosition) {
+                                println("Start : renderHandles.size ========= ${renderHandles.size}")
                                 moveItemClientSide(renderHandles[change.oldPosition].renderFragment.startId,
                                     renderHandles[change.oldPosition].renderFragment.endId,
                                     renderHandles[change.newPosition].renderFragment.startId)
@@ -470,14 +474,34 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEachWIP(
                                 //moveItemClientSide(change.newPosition, renderHandles[change.oldPosition], renderHandles)
                                 //insertItem(change.newPosition, renderHandles[change.oldPosition].kvar.value, renderHandles)
                                 renderHandles.removeAt(change.oldPosition+1)
+                                println("renderHandles.size ========= ${renderHandles.size}")
                             }
                             else { //change.newPosition > change.oldPosition
-                                val itemToMove = renderHandles[change.oldPosition]
+                                println("Start : renderHandles.size ========= ${renderHandles.size}")
+                                val newRenderHandle = RenderHandle(renderHandles[change.oldPosition].renderFragment, renderHandles[change.oldPosition].kvar)
+                                //val itemToMove = renderHandles[change.oldPosition]
+                                println("Current : renderHandles.size ========= ${renderHandles.size}")
+                                println("Current Item = ${renderHandles[change.newPosition].kvar.value}")
+                                val startId = if (change.newPosition == renderHandles.size-1) {
+                                    listFragment.endId
+                                } else {
+                                    renderHandles[change.newPosition+1].renderFragment.startId
+                                }
                                 moveItemClientSide(renderHandles[change.oldPosition].renderFragment.startId,
                                     renderHandles[change.oldPosition].renderFragment.endId,
-                                    renderHandles[change.newPosition].renderFragment.startId)
+                                    startId)
+                                if (change.newPosition == renderHandles.size-1) {
+                                    renderHandles.add(newRenderHandle)
+                                } else {
+                                    renderHandles.add(change.newPosition+1, newRenderHandle)
+                                }
                                 renderHandles.removeAt(change.oldPosition)
-                                insertItem(change.newPosition, itemToMove.kvar.value, renderHandles)
+                                //insertItem(change.newPosition, itemToMove.kvar.value, renderHandles)
+                                println("Renderhandles content:")
+                                renderHandles.forEach {
+                                    println(it.kvar.value)
+                                }
+                                println("renderHandles.size ========= ${renderHandles.size}")
                             }
                         }
                     }
@@ -510,7 +534,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
             items.add(
                 index,
                 createItem(orderedViewSet, inserted, renderer, "index")
-            )//TODO I broke this line so the project would compile
+            )//TODO I broke this line so the mirror galleryproject would compile
         } else {
             items.add(createItem(orderedViewSet, inserted, renderer, insertAtPosition = null))
         }
