@@ -50,7 +50,9 @@ class TodoApp {
                                  * This will cause the page to switch to the newly created list automatically, and
                                  * without a page refresh.
                                  */
+                                //TODO: This doesn't seem to be triggering a page refresh for some reason. I have no idea why.
                                 url.value = "/lists/$newListId"
+
                             }
 
                             path("/lists/{id}") { params ->
@@ -119,6 +121,9 @@ class TodoApp {
     }
 
     private fun ElementCreator<*>.renderList(activeListKey: String) {
+        //This line of code just inserts the List title under To do List on the webpage. I don't think this was intended
+        //But, it's a copy of the line of code that used to be here. It doesn't seem to work on Master though
+        //The title is an empty Kvar() when run on the master branch.
         h3().text(todoLists[activeListKey]!!.title)
 
         div(fomantic.ui.middle.aligned.divided.list) {
