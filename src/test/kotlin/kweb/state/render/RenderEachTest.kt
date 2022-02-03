@@ -271,6 +271,38 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
     }
 
     @Test
+    fun moveItemFromEndToStart() {
+        val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
+
+        val server = Kweb(port = 1234, buildPage = {
+            doc.body.new {
+                renderEach(animals) { animal ->
+                    div().new {
+                        h1().text(animal)
+                    }
+                }
+                button()
+                    .text("Move Horse to start")
+                    .on.click {
+                        animals.move(4, 0)
+                    }
+            }
+        })
+
+        driver.get("http://localhost:1234")
+        val button = driver.findElement<WebElement>(By.tagName("button"))
+        button.click()
+        Thread.sleep(50)
+        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        labels[0].text shouldBe("Horse")
+        labels[1].text shouldBe("Dog")
+        labels[2].text shouldBe("Cat")
+        labels[3].text shouldBe("Bear")
+        labels[4].text shouldBe("Moose")
+        server.close()
+    }
+
+    @Test
     fun ClearItemsTest() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
