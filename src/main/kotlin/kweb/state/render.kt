@@ -79,7 +79,7 @@ fun <T : Any?> ElementCreator<*>.render(
         } while (renderState.get() != NOT_RENDERING)
     }
 
-    val listenerHandle = value.addListener { _, _ ->
+    val listenerHandle = value.addListener { old, new ->
         when (renderState.get()) {
             NOT_RENDERING -> {
                 renderLogic()
@@ -96,12 +96,14 @@ fun <T : Any?> ElementCreator<*>.render(
         value.removeListener(listenerHandle)
     }
 
-    previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
+    renderLogic()
+
+    /*previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
     renderState.set(RENDERING_NO_PENDING_CHANGE)
     previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
     if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
         renderState.set(NOT_RENDERING)
-    }
+    }*/
 
     this.onCleanup(false) {
         //TODO I'm not sure what cleanup needs to be done now that there is no container element
