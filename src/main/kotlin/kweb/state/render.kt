@@ -37,16 +37,18 @@ fun <T : Any?> ElementCreator<*>.render(
 
     val renderState = AtomicReference(NOT_RENDERING)
 
+    val renderMarkerStartClassId = "rMStart"
+    val renderMarkerEndClassId = "rMEnd"
     //TODO this could possibly be improved
     val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
         parent.browser.batch(WebBrowser.CatcherType.RENDER) {
-            val startSpan = span().classes("RenderMarkerStart")
-            val endSpan = span().classes("RenderMarkerEnd")
+            val startSpan = span().classes(renderMarkerStartClassId)
+            val endSpan = span().classes(renderMarkerEndClassId)
             RenderFragment(startSpan.id, endSpan.id)
         }
     } else {
-        val startSpan = span().classes("RenderMarkerStart")
-        val endSpan = span().classes("RenderMarkerEnd")
+        val startSpan = span().classes(renderMarkerStartClassId)
+        val endSpan = span().classes(renderMarkerEndClassId)
         RenderFragment(startSpan.id, endSpan.id)
     }
 
@@ -79,7 +81,7 @@ fun <T : Any?> ElementCreator<*>.render(
         } while (renderState.get() != NOT_RENDERING)
     }
 
-    val listenerHandle = value.addListener { old, new ->
+    val listenerHandle = value.addListener { _, _ ->
         when (renderState.get()) {
             NOT_RENDERING -> {
                 renderLogic()
@@ -97,13 +99,6 @@ fun <T : Any?> ElementCreator<*>.render(
     }
 
     renderLogic()
-
-    /*previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
-    renderState.set(RENDERING_NO_PENDING_CHANGE)
-    previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
-    if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
-        renderState.set(NOT_RENDERING)
-    }*/
 
     this.onCleanup(false) {
         //TODO I'm not sure what cleanup needs to be done now that there is no container element
@@ -151,12 +146,11 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
     }
 
     private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
-    fun insert(position: Int, item: ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
-    fun change(position: Int, newItem: ITEM) = applyModifications(listOf(Modification.Change(position, newItem)))
+    private fun insert(position: Int, item: ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
+    private fun change(position: Int, newItem: ITEM) = applyModifications(listOf(Modification.Change(position, newItem)))
+    private fun delete(position: Int) = applyModifications(listOf(Modification.Deletion(position)))
     fun move(oldPosition: Int, newPosition: Int) =
         applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
-
-    fun delete(position: Int) = applyModifications(listOf(Modification.Deletion(position)))
 
     fun applyModifications(modifications: List<Modification<ITEM>>) {
         synchronized(items) {
@@ -323,9 +317,11 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
     itemRenderer: ElementCreator<Element>.(ITEM) -> Unit
 ) {
 
+    //a wrapper made of 2 empty spans around the list of items that renderEach will draw
+    //This is needed to be able to use insertBefore on the end span to add items to the end of the list.
     val listFragment = RenderFragment(
-        span().classes("RenderListStart").id,
-        span().classes("RenderListEnd").id
+        span().classes("rLStart").id,//renderListStart
+        span().classes("rLEnd").id//renderListEnd
     )
 
     fun insertItem(position: Int, newItem: ITEM,
