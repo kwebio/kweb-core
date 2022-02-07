@@ -326,7 +326,55 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         button.click()
         Thread.sleep(50)
         val labels = driver.findElements<WebElement>(By.tagName("h1"))
-        labels.size shouldBe(0)
+        labels.size shouldBe 0
+        server.close()
+    }
+
+    @Test
+    fun nestedRenderEachTest() {
+        val planets = ObservableList(mutableListOf())
+        val jupiter = ObservableList(mutableListOf("Io", "Europa", "Ganymede", "Callisto"))
+        val saturn = ObservableList(mutableListOf("Titan", "Rhea", "Enceladus", "Mimas", "Phoebe"))
+        val neptune = ObservableList(mutableListOf("Triton", "Nereid", "Neso", "Psamathe", "Galatea", "Proteus"))
+        planets.add(jupiter)
+        planets.add(saturn)
+        planets.add(neptune)
+
+
+        val server = Kweb(port = 1234, buildPage = {
+            doc.body.new {
+                renderEach(planets) { planet ->
+                    renderEach(planet as ObservableList<Any>) { moon ->
+                        h1().text(moon.toString())
+
+                    }
+                    button()
+                        .text("Move last moon to second from the top")
+                        .on.click {
+                            planet.move(planet.size - 1, 1)
+                        }
+                }
+                br()
+                br()
+                button()
+                    .text("Reorder planets")
+                    .on.click {
+                        planets.move(2, 0)
+                        planets.move(1, 2)
+                    }
+            }
+        })
+
+        driver.get("http://localhost:1234")
+        val buttons = driver.findElements<WebElement>(By.tagName("button"))
+        for (button in buttons) {
+            button.click()
+        }
+        Thread.sleep(50)
+        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        labels[1].text shouldBe "Proteus"
+        labels[7].text shouldBe "Phoebe"
+        labels[13].text shouldBe "Europa"
         server.close()
     }
 }
