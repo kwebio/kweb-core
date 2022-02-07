@@ -62,14 +62,18 @@ fun <T : Any?> ElementCreator<*>.render(
 
         previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
         renderState.set(RENDERING_NO_PENDING_CHANGE)
-        previousElementCreator.get()!!.block(value.value) // TODO: Refactor to remove !!
+        previousElementCreator.get()?.let { it ->
+            it.block(value.value)
+        }//TODO We may need to catch an error here. I don't know how this could ever get to a point where previousElementCreator.get() is null
+        //But, if it was ever null, I think Kweb would just outright fail here.
         if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
             renderState.set(NOT_RENDERING)
         }
     }
 
-    //TODO rename this function
-    fun renderLogic() {
+    //TODO this function could probably have a clearer name
+    //It's purpose is to monitor renderState, and call eraseAndRender() if the page is rendering.
+    fun renderLoop() {
         do {
             if (parent.browser.isCatchingOutbound() == null) {
                 parent.browser.batch(WebBrowser.CatcherType.RENDER) {
@@ -84,7 +88,7 @@ fun <T : Any?> ElementCreator<*>.render(
     val listenerHandle = value.addListener { _, _ ->
         when (renderState.get()) {
             NOT_RENDERING -> {
-                renderLogic()
+                renderLoop()
             }
             RENDERING_NO_PENDING_CHANGE -> {
                 renderState.set(RENDERING_WITH_PENDING_CHANGE)
@@ -98,7 +102,8 @@ fun <T : Any?> ElementCreator<*>.render(
         value.removeListener(listenerHandle)
     }
 
-    renderLogic()
+    //we have to make sure to call renderLoop to start the initial render and begin monitoring renderState
+    renderLoop()
 
     this.onCleanup(false) {
         //TODO I'm not sure what cleanup needs to be done now that there is no container element
