@@ -41,10 +41,10 @@ test {
 }
 
 dependencies {
-    compile 'org.apache.commons:commons-lang3:3.11'
-    compile 'commons-io:commons-io:2.8.0'
+    compile 'org.apache.commons:commons-lang3:3.12.0'
+    compile 'commons-io:commons-io:2.11.0'
     compile 'org.jsoup:jsoup:1.13.1'
-    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'com.google.guava:guava:31.0.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
