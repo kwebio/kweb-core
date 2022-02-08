@@ -21,7 +21,7 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.6.1'
+    ktor_version = '1.6.7'
 }
 
 group 'com.github.kwebio'
@@ -63,11 +63,11 @@ dependencies {
     compile "io.ktor:ktor-websockets:$ktor_version"
     compile "io.ktor:ktor-network-tls-certificates:$ktor_version"
 
-    compile "org.jetbrains.kotlin:kotlin-reflect:1.5.0-RC"
+    compile "org.jetbrains.kotlin:kotlin-reflect:1.6.0"
     compile 'io.mola.galimatias:galimatias:0.2.1'
 
-    compile 'io.github.microutils:kotlin-logging:2.0.3'
-    compile "org.reflections:reflections:0.9.12"
+    compile 'io.github.microutils:kotlin-logging:2.1.21'
+    compile "org.reflections:reflections:0.10.2"
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
