@@ -62,10 +62,14 @@ fun <T : Any?> ElementCreator<*>.render(
 
         previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
         renderState.set(RENDERING_NO_PENDING_CHANGE)
-        previousElementCreator.get()?.let { it ->
-            it.block(value.value)
-        }//TODO We may need to catch an error here. I don't know how this could ever get to a point where previousElementCreator.get() is null
-        //But, if it was ever null, I think Kweb would just outright fail here.
+        val elementCreator = previousElementCreator.get()
+        if (elementCreator != null) {
+            elementCreator.block(value.value)
+        } else {
+            logger.error("previousElementCreator.get() was null in eraseAndRender()")
+            //TODO This warning message could be made more helpful. I can't think of a situation where this could actually happen
+            //So I'm not sure what we need to say in this message.
+        }
         if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
             renderState.set(NOT_RENDERING)
         }
