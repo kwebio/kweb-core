@@ -324,9 +324,11 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
 
     //a wrapper made of 2 empty spans around the list of items that renderEach will draw
     //This is needed to be able to use insertBefore on the end span to add items to the end of the list.
+    val renderListStartClassId = "rLStart"
+    val renderListEndClassId = "rLEnd"
     val listFragment = RenderFragment(
-        span().classes("rLStart").id,//renderListStart
-        span().classes("rLEnd").id//renderListEnd
+        span().classes(renderListStartClassId).id,
+        span().classes(renderListEndClassId).id
     )
 
     fun insertItem(position: Int, newItem: ITEM,
