@@ -27,7 +27,7 @@ typealias Cleaner = () -> Unit
 open class ElementCreator<out PARENT_TYPE : Element>(
     val parent: PARENT_TYPE,
     val parentCreator: ElementCreator<*>? = parent.creator,
-    val position: Int? = null
+    val insertBefore: String? = null
 ) {
 
     companion object : KLogging()
@@ -55,35 +55,45 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
      *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
      */
-    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace : String? = null): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace: String? = null): Element {
 
         val mutAttributes = HashMap(attributes)
 
-        if (position != null && elementsCreatedCount == 2) {
-            logger.warn {
-                """
-                It's unwise to create multiple elements using the same ElementCreator when position is specified,
-                because each element will be added at the same position among its siblings, which will result in them
-                being inserted in reverse-order.
-                """.trimIndent().trim()
-            }
-        }
-
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
-        val createElementStatement = when(namespace) {
+        val createElementStatement = when (namespace) {
             null -> "document.createElement(tag);"
             else -> "document.createElementNS(\"${namespace}\", tag);"
         }
         when {
+            htmlDoc != null -> {
+                val parentElement = when (parent) {
+                    is HeadElement -> htmlDoc.head()
+                    is BodyElement -> htmlDoc.body()
+                    else -> htmlDoc.getElementById(parent.id)
+                } ?: error("Can't find element with id ${parent.id}")
+                val jsElement =
+                    if (insertBefore != null) {
+                        val ne = htmlDoc.createElement(tag)
+                        htmlDoc.getElementById(insertBefore).before(ne)
+                        ne
+                    } else {
+                        parentElement.appendElement(tag)
+                    }
+                for ((k, v) in mutAttributes) {
+                    jsElement.attr(k, v.content)
+                }
+            }
             parent.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
                 val createElementJs = """
+                    console.log("Creating new element")
                     let tag = {};
                     let attributes = {};
                     let myId = {};
                     let parentId = {};
-                    let position = {};
+                    let insertBefore = {};
+                    console.log("insertBefore = " + insertBefore)
                     let newEl = $createElementStatement
                     newEl.setAttribute("id", myId);
                     for (const key in attributes) {
@@ -92,39 +102,29 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         }
                     }
                     let parentElement = document.getElementById(parentId);
+                    let startNode = document.getElementById(insertBefore)
                     
-                    if (position > -1) {
-                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                    if (insertBefore !== undefined) {
+                        parentElement.insertBefore(newEl, startNode)
                     } else {
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                browser.callJsFunction(createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
-                        JsonPrimitive(parent.id), JsonPrimitive(position ?: -1))
-            }
-            htmlDoc != null -> {
-                val jsElement = when (parent) {
-                    is HeadElement -> {
-                        htmlDoc.head().appendElement(tag)
-                    }
-                    is BodyElement -> {
-                        htmlDoc.body().appendElement(tag)
-                    }
-                    else -> htmlDoc.getElementById(parent.id).appendElement(tag)
-                }!!
-                for ((k, v) in mutAttributes) {
-                    jsElement.attr(k, v.content)
-                }
+                browser.callJsFunction(
+                    createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
+                    JsonPrimitive(parent.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                )
             }
             else -> {
                 //The way I have written this function, instead of attributes.get(), we now use attributes[].
                 //language=JavaScript
                 val createElementJs = """
+                    console.log("Creating new element in other place")
                     let tag = {};
                     let attributes = {};
                     let myId = {};
                     let parentId = {};
-                    let position = {};
+                    let insertBefore = {};
                     let newEl = document.createElement(tag);
                     if (attributes["id"] === undefined) {
                         newEl.setAttribute("id", myId);
@@ -133,15 +133,18 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                             newEl.setAttribute(key, attributes[key]);
                     }
                     let parentElement = document.getElementById(parentId);
+                    let startNode = document.getElementById(insertBefore)
                     
-                    if (position == null) {
-                        parentElement.appendChild(newEl);
+                    if (insertBefore !== undefined) {
+                        parentElement.insertBefore(newEl, startNode)
                     } else {
-                        parentElement.insertBefore(newEl, parentElement.children[position]);
+                        parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                parent.callJsFunction(createElementJs, tag.json, JsonObject(mutAttributes), id.json,
-                        parent.id.json, (position ?: -1).json)
+                parent.callJsFunction(
+                    createElementJs, tag.json, JsonObject(mutAttributes), id.json,
+                    parent.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                )
             }
         }
         val newElement = Element(parent.browser, this, tag = tag, id = id)
