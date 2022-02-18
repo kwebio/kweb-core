@@ -86,7 +86,7 @@ class TodoApp {
         })
     }
 
-    private fun ElementCreator<*>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
+    private fun ElementCreator.pageBorderAndTitle(title: String, content: ElementCreator.() -> Unit) {
         div(fomantic.ui.main.container) {
             div(fomantic.column) {
                 div(fomantic.ui.vertical.segment) {
@@ -120,7 +120,7 @@ class TodoApp {
         return newListId
     }
 
-    private fun ElementCreator<*>.renderList(activeListKey: String) {
+    private fun ElementCreator.renderList(activeListKey: String) {
         //This line of code just inserts the List title under To do List on the webpage. I don't think this was intended
         //But, it's a copy of the line of code that used to be here. It doesn't seem to work on Master though
         //The title is an empty Kvar() when run on the master branch.
@@ -160,7 +160,7 @@ class TodoApp {
         todoLists[activeListKey]!!.todoItems.add(newItemText)
     }
 
-    private fun ElementCreator<DivElement>.renderRemoveButton(activeListKey : String, item: String) {
+    private fun ElementCreator.renderRemoveButton(activeListKey : String, item: String) {
         val button = button(fomantic.mini.ui.icon.button)
         button.new {
             i(fomantic.trash.icon)

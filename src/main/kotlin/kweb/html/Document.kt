@@ -24,7 +24,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     val body = BodyElement(receiver, "K_body")
 
-    fun body(new: (ElementCreator<BodyElement>.() -> Unit)? = null) : BodyElement {
+    fun body(new: (ElementCreator.() -> Unit)? = null) : BodyElement {
         if (new != null) {
             new(ElementCreator(parent = body, insertBefore = null))
         }
@@ -33,7 +33,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     val head = HeadElement(receiver, "K_head")
 
-    fun head(new: (ElementCreator<HeadElement>.() -> Unit)? = null) : HeadElement {
+    fun head(new: (ElementCreator.() -> Unit)? = null) : HeadElement {
         if (new != null) {
             new(ElementCreator(parent = head, insertBefore = null))
         }
