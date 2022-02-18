@@ -26,7 +26,7 @@ import kotlin.reflect.KClass
 @KWebDSL
 open class Element(
         override val browser: WebBrowser,
-        val creator: ElementCreator<*>?,
+        val creator: ElementCreator?,
         val tag: String? = null,
         @Volatile var id: String
 ) :
@@ -622,7 +622,7 @@ open class Element(
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
     insertBefore: String? = null,
-    receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE
+    receiver: ElementCreator.() -> RETURN_VALUE_TYPE
 )
         : RETURN_VALUE_TYPE {
     return receiver(
