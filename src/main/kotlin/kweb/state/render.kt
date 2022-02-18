@@ -28,12 +28,12 @@ import kotlin.collections.withIndex
 
 private val logger = KotlinLogging.logger {}
 
-fun <T : Any?> ElementCreator<*>.render(
+fun <T : Any?> ElementCreator.render(
     value: KVal<T>,
-    block: ElementCreator<Element>.(T) -> Unit
+    block: ElementCreator.(T) -> Unit
 ) : RenderFragment {
 
-    val previousElementCreator: AtomicReference<ElementCreator<Element>?> = AtomicReference(null)
+    val previousElementCreator: AtomicReference<ElementCreator> = AtomicReference(null)
 
     val renderState = AtomicReference(NOT_RENDERING)
 
@@ -60,7 +60,7 @@ fun <T : Any?> ElementCreator<*>.render(
     fun eraseAndRender() {
         eraseBetweenSpans()
 
-        previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
+        previousElementCreator.set(ElementCreator(this.parent, this, insertBefore = renderFragment.endId))
         renderState.set(RENDERING_NO_PENDING_CHANGE)
         val elementCreator = previousElementCreator.get()
         if (elementCreator != null) {
@@ -121,7 +121,7 @@ fun <T : Any?> ElementCreator<*>.render(
     return renderFragment
 }
 
-fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
+fun ElementCreator.closeOnElementCreatorCleanup(kv: KVal<*>) {
     this.onCleanup(withParent = true) {
         kv.close(CloseReason("Closed because a parent ElementCreator was cleaned up"))
     }
@@ -321,9 +321,9 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
      }
  }
 
-fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
+fun <ITEM : Any> ElementCreator.renderEach(
     observableList: ObservableList<ITEM>,
-    itemRenderer: ElementCreator<Element>.(ITEM) -> Unit
+    itemRenderer: ElementCreator.(ITEM) -> Unit
 ) {
 
     //a wrapper made of 2 empty spans around the list of items that renderEach will draw
@@ -343,7 +343,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
             renderHandles[position].renderFragment.startId
         }
         val itemElementCreator =
-            ElementCreator<Element>(this.parent, this, nextElementRenderMarkerStartId)
+            ElementCreator(this.parent, this, nextElementRenderMarkerStartId)
         val kvar = KVar(newItem)
         val newFragment = itemElementCreator.render(kvar) { item ->
             itemRenderer(item)
@@ -396,7 +396,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
         )
     }
 
-    ElementCreator<Element>(this.parent, this.parentCreator, insertBefore = listFragment.endId).apply {
+    ElementCreator(this.parent, this.parentCreator, insertBefore = listFragment.endId).apply {
 
         //These renderFragments must be kept in sync with the items in observableList that they're rendering
         val renderHandles = ArrayList<RenderHandle<ITEM>>()
