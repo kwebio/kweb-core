@@ -8,22 +8,22 @@ import kotlinx.serialization.json.JsonPrimitive
  *
  * // @sample table_example
  */
-fun ElementCreator<Element>.table(attributes: Map<String, JsonPrimitive> = attr) = TableElement(element("table", attributes))
+fun ElementCreator.table(attributes: Map<String, JsonPrimitive> = attr) = TableElement(element("table", attributes))
 open class TableElement(parent: Element) : Element(parent)
 
-fun ElementCreator<Element>.thead(attributes: Map<String, JsonPrimitive> = attr) = TheadElement(element("thead", attributes))
+fun ElementCreator.thead(attributes: Map<String, JsonPrimitive> = attr) = TheadElement(element("thead", attributes))
 open class TheadElement(parent: Element) : Element(parent)
 
-fun ElementCreator<Element>.th(attributes: Map<String, JsonPrimitive> = attr) = ThElement(element("th", attributes))
+fun ElementCreator.th(attributes: Map<String, JsonPrimitive> = attr) = ThElement(element("th", attributes))
 open class ThElement(parent: Element) : Element(parent)
 
-fun ElementCreator<Element>.tbody(attributes: Map<String, JsonPrimitive> = attr) = TbodyElement(element("tbody", attributes))
+fun ElementCreator.tbody(attributes: Map<String, JsonPrimitive> = attr) = TbodyElement(element("tbody", attributes))
 open class TbodyElement(parent: Element) : Element(parent)
 
-fun ElementCreator<Element>.tr(attributes: Map<String, JsonPrimitive> = attr) = TrElement(element("tr", attributes))
+fun ElementCreator.tr(attributes: Map<String, JsonPrimitive> = attr) = TrElement(element("tr", attributes))
 open class TrElement(parent: Element) : Element(parent)
 
-fun ElementCreator<Element>.td(attributes: Map<String, JsonPrimitive> = attr) = TdElement(element("td", attributes))
+fun ElementCreator.td(attributes: Map<String, JsonPrimitive> = attr) = TdElement(element("td", attributes))
 class TdElement(parent: Element) : Element(parent)
 
 private fun table_example() {

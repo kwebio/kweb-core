@@ -6,6 +6,7 @@ import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.plugins.jqueryCore.executeOnSelf
 import kweb.plugins.jqueryCore.jqueryCore
+import kweb.util.json
 import org.jsoup.nodes.Document
 
 /**
@@ -40,7 +41,7 @@ fun TableElement.sort() =
 fun tablesortSample() {
     Kweb(port = 4200, plugins = listOf(fomanticUIPlugin, tableSortPlugin), buildPage = {
         doc.body.new {
-            table(fomantic.ui.sortable.celled.striped.table.fixed).new {
+            val table = table(fomantic.ui.sortable.celled.striped.table.fixed).new {
                 thead().new {
                     tr().new {
                         th().text("Person")
@@ -49,7 +50,7 @@ fun tablesortSample() {
                     }
                 }
 
-                fun ElementCreator<TbodyElement>.tableRow(person: String, age: Int, net: Long) =
+                fun ElementCreator.tableRow(person: String, age: Int, net: Long) =
                         tr().new {
                             td().text(person)
                             td().text("$age")
@@ -63,8 +64,10 @@ fun tablesortSample() {
                     tableRow("Walt (ghost)", 118, 130_000_000_000)
                 }
                 // returning self so we don't have to create a val
-                parent
-            }.sort()
+                //parent
+            //TODO the "sort()" extension function wouldn't work unless I created a val and cast it to a TableElement
+            } as TableElement
+            table.sort()
             div(fomantic.ui.segment).text("""
                 Try sorting the age and net column.
                 
