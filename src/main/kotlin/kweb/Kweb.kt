@@ -237,6 +237,14 @@ class Kweb private constructor(
         }
     }
 
+    private suspend fun RemoteClientState?.ensureSessionExists(sock: DefaultWebSocketSession, sessionId: String) : RemoteClientState{
+        if(this == null) {
+            sock.close(CloseReason(CloseReason.Codes.NOT_CONSISTENT, "Session not found. Please reload"))
+            error("Unable to find server state corresponding to client id ${sessionId}")
+        }
+        return this
+    }
+
     private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
         val hello = Json.decodeFromString<Client2ServerMessage>((incoming.receive() as Text).readText())
 
@@ -244,8 +252,7 @@ class Kweb private constructor(
             error("First message from client isn't 'hello'")
         }
 
-        val remoteClientState = clientState.getIfPresent(hello.id)
-            ?: error("Unable to find server state corresponding to client id ${hello.id}")
+        val remoteClientState = clientState.getIfPresent(hello.id).ensureSessionExists(this, hello.id)
 
         assert(remoteClientState.clientConnection is Caching)
         logger.debug { "Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache" }
@@ -299,10 +306,25 @@ class Kweb private constructor(
         }
     }
 
+    fun determineClientPrefix(call:ApplicationCall) : String{
+        val kwClientPrefixCookieName = "kwebClientPrefix"
+        val currentPrefix = call.request.cookies.get(kwClientPrefixCookieName)
+        return if(currentPrefix != null) {
+            currentPrefix
+        }
+        else {
+            val newClientPrefix = createNonce(6)
+            call.response.cookies.append(kwClientPrefixCookieName, newClientPrefix)
+            newClientPrefix
+        }
+    }
+
     suspend fun respondKweb(call: ApplicationCall, buildPage: WebBrowser.() -> Unit) {
         val htmlDocument = HtmlDocumentSupplier.getTemplateCopy()
 
-        val kwebSessionId = createNonce()
+        // The client prefix allows to monitor the ressource usage (#Sessions, State Size) per User
+        val clientPrefix = determineClientPrefix(call)
+        val kwebSessionId = clientPrefix + ":" + createNonce()
 
         val remoteClientState = clientState.get(kwebSessionId) {
             RemoteClientState(id = kwebSessionId, clientConnection = Caching())
@@ -381,7 +403,9 @@ class Kweb private constructor(
             val bootstrapJS = BootstrapJs.hydrate(
                 kwebSessionId,
                 initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
-                functionCacheString
+                functionCacheString,
+                kwebConfig.clientOfflineBannerTextTemplate,
+                kwebConfig.clientOfflineBannerStyle
             )
 
             htmlDocument.head().appendElement("script")

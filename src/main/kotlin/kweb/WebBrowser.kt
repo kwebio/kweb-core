@@ -32,7 +32,7 @@ private val logger = KotlinLogging.logger {}
  * expressions and retrieve the result.
  */
 
-class WebBrowser(private val sessionId: String, val httpRequestInfo: HttpRequestInfo, val kweb: Kweb) {
+class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, val kweb: Kweb) {
 
     private val idCounter = AtomicInteger(0)
 

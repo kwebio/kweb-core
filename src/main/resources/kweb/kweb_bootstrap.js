@@ -9,6 +9,7 @@ let preWSMsgQueue = [];
 let socket;
 let bannerId = "CkU6vMWzW0Hbp"  // Random id to avoid conflicts
 let reconnectTimeout = 1000
+let reconnectCount = 0
 
 <!-- FUNCTION CACHE PLACEHOLDER -->
 
@@ -125,6 +126,10 @@ function connectWs() {
                 explanation = "without a reason specified";
             }
 
+            if(evt.code == 1007){ //Server did restart or load balancer shifted session to other backend
+                location.reload(true);
+            }
+
             console.error("WebSocket was closed", explanation, evt);
             websocketEstablished = false;
             reconnectLoopWs();
@@ -138,6 +143,7 @@ function connectWs() {
 
 function reconnectLoopWs() {
     reconnectTimeout *= 2
+
     createBannerIfNotExists();
 
     setTimeout(function() {
@@ -155,14 +161,28 @@ function reconnectLoopWs() {
 
 function createBannerIfNotExists() {
     var banner = document.getElementById(bannerId);
+
     if (typeof(banner) == 'undefined' || banner == null) {
         banner = document.createElement("h1");
         banner.id = bannerId
-        banner.innerHTML = `Connection to server lost, attempting to reconnect in ${reconnectTimeout/1000} seconds`;
-        banner.style = "background-color: yellow; text-align: center;";
+        banner.style = "-- BANNER STYLE PLACEHOLDER --";
+
+        msg = document.createElement("span")
+        msg.innerHTML = `-- BANNER MESSAGE PLACEHOLDER --`;
+
+        banner.append(msg)
+
+        reloadNow = document.createElement("button")
+        reloadNow.onclick = function (){
+            connectWs()
+        }
+        reloadNow.innerHTML = `Retry`
+
+        banner.append(reloadNow)
+
         document.body.insertBefore(banner,document.body.childNodes[0]);
     } else {
-        banner.innerHTML = `Connection to server lost, attempting to reconnect in ${reconnectTimeout/1000} seconds`;
+        banner.children[0].innerHTML = `-- BANNER MESSAGE PLACEHOLDER --`;
     }
 }
 
