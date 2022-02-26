@@ -72,6 +72,17 @@ abstract class KwebConfiguration {
         call.respondText("favicons not currently supported by kweb", status = HttpStatusCode.NotFound)
     }
 
+    /**
+     * Message that is shown to a disconnected client.
+     *
+     */
+    open val clientOfflineBannerTextTemplate: String = "Connection to server lost, attempting to reconnect in \${reconnectTimeout/1000} seconds"
+
+    /**
+     * Style of the message that is shown to a disconnected client
+     */
+    open val clientOfflineBannerStyle: String = "background-color: yellow; text-align: center;"
+
     protected object Accessor {
         private val env = System.getenv()
 
