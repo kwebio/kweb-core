@@ -117,13 +117,13 @@ open class Element(
             else -> "document.getElementById({}).setAttributeNS(\"$namespace\", {}, {});"
         }
         when {
+            htmlDoc != null -> {
+                htmlDoc.getElementById(this.id).attr(name, value.content)
+            }
             browser.isCatchingOutbound() != null -> {
                 callJsFunction(
                     setAttributeJavaScript,
                         id.json, name.json, value)
-            }
-            htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).attr(name, value.content)
             }
             else -> {
                 callJsFunction(
@@ -348,16 +348,47 @@ open class Element(
         return this
     }
 
-    fun removeChildAt(position: Int): Element {
+    fun removeChildrenBetweenSpans(startSpanId : String, endSpanId: String) : Element{
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
+                //TODO this will only run during initial page render, and is currently untested.
                 htmlDoc.getElementById(this.id).let { jsoupElement ->
-                    jsoupElement.children()[position]
+                    val startSpan = jsoupElement.getElementById(startSpanId)
+                    val endSpan = jsoupElement.getElementById(endSpanId)
+                    var nextSibling = startSpan.nextElementSibling()
+                    while (nextSibling != endSpan) {
+                        nextSibling.remove()
+                        nextSibling = startSpan.nextElementSibling()
+                    }
                 }
             }
             else -> {
                 //language=JavaScript
+                callJsFunction("""
+                    let startSpan = document.getElementById({});
+                    let endSpan = document.getElementById({});
+                    let nextSibling = startSpan.nextSibling;
+                    while(nextSibling != endSpan) {
+                        startSpan.parentNode.removeChild(startSpan.nextSibling);
+                        nextSibling = startSpan.nextSibling;
+                    }
+                """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId))
+            }
+        }
+        return this
+    }
+
+    fun removeChildAt(position: Int): Element {
+        val htmlDoc = browser.htmlDocument.get()
+        when {
+            htmlDoc != null -> {
+                htmlDoc
+                    .getElementById(this.id)
+                    .children()[position]
+                    .remove()
+            }
+            else -> {
                 callJsFunction("""
                         let element = document.getElementById({});
                         element.removeChild(element.children[{}]);
@@ -590,7 +621,7 @@ open class Element(
  * @param receiver A code block in which any created elements will be children of this element.
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
-    position: Int? = null,
+    insertBefore: String? = null,
     receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE
 )
         : RETURN_VALUE_TYPE {
@@ -603,7 +634,7 @@ fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
          *           [ElementCreator]
          * @Param position What position among the parent's children should the new element have?
          */
-        ElementCreator(parent = this, position = position)
+        ElementCreator(parent = this, insertBefore = insertBefore)
     )
 }
 

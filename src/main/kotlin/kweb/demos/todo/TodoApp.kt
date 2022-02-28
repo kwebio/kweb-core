@@ -16,7 +16,9 @@ class TodoApp {
 
     private val logger = KotlinLogging.logger {}
 
-    val state = ToDoState()
+    class TodoList(var title: String, val todoItems: ObservableList<String>)
+
+    private val todoLists = mutableMapOf<String, TodoList>()
     val plugins = listOf(fomanticUIPlugin)
     val server: Kweb
 
@@ -48,7 +50,9 @@ class TodoApp {
                                  * This will cause the page to switch to the newly created list automatically, and
                                  * without a page refresh.
                                  */
+                                //TODO: This doesn't seem to be triggering a page refresh for some reason. I have no idea why.
                                 url.value = "/lists/$newListId"
+
                             }
 
                             path("/lists/{id}") { params ->
@@ -59,12 +63,7 @@ class TodoApp {
                                     logger.info("Rendering list id $listId")
 
                                     try {
-                                        /** Here I use the same render mechanism to tie DOM
-                                        state to persistent state stored in Shoebox, a simple but powerful
-                                        key-value store with observer pattern support. */
-                                        val list: KVar<ToDoState.List> = toVar(state.lists, listId)
-
-                                        renderList(list)
+                                        renderList(listId)
                                     } catch (e: NoSuchElementException) {
                                         throw NotFoundException("Can't find list with id $listId")
                                     }
@@ -117,20 +116,24 @@ class TodoApp {
 
     private fun createNewList(): String {
         val newListId = generateNewUid()
-        state.lists[newListId] = ToDoState.List(newListId, "")
+        todoLists[newListId] = TodoList(newListId, ObservableList<String>(mutableListOf()))
         return newListId
     }
 
-    private fun ElementCreator<*>.renderList(list: KVar<ToDoState.List>) {
-        h3().text(list.property(ToDoState.List::title))
+    private fun ElementCreator<*>.renderList(activeListKey: String) {
+        //This line of code just inserts the List title under To do List on the webpage. I don't think this was intended
+        //But, it's a copy of the line of code that used to be here. It doesn't seem to work on Master though
+        //The title is an empty Kvar() when run on the master branch.
+        h3().text(todoLists[activeListKey]!!.title)
+
         div(fomantic.ui.middle.aligned.divided.list) {
-            renderEach(state.itemsByList(list.value.uid)) { item ->
+            renderEach(todoLists[activeListKey]!!.todoItems) { item ->
                 div(fomantic.item) {
                     div(fomantic.right.floated.content) {
-                        renderRemoveButton(item)
+                        renderRemoveButton(activeListKey, item)
                     }
                     div(fomantic.content) {
-                        text(item.map(ToDoState.Item::text))
+                        text(item)
                     }
                 }
             }
@@ -141,30 +144,29 @@ class TodoApp {
             // result, which is supplied to the event handler in event.retrieved.
             input.on(retrieveJs = input.valueJsExpression).keypress { event ->
                 if (event.code == "Enter") {
-                    handleAddItem(input, list, event.retrieved.jsonPrimitive.content)
+                    handleAddItem(activeListKey, input, event.retrieved.jsonPrimitive.content)
                 }
             }
             button(fomantic.ui.button).text("Add").apply {
                 on(retrieveJs = input.valueJsExpression).click { event ->
-                    handleAddItem(input, list, event.retrieved.jsonPrimitive.content)
+                    handleAddItem(activeListKey, input, event.retrieved.jsonPrimitive.content)
                 }
             }
         }
     }
 
-    private fun handleAddItem(input: InputElement, list: KVar<ToDoState.List>, newItemText: String) {
+    private fun handleAddItem(activeListKey: String, input: InputElement, newItemText: String) {
         input.setValue("")
-        val newItem = ToDoState.Item(generateNewUid(), System.currentTimeMillis(), list.value.uid, newItemText)
-        state.items[newItem.uid] = newItem
+        todoLists[activeListKey]!!.todoItems.add(newItemText)
     }
 
-    private fun ElementCreator<DivElement>.renderRemoveButton(item: KVar<ToDoState.Item>) {
+    private fun ElementCreator<DivElement>.renderRemoveButton(activeListKey : String, item: String) {
         val button = button(fomantic.mini.ui.icon.button)
         button.new {
             i(fomantic.trash.icon)
         }
         button.on.click {
-            state.items.remove(item.value.uid)
+            todoLists[activeListKey]!!.todoItems.remove(item)
         }
     }
 

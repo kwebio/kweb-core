@@ -1,13 +1,10 @@
 package kweb.html
 
-import io.ktor.routing.Routing
+import io.ktor.routing.*
 import kweb.plugins.KwebPlugin
-import kweb.util.random
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.DocumentType
 import org.jsoup.nodes.Element
-import java.util.*
-import kotlin.math.abs
 
 internal object HtmlDocumentSupplier {
     val appliedPlugins: Set<KwebPlugin> get() = mutableAppliedPlugins
@@ -28,6 +25,14 @@ internal object HtmlDocumentSupplier {
                     .attr("id", "K_head")
                     .attr("name", "viewport")
                     .attr("content", "width=device-width, initial-scale=1.0")
+
+                //these css ids denote spans used in render() and renderEach()
+                head.appendElement("style")
+                    .html(""".rmStart {display: none;}
+                            .rMEnd {display: none;}
+                            .rLStart {display: none}
+                            .rLEnd {display: none}
+                        """.trimMargin())
             }
 
             html.appendElement("body").let { body: Element ->

@@ -1,10 +1,9 @@
 package kweb.html.events
 
-import kweb.Kweb
-import kweb.WebBrowser
-import kweb.div
-import kweb.h1
+import kweb.*
 import kweb.plugins.fomanticUI.fomantic
+import kweb.state.KVar
+import kweb.state.render
 import kweb.util.KWebDSL
 
 @KWebDSL
@@ -14,7 +13,7 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
             callback()
         }
         val immediateJs = mutableListOf<String>()
-        for (jsFunction in caughtJsFunctions) {
+        for (jsFunction in caughtJsFunctions.first) {
             if (jsFunction.arguments.isNotEmpty()) {
                 val argStrings = mutableListOf<String>()
                 for (arg in jsFunction.arguments) {

@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath "com.github.ben-manes:gradle-versions-plugin:0.41.0"
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.36.0"
     }
 }
 
@@ -21,7 +21,7 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.6.1'
+    ktor_version = '1.6.7'
 }
 
 group 'com.github.kwebio'
@@ -31,7 +31,6 @@ repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
     maven { url 'https://plugins.gradle.org/m2' }
-    jcenter()
 }
 
 test {
@@ -43,15 +42,14 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.12.0'
     compile 'commons-io:commons-io:2.11.0'
     compile 'org.jsoup:jsoup:1.13.1'
-    compile 'com.github.kwebio:shoebox:0.4.35'
     implementation 'com.google.guava:guava:31.0.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.5.0"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.0"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-RC'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0'
     compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2'
 
@@ -78,10 +76,10 @@ dependencies {
     ///////////////////////////
     testCompile 'org.amshove.kluent:kluent:1.68'
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
-    testCompile 'ch.qos.logback:logback-classic:1.3.0-alpha12'
+    testCompile 'ch.qos.logback:logback-classic:1.3.0-alpha13'
     testCompile "io.github.bonigarcia:selenium-jupiter:3.3.5"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.7.0"
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     compile 'org.jsoup:jsoup:1.12.2'
 }
 

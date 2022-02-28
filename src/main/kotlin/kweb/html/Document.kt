@@ -26,7 +26,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     fun body(new: (ElementCreator<BodyElement>.() -> Unit)? = null) : BodyElement {
         if (new != null) {
-            new(ElementCreator(parent = body, position = null))
+            new(ElementCreator(parent = body, insertBefore = null))
         }
         return body
     }
@@ -35,7 +35,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     fun head(new: (ElementCreator<HeadElement>.() -> Unit)? = null) : HeadElement {
         if (new != null) {
-            new(ElementCreator(parent = head, position = null))
+            new(ElementCreator(parent = head, insertBefore = null))
         }
         return head
     }

@@ -21,6 +21,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.contracts.ExperimentalContracts
 import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
@@ -79,20 +80,22 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
      * The main use-case is recording changes made to the DOM within an onImmediate event callback so that these can be
      * replayed in the browser when an event is triggered without a server round-trip.
      */
-    fun catchOutbound(catchingType: CatcherType, f: () -> Unit): List<FunctionCall> {
+    fun <R> catchOutbound(catchingType: CatcherType, f: () -> R): Pair<List<FunctionCall>, R> {
         require(outboundMessageCatcher.get() == null) { "Can't nest withThreadLocalOutboundMessageCatcher()" }
 
         val jsList = ArrayList<FunctionCall>()
         outboundMessageCatcher.set(OutboundMessageCatcher(catchingType, jsList))
-        f()
+        val r = f()
         outboundMessageCatcher.set(null)
-        return jsList
+        return Pair(jsList, r)
     }
 
-    fun batch(catchingType: CatcherType, f: () -> Unit) {
-        val caughtMessages = catchOutbound(catchingType, f)
-        val server2ClientMessage = Server2ClientMessage(sessionId, caughtMessages)
+    // TODO: Maybe use contract callsInPlace on f
+    fun <R> batch(catchingType: CatcherType, f: () -> R) : R {
+        val catchOutboundRet = catchOutbound(catchingType, f)
+        val server2ClientMessage = Server2ClientMessage(sessionId, catchOutboundRet.first)
         kweb.sendMessage(sessionId, server2ClientMessage)
+        return catchOutboundRet.second
     }
 
     @Suppress("UNCHECKED_CAST")
