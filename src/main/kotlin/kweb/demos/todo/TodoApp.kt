@@ -50,9 +50,8 @@ class TodoApp {
                                  * This will cause the page to switch to the newly created list automatically, and
                                  * without a page refresh.
                                  */
-                                //TODO: This doesn't seem to be triggering a page refresh for some reason. I have no idea why.
-                                url.value = "/lists/$newListId"
 
+                                url.value = "/lists/$newListId"
                             }
 
                             path("/lists/{id}") { params ->
