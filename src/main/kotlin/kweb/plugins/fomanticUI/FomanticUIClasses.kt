@@ -856,6 +856,12 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val pushable: FomanticUIClasses
+        get() {
+            classes("pushable")
+            return this
+        }
+
     val pusher: FomanticUIClasses
         get() {
             classes("pusher")
