@@ -75,7 +75,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 val jsElement =
                     if (insertBefore != null) {
                         val ne = htmlDoc.createElement(tag)
-                        htmlDoc.getElementById(insertBefore).before(ne)
+                        htmlDoc.getElementById(insertBefore)!!.before(ne)
                         ne
                     } else {
                         parentElement.appendElement(tag)

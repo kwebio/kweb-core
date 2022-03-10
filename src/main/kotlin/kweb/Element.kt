@@ -118,7 +118,7 @@ open class Element(
         }
         when {
             htmlDoc != null -> {
-                htmlDoc.getElementById(this.id).attr(name, value.content)
+                htmlDoc.getElementById(this.id)!!.attr(name, value.content)
             }
             browser.isCatchingOutbound() != null -> {
                 callJsFunction(
@@ -181,7 +181,7 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                htmlDoc.getElementById(id).removeAttr(name)
+                htmlDoc.getElementById(id)!!.removeAttr(name)
             }
             else -> {
                 callJsFunction("document.getElementById({}).removeAttribute({})", id.json, JsonPrimitive(name))
@@ -199,7 +199,7 @@ open class Element(
         val htmlDoc = browser.htmlDocument.get()
         when {
             htmlDoc != null -> {
-                val thisEl = htmlDoc.getElementById(this.id)
+                val thisEl = htmlDoc.getElementById(this.id)!!
                 thisEl.html(html)
             }
             else -> {
@@ -329,7 +329,7 @@ open class Element(
         when {
             htmlDoc != null -> {
                 val jsoupElement = htmlDoc.getElementById(this.id)
-                    jsoupElement.children().remove()
+                    jsoupElement!!.children().remove()
             }
             else -> {
                 //language=JavaScript
@@ -354,12 +354,12 @@ open class Element(
             htmlDoc != null -> {
                 //TODO this will only run during initial page render, and is currently untested.
                 htmlDoc.getElementById(this.id).let { jsoupElement ->
-                    val startSpan = jsoupElement.getElementById(startSpanId)
-                    val endSpan = jsoupElement.getElementById(endSpanId)
-                    var nextSibling = startSpan.nextElementSibling()
+                    val startSpan = jsoupElement!!.getElementById(startSpanId)
+                    val endSpan = jsoupElement!!.getElementById(endSpanId)
+                    var nextSibling = startSpan!!.nextElementSibling()
                     while (nextSibling != endSpan) {
-                        nextSibling.remove()
-                        nextSibling = startSpan.nextElementSibling()
+                        nextSibling!!.remove()
+                        nextSibling = startSpan!!.nextElementSibling()
                     }
                 }
             }
@@ -384,7 +384,7 @@ open class Element(
         when {
             htmlDoc != null -> {
                 htmlDoc
-                    .getElementById(this.id)
+                    .getElementById(this.id)!!
                     .children()[position]
                     .remove()
             }
@@ -412,7 +412,7 @@ open class Element(
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
-                element.text(value)
+                element!!.text(value)
             }
             else -> {
                 callJsFunction(setTextJS, id.json, JsonPrimitive(value))
@@ -459,7 +459,7 @@ open class Element(
             }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
-                element.appendText(value)
+                element!!.appendText(value)
             }
             else -> {
                 callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
