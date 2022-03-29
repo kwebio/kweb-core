@@ -8,7 +8,7 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 let bannerId = "CkU6vMWzW0Hbp"  // Random id to avoid conflicts
-let reconnectTimeout = 1000
+let reconnectTimeout = 2000
 let reconnectCount = 0
 
 <!-- FUNCTION CACHE PLACEHOLDER -->
@@ -110,6 +110,7 @@ function connectWs() {
             while (preWSMsgQueue.length > 0) {
                 sendMessage(preWSMsgQueue.shift());
             }
+            reconnectTimeout = 2000
         };
         socket.onmessage = function (event) {
             var msg = JSON.parse(event.data);
@@ -144,7 +145,8 @@ function connectWs() {
 function reconnectLoopWs() {
     reconnectTimeout *= 2
 
-    createBannerIfNotExists();
+    //createBannerIfNotExists();
+    showReconnectToast();
 
     setTimeout(function() {
         if (websocketEstablished == false) {
@@ -157,6 +159,15 @@ function reconnectLoopWs() {
             }
         }
     }, reconnectTimeout);
+}
+
+function showReconnectToast() {
+    $('body')
+        .toast({
+            message: `-- TOAST MESSAGE PLACEHOLDER --`,
+            duration: reconnectTimeout,
+            position: 'bottom center'
+        })
 }
 
 function createBannerIfNotExists() {

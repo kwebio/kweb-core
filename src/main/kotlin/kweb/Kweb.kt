@@ -404,8 +404,7 @@ class Kweb private constructor(
                 kwebSessionId,
                 initialMessages.joinToString(separator = "\n") { "handleInboundMessage($it);" },
                 functionCacheString,
-                kwebConfig.clientOfflineBannerTextTemplate,
-                kwebConfig.clientOfflineBannerStyle
+                kwebConfig.clientOfflineToastTextTemplate
             )
 
             htmlDocument.head().appendElement("script")
