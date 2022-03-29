@@ -161,12 +161,18 @@ function reconnectLoopWs() {
 }
 
 function showReconnectToast() {
-    $('body')
-        .toast({
-            message: `-- TOAST MESSAGE PLACEHOLDER --`,
-            duration: reconnectTimeout,
-            position: 'bottom center'
-        })
+    Toastify({
+        text: `-- TOAST MESSAGE PLACEHOLDER --`,
+        duration: reconnectTimeout,
+        close: false,
+        gravity: "bottom",
+        position: "center",
+        stopOnFocus: false,
+        style: {
+            color: "red",
+            background: "white"
+        }
+    }).showToast();
 }
 
 function sendMessage(msg) {

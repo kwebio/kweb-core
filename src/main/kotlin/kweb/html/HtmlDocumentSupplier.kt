@@ -33,17 +33,25 @@ internal object HtmlDocumentSupplier {
                             .rLStart {display: none}
                             .rLEnd {display: none}
                         """.trimMargin())
+
+
+                head.appendElement("link")
+                    .attr("rel", "stylesheet")
+                    .attr("href", "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css")
             }
 
             html.appendElement("body").let { body: Element ->
 
                 body.attr("onload", "buildPage()")
                 body.attr("id", "K_body")
+
                 body.appendElement("noscript")
                     .html(
                         """
                             | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
                             | requires JavaScript to be enabled.""".trimMargin())
+                body.appendElement("script")
+                    .attr("src", "https://cdn.jsdelivr.net/npm/toastify-js")
             }
         }
 
