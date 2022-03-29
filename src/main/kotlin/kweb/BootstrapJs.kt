@@ -6,7 +6,8 @@ import org.apache.commons.io.IOUtils
 object BootstrapJs {
     private const val clientIdToken = "--CLIENT-ID-PLACEHOLDER--"
     private const val buildPageToken = "<!-- BUILD PAGE PAYLOAD PLACEHOLDER -->"
-    private const val functionCacheToken = "<!-- FUNCTION CACHE PLACEHOLDER -->"
+    private const val functionCacheToken = "// FUNCTION CACHE PLACEHOLDER //"
+    //private const val functionCacheToken = "<!-- FUNCTION CACHE PLACEHOLDER -->"
     private const val offlineToastMessage = "-- TOAST MESSAGE PLACEHOLDER --"
 
     private val template: Template by lazy {

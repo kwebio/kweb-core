@@ -11,7 +11,7 @@ let bannerId = "CkU6vMWzW0Hbp"  // Random id to avoid conflicts
 let reconnectTimeout = 2000
 let reconnectCount = 0
 
-<!-- FUNCTION CACHE PLACEHOLDER -->
+// FUNCTION CACHE PLACEHOLDER //
 
 function handleInboundMessage(msg) {
     console.debug("")
@@ -145,7 +145,6 @@ function connectWs() {
 function reconnectLoopWs() {
     reconnectTimeout *= 2
 
-    //createBannerIfNotExists();
     showReconnectToast();
 
     setTimeout(function() {
@@ -168,33 +167,6 @@ function showReconnectToast() {
             duration: reconnectTimeout,
             position: 'bottom center'
         })
-}
-
-function createBannerIfNotExists() {
-    var banner = document.getElementById(bannerId);
-
-    if (typeof(banner) == 'undefined' || banner == null) {
-        banner = document.createElement("h1");
-        banner.id = bannerId
-        banner.style = "-- BANNER STYLE PLACEHOLDER --";
-
-        msg = document.createElement("span")
-        msg.innerHTML = `-- BANNER MESSAGE PLACEHOLDER --`;
-
-        banner.append(msg)
-
-        reloadNow = document.createElement("button")
-        reloadNow.onclick = function (){
-            connectWs()
-        }
-        reloadNow.innerHTML = `Retry`
-
-        banner.append(reloadNow)
-
-        document.body.insertBefore(banner,document.body.childNodes[0]);
-    } else {
-        banner.children[0].innerHTML = `-- BANNER MESSAGE PLACEHOLDER --`;
-    }
 }
 
 function sendMessage(msg) {
