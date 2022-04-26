@@ -20,7 +20,7 @@ fun main() {
     doc.body {
       h1().text("Hello World!")
     }
- }
+  }
 }
 ```
 
