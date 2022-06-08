@@ -28,7 +28,7 @@ internal object HtmlDocumentSupplier {
 
                 //these css ids denote spans used in render() and renderEach()
                 head.appendElement("style")
-                    .html(""".rmStart {display: none;}
+                    .html(""".rMStart {display: none;}
                             .rMEnd {display: none;}
                             .rLStart {display: none}
                             .rLEnd {display: none}
