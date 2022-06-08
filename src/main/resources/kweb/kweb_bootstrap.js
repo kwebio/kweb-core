@@ -9,7 +9,7 @@ let preWSMsgQueue = [];
 let socket;
 let bannerId = "CkU6vMWzW0Hbp"  // Random id to avoid conflicts
 let reconnectTimeout = 2000
-let reconnectCount = 0
+//let reconnectCount = 0
 
 // FUNCTION CACHE PLACEHOLDER //
 
@@ -133,7 +133,9 @@ function connectWs() {
 
             console.error("WebSocket was closed", explanation, evt);
             websocketEstablished = false;
-            reconnectLoopWs();
+            setTimeout(() => {
+                reconnectLoopWs()
+            }, reconnectTimeout)
         };
         socket.onerror = function (evt) {
             console.error("WebSocket error", evt);
