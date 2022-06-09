@@ -8,10 +8,10 @@ let websocketEstablished = false;
 let preWSMsgQueue = [];
 let socket;
 let bannerId = "CkU6vMWzW0Hbp"  // Random id to avoid conflicts
-let reconnectTimeout = 1000
-let reconnectCount = 0
+let reconnectTimeout = 2000
+//let reconnectCount = 0
 
-<!-- FUNCTION CACHE PLACEHOLDER -->
+// FUNCTION CACHE PLACEHOLDER //
 
 function handleInboundMessage(msg) {
     console.debug("")
@@ -110,6 +110,7 @@ function connectWs() {
             while (preWSMsgQueue.length > 0) {
                 sendMessage(preWSMsgQueue.shift());
             }
+            reconnectTimeout = 2000
         };
         socket.onmessage = function (event) {
             var msg = JSON.parse(event.data);
@@ -132,7 +133,9 @@ function connectWs() {
 
             console.error("WebSocket was closed", explanation, evt);
             websocketEstablished = false;
-            reconnectLoopWs();
+            setTimeout(() => {
+                reconnectLoopWs()
+            }, reconnectTimeout)
         };
         socket.onerror = function (evt) {
             console.error("WebSocket error", evt);
@@ -144,7 +147,7 @@ function connectWs() {
 function reconnectLoopWs() {
     reconnectTimeout *= 2
 
-    createBannerIfNotExists();
+    showReconnectToast();
 
     setTimeout(function() {
         if (websocketEstablished == false) {
@@ -159,31 +162,19 @@ function reconnectLoopWs() {
     }, reconnectTimeout);
 }
 
-function createBannerIfNotExists() {
-    var banner = document.getElementById(bannerId);
-
-    if (typeof(banner) == 'undefined' || banner == null) {
-        banner = document.createElement("h1");
-        banner.id = bannerId
-        banner.style = "-- BANNER STYLE PLACEHOLDER --";
-
-        msg = document.createElement("span")
-        msg.innerHTML = `-- BANNER MESSAGE PLACEHOLDER --`;
-
-        banner.append(msg)
-
-        reloadNow = document.createElement("button")
-        reloadNow.onclick = function (){
-            connectWs()
+function showReconnectToast() {
+    Toastify({
+        text: `-- TOAST MESSAGE PLACEHOLDER --`,
+        duration: reconnectTimeout,
+        close: false,
+        gravity: "bottom",
+        position: "center",
+        stopOnFocus: false,
+        style: {
+            color: "#ff0033",
+            background: "white"
         }
-        reloadNow.innerHTML = `Retry`
-
-        banner.append(reloadNow)
-
-        document.body.insertBefore(banner,document.body.childNodes[0]);
-    } else {
-        banner.children[0].innerHTML = `-- BANNER MESSAGE PLACEHOLDER --`;
-    }
+    }).showToast();
 }
 
 function sendMessage(msg) {

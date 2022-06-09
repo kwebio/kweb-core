@@ -27,6 +27,12 @@ import kotlin.collections.withIndex
  */
 
 private val logger = KotlinLogging.logger {}
+object RenderSpanNames{
+    const val startMarkerClassName = "rMStart"
+    const val endMarkerClassName = "rMEnd"
+    const val listStartMarkerClassName = "rLStart"
+    const val listEndMarkerClassName = "rLEnd"
+}
 
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
@@ -37,18 +43,16 @@ fun <T : Any?> ElementCreator<*>.render(
 
     val renderState = AtomicReference(NOT_RENDERING)
 
-    val renderMarkerStartClassId = "rMStart"
-    val renderMarkerEndClassId = "rMEnd"
     //TODO this could possibly be improved
     val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
         parent.browser.batch(WebBrowser.CatcherType.RENDER) {
-            val startSpan = span().classes(renderMarkerStartClassId)
-            val endSpan = span().classes(renderMarkerEndClassId)
+            val startSpan = span().classes(RenderSpanNames.startMarkerClassName)
+            val endSpan = span().classes(RenderSpanNames.endMarkerClassName)
             RenderFragment(startSpan.id, endSpan.id)
         }
     } else {
-        val startSpan = span().classes(renderMarkerStartClassId)
-        val endSpan = span().classes(renderMarkerEndClassId)
+        val startSpan = span().classes(RenderSpanNames.startMarkerClassName)
+        val endSpan = span().classes(RenderSpanNames.endMarkerClassName)
         RenderFragment(startSpan.id, endSpan.id)
     }
 
@@ -328,11 +332,9 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
 
     //a wrapper made of 2 empty spans around the list of items that renderEach will draw
     //This is needed to be able to use insertBefore on the end span to add items to the end of the list.
-    val renderListStartClassId = "rLStart"
-    val renderListEndClassId = "rLEnd"
     val listFragment = RenderFragment(
-        span().classes(renderListStartClassId).id,
-        span().classes(renderListEndClassId).id
+        span().classes(RenderSpanNames.listStartMarkerClassName).id,
+        span().classes(RenderSpanNames.listEndMarkerClassName).id
     )
 
     fun insertItem(position: Int, newItem: ITEM,
