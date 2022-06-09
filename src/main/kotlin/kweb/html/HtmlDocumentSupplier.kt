@@ -2,6 +2,7 @@ package kweb.html
 
 import io.ktor.routing.*
 import kweb.plugins.KwebPlugin
+import kweb.state.RenderSpanNames
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.DocumentType
 import org.jsoup.nodes.Element
@@ -29,9 +30,10 @@ internal object HtmlDocumentSupplier {
                 //these css ids denote spans used in render() and renderEach()
                 head.appendElement("style")
                     .html(""".rMStart {display: none;}
-                            .rMEnd {display: none;}
-                            .rLStart {display: none}
-                            .rLEnd {display: none}
+                            .${RenderSpanNames.startMarkerClassName} {display: none;}
+                            .${RenderSpanNames.endMarkerClassName} {display: none;}
+                            .${RenderSpanNames.listStartMarkerClassName} {display: none}
+                            .${RenderSpanNames.listEndMarkerClassName} {display: none}
                         """.trimMargin())
 
 

@@ -171,7 +171,7 @@ function showReconnectToast() {
         position: "center",
         stopOnFocus: false,
         style: {
-            color: "red",
+            color: "#ff0033",
             background: "white"
         }
     }).showToast();
