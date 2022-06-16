@@ -198,4 +198,12 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     fun text(text: KVal<String>) {
         this.parent.text(text)
     }
+
+    fun attr(key: String, value: String) {
+        this.parent.setAttribute(key, value)
+    }
+
+    fun classes(vararg classes: String) {
+        this.parent.classes(*classes)
+    }
 }

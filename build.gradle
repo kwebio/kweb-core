@@ -10,9 +10,9 @@ buildscript {
 
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version '1.6.10'
+    id "org.jetbrains.kotlin.jvm" version '1.7.0'
     id 'maven'
-    id 'org.jetbrains.dokka' version '1.5.0'
+    id 'org.jetbrains.dokka' version '1.6.21'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.github.ben-manes.versions" version "0.41.0"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
@@ -21,11 +21,11 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.6.7'
+    ktor_version = '2.0.2'
 }
 
 group 'com.github.kwebio'
-version '0.11.3'
+version '0.11.4'
 
 repositories {
     mavenCentral()
