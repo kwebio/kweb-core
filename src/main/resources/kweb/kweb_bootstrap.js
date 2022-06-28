@@ -241,12 +241,12 @@ function get_diff_changes(htmlInputElement) {
     let shorterStringLength = (oldString.length > newString.length) ? newString.length : oldString.length;
 
     for (let i = 0; i < shorterStringLength; i++) {
-        if (oldString.charAt(i) == newString.charAt(i)) {
+        if (oldString.charAt(i) === newString.charAt(i)) {
             commonPrefixEnd = i+1;
         } else break;
     }
     for(let offset = 0; offset < shorterStringLength - commonPrefixEnd; offset++) {
-        if (oldString.charAt(oldStringLastIndex - offset) == newString.charAt(newStringLastIndex - offset)) {
+        if (oldString.charAt(oldStringLastIndex - offset) === newString.charAt(newStringLastIndex - offset)) {
             commonPostfixOffset = offset+1;
         } else break;
     }
