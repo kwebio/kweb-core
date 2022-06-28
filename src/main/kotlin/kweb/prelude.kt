@@ -325,7 +325,8 @@ fun ElementCreator<Element>.meta(
     }
 }
 
-open class InputElement(override val element: Element, initialValue: String? = null) : ValueElement(element, initialValue = initialValue) {
+open class InputElement(override val element: Element, initialValue: String? = null) :
+    ValueElement(element, initialValue = initialValue) {
     fun select() = element.callJsFunction("document.getElementById({}).select();", id.json)
 
     fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
@@ -336,7 +337,8 @@ open class InputElement(override val element: Element, initialValue: String? = n
             id.json, ro.json)
 
     fun checked(initialValue : Boolean = false) : KVar<Boolean> {
-        val kv = bind(accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change", initialValue = JsonPrimitive(initialValue))
+        val kv = bind(accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change",
+            initialValue = JsonPrimitive(initialValue))
         return kv.map(object : ReversibleFunction<JsonElement, Boolean>("") {
             override fun invoke(from: JsonElement) = from.jsonPrimitive.boolean
 
@@ -390,7 +392,8 @@ fun ElementCreator<Element>.textArea(
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
  */
-class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
+class SelectElement(parent: Element, initialValue: String? = null) :
+    ValueElement(parent, kvarUpdateEvent = "change", initialValue = initialValue)
 
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
@@ -430,7 +433,7 @@ private fun select_sample() {
 /**
  * https://www.w3schools.com/tags/tag_textarea.asp
  */
-open class TextAreaElement(parent: Element) : ValueElement(parent) {
+open class TextAreaElement(parent: Element, initialValue: String? = null) : ValueElement(parent, initialValue = initialValue) {
     //TODO ValueElement already provides a way to get the value of an element. I'm not sure why this function is here.
     //But, something needs to be done with it.
     override val read get() = TextAreaElementReader(this)
@@ -554,7 +557,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     }
 
     fun setValue(toBind: KVar<String>, updateOn: String = "input") {
-        setValue(toBind as KVal<String>)
+        //setValue(toBind as KVal<String>)
 
         on(
             //language=JavaScript
@@ -566,12 +569,6 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
                 val diffDataJson = it.retrieved
                 val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
                 toBind.value = applyDiff(toBind.value, diffData)
-                /*println("toBind.value = ${toBind.value}")
-                println("diffData = ${diffData}")
-                println("diffDataJson = ${diffDataJson}")
-                toBind.value = applyDiff(toBind.value, diffData)
-                println("toBind new value: ${toBind.value}")
-                println("---------------------------------")*/
             }
         }
     }
