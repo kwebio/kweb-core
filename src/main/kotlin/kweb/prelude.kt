@@ -325,7 +325,7 @@ fun ElementCreator<Element>.meta(
     }
 }
 
-open class InputElement(override val element: Element) : ValueElement(element) {
+open class InputElement(override val element: Element, initialValue: String? = null) : ValueElement(element, initialValue = initialValue) {
     fun select() = element.callJsFunction("document.getElementById({}).select();", id.json)
 
     fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
@@ -365,7 +365,7 @@ fun ElementCreator<Element>.input(
                 .set("value", JsonPrimitive(initialValue))
                 .set("placeholder", JsonPrimitive(placeholder))
                 .set("size", JsonPrimitive(size))
-        )
+        ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(parent = it, insertBefore = null))
     }
@@ -476,7 +476,8 @@ fun ElementCreator<Element>.label(
  *
  * @param kvarUpdateEvent The [value] of this element will update on this event, defaults to [input](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event)
  */
-abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
+abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input",
+                            val initialValue: String? = null) : Element(element) {
     val valueJsExpression : String by lazy { "document.getElementById(\"$id\").value" }
 
     suspend fun getValue():String = element.
@@ -514,7 +515,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
         get() {
             synchronized(this) {
                 if (_valueKvar == null) {
-                    value = KVar("")
+                    value = KVar(initialValue ?: "")
                 }
             }
             return _valueKvar!!
@@ -534,7 +535,8 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     data class DiffData(val prefixEndIndex: Int, val postfixOffset: Int, val diffString: String)
 
     private fun applyDiff(oldString: String, diffData: DiffData) : String {
-        return when {
+
+        val newString = when {
             diffData.postfixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
                 // repeated when you append text to the beginning of the text or the end of the text
                 oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString
@@ -547,6 +549,8 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
                         oldString.substring(oldString.length - diffData.postfixOffset)
             }
         }
+        println("applied String = ${newString}")
+        return newString
     }
 
     fun setValue(toBind: KVar<String>, updateOn: String = "input") {
@@ -562,6 +566,12 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
                 val diffDataJson = it.retrieved
                 val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
                 toBind.value = applyDiff(toBind.value, diffData)
+                /*println("toBind.value = ${toBind.value}")
+                println("diffData = ${diffData}")
+                println("diffDataJson = ${diffDataJson}")
+                toBind.value = applyDiff(toBind.value, diffData)
+                println("toBind new value: ${toBind.value}")
+                println("---------------------------------")*/
             }
         }
     }
