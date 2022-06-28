@@ -78,15 +78,8 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     fun removeTextFromMiddle() {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
-        inputField.sendKeys(Keys.HOME)
-        for (i in 0 until 4) {
-            inputField.sendKeys(Keys.ARROW_LEFT)
-        }
-        for (i in 0 until 6) {
-            inputField.sendKeys(Keys.BACK_SPACE)
-        }
-
-        inputField.getAttribute("value").shouldBe("Lazy Fox")
+        inputField.sendKeys("${Keys.LEFT}${Keys.BACK_SPACE}${Keys.BACK_SPACE}")
+        inputField.getAttribute("value").shouldBe("Lazy Brown x")
     }
 
     @Test
