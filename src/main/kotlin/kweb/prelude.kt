@@ -525,7 +525,7 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
         }
         set(v) {
             if (_valueKvar != null) error("`value` may only be set once, and cannot be set after it has been retrieved")
-            setValue(v, updateOn = kvarUpdateEvent)
+            updateKVar(v, updateOn = kvarUpdateEvent)
             _valueKvar = v
         }
 
@@ -552,13 +552,10 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
                         oldString.substring(oldString.length - diffData.postfixOffset)
             }
         }
-        println("applied String = ${newString}")
         return newString
     }
 
-    fun setValue(toBind: KVar<String>, updateOn: String = "input") {
-        //setValue(toBind as KVal<String>)
-
+    private fun updateKVar(toBind: KVar<String>, updateOn: String = "input") {
         on(
             //language=JavaScript
             retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))")
