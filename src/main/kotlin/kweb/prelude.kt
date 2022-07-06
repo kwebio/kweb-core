@@ -325,7 +325,8 @@ fun ElementCreator<Element>.meta(
     }
 }
 
-open class InputElement(override val element: Element) : ValueElement(element) {
+open class InputElement(override val element: Element, initialValue: String? = null) :
+    ValueElement(element, initialValue = initialValue) {
     fun select() = element.callJsFunction("document.getElementById({}).select();", id.json)
 
     fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
@@ -336,7 +337,8 @@ open class InputElement(override val element: Element) : ValueElement(element) {
             id.json, ro.json)
 
     fun checked(initialValue : Boolean = false) : KVar<Boolean> {
-        val kv = bind(accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change", initialValue = JsonPrimitive(initialValue))
+        val kv = bind(accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change",
+            initialValue = JsonPrimitive(initialValue))
         return kv.map(object : ReversibleFunction<JsonElement, Boolean>("") {
             override fun invoke(from: JsonElement) = from.jsonPrimitive.boolean
 
@@ -365,7 +367,7 @@ fun ElementCreator<Element>.input(
                 .set("value", JsonPrimitive(initialValue))
                 .set("placeholder", JsonPrimitive(placeholder))
                 .set("size", JsonPrimitive(size))
-        )
+        ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(parent = it, insertBefore = null))
     }
@@ -390,7 +392,8 @@ fun ElementCreator<Element>.textArea(
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
  */
-class SelectElement(parent: Element) : ValueElement(parent, kvarUpdateEvent = "change")
+class SelectElement(parent: Element, initialValue: String? = null) :
+    ValueElement(parent, kvarUpdateEvent = "change", initialValue = initialValue)
 
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
@@ -430,7 +433,7 @@ private fun select_sample() {
 /**
  * https://www.w3schools.com/tags/tag_textarea.asp
  */
-open class TextAreaElement(parent: Element) : ValueElement(parent) {
+open class TextAreaElement(parent: Element, initialValue: String? = null) : ValueElement(parent, initialValue = initialValue) {
     //TODO ValueElement already provides a way to get the value of an element. I'm not sure why this function is here.
     //But, something needs to be done with it.
     override val read get() = TextAreaElementReader(this)
@@ -476,7 +479,8 @@ fun ElementCreator<Element>.label(
  *
  * @param kvarUpdateEvent The [value] of this element will update on this event, defaults to [input](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event)
  */
-abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input") : Element(element) {
+abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input",
+                            val initialValue: String? = null) : Element(element) {
     val valueJsExpression : String by lazy { "document.getElementById(\"$id\").value" }
 
     suspend fun getValue():String = element.
@@ -514,14 +518,14 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
         get() {
             synchronized(this) {
                 if (_valueKvar == null) {
-                    value = KVar("")
+                    value = KVar(initialValue ?: "")
                 }
             }
             return _valueKvar!!
         }
         set(v) {
             if (_valueKvar != null) error("`value` may only be set once, and cannot be set after it has been retrieved")
-            setValue(v, updateOn = kvarUpdateEvent)
+            updateKVar(v, updateOn = kvarUpdateEvent)
             _valueKvar = v
         }
 
@@ -534,7 +538,8 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     data class DiffData(val prefixEndIndex: Int, val postfixOffset: Int, val diffString: String)
 
     private fun applyDiff(oldString: String, diffData: DiffData) : String {
-        return when {
+
+        val newString = when {
             diffData.postfixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
                 // repeated when you append text to the beginning of the text or the end of the text
                 oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString
@@ -547,11 +552,10 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
                         oldString.substring(oldString.length - diffData.postfixOffset)
             }
         }
+        return newString
     }
 
-    fun setValue(toBind: KVar<String>, updateOn: String = "input") {
-        setValue(toBind as KVal<String>)
-
+    private fun updateKVar(toBind: KVar<String>, updateOn: String = "input") {
         on(
             //language=JavaScript
             retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))")

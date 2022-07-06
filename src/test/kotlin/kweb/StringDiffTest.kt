@@ -1,5 +1,4 @@
 package kweb
-/*
 import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumExtension
 import io.kotlintest.shouldBe
@@ -20,7 +19,6 @@ import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumExtension::class)
 class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
-//class StringDiffTest(private var driver: WebDriver) {
 
     init {
 		//ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
@@ -48,61 +46,40 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     fun appendTextToBeginning() {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
-        inputField.sendKeys(Keys.HOME)
-        inputField.sendKeys("Super ")
-        inputField.sendKeys(Keys.ENTER)
-        stringDiffTestApp.getValue().shouldBe("Super Lazy Brown Fox")
+        inputField.sendKeys("${Keys.HOME}Super ")
+        inputField.getAttribute("value").shouldBe("Super Lazy Brown Fox")
     }
 
     @Test
     fun appendTextToMiddle() {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
-        inputField.sendKeys(Keys.HOME)
-        for (i in 0 until 5) {
-            inputField.sendKeys(Keys.ARROW_RIGHT)
-            Thread.sleep(200);
-        }
-        inputField.sendKeys("Reddish ")
-        inputField.sendKeys(Keys.ENTER)
-        stringDiffTestApp.getValue().shouldBe("Lazy Reddish Brown Fox")
+        inputField.sendKeys("${Keys.LEFT}${Keys.LEFT}1234")
+        inputField.getAttribute("value").shouldBe("Lazy Brown F1234ox")
     }
 
     @Test
     fun appendTextToEnd() {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
-        inputField.sendKeys(Keys.END)
         inputField.sendKeys(" Jumped")
-        inputField.sendKeys(Keys.ENTER)
-        stringDiffTestApp.getValue().shouldBe("Lazy Brown Fox Jumped")
+        inputField.getAttribute("value").shouldBe("Lazy Brown Fox Jumped")
     }
 
     @Test
     fun removeTextFromBeginning() {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
-        inputField.sendKeys(Keys.HOME)
-        for (i in 0 until 5) {
-            inputField.sendKeys(Keys.DELETE)
-        }
-        inputField.sendKeys(Keys.ENTER)
-        stringDiffTestApp.getValue().shouldBe("Brown Fox")
+        inputField.sendKeys("${Keys.HOME}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}")
+        inputField.getAttribute("value").shouldBe("Brown Fox")
     }
 
     @Test
     fun removeTextFromMiddle() {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
-        inputField.sendKeys(Keys.HOME)
-        for (i in 0 until 5) {
-            inputField.sendKeys(Keys.ARROW_RIGHT)
-        }
-        for (i in 0 until 6) {
-            inputField.sendKeys(Keys.DELETE)
-        }
-        inputField.sendKeys(Keys.ENTER)
-        stringDiffTestApp.getValue().shouldBe("Lazy Fox")
+        inputField.sendKeys("${Keys.LEFT}${Keys.BACK_SPACE}${Keys.BACK_SPACE}")
+        inputField.getAttribute("value").shouldBe("Lazy Brown x")
     }
 
     @Test
@@ -114,26 +91,20 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
             inputField.sendKeys(Keys.BACK_SPACE)
         }
         inputField.sendKeys(Keys.ENTER)
-        stringDiffTestApp.getValue().shouldBe("Lazy Brown")
+        inputField.getAttribute("value").shouldBe("Lazy Brown")
     }
 
 }
 
 class StringDiffTestApp {
-    private lateinit var input: InputElement
+    var inputString = KVar("")
 
-    val server: Kweb = Kweb(port= 7660) {
-        doc.body.new {
-            val inputKvar = KVar(false)
-            render(inputKvar) {
-                input = input(type = InputType.text, initialValue = "Lazy Brown Fox")
-            }
+    val server: Kweb = Kweb(port= 7660){
+        doc.body {
+            val input = input(initialValue = "Lazy Brown Fox")
+            inputString = input.value
         }
     }
-
-    suspend fun getValue(): String {
-            return input.getValue()
-    }
 }
-*/
+
 
