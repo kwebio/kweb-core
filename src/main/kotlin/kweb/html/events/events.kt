@@ -44,8 +44,8 @@ data class MouseEvent(
     val altKey: Boolean,
     val button: Int,
     val buttons: Int,
-    val clientX: Int,
-    val clientY: Int,
+    val clientX: Float,
+    val clientY: Float,
     val ctrlKey: Boolean,
     val metaKey: Boolean,
     val movementX: Int? = null,
@@ -54,8 +54,8 @@ data class MouseEvent(
     val screenX: Int,
     val screenY: Int,
     val shiftKey: Boolean,
-    val x: Int = clientX,
-    val y: Int = clientY,
+    val x: Float = clientX,
+    val y: Float = clientY,
     /** @see kweb.Element.on **/
     val retrieved: JsonElement = JsonNull
 )

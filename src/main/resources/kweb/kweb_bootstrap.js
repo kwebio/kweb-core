@@ -88,7 +88,7 @@ function debugErr(debugToken, err, errMsg) {
         const message = {id: kwebClientId, error: err};
         sendMessage(JSON.stringify(message));
     } else {
-        throw err;
+        console.error(errMsg)
     }
 }
 

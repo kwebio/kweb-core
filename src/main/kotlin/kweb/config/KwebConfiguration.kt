@@ -51,6 +51,18 @@ abstract class KwebConfiguration {
         logger.debug { "Configuration has been initialized successfully" }
     }
 
+
+    /**
+     * Override this function to handle uncaught exceptions of client callbacks.
+     * E.g. if the browser sends a websocket message back to the kweb instance
+     * and the message handler throws an uncaught exception, kweb will invoke
+     * this exception handler to expose the fact that a message could not be
+     * properly handled
+     */
+    open fun onWebsocketMessageHandlingFailure(ex: Exception){
+
+    }
+
     /**
      * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
      * which may be used to return whatever you wish.
