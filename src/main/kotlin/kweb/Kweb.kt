@@ -112,6 +112,8 @@ class Kweb private constructor(
             var plugins: List<KwebPlugin> = Collections.emptyList()
             var kwebConfig: KwebConfiguration = KwebDefaultConfiguration()
 
+
+
             @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
             var buildPage: (WebBrowser.() -> Unit)? = null
         }
@@ -298,6 +300,7 @@ class Kweb private constructor(
                     }
                 } catch (e: Exception) {
                     logger.error("Exception while receiving websocket message", e)
+                    kwebConfig.onWebsocketMessageHandlingFailure(e)
                 }
             }
         } finally {
