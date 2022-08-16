@@ -10,6 +10,8 @@ Read [Getting Started](http://docs.kweb.io/en/latest/gettingstarted.html) from t
 
 Kweb is a new way to create beautiful, efficient, and scalable websites in [Kotlin](https://kotlinlang.org/), where server-browser communication is handled automatically.
 
+Kweb's API is likely to change between now and our 1.0.0 release, so you may need to modify your code to stay current with Kweb versions. We won't do this without a good reason.
+
 ## Example
 
 ```kotlin
