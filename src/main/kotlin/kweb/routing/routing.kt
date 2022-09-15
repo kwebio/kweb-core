@@ -1,6 +1,6 @@
 package kweb.routing
 
-import io.ktor.routing.*
+import io.ktor.server.routing.*
 import kweb.ElementCreator
 import kweb.Kweb
 import kweb.h1

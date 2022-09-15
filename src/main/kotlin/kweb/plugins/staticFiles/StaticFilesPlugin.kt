@@ -1,11 +1,11 @@
 package kweb.plugins.staticFiles
 
-import io.ktor.application.install
-import io.ktor.features.CachingHeaders
+import io.ktor.server.application.install
+import io.ktor.server.plugins.CachingHeaders
 import io.ktor.http.CacheControl
 import io.ktor.http.content.*
-import io.ktor.routing.Route
-import io.ktor.routing.Routing
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.Routing
 import kweb.plugins.KwebPlugin
 import java.io.File
 

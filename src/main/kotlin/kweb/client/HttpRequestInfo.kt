@@ -1,6 +1,6 @@
 package kweb.client
 
-import io.ktor.features.origin
+import io.ktor.server.plugins.origin
 import io.ktor.request.ApplicationRequest
 
 /**

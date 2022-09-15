@@ -1,6 +1,6 @@
 package kweb
 
-import io.ktor.routing.*
+import io.ktor.server.routing.*
 import io.mola.galimatias.URL
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*

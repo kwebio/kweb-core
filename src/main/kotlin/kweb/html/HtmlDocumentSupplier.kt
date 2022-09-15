@@ -1,6 +1,6 @@
 package kweb.html
 
-import io.ktor.routing.*
+import io.ktor.server.routing.*
 import kweb.plugins.KwebPlugin
 import kweb.state.RenderSpanNames
 import org.jsoup.nodes.Document
