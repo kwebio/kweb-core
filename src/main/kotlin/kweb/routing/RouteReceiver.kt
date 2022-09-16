@@ -1,6 +1,6 @@
 package kweb.routing
 
-import io.ktor.routing.RoutingPath
+import io.ktor.server.routing.RoutingPath
 import kweb.h1
 
 class RouteReceiver internal constructor() {

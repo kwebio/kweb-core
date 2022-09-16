@@ -21,11 +21,11 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '1.6.7'
+    ktor_version = '2.1.1'
 }
 
 group 'com.github.kwebio'
-version '0.11.4'
+version '0.11.6'
 
 repositories {
     mavenCentral()
@@ -56,9 +56,11 @@ dependencies {
     ////////////////////
     // Ktor dependencies
     ////////////////////
-    compile "io.ktor:ktor-server-core:$ktor_version"
     compile "io.ktor:ktor-server-jetty:$ktor_version"
-    compile "io.ktor:ktor-websockets:$ktor_version"
+    compile "io.ktor:ktor-server-websockets:$ktor_version"
+    compile "io.ktor:ktor-server-default-headers:$ktor_version"
+    compile "io.ktor:ktor-server-compression:$ktor_version"
+    compile "io.ktor:ktor-server-caching-headers:$ktor_version"
     compile "io.ktor:ktor-network-tls-certificates:$ktor_version"
 
     compile 'io.mola.galimatias:galimatias:0.2.1'
