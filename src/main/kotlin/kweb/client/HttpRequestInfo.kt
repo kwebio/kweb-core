@@ -1,7 +1,7 @@
 package kweb.client
 
 import io.ktor.server.plugins.origin
-import io.ktor.request.ApplicationRequest
+import io.ktor.server.request.ApplicationRequest
 
 /**
  * @param request This is the raw [ApplicationRequest](https://api.ktor.io/1.3.2/io.ktor.request/-application-request/index.html)

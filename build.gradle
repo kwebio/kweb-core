@@ -56,10 +56,11 @@ dependencies {
     ////////////////////
     // Ktor dependencies
     ////////////////////
-    compile "io.ktor:ktor-server-default-headers:$ktor_version"
-    compile "io.ktor:ktor-server-compression:$ktor_version"
     compile "io.ktor:ktor-server-jetty:$ktor_version"
     compile "io.ktor:ktor-server-websockets:$ktor_version"
+    compile "io.ktor:ktor-server-default-headers:$ktor_version"
+    compile "io.ktor:ktor-server-compression:$ktor_version"
+    compile "io.ktor:ktor-server-caching-headers:$ktor_version"
     compile "io.ktor:ktor-network-tls-certificates:$ktor_version"
 
     compile 'io.mola.galimatias:galimatias:0.2.1'
