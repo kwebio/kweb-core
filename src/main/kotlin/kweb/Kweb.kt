@@ -5,17 +5,17 @@ import com.google.common.cache.CacheBuilder
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.http.*
-import io.ktor.http.cio.websocket.*
-import io.ktor.http.cio.websocket.Frame.*
-import io.ktor.request.*
-import io.ktor.response.*
+import io.ktor.websocket.*
+import io.ktor.websocket.Frame.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.jetty.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
+import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.compression.*
+import io.ktor.server.websocket.*
 import io.ktor.util.*
-import io.ktor.websocket.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -107,7 +107,7 @@ class Kweb private constructor(
      *
      * @see kweb.demos.feature.kwebFeature for an example
      */
-    companion object Feature : ApplicationFeature<Application, Feature.Configuration, Kweb> {
+    companion object Feature : BaseApplicationPlugin<Application, Feature.Configuration, Kweb> {
         // Note that this is not KwebConfiguration, which is a different thing
         class Configuration {
             var debug: Boolean = true
