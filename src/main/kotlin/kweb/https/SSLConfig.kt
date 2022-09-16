@@ -5,11 +5,10 @@ import io.ktor.network.tls.extensions.HashAlgorithm
 import io.ktor.network.tls.extensions.SignatureAlgorithm
 import io.ktor.server.engine.ConnectorType
 import io.ktor.server.engine.EngineSSLConnectorConfig
-import io.ktor.util.KtorExperimentalAPI
 import java.io.File
 import java.security.KeyStore
+import kotlin.text.toCharArray
 
-@KtorExperimentalAPI
 val defaultKeyStore by lazy {
     buildKeyStore {
         certificate("test") {
@@ -27,7 +26,9 @@ data class SSLConfig constructor(
         override val keyStorePath: File? = null,
         override val keyAlias: String = "mykey",
         override val keyStorePassword: () -> CharArray = { "changeit".toCharArray() },
-        override val privateKeyPassword: () -> CharArray = { "changeit".toCharArray() }
+        override val privateKeyPassword: () -> CharArray = { "changeit".toCharArray() },
+        override val trustStore: KeyStore? = null,
+        override val trustStorePath: File? = null
 ) : EngineSSLConnectorConfig {
     override val type: ConnectorType = ConnectorType.HTTPS
 }
