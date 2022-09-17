@@ -407,12 +407,12 @@ open class Element(
         //language=JavaScript
         val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
-            browser.isCatchingOutbound() != null -> {
-                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
-            }
             jsoupDoc != null -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element!!.text(value)
+            }
+            browser.isCatchingOutbound() != null -> {
+                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
             else -> {
                 callJsFunction(setTextJS, id.json, JsonPrimitive(value))
