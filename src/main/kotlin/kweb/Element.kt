@@ -256,19 +256,29 @@ open class Element(
      */
     fun addClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
-            for (class_ in classes) {
-                if (class_.contains(' ')) {
-                    error("Class names must not contain spaces")
+            val jsoupDoc = browser.htmlDocument.get()
+            when {
+                jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
+                    val thisEl = jsoupDoc.getElementById(this.id)!!
+                    val existingClasses = thisEl.attr("class").split(" ")
+                    val newClasses = existingClasses + classes
+                    thisEl.attr("class", newClasses.joinToString(separator = " "))
+            } 
+            else -> {
+                for (class_ in classes) {
+                    if (class_.contains(' ')) {
+                        error("Class names must not contain spaces")
+                    }
+                    //language=JavaScript
+                    callJsFunction("""
+                        let id = {};
+                        let className = {};
+                        let el = document.getElementById(id);
+                        if (el.classList) el.classList.add(className);
+                        else if (!hasClass(el, className)) el.className += " " + className;
+                    """.trimIndent(), id.json, JsonPrimitive(class_))
                 }
-                //language=JavaScript
-                callJsFunction("""
-                    let id = {};
-                    let className = {};
-                    let el = document.getElementById(id);
-                    if (el.classList) el.classList.add(className);
-                    else if (!hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), id.json, JsonPrimitive(class_))
-            }
+        }
         }
         return this
     }
