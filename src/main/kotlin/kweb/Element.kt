@@ -26,12 +26,12 @@ import kotlin.reflect.KClass
 
 @KWebDSL
 open class Element(
-        override val browser: WebBrowser,
-        val creator: ElementCreator<*>?,
-        val tag: String? = null,
-        @Volatile var id: String
+    override val browser: WebBrowser,
+    val creator: ElementCreator<*>?,
+    val tag: String? = null,
+    @Volatile var id: String
 ) :
-        EventGenerator<Element> {
+    EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, tag = element.tag, id = element.id)
 
     /**
@@ -56,7 +56,11 @@ open class Element(
      *
      * This uses the same template mechanism as [callJsFunction]
      */
-    suspend fun <O> callJsFunctionWithResult(js: String, outputMapper: (JsonElement) -> O, vararg args: JsonElement): O? {
+    suspend fun <O> callJsFunctionWithResult(
+        js: String,
+        outputMapper: (JsonElement) -> O,
+        vararg args: JsonElement
+    ): O? {
         val result = browser.callJsFunctionWithResult(js, *args)
         return outputMapper.invoke(result)
     }
@@ -98,7 +102,7 @@ open class Element(
      * A utility function to set multiple attributes in a single call, in the
      * style of [mapOf]. This is a wrapper around [setAttribute].
      */
-    fun setAttributes(vararg pair : Pair<String, JsonPrimitive>) : Element {
+    fun setAttributes(vararg pair: Pair<String, JsonPrimitive>): Element {
         pair.forEach { (k, v) -> setAttribute(k, v) }
         return this
     }
@@ -111,9 +115,9 @@ open class Element(
      *                  with the specified namespace. If null then Kweb will use [Element.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
 
      */
-    fun setAttribute(name: String, value: JsonPrimitive, namespace : String? = null): Element {
+    fun setAttribute(name: String, value: JsonPrimitive, namespace: String? = null): Element {
         val jsoupDoc = browser.htmlDocument.get()
-        val setAttributeJavaScript = when(namespace) {
+        val setAttributeJavaScript = when (namespace) {
             null -> "document.getElementById({}).setAttribute({}, {});"
             else -> "document.getElementById({}).setAttributeNS(\"$namespace\", {}, {});"
         }
@@ -121,10 +125,12 @@ open class Element(
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 jsoupDoc.getElementById(this.id)!!.attr(name, value.content)
             }
+
             else -> {
                 callJsFunction(
                     setAttributeJavaScript,
-                        id.json, name.json, value)
+                    id.json, name.json, value
+                )
             }
         }
         if (name.equals("id", ignoreCase = true)) {
@@ -134,29 +140,22 @@ open class Element(
     }
 
     @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name : String, value : JsonPrimitive)
-            = setAttribute(name, value)
+    fun setAttributeRaw(name: String, value: JsonPrimitive) = setAttribute(name, value)
 
     @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name : String, value : String)
-            = setAttribute(name, JsonPrimitive(value))
+    fun setAttributeRaw(name: String, value: String) = setAttribute(name, JsonPrimitive(value))
 
     @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name : String, value : Boolean)
-            = setAttribute(name, JsonPrimitive(value))
+    fun setAttributeRaw(name: String, value: Boolean) = setAttribute(name, JsonPrimitive(value))
 
     @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name : String, value : Number)
-            = setAttribute(name, JsonPrimitive(value))
+    fun setAttributeRaw(name: String, value: Number) = setAttribute(name, JsonPrimitive(value))
 
-    fun setAttribute(name : String, value : String)
-        = setAttribute(name, JsonPrimitive(value))
+    fun setAttribute(name: String, value: String) = setAttribute(name, JsonPrimitive(value))
 
-    fun setAttribute(name : String, value : Boolean)
-        = setAttribute(name, JsonPrimitive(value))
+    fun setAttribute(name: String, value: Boolean) = setAttribute(name, JsonPrimitive(value))
 
-    fun setAttribute(name : String, value : Number)
-        = setAttribute(name, JsonPrimitive(value))
+    fun setAttribute(name: String, value: Number) = setAttribute(name, JsonPrimitive(value))
 
     /**
      * Set an attribute to the value in a [KVal], if the value changes the attribute
@@ -179,6 +178,7 @@ open class Element(
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 jsoupDoc.getElementById(id)!!.removeAttr(name)
             }
+
             else -> {
                 callJsFunction("document.getElementById({}).removeAttribute({})", id.json, JsonPrimitive(name))
             }
@@ -198,6 +198,7 @@ open class Element(
                 val thisEl = jsoupDoc.getElementById(this.id)!!
                 thisEl.html(html)
             }
+
             else -> {
                 callJsFunction("document.getElementById({}).innerHTML = {}", id.json, JsonPrimitive(html))
             }
@@ -234,7 +235,7 @@ open class Element(
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
      * this is a wrapper around [setAttribute].
      */
-    fun classes(value : KVal<String>) = setAttribute("class", value.map { it.json })
+    fun classes(value: KVal<String>) = setAttribute("class", value.map { it.json })
 
     /**
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
@@ -256,19 +257,32 @@ open class Element(
      */
     fun addClasses(vararg classes: String, onlyIf: Boolean = true): Element {
         if (onlyIf) {
-            for (class_ in classes) {
-                if (class_.contains(' ')) {
-                    error("Class names must not contain spaces")
+            val jsoupDoc = browser.htmlDocument.get()
+            when {
+                jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
+                    val thisEl = jsoupDoc.getElementById(this.id)!!
+                    classes.forEach { thisEl.addClass(it) }
                 }
-                //language=JavaScript
-                callJsFunction("""
+                else -> {
+                    for (class_ in classes) {
+                        if (class_.contains(' ')) {
+                            error("Class names must not contain spaces")
+                        }
+                        //language=JavaScript
+                        callJsFunction(
+                            """
                     let id = {};
                     let className = {};
                     let el = document.getElementById(id);
                     if (el.classList) el.classList.add(className);
                     else if (!hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), id.json, JsonPrimitive(class_))
+                """.trimIndent(), id.json, JsonPrimitive(class_)
+                        )
+                    }
+                }
             }
+
+
         }
         return this
     }
@@ -285,7 +299,8 @@ open class Element(
                     error("Class names must not contain spaces")
                 }
                 //language=JavaScript
-                callJsFunction("""
+                callJsFunction(
+                    """
                     let id = {};
                     let className = {};
                     let el = document.getElementById(id);
@@ -294,7 +309,8 @@ open class Element(
                         var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
                         el.className = el.className.replace(reg, " ");
                     }
-                """.trimIndent(), id.json, JsonPrimitive(class_))
+                """.trimIndent(), id.json, JsonPrimitive(class_)
+                )
             }
         }
         return this
@@ -325,11 +341,13 @@ open class Element(
         when {
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 val jsoupElement = jsoupDoc.getElementById(this.id)
-                    jsoupElement!!.children().remove()
+                jsoupElement!!.children().remove()
             }
+
             else -> {
                 //language=JavaScript
-                callJsFunction("""
+                callJsFunction(
+                    """
                     let id = {};
                     if (document.getElementById(id) != null) {
                         let element = document.getElementById(id);
@@ -337,14 +355,15 @@ open class Element(
                             element.removeChild(element.firstChild);
                         }
                     }
-                """.trimIndent(), id.json)
+                """.trimIndent(), id.json
+                )
             }
         }
 
         return this
     }
 
-    fun removeChildrenBetweenSpans(startSpanId : String, endSpanId: String) : Element{
+    fun removeChildrenBetweenSpans(startSpanId: String, endSpanId: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
         when {
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
@@ -359,9 +378,11 @@ open class Element(
                     }
                 }
             }
+
             else -> {
                 //language=JavaScript
-                callJsFunction("""
+                callJsFunction(
+                    """
                     let startSpan = document.getElementById({});
                     let endSpan = document.getElementById({});
                     let nextSibling = startSpan.nextSibling;
@@ -369,7 +390,8 @@ open class Element(
                         startSpan.parentNode.removeChild(startSpan.nextSibling);
                         nextSibling = startSpan.nextSibling;
                     }
-                """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId))
+                """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId)
+                )
             }
         }
         return this
@@ -384,11 +406,14 @@ open class Element(
                     .children()[position]
                     .remove()
             }
+
             else -> {
-                callJsFunction("""
+                callJsFunction(
+                    """
                         let element = document.getElementById({});
                         element.removeChild(element.children[{}]);
-                """.trimIndent(), id.json, position.json)
+                """.trimIndent(), id.json, position.json
+                )
             }
         }
         return this
@@ -407,6 +432,7 @@ open class Element(
                 val element = jsoupDoc.getElementById(this.id)
                 element!!.text(value)
             }
+
             else -> {
                 callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
@@ -451,6 +477,7 @@ open class Element(
                 val element = jsoupDoc.getElementById(this.id)
                 element!!.appendText(value)
             }
+
             else -> {
                 callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
             }
@@ -467,10 +494,17 @@ open class Element(
         browser.callJsFunction(wrappedJS, id.json, JsonPrimitive(eventName))
     }
 
-    override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Element {
+    override fun addEventListener(
+        eventName: String,
+        returnEventFields: Set<String>,
+        retrieveJs: String?,
+        preventDefault: Boolean,
+        callback: (JsonElement) -> Unit
+    ): Element {
         val callbackId = abs(random.nextInt())
         val retrievedJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
-        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
+        val eventObject =
+            "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrievedJs + "}"
         /*It'd be nice to make eventObject a parameter, but it doesn't work.
             eventObject is a map that has entries that look like { "buttons" : event.buttons }
             the event field accessed here is the event parameter from the "function(event)" in the javascript
@@ -510,8 +544,17 @@ open class Element(
      * @param updateOnEvent The event to listen for that signifies this element has been updated
      * @param initialValue The initial value of the KVar
      */
-    fun bind(accessor : (elementId : String) -> String, updateOnEvent: String, initialValue : JsonElement = JsonPrimitive("")) : KVar<JsonElement> {
-        return bind(reader = { accessor(it) }, writer = { id, value -> "${accessor(id)} = $value" }, updateOnEvent = updateOnEvent, initialValue = initialValue)
+    fun bind(
+        accessor: (elementId: String) -> String,
+        updateOnEvent: String,
+        initialValue: JsonElement = JsonPrimitive("")
+    ): KVar<JsonElement> {
+        return bind(
+            reader = { accessor(it) },
+            writer = { id, value -> "${accessor(id)} = $value" },
+            updateOnEvent = updateOnEvent,
+            initialValue = initialValue
+        )
     }
 
     /**
@@ -526,19 +569,24 @@ open class Element(
      * @param updateOnEvent The event to listen for that signifies this element has been updated
      * @param initialValue The initial value of the KVar
      */
-    fun bind(reader : (elementId : String) -> String, writer : (elementId : String, value : String) -> String, updateOnEvent : String, initialValue : JsonElement = JsonPrimitive("")) : KVar<JsonElement> {
+    fun bind(
+        reader: (elementId: String) -> String,
+        writer: (elementId: String, value: String) -> String,
+        updateOnEvent: String,
+        initialValue: JsonElement = JsonPrimitive("")
+    ): KVar<JsonElement> {
         val kv = KVar(initialValue)
         on(retrieveJs = reader(this.id)).event<Event>(updateOnEvent) { event ->
             kv.value = event.retrieved
         }
         val kvChangeHandler = kv.addListener { old, new ->
-            callJsFunction(writer(this.id, "{}")+";", new)
+            callJsFunction(writer(this.id, "{}") + ";", new)
         }
         creator?.onCleanup(true) {
             kv.removeListener(kvChangeHandler)
             kv.close(CloseReason("Ancestor ElementCreator cleaned up"))
         }
-        callJsFunction(writer(this.id, "{}")+";", initialValue)
+        callJsFunction(writer(this.id, "{}") + ";", initialValue)
         return kv
     }
 
@@ -548,10 +596,12 @@ open class Element(
      */
     fun delete() {
         //language=JavaScript
-        callJsFunction("""
+        callJsFunction(
+            """
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
-        """.trimIndent(), id.json)
+        """.trimIndent(), id.json
+        )
     }
 
     /**
@@ -560,13 +610,15 @@ open class Element(
      */
     fun deleteIfExists() {
         //language=JavaScript
-        callJsFunction("""
+        callJsFunction(
+            """
             let id = {}
             if (document.getElementById(id)) {
                 let element = document.getElementById(id);
                 element.parentNode.removeChild(element);
             }
-        """.trimIndent(), id.json)
+        """.trimIndent(), id.json
+        )
     }
 
     /**
@@ -579,7 +631,7 @@ open class Element(
      */
     val style get() = StyleReceiver(this)
 
-    val flags : ConcurrentSkipListSet<String> by lazy { ConcurrentSkipListSet() }
+    val flags: ConcurrentSkipListSet<String> by lazy { ConcurrentSkipListSet() }
 
     /**
      * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
