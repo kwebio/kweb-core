@@ -1,6 +1,7 @@
 package kweb
 
 import kotlinx.serialization.json.*
+import kweb.WebBrowser.CatcherType.RENDER
 import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -111,19 +112,14 @@ open class Element(
 
      */
     fun setAttribute(name: String, value: JsonPrimitive, namespace : String? = null): Element {
-        val htmlDoc = browser.htmlDocument.get()
+        val jsoupDoc = browser.htmlDocument.get()
         val setAttributeJavaScript = when(namespace) {
             null -> "document.getElementById({}).setAttribute({}, {});"
             else -> "document.getElementById({}).setAttributeNS(\"$namespace\", {}, {});"
         }
         when {
-            htmlDoc != null -> {
-                htmlDoc.getElementById(this.id)!!.attr(name, value.content)
-            }
-            browser.isCatchingOutbound() != null -> {
-                callJsFunction(
-                    setAttributeJavaScript,
-                        id.json, name.json, value)
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
+                jsoupDoc.getElementById(this.id)!!.attr(name, value.content)
             }
             else -> {
                 callJsFunction(
@@ -178,10 +174,10 @@ open class Element(
     }
 
     fun removeAttribute(name: String): Element {
-        val htmlDoc = browser.htmlDocument.get()
+        val jsoupDoc = browser.htmlDocument.get()
         when {
-            htmlDoc != null -> {
-                htmlDoc.getElementById(id)!!.removeAttr(name)
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
+                jsoupDoc.getElementById(id)!!.removeAttr(name)
             }
             else -> {
                 callJsFunction("document.getElementById({}).removeAttribute({})", id.json, JsonPrimitive(name))
@@ -196,10 +192,10 @@ open class Element(
      * of a DOM element.
      */
     fun innerHTML(html: String): Element {
-        val htmlDoc = browser.htmlDocument.get()
+        val jsoupDoc = browser.htmlDocument.get()
         when {
-            htmlDoc != null -> {
-                val thisEl = htmlDoc.getElementById(this.id)!!
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
+                val thisEl = jsoupDoc.getElementById(this.id)!!
                 thisEl.html(html)
             }
             else -> {
@@ -325,10 +321,10 @@ open class Element(
     }
 
     fun removeChildren(): Element {
-        val htmlDoc = browser.htmlDocument.get()
+        val jsoupDoc = browser.htmlDocument.get()
         when {
-            htmlDoc != null -> {
-                val jsoupElement = htmlDoc.getElementById(this.id)
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
+                val jsoupElement = jsoupDoc.getElementById(this.id)
                     jsoupElement!!.children().remove()
             }
             else -> {
@@ -349,11 +345,11 @@ open class Element(
     }
 
     fun removeChildrenBetweenSpans(startSpanId : String, endSpanId: String) : Element{
-        val htmlDoc = browser.htmlDocument.get()
+        val jsoupDoc = browser.htmlDocument.get()
         when {
-            htmlDoc != null -> {
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 //TODO this will only run during initial page render, and is currently untested.
-                htmlDoc.getElementById(this.id).let { jsoupElement ->
+                jsoupDoc.getElementById(this.id).let { jsoupElement ->
                     val startSpan = jsoupElement!!.getElementById(startSpanId)
                     val endSpan = jsoupElement!!.getElementById(endSpanId)
                     var nextSibling = startSpan!!.nextElementSibling()
@@ -380,10 +376,10 @@ open class Element(
     }
 
     fun removeChildAt(position: Int): Element {
-        val htmlDoc = browser.htmlDocument.get()
+        val jsoupDoc = browser.htmlDocument.get()
         when {
-            htmlDoc != null -> {
-                htmlDoc
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
+                jsoupDoc
                     .getElementById(this.id)!!
                     .children()[position]
                     .remove()
@@ -407,12 +403,9 @@ open class Element(
         //language=JavaScript
         val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
         when {
-            jsoupDoc != null -> {
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element!!.text(value)
-            }
-            browser.isCatchingOutbound() != null -> {
-                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
             else -> {
                 callJsFunction(setTextJS, id.json, JsonPrimitive(value))
@@ -454,10 +447,7 @@ open class Element(
             document.getElementById({}).appendChild(ntn);
         """.trimIndent()
         when {
-            browser.isCatchingOutbound() != null -> {
-                callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
-            }
-            jsoupDoc != null -> {
+            jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 val element = jsoupDoc.getElementById(this.id)
                 element!!.appendText(value)
             }
