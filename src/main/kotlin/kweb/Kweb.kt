@@ -183,6 +183,7 @@ class Kweb private constructor(
     override fun close() {
         logger.info("Shutting down Kweb")
         server?.stop(0, 0)
+        clientState.asMap().values.forEach { it.triggerCloseListeners() }
     }
 
     private fun createServer(

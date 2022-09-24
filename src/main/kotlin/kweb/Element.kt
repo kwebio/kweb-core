@@ -609,16 +609,20 @@ open class Element(
      * on its parent element if it exists.
      */
     fun deleteIfExists() {
-        //language=JavaScript
-        callJsFunction(
-            """
+        try {
+            //language=JavaScript
+            callJsFunction(
+                """
             let id = {}
             if (document.getElementById(id)) {
                 let element = document.getElementById(id);
                 element.parentNode.removeChild(element);
             }
         """.trimIndent(), id.json
-        )
+            )
+        } catch (e : IllegalStateException) {
+
+        }
     }
 
     /**
