@@ -187,7 +187,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         // TODO: Warn if called twice?
         if (!isCleanedUp) {
             isCleanedUp = true
-            cleanupListeners?.forEach { it() }
+            try {
+                cleanupListeners?.forEach { it() }
+            } catch (e: Exception) {
+                logger.warn(e) { "Error while cleaning up ElementCreator" }
+            }
         }
     }
 
