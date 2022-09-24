@@ -37,6 +37,8 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
 
     private val idCounter = AtomicInteger(0)
 
+    private val closeListeners : ConcurrentHashMap<Int, () -> Unit> = ConcurrentHashMap()
+
     /**
      * During page render, the initial HTML document will be available for modification as a
      * [JSoup Document](https://jsoup.org/) in this [AtomicReference].
@@ -227,6 +229,24 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
             }
         }
         kweb.addCallback(sessionId, functionCall.callbackId!!, callback)
+    }
+
+    fun addCloseListener(listener: () -> Unit) : Int {
+        val id = random.nextInt()
+        this.closeListeners[id] = listener
+        return id
+    }
+
+    fun removeCloseListener(id: Int) {
+        synchronized(this) {
+            this.closeListeners.remove(id)
+        }
+    }
+
+    fun close() {
+        synchronized(this) {
+            this.closeListeners.values.forEach { it() }
+        }
     }
 
     private fun createCacheFunctionJs(cacheId: Int, functionBody: String, params: String? = null) : String {

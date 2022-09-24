@@ -18,6 +18,7 @@ import kweb.util.random
  * Passed in as `doc` to the `buildPage` lambda of the [Kweb] constructor.
  */
 class Document(val receiver: WebBrowser) : EventGenerator<Document> {
+
     fun getElementById(id: String) = Element(receiver, null, "return document.getElementById(\"$id\")", id = id)
 
     val cookie = CookieReceiver(receiver)
@@ -26,7 +27,11 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     fun body(new: (ElementCreator<BodyElement>.() -> Unit)? = null) : BodyElement {
         if (new != null) {
-            new(ElementCreator(parent = body, insertBefore = null))
+            val ec = ElementCreator(parent = body, insertBefore = null)
+            new(ec)
+            receiver.addCloseListener {
+                ec.cleanup()
+            }
         }
         return body
     }
@@ -35,7 +40,11 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     fun head(new: (ElementCreator<HeadElement>.() -> Unit)? = null) : HeadElement {
         if (new != null) {
-            new(ElementCreator(parent = head, insertBefore = null))
+            val ec = ElementCreator(parent = head, insertBefore = null)
+            new(ec)
+            receiver.addCloseListener {
+                ec.cleanup()
+            }
         }
         return head
     }

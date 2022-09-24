@@ -140,6 +140,9 @@ class Kweb private constructor(
     val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
         .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
+        .removalListener<String, RemoteClientState> { rl ->
+            rl.value?.triggerCloseListeners()
+        }
         .build()
 
     //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
@@ -339,6 +342,9 @@ class Kweb private constructor(
 
         try {
             val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
+
+            remoteClientState.addCloseHandler { webBrowser.close() }
+
             webBrowser.htmlDocument.set(htmlDocument)
             if (debug) {
                 warnIfBlocking(maxTimeMs = kwebConfig.buildpageTimeout.toMillis(), onBlock = { thread ->
