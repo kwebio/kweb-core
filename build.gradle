@@ -41,13 +41,13 @@ test {
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.12.0'
     compile 'commons-io:commons-io:2.11.0'
-    compile 'org.jsoup:jsoup:1.14.3'
-    implementation 'com.google.guava:guava:31.0.1-jre'
+    compile 'org.jsoup:jsoup:1.15.3'
+    implementation 'com.google.guava:guava:31.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0'
@@ -82,7 +82,6 @@ dependencies {
     testCompile "io.github.bonigarcia:selenium-jupiter:3.3.5"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.7.0"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-    compile 'org.jsoup:jsoup:1.12.2'
 }
 
 // Not sure why this is necessary, seems like a dependency is turning on build scans.
