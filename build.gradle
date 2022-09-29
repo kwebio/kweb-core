@@ -13,7 +13,6 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version '1.6.10'
     id 'maven'
     id 'org.jetbrains.dokka' version '1.5.0'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.github.ben-manes.versions" version "0.41.0"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
 }
@@ -25,7 +24,7 @@ ext {
 }
 
 group 'com.github.kwebio'
-version '0.12.3'
+version '0.12.4'
 
 repositories {
     mavenCentral()
@@ -98,15 +97,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
-
-shadowJar {
-    archiveBaseName = project.name
-    archiveClassifier = 'all'
-    manifest {
-        attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
-    }
-    mergeServiceFiles()
 }
 
 dokkaHtml {
