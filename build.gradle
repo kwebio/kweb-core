@@ -14,7 +14,7 @@ plugins {
     id 'maven'
     id 'org.jetbrains.dokka' version '1.5.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id "com.github.ben-manes.versions" version "0.41.0"
+    id "com.github.ben-manes.versions" version "0.42.0"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
 }
 
