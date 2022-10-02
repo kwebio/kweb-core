@@ -48,8 +48,9 @@ dependencies {
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
     compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
