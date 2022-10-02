@@ -10,7 +10,7 @@ buildscript {
 
 plugins {
     id 'java'
-    id "org.jetbrains.kotlin.jvm" version '1.6.10'
+    id "org.jetbrains.kotlin.jvm" version "1.7.20"
     id 'maven'
     id 'org.jetbrains.dokka' version '1.5.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
@@ -22,10 +22,11 @@ apply plugin: "com.github.ben-manes.versions"
 
 ext {
     ktor_version = '2.1.2'
+    kotlin_version = '1.7.20'
 }
 
 group 'com.github.kwebio'
-version '0.12.4'
+version '0.12.5'
 
 repositories {
     mavenCentral()
@@ -41,17 +42,17 @@ test {
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.12.0'
     compile 'commons-io:commons-io:2.11.0'
-    compile 'org.jsoup:jsoup:1.14.3'
-    implementation 'com.google.guava:guava:31.0.1-jre'
+    compile 'org.jsoup:jsoup:1.15.3'
+    implementation 'com.google.guava:guava:31.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.0'
-    compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
+    compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
 
     ////////////////////
     // Ktor dependencies
@@ -65,7 +66,7 @@ dependencies {
 
     compile 'io.mola.galimatias:galimatias:0.2.1'
 
-    compile 'io.github.microutils:kotlin-logging:2.1.23'
+    compile 'io.github.microutils:kotlin-logging:3.0.0'
     //compile "org.reflections:reflections:0.10.2"
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
@@ -82,7 +83,7 @@ dependencies {
     testCompile "io.github.bonigarcia:selenium-jupiter:3.3.5"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.7.0"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-    compile 'org.jsoup:jsoup:1.12.2'
+    compile 'org.jsoup:jsoup:1.15.3'
 }
 
 // Not sure why this is necessary, seems like a dependency is turning on build scans.
