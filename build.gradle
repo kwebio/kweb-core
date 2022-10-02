@@ -83,7 +83,7 @@ dependencies {
     testCompile 'ch.qos.logback:logback-classic:1.4.1'
     testCompile "io.github.bonigarcia:selenium-jupiter:3.3.5"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.9.1"
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
     compile 'org.jsoup:jsoup:1.15.3'
 }
 
