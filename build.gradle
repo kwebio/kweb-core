@@ -20,11 +20,6 @@ plugins {
 
 apply plugin: "com.github.ben-manes.versions"
 
-ext {
-    ktor_version = '2.1.2'
-    kotlin_version = '1.7.20'
-}
-
 group 'com.github.kwebio'
 version '0.12.5'
 
@@ -58,12 +53,12 @@ dependencies {
     ////////////////////
     // Ktor dependencies
     ////////////////////
-    compile "io.ktor:ktor-server-jetty:$ktor_version"
-    compile "io.ktor:ktor-server-websockets:$ktor_version"
-    compile "io.ktor:ktor-server-default-headers:$ktor_version"
-    compile "io.ktor:ktor-server-compression:$ktor_version"
-    compile "io.ktor:ktor-server-caching-headers:$ktor_version"
-    compile "io.ktor:ktor-network-tls-certificates:$ktor_version"
+    compile "io.ktor:ktor-server-jetty:2.1.2"
+    compile "io.ktor:ktor-server-websockets:2.1.2"
+    compile "io.ktor:ktor-server-default-headers:2.1.2"
+    compile "io.ktor:ktor-server-compression:2.1.2"
+    compile "io.ktor:ktor-server-caching-headers:2.1.2"
+    compile "io.ktor:ktor-network-tls-certificates:2.1.2"
 
     compile 'io.mola.galimatias:galimatias:0.2.1'
 
