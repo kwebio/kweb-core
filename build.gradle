@@ -21,11 +21,11 @@ plugins {
 apply plugin: "com.github.ben-manes.versions"
 
 ext {
-    ktor_version = '2.1.1'
+    ktor_version = '2.1.2'
 }
 
 group 'com.github.kwebio'
-version '0.12.3'
+version '0.12.4'
 
 repositories {
     mavenCentral()
