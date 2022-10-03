@@ -13,7 +13,6 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.7.20"
     id 'maven'
     id 'org.jetbrains.dokka' version '1.7.10'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.github.ben-manes.versions" version "0.42.0"
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.20'
 }
@@ -26,7 +25,7 @@ ext {
 }
 
 group 'com.github.kwebio'
-version '0.12.5'
+version '0.12.6'
 
 repositories {
     mavenCentral()
@@ -68,7 +67,6 @@ dependencies {
     compile 'io.mola.galimatias:galimatias:0.2.1'
 
     compile 'io.github.microutils:kotlin-logging:3.0.0'
-    //compile "org.reflections:reflections:0.10.2"
 
     compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
@@ -83,13 +81,8 @@ dependencies {
     testImplementation 'ch.qos.logback:logback-classic:1.4.1'
     testImplementation "io.github.bonigarcia:selenium-jupiter:4.3.1"
     testImplementation 'org.seleniumhq.selenium:selenium-java:4.4.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-    testCompile 'org.amshove.kluent:kluent:1.68'
-    testCompile 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
-    testCompile 'ch.qos.logback:logback-classic:1.4.1'
-    testCompile "io.github.bonigarcia:selenium-jupiter:3.3.5"
-    testCompile "org.junit.jupiter:junit-jupiter-api:5.9.1"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
     compile 'org.jsoup:jsoup:1.15.3'
 }
@@ -108,15 +101,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
-
-shadowJar {
-    archiveBaseName = project.name
-    archiveClassifier = 'all'
-    manifest {
-        attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
-    }
-    mergeServiceFiles()
 }
 
 dokkaHtml {
