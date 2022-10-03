@@ -417,7 +417,7 @@ fun ElementCreator<Element>.select(
 }
 
 private fun select_sample() {
-    val server: Kweb = Kweb(port= 7668) {
+    Kweb(port= 7668) {
         doc.body {
             val select = select(name = "pets") {
                 option().setAttribute("value", "dog").text("Dog")
@@ -436,6 +436,9 @@ private fun select_sample() {
 open class TextAreaElement(parent: Element, initialValue: String? = null) : ValueElement(parent, initialValue = initialValue) {
     //TODO ValueElement already provides a way to get the value of an element. I'm not sure why this function is here.
     //But, something needs to be done with it.
+    @Deprecated("ElementReader has been deprecated",
+        ReplaceWith("ValueElement.value", "kweb.ValueElement")
+    )
     override val read get() = TextAreaElementReader(this)
 }
 
