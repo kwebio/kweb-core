@@ -1,7 +1,9 @@
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotlintest.shouldBe
-import kweb.*
+import kweb.Kweb
+import kweb.a
+import kweb.route
 import kweb.state.KVar
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -9,10 +11,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -40,7 +41,7 @@ class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun testClick() {
         driver.get("http://localhost:7665/")
-        val aElement = driver.findElement<WebElement>(By.tagName("a"))
+        val aElement = driver.findElement(By.tagName("a"))
         hrefTestApp.appUrl.value shouldBe "/"
         hrefTestApp.renderCount.value shouldBe 1
         aElement.click()

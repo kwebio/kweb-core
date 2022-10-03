@@ -1,8 +1,9 @@
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotlintest.shouldBe
-import kotlinx.coroutines.delay
-import kweb.*
+import kweb.InputType
+import kweb.Kweb
+import kweb.input
 import kweb.state.KVar
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -10,10 +11,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class InputCheckedTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -41,7 +41,7 @@ class InputCheckedTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun checkBeforeAndAfterClick() {
         driver.get("http://localhost:7660/")
-        val input = driver.findElement<WebElement>(By.tagName("input"))
+        val input = driver.findElement(By.tagName("input"))
         inputCheckedTestApp.checkKVar.value shouldBe false
         input.click()
         Thread.sleep(100)

@@ -1,21 +1,14 @@
 package kweb
 
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
-import io.kotlintest.shouldBe
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import kotlinx.serialization.json.JsonPrimitive
-import kweb.state.KVar
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicInteger
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 //class CacheJSTest(private var driver: WebDriver) {
 class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
 

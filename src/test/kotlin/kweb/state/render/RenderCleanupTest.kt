@@ -1,7 +1,7 @@
 package kweb.state.render
 
 import io.github.bonigarcia.seljup.Options
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kweb.*
@@ -17,7 +17,7 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class RenderCleanupTest {
     companion object {
         private lateinit var renderCleanupTestApp: RenderCleanupTestApp

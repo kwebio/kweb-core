@@ -1,18 +1,18 @@
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotlintest.shouldBe
-import kweb.*
+import kweb.H1Element
+import kweb.Kweb
+import kweb.h1
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class ImmediateEventTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -40,7 +40,7 @@ class ImmediateEventTest(@Arguments("--headless") private var driver: WebDriver)
     @Test
     fun checkBeforeAndAfterClick() {
         driver.get("http://localhost:7660/")
-        val label = driver.findElement<WebElement>(By.tagName("h1"))
+        val label = driver.findElement(By.tagName("h1"))
         label.text shouldBe("Click Me")
         label.click()
         label.text shouldBe("Clicked!")

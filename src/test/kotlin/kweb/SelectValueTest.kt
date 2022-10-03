@@ -1,7 +1,9 @@
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotlintest.shouldBe
-import kweb.*
+import kweb.Kweb
+import kweb.option
+import kweb.select
 import kweb.state.KVar
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -9,11 +11,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 import org.openqa.selenium.support.ui.Select
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class SelectValueTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -41,7 +42,7 @@ class SelectValueTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun mainTest() {
         driver.get("http://localhost:7668/")
-        val select = Select(driver.findElement<WebElement>(By.tagName("select")))
+        val select = Select(driver.findElement(By.tagName("select")))
         selectValueTestApp.selectValue.value shouldBe ""
         Thread.sleep(100)
         select.selectByValue("cat")

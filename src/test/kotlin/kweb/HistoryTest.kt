@@ -1,7 +1,6 @@
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotlintest.shouldBe
-import kotlinx.coroutines.delay
 import kweb.*
 import kweb.state.KVar
 import kweb.state.render
@@ -14,7 +13,7 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -43,13 +42,13 @@ class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
     fun testBackButton() {
         historyTestApp.reloadCount.value shouldBe 0
         driver.get("http://localhost:7665/0")
-        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+        driver.findElement(By.tagName("a")).let { aElement ->
             historyTestApp.url.value shouldBe "/0"
             aElement.click()
             Thread.sleep(100)
             historyTestApp.url.value shouldBe "/1"
         }
-        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+        driver.findElement(By.tagName("a")).let { aElement ->
             aElement.click()
             Thread.sleep(100)
             historyTestApp.url.value shouldBe "/2"

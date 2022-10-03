@@ -1,7 +1,7 @@
 package kweb.state.render
 
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotlintest.shouldBe
 import kweb.*
 import kweb.state.ObservableList
@@ -10,10 +10,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -48,10 +47,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElements<WebElement>(By.tagName("button"))
+        val button = driver.findElements(By.tagName("button"))
         button[0].click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[0].text shouldBe("Moose")
         labels[1].text shouldBe("Dog")
         labels[2].text shouldBe("Cat")
@@ -80,10 +79,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElements<WebElement>(By.tagName("button"))
+        val button = driver.findElements(By.tagName("button"))
         button[0].click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[0].text shouldBe("Dog")
         labels[1].text shouldBe("Cat")
         labels[2].text shouldBe("Bear")
@@ -112,10 +111,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElements<WebElement>(By.tagName("button"))
+        val button = driver.findElements(By.tagName("button"))
         button[0].click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[0].text shouldBe("Dog")
         labels[1].text shouldBe("Cat")
         labels[2].text shouldBe("Moose")
@@ -144,10 +143,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElements<WebElement>(By.tagName("button"))
+        val button = driver.findElements(By.tagName("button"))
         button[0].click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[1].text shouldBe("Horse")
         server.close()
     }
@@ -182,10 +181,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElements<WebElement>(By.tagName("button"))
+        val button = driver.findElements(By.tagName("button"))
         button[0].click()
         Thread.sleep(50)
-        var labels = driver.findElements<WebElement>(By.tagName("h1"))
+        var labels = driver.findElements(By.tagName("h1"))
         labels[0].text shouldBe("Aardvark")
         labels[1].text shouldBe("Cow")
         labels[2].text shouldBe("Dog")
@@ -226,10 +225,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElement<WebElement>(By.tagName("button"))
+        val button = driver.findElement(By.tagName("button"))
         button.click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[0].text shouldBe("Dog")
         labels[1].text shouldBe("Cat")
         labels[2].text shouldBe("Horse")
@@ -258,10 +257,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElement<WebElement>(By.tagName("button"))
+        val button = driver.findElement(By.tagName("button"))
         button.click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[0].text shouldBe("Cat")
         labels[1].text shouldBe("Bear")
         labels[2].text shouldBe("Moose")
@@ -290,10 +289,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElement<WebElement>(By.tagName("button"))
+        val button = driver.findElement(By.tagName("button"))
         button.click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[0].text shouldBe("Horse")
         labels[1].text shouldBe("Dog")
         labels[2].text shouldBe("Cat")
@@ -322,10 +321,10 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val button = driver.findElement<WebElement>(By.tagName("button"))
+        val button = driver.findElement(By.tagName("button"))
         button.click()
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels.size shouldBe 0
         server.close()
     }
@@ -366,12 +365,12 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         })
 
         driver.get("http://localhost:1234")
-        val buttons = driver.findElements<WebElement>(By.tagName("button"))
+        val buttons = driver.findElements(By.tagName("button"))
         for (button in buttons) {
             button.click()
         }
         Thread.sleep(50)
-        val labels = driver.findElements<WebElement>(By.tagName("h1"))
+        val labels = driver.findElements(By.tagName("h1"))
         labels[1].text shouldBe "Proteus"
         labels[7].text shouldBe "Phoebe"
         labels[13].text shouldBe "Europa"
