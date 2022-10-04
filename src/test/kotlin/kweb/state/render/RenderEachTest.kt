@@ -9,17 +9,16 @@ import kweb.state.renderEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.support.ThreadGuard
+import org.openqa.selenium.chrome.ChromeDriver
 
 @ExtendWith(SeleniumJupiter::class)
-class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
+class RenderEachTest(@Arguments("--headless") private var driver: ChromeDriver) {
 
-    init {
+    /*init {
         //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
         //This should make this test thread safe.
         driver = ThreadGuard.protect(driver)
-    }
+    }*/
 
     /*NOTE: Thread.sleep(50) is used throughout these tests. I had success with values as small as Thread.sleep(1)
     But for consistent success, I left it at 50.

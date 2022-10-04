@@ -10,18 +10,17 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.support.ThreadGuard
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.Select
 
 @ExtendWith(SeleniumJupiter::class)
-class SelectValueTest(@Arguments("--headless") private var driver: WebDriver) {
+class SelectValueTest(@Arguments("--headless") private var driver: ChromeDriver) {
 
-    init {
+    /*init {
 		//ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
 		//This should make this test thread safe.
         driver = ThreadGuard.protect(driver)
-    }
+    }*/
 
     companion object {
         private lateinit var selectValueTestApp: SelectValueTestApp

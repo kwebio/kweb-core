@@ -1,26 +1,27 @@
 import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotlintest.shouldBe
-import kweb.*
+import kweb.Kweb
+import kweb.a
+import kweb.route
 import kweb.state.KVar
 import kweb.state.render
+import kweb.toInt
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.ThreadGuard
+import org.openqa.selenium.chrome.ChromeDriver
 
 @ExtendWith(SeleniumJupiter::class)
-class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
+class HistoryTest(@Arguments("--headless") private var driver: ChromeDriver) {
 
-    init {
+    /*init {
         //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
         //This should make this test thread safe.
         driver = ThreadGuard.protect(driver)
-    }
+    }*/
 
     companion object {
         private lateinit var historyTestApp: HistoryTestApp
