@@ -3,7 +3,7 @@ package kweb.util
 import io.mola.galimatias.URL
 import kotlinx.serialization.json.JsonElement
 import kweb.state.KVar
-import org.apache.commons.lang3.StringEscapeUtils
+import org.apache.commons.text.StringEscapeUtils
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
