@@ -15,7 +15,7 @@ repositories {
     mavenCentral()
 }
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
     systemProperty('sel.jup.default.browser', System.getProperty('sel.jup.default.browser'))
 }
@@ -74,7 +74,7 @@ if (hasProperty('buildScan')) {
     }
 }
 
-shadowJar {
+tasks.named('shadowJar') {
     archiveBaseName = project.name
     archiveClassifier = 'all'
     manifest {
@@ -83,7 +83,7 @@ shadowJar {
     mergeServiceFiles()
 }
 
-dokkaHtml {
+tasks.named('dokkaHtml') {
     dokkaSourceSets {
         configureEach {
             samples.from(files("src/main/kotlin/samples.kt"))
