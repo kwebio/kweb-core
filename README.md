@@ -2,7 +2,7 @@
 
 <div align="center">
   <!-- Github Actions -->
-  <a href="https://github.com/freenet/locutus/actions/workflows/build.yml">
+  <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
     <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/actions?label=CI&style=flat-square" alt="continuous integration status" />
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
@@ -12,10 +12,6 @@
     <img src="https://jitpack.io/v/kwebio/kweb-core.svg?style=flat-square&label=gradle" />
   </a>
 </div>
-
-https://matrix.to/#/#kweb:matrix.org
-
-[![](https://jitpack.io/v/kwebio/kweb-core.svg)](https://jitpack.io/#kwebio/kweb-core) [![Build Status](https://github.com/kwebio/kweb-core/workflows/tests/badge.svg?branch=master)](https://github.com/kwebio/kweb-core/actions)
 
 ## Quick Start
 
