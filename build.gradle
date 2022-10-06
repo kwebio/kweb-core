@@ -8,9 +8,6 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.20'
 }
 
-apply plugin: "com.github.ben-manes.versions"
-apply plugin: "maven-publish"
-
 group 'com.github.kwebio'
 version '0.12.6'
 
