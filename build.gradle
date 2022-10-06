@@ -78,7 +78,7 @@ dependencies {
     testImplementation 'io.kotest:kotest-runner-junit5'
     testImplementation 'io.kotest:kotest-assertions-core'
 
-    testImplementation 'ch.qos.logback:logback-classic:1.4.1'
+    testImplementation 'ch.qos.logback:logback-classic:1.4.3'
     testImplementation 'io.github.bonigarcia:selenium-jupiter:3.3.5'
 
     testImplementation "org.junit.jupiter:junit-jupiter-api"
