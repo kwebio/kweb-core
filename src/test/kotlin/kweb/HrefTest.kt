@@ -1,3 +1,5 @@
+package kweb
+
 import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
@@ -27,13 +29,13 @@ class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
         @JvmStatic
         @BeforeAll
         fun setupServer() {
-            HrefTest.hrefTestApp = HrefTestApp()
+            hrefTestApp = HrefTestApp()
         }
 
         @JvmStatic
         @AfterAll
         fun tearDownServer() {
-            HrefTest.hrefTestApp.server.close()
+            hrefTestApp.server.close()
         }
     }
 

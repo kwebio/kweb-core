@@ -18,13 +18,13 @@ class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
         @JvmStatic
         @BeforeAll
         fun setupServer() {
-            CacheJSTest.cacheJSApp = CacheJSApp()
+            cacheJSApp = CacheJSApp()
         }
 
         @JvmStatic
         @AfterAll
         fun tearDownServer() {
-            CacheJSTest.cacheJSApp.server.close()
+            cacheJSApp.server.close()
         }
     }
 

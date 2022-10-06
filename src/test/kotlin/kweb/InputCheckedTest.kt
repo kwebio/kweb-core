@@ -1,3 +1,5 @@
+package kweb
+
 import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
