@@ -6,10 +6,10 @@
     <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=CI&style=flat-square" alt="continuous integration status" />
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
-    <img src="https://img.shields.io/matrix/kweb:matrix.org?label=matrix&logo=matrix&style=flat-square" alt="matrix" />
+    <img src="https://img.shields.io/matrix/kweb:matrix.org?label=matrix&logo=matrix&style=flat-square&color=blue" alt="matrix" />
   </a>
   <a href="https://jitpack.io/#kwebio/kweb-core">
-    <img src="https://jitpack.io/v/kwebio/kweb-core.svg?style=flat-square&label=gradle" />
+    <img src="https://jitpack.io/v/kwebio/kweb-core.svg?style=flat-square&label=gradle&color=bluevilot" />
   </a>
 </div>
 
