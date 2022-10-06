@@ -67,8 +67,6 @@ dependencies {
 }
 
 tasks.named('shadowJar') {
-    archiveBaseName = project.name
-    archiveClassifier = 'all'
     manifest {
         attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
     }
