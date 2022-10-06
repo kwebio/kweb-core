@@ -42,7 +42,7 @@ fun <T> warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -> Unit, f: () -> T): 
 fun Array<StackTraceElement>.pruneAndDumpStackTo(logStatementBuilder: StringBuilder) {
     val disregardClassPrefixes = listOf("org.jetbrains.ktor", "io.netty", "java.lang", "kotlin", "kotlinx")
     this.filter { ste -> ste.lineNumber >= 0 && !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement ->
-        logStatementBuilder.appendln("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
+        logStatementBuilder.appendLine("        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})")
     }
 }
 
