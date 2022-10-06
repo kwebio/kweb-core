@@ -79,7 +79,7 @@ dependencies {
     testImplementation 'io.kotest:kotest-assertions-core'
 
     testImplementation 'ch.qos.logback:logback-classic:1.4.3'
-    testImplementation 'io.github.bonigarcia:selenium-jupiter:3.3.5'
+    testImplementation 'io.github.bonigarcia:selenium-jupiter:4.3.1'
 
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
