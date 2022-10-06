@@ -13,8 +13,6 @@ version '0.12.6'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://plugins.gradle.org/m2' }
 }
 
 test {
