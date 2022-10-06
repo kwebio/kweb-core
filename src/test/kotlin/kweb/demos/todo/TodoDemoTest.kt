@@ -104,12 +104,11 @@ class TodoDemoTest {
     }
 
     @Test
-    @Disabled
     fun navigateToNewSite(driver: WebDriver) {
         driver.get("http://localhost:7659")
         val firstSiteUrl = driver.currentUrl
         driver.get("http://localhost:7659")
-        driver.currentUrl shouldBe firstSiteUrl
+        driver.currentUrl shouldNotBe firstSiteUrl
     }
 }
 
