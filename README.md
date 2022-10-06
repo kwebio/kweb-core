@@ -2,7 +2,7 @@
 
 <div align="center">
   <!-- Github Actions -->
-  <a href="https://github.com/freenet/locutus/actions/workflows/ci.yml">
+  <a href="https://github.com/freenet/locutus/actions/workflows/build.yml">
     <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/actions?label=CI&style=flat-square" alt="continuous integration status" />
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
