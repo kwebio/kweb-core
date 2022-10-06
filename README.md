@@ -47,5 +47,5 @@ Kweb's API is likely to change between now and our 1.0.0 release, so you may nee
 * [Template Repo](https://github.com/kwebio/kweb-template)
 * [Example Projects](https://github.com/kwebio/kweb-demos)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
-* [Chat with us](https://gitter.im/kwebio/Lobby)
+* [Chat with us](https://matrix.to/#/#kweb:matrix.org)
 * [Frequently Asked Questions](http://docs.kweb.io/en/latest/faq.html)
