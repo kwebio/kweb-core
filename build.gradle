@@ -1,15 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "com.github.ben-manes:gradle-versions-plugin:0.42.0"
-    }
-}
-
 plugins {
-    id 'java'
     id "org.jetbrains.kotlin.jvm" version "1.7.20"
     id 'maven-publish'
     id 'org.jetbrains.dokka' version '1.7.10'
@@ -18,19 +7,14 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.20'
 }
 
-apply plugin: "com.github.ben-manes.versions"
-apply plugin: "maven-publish"
-
 group 'com.github.kwebio'
 version '0.12.6'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://plugins.gradle.org/m2' }
 }
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
     systemProperty('sel.jup.default.browser', System.getProperty('sel.jup.default.browser'))
 }
@@ -45,8 +29,6 @@ dependencies {
     // Kotlin library dependencies
     //////////////////////////////
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
@@ -64,8 +46,6 @@ dependencies {
     implementation 'io.mola.galimatias:galimatias:0.2.1'
 
     implementation 'io.github.microutils:kotlin-logging:3.0.0'
-
-    implementation 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
     ///////////////////////////
     // Dependencies for testing
@@ -85,32 +65,14 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
-// Not sure why this is necessary, seems like a dependency is turning on build scans.
-if (hasProperty('buildScan')) {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
-
-//This is required because kotlin compiler targets 1.6 by default (https://stackoverflow.com/questions/41113268)
-//https://kotlinlang.org/docs/reference/using-gradle.html#attributes-specific-for-jvm
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
-shadowJar {
-    archiveBaseName = project.name
-    archiveClassifier = 'all'
+tasks.named('shadowJar') {
     manifest {
         attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
     }
     mergeServiceFiles()
 }
 
-dokkaHtml {
+tasks.named('dokkaHtml') {
     dokkaSourceSets {
         configureEach {
             samples.from(files("src/main/kotlin/samples.kt"))
