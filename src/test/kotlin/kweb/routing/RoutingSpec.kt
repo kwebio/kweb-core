@@ -1,7 +1,7 @@
 package kweb.routing
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.FreeSpec
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 import kweb.state.KVar
 import kweb.subList
 

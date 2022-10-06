@@ -1,7 +1,7 @@
 package kweb.state.render
 
 import io.github.bonigarcia.seljup.Options
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import kweb.*
@@ -16,8 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 
-
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class RenderCleanupTest {
     companion object {
         private lateinit var renderCleanupTestApp: RenderCleanupTestApp
@@ -78,17 +77,17 @@ class RenderCleanupTestApp {
                             val ta = textArea()
                             ta.setValue(taskList.value.joinToString(separator = "\n"))
                             div(fomantic.ui.buttons) {
-                                button(fomantic.ui.button, type = ButtonType.submit).text("Save").
-                                    on("document.getElementById(${ta.id})").click { event ->
-                                    //TODO, I'm not sure about this change
-                                    taskList.value = Json.decodeFromJsonElement<List<String>>(event.retrieved!!)
-                                    //taskList.value = event.retrieved!!//.split('\n').map { it.trim() }.toList()
-                                    editing.value = false
-                                }
-                                button(fomantic.ui.button, type = ButtonType.submit).text("Cancel").
-                                    on("document.getElementById(${ta.id}).value").click { event ->
-                                    editing.value = false
-                                }
+                                button(fomantic.ui.button, type = ButtonType.submit).text("Save")
+                                    .on("document.getElementById(${ta.id})").click { event ->
+                                        //TODO, I'm not sure about this change
+                                        taskList.value = Json.decodeFromJsonElement(event.retrieved)
+                                        //taskList.value = event.retrieved!!//.split('\n').map { it.trim() }.toList()
+                                        editing.value = false
+                                    }
+                                button(fomantic.ui.button, type = ButtonType.submit).text("Cancel")
+                                    .on("document.getElementById(${ta.id}).value").click {
+                                        editing.value = false
+                                    }
                             }
                         }
                     }
@@ -108,7 +107,6 @@ class RenderCleanupTestApp {
             }
         }
     }
-
 }
 
 private val stringBool = object : ReversibleFunction<Boolean, String>(label = "bool -> string") {

@@ -1,7 +1,7 @@
 package kweb.state
 
-import io.kotlintest.specs.FreeSpec
-import org.amshove.kluent.shouldBeEqualTo
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
 /**
  * Created by ian on 6/18/17.
@@ -10,9 +10,9 @@ class StateSpec : FreeSpec({
     "KVal" - {
         val readOnlyBindable = KVal("Test")
         "retrieving its value" - {
-            val value = readOnlyBindable.value
+            // val value = readOnlyBindable.value
             "should match the value it was initialized with" {
-                readOnlyBindable.value shouldBeEqualTo "Test"
+                readOnlyBindable.value shouldBe "Test"
             }
         }
     }
@@ -22,8 +22,8 @@ class StateSpec : FreeSpec({
         var old: String? = null
         var new: String? = null
         val handle = kvar.addListener { o, n ->
-            old shouldBeEqualTo null
-            new shouldBeEqualTo null
+            old shouldBe null
+            new shouldBe null
             old = o
             new = n
         }
@@ -32,8 +32,8 @@ class StateSpec : FreeSpec({
                 kvar.value = "Bar"
             }
             "should call the listener, modifying the vars accordingly" {
-                old shouldBeEqualTo "Foo"
-                new shouldBeEqualTo "Bar"
+                old shouldBe "Foo"
+                new shouldBe "Bar"
             }
         }
         "removing the listener and modifying the value again" - {
@@ -44,8 +44,8 @@ class StateSpec : FreeSpec({
                 kvar.value = "FooBar"
             }
             "listener shouldn't have been called" {
-                old shouldBeEqualTo "Foo"
-                new shouldBeEqualTo "Bar"
+                old shouldBe "Foo"
+                new shouldBe "Bar"
             }
         }
 
@@ -56,7 +56,7 @@ class StateSpec : FreeSpec({
                 kvar.value = "elephant"
             }
             "should be mapped correctly" {
-                mappedBindable.value shouldBeEqualTo 8
+                mappedBindable.value shouldBe 8
             }
         }
     }
@@ -64,10 +64,9 @@ class StateSpec : FreeSpec({
     "Two-way mapping on KVar" - {
         val lowerCaseVar = KVar("foo")
         val upperCaseVar = lowerCaseVar.map(object : ReversibleFunction<String, String>("upperCase") {
-            override fun invoke(from: String) = from.toUpperCase()
+            override fun invoke(from: String) = from.uppercase()
 
-            override fun reverse(original: String, change: String) = change.toLowerCase()
-
+            override fun reverse(original: String, change: String) = change.lowercase()
         })
         "Mapping from original to target" - {
 
@@ -76,7 +75,7 @@ class StateSpec : FreeSpec({
             }
             "value should be mapped correctly to target" {
                 val value = upperCaseVar.value
-                value shouldBeEqualTo "ONE"
+                value shouldBe "ONE"
             }
         }
         "Mapping from target to original" - {
@@ -85,7 +84,7 @@ class StateSpec : FreeSpec({
             }
             "value should be mapped correctly to original" {
                 val value = lowerCaseVar.value
-                value shouldBeEqualTo "two"
+                value shouldBe "two"
             }
         }
     }

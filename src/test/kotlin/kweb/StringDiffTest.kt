@@ -1,12 +1,10 @@
 package kweb
+
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
-import io.kotlintest.shouldBe
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import io.github.bonigarcia.seljup.SeleniumJupiter
+import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
-import kweb.state.render
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -17,12 +15,12 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
-		//ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-		//This should make this test thread safe.
+        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
+        //This should make this test thread safe.
         driver = ThreadGuard.protect(driver)
     }
 
@@ -32,13 +30,13 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
         @JvmStatic
         @BeforeAll
         fun setupServer() {
-            StringDiffTest.stringDiffTestApp = StringDiffTestApp()
+            stringDiffTestApp = StringDiffTestApp()
         }
 
         @JvmStatic
         @AfterAll
         fun tearDownServer() {
-            StringDiffTest.stringDiffTestApp.server.close()
+            stringDiffTestApp.server.close()
         }
     }
 
@@ -47,7 +45,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}Super ")
-        inputField.getAttribute("value").shouldBe("Super Lazy Brown Fox")
+        inputField.getAttribute("value") shouldBe "Super Lazy Brown Fox"
     }
 
     @Test
@@ -55,7 +53,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.LEFT}1234")
-        inputField.getAttribute("value").shouldBe("Lazy Brown F1234ox")
+        inputField.getAttribute("value") shouldBe "Lazy Brown F1234ox"
     }
 
     @Test
@@ -63,7 +61,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
         inputField.sendKeys(" Jumped")
-        inputField.getAttribute("value").shouldBe("Lazy Brown Fox Jumped")
+        inputField.getAttribute("value") shouldBe "Lazy Brown Fox Jumped"
     }
 
     @Test
@@ -71,7 +69,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}")
-        inputField.getAttribute("value").shouldBe("Brown Fox")
+        inputField.getAttribute("value") shouldBe "Brown Fox"
     }
 
     @Test
@@ -79,7 +77,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement<WebElement>(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.BACK_SPACE}${Keys.BACK_SPACE}")
-        inputField.getAttribute("value").shouldBe("Lazy Brown x")
+        inputField.getAttribute("value") shouldBe "Lazy Brown x"
     }
 
     @Test
@@ -91,15 +89,14 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
             inputField.sendKeys(Keys.BACK_SPACE)
         }
         inputField.sendKeys(Keys.ENTER)
-        inputField.getAttribute("value").shouldBe("Lazy Brown")
+        inputField.getAttribute("value") shouldBe "Lazy Brown"
     }
-
 }
 
 class StringDiffTestApp {
     var inputString = KVar("")
 
-    val server: Kweb = Kweb(port= 7660){
+    val server: Kweb = Kweb(port = 7660) {
         doc.body {
             val input = input(initialValue = "Lazy Brown Fox")
             inputString = input.value

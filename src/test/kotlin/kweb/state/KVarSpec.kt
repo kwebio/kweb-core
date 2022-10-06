@@ -1,12 +1,13 @@
 package kweb.state
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.FreeSpec
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 import kweb.util.combine
 
 class KVarSpec : FreeSpec({
     "a KVar with value `dog`" - {
-        data class Foo(val bar : String)
+        data class Foo(val bar: String)
+
         val f = Foo("dog")
         val kvf = KVar(f)
         "should have field with value `dog`" {
