@@ -1,7 +1,7 @@
 package kweb.routing
 
-import io.kotlintest.specs.FreeSpec
-import org.amshove.kluent.shouldBeEqualTo
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
 class UrlToPathSegmentsRFSpec : FreeSpec() {
     init {
@@ -9,9 +9,9 @@ class UrlToPathSegmentsRFSpec : FreeSpec() {
             "Simple URL without query fragment" {
                 val orig = "/one/two/three"
                 val trans = UrlToPathSegmentsRF.invoke(orig)
-                trans shouldBeEqualTo  listOf("one", "two", "three")
+                trans shouldBe listOf("one", "two", "three")
                 val orig2 = UrlToPathSegmentsRF.reverse("/four/five?seven", trans)
-                orig2 shouldBeEqualTo "/one/two/three?seven"
+                orig2 shouldBe "/one/two/three?seven"
             }
         }
     }

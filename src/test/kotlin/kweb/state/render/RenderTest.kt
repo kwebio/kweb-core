@@ -1,8 +1,8 @@
 package kweb.state.render
 
 import io.github.bonigarcia.seljup.Options
-import io.github.bonigarcia.seljup.SeleniumExtension
-import io.kotlintest.matchers.types.shouldNotBeNull
+import io.github.bonigarcia.seljup.SeleniumJupiter
+import io.kotest.matchers.shouldNotBe
 import kweb.*
 import kweb.state.KVar
 import kweb.state.ReversibleFunction
@@ -17,7 +17,7 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class RenderTest {
     companion object {
         private lateinit var renderTestApp: RenderTestApp
@@ -48,10 +48,10 @@ class RenderTest {
     }
 
     @Test
-    fun initialRender(driver : WebDriver) {
+    fun initialRender(driver: WebDriver) {
         driver.get("http://localhost:7659/")
         val h1 = driver.findElement<WebElement>(By.tagName("H1"))
-        h1.shouldNotBeNull()
+        h1 shouldNotBe null
     }
 }
 
@@ -86,7 +86,6 @@ class RenderTestApp {
             input(type = InputType.text).value = innerKvar.map(stringBool)
         }
     }
-
 }
 
 private val stringBool = object : ReversibleFunction<Boolean, String>(label = "bool -> string") {

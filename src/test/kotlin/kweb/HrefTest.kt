@@ -1,6 +1,8 @@
+package kweb
+
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
-import io.kotlintest.shouldBe
+import io.github.bonigarcia.seljup.SeleniumJupiter
+import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
 import org.junit.jupiter.api.AfterAll
@@ -12,7 +14,7 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -27,13 +29,13 @@ class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
         @JvmStatic
         @BeforeAll
         fun setupServer() {
-            HrefTest.hrefTestApp = HrefTestApp()
+            hrefTestApp = HrefTestApp()
         }
 
         @JvmStatic
         @AfterAll
         fun tearDownServer() {
-            HrefTest.hrefTestApp.server.close()
+            hrefTestApp.server.close()
         }
     }
 

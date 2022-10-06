@@ -1,7 +1,8 @@
+package kweb
+
 import io.github.bonigarcia.seljup.Arguments
-import io.github.bonigarcia.seljup.SeleniumExtension
-import io.kotlintest.shouldBe
-import kotlinx.coroutines.delay
+import io.github.bonigarcia.seljup.SeleniumJupiter
+import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
 import kweb.state.render
@@ -14,7 +15,7 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
 
     init {
@@ -29,13 +30,13 @@ class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
         @JvmStatic
         @BeforeAll
         fun setupServer() {
-            HistoryTest.historyTestApp = HistoryTestApp()
+            historyTestApp = HistoryTestApp()
         }
 
         @JvmStatic
         @AfterAll
         fun tearDownServer() {
-            HistoryTest.historyTestApp.server.close()
+            historyTestApp.server.close()
         }
     }
 
@@ -65,8 +66,6 @@ class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
         historyTestApp.url.value shouldBe "/2"
         historyTestApp.reloadCount.value shouldBe 1
     }
-
-
 }
 
 fun main() {
@@ -96,5 +95,4 @@ class HistoryTestApp {
 
         }
     }
-
 }

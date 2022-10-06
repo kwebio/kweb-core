@@ -11,7 +11,7 @@ buildscript {
 plugins {
     id 'java'
     id "org.jetbrains.kotlin.jvm" version "1.7.20"
-    id 'maven'
+    id 'maven-publish'
     id 'org.jetbrains.dokka' version '1.7.10'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id "com.github.ben-manes.versions" version "0.42.0"
@@ -19,9 +19,10 @@ plugins {
 }
 
 apply plugin: "com.github.ben-manes.versions"
+apply plugin: "maven-publish"
 
 group 'com.github.kwebio'
-version '0.12.5'
+version '0.12.6'
 
 repositories {
     mavenCentral()
@@ -35,51 +36,53 @@ test {
 }
 
 dependencies {
-    compile 'org.apache.commons:commons-lang3:3.12.0'
-    compile 'commons-io:commons-io:2.11.0'
-    compile 'org.jsoup:jsoup:1.15.3'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.guava:guava:31.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
-    compile 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
 
     ////////////////////
     // Ktor dependencies
     ////////////////////
-    compile "io.ktor:ktor-server-jetty:2.1.2"
-    compile "io.ktor:ktor-server-websockets:2.1.2"
-    compile "io.ktor:ktor-server-default-headers:2.1.2"
-    compile "io.ktor:ktor-server-compression:2.1.2"
-    compile "io.ktor:ktor-server-caching-headers:2.1.2"
-    compile "io.ktor:ktor-network-tls-certificates:2.1.2"
+    implementation "io.ktor:ktor-server-jetty:2.1.2"
+    implementation "io.ktor:ktor-server-websockets:2.1.2"
+    implementation "io.ktor:ktor-server-default-headers:2.1.2"
+    implementation "io.ktor:ktor-server-compression:2.1.2"
+    implementation "io.ktor:ktor-server-caching-headers:2.1.2"
+    implementation "io.ktor:ktor-network-tls-certificates:2.1.2"
 
-    compile 'io.mola.galimatias:galimatias:0.2.1'
+    implementation 'io.mola.galimatias:galimatias:0.2.1'
 
-    compile 'io.github.microutils:kotlin-logging:3.0.0'
-    //compile "org.reflections:reflections:0.10.2"
+    implementation 'io.github.microutils:kotlin-logging:3.0.0'
 
-    compile 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
-
-
-
+    implementation 'com.github.yamamotoj:cached-property-kotlin:0.1.0'
 
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    testCompile 'org.amshove.kluent:kluent:1.68'
-    testCompile 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
-    testCompile 'ch.qos.logback:logback-classic:1.4.1'
-    testCompile "io.github.bonigarcia:selenium-jupiter:3.3.5"
-    testCompile "org.junit.jupiter:junit-jupiter-api:5.9.1"
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
-    compile 'org.jsoup:jsoup:1.15.3'
+    // Pinned to 5.4.2 for now since there are issues with test discovery in 5.5.0
+    // See: https://github.com/kotest/kotest/issues/3223
+    testApi(platform('io.kotest:kotest-bom:5.4.2'))
+    testApi(platform('org.junit:junit-bom:5.9.1'))
+
+    testImplementation 'io.kotest:kotest-runner-junit5'
+    testImplementation 'io.kotest:kotest-assertions-core'
+
+    testImplementation 'ch.qos.logback:logback-classic:1.4.1'
+    testImplementation 'io.github.bonigarcia:selenium-jupiter:3.3.5'
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 // Not sure why this is necessary, seems like a dependency is turning on build scans.
