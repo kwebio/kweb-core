@@ -1,6 +1,17 @@
 # Kweb 🦆
 
-[![](https://jitpack.io/v/kwebio/kweb-core.svg)](https://jitpack.io/#kwebio/kweb-core) [![Build Status](https://github.com/kwebio/kweb-core/workflows/tests/badge.svg?branch=master)](https://github.com/kwebio/kweb-core/actions)
+<div align="center">
+  <!-- Github Actions -->
+  <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
+    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=CI&style=flat-square" alt="continuous integration status" />
+  </a>
+  <a href="https://matrix.to/#/#kweb:matrix.org">
+    <img src="https://img.shields.io/matrix/kweb:matrix.org?label=matrix&logo=matrix&style=flat-square&color=blue" alt="matrix" />
+  </a>
+  <a href="https://jitpack.io/#kwebio/kweb-core">
+    <img src="https://jitpack.io/v/kwebio/kweb-core.svg?style=flat-square&label=gradle&color=bluevilot" />
+  </a>
+</div>
 
 ## Quick Start
 
@@ -36,5 +47,5 @@ Kweb's API is likely to change between now and our 1.0.0 release, so you may nee
 * [Template Repo](https://github.com/kwebio/kweb-template)
 * [Example Projects](https://github.com/kwebio/kweb-demos)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
-* [Chat with us](https://gitter.im/kwebio/Lobby)
+* [Chat with us](https://matrix.to/#/#kweb:matrix.org)
 * [Frequently Asked Questions](http://docs.kweb.io/en/latest/faq.html)

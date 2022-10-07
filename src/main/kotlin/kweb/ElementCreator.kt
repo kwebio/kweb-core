@@ -28,7 +28,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     val parent: PARENT_TYPE,
     val parentCreator: ElementCreator<*>? = parent.creator,
     val insertBefore: String? = null
-) {
+)  {
 
     companion object : KLogging()
 

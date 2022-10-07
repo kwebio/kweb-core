@@ -1,2 +1,4 @@
 jdk:
-  - oraclejdk8
+  - openjdk16
+install:
+  - mvn install

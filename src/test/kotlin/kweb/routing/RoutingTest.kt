@@ -1,7 +1,7 @@
 package kweb.routing
 
 import io.github.bonigarcia.seljup.Options
-import io.github.bonigarcia.seljup.SeleniumExtension
+import io.github.bonigarcia.seljup.SeleniumJupiter
 import kweb.*
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.KVar
@@ -12,8 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 
-
-@ExtendWith(SeleniumExtension::class)
+@ExtendWith(SeleniumJupiter::class)
 class RoutingTest {
     companion object {
         private lateinit var routingTestApp: RoutingTestApp
@@ -74,9 +73,7 @@ class RoutingTestApp {
             }
         }
 
-
     }
-
 }
 
 private val stringBool = object : ReversibleFunction<Boolean, String>(label = "bool -> string") {

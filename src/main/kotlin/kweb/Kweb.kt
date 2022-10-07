@@ -352,7 +352,7 @@ class Kweb private constructor(
                     logger.warn { "buildPage lambda must return immediately but has taken > ${kwebConfig.buildpageTimeout}.  More info at DEBUG loglevel" }
 
                     val logStatementBuilder = StringBuilder()
-                    logStatementBuilder.appendln("buildPage lambda must return immediately but has taken > ${kwebConfig.buildpageTimeout}, appears to be blocking here:")
+                    logStatementBuilder.appendLine("buildPage lambda must return immediately but has taken > ${kwebConfig.buildpageTimeout}, appears to be blocking here:")
 
                     thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
                     val logStatement = logStatementBuilder.toString()
@@ -449,8 +449,8 @@ class Kweb private constructor(
         val debugInfo = remoteClientState.debugTokens[error.debugToken]
             ?: error("DebugInfo message not found")
         val logStatementBuilder = StringBuilder()
-        logStatementBuilder.appendln("JavaScript message: '${error.error.message}'")
-        logStatementBuilder.appendln("Caused by ${debugInfo.action}: '${debugInfo.js}':")
+        logStatementBuilder.appendLine("JavaScript message: '${error.error.message}'")
+        logStatementBuilder.appendLine("Caused by ${debugInfo.action}: '${debugInfo.js}':")
         // TODO: Filtering the stacktrace like this seems a bit kludgy, although I can't think
         // TODO: of a specific reason why it would be bad.
         debugInfo.throwable.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
