@@ -12,6 +12,7 @@ version '0.12.6'
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 tasks.named('test') {
