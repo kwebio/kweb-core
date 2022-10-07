@@ -1,2 +1,4 @@
 jdk:
   - openjdk16
+install:
+  - mvn install
