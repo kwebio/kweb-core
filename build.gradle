@@ -79,3 +79,17 @@ tasks.named('dokkaHtml') {
         }
     }
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.kwebio'
+                artifactId = 'kweb-core'
+                version = '0.12.6'
+            }
+        }
+    }
+}
