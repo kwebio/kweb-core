@@ -1,2 +1,10 @@
 jdk:
-  - oraclejdk8
+  - openjdk16
+before_install:
+  - echo "Before Install"
+  - bash ensure-java-16 install
+install:
+  - echo "Install"
+  - if ! bash ensure-java-16 use; then source ~/.sdkman/bin/sdkman-init.sh; fi
+  - java -version
+  - mvn install
