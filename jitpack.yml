@@ -1,4 +1,4 @@
 jdk:
   - openjdk16
 install:
-  - gradle install
+  - ./gradlew install
