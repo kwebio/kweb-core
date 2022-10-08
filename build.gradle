@@ -10,6 +10,7 @@ plugins {
 allprojects {
     repositories {
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -71,6 +72,20 @@ tasks.named('dokkaHtml') {
     }
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            create(MavenPublication) {
+                groupId = "com.github.kwebio"
+                artifactId = "kweb-core"
+                version = version
+                from(components["java"])
+            }
+        }
+    }
+}
+
+/* // Had to abandon this because the repositories aren't public :(
 publishing {
     repositories {
         maven {
@@ -88,3 +103,4 @@ publishing {
         }
     }
 }
+*/
