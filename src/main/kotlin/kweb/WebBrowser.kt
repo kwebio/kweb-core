@@ -245,7 +245,11 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
 
     fun close() {
         synchronized(this) {
-            this.closeListeners.values.forEach { it() }
+            try {
+                this.closeListeners.values.forEach { it() }
+            } catch (e : Exception) {
+                logger.warn("Exception while calling closeListener", e)
+            }
         }
     }
 

@@ -4,10 +4,6 @@ package kweb
 import kotlinx.serialization.json.JsonNull
  import kweb.util.json
 
-/**
- * Created by ian on 1/14/17.
- */
-
 val attr: MutableMap<String, JsonPrimitive> get() = AttributeBuilder()
 
 open class AttributeBuilder : MutableMap<String, JsonPrimitive> by LinkedHashMap()

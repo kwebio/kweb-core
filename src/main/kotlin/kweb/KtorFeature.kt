@@ -10,7 +10,7 @@ import io.ktor.server.routing.routing
 import kweb.routing.PathReceiver
 
 /**
- * Kweb normally calls this function on initialization, if you provide a buildpage,
+ * Kweb normally calls this function on initialization. If you provide a buildpage,
  * regardless of whether it's initialized as a standalone, or Ktor Feature.
  *
  * If you are using Ktor, this is an easy way to migrate from the deprecated buildPage design

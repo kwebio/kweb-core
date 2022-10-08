@@ -1,10 +1,21 @@
 # Kweb 🦆
 
-[![](https://jitpack.io/v/kwebio/kweb-core.svg)](https://jitpack.io/#kwebio/kweb-core) [![Build Status](https://github.com/kwebio/kweb-core/workflows/tests/badge.svg?branch=master)](https://github.com/kwebio/kweb-core/actions)
+<div align="center">
+  <!-- Github Actions -->
+  <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
+    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=CI&style=flat-square" alt="continuous integration status" />
+  </a>
+  <a href="https://matrix.to/#/#kweb:matrix.org">
+    <img src="https://img.shields.io/matrix/kweb:matrix.org?label=matrix&logo=matrix&style=flat-square&color=blue" alt="matrix" />
+  </a>
+  <a href="https://jitpack.io/#kwebio/kweb-core">
+    <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=latest&sort=semver&flat-square&color=bluevilot" />
+  </a>
+</div>
 
 ## Quick Start
 
-Read [Getting Started](http://docs.kweb.io/en/latest/gettingstarted.html) from the [User Manual](http://docs.kweb.io/).
+Read [Getting Started](https://docs.kweb.io/book/gettingstarted.html) from the [Kweb Book](https://docs.kweb.io/book/).
 
 ## Overview
 
@@ -26,15 +37,16 @@ fun main() {
 
 ## API Stability
 
-Kweb's API is likely to change between now and our 1.0.0 release, so you may need to modify your code to stay current with Kweb versions. We won't do this without a good reason.
+Kweb's API is likely to change between now and our 1.0.0 release, so you may need to modify your code to stay current 
+with Kweb versions. We won't do this without a good reason.
 
 ## Learn More
 
-* [User Manual](http://docs.kweb.io/)
-* [API Documentation](https://dokka.kweb.io/index.html)
-* [Live Example](http://demo.kweb.io:7659/)
+* [User Manual](http://docs.kweb.io/book)
+* [API Documentation](https://docs.kweb/io/api)
+* [Example Project](https://github.com/freenet/freenetorg-website/tree/staging/src/main/kotlin/org/freenet/website)
 * [Template Repo](https://github.com/kwebio/kweb-template)
-* [Example Projects](https://github.com/kwebio/kweb-demos)
+* [Examples](https://github.com/kwebio/kweb-demos)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
-* [Chat with us](https://gitter.im/kwebio/Lobby)
-* [Frequently Asked Questions](http://docs.kweb.io/en/latest/faq.html)
+* [Chat with us](https://matrix.to/#/#kweb:matrix.org)
+* [Frequently Asked Questions](https://docs.kweb.io/book/faq.html)
