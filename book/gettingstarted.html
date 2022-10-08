@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Getting Started - The Kweb Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html" class="active"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Kweb Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <hr />
+<h2 id="title-getting-started"><a class="header" href="#title-getting-started">title: Getting Started</a></h2>
+<h1 id="what-youll-need"><a class="header" href="#what-youll-need">What you'll need</a></h1>
+<p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
+is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
+some familiarity with HTML.</p>
+<h1 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h1>
+<p>Add these to your repositories and dependencies {blocks} in your
+[build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.</p>
+<p><strong>NOTE:</strong> Replace <code>LATEST_VERSION</code> with the latest version of Kweb,
+which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</a>.</p>
+<h2 id="gradle-groovy"><a class="header" href="#gradle-groovy">Gradle (Groovy)</a></h2>
+<pre><code class="language-groovy">repositories {
+ maven { url &quot;https://maven.pkg.github.com/kwebio/kweb-core&quot; }
+ jcenter()
+}
+</code></pre>
+<pre><code class="language-groovy">dependencies {
+  implementation 'io.kweb:kweb-core:LATEST_VERSION'
+
+  // This (or another SLF4J binding) is required for Kweb to log errors
+  implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+}
+</code></pre>
+<h2 id="gradle-kotlin"><a class="header" href="#gradle-kotlin">Gradle (Kotlin)</a></h2>
+<pre><code class="language-kotlin">repositories {
+  maven(&quot;https://maven.pkg.github.com/kwebio/kweb-core&quot;)
+  jcenter()
+}
+</code></pre>
+<pre><code class="language-kotlin">dependencies {
+  implementation(&quot;io.kweb:kweb-core:LATEST_VERSION&quot;)
+
+  // This (or another SLF4J binding) is required for Kweb to log errors
+  implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
+}
+</code></pre>
+<h1 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h1>
+<p>Create a new Kotlin file and type this:</p>
+<pre><code class="language-kotlin">import kweb.*
+
+fun main() {
+  Kweb(port = 16097) {
+    doc.body {
+      h1().text(&quot;Hello World!&quot;)
+    }
+ }
+}
+</code></pre>
+<p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
+see the traditional greeting, translating to the following HTML body:</p>
+<pre><code class="language-html">&lt;body&gt;
+  &lt;h1&gt;Hello World!&lt;/h1&gt;
+&lt;/body&gt;
+</code></pre>
+<p>This simple example already illustrates some important features of Kweb:</p>
+<ul>
+<li>Getting a kwebsite up and running is a breeze, no messing around
+with servlets, or third party webservers</li>
+<li>Your Kweb code will loosely mirror the structure of the HTML it
+generates</li>
+</ul>
+<h1 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h1>
+<p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
+(DSL)</a> for
+building and manipulating a
+<a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> in a remote
+web browser, while also listening for and handing DOM events.</p>
+<p>Importantly, this DSL can also do anything Kotlin can do, including
+features like for loops, functions, coroutines, and classes.</p>
+<p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
+<pre><code class="language-kotlin">import kweb.*
+
+fun main() {
+  Kweb(port = 16097) {
+    doc.body {
+      ul {
+          for (x in 1..5) {
+             li().text(&quot;Hello World $x!&quot;)
+          }
+      }
+    }
+ }
+}
+</code></pre>
+<p>To produce...</p>
+<pre><code class="language-html">&lt;body&gt;
+  &lt;ul&gt;
+      &lt;li&gt;Hello World 1!&lt;/li&gt;
+      &lt;li&gt;Hello World 2!&lt;/li&gt;
+      &lt;li&gt;Hello World 3!&lt;/li&gt;
+      &lt;li&gt;Hello World 4!&lt;/li&gt;
+      &lt;li&gt;Hello World 5!&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/body&gt;
+</code></pre>
+<p>You can use functions for modularization and reuse:</p>
+<pre><code class="language-kotlin">fun main() {
+    Kweb(port = 16097) {
+        doc.body {
+            ul {
+                for (x in 1..5) {
+                    createMessage(x)
+                }
+            }
+        }
+    }
+}
+
+private fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
+    li().text(&quot;Hello World $x!&quot;)
+}
+</code></pre>
+<p>As you can see this is an extension function, which allows you to use
+the Kweb DSL within the newly created function.</p>
+<p>Don't worry if you're unsure about this because you can use
+IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
+function</a>
+refactoring to create these functions automatically.</p>
+<h1 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h1>
+<p>You can find a simple template Kweb project in
+<a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="next" href="dom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="next" href="dom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
