@@ -26,5 +26,6 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          FOLDER: docs/book
-          TARGET_FOLDER: book
+          branch: gh-pages
+          folder: docs/book
+          target-folder: book
