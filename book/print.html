@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">8.</strong> Frequency Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,7 +135,54 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
+<p>Modern websites consist of at least two <a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)">tightly
+coupled</a>
+components, one runs in the browser, the other on the server. These are
+often written in different programming languages and must communicate
+with each other over an HTTP connection.</p>
+<p>Kweb<code>s goal is to eliminate this server/browser separation so that your webapp</code>s architecture is determined by the problem you<code>re solving, rather than the limitations of today</code>s tools.</p>
+<h2 id="how-does-it-work"><a class="header" href="#how-does-it-work">How does it work?</a></h2>
+<p>Kweb is a self-contained Kotlin library that can be added easily to new
+or existing projects. When Kweb receives a HTTP request it responds with
+the initial HTML page, and some JavaScript that connects back to the web
+server via a WebSocket. The page then waits and listens for instructions
+from the server, while notifying the server of relevant browser events.</p>
+<p>A common concern about this approach is that the user interface might
+feel sluggish if it is server driven. Kweb solves this problem by
+<a href="https://docs.kweb.io/en/latest/events.html#immediate-events">preloading</a>
+instructions to the browser to be executed immediately on browser events
+without a server round-trip.</p>
+<p>Kweb is built on the excellent <a href="https://ktor.io/">Ktor</a> framework, which
+handles HTTP, HTTPS, and WebSocket transport. You don<code>t need to know Ktor to use Kweb, but if you</code>ve already got a Ktor app you can <a href="https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt">embed
+Kweb as a Feature</a>.</p>
+<h2 id="features"><a class="header" href="#features">Features</a></h2>
+<ul>
+<li>Allows the problem to determine your architecture, not the
+server/browser divide</li>
+<li>End-to-end Kotlin (<a href="https://steve-yegge.blogspot.com/2017/05/why-kotlin-is-better-than-whatever-dumb.html?m=1">Why
+Kotlin?</a>)</li>
+<li>Keep the web page in sync with your back-end data in realtime, Kweb
+does all the plumbing for you</li>
+<li>Server-side HTML rendering with
+<a href="https://developers.google.com/web/updates/2019/02/rendering-on-the-web">rehydration</a></li>
+<li>Efficient instruction preloading to avoid unnecessary server
+communication</li>
+<li>Very lightweight, Kweb is less than 5,000 lines of code</li>
+</ul>
+<h2 id="professional-services"><a class="header" href="#professional-services">Professional Services</a></h2>
+<p>If you```re interested in professional services related to Kweb from the
+people who built Kweb please email <a href="mailto:services@kweb.io">services@kweb.io</a>.</p>
+<h2 id="relevant-links"><a class="header" href="#relevant-links">Relevant Links</a></h2>
+<ul>
+<li>Github Repository(https://github.com/kwebio/kweb-core)</li>
+<li><a href="https://docs.kweb.io/api/">API documentation</a></li>
+<li><a href="https://github.com/freenet/freenetorg-website/">Example Google Cloud Project</a></li>
+<li><a href="https://github.com/kwebio/kweb-core/issues">Questions/Feedback/Bugs</a></li>
+<li>Chat with us on <a href="https://matrix.to/#/#kweb:matrix.org">Matrix</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
 <p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
 is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
