@@ -1,0 +1,348 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Observer Pattern &amp; State - The Kweb Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html" class="active"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Kweb Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <hr />
+<h2 id="title-observer-pattern--state"><a class="header" href="#title-observer-pattern--state">title: Observer Pattern &amp; State</a></h2>
+<h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+<p>Kweb uses the <a href="https://en.wikipedia.org/wiki/Observer_pattern">observer
+pattern</a> to manage
+state.</p>
+<p>A Kweb app can be viewed as a mapping function between state on the
+server and the DOM within the end-user's web browser. Once this mapping
+is defined, simply modify this state and the change will propagate
+automatically to the browser.</p>
+<h1 id="building-blocks"><a class="header" href="#building-blocks">Building blocks</a></h1>
+<p>A
+<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt">KVar</a>
+class contains a single typed object, which can change over time. For
+example:</p>
+<pre><code class="language-kotlin">val counter = KVar(0)
+</code></pre>
+<p>Here we create a counter of type <em>KVar&lt;Int&gt;</em> initialized with the
+value 0.</p>
+<p>We can also read and modify the value of a KVar:</p>
+<pre><code class="language-kotlin">println(&quot;Counter value ${counter.value}&quot;)
+counter.value = 1
+println(&quot;Counter value ${counter.value}&quot;)
+counter.value++
+println(&quot;Counter value ${counter.value}&quot;)
+</code></pre>
+<p>Will print:</p>
+<pre><code class="language-text">Counter value 0
+Counter value 1
+Counter value 2
+</code></pre>
+<p>KVars support powerful mapping semantics to create new KVars:</p>
+<pre><code class="language-kotlin">val counterDoubled = counter.map { it * 2 }
+counter.value = 5
+println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+counter.value = 6
+println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+</code></pre>
+<p>Will print:</p>
+<pre><code class="language-text">counter: 5, doubled: 10
+counter: 6, doubled: 12
+</code></pre>
+<p>Note that counterDoubled updates automatically.</p>
+<p>::: note
+::: title
+Note
+:::</p>
+<p>KVars should only be used to store values that are themselves immutable,
+such as an Int, String, or a Kotlin <a href="https://kotlinlang.org/docs/reference/data-classes.html">data
+class</a> with
+immutable parameters.
+:::</p>
+<h1 id="kvars-and-the-dom"><a class="header" href="#kvars-and-the-dom">KVars and the DOM</a></h1>
+<p>You can use a KVar (or KVal) to set the text of a DOM element:</p>
+<pre><code class="language-kotlin">val name = KVar(&quot;John&quot;)
+li().text(name)
+</code></pre>
+<p>The neat part is that if the value of <em>name</em> changes, the DOM element
+text will update automatically. It may help to think of this as a way of
+&quot;unwrapping&quot; a KVar.</p>
+<p>Numerous other functions on
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/index.html">Elements</a>
+support KVars in a similar manner, including
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/inner-h-t-m-l.html">innerHtml()</a>
+and
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/set-attribute.html">setAttribute()</a>.</p>
+<h1 id="binding-a-kvar-to-an-input-elements-value"><a class="header" href="#binding-a-kvar-to-an-input-elements-value">Binding a KVar to an input element's value</a></h1>
+<p>For &lt;input&gt; elements you can set the value to a KVar, which will
+connect them bidirectionally.</p>
+<p>Any changes to the KVar will be reflected in realtime in the browser,
+and similarly any changes in the browser by the user will be reflected
+immediately in the KVar, for example:</p>
+<pre><code class="language-kotlin">Kweb(port = 2395) {
+    doc.body {
+         p().text(&quot;What is your name?&quot;)
+        val clickMe = input(type = text)
+        val nameKVar = KVar(&quot;Peter Pan&quot;)
+        clickMe.value = nameKVar
+        p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
+    }
+}
+</code></pre>
+<p>This will also work for &lt;option&gt; and &lt;textarea&gt; elements which also
+have values.</p>
+<p>See also:
+<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L232">ValueElement.value</a></p>
+<h1 id="rendering-state-to-a-dom-fragment"><a class="header" href="#rendering-state-to-a-dom-fragment">Rendering state to a DOM fragment</a></h1>
+<p>But what if you want to do more than just modify a single element based
+on a KVar, what if you want to modify a whole tree of elements?</p>
+<p>This is where the
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state.persistent/render.html">render</a>
+function comes in:</p>
+<pre><code class="language-kotlin">val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
+
+Kweb(port = 16097) {
+    doc.body {
+        render(list) { rList -&gt;
+            ul {
+                for (item in rList) {
+                    li().text(item)
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>Here, if we were to change the list:</p>
+<pre><code class="language-kotlin">list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
+</code></pre>
+<p>Then the relevant part of the DOM will be redrawn instantly.</p>
+<p>The simplicity of this mechanism may disguise how powerful it is, since
+render {} blocks can be nested, it's possible to be very selective
+about what parts of the DOM must be modified in response to changes in
+state.</p>
+<p>::: note
+::: title
+Note
+:::</p>
+<p>Kweb will only re-render a DOM fragment if the value of the KVar
+actually changes so you should avoid &quot;unwrapping&quot; KVars with a
+<em>render()</em> or <em>.text()</em> call before you need to.</p>
+<p>The <a href="https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html">KVal.map
+{}</a>
+function is a powerful tool for manipulating KVals and KVars without
+unwrapping them.
+:::</p>
+<h1 id="extracting-data-class-properties"><a class="header" href="#extracting-data-class-properties">Extracting data class properties</a></h1>
+<p>If your KVar contains a <a href="https://kotlinlang.org/docs/reference/data-classes.html">data
+class</a> then you
+can use Kvar.property() to create a KVar from one of its properties
+which will update the original KVar if changed:</p>
+<pre><code class="language-kotlin">data class User(val name : String)
+val user = KVar(User(&quot;Ian&quot;))
+val name = user.property(User::name)
+name.value = &quot;John&quot;
+println(user) // Will print: KVar(User(name = &quot;John&quot;))
+</code></pre>
+<h1 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h1>
+<p>If you check the type of <em>counterDoubled</em>, you'll notice that it's a
+<em>KVal</em> rather than a <em>KVar</em>.
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html">KVal</a>'s
+values may not be modified directly, so this won't be permitted:</p>
+<pre><code class="language-kotlin">val counter = KVar(0)
+val counterDoubled = counter.map { it * 2 }
+counterDoubled.value = 20 // &lt;--- This won't compile
+</code></pre>
+<p>The <em>KVar</em> class has a second
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-var/map.html">map()</a>
+function which takes a <em>ReversibleFunction</em> implementation. This version
+of <em>map</em> will produce a KVar which can be modified, as follows:</p>
+<pre><code class="language-kotlin">val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
+    override fun invoke(from: Int) = from * 2
+    override fun reverse(original: Int, change: Int) = change / 2
+})
+counter.value = 5
+println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+// output: counter: 5, doubled: 10
+
+counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
+println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+// output: counter: 6, doubled: 12
+</code></pre>
+<p>::: note
+::: title
+Note
+:::</p>
+<p>Reversible mappings are an advanced feature that you only need if you
+want the mapped value to be a mutable KVar. Most of the time the simple
+<a href="https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html">KVal.map
+{}</a>
+function will be what you need.
+:::</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="events.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="routing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="events.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="routing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
