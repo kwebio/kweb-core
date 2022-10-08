@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting Started - The Kweb Book</title>
+        <title>DOM Basics - The Kweb Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html" class="active"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html" class="active"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,133 +135,106 @@
                 <div id="content" class="content">
                     <main>
                         <hr />
-<h2 id="title-getting-started"><a class="header" href="#title-getting-started">title: Getting Started</a></h2>
-<h1 id="what-youll-need"><a class="header" href="#what-youll-need">What you'll need</a></h1>
-<p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
-is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
-some familiarity with HTML.</p>
-<h1 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h1>
-<p>Add these to your repositories and dependencies {blocks} in your
-[build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.</p>
-<p><strong>NOTE:</strong> Replace <code>LATEST_VERSION</code> with the latest version of Kweb,
-which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</a>.</p>
-<h2 id="gradle-groovy"><a class="header" href="#gradle-groovy">Gradle (Groovy)</a></h2>
-<pre><code class="language-groovy">repositories {
- maven { url &quot;https://maven.pkg.github.com/kwebio/kweb-core&quot; }
- jcenter()
-}
-</code></pre>
-<pre><code class="language-groovy">dependencies {
-  implementation 'io.kweb:kweb-core:LATEST_VERSION'
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
-}
-</code></pre>
-<h2 id="gradle-kotlin"><a class="header" href="#gradle-kotlin">Gradle (Kotlin)</a></h2>
-<pre><code class="language-kotlin">repositories {
-  maven(&quot;https://maven.pkg.github.com/kwebio/kweb-core&quot;)
-  jcenter()
-}
-</code></pre>
-<pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:LATEST_VERSION&quot;)
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
-}
-</code></pre>
-<h1 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h1>
-<p>Create a new Kotlin file and type this:</p>
+<h2 id="title-dom-basics"><a class="header" href="#title-dom-basics">title: DOM Basics</a></h2>
+<h1 id="creating-dom-elements-and-fragments"><a class="header" href="#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></h1>
+<p>Let's create a &lt;button&gt; as a child of the &lt;body&gt;:</p>
 <pre><code class="language-kotlin">import kweb.*
 
 fun main() {
   Kweb(port = 16097) {
-    doc.body {
-      h1().text(&quot;Hello World!&quot;)
-    }
+     doc.body {
+         button().text(&quot;Click Me!&quot;)
+     }
+   }
  }
+</code></pre>
+<h1 id="element-attributes"><a class="header" href="#element-attributes">Element Attributes</a></h1>
+<p>If you assign the button element to a val then you can also modify its
+attributes:</p>
+<pre><code class="language-kotlin">val button = button()
+button.text(&quot;Click Me!&quot;)
+button.classes(&quot;bigbutton&quot;)
+button.setAttribute(&quot;autofocus&quot;, JsonPrimitive(true))
+</code></pre>
+<p>Attributes can also be specified in a Map when you create the element:</p>
+<pre><code class="language-kotlin">button(mapOf(&quot;class&quot; to &quot;bigbutton&quot;, &quot;autofocus&quot; to true)).text(&quot;Click Me!&quot;)
+</code></pre>
+<p>Or delete it:</p>
+<pre><code class="language-kotlin">button.delete()
+</code></pre>
+<h1 id="adding-children-to-an-existing-element"><a class="header" href="#adding-children-to-an-existing-element">Adding children to an existing element</a></h1>
+<p>The DSL syntax makes it very easy to create elements and their children
+together:</p>
+<pre><code class="language-kotlin">ul {
+  li().text(&quot;One&quot;)
+  li().text(&quot;Two&quot;)
 }
 </code></pre>
-<p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
-see the traditional greeting, translating to the following HTML body:</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;h1&gt;Hello World!&lt;/h1&gt;
-&lt;/body&gt;
+<p>Alternatively we can use the [new {}]{.title-ref} function on Elements
+to add children to a pre-existing Element:</p>
+<pre><code class="language-kotlin">val unorderedList : ULElement = ul()
+unorderedList.new {
+  li().text(&quot;One&quot;)
+  li().text(&quot;Two&quot;)
+}
 </code></pre>
-<p>This simple example already illustrates some important features of Kweb:</p>
-<ul>
-<li>Getting a kwebsite up and running is a breeze, no messing around
-with servlets, or third party webservers</li>
-<li>Your Kweb code will loosely mirror the structure of the HTML it
-generates</li>
-</ul>
-<h1 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h1>
-<p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
-(DSL)</a> for
-building and manipulating a
-<a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> in a remote
-web browser, while also listening for and handing DOM events.</p>
-<p>Importantly, this DSL can also do anything Kotlin can do, including
-features like for loops, functions, coroutines, and classes.</p>
-<p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
+<h1 id="reading-from-the-dom"><a class="header" href="#reading-from-the-dom">Reading from the DOM</a></h1>
+<p>Kweb can also read from the DOM, in this case the value of an &lt;input&gt;
+element:</p>
 <pre><code class="language-kotlin">import kweb.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.launch
 
 fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      ul {
-          for (x in 1..5) {
-             li().text(&quot;Hello World $x!&quot;)
-          }
-      }
-    }
- }
-}
-</code></pre>
-<p>To produce...</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;ul&gt;
-      &lt;li&gt;Hello World 1!&lt;/li&gt;
-      &lt;li&gt;Hello World 2!&lt;/li&gt;
-      &lt;li&gt;Hello World 3!&lt;/li&gt;
-      &lt;li&gt;Hello World 4!&lt;/li&gt;
-      &lt;li&gt;Hello World 5!&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/body&gt;
-</code></pre>
-<p>You can use functions for modularization and reuse:</p>
-<pre><code class="language-kotlin">fun main() {
-    Kweb(port = 16097) {
+    Kweb(port = 2395) {
         doc.body {
-            ul {
-                for (x in 1..5) {
-                    createMessage(x)
-                }
+            val input: InputElement = input()
+            input.on(retrieveJs = input.valueJsExpression).submit { event -&gt;
+                 println(&quot;Value: ${event.retrieved}&quot;)
             }
         }
     }
 }
-
-private fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
-    li().text(&quot;Hello World $x!&quot;)
+</code></pre>
+<p>Events can evaluate a JavaScript expression and send the result to the
+server, in this case we give it an expression that will retrieve the
+value of an InputElement, conveniently provided by valueJsExpression.</p>
+<p>::: note
+::: title
+Note
+:::</p>
+<p>See the <a href="https://docs.kweb.io/en/latest/state.html#binding-a-kvar-to-an-input-element-s-value">Observer Pattern &amp;
+State</a>
+section for
+:::</p>
+<p>another way to read input element values.</p>
+<h1 id="supported-html-tags"><a class="header" href="#supported-html-tags">Supported HTML tags</a></h1>
+<p>Kweb supports a significant subset of HTML tags like <em>button()</em>, <em>p()</em>,
+<em>a()</em>, <em>table()</em>, and so on. You can find a more complete list in
+<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt">prelude.kt</a>
+(scroll down to the <em>Functions</em> section). This provides a nice
+statically-typed HTML DSL, fully integrated with the Kotlin language.</p>
+<p>If a tag doesn't have explicit support in Kweb that's not a problem.
+For example, here is how you might use the infamous and now-obsolete
+&lt;blink&gt; tag:</p>
+<pre><code class="language-kotlin">doc.body {
+    val blink = element(&quot;blink&quot;).text(&quot;I am annoying!&quot;)
 }
 </code></pre>
-<p>As you can see this is an extension function, which allows you to use
-the Kweb DSL within the newly created function.</p>
-<p>Don't worry if you're unsure about this because you can use
-IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
-function</a>
-refactoring to create these functions automatically.</p>
-<h1 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h1>
-<p>You can find a simple template Kweb project in
-<a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
+<h1 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h1>
+<p>The
+<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/Element.kt">Element</a>
+class provides many other useful ways to interact with DOM elements.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="next" href="dom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="prev" href="gettingstarted.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="events.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -270,7 +243,10 @@ refactoring to create these functions automatically.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="next" href="dom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="prev" href="gettingstarted.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="events.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting Started - The Kweb Book</title>
+        <title>URL Routing - The Kweb Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html" class="active"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html" class="active"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,133 +135,121 @@
                 <div id="content" class="content">
                     <main>
                         <hr />
-<h2 id="title-getting-started"><a class="header" href="#title-getting-started">title: Getting Started</a></h2>
-<h1 id="what-youll-need"><a class="header" href="#what-youll-need">What you'll need</a></h1>
-<p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
-is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
-some familiarity with HTML.</p>
-<h1 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h1>
-<p>Add these to your repositories and dependencies {blocks} in your
-[build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.</p>
-<p><strong>NOTE:</strong> Replace <code>LATEST_VERSION</code> with the latest version of Kweb,
-which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</a>.</p>
-<h2 id="gradle-groovy"><a class="header" href="#gradle-groovy">Gradle (Groovy)</a></h2>
-<pre><code class="language-groovy">repositories {
- maven { url &quot;https://maven.pkg.github.com/kwebio/kweb-core&quot; }
- jcenter()
-}
-</code></pre>
-<pre><code class="language-groovy">dependencies {
-  implementation 'io.kweb:kweb-core:LATEST_VERSION'
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
-}
-</code></pre>
-<h2 id="gradle-kotlin"><a class="header" href="#gradle-kotlin">Gradle (Kotlin)</a></h2>
-<pre><code class="language-kotlin">repositories {
-  maven(&quot;https://maven.pkg.github.com/kwebio/kweb-core&quot;)
-  jcenter()
-}
-</code></pre>
-<pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:LATEST_VERSION&quot;)
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
-}
-</code></pre>
-<h1 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h1>
-<p>Create a new Kotlin file and type this:</p>
-<pre><code class="language-kotlin">import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      h1().text(&quot;Hello World!&quot;)
-    }
- }
-}
-</code></pre>
-<p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
-see the traditional greeting, translating to the following HTML body:</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;h1&gt;Hello World!&lt;/h1&gt;
-&lt;/body&gt;
-</code></pre>
-<p>This simple example already illustrates some important features of Kweb:</p>
+<h2 id="title-url-routing"><a class="header" href="#title-url-routing">title: URL Routing</a></h2>
+<p>In a web application, routing is the process of using URLs to drive the
+user interface (UI). URLs are a prominent feature in every web browser,
+and have several main functions:</p>
 <ul>
-<li>Getting a kwebsite up and running is a breeze, no messing around
-with servlets, or third party webservers</li>
-<li>Your Kweb code will loosely mirror the structure of the HTML it
-generates</li>
+<li>Bookmarking - Users can bookmark URLs in their web browser to save
+content they want to come back to later.</li>
+<li>Sharing - Users can share content with others by sending a link to a
+certain page.</li>
+<li>Navigation - URLs are used to drive the web browser's back/forward
+functions.</li>
 </ul>
-<h1 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h1>
-<p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
-(DSL)</a> for
-building and manipulating a
-<a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> in a remote
-web browser, while also listening for and handing DOM events.</p>
-<p>Importantly, this DSL can also do anything Kotlin can do, including
-features like for loops, functions, coroutines, and classes.</p>
-<p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
-<pre><code class="language-kotlin">import kweb.*
+<p>Traditionally, visiting a different URL within the same website would
+cause a new page to be downloaded from the server, but current
+state-of-the-art websites are able to modify the page in response to URL
+changes without a full refresh.</p>
+<p>With Kweb's routing mechanism you get this automatically.</p>
+<h1 id="a-simple-example"><a class="header" href="#a-simple-example">A simple example</a></h1>
+<pre><code class="language-kotlin">import kweb.Kweb
+import kweb.dom.element.new
+import kweb.dom.element.creation.tags.h1
+import kweb.routing.route
 
 fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      ul {
-          for (x in 1..5) {
-             li().text(&quot;Hello World $x!&quot;)
-          }
-      }
-    }
- }
-}
-</code></pre>
-<p>To produce...</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;ul&gt;
-      &lt;li&gt;Hello World 1!&lt;/li&gt;
-      &lt;li&gt;Hello World 2!&lt;/li&gt;
-      &lt;li&gt;Hello World 3!&lt;/li&gt;
-      &lt;li&gt;Hello World 4!&lt;/li&gt;
-      &lt;li&gt;Hello World 5!&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/body&gt;
-</code></pre>
-<p>You can use functions for modularization and reuse:</p>
-<pre><code class="language-kotlin">fun main() {
     Kweb(port = 16097) {
         doc.body {
-            ul {
-                for (x in 1..5) {
-                    createMessage(x)
+            route {
+                path(&quot;/users/{userId}&quot;) { params -&gt;
+                    val userId = params.getValue(&quot;userId&quot;)
+                    h1().text(userId.map { &quot;User id: $it&quot; })
+                }
+                path(&quot;/lists/{listId}&quot;) { params -&gt;
+                    val listId = params.getValue(&quot;listId&quot;)
+                    h1().text(listId.map { &quot;List id: $it&quot; })
                 }
             }
         }
     }
 }
-
-private fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
-    li().text(&quot;Hello World $x!&quot;)
+</code></pre>
+<p>Now, if you visit <a href="http://localhost:16097/users/997">http://localhost:16097/users/997</a>, you will see:</p>
+<pre><code class="language-html">&lt;h1&gt;User id: 997&lt;/h1&gt;
+</code></pre>
+<p>You can have as many path()s as you need, each with it's own path
+definition. The definition can contain parameters wrapped in <code>{braces}</code>.</p>
+<p>The value of these parameters can then be retrieved from the <em>params</em>
+map, but note that the values are wrapped in a <code>KVar&lt;String&gt;</code> object.
+This means that you can use all of Kweb's <a href="https://docs.kweb.io/en/latest/state.html">state
+management</a> features to
+render parts of the DOM using this value.</p>
+<p>The key advantage here is that if the URL changes the page can be
+updated without a full page refresh, but rather only changing the parts
+of the DOM that need to change - this is much faster and more efficient.</p>
+<h1 id="handing-404s"><a class="header" href="#handing-404s">Handing 404s</a></h1>
+<p>You can override the default 404 Page Not Found message in the event
+that none of the routes match, making it easy to integrate the 404 page
+with the style of your overall website:</p>
+<pre><code class="language-kotlin">route {
+    path(&quot;/users/{userId}&quot;) { params -&gt;
+        // ...
+    }
+    notFound {
+      h1().text(&quot;Page not found!&quot;)
+    }
 }
 </code></pre>
-<p>As you can see this is an extension function, which allows you to use
-the Kweb DSL within the newly created function.</p>
-<p>Don't worry if you're unsure about this because you can use
-IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
-function</a>
-refactoring to create these functions automatically.</p>
-<h1 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h1>
-<p>You can find a simple template Kweb project in
-<a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
+<h1 id="modifying-the-url"><a class="header" href="#modifying-the-url">Modifying the URL</a></h1>
+<p>You can obtain <em>and modify</em> the URL of the current page using
+<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/WebBrowser.kt#L98">WebBrowser.url</a>.</p>
+<p>This returns a <code>KVar&lt;String&gt;</code> which contains the URL relative to the
+origin - so for the page <code>http://foo/bar/z</code> the <code>url</code> would be <code>/bar/z</code>.</p>
+<p>Here is a more realistic example:</p>
+<pre><code class="language-kotlin">import kweb.Kweb
+import kweb.dom.element.creation.tags.a
+import kweb.dom.element.new
+import kweb.routing.route
+import kweb.state.*
+
+fun main() {
+    Kweb(port = 16097) {
+        doc.body {
+            route {
+                path(&quot;/&quot;) {
+                    url.value = &quot;/number/1&quot;
+                }
+                path(&quot;/number/{num}&quot;) { params -&gt;
+                    val num = params.getValue(&quot;num&quot;).toInt()
+                    a().text(num.map {&quot;Number $it&quot;}).on.click {
+                        num.value++
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p>If you visit <code>http://localhost:16097/</code> the URL will immediately update
+to <code>http://localhost:16097/number/1</code> without a page refresh, and you'll
+see a hyperlink with text <code>Number 1</code>. If you click on this link you'll
+see that the number increments (both in the URL and in the link text),
+also without a page refresh.</p>
+<p>The line <code>num.value++</code> is worthy of additional attention as there is
+more going on here than meets the eye. <code>num</code> is a <code>KVar&lt;Int&gt;</code>, and so it
+can be incremented via its <code>value</code> property. This will cause the page
+URL to update, which will in-turn cause the DOM to update to reflect the
+new URL. All of this is handled for you automatically by Kweb.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="next" href="dom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="prev" href="state.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="style.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -270,7 +258,10 @@ refactoring to create these functions automatically.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="next" href="dom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="prev" href="state.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="style.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

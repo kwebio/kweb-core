@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting Started - The Kweb Book</title>
+        <title>Event Handling - The Kweb Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html" class="active"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">2.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html" class="active"><strong aria-hidden="true">3.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">4.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">5.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">6.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">7.</strong> Frequency Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,133 +135,71 @@
                 <div id="content" class="content">
                     <main>
                         <hr />
-<h2 id="title-getting-started"><a class="header" href="#title-getting-started">title: Getting Started</a></h2>
-<h1 id="what-youll-need"><a class="header" href="#what-youll-need">What you'll need</a></h1>
-<p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
-is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
-some familiarity with HTML.</p>
-<h1 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h1>
-<p>Add these to your repositories and dependencies {blocks} in your
-[build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.</p>
-<p><strong>NOTE:</strong> Replace <code>LATEST_VERSION</code> with the latest version of Kweb,
-which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</a>.</p>
-<h2 id="gradle-groovy"><a class="header" href="#gradle-groovy">Gradle (Groovy)</a></h2>
-<pre><code class="language-groovy">repositories {
- maven { url &quot;https://maven.pkg.github.com/kwebio/kweb-core&quot; }
- jcenter()
-}
-</code></pre>
-<pre><code class="language-groovy">dependencies {
-  implementation 'io.kweb:kweb-core:LATEST_VERSION'
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
-}
-</code></pre>
-<h2 id="gradle-kotlin"><a class="header" href="#gradle-kotlin">Gradle (Kotlin)</a></h2>
-<pre><code class="language-kotlin">repositories {
-  maven(&quot;https://maven.pkg.github.com/kwebio/kweb-core&quot;)
-  jcenter()
-}
-</code></pre>
-<pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:LATEST_VERSION&quot;)
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
-}
-</code></pre>
-<h1 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h1>
-<p>Create a new Kotlin file and type this:</p>
-<pre><code class="language-kotlin">import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      h1().text(&quot;Hello World!&quot;)
-    }
- }
-}
-</code></pre>
-<p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
-see the traditional greeting, translating to the following HTML body:</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;h1&gt;Hello World!&lt;/h1&gt;
-&lt;/body&gt;
-</code></pre>
-<p>This simple example already illustrates some important features of Kweb:</p>
-<ul>
-<li>Getting a kwebsite up and running is a breeze, no messing around
-with servlets, or third party webservers</li>
-<li>Your Kweb code will loosely mirror the structure of the HTML it
-generates</li>
-</ul>
-<h1 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h1>
-<p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
-(DSL)</a> for
-building and manipulating a
-<a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> in a remote
-web browser, while also listening for and handing DOM events.</p>
-<p>Importantly, this DSL can also do anything Kotlin can do, including
-features like for loops, functions, coroutines, and classes.</p>
-<p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
-<pre><code class="language-kotlin">import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      ul {
-          for (x in 1..5) {
-             li().text(&quot;Hello World $x!&quot;)
-          }
-      }
-    }
- }
-}
-</code></pre>
-<p>To produce...</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;ul&gt;
-      &lt;li&gt;Hello World 1!&lt;/li&gt;
-      &lt;li&gt;Hello World 2!&lt;/li&gt;
-      &lt;li&gt;Hello World 3!&lt;/li&gt;
-      &lt;li&gt;Hello World 4!&lt;/li&gt;
-      &lt;li&gt;Hello World 5!&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/body&gt;
-</code></pre>
-<p>You can use functions for modularization and reuse:</p>
-<pre><code class="language-kotlin">fun main() {
-    Kweb(port = 16097) {
-        doc.body {
-            ul {
-                for (x in 1..5) {
-                    createMessage(x)
-                }
-            }
-        }
+<h2 id="title-event-handling"><a class="header" href="#title-event-handling">title: Event Handling</a></h2>
+<h1 id="listening-for-events"><a class="header" href="#listening-for-events">Listening for events</a></h1>
+<p>You can attach event handlers to DOM elements:</p>
+<pre><code class="language-kotlin">doc.body {
+    val label = h1()
+    label.text(&quot;Click Me&quot;)
+    label.on.click {
+        label.text(&quot;Clicked!&quot;)
     }
 }
-
-private fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
-    li().text(&quot;Hello World $x!&quot;)
+</code></pre>
+<p>Most if not all JavaScript event types are supported, and you can read
+event data like which key was pressed:</p>
+<pre><code class="language-kotlin">doc.body {
+    val input = input(type = text)
+    input.on.keypress { keypressEvent -&gt;
+        println(&quot;Key Pressed: ${keypressEvent.key}&quot;)
+    }
 }
 </code></pre>
-<p>As you can see this is an extension function, which allows you to use
-the Kweb DSL within the newly created function.</p>
-<p>Don't worry if you're unsure about this because you can use
-IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
-function</a>
-refactoring to create these functions automatically.</p>
-<h1 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h1>
-<p>You can find a simple template Kweb project in
-<a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
+<h1 id="immediate-events"><a class="header" href="#immediate-events">Immediate events</a></h1>
+<p>Since the code to respond to events runs on the server, there may be a
+short lag between the action causing the event and any changes to the
+DOM caused by the event handler. This was a common complaint about
+previous server-driven web frameworks like Vaadin, inhibiting their
+adoption.</p>
+<p>Fortunately, Kweb has a solution:</p>
+<pre><code class="language-kotlin">doc.body {
+    val label = h1()
+    label.text(&quot;Click Me&quot;)
+    label.onImmediate.click {
+        label.text(&quot;Clicked!&quot;)
+    }
+}
+</code></pre>
+<p>This is identical to the first event listener example, except <em>on</em> has
+been replaced by <em>onImmediate</em>.</p>
+<p>Kweb executes this event handler <em>on page render</em> and records the
+changes it makes to the DOM. It then &quot;pre-loads&quot; these instructions to
+the browser such that they are executed immediately when the event
+occurs without any server round-trip.</p>
+<p>::: warning
+::: title
+Warning
+:::</p>
+<p>Due to this pre-loading mechanism, the event handler for an
+<em>onImmediate</em> must limit itself to simple DOM modifications. Kweb
+includes some runtime safeguards against this but they can't catch
+every problem so please use with caution.
+:::</p>
+<h1 id="combination-event-handlers"><a class="header" href="#combination-event-handlers">Combination event handlers</a></h1>
+<p>A common pattern is to use both types of event handler on a DOM element.
+The immediate handler might disable a clicked button, or temporarily
+display some form of <a href="https://loading.io/css/">spinner</a>. The normal
+handler would then do what it needs on the server, and then perhaps
+re-enable the button and remove the spinner.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="next" href="dom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="prev" href="dom.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="state.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -270,7 +208,10 @@ refactoring to create these functions automatically.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="next" href="dom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="prev" href="dom.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="state.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
