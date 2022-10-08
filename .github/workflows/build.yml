@@ -32,6 +32,5 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
         branch: gh-pages
-        single-commit: true
         folder: build/dokka/html
         target-folder: api
