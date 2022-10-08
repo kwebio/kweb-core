@@ -8,11 +8,13 @@ plugins {
 }
 
 group 'com.github.kwebio'
-version '0.12.6'
+version '0.12.7'
 
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
 }
 
 tasks.named('test') {
@@ -80,15 +82,14 @@ tasks.named('dokkaHtml') {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                groupId = 'com.github.kwebio'
-                artifactId = 'kweb-core'
-                version = '0.12.6'
+publishing {
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
     }
