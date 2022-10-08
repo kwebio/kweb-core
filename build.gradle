@@ -7,9 +7,6 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.20'
 }
 
-group 'io.kweb'
-version '0.12.7.2'
-
 allprojects {
     repositories {
         mavenCentral()
@@ -85,12 +82,17 @@ tasks.named('dokkaHtml') {
 publishing {
     repositories {
         maven {
-            name = "OSSRH"
-            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/kwebio/kweb-core")
             credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
