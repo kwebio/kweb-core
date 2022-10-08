@@ -63,13 +63,6 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
-tasks.named('shadowJar') {
-    manifest {
-        attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
-    }
-    mergeServiceFiles()
-}
-
 tasks.named('dokkaHtml') {
     dokkaSourceSets {
         configureEach {
