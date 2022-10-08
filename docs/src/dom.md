@@ -6,7 +6,7 @@ title: DOM Basics
 
 Let\'s create a \<button\> as a child of the \<body\>:
 
-``` kotlin
+```kotlin
 import kweb.*
 
 fun main() {
@@ -23,7 +23,7 @@ fun main() {
 If you assign the button element to a val then you can also modify its
 attributes:
 
-``` kotlin
+```kotlin
 val button = button()
 button.text("Click Me!")
 button.classes("bigbutton")
@@ -32,13 +32,13 @@ button.setAttribute("autofocus", JsonPrimitive(true))
 
 Attributes can also be specified in a Map when you create the element:
 
-``` kotlin
+```kotlin
 button(mapOf("class" to "bigbutton", "autofocus" to true)).text("Click Me!")
 ```
 
 Or delete it:
 
-``` kotlin
+```kotlin
 button.delete()
 ```
 
@@ -47,7 +47,7 @@ button.delete()
 The DSL syntax makes it very easy to create elements and their children
 together:
 
-``` kotlin
+```kotlin
 ul {
   li().text("One")
   li().text("Two")
@@ -57,7 +57,7 @@ ul {
 Alternatively we can use the [new {}]{.title-ref} function on Elements
 to add children to a pre-existing Element:
 
-``` kotlin
+```kotlin
 val unorderedList : ULElement = ul()
 unorderedList.new {
   li().text("One")
@@ -70,7 +70,7 @@ unorderedList.new {
 Kweb can also read from the DOM, in this case the value of an \<input\>
 element:
 
-``` kotlin
+```kotlin
 import kweb.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.await
@@ -116,7 +116,7 @@ If a tag doesn\'t have explicit support in Kweb that\'s not a problem.
 For example, here is how you might use the infamous and now-obsolete
 \<blink\> tag:
 
-``` kotlin
+```kotlin
 doc.body {
     val blink = element("blink").text("I am annoying!")
 }

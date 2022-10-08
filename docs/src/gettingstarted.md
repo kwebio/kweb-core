@@ -8,8 +8,7 @@ Some familiarity with [Kotlin](https://kotlinlang.org/) is assumed, as
 is familiarity with [Gradle](https://gradle.org/). You should also have
 some familiarity with HTML.
 
-Adding Kweb to your Gradle project
-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
+# Adding Kweb to your Gradle project
 
 Add these to your repositories and dependencies {blocks} in your
 [build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.
@@ -19,14 +18,14 @@ which you can find [here](https://github.com/kwebio/kweb-core/releases).
 
 ## Gradle (Groovy)
 
-``` gradle
+```groovy
 repositories {
  maven { url "https://maven.pkg.github.com/kwebio/kweb-core" }
  jcenter()
 }
 ```
 
-``` gradle
+```groovy
 dependencies {
   implementation 'io.kweb:kweb-core:LATEST_VERSION'
 
@@ -37,14 +36,14 @@ dependencies {
 
 ## Gradle (Kotlin)
 
-``` kotlin
+```kotlin
 repositories {
   maven("https://maven.pkg.github.com/kwebio/kweb-core")
   jcenter()
 }
 ```
 
-``` kotlin
+```kotlin
 dependencies {
   implementation("io.kweb:kweb-core:LATEST_VERSION")
 
@@ -57,7 +56,7 @@ dependencies {
 
 Create a new Kotlin file and type this:
 
-``` kotlin
+```kotlin
 import kweb.*
 
 fun main() {
@@ -72,7 +71,7 @@ fun main() {
 Run it, and then visit <http://localhost:16097/> in your web browser to
 see the traditional greeting, translating to the following HTML body:
 
-``` html
+```html
 <body>
   <h1>Hello World!</h1>
 </body>
@@ -98,7 +97,7 @@ features like for loops, functions, coroutines, and classes.
 
 Here is a simple example using an ordinary Kotlin *for loop*:
 
-``` kotlin
+```kotlin
 import kweb.*
 
 fun main() {
@@ -116,7 +115,7 @@ fun main() {
 
 To produce\...
 
-``` html
+```html
 <body>
   <ul>
       <li>Hello World 1!</li>
@@ -130,7 +129,7 @@ To produce\...
 
 You can use functions for modularization and reuse:
 
-``` kotlin
+```kotlin
 fun main() {
     Kweb(port = 16097) {
         doc.body {

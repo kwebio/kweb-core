@@ -10,7 +10,7 @@ responsive layouts using human-friendly HTML.
 
 First tell Kweb to use the Fomantic UI plugin:
 
-``` kotlin
+```kotlin
 import kweb.plugins.fomanticUI.*
 
 fun main() {
@@ -26,7 +26,7 @@ website automatically.
 Let\'s look at one of the simple examples from the [Fomantic
 UI](https://Fomantic-ui.com/elements/input.html) documentation:
 
-``` html
+```html
 <div class="ui icon input">
   <input type="text" placeholder="Search...">
   <i class="search icon"></i>
@@ -35,7 +35,7 @@ UI](https://Fomantic-ui.com/elements/input.html) documentation:
 
 This translates to the Kotlin:
 
-``` kotlin
+```kotlin
 import kweb.plugins.fomanticUI.*
 import kweb.dom.element.creation.tags.InputType.*
 

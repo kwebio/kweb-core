@@ -6,7 +6,7 @@ title: Event Handling
 
 You can attach event handlers to DOM elements:
 
-``` kotlin
+```kotlin
 doc.body {
     val label = h1()
     label.text("Click Me")
@@ -19,7 +19,7 @@ doc.body {
 Most if not all JavaScript event types are supported, and you can read
 event data like which key was pressed:
 
-``` kotlin
+```kotlin
 doc.body {
     val input = input(type = text)
     input.on.keypress { keypressEvent ->
@@ -38,7 +38,7 @@ adoption.
 
 Fortunately, Kweb has a solution:
 
-``` kotlin
+```kotlin
 doc.body {
     val label = h1()
     label.text("Click Me")

@@ -20,7 +20,7 @@ A
 class contains a single typed object, which can change over time. For
 example:
 
-``` kotlin
+```kotlin
 val counter = KVar(0)
 ```
 
@@ -29,7 +29,7 @@ value 0.
 
 We can also read and modify the value of a KVar:
 
-``` kotlin
+```kotlin
 println("Counter value ${counter.value}")
 counter.value = 1
 println("Counter value ${counter.value}")
@@ -39,7 +39,7 @@ println("Counter value ${counter.value}")
 
 Will print:
 
-``` text
+```text
 Counter value 0
 Counter value 1
 Counter value 2
@@ -47,7 +47,7 @@ Counter value 2
 
 KVars support powerful mapping semantics to create new KVars:
 
-``` kotlin
+```kotlin
 val counterDoubled = counter.map { it * 2 }
 counter.value = 5
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
@@ -57,7 +57,7 @@ println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 
 Will print:
 
-``` text
+```text
 counter: 5, doubled: 10
 counter: 6, doubled: 12
 ```
@@ -79,7 +79,7 @@ immutable parameters.
 
 You can use a KVar (or KVal) to set the text of a DOM element:
 
-``` kotlin
+```kotlin
 val name = KVar("John")
 li().text(name)
 ```
@@ -104,7 +104,7 @@ Any changes to the KVar will be reflected in realtime in the browser,
 and similarly any changes in the browser by the user will be reflected
 immediately in the KVar, for example:
 
-``` kotlin
+```kotlin
 Kweb(port = 2395) {
     doc.body {
          p().text("What is your name?")
@@ -131,7 +131,7 @@ This is where the
 [render](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state.persistent/render.html)
 function comes in:
 
-``` kotlin
+```kotlin
 val list = KVar(listOf("one", "two", "three"))
 
 Kweb(port = 16097) {
@@ -149,7 +149,7 @@ Kweb(port = 16097) {
 
 Here, if we were to change the list:
 
-``` kotlin
+```kotlin
 list.value = listOf("four", "five", "six")
 ```
 
@@ -182,7 +182,7 @@ class](https://kotlinlang.org/docs/reference/data-classes.html) then you
 can use Kvar.property() to create a KVar from one of its properties
 which will update the original KVar if changed:
 
-``` kotlin
+```kotlin
 data class User(val name : String)
 val user = KVar(User("Ian"))
 val name = user.property(User::name)
@@ -197,7 +197,7 @@ If you check the type of *counterDoubled*, you\'ll notice that it\'s a
 [KVal](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html)\'s
 values may not be modified directly, so this won\'t be permitted:
 
-``` kotlin
+```kotlin
 val counter = KVar(0)
 val counterDoubled = counter.map { it * 2 }
 counterDoubled.value = 20 // <--- This won't compile
@@ -208,7 +208,7 @@ The *KVar* class has a second
 function which takes a *ReversibleFunction* implementation. This version
 of *map* will produce a KVar which can be modified, as follows:
 
-``` kotlin
+```kotlin
 val counterDoubled = counter.map(object : ReversibleFunction<Int, Int>("doubledCounter") {
     override fun invoke(from: Int) = from * 2
     override fun reverse(original: Int, change: Int) = change / 2

@@ -22,7 +22,7 @@ With Kweb\'s routing mechanism you get this automatically.
 
 # A simple example
 
-``` kotlin
+```kotlin
 import kweb.Kweb
 import kweb.dom.element.new
 import kweb.dom.element.creation.tags.h1
@@ -48,7 +48,7 @@ fun main() {
 
 Now, if you visit <http://localhost:16097/users/997>, you will see:
 
-``` html
+```html
 <h1>User id: 997</h1>
 ```
 
@@ -71,7 +71,7 @@ You can override the default 404 Page Not Found message in the event
 that none of the routes match, making it easy to integrate the 404 page
 with the style of your overall website:
 
-``` kotlin
+```kotlin
 route {
     path("/users/{userId}") { params ->
         // ...
@@ -92,7 +92,7 @@ origin - so for the page `http://foo/bar/z` the `url` would be `/bar/z`.
 
 Here is a more realistic example:
 
-``` kotlin
+```kotlin
 import kweb.Kweb
 import kweb.dom.element.creation.tags.a
 import kweb.dom.element.new
