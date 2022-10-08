@@ -20,29 +20,29 @@ tasks.named('test') {
 }
 
 dependencies {
+    api 'org.jsoup:jsoup:1.15.3'
     implementation 'org.apache.commons:commons-text:1.10.0'
-    implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.guava:guava:31.1-jre'
 
     //////////////////////////////
     // Kotlin library dependencies
     //////////////////////////////
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4'
+    api 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
 
     ////////////////////
     // Ktor dependencies
     ////////////////////
-    implementation "io.ktor:ktor-server-jetty:2.1.2"
-    implementation "io.ktor:ktor-server-websockets:2.1.2"
-    implementation "io.ktor:ktor-server-default-headers:2.1.2"
-    implementation "io.ktor:ktor-server-compression:2.1.2"
-    implementation "io.ktor:ktor-server-caching-headers:2.1.2"
-    implementation "io.ktor:ktor-network-tls-certificates:2.1.2"
+    api "io.ktor:ktor-server-jetty:2.1.2"
+    api "io.ktor:ktor-server-websockets:2.1.2"
+    api "io.ktor:ktor-server-default-headers:2.1.2"
+    api "io.ktor:ktor-server-compression:2.1.2"
+    api "io.ktor:ktor-server-caching-headers:2.1.2"
+    api "io.ktor:ktor-network-tls-certificates:2.1.2"
 
-    implementation 'io.mola.galimatias:galimatias:0.2.1'
+    api 'io.mola.galimatias:galimatias:0.2.1'
 
     implementation 'io.github.microutils:kotlin-logging:3.0.0'
 
