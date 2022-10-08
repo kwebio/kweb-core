@@ -14,7 +14,9 @@ Add these to your repositories and dependencies {blocks} in your
 **NOTE:** Replace `LATEST_VERSION` with the latest version of Kweb,
 which you can find [here](https://github.com/kwebio/kweb-core/releases).
 
-### Gradle (Groovy)
+### Gradle
+
+#### Groovy
 
 ```groovy
 repositories {
@@ -32,7 +34,7 @@ dependencies {
 }
 ```
 
-### Gradle (Kotlin)
+#### Kotlin
 
 ```kotlin
 repositories {
