@@ -15,7 +15,7 @@
 
 ## Quick Start
 
-Read [Getting Started](http://docs.kweb.io/en/latest/gettingstarted.html) from the [User Manual](http://docs.kweb.io/).
+Read [Getting Started](https://docs.kweb.io/en/latest/gettingstarted.html) from the [User Manual](http://docs.kweb.io/).
 
 ## Overview
 
