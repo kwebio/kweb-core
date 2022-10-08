@@ -134,9 +134,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <hr />
-<h2 id="title-frequently-asked-questions"><a class="header" href="#title-frequently-asked-questions">title: Frequently Asked Questions</a></h2>
-<h1 id="wont-kweb-be-slow-relative-to-client-side-web-frameworks"><a class="header" href="#wont-kweb-be-slow-relative-to-client-side-web-frameworks">Won't Kweb be slow relative to client-side web frameworks?</a></h1>
+                        <h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
+<h2 id="wont-kweb-be-slow-relative-to-client-side-web-frameworks"><a class="header" href="#wont-kweb-be-slow-relative-to-client-side-web-frameworks">Won't Kweb be slow relative to client-side web frameworks?</a></h2>
 <p>No, Kweb's <a href="https://docs.kweb.io/en/latest/events.html#immediate-events">immediate
 events</a>
 allows you to avoid any server communication delay by responding
@@ -145,8 +144,8 @@ immediately to DOM-modifying events.</p>
 server CPU/memory.</p>
 <p>If you encounter a situation in which Kweb is slow please <a href="https://github.com/kwebio/kweb-core/issues">submit a
 bug</a>.</p>
-<h1 id="whats-the-difference-between-kweb-and-vaadin"><a class="header" href="#whats-the-difference-between-kweb-and-vaadin">What's the difference between Kweb and Vaadin?</a></h1>
-<p>Of all web frameworks we're aware of, <a href="https://vaadin.com/">Vaadin</a> is
+<h2 id="whats-the-difference-between-kweb-and-vaadin"><a class="header" href="#whats-the-difference-between-kweb-and-vaadin">What's the difference between Kweb and Vaadin?</a></h2>
+<p>Of all web frameworks we```re aware of, <a href="https://vaadin.com/">Vaadin</a> is
 the closest in design and philosophy to Kweb, but there are also
 important differences:</p>
 <ul>
@@ -155,17 +154,16 @@ important differences:</p>
 lines of code, while
 <a href="https://github.com/vaadin/framework">vaadin/framework</a> is currently
 502,398 lines of code, almost a 100:1 ratio!</li>
-<li>Vaadin doesn't have any equivalent feature to Kweb's <a href="https://docs.kweb.io/en/latest/events.html#immediate-events">immediate
+<li>Vaadin doesn<code>t have any equivalent feature to Kweb</code>s <a href="https://docs.kweb.io/en/latest/events.html#immediate-events">immediate
 events</a>,
 which has led to frequent
 <a href="https://stackoverflow.com/a/22848521/16050">complaints</a> of
 sluggishness from Vaadin users because a server round-trip is
 required to update the DOM.</li>
 <li>Vaadin brought a more desktop-style of user interface to the web
-browser, but since then we've realized that users generally prefer
+browser, but since then we```ve realized that users generally prefer
 their websites to look like websites.</li>
-<li>This is why Kweb's philosophy is to be a thin interface between
-server logic and the user's browser, leveraging existing tools from
+<li>This is why Kweb<code>s philosophy is to be a thin interface between server logic and the user</code>s browser, leveraging existing tools from
 the JavaScript ecosystem <a href="https://docs.kweb.io/en/latest/style.html">when it makes
 sense</a>.</li>
 <li>Kweb was built natively for Kotlin, and takes advantage of all of
@@ -173,70 +171,69 @@ its language features like
 <a href="https://kotlinlang.org/docs/reference/coroutines-overview.html">coroutines</a>
 and the flexible DSL-like syntax. Because of this Kweb code can be a
 lot more concise, without sacrificing readability.</li>
-<li>In Vaadin's favor, it has been a commercial product since 2006, it
+<li>In Vaadin```s favor, it has been a commercial product since 2006, it
 is extremely mature and has a vast developer ecosystem, while Kweb
 is still pre-1.0.</li>
 </ul>
-<h1 id="is-there-a-larger-working-example"><a class="header" href="#is-there-a-larger-working-example">Is there a larger working example?</a></h1>
+<h2 id="is-there-a-larger-working-example"><a class="header" href="#is-there-a-larger-working-example">Is there a larger working example?</a></h2>
 <p>Yes, here is a simple <a href="https://github.com/kwebio/kweb-demos/tree/master/todoList">todo
 list</a>
-implementation which demonstrates many of Kweb's features.</p>
+implementation which demonstrates many of Kweb```s features.</p>
 <p>You can find a copy of this demo running here:
 <a href="http://demo.kweb.io:7659/">http://demo.kweb.io:7659/</a></p>
-<p>It's running on a $50/month EC2 instance. Try visiting the same list
+<p>It```s running on a $50/month EC2 instance. Try visiting the same list
 URL in two different browser windows and notice how they synchronize in
 realtime.</p>
 <p>You can see a number of other example Kweb projects here:
 <a href="https://github.com/kwebio/kweb-demos/tree/master/">kwebio/kweb-demos</a></p>
-<h1 id="how-do-i-enable-https"><a class="header" href="#how-do-i-enable-https">How do I enable HTTPS?</a></h1>
+<h2 id="how-do-i-enable-https"><a class="header" href="#how-do-i-enable-https">How do I enable HTTPS?</a></h2>
 <p>Very easily, please see <a href="https://github.com/kwebio/kweb-demos/blob/master/https/src/HttpsApp.kt">this
 example</a>.</p>
-<h1 id="can-i-embed-kweb-within-an-android-app"><a class="header" href="#can-i-embed-kweb-within-an-android-app">Can I embed Kweb within an Android app?</a></h1>
+<h2 id="can-i-embed-kweb-within-an-android-app"><a class="header" href="#can-i-embed-kweb-within-an-android-app">Can I embed Kweb within an Android app?</a></h2>
 <p>Yes! Please see
 <a href="https://github.com/kwebio/kweb-demos/tree/master/android">kweb-demos/tree/master/android</a>
 for an example.</p>
-<h1 id="i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider"><a class="header" href="#i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider">I want to deploy a Kweb Application behind a load balancer, what do i need to consider?</a></h1>
+<h2 id="i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider"><a class="header" href="#i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider">I want to deploy a Kweb Application behind a load balancer, what do i need to consider?</a></h2>
 <p>Please make sure to enable session affinity so that repeated requests
 from the same client end up at the same kweb instance. Kweb does not
-share it's internal state between multiple instances, so it is
+share it```s internal state between multiple instances, so it is
 important to make sure that each request from a single user ends up at
 always the same instance.</p>
 <p>If the load balancer uses e.g. round robin strategy for load balancing,
 repeated requests end up at different backend instances and kweb may not
 function propery.</p>
 <p>Example how to setup HAProxy can be found
-[here](<a href="https://www.haproxy.com/de/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/">https://www.haproxy.com/de/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/</a>).</p>
-<h1 id="what-about-templates"><a class="header" href="#what-about-templates">What about templates?</a></h1>
+<a href="https://www.haproxy.com/de/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/">here</a>.</p>
+<h2 id="what-about-templates"><a class="header" href="#what-about-templates">What about templates?</a></h2>
 <p>Kweb replaces templates with something better - a typesafe HTML DSL
 embedded within a powerful programming language.</p>
 <p>If you like you could separate out the code that interfaces directly to
 the DOM - this would be architecturally closer to a template-based
-approach, but we view it as a feature that this paradigm isn't forced
+approach, but we view it as a feature that this paradigm isn```t forced
 on the programmer.</p>
-<h1 id="why-risk-my-project-on-a-framework-i-just-heard-of"><a class="header" href="#why-risk-my-project-on-a-framework-i-just-heard-of">Why risk my project on a framework I just heard of?</a></h1>
+<h2 id="why-risk-my-project-on-a-framework-i-just-heard-of"><a class="header" href="#why-risk-my-project-on-a-framework-i-just-heard-of">Why risk my project on a framework I just heard of?</a></h2>
 <p>Picking a framework is stressful. Pick the wrong one and perhaps the
 company behind it goes out of business, meaning your entire app is now
-built on something obsolete. We've been there.</p>
-<p>Kweb's development is driven by a community of volunteers. We welcome
-contributions from anyone, but Kweb doesn't depend on any sponsoring
+built on something obsolete. We```ve been there.</p>
+<p>Kweb<code>s development is driven by a community of volunteers. We welcome contributions from anyone, but Kweb doesn</code>t depend on any sponsoring
 company.</p>
-<p>Because of the powerful abstractions it's built on, Kweb also has the
+<p>Because of the powerful abstractions it```s built on, Kweb also has the
 advantage of simplicity (&lt;5k loc). This makes it easier for people to
 contribute, and less code means fewer bugs.</p>
 <p>That said, Kweb is still pre-1.0, one of the implications being that we
 can and will make breaking API changes, and new releases are quite
 frequent.</p>
-<h1 id="how-is-kweb-pronounced"><a class="header" href="#how-is-kweb-pronounced">How is &quot;Kweb&quot; pronounced?</a></h1>
+<h2 id="how-is-kweb-pronounced"><a class="header" href="#how-is-kweb-pronounced">How is &quot;Kweb&quot; pronounced?</a></h2>
 <p>&quot;Kay-web&quot;.</p>
-<h1 id="can-kweb-be-embedded-in-an-existing-ktor-app"><a class="header" href="#can-kweb-be-embedded-in-an-existing-ktor-app">Can Kweb be embedded in an existing Ktor app?</a></h1>
+<h2 id="can-kweb-be-embedded-in-an-existing-ktor-app"><a class="header" href="#can-kweb-be-embedded-in-an-existing-ktor-app">Can Kweb be embedded in an existing Ktor app?</a></h2>
 <p>Yes! Please see <a href="https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt">this
 example</a>.</p>
-<h1 id="i-have-a-question-not-answered-here"><a class="header" href="#i-have-a-question-not-answered-here">I have a question not answered here</a></h1>
+<h2 id="i-have-a-question-not-answered-here"><a class="header" href="#i-have-a-question-not-answered-here">I have a question not answered here</a></h2>
 <p>Feel free to <a href="https://github.com/kwebio/core/issues/new">ask us a
 question</a> on Github Issues,
 but please search first to see whether it has already been answered. For
 a more realtime experience you can also chat with us on
-<a href="https://gitter.im/kwebio/Lobby">Gitter</a>.</p>
+<a href="https://matrix.to/#/#kweb:matrix.org">Matrix</a>.</p>
 
                     </main>
 

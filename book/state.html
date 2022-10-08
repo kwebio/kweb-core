@@ -134,17 +134,16 @@
 
                 <div id="content" class="content">
                     <main>
-                        <hr />
-<h2 id="title-observer-pattern--state"><a class="header" href="#title-observer-pattern--state">title: Observer Pattern &amp; State</a></h2>
-<h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+                        <h1 id="observer-pattern--state"><a class="header" href="#observer-pattern--state">Observer Pattern &amp; State</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>Kweb uses the <a href="https://en.wikipedia.org/wiki/Observer_pattern">observer
 pattern</a> to manage
 state.</p>
 <p>A Kweb app can be viewed as a mapping function between state on the
-server and the DOM within the end-user's web browser. Once this mapping
+server and the DOM within the end-user```s web browser. Once this mapping
 is defined, simply modify this state and the change will propagate
 automatically to the browser.</p>
-<h1 id="building-blocks"><a class="header" href="#building-blocks">Building blocks</a></h1>
+<h2 id="building-blocks"><a class="header" href="#building-blocks">Building blocks</a></h2>
 <p>A
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt">KVar</a>
 class contains a single typed object, which can change over time. For
@@ -186,7 +185,7 @@ such as an Int, String, or a Kotlin <a href="https://kotlinlang.org/docs/referen
 class</a> with
 immutable parameters.
 :::</p>
-<h1 id="kvars-and-the-dom"><a class="header" href="#kvars-and-the-dom">KVars and the DOM</a></h1>
+<h2 id="kvars-and-the-dom"><a class="header" href="#kvars-and-the-dom">KVars and the DOM</a></h2>
 <p>You can use a KVar (or KVal) to set the text of a DOM element:</p>
 <pre><code class="language-kotlin">val name = KVar(&quot;John&quot;)
 li().text(name)
@@ -200,7 +199,7 @@ support KVars in a similar manner, including
 <a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/inner-h-t-m-l.html">innerHtml()</a>
 and
 <a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/set-attribute.html">setAttribute()</a>.</p>
-<h1 id="binding-a-kvar-to-an-input-elements-value"><a class="header" href="#binding-a-kvar-to-an-input-elements-value">Binding a KVar to an input element's value</a></h1>
+<h2 id="binding-a-kvar-to-an-input-elements-value"><a class="header" href="#binding-a-kvar-to-an-input-elements-value">Binding a KVar to an input element```s value</a></h2>
 <p>For &lt;input&gt; elements you can set the value to a KVar, which will
 connect them bidirectionally.</p>
 <p>Any changes to the KVar will be reflected in realtime in the browser,
@@ -220,7 +219,7 @@ immediately in the KVar, for example:</p>
 have values.</p>
 <p>See also:
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L232">ValueElement.value</a></p>
-<h1 id="rendering-state-to-a-dom-fragment"><a class="header" href="#rendering-state-to-a-dom-fragment">Rendering state to a DOM fragment</a></h1>
+<h2 id="rendering-state-to-a-dom-fragment"><a class="header" href="#rendering-state-to-a-dom-fragment">Rendering state to a DOM fragment</a></h2>
 <p>But what if you want to do more than just modify a single element based
 on a KVar, what if you want to modify a whole tree of elements?</p>
 <p>This is where the
@@ -245,7 +244,7 @@ Kweb(port = 16097) {
 </code></pre>
 <p>Then the relevant part of the DOM will be redrawn instantly.</p>
 <p>The simplicity of this mechanism may disguise how powerful it is, since
-render {} blocks can be nested, it's possible to be very selective
+render {} blocks can be nested, it```s possible to be very selective
 about what parts of the DOM must be modified in response to changes in
 state.</p>
 <p>::: note
@@ -260,7 +259,7 @@ actually changes so you should avoid &quot;unwrapping&quot; KVars with a
 function is a powerful tool for manipulating KVals and KVars without
 unwrapping them.
 :::</p>
-<h1 id="extracting-data-class-properties"><a class="header" href="#extracting-data-class-properties">Extracting data class properties</a></h1>
+<h2 id="extracting-data-class-properties"><a class="header" href="#extracting-data-class-properties">Extracting data class properties</a></h2>
 <p>If your KVar contains a <a href="https://kotlinlang.org/docs/reference/data-classes.html">data
 class</a> then you
 can use Kvar.property() to create a KVar from one of its properties
@@ -271,11 +270,10 @@ val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
 </code></pre>
-<h1 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h1>
-<p>If you check the type of <em>counterDoubled</em>, you'll notice that it's a
+<h2 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h2>
+<p>If you check the type of <em>counterDoubled</em>, you<code>ll notice that it</code>s a
 <em>KVal</em> rather than a <em>KVar</em>.
-<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html">KVal</a>'s
-values may not be modified directly, so this won't be permitted:</p>
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html">KVal</a><code>s values may not be modified directly, so this won</code>t be permitted:</p>
 <pre><code class="language-kotlin">val counter = KVar(0)
 val counterDoubled = counter.map { it * 2 }
 counterDoubled.value = 20 // &lt;--- This won't compile

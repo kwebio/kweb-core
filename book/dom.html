@@ -134,10 +134,9 @@
 
                 <div id="content" class="content">
                     <main>
-                        <hr />
-<h2 id="title-dom-basics"><a class="header" href="#title-dom-basics">title: DOM Basics</a></h2>
-<h1 id="creating-dom-elements-and-fragments"><a class="header" href="#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></h1>
-<p>Let's create a &lt;button&gt; as a child of the &lt;body&gt;:</p>
+                        <h1 id="dom-basics"><a class="header" href="#dom-basics">DOM Basics</a></h1>
+<h2 id="creating-dom-elements-and-fragments"><a class="header" href="#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></h2>
+<p>Let```s create a &lt;button&gt; as a child of the &lt;body&gt;:</p>
 <pre><code class="language-kotlin">import kweb.*
 
 fun main() {
@@ -148,7 +147,7 @@ fun main() {
    }
  }
 </code></pre>
-<h1 id="element-attributes"><a class="header" href="#element-attributes">Element Attributes</a></h1>
+<h2 id="element-attributes"><a class="header" href="#element-attributes">Element Attributes</a></h2>
 <p>If you assign the button element to a val then you can also modify its
 attributes:</p>
 <pre><code class="language-kotlin">val button = button()
@@ -162,7 +161,7 @@ button.setAttribute(&quot;autofocus&quot;, JsonPrimitive(true))
 <p>Or delete it:</p>
 <pre><code class="language-kotlin">button.delete()
 </code></pre>
-<h1 id="adding-children-to-an-existing-element"><a class="header" href="#adding-children-to-an-existing-element">Adding children to an existing element</a></h1>
+<h2 id="adding-children-to-an-existing-element"><a class="header" href="#adding-children-to-an-existing-element">Adding children to an existing element</a></h2>
 <p>The DSL syntax makes it very easy to create elements and their children
 together:</p>
 <pre><code class="language-kotlin">ul {
@@ -178,7 +177,7 @@ unorderedList.new {
   li().text(&quot;Two&quot;)
 }
 </code></pre>
-<h1 id="reading-from-the-dom"><a class="header" href="#reading-from-the-dom">Reading from the DOM</a></h1>
+<h2 id="reading-from-the-dom"><a class="header" href="#reading-from-the-dom">Reading from the DOM</a></h2>
 <p>Kweb can also read from the DOM, in this case the value of an &lt;input&gt;
 element:</p>
 <pre><code class="language-kotlin">import kweb.*
@@ -209,20 +208,20 @@ State</a>
 section for
 :::</p>
 <p>another way to read input element values.</p>
-<h1 id="supported-html-tags"><a class="header" href="#supported-html-tags">Supported HTML tags</a></h1>
+<h2 id="supported-html-tags"><a class="header" href="#supported-html-tags">Supported HTML tags</a></h2>
 <p>Kweb supports a significant subset of HTML tags like <em>button()</em>, <em>p()</em>,
 <em>a()</em>, <em>table()</em>, and so on. You can find a more complete list in
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt">prelude.kt</a>
 (scroll down to the <em>Functions</em> section). This provides a nice
 statically-typed HTML DSL, fully integrated with the Kotlin language.</p>
-<p>If a tag doesn't have explicit support in Kweb that's not a problem.
+<p>If a tag doesn<code>t have explicit support in Kweb that</code>s not a problem.
 For example, here is how you might use the infamous and now-obsolete
 &lt;blink&gt; tag:</p>
 <pre><code class="language-kotlin">doc.body {
     val blink = element(&quot;blink&quot;).text(&quot;I am annoying!&quot;)
 }
 </code></pre>
-<h1 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h1>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
 <p>The
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/Element.kt">Element</a>
 class provides many other useful ways to interact with DOM elements.</p>

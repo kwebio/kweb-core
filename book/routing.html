@@ -134,8 +134,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <hr />
-<h2 id="title-url-routing"><a class="header" href="#title-url-routing">title: URL Routing</a></h2>
+                        <h1 id="url-routing"><a class="header" href="#url-routing">URL Routing</a></h1>
 <p>In a web application, routing is the process of using URLs to drive the
 user interface (UI). URLs are a prominent feature in every web browser,
 and have several main functions:</p>
@@ -151,8 +150,8 @@ functions.</li>
 cause a new page to be downloaded from the server, but current
 state-of-the-art websites are able to modify the page in response to URL
 changes without a full refresh.</p>
-<p>With Kweb's routing mechanism you get this automatically.</p>
-<h1 id="a-simple-example"><a class="header" href="#a-simple-example">A simple example</a></h1>
+<p>With Kweb```s routing mechanism you get this automatically.</p>
+<h2 id="a-simple-example"><a class="header" href="#a-simple-example">A simple example</a></h2>
 <pre><code class="language-kotlin">import kweb.Kweb
 import kweb.dom.element.new
 import kweb.dom.element.creation.tags.h1
@@ -178,17 +177,17 @@ fun main() {
 <p>Now, if you visit <a href="http://localhost:16097/users/997">http://localhost:16097/users/997</a>, you will see:</p>
 <pre><code class="language-html">&lt;h1&gt;User id: 997&lt;/h1&gt;
 </code></pre>
-<p>You can have as many path()s as you need, each with it's own path
+<p>You can have as many path()s as you need, each with it```s own path
 definition. The definition can contain parameters wrapped in <code>{braces}</code>.</p>
 <p>The value of these parameters can then be retrieved from the <em>params</em>
 map, but note that the values are wrapped in a <code>KVar&lt;String&gt;</code> object.
-This means that you can use all of Kweb's <a href="https://docs.kweb.io/en/latest/state.html">state
+This means that you can use all of Kweb```s <a href="https://docs.kweb.io/en/latest/state.html">state
 management</a> features to
 render parts of the DOM using this value.</p>
 <p>The key advantage here is that if the URL changes the page can be
 updated without a full page refresh, but rather only changing the parts
 of the DOM that need to change - this is much faster and more efficient.</p>
-<h1 id="handing-404s"><a class="header" href="#handing-404s">Handing 404s</a></h1>
+<h2 id="handing-404s"><a class="header" href="#handing-404s">Handing 404s</a></h2>
 <p>You can override the default 404 Page Not Found message in the event
 that none of the routes match, making it easy to integrate the 404 page
 with the style of your overall website:</p>
@@ -201,7 +200,7 @@ with the style of your overall website:</p>
     }
 }
 </code></pre>
-<h1 id="modifying-the-url"><a class="header" href="#modifying-the-url">Modifying the URL</a></h1>
+<h2 id="modifying-the-url"><a class="header" href="#modifying-the-url">Modifying the URL</a></h2>
 <p>You can obtain <em>and modify</em> the URL of the current page using
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/WebBrowser.kt#L98">WebBrowser.url</a>.</p>
 <p>This returns a <code>KVar&lt;String&gt;</code> which contains the URL relative to the
@@ -232,8 +231,7 @@ fun main() {
 }
 </code></pre>
 <p>If you visit <code>http://localhost:16097/</code> the URL will immediately update
-to <code>http://localhost:16097/number/1</code> without a page refresh, and you'll
-see a hyperlink with text <code>Number 1</code>. If you click on this link you'll
+to <code>http://localhost:16097/number/1</code> without a page refresh, and you<code>ll see a hyperlink with text `Number 1`. If you click on this link you</code>ll
 see that the number increments (both in the URL and in the link text),
 also without a page refresh.</p>
 <p>The line <code>num.value++</code> is worthy of additional attention as there is

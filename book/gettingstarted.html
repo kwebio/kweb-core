@@ -134,18 +134,17 @@
 
                 <div id="content" class="content">
                     <main>
-                        <hr />
-<h2 id="title-getting-started"><a class="header" href="#title-getting-started">title: Getting Started</a></h2>
-<h1 id="what-youll-need"><a class="header" href="#what-youll-need">What you'll need</a></h1>
+                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<h2 id="what-youll-need"><a class="header" href="#what-youll-need">What you'll need</a></h2>
 <p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
 is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
 some familiarity with HTML.</p>
-<h1 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h1>
+<h2 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h2>
 <p>Add these to your repositories and dependencies {blocks} in your
 [build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.</p>
 <p><strong>NOTE:</strong> Replace <code>LATEST_VERSION</code> with the latest version of Kweb,
 which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</a>.</p>
-<h2 id="gradle-groovy"><a class="header" href="#gradle-groovy">Gradle (Groovy)</a></h2>
+<h3 id="gradle-groovy"><a class="header" href="#gradle-groovy">Gradle (Groovy)</a></h3>
 <pre><code class="language-groovy">repositories {
  maven { url &quot;https://maven.pkg.github.com/kwebio/kweb-core&quot; }
  jcenter()
@@ -158,7 +157,7 @@ which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</
   implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
 }
 </code></pre>
-<h2 id="gradle-kotlin"><a class="header" href="#gradle-kotlin">Gradle (Kotlin)</a></h2>
+<h3 id="gradle-kotlin"><a class="header" href="#gradle-kotlin">Gradle (Kotlin)</a></h3>
 <pre><code class="language-kotlin">repositories {
   maven(&quot;https://maven.pkg.github.com/kwebio/kweb-core&quot;)
   jcenter()
@@ -171,7 +170,7 @@ which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</
   implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
 }
 </code></pre>
-<h1 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h1>
+<h2 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h2>
 <p>Create a new Kotlin file and type this:</p>
 <pre><code class="language-kotlin">import kweb.*
 
@@ -196,7 +195,7 @@ with servlets, or third party webservers</li>
 <li>Your Kweb code will loosely mirror the structure of the HTML it
 generates</li>
 </ul>
-<h1 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h1>
+<h2 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h2>
 <p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
 (DSL)</a> for
 building and manipulating a
@@ -249,11 +248,11 @@ private fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
 </code></pre>
 <p>As you can see this is an extension function, which allows you to use
 the Kweb DSL within the newly created function.</p>
-<p>Don't worry if you're unsure about this because you can use
-IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
+<p>Don<code>t worry if you</code>re unsure about this because you can use
+IntelliJ```s <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
 function</a>
 refactoring to create these functions automatically.</p>
-<h1 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h1>
+<h2 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h2>
 <p>You can find a simple template Kweb project in
 <a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
 
