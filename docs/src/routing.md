@@ -1,6 +1,4 @@
----
-title: URL Routing
----
+# URL Routing
 
 In a web application, routing is the process of using URLs to drive the
 user interface (UI). URLs are a prominent feature in every web browser,
@@ -18,9 +16,9 @@ cause a new page to be downloaded from the server, but current
 state-of-the-art websites are able to modify the page in response to URL
 changes without a full refresh.
 
-With Kweb\'s routing mechanism you get this automatically.
+With Kweb```s routing mechanism you get this automatically.
 
-# A simple example
+## A simple example
 
 ```kotlin
 import kweb.Kweb
@@ -52,12 +50,12 @@ Now, if you visit <http://localhost:16097/users/997>, you will see:
 <h1>User id: 997</h1>
 ```
 
-You can have as many path()s as you need, each with it\'s own path
+You can have as many path()s as you need, each with it```s own path
 definition. The definition can contain parameters wrapped in `{braces}`.
 
 The value of these parameters can then be retrieved from the *params*
 map, but note that the values are wrapped in a `KVar<String>` object.
-This means that you can use all of Kweb\'s [state
+This means that you can use all of Kweb```s [state
 management](https://docs.kweb.io/en/latest/state.html) features to
 render parts of the DOM using this value.
 
@@ -65,7 +63,7 @@ The key advantage here is that if the URL changes the page can be
 updated without a full page refresh, but rather only changing the parts
 of the DOM that need to change - this is much faster and more efficient.
 
-# Handing 404s
+## Handing 404s
 
 You can override the default 404 Page Not Found message in the event
 that none of the routes match, making it easy to integrate the 404 page
@@ -82,7 +80,7 @@ route {
 }
 ```
 
-# Modifying the URL
+## Modifying the URL
 
 You can obtain *and modify* the URL of the current page using
 [WebBrowser.url](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/WebBrowser.kt#L98).
@@ -119,8 +117,8 @@ fun main() {
 ```
 
 If you visit `http://localhost:16097/` the URL will immediately update
-to `http://localhost:16097/number/1` without a page refresh, and you\'ll
-see a hyperlink with text `Number 1`. If you click on this link you\'ll
+to `http://localhost:16097/number/1` without a page refresh, and you```ll
+see a hyperlink with text `Number 1`. If you click on this link you```ll
 see that the number increments (both in the URL and in the link text),
 also without a page refresh.
 

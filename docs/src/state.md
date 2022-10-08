@@ -1,19 +1,17 @@
----
-title: Observer Pattern & State
----
+# Observer Pattern & State
 
-# Overview
+## Overview
 
 Kweb uses the [observer
 pattern](https://en.wikipedia.org/wiki/Observer_pattern) to manage
 state.
 
 A Kweb app can be viewed as a mapping function between state on the
-server and the DOM within the end-user\'s web browser. Once this mapping
+server and the DOM within the end-user```s web browser. Once this mapping
 is defined, simply modify this state and the change will propagate
 automatically to the browser.
 
-# Building blocks
+## Building blocks
 
 A
 [KVar](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt)
@@ -75,7 +73,7 @@ class](https://kotlinlang.org/docs/reference/data-classes.html) with
 immutable parameters.
 :::
 
-# KVars and the DOM
+## KVars and the DOM
 
 You can use a KVar (or KVal) to set the text of a DOM element:
 
@@ -95,7 +93,7 @@ support KVars in a similar manner, including
 and
 [setAttribute()](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/set-attribute.html).
 
-# Binding a KVar to an input element\'s value
+## Binding a KVar to an input element```s value
 
 For \<input\> elements you can set the value to a KVar, which will
 connect them bidirectionally.
@@ -122,7 +120,7 @@ have values.
 See also:
 [ValueElement.value](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L232)
 
-# Rendering state to a DOM fragment
+## Rendering state to a DOM fragment
 
 But what if you want to do more than just modify a single element based
 on a KVar, what if you want to modify a whole tree of elements?
@@ -156,7 +154,7 @@ list.value = listOf("four", "five", "six")
 Then the relevant part of the DOM will be redrawn instantly.
 
 The simplicity of this mechanism may disguise how powerful it is, since
-render {} blocks can be nested, it\'s possible to be very selective
+render {} blocks can be nested, it```s possible to be very selective
 about what parts of the DOM must be modified in response to changes in
 state.
 
@@ -175,7 +173,7 @@ function is a powerful tool for manipulating KVals and KVars without
 unwrapping them.
 :::
 
-# Extracting data class properties
+## Extracting data class properties
 
 If your KVar contains a [data
 class](https://kotlinlang.org/docs/reference/data-classes.html) then you
@@ -190,12 +188,12 @@ name.value = "John"
 println(user) // Will print: KVar(User(name = "John"))
 ```
 
-# Reversible mapping
+## Reversible mapping
 
-If you check the type of *counterDoubled*, you\'ll notice that it\'s a
+If you check the type of *counterDoubled*, you```ll notice that it```s a
 *KVal* rather than a *KVar*.
-[KVal](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html)\'s
-values may not be modified directly, so this won\'t be permitted:
+[KVal](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html)```s
+values may not be modified directly, so this won```t be permitted:
 
 ```kotlin
 val counter = KVar(0)

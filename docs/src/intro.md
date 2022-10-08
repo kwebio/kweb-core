@@ -1,8 +1,6 @@
----
-title: Introduction
----
+# Introduction
 
-# Motivation
+## Motivation
 
 Modern websites consist of at least two [tightly
 coupled](https://en.wikipedia.org/wiki/Coupling_(computer_programming))
@@ -10,11 +8,11 @@ components, one runs in the browser, the other on the server. These are
 often written in different programming languages and must communicate
 with each other over an HTTP connection.
 
-Kweb\'s goal is to eliminate this server/browser separation so that your
-webapp\'s architecture is determined by the problem you\'re solving,
-rather than the limitations of today\'s tools.
+Kweb```s goal is to eliminate this server/browser separation so that your
+webapp```s architecture is determined by the problem you```re solving,
+rather than the limitations of today```s tools.
 
-# How does it work?
+## How does it work?
 
 Kweb is a self-contained Kotlin library that can be added easily to new
 or existing projects. When Kweb receives a HTTP request it responds with
@@ -29,13 +27,11 @@ instructions to the browser to be executed immediately on browser events
 without a server round-trip.
 
 Kweb is built on the excellent [Ktor](https://ktor.io/) framework, which
-handles HTTP, HTTPS, and WebSocket transport. You don\'t need to know
-Ktor to use Kweb, but if you\'ve already got a Ktor app you can [embed
-Kweb as a
-Feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
+handles HTTP, HTTPS, and WebSocket transport. You don```t need to know
+Ktor to use Kweb, but if you```ve already got a Ktor app you can [embed
+Kweb as a Feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
 
-Features
-\-\-\-\-\-\-\--[https://matrix.to/#/#kweb:matrix.org](https://matrix.to/#/#kweb:matrix.org)
+## Features
 
 -   Allows the problem to determine your architecture, not the
     server/browser divide
@@ -49,12 +45,12 @@ Features
     communication
 -   Very lightweight, Kweb is less than 5,000 lines of code
 
-# Professional Services
+## Professional Services
 
-If you\'re interested in professional services related to Kweb from the
+If you```re interested in professional services related to Kweb from the
 people who built Kweb please email <services@kweb.io>.
 
-# Relevant Links
+## Relevant Links
 
 * Github Repository(https://github.com/kwebio/kweb-core)
 * [API documentation](https://docs.kweb.io/api/)

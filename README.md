@@ -37,7 +37,8 @@ fun main() {
 
 ## API Stability
 
-Kweb's API is likely to change between now and our 1.0.0 release, so you may need to modify your code to stay current with Kweb versions. We won't do this without a good reason.
+Kweb's API is likely to change between now and our 1.0.0 release, so you may need to modify your code to stay current 
+with Kweb versions. We won't do this without a good reason.
 
 ## Learn More
 

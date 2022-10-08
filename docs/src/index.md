@@ -1,6 +1,4 @@
----
-title: Kweb - Pleasant web development, in Kotlin 🦆
----
+# Kweb - Pleasant web development, in Kotlin 🦆
 
 A lightweight Kotlin web framework for backend developers.
 

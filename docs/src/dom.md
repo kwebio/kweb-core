@@ -1,10 +1,8 @@
----
-title: DOM Basics
----
+# DOM Basics
 
-# Creating DOM Elements and Fragments
+## Creating DOM Elements and Fragments
 
-Let\'s create a \<button\> as a child of the \<body\>:
+Let```s create a \<button\> as a child of the \<body\>:
 
 ```kotlin
 import kweb.*
@@ -18,7 +16,7 @@ fun main() {
  }
 ```
 
-# Element Attributes
+## Element Attributes
 
 If you assign the button element to a val then you can also modify its
 attributes:
@@ -42,7 +40,7 @@ Or delete it:
 button.delete()
 ```
 
-# Adding children to an existing element
+## Adding children to an existing element
 
 The DSL syntax makes it very easy to create elements and their children
 together:
@@ -65,7 +63,7 @@ unorderedList.new {
 }
 ```
 
-# Reading from the DOM
+## Reading from the DOM
 
 Kweb can also read from the DOM, in this case the value of an \<input\>
 element:
@@ -104,7 +102,7 @@ section for
 
 another way to read input element values.
 
-# Supported HTML tags
+## Supported HTML tags
 
 Kweb supports a significant subset of HTML tags like *button()*, *p()*,
 *a()*, *table()*, and so on. You can find a more complete list in
@@ -112,7 +110,7 @@ Kweb supports a significant subset of HTML tags like *button()*, *p()*,
 (scroll down to the *Functions* section). This provides a nice
 statically-typed HTML DSL, fully integrated with the Kotlin language.
 
-If a tag doesn\'t have explicit support in Kweb that\'s not a problem.
+If a tag doesn```t have explicit support in Kweb that```s not a problem.
 For example, here is how you might use the infamous and now-obsolete
 \<blink\> tag:
 
@@ -122,7 +120,7 @@ doc.body {
 }
 ```
 
-# Further Reading
+## Further Reading
 
 The
 [Element](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/Element.kt)

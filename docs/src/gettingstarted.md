@@ -1,14 +1,12 @@
----
-title: Getting Started
----
+# Getting Started
 
-# What you\'ll need
+## What you'll need
 
 Some familiarity with [Kotlin](https://kotlinlang.org/) is assumed, as
 is familiarity with [Gradle](https://gradle.org/). You should also have
 some familiarity with HTML.
 
-# Adding Kweb to your Gradle project
+## Adding Kweb to your Gradle project
 
 Add these to your repositories and dependencies {blocks} in your
 [build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.
@@ -16,7 +14,7 @@ Add these to your repositories and dependencies {blocks} in your
 **NOTE:** Replace `LATEST_VERSION` with the latest version of Kweb,
 which you can find [here](https://github.com/kwebio/kweb-core/releases).
 
-## Gradle (Groovy)
+### Gradle (Groovy)
 
 ```groovy
 repositories {
@@ -34,7 +32,7 @@ dependencies {
 }
 ```
 
-## Gradle (Kotlin)
+### Gradle (Kotlin)
 
 ```kotlin
 repositories {
@@ -52,7 +50,7 @@ dependencies {
 }
 ```
 
-# Hello world
+## Hello world
 
 Create a new Kotlin file and type this:
 
@@ -84,7 +82,7 @@ This simple example already illustrates some important features of Kweb:
 -   Your Kweb code will loosely mirror the structure of the HTML it
     generates
 
-# Hello world²
+## Hello world²
 
 One way to think of Kweb is as a [domain-specific language
 (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for
@@ -150,12 +148,12 @@ private fun ElementCreator<ULElement>.createMessage(x: Int) {
 As you can see this is an extension function, which allows you to use
 the Kweb DSL within the newly created function.
 
-Don\'t worry if you\'re unsure about this because you can use
-IntelliJ\'s [extract
+Don```t worry if you```re unsure about this because you can use
+IntelliJ```s [extract
 function](https://www.jetbrains.com/help/idea/extract-method.html)
 refactoring to create these functions automatically.
 
-# Template Repository
+## Template Repository
 
 You can find a simple template Kweb project in
 [kwebio/kweb-template](https://github.com/kwebio/kweb-template).

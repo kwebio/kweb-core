@@ -1,8 +1,6 @@
----
-title: Event Handling
----
+# Event Handling
 
-# Listening for events
+## Listening for events
 
 You can attach event handlers to DOM elements:
 
@@ -28,7 +26,7 @@ doc.body {
 }
 ```
 
-# Immediate events
+## Immediate events
 
 Since the code to respond to events runs on the server, there may be a
 short lag between the action causing the event and any changes to the
@@ -63,11 +61,11 @@ Warning
 
 Due to this pre-loading mechanism, the event handler for an
 *onImmediate* must limit itself to simple DOM modifications. Kweb
-includes some runtime safeguards against this but they can\'t catch
+includes some runtime safeguards against this but they can```t catch
 every problem so please use with caution.
 :::
 
-# Combination event handlers
+## Combination event handlers
 
 A common pattern is to use both types of event handler on a DOM element.
 The immediate handler might disable a clicked button, or temporarily
