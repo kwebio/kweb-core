@@ -7,8 +7,8 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.20'
 }
 
-group 'com.github.kwebio'
-version '0.12.7'
+group 'io.kweb'
+version '0.12.7.1'
 
 allprojects {
     repositories {
