@@ -19,8 +19,8 @@ which you can find [here](https://github.com/kwebio/kweb-core/releases).
 
 ```groovy
 repositories {
- maven { url "https://jitpack.io" }
- jcenter()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 ```
 
