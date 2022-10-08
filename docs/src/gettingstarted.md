@@ -1,6 +1,6 @@
 # Getting Started
 
-## What you'll need
+## Requirements
 
 Some familiarity with [Kotlin](https://kotlinlang.org/) is assumed, as
 is familiarity with [Gradle](https://gradle.org/). You should also have
