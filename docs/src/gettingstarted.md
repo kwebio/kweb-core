@@ -17,14 +17,14 @@ which you can find [here](https://github.com/kwebio/kweb-core/releases).
 
 #### Groovy
 
-```groovy
+```ruby
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
 }
 ```
 
-```groovy
+```ruby
 dependencies {
   implementation 'com.github.kwebio:kweb-core:LATEST_VERSION'
 
