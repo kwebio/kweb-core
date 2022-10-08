@@ -17,6 +17,7 @@ import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import org.openqa.selenium.support.ui.WebDriverWait
+import java.time.Duration
 
 /**
  * Test for the todoApp demo
@@ -151,14 +152,14 @@ class TodoSite(private val driver: WebDriver) {
      * itemText cannot contain single quotes (') because those are used in the xpath to delimit the search string
      */
     fun getItemByText(itemText: String): WebElement {
-        return WebDriverWait(driver, 5).until {
+        return WebDriverWait(driver, Duration.ofSeconds(5)).until {
             driver.findElement(By.xpath("//div[contains(descendant::text(),'$itemText') and @class='item']"))
         }
     }
 
     fun deleteItemByText(itemText: String) {
         val item = getItemByText(itemText)
-        val delButton = item.findElement<WebElement>(By.tagName("button"))
+        val delButton = item.findElement(By.tagName("button"))
         delButton.click()
     }
 

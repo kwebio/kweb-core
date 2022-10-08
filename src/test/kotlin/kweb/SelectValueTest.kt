@@ -43,7 +43,7 @@ class SelectValueTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun mainTest() {
         driver.get("http://localhost:7668/")
-        val select = Select(driver.findElement<WebElement>(By.tagName("select")))
+        val select = Select(driver.findElement(By.tagName("select")))
         selectValueTestApp.selectValue.value shouldBe ""
         Thread.sleep(100)
         select.selectByValue("cat")

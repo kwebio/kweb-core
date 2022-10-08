@@ -42,7 +42,7 @@ class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun testClick() {
         driver.get("http://localhost:7665/")
-        val aElement = driver.findElement<WebElement>(By.tagName("a"))
+        val aElement = driver.findElement(By.tagName("a"))
         hrefTestApp.appUrl.value shouldBe "/"
         hrefTestApp.renderCount.value shouldBe 1
         aElement.click()

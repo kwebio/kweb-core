@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
@@ -44,13 +44,13 @@ class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
     fun testBackButton() {
         historyTestApp.reloadCount.value shouldBe 0
         driver.get("http://localhost:7665/0")
-        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+        driver.findElement(By.tagName("a")).let { aElement ->
             historyTestApp.url.value shouldBe "/0"
             aElement.click()
             Thread.sleep(100)
             historyTestApp.url.value shouldBe "/1"
         }
-        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+        driver.findElement(By.tagName("a")).let { aElement ->
             aElement.click()
             Thread.sleep(100)
             historyTestApp.url.value shouldBe "/2"
