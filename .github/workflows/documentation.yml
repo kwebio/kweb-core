@@ -28,3 +28,4 @@ jobs:
         with:
           folder: docs/book
           single-commit: true
+          target-folder: book
