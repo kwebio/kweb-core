@@ -1,5 +1,6 @@
 # Summary
 
+- [Introduction](intro.md)
 - [Getting Started](gettingstarted.md)
 - [DOM Basics](dom.md)
 - [Event Handling](events.md)
