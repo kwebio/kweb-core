@@ -15,7 +15,7 @@
 
 ## Quick Start
 
-Read [Getting Started](https://docs.kweb.io/en/latest/gettingstarted.html) from the [User Manual](http://docs.kweb.io/).
+Read [Getting Started](https://docs.kweb.io/book/gettingstarted.html) from the [Kweb Book](https://docs.kweb.io/book/).
 
 ## Overview
 
@@ -41,11 +41,11 @@ Kweb's API is likely to change between now and our 1.0.0 release, so you may nee
 
 ## Learn More
 
-* [User Manual](http://docs.kweb.io/)
-* [API Documentation](https://dokka.kweb.io/index.html)
-* [Live Example](http://demo.kweb.io:7659/)
+* [User Manual](http://docs.kweb.io/book)
+* [API Documentation](https://docs.kweb/io/api)
+* [Example Project](https://github.com/freenet/freenetorg-website/tree/staging/src/main/kotlin/org/freenet/website)
 * [Template Repo](https://github.com/kwebio/kweb-template)
-* [Example Projects](https://github.com/kwebio/kweb-demos)
+* [Examples](https://github.com/kwebio/kweb-demos)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
 * [Chat with us](https://matrix.to/#/#kweb:matrix.org)
-* [Frequently Asked Questions](http://docs.kweb.io/en/latest/faq.html)
+* [Frequently Asked Questions](https://docs.kweb.io/book/faq.html)
