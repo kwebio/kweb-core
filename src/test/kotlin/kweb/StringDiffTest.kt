@@ -12,17 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
+class StringDiffTest(@Arguments("--headless") unprotectedDriver: WebDriver) {
 
-    init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
-    }
+    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
+    //This should make this test thread safe.
+    val driver = ThreadGuard.protect(unprotectedDriver)
 
     companion object {
         private lateinit var stringDiffTestApp: StringDiffTestApp

@@ -43,7 +43,7 @@ class RoutingTest {
     }
     /*
     @Test
-    fun initialRender(driver : WebDriver) {
+    fun initialRender(driver : ChromeDriver) {
         driver.get("http://localhost:7659/")
         val h1 = driver.findElement(By.tagName("H1"))
         h1.shouldNotBeNull()

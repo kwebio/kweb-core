@@ -12,8 +12,8 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 
@@ -48,7 +48,7 @@ class RenderTest {
     }
 
     @Test
-    fun initialRender(driver: WebDriver) {
+    fun initialRender(driver: ChromeDriver) {
         driver.get("http://localhost:7659/")
         val h1 = driver.findElement(By.tagName("H1"))
         h1 shouldNotBe null

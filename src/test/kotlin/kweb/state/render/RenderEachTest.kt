@@ -9,18 +9,17 @@ import kweb.state.renderEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
+class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
-    init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
-    }
+    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
+    //This should make this test thread safe.
+    val driver = ThreadGuard.protect(unprotectedDriver)
+
 
     /*NOTE: Thread.sleep(50) is used throughout these tests. I had success with values as small as Thread.sleep(1)
     But for consistent success, I left it at 50.
@@ -84,11 +83,11 @@ class RenderEachTest(@Arguments("--headless") private var driver: WebDriver) {
         button[0].click()
         Thread.sleep(50)
         val labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe("Dog")
-        labels[1].text shouldBe("Cat")
-        labels[2].text shouldBe("Bear")
-        labels[3].text shouldBe("Horse")
-        labels[4].text shouldBe("Moose")
+        labels[0].text shouldBe ("Dog")
+        labels[1].text shouldBe ("Cat")
+        labels[2].text shouldBe ("Bear")
+        labels[3].text shouldBe ("Horse")
+        labels[4].text shouldBe ("Moose")
         server.close()
     }
 

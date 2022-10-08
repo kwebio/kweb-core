@@ -6,12 +6,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.FindBy
@@ -54,7 +53,7 @@ class TodoDemoTest {
 
     //TODO: Set the title in todo demo to fix this test
     /*@Test
-    fun pageRenders(driver:WebDriver){
+    fun pageRenders(driver:ChromeDriver){
         val site = TodoSite(driver)
         site.allElementsExist().shouldBeTrue()
         val listId = driver.currentUrl.split('/').reversed()[0]
@@ -62,7 +61,7 @@ class TodoDemoTest {
     }*/
 
     @Test
-    fun enterNewItem(driver: WebDriver) {
+    fun enterNewItem(driver: ChromeDriver) {
         val todoItem = "Right eyelids closed, both feet behind"
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
@@ -70,7 +69,8 @@ class TodoDemoTest {
     }
 
     @Test
-    fun multipleUsers(driver1: WebDriver, driver2: WebDriver) {
+    fun multipleUsers(driver1: ChromeDriver, driver2: ChromeDriver) {
+
         val todoItem = "I aim for tomorrow, work on my mind"
         val site = TodoSite(driver1)
 
@@ -86,7 +86,7 @@ class TodoDemoTest {
     }
 
     @Test
-    fun deleteItems(driver: WebDriver) {
+    fun deleteItems(driver: ChromeDriver) {
         val firstItem = "We'll be all right"
         val secondItem = "Stay here some time"
         val thirdItem = "This country dog won't die in the city"
@@ -105,7 +105,7 @@ class TodoDemoTest {
     }
 
     @Test
-    fun navigateToNewSite(driver: WebDriver) {
+    fun navigateToNewSite(driver: ChromeDriver) {
         driver.get("http://localhost:7659")
         val firstSiteUrl = driver.currentUrl
         driver.get("http://localhost:7659")
@@ -113,7 +113,7 @@ class TodoDemoTest {
     }
 }
 
-class TodoSite(private val driver: WebDriver) {
+class TodoSite(private val driver: ChromeDriver) {
 
     @FindBy(tagName = "title")
     val title: WebElement? = null

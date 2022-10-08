@@ -12,15 +12,18 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class HrefTest(@Arguments("--headless") private var driver: WebDriver) {
+class HrefTest(@Arguments("--headless") private var unprotectedDriver: ChromeDriver) {
+
+    val driver : WebDriver
 
     init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
+        //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
         //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
+        driver = ThreadGuard.protect(unprotectedDriver)
     }
 
     companion object {

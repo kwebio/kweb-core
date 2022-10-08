@@ -6,11 +6,11 @@ import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.extension.ExtendWith
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriver
 
 @ExtendWith(SeleniumJupiter::class)
-//class CacheJSTest(private var driver: WebDriver) {
-class CacheJSTest(@Arguments("--headless") private var driver: WebDriver) {
+//class CacheJSTest(private var driver: ChromeDriver) {
+class CacheJSTest(@Arguments("--headless") private var driver: ChromeDriver) {
 
     companion object {
         private lateinit var cacheJSApp: CacheJSApp
