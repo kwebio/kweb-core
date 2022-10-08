@@ -12,17 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
+class StringDiffTest(@Arguments("--headless") unprotectedDriver: WebDriver) {
 
-    init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
-    }
+    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
+    //This should make this test thread safe.
+    val driver = ThreadGuard.protect(unprotectedDriver)
 
     companion object {
         private lateinit var stringDiffTestApp: StringDiffTestApp
@@ -43,7 +40,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun appendTextToBeginning() {
         driver.get("http://localhost:7660/")
-        val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}Super ")
         inputField.getAttribute("value") shouldBe "Super Lazy Brown Fox"
     }
@@ -51,7 +48,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun appendTextToMiddle() {
         driver.get("http://localhost:7660/")
-        val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.LEFT}1234")
         inputField.getAttribute("value") shouldBe "Lazy Brown F1234ox"
     }
@@ -59,7 +56,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun appendTextToEnd() {
         driver.get("http://localhost:7660/")
-        val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys(" Jumped")
         inputField.getAttribute("value") shouldBe "Lazy Brown Fox Jumped"
     }
@@ -67,7 +64,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun removeTextFromBeginning() {
         driver.get("http://localhost:7660/")
-        val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}")
         inputField.getAttribute("value") shouldBe "Brown Fox"
     }
@@ -75,7 +72,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun removeTextFromMiddle() {
         driver.get("http://localhost:7660/")
-        val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.BACK_SPACE}${Keys.BACK_SPACE}")
         inputField.getAttribute("value") shouldBe "Lazy Brown x"
     }
@@ -83,7 +80,7 @@ class StringDiffTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun removeTextFromEnd() {
         driver.get("http://localhost:7660/")
-        val inputField = driver.findElement<WebElement>(By.tagName("input"))
+        val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys(Keys.END)
         for (i in 0 until 4) {
             inputField.sendKeys(Keys.BACK_SPACE)

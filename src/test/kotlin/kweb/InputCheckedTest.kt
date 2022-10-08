@@ -12,16 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class InputCheckedTest(@Arguments("--headless") private var driver: WebDriver) {
+class InputCheckedTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
-    init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
-    }
+    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
+    //This should make this test thread safe.
+    val driver: WebDriver = ThreadGuard.protect(unprotectedDriver)
 
     companion object {
         private lateinit var inputCheckedTestApp: InputCheckedTestApp
@@ -42,7 +41,7 @@ class InputCheckedTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun checkBeforeAndAfterClick() {
         driver.get("http://localhost:7660/")
-        val input = driver.findElement<WebElement>(By.tagName("input"))
+        val input = driver.findElement(By.tagName("input"))
         inputCheckedTestApp.checkKVar.value shouldBe false
         input.click()
         Thread.sleep(100)

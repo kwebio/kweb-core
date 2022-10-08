@@ -10,19 +10,18 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ThreadGuard
 import org.openqa.selenium.support.ui.Select
 
 @ExtendWith(SeleniumJupiter::class)
-class SelectValueTest(@Arguments("--headless") private var driver: WebDriver) {
+class SelectValueTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
-    init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
-    }
+
+    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
+    //This should make this test thread safe.
+    val driver = ThreadGuard.protect(unprotectedDriver)
 
     companion object {
         private lateinit var selectValueTestApp: SelectValueTestApp
@@ -43,7 +42,7 @@ class SelectValueTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun mainTest() {
         driver.get("http://localhost:7668/")
-        val select = Select(driver.findElement<WebElement>(By.tagName("select")))
+        val select = Select(driver.findElement(By.tagName("select")))
         selectValueTestApp.selectValue.value shouldBe ""
         Thread.sleep(100)
         select.selectByValue("cat")

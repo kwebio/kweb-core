@@ -11,16 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class ImmediateEventTest(@Arguments("--headless") private var driver: WebDriver) {
+class ImmediateEventTest(@Arguments("--headless") private var unprotectedDriver: ChromeDriver) {
 
-    init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
-    }
+    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
+    //This should make this test thread safe
+    val driver : WebDriver = ThreadGuard.protect(unprotectedDriver)
+
 
     companion object {
         private lateinit var immediateEventTestApp: ImmediateEventTestApp
@@ -41,7 +41,7 @@ class ImmediateEventTest(@Arguments("--headless") private var driver: WebDriver)
     @Test
     fun checkBeforeAndAfterClick() {
         driver.get("http://localhost:7660/")
-        val label = driver.findElement<WebElement>(By.tagName("h1"))
+        val label = driver.findElement(By.tagName("h1"))
         label.text shouldBe ("Click Me")
         label.click()
         label.text shouldBe ("Clicked!")

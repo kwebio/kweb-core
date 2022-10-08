@@ -13,15 +13,18 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
+class HistoryTest(@Arguments("--headless")  unprotectedDriver: ChromeDriver) {
+
+    val driver : WebDriver
 
     init {
-        //ThreadGuard.protect ensures that the webdriver can only be called by the thread that created it
+        //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
         //This should make this test thread safe.
-        driver = ThreadGuard.protect(driver)
+         driver = ThreadGuard.protect(unprotectedDriver)
     }
 
     companion object {
@@ -44,13 +47,13 @@ class HistoryTest(@Arguments("--headless") private var driver: WebDriver) {
     fun testBackButton() {
         historyTestApp.reloadCount.value shouldBe 0
         driver.get("http://localhost:7665/0")
-        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+        driver.findElement(By.tagName("a")).let { aElement ->
             historyTestApp.url.value shouldBe "/0"
             aElement.click()
             Thread.sleep(100)
             historyTestApp.url.value shouldBe "/1"
         }
-        driver.findElement<WebElement>(By.tagName("a")).let { aElement ->
+        driver.findElement(By.tagName("a")).let { aElement ->
             aElement.click()
             Thread.sleep(100)
             historyTestApp.url.value shouldBe "/2"
