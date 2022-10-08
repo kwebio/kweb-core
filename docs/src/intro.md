@@ -56,12 +56,8 @@ people who built Kweb please email <services@kweb.io>.
 
 # Relevant Links
 
--   Website: <https://kweb.io/>
--   Source code: <https://github.com/kwebio/kweb-core>
--   API documentation: <https://dokka.kweb.io/index.html>
--   Example projects: <https://github.com/kwebio/kweb-demos>
--   Live Demo: <http://demo.kweb.io:7659/>
--   Questions/Feedback/Bugs:
-    <https://github.com/kwebio/kweb-core/issues>
--   Chat with us on [Matrix
-    \<https://matrix.to/#/#kweb:matrix.org\>]{.title-ref}
+* Github Repository(https://github.com/kwebio/kweb-core)
+* [API documentation](https://docs.kweb.io/api/)
+* [Example Google Cloud Project](https://github.com/freenet/freenetorg-website/)
+* [Questions/Feedback/Bugs](https://github.com/kwebio/kweb-core/issues)
+* Chat with us on [Matrix](https://matrix.to/#/#kweb:matrix.org)
