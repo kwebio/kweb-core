@@ -42,7 +42,7 @@ class InputCheckedTest(@Arguments("--headless") private var driver: WebDriver) {
     @Test
     fun checkBeforeAndAfterClick() {
         driver.get("http://localhost:7660/")
-        val input = driver.findElement<WebElement>(By.tagName("input"))
+        val input = driver.findElement(By.tagName("input"))
         inputCheckedTestApp.checkKVar.value shouldBe false
         input.click()
         Thread.sleep(100)

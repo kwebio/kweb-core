@@ -41,7 +41,7 @@ class ImmediateEventTest(@Arguments("--headless") private var driver: WebDriver)
     @Test
     fun checkBeforeAndAfterClick() {
         driver.get("http://localhost:7660/")
-        val label = driver.findElement<WebElement>(By.tagName("h1"))
+        val label = driver.findElement(By.tagName("h1"))
         label.text shouldBe ("Click Me")
         label.click()
         label.text shouldBe ("Clicked!")

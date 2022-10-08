@@ -79,6 +79,8 @@ dependencies {
     testImplementation 'io.kotest:kotest-assertions-core'
 
     testImplementation 'ch.qos.logback:logback-classic:1.4.3'
+
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.5.0'
     testImplementation 'io.github.bonigarcia:selenium-jupiter:4.3.1'
 
     testImplementation "org.junit.jupiter:junit-jupiter-api"
@@ -99,15 +101,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
-
-shadowJar {
-    archiveBaseName = project.name
-    archiveClassifier = 'all'
-    manifest {
-        attributes 'Main-Class': 'kweb.demos.todo.TodoAppKt'
-    }
-    mergeServiceFiles()
 }
 
 dokkaHtml {
