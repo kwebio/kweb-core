@@ -8,8 +8,7 @@ some familiarity with HTML.
 
 ## Adding Kweb to your Gradle project
 
-Add these to your repositories and dependencies {blocks} in your
-[build.gradle]{.title-ref} or [build.gradle.kt]{.title-ref} files.
+Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
 **NOTE:** Replace `LATEST_VERSION` with the latest version of Kweb,
 which you can find [here](https://github.com/kwebio/kweb-core/releases).
