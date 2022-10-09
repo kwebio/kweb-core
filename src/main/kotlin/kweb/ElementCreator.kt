@@ -25,7 +25,7 @@ typealias Cleaner = () -> Unit
  */
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
-    val parent: PARENT_TYPE,
+    internal val parent: PARENT_TYPE,
     val parentCreator: ElementCreator<*>? = parent.creator,
     val insertBefore: String? = null
 )  {
@@ -201,5 +201,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     fun text(text: KVal<String>) {
         this.parent.text(text)
+    }
+
+    fun attr(receiver : (PARENT_TYPE).() -> Unit) {
+        receiver(parent)
     }
 }

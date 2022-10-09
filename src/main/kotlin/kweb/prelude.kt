@@ -703,8 +703,8 @@ val KVar<URL>.pathQueryFragment
         }
     })
 
-infix operator fun KVar<String>.plus(s: String) = this.map { it + s }
-infix operator fun String.plus(sKV: KVar<String>) = sKV.map { this + it }
+infix fun KVar<String>.attr(s: String) = this.map { it + s }
+infix fun String.attr(sKV: KVar<String>) = sKV.map { this + it }
 
 fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(label = "KVar<String>.toInt()") {
     override fun invoke(from: String) = from.toInt()
