@@ -41,7 +41,6 @@ class TodoApp {
                 draw some util outer page DOM elements */
                 pageBorderAndTitle("To do List") {
                     div(fomantic.content) {
-
                         route {
 
                             path("/") {

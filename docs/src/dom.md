@@ -2,18 +2,10 @@
 
 ## Creating DOM Elements and Fragments
 
-Let's create a \<button\> as a child of the \<body\>:
+Let's create a `<button>` as a child of the `<body>` element:
 
 ```kotlin
-import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
-     doc.body {
-         button().text("Click Me!")
-     }
-   }
- }
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:create}}
 ```
 
 ## Element Attributes
@@ -22,22 +14,19 @@ If you assign the button element to a val then you can also modify its
 attributes:
 
 ```kotlin
-val button = button()
-button.text("Click Me!")
-button.classes("bigbutton")
-button.setAttribute("autofocus", JsonPrimitive(true))
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr}}
 ```
 
-Attributes can also be specified in a Map when you create the element:
+Attributes can also be specified in an `attr` block:
 
 ```kotlin
-button(mapOf("class" to "bigbutton", "autofocus" to true)).text("Click Me!")
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr2}}
 ```
 
 Or delete it:
 
 ```kotlin
-button.delete()
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:delete}}
 ```
 
 ## Adding children to an existing element
@@ -46,44 +35,24 @@ The DSL syntax makes it very easy to create elements and their children
 together:
 
 ```kotlin
-ul {
-  li().text("One")
-  li().text("Two")
-}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:children}}
 ```
 
 Alternatively we can use the [new {}]{.title-ref} function on Elements
 to add children to a pre-existing Element:
 
 ```kotlin
-val unorderedList : ULElement = ul()
-unorderedList.new {
-  li().text("One")
-  li().text("Two")
-}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:children_new}}
+
 ```
 
 ## Reading from the DOM
 
-Kweb can also read from the DOM, in this case the value of an \<input\>
+Kweb can also read from the DOM, in this case the value of an `<input>`
 element:
 
 ```kotlin
-import kweb.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
-
-fun main() {
-    Kweb(port = 2395) {
-        doc.body {
-            val input: InputElement = input()
-            input.on(retrieveJs = input.valueJsExpression).submit { event ->
-                 println("Value: ${event.retrieved}")
-            }
-        }
-    }
-}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:read_value}}
 ```
 
 Events can evaluate a JavaScript expression and send the result to the
@@ -115,9 +84,7 @@ For example, here is how you might use the infamous and now-obsolete
 \<blink\> tag:
 
 ```kotlin
-doc.body {
-    val blink = element("blink").text("I am annoying!")
-}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:blink}}
 ```
 
 ## Further Reading
