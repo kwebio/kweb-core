@@ -14,12 +14,12 @@ fun main() {
 
 // ANCHOR: hello_world_2
 fun helloWorld2() {
-// ANCHOR: hello_world_2
-Kweb(port = 16097) {
-    doc.body {
-        ul {
-            for (x in 1..5) {
-                li().text("Hello World $x!")
+    Kweb(port = 16097) {
+        doc.body {
+            ul {
+                for (x in 1..5) {
+                    li().text("Hello World $x!")
+                }
             }
         }
     }
@@ -43,4 +43,4 @@ fun helloWorld3() {
     }
 }
 // ANCHOR_END: hello_world_3
-}
+
