@@ -52,7 +52,7 @@ people who built Kweb please email <services@kweb.io>.
 
 ## Relevant Links
 
-* Github Repository(https://github.com/kwebio/kweb-core)
+* [Github repository](https://github.com/kwebio/kweb-core)
 * [API documentation](https://docs.kweb.io/api/)
 * [Example Google Cloud Project](https://github.com/freenet/freenetorg-website/)
 * [Questions/Feedback/Bugs](https://github.com/kwebio/kweb-core/issues)
