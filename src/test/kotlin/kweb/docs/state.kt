@@ -25,7 +25,7 @@ counter.value = 5
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 counter.value = 6
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
-    // ANCHOR END: map_kvar
+    // ANCHOR_END: map_kvar
 
     // ANCHOR: kvartext
 Kweb(port = 2135) {
@@ -34,7 +34,7 @@ Kweb(port = 2135) {
         li().text(name)
     }
 }
-    // ANCHOR END: kvartext
+    // ANCHOR_END: kvartext
 
 
     // ANCHOR: bindinput
@@ -47,7 +47,7 @@ Kweb(port = 2395) {
         p().text(nameKVar.map { n -> "Hi $n!" })
     }
 }
-    // ANCHOR END: bindinput
+    // ANCHOR_END: bindinput
 
     // ANCHOR: render1
 val list = KVar(listOf("one", "two", "three"))
@@ -63,11 +63,11 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render1
+    // ANCHOR_END: render1
 
     // ANCHOR: render2
 list.value = listOf("four", "five", "six")
-    // ANCHOR END: render2
+    // ANCHOR_END: render2
 
     // ANCHOR: dataclass
 data class User(val name: String)
@@ -76,7 +76,7 @@ val user = KVar(User("Ian"))
 val name = user.property(User::name)
 name.value = "John"
 println(user) // Will print: KVar(User(name = "John"))
-    // ANCHOR END: dataclass
+    // ANCHOR_END: dataclass
 
 }
 
@@ -94,5 +94,5 @@ println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 counterDoubled.value = 12 // <-- Couldn't do this with a KVal
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
+// ANCHOR_END: reversible1
     }
