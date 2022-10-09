@@ -8,9 +8,9 @@ components, one runs in the browser, the other on the server. These are
 often written in different programming languages and must communicate
 with each other over an HTTP connection.
 
-Kweb```s goal is to eliminate this server/browser separation so that your
-webapp```s architecture is determined by the problem you```re solving,
-rather than the limitations of today```s tools.
+Kweb's goal is to eliminate this server/browser separation so that your
+webapp's architecture is determined by the problem you're solving,
+rather than the limitations of today's tools.
 
 ## How does it work?
 
