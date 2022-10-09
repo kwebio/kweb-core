@@ -307,65 +307,61 @@ refactoring to create these functions automatically.</p>
 <a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dom-basics"><a class="header" href="#dom-basics">DOM Basics</a></h1>
 <h2 id="creating-dom-elements-and-fragments"><a class="header" href="#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></h2>
-<p>Let's create a &lt;button&gt; as a child of the &lt;body&gt;:</p>
-<pre><code class="language-kotlin">import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
-     doc.body {
-         button().text(&quot;Click Me!&quot;)
-     }
-   }
- }
+<p>Let's create a <code>&lt;button&gt;</code> as a child of the <code>&lt;body&gt;</code> element:</p>
+<pre><code class="language-kotlin">fun main() {
+    Kweb(port = 16097) {
+        doc.body {
+            button().text(&quot;Click Me!&quot;)
+        }
+    }
+}
 </code></pre>
 <h2 id="element-attributes"><a class="header" href="#element-attributes">Element Attributes</a></h2>
 <p>If you assign the button element to a val then you can also modify its
 attributes:</p>
-<pre><code class="language-kotlin">val button = button()
-button.text(&quot;Click Me!&quot;)
-button.classes(&quot;bigbutton&quot;)
-button.setAttribute(&quot;autofocus&quot;, JsonPrimitive(true))
+<pre><code class="language-kotlin">            val button = button()
+            button.text(&quot;Click Me!&quot;)
+            button.classes(&quot;bigbutton&quot;)
+            button.setAttribute(&quot;autofocus&quot;, true)
 </code></pre>
-<p>Attributes can also be specified in a Map when you create the element:</p>
-<pre><code class="language-kotlin">button(mapOf(&quot;class&quot; to &quot;bigbutton&quot;, &quot;autofocus&quot; to true)).text(&quot;Click Me!&quot;)
+<p>Attributes can also be specified in an <code>attr</code> block:</p>
+<pre><code class="language-kotlin">            button {
+                attr {
+                    setAttribute(&quot;class&quot;, &quot;bigbutton&quot;)
+                    setAttribute(&quot;autofocus&quot;, true)
+                }
+                text(&quot;Click Me!&quot;)
+            }
 </code></pre>
 <p>Or delete it:</p>
-<pre><code class="language-kotlin">button.delete()
+<pre><code class="language-kotlin">            button.delete()
 </code></pre>
 <h2 id="adding-children-to-an-existing-element"><a class="header" href="#adding-children-to-an-existing-element">Adding children to an existing element</a></h2>
 <p>The DSL syntax makes it very easy to create elements and their children
 together:</p>
-<pre><code class="language-kotlin">ul {
-  li().text(&quot;One&quot;)
-  li().text(&quot;Two&quot;)
-}
+<pre><code class="language-kotlin">            ul {
+                li().text(&quot;One&quot;)
+                li().text(&quot;Two&quot;)
+            }
 </code></pre>
 <p>Alternatively we can use the [new {}]{.title-ref} function on Elements
 to add children to a pre-existing Element:</p>
-<pre><code class="language-kotlin">val unorderedList : ULElement = ul()
-unorderedList.new {
-  li().text(&quot;One&quot;)
-  li().text(&quot;Two&quot;)
-}
+<pre><code class="language-kotlin">            val unorderedList : ULElement = ul()
+            unorderedList.new {
+                li().text(&quot;One&quot;)
+                li().text(&quot;Two&quot;)
+            }
+
 </code></pre>
 <h2 id="reading-from-the-dom"><a class="header" href="#reading-from-the-dom">Reading from the DOM</a></h2>
-<p>Kweb can also read from the DOM, in this case the value of an &lt;input&gt;
+<p>Kweb can also read from the DOM, in this case the value of an <code>&lt;input&gt;</code>
 element:</p>
-<pre><code class="language-kotlin">import kweb.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
-
-fun main() {
-    Kweb(port = 2395) {
-        doc.body {
-            val input: InputElement = input()
-            input.on(retrieveJs = input.valueJsExpression).submit { event -&gt;
-                 println(&quot;Value: ${event.retrieved}&quot;)
+<pre><code class="language-kotlin">            val input: InputElement = input(type = InputType.text)
+            // A KVar is a mutable value to which you can add listeners
+            val inputKVar = input.value
+            inputKVar.addListener { old, new -&gt;
+                println(&quot;Input changed from $old to $new&quot;)
             }
-        }
-    }
-}
 </code></pre>
 <p>Events can evaluate a JavaScript expression and send the result to the
 server, in this case we give it an expression that will retrieve the
@@ -388,9 +384,7 @@ statically-typed HTML DSL, fully integrated with the Kotlin language.</p>
 <p>If a tag doesn't have explicit support in Kweb that's not a problem.
 For example, here is how you might use the infamous and now-obsolete
 &lt;blink&gt; tag:</p>
-<pre><code class="language-kotlin">doc.body {
-    val blink = element(&quot;blink&quot;).text(&quot;I am annoying!&quot;)
-}
+<pre><code class="language-kotlin">            val blink = element(&quot;blink&quot;).text(&quot;I am annoying!&quot;)
 </code></pre>
 <h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
 <p>The
