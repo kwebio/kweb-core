@@ -19,7 +19,7 @@ class contains a single typed object, which can change over time. For
 example:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:create_kvar}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:createkvar}}
 ```
 
 Here we create a counter of type *KVar\<Int\>* initialized with the
@@ -28,7 +28,7 @@ value 0.
 We can also read and modify the value of a KVar:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:modify_kvar}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:modifykvar}}
 ```
 
 Will print:
@@ -42,7 +42,7 @@ Counter value 2
 KVars support powerful mapping semantics to create new KVars:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:map_kvar}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:mapkvar}}
 ```
 
 Will print:
@@ -70,7 +70,7 @@ immutable parameters.
 You can use a KVar (or KVal) to set the text of a DOM element:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:kvar_text}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:kvartext}}
 ```
 
 The neat part is that if the value of *name* changes, the DOM element
@@ -94,7 +94,7 @@ and similarly any changes in the browser by the user will be reflected
 immediately in the KVar, for example:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:map_kvar}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:mapkvar}}
 ```
 
 This will also work for \<option\> and \<textarea\> elements which also
@@ -113,13 +113,13 @@ This is where the
 function comes in:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:render_1}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:render1}}
 ```
 
 Here, if we were to change the list:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:render_2}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:render2}}
 ```
 
 Then the relevant part of the DOM will be redrawn instantly.
@@ -152,7 +152,7 @@ can use Kvar.property() to create a KVar from one of its properties
 which will update the original KVar if changed:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:data_class}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:dataclass}}
 ```
 
 ## Reversible mapping
@@ -174,7 +174,7 @@ function which takes a *ReversibleFunction* implementation. This version
 of *map* will produce a KVar which can be modified, as follows:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:reversible_1}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:reversible1}}
 ```
 
 ::: note
