@@ -2,7 +2,6 @@ package kweb
 
 import kotlinx.serialization.json.*
 import kweb.WebBrowser.CatcherType.RENDER
-import kweb.html.ElementReader
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
 import kweb.html.events.OnImmediateReceiver
@@ -82,17 +81,6 @@ open class Element(
      */
     // TODO: Does this prevent the use of multiple plugins of the same class?
     fun <P : KwebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
-
-
-    //val children: List<Element> = ArrayList()
-
-    /**
-     * Obtain an [ElementReader] that can be used to read various properties of this element.
-     *
-     * This has been deprecated, functions like [ValueElement.value] should be used instead.
-     */
-    @Deprecated("ElementReader has been deprecated")
-    open val read: ElementReader get() = ElementReader(this)
 
     /*********
      ********* Utilities for modifying this element
@@ -370,11 +358,11 @@ open class Element(
                 //TODO this will only run during initial page render, and is currently untested.
                 jsoupDoc.getElementById(this.id).let { jsoupElement ->
                     val startSpan = jsoupElement!!.getElementById(startSpanId)
-                    val endSpan = jsoupElement!!.getElementById(endSpanId)
+                    val endSpan = jsoupElement.getElementById(endSpanId)
                     var nextSibling = startSpan!!.nextElementSibling()
                     while (nextSibling != endSpan) {
                         nextSibling!!.remove()
-                        nextSibling = startSpan!!.nextElementSibling()
+                        nextSibling = startSpan.nextElementSibling()
                     }
                 }
             }
@@ -579,7 +567,7 @@ open class Element(
         on(retrieveJs = reader(this.id)).event<Event>(updateOnEvent) { event ->
             kv.value = event.retrieved
         }
-        val kvChangeHandler = kv.addListener { old, new ->
+        val kvChangeHandler = kv.addListener { _, new ->
             callJsFunction(writer(this.id, "{}") + ";", new)
         }
         creator?.onCleanup(true) {

@@ -4,7 +4,6 @@ import io.ktor.server.routing.*
 import io.mola.galimatias.URL
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
-import kweb.html.ElementReader
 import kweb.html.HeadElement
 import kweb.html.TitleElement
 import kweb.html.events.Event
@@ -433,14 +432,7 @@ private fun select_sample() {
 /**
  * https://www.w3schools.com/tags/tag_textarea.asp
  */
-open class TextAreaElement(parent: Element, initialValue: String? = null) : ValueElement(parent, initialValue = initialValue) {
-    //TODO ValueElement already provides a way to get the value of an element. I'm not sure why this function is here.
-    //But, something needs to be done with it.
-    @Deprecated("ElementReader has been deprecated",
-        ReplaceWith("ValueElement.value", "kweb.ValueElement")
-    )
-    override val read get() = TextAreaElementReader(this)
-}
+class TextAreaElement(parent: Element, initialValue: String? = null) : ValueElement(parent, initialValue = initialValue)
 
 /**
  * https://www.w3schools.com/tags/tag_textarea.asp
@@ -452,18 +444,6 @@ fun ElementCreator<Element>.textArea(
     return TextAreaElement(element("textArea", attributes)).also {
         if (new != null) new(ElementCreator(parent = it, insertBefore = null))
     }
-}
-
-//TODO I'm not quite sure how much information I should be putting in this message, or how an end user should replace this
-//It seems like we should rewrite TextAreaElement.get() so they can use that, or tell them to just use Kvars.
-@Deprecated("ElementReader has been deprecated. Use TextAreaElement.get() instead")
-open class TextAreaElementReader(val element: TextAreaElement) : ElementReader(element) {
-    suspend fun getValue() : String {
-        //A TextArea should only ever contain a String. So using toString() here should be safe.
-        // We could add some error handling here if we wanted to though.
-        return receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", JsonPrimitive(element.id)).toString()
-    }
-    //val value get() = receiver.callJsFunctionWithResult("return document.getElementById({}).innerText;", element.id)
 }
 
 open class LabelElement(wrapped: Element) : Element(wrapped)
