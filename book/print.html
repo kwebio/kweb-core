@@ -479,64 +479,6 @@ counter.value = 5
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counter.value = 6
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-
-Kweb(port = 2135) {
-    doc.body {
-        val name = KVar(&quot;John&quot;)
-        li().text(name)
-    }
-}
-
-
-Kweb(port = 2395) {
-    doc.body {
-        p().text(&quot;What is your name?&quot;)
-        val clickMe = input(type = InputType.text)
-        val nameKVar = KVar(&quot;Peter Pan&quot;)
-        clickMe.value = nameKVar
-        p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
-    }
-}
-
-val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
-
-Kweb(port = 16097) {
-    doc.body {
-        render(list) { rList -&gt;
-            ul {
-                for (item in rList) {
-                    li().text(item)
-                }
-            }
-        }
-    }
-}
-
-list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-
-data class User(val name: String)
-
-val user = KVar(User(&quot;Ian&quot;))
-val name = user.property(User::name)
-name.value = &quot;John&quot;
-println(user) // Will print: KVar(User(name = &quot;John&quot;))
-
-}
-
-fun state2() {
-    val counter = KVar(0)
-val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
-    override fun invoke(from: Int) = from * 2
-    override fun reverse(original: Int, change: Int) = change / 2
-})
-counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 5, doubled: 10
-
-counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 6, doubled: 12
-    }
 </code></pre>
 <p>Will print:</p>
 <pre><code class="language-text">counter: 5, doubled: 10
@@ -581,64 +523,6 @@ counter.value = 5
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counter.value = 6
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-
-Kweb(port = 2135) {
-    doc.body {
-        val name = KVar(&quot;John&quot;)
-        li().text(name)
-    }
-}
-
-
-Kweb(port = 2395) {
-    doc.body {
-        p().text(&quot;What is your name?&quot;)
-        val clickMe = input(type = InputType.text)
-        val nameKVar = KVar(&quot;Peter Pan&quot;)
-        clickMe.value = nameKVar
-        p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
-    }
-}
-
-val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
-
-Kweb(port = 16097) {
-    doc.body {
-        render(list) { rList -&gt;
-            ul {
-                for (item in rList) {
-                    li().text(item)
-                }
-            }
-        }
-    }
-}
-
-list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-
-data class User(val name: String)
-
-val user = KVar(User(&quot;Ian&quot;))
-val name = user.property(User::name)
-name.value = &quot;John&quot;
-println(user) // Will print: KVar(User(name = &quot;John&quot;))
-
-}
-
-fun state2() {
-    val counter = KVar(0)
-val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
-    override fun invoke(from: Int) = from * 2
-    override fun reverse(original: Int, change: Int) = change / 2
-})
-counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 5, doubled: 10
-
-counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 6, doubled: 12
-    }
 </code></pre>
 <p>This will also work for &lt;option&gt; and &lt;textarea&gt; elements which also
 have values.</p>
