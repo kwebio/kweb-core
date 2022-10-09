@@ -61,7 +61,7 @@ Warning
 
 Due to this pre-loading mechanism, the event handler for an
 *onImmediate* must limit itself to simple DOM modifications. Kweb
-includes some runtime safeguards against this but they can```t catch
+includes some runtime safeguards against this but they can't catch
 every problem so please use with caution.
 :::
 

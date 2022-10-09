@@ -149,7 +149,7 @@ private fun ElementCreator<ULElement>.createMessage(x: Int) {
 As you can see this is an extension function, which allows you to use
 the Kweb DSL within the newly created function.
 
-Don```t worry if you```re unsure about this because you can use
+Don't worry if you```re unsure about this because you can use
 IntelliJ```s [extract
 function](https://www.jetbrains.com/help/idea/extract-method.html)
 refactoring to create these functions automatically.

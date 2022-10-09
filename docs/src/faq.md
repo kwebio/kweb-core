@@ -15,7 +15,7 @@ bug](https://github.com/kwebio/kweb-core/issues).
 
 ## What's the difference between Kweb and Vaadin?
 
-Of all web frameworks we```re aware of, [Vaadin](https://vaadin.com/) is
+Of all web frameworks we're aware of, [Vaadin](https://vaadin.com/) is
 the closest in design and philosophy to Kweb, but there are also
 important differences:
 
@@ -24,17 +24,17 @@ important differences:
     lines of code, while
     [vaadin/framework](https://github.com/vaadin/framework) is currently
     502,398 lines of code, almost a 100:1 ratio!
--   Vaadin doesn```t have any equivalent feature to Kweb```s [immediate
+-   Vaadin doesn't have any equivalent feature to Kweb's [immediate
     events](https://docs.kweb.io/en/latest/events.html#immediate-events),
     which has led to frequent
     [complaints](https://stackoverflow.com/a/22848521/16050) of
     sluggishness from Vaadin users because a server round-trip is
     required to update the DOM.
 -   Vaadin brought a more desktop-style of user interface to the web
-    browser, but since then we```ve realized that users generally prefer
+    browser, but since then we've realized that users generally prefer
     their websites to look like websites.
--   This is why Kweb```s philosophy is to be a thin interface between
-    server logic and the user```s browser, leveraging existing tools from
+-   This is why Kweb's philosophy is to be a thin interface between
+    server logic and the user's browser, leveraging existing tools from
     the JavaScript ecosystem [when it makes
     sense](https://docs.kweb.io/en/latest/style.html).
 -   Kweb was built natively for Kotlin, and takes advantage of all of
@@ -42,7 +42,7 @@ important differences:
     [coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
     and the flexible DSL-like syntax. Because of this Kweb code can be a
     lot more concise, without sacrificing readability.
--   In Vaadin```s favor, it has been a commercial product since 2006, it
+-   In Vaadin's favor, it has been a commercial product since 2006, it
     is extremely mature and has a vast developer ecosystem, while Kweb
     is still pre-1.0.
 
@@ -50,12 +50,12 @@ important differences:
 
 Yes, here is a simple [todo
 list](https://github.com/kwebio/kweb-demos/tree/master/todoList)
-implementation which demonstrates many of Kweb```s features.
+implementation which demonstrates many of Kweb's features.
 
 You can find a copy of this demo running here:
 <http://demo.kweb.io:7659/>
 
-It```s running on a \$50/month EC2 instance. Try visiting the same list
+It's running on a \$50/month EC2 instance. Try visiting the same list
 URL in two different browser windows and notice how they synchronize in
 realtime.
 
@@ -77,7 +77,7 @@ for an example.
 
 Please make sure to enable session affinity so that repeated requests
 from the same client end up at the same kweb instance. Kweb does not
-share it```s internal state between multiple instances, so it is
+share it's internal state between multiple instances, so it is
 important to make sure that each request from a single user ends up at
 always the same instance.
 
@@ -95,7 +95,7 @@ embedded within a powerful programming language.
 
 If you like you could separate out the code that interfaces directly to
 the DOM - this would be architecturally closer to a template-based
-approach, but we view it as a feature that this paradigm isn```t forced
+approach, but we view it as a feature that this paradigm isn't forced
 on the programmer.
 
 ## Why risk my project on a framework I just heard of?

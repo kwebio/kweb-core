@@ -27,8 +27,8 @@ instructions to the browser to be executed immediately on browser events
 without a server round-trip.
 
 Kweb is built on the excellent [Ktor](https://ktor.io/) framework, which
-handles HTTP, HTTPS, and WebSocket transport. You don```t need to know
-Ktor to use Kweb, but if you```ve already got a Ktor app you can [embed
+handles HTTP, HTTPS, and WebSocket transport. You don't need to know
+Ktor to use Kweb, but if you've already got a Ktor app you can [embed
 Kweb as a Feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
 
 ## Features
@@ -47,7 +47,7 @@ Kweb as a Feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/
 
 ## Professional Services
 
-If you```re interested in professional services related to Kweb from the
+If you're interested in professional services related to Kweb from the
 people who built Kweb please email <services@kweb.io>.
 
 ## Relevant Links

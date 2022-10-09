@@ -21,7 +21,7 @@ fun main() {
 Now the plugin will add the Fomantic CSS and JavaScript code to your
 website automatically.
 
-Let```s look at one of the simple examples from the [Fomantic
+Let's look at one of the simple examples from the [Fomantic
 UI](https://Fomantic-ui.com/elements/input.html) documentation:
 
 ```html

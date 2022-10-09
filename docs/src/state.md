@@ -7,7 +7,7 @@ pattern](https://en.wikipedia.org/wiki/Observer_pattern) to manage
 state.
 
 A Kweb app can be viewed as a mapping function between state on the
-server and the DOM within the end-user```s web browser. Once this mapping
+server and the DOM within the end-user's web browser. Once this mapping
 is defined, simply modify this state and the change will propagate
 automatically to the browser.
 
@@ -93,7 +93,7 @@ support KVars in a similar manner, including
 and
 [setAttribute()](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/set-attribute.html).
 
-## Binding a KVar to an input element```s value
+## Binding a KVar to an input element's value
 
 For \<input\> elements you can set the value to a KVar, which will
 connect them bidirectionally.
@@ -154,7 +154,7 @@ list.value = listOf("four", "five", "six")
 Then the relevant part of the DOM will be redrawn instantly.
 
 The simplicity of this mechanism may disguise how powerful it is, since
-render {} blocks can be nested, it```s possible to be very selective
+render {} blocks can be nested, it's possible to be very selective
 about what parts of the DOM must be modified in response to changes in
 state.
 

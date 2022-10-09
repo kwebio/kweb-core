@@ -2,7 +2,7 @@
 
 ## Creating DOM Elements and Fragments
 
-Let```s create a \<button\> as a child of the \<body\>:
+Let's create a \<button\> as a child of the \<body\>:
 
 ```kotlin
 import kweb.*
@@ -110,7 +110,7 @@ Kweb supports a significant subset of HTML tags like *button()*, *p()*,
 (scroll down to the *Functions* section). This provides a nice
 statically-typed HTML DSL, fully integrated with the Kotlin language.
 
-If a tag doesn```t have explicit support in Kweb that```s not a problem.
+If a tag doesn't have explicit support in Kweb that's not a problem.
 For example, here is how you might use the infamous and now-obsolete
 \<blink\> tag:
 
