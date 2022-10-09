@@ -479,7 +479,6 @@ counter.value = 5
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counter.value = 6
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-    // ANCHOR END: map_kvar
 
 Kweb(port = 2135) {
     doc.body {
@@ -487,7 +486,6 @@ Kweb(port = 2135) {
         li().text(name)
     }
 }
-    // ANCHOR END: kvartext
 
 
 Kweb(port = 2395) {
@@ -499,7 +497,6 @@ Kweb(port = 2395) {
         p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
     }
 }
-    // ANCHOR END: bindinput
 
 val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
 
@@ -514,10 +511,8 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render1
 
 list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render2
 
 data class User(val name: String)
 
@@ -525,7 +520,6 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: dataclass
 
 }
 
@@ -542,7 +536,6 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
     }
 </code></pre>
 <p>Will print:</p>
@@ -567,63 +560,6 @@ immutable parameters.
         li().text(name)
     }
 }
-    // ANCHOR END: kvartext
-
-
-Kweb(port = 2395) {
-    doc.body {
-        p().text(&quot;What is your name?&quot;)
-        val clickMe = input(type = InputType.text)
-        val nameKVar = KVar(&quot;Peter Pan&quot;)
-        clickMe.value = nameKVar
-        p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
-    }
-}
-    // ANCHOR END: bindinput
-
-val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
-
-Kweb(port = 16097) {
-    doc.body {
-        render(list) { rList -&gt;
-            ul {
-                for (item in rList) {
-                    li().text(item)
-                }
-            }
-        }
-    }
-}
-    // ANCHOR END: render1
-
-list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render2
-
-data class User(val name: String)
-
-val user = KVar(User(&quot;Ian&quot;))
-val name = user.property(User::name)
-name.value = &quot;John&quot;
-println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: dataclass
-
-}
-
-fun state2() {
-    val counter = KVar(0)
-val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
-    override fun invoke(from: Int) = from * 2
-    override fun reverse(original: Int, change: Int) = change / 2
-})
-counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 5, doubled: 10
-
-counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
-    }
 </code></pre>
 <p>The neat part is that if the value of <em>name</em> changes, the DOM element
 text will update automatically. It may help to think of this as a way of
@@ -645,7 +581,6 @@ counter.value = 5
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counter.value = 6
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-    // ANCHOR END: map_kvar
 
 Kweb(port = 2135) {
     doc.body {
@@ -653,7 +588,6 @@ Kweb(port = 2135) {
         li().text(name)
     }
 }
-    // ANCHOR END: kvartext
 
 
 Kweb(port = 2395) {
@@ -665,7 +599,6 @@ Kweb(port = 2395) {
         p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
     }
 }
-    // ANCHOR END: bindinput
 
 val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
 
@@ -680,10 +613,8 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render1
 
 list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render2
 
 data class User(val name: String)
 
@@ -691,7 +622,6 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: dataclass
 
 }
 
@@ -708,7 +638,6 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
     }
 </code></pre>
 <p>This will also work for &lt;option&gt; and &lt;textarea&gt; elements which also
@@ -734,66 +663,9 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render1
-
-list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render2
-
-data class User(val name: String)
-
-val user = KVar(User(&quot;Ian&quot;))
-val name = user.property(User::name)
-name.value = &quot;John&quot;
-println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: dataclass
-
-}
-
-fun state2() {
-    val counter = KVar(0)
-val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
-    override fun invoke(from: Int) = from * 2
-    override fun reverse(original: Int, change: Int) = change / 2
-})
-counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 5, doubled: 10
-
-counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
-    }
 </code></pre>
 <p>Here, if we were to change the list:</p>
 <pre><code class="language-kotlin">list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render2
-
-data class User(val name: String)
-
-val user = KVar(User(&quot;Ian&quot;))
-val name = user.property(User::name)
-name.value = &quot;John&quot;
-println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: dataclass
-
-}
-
-fun state2() {
-    val counter = KVar(0)
-val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
-    override fun invoke(from: Int) = from * 2
-    override fun reverse(original: Int, change: Int) = change / 2
-})
-counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 5, doubled: 10
-
-counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
-    }
 </code></pre>
 <p>Then the relevant part of the DOM will be redrawn instantly.</p>
 <p>The simplicity of this mechanism may disguise how powerful it is, since
@@ -823,25 +695,6 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: dataclass
-
-}
-
-fun state2() {
-    val counter = KVar(0)
-val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
-    override fun invoke(from: Int) = from * 2
-    override fun reverse(original: Int, change: Int) = change / 2
-})
-counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 5, doubled: 10
-
-counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-// output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
-    }
 </code></pre>
 <h2 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h2>
 <p>If you check the type of <em>counterDoubled</em>, you<code>ll notice that it</code>s a
@@ -866,8 +719,6 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible1
-    }
 </code></pre>
 <p>::: note
 ::: title
