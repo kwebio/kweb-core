@@ -893,7 +893,6 @@ $dokka.location:kweb/Element/on/#/PointingToDeclaration/kweb-core/kweb/-element
 $dokka.location:kweb/Element/on/#kotlin.String?#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-element/on.html
 $dokka.location:kweb/Element/onImmediate/#/PointingToDeclaration/kweb-core/kweb/-element/on-immediate.html
 $dokka.location:kweb/Element/plugin/#kotlin.reflect.KClass[TypeParam(bounds=[kweb.plugins.KwebPlugin])]/PointingToDeclaration/kweb-core/kweb/-element/plugin.html
-$dokka.location:kweb/Element/read/#/PointingToDeclaration/kweb-core/kweb/-element/read.html
 $dokka.location:kweb/Element/removeAttribute/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element/remove-attribute.html
 $dokka.location:kweb/Element/removeChildAt/#kotlin.Int/PointingToDeclaration/kweb-core/kweb/-element/remove-child-at.html
 $dokka.location:kweb/Element/removeChildren/#/PointingToDeclaration/kweb-core/kweb/-element/remove-children.html
@@ -1031,11 +1030,6 @@ $dokka.location:kweb/TdElement///PointingToDeclaration/kweb-core/kweb/-td-eleme
 $dokka.location:kweb/TdElement/TdElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-td-element/-td-element.html
 $dokka.location:kweb/TextAreaElement///PointingToDeclaration/kweb-core/kweb/-text-area-element/index.html
 $dokka.location:kweb/TextAreaElement/TextAreaElement/#kweb.Element#kotlin.String?/PointingToDeclaration/kweb-core/kweb/-text-area-element/-text-area-element.html
-$dokka.location:kweb/TextAreaElement/read/#/PointingToDeclaration/kweb-core/kweb/-text-area-element/read.html
-$dokka.location:kweb/TextAreaElementReader///PointingToDeclaration/kweb-core/kweb/-text-area-element-reader/index.html
-$dokka.location:kweb/TextAreaElementReader/TextAreaElementReader/#kweb.TextAreaElement/PointingToDeclaration/kweb-core/kweb/-text-area-element-reader/-text-area-element-reader.html
-$dokka.location:kweb/TextAreaElementReader/element/#/PointingToDeclaration/kweb-core/kweb/-text-area-element-reader/element.html
-$dokka.location:kweb/TextAreaElementReader/getValue/#/PointingToDeclaration/kweb-core/kweb/-text-area-element-reader/get-value.html
 $dokka.location:kweb/ThElement///PointingToDeclaration/kweb-core/kweb/-th-element/index.html
 $dokka.location:kweb/ThElement/ThElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-th-element/-th-element.html
 $dokka.location:kweb/TheadElement///PointingToDeclaration/kweb-core/kweb/-thead-element/index.html
