@@ -56,15 +56,7 @@ dependencies {
 Create a new Kotlin file and type this:
 
 ```kotlin
-import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      h1().text("Hello World!")
-    }
- }
-}
+{{#include ../../src/test/kotlin/kweb/docs/gettingstarted.kt:hello_world}}
 ```
 
 Run it, and then visit <http://localhost:16097/> in your web browser to
@@ -97,19 +89,7 @@ features like for loops, functions, coroutines, and classes.
 Here is a simple example using an ordinary Kotlin *for loop*:
 
 ```kotlin
-import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      ul {
-          for (x in 1..5) {
-             li().text("Hello World $x!")
-          }
-      }
-    }
- }
-}
+{{#include ../../src/test/kotlin/kweb/docs/gettingstarted.kt:hello_world_2}}
 ```
 
 To produce\...
@@ -129,21 +109,7 @@ To produce\...
 You can use functions for modularization and reuse:
 
 ```kotlin
-fun main() {
-    Kweb(port = 16097) {
-        doc.body {
-            ul {
-                for (x in 1..5) {
-                    createMessage(x)
-                }
-            }
-        }
-    }
-}
-
-private fun ElementCreator<ULElement>.createMessage(x: Int) {
-    li().text("Hello World $x!")
-}
+{{#include ../../src/test/kotlin/kweb/docs/gettingstarted.kt:hello_world_3}}
 ```
 
 As you can see this is an extension function, which allows you to use
