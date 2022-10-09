@@ -177,14 +177,8 @@ of *map* will produce a KVar which can be modified, as follows:
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:reversible1}}
 ```
 
-::: note
-::: title
-Note
-:::
-
 Reversible mappings are an advanced feature that you only need if you
 want the mapped value to be a mutable KVar. Most of the time the simple
-[KVal.map
-{}](https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html)
-function will be what you need.
-:::
+[KVal.map {}](https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html)
+function is what you need.
+
