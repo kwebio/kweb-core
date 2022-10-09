@@ -178,7 +178,7 @@ Kweb(port = 2135) {
         li().text(name)
     }
 }
-    // ANCHOR END: kvar_text
+    // ANCHOR END: kvartext
 
 
 Kweb(port = 2395) {
@@ -190,7 +190,7 @@ Kweb(port = 2395) {
         p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
     }
 }
-    // ANCHOR END: bind_input
+    // ANCHOR END: bindinput
 
 val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
 
@@ -205,10 +205,10 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render_1
+    // ANCHOR END: render1
 
 list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render_2
+    // ANCHOR END: render2
 
 data class User(val name: String)
 
@@ -216,7 +216,7 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: data_class
+    // ANCHOR END: dataclass
 
 }
 
@@ -233,7 +233,7 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible_1
+// ANCHOR END: reversible1
     }
 </code></pre>
 <p>Will print:</p>
@@ -258,7 +258,7 @@ immutable parameters.
         li().text(name)
     }
 }
-    // ANCHOR END: kvar_text
+    // ANCHOR END: kvartext
 
 
 Kweb(port = 2395) {
@@ -270,7 +270,7 @@ Kweb(port = 2395) {
         p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
     }
 }
-    // ANCHOR END: bind_input
+    // ANCHOR END: bindinput
 
 val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
 
@@ -285,10 +285,10 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render_1
+    // ANCHOR END: render1
 
 list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render_2
+    // ANCHOR END: render2
 
 data class User(val name: String)
 
@@ -296,7 +296,7 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: data_class
+    // ANCHOR END: dataclass
 
 }
 
@@ -313,7 +313,7 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible_1
+// ANCHOR END: reversible1
     }
 </code></pre>
 <p>The neat part is that if the value of <em>name</em> changes, the DOM element
@@ -344,7 +344,7 @@ Kweb(port = 2135) {
         li().text(name)
     }
 }
-    // ANCHOR END: kvar_text
+    // ANCHOR END: kvartext
 
 
 Kweb(port = 2395) {
@@ -356,7 +356,7 @@ Kweb(port = 2395) {
         p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
     }
 }
-    // ANCHOR END: bind_input
+    // ANCHOR END: bindinput
 
 val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
 
@@ -371,10 +371,10 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render_1
+    // ANCHOR END: render1
 
 list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render_2
+    // ANCHOR END: render2
 
 data class User(val name: String)
 
@@ -382,7 +382,7 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: data_class
+    // ANCHOR END: dataclass
 
 }
 
@@ -399,7 +399,7 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible_1
+// ANCHOR END: reversible1
     }
 </code></pre>
 <p>This will also work for &lt;option&gt; and &lt;textarea&gt; elements which also
@@ -425,10 +425,10 @@ Kweb(port = 16097) {
         }
     }
 }
-    // ANCHOR END: render_1
+    // ANCHOR END: render1
 
 list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render_2
+    // ANCHOR END: render2
 
 data class User(val name: String)
 
@@ -436,7 +436,7 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: data_class
+    // ANCHOR END: dataclass
 
 }
 
@@ -453,12 +453,12 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible_1
+// ANCHOR END: reversible1
     }
 </code></pre>
 <p>Here, if we were to change the list:</p>
 <pre><code class="language-kotlin">list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
-    // ANCHOR END: render_2
+    // ANCHOR END: render2
 
 data class User(val name: String)
 
@@ -466,7 +466,7 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: data_class
+    // ANCHOR END: dataclass
 
 }
 
@@ -483,7 +483,7 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible_1
+// ANCHOR END: reversible1
     }
 </code></pre>
 <p>Then the relevant part of the DOM will be redrawn instantly.</p>
@@ -514,7 +514,7 @@ val user = KVar(User(&quot;Ian&quot;))
 val name = user.property(User::name)
 name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
-    // ANCHOR END: data_class
+    // ANCHOR END: dataclass
 
 }
 
@@ -531,7 +531,7 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible_1
+// ANCHOR END: reversible1
     }
 </code></pre>
 <h2 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h2>
@@ -557,7 +557,7 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
-// ANCHOR END: reversible_1
+// ANCHOR END: reversible1
     }
 </code></pre>
 <p>::: note
