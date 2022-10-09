@@ -42,7 +42,7 @@ with Kweb versions. We won't do this without a good reason.
 
 ## Learn More
 
-* [User Manual](http://docs.kweb.io/book)
+* [The Kweb Book](http://docs.kweb.io/book) (user manual)
 * [API Documentation](https://docs.kweb/io/api)
 * [Example Project](https://github.com/freenet/freenetorg-website/tree/staging/src/main/kotlin/org/freenet/website)
 * [Template Repo](https://github.com/kwebio/kweb-template)
