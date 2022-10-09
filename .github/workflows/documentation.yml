@@ -3,7 +3,6 @@ name: documentation
 on:
   push:
     branches: [master]
-    paths: ['docs/**', '.github/workflows/documentation.yml']
 permissions:
   contents: write
 
