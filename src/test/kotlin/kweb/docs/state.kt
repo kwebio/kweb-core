@@ -25,7 +25,7 @@ counter.value = 5
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 counter.value = 6
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
-    // ANCHOR_END: map_kvar
+    // ANCHOR_END: mapkvar
 
     // ANCHOR: kvartext
 Kweb(port = 2135) {
