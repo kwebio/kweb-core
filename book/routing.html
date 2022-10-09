@@ -150,7 +150,7 @@ functions.</li>
 cause a new page to be downloaded from the server, but current
 state-of-the-art websites are able to modify the page in response to URL
 changes without a full refresh.</p>
-<p>With Kweb```s routing mechanism you get this automatically.</p>
+<p>With Kweb's routing mechanism you get this automatically.</p>
 <h2 id="a-simple-example"><a class="header" href="#a-simple-example">A simple example</a></h2>
 <pre><code class="language-kotlin">import kweb.Kweb
 import kweb.dom.element.new
@@ -177,11 +177,11 @@ fun main() {
 <p>Now, if you visit <a href="http://localhost:16097/users/997">http://localhost:16097/users/997</a>, you will see:</p>
 <pre><code class="language-html">&lt;h1&gt;User id: 997&lt;/h1&gt;
 </code></pre>
-<p>You can have as many path()s as you need, each with it```s own path
+<p>You can have as many path()s as you need, each with it's own path
 definition. The definition can contain parameters wrapped in <code>{braces}</code>.</p>
 <p>The value of these parameters can then be retrieved from the <em>params</em>
 map, but note that the values are wrapped in a <code>KVar&lt;String&gt;</code> object.
-This means that you can use all of Kweb```s <a href="https://docs.kweb.io/en/latest/state.html">state
+This means that you can use all of Kweb's <a href="https://docs.kweb.io/en/latest/state.html">state
 management</a> features to
 render parts of the DOM using this value.</p>
 <p>The key advantage here is that if the URL changes the page can be
@@ -231,7 +231,8 @@ fun main() {
 }
 </code></pre>
 <p>If you visit <code>http://localhost:16097/</code> the URL will immediately update
-to <code>http://localhost:16097/number/1</code> without a page refresh, and you<code>ll see a hyperlink with text `Number 1`. If you click on this link you</code>ll
+to <code>http://localhost:16097/number/1</code> without a page refresh, and you'll
+see a hyperlink with text <code>Number 1</code>. If you click on this link you'll
 see that the number increments (both in the URL and in the link text),
 also without a page refresh.</p>
 <p>The line <code>num.value++</code> is worthy of additional attention as there is

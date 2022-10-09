@@ -145,7 +145,7 @@ server CPU/memory.</p>
 <p>If you encounter a situation in which Kweb is slow please <a href="https://github.com/kwebio/kweb-core/issues">submit a
 bug</a>.</p>
 <h2 id="whats-the-difference-between-kweb-and-vaadin"><a class="header" href="#whats-the-difference-between-kweb-and-vaadin">What's the difference between Kweb and Vaadin?</a></h2>
-<p>Of all web frameworks we```re aware of, <a href="https://vaadin.com/">Vaadin</a> is
+<p>Of all web frameworks we're aware of, <a href="https://vaadin.com/">Vaadin</a> is
 the closest in design and philosophy to Kweb, but there are also
 important differences:</p>
 <ul>
@@ -154,16 +154,17 @@ important differences:</p>
 lines of code, while
 <a href="https://github.com/vaadin/framework">vaadin/framework</a> is currently
 502,398 lines of code, almost a 100:1 ratio!</li>
-<li>Vaadin doesn<code>t have any equivalent feature to Kweb</code>s <a href="https://docs.kweb.io/en/latest/events.html#immediate-events">immediate
+<li>Vaadin doesn't have any equivalent feature to Kweb's <a href="https://docs.kweb.io/en/latest/events.html#immediate-events">immediate
 events</a>,
 which has led to frequent
 <a href="https://stackoverflow.com/a/22848521/16050">complaints</a> of
 sluggishness from Vaadin users because a server round-trip is
 required to update the DOM.</li>
 <li>Vaadin brought a more desktop-style of user interface to the web
-browser, but since then we```ve realized that users generally prefer
+browser, but since then we've realized that users generally prefer
 their websites to look like websites.</li>
-<li>This is why Kweb<code>s philosophy is to be a thin interface between server logic and the user</code>s browser, leveraging existing tools from
+<li>This is why Kweb's philosophy is to be a thin interface between
+server logic and the user's browser, leveraging existing tools from
 the JavaScript ecosystem <a href="https://docs.kweb.io/en/latest/style.html">when it makes
 sense</a>.</li>
 <li>Kweb was built natively for Kotlin, and takes advantage of all of
@@ -171,17 +172,17 @@ its language features like
 <a href="https://kotlinlang.org/docs/reference/coroutines-overview.html">coroutines</a>
 and the flexible DSL-like syntax. Because of this Kweb code can be a
 lot more concise, without sacrificing readability.</li>
-<li>In Vaadin```s favor, it has been a commercial product since 2006, it
+<li>In Vaadin's favor, it has been a commercial product since 2006, it
 is extremely mature and has a vast developer ecosystem, while Kweb
 is still pre-1.0.</li>
 </ul>
 <h2 id="is-there-a-larger-working-example"><a class="header" href="#is-there-a-larger-working-example">Is there a larger working example?</a></h2>
 <p>Yes, here is a simple <a href="https://github.com/kwebio/kweb-demos/tree/master/todoList">todo
 list</a>
-implementation which demonstrates many of Kweb```s features.</p>
+implementation which demonstrates many of Kweb's features.</p>
 <p>You can find a copy of this demo running here:
 <a href="http://demo.kweb.io:7659/">http://demo.kweb.io:7659/</a></p>
-<p>It```s running on a $50/month EC2 instance. Try visiting the same list
+<p>It's running on a $50/month EC2 instance. Try visiting the same list
 URL in two different browser windows and notice how they synchronize in
 realtime.</p>
 <p>You can see a number of other example Kweb projects here:
@@ -196,7 +197,7 @@ for an example.</p>
 <h2 id="i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider"><a class="header" href="#i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider">I want to deploy a Kweb Application behind a load balancer, what do i need to consider?</a></h2>
 <p>Please make sure to enable session affinity so that repeated requests
 from the same client end up at the same kweb instance. Kweb does not
-share it```s internal state between multiple instances, so it is
+share it's internal state between multiple instances, so it is
 important to make sure that each request from a single user ends up at
 always the same instance.</p>
 <p>If the load balancer uses e.g. round robin strategy for load balancing,
@@ -209,7 +210,7 @@ function propery.</p>
 embedded within a powerful programming language.</p>
 <p>If you like you could separate out the code that interfaces directly to
 the DOM - this would be architecturally closer to a template-based
-approach, but we view it as a feature that this paradigm isn```t forced
+approach, but we view it as a feature that this paradigm isn't forced
 on the programmer.</p>
 <h2 id="why-risk-my-project-on-a-framework-i-just-heard-of"><a class="header" href="#why-risk-my-project-on-a-framework-i-just-heard-of">Why risk my project on a framework I just heard of?</a></h2>
 <p>Picking a framework is stressful. Pick the wrong one and perhaps the
