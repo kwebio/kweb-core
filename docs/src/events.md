@@ -5,25 +5,14 @@
 You can attach event handlers to DOM elements:
 
 ```kotlin
-doc.body {
-    val label = h1()
-    label.text("Click Me")
-    label.on.click {
-        label.text("Clicked!")
-    }
-}
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:attach_1}}
 ```
 
 Most if not all JavaScript event types are supported, and you can read
 event data like which key was pressed:
 
 ```kotlin
-doc.body {
-    val input = input(type = text)
-    input.on.keypress { keypressEvent ->
-        println("Key Pressed: ${keypressEvent.key}")
-    }
-}
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:read}}
 ```
 
 ## Immediate events
@@ -37,13 +26,7 @@ adoption.
 Fortunately, Kweb has a solution:
 
 ```kotlin
-doc.body {
-    val label = h1()
-    label.text("Click Me")
-    label.onImmediate.click {
-        label.text("Clicked!")
-    }
-}
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:immediate}}
 ```
 
 This is identical to the first event listener example, except *on* has
