@@ -205,11 +205,12 @@ web browser, while also listening for and handing DOM events.</p>
 features like for loops, functions, coroutines, and classes.</p>
 <p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
 <pre><code class="language-kotlin">fun helloWorld2() {
-Kweb(port = 16097) {
-    doc.body {
-        ul {
-            for (x in 1..5) {
-                li().text(&quot;Hello World $x!&quot;)
+    Kweb(port = 16097) {
+        doc.body {
+            ul {
+                for (x in 1..5) {
+                    li().text(&quot;Hello World $x!&quot;)
+                }
             }
         }
     }
