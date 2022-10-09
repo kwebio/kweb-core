@@ -24,12 +24,12 @@ doc.body {
         // ANCHOR_END: read
 
         // ANCHOR: immediate
-        doc.body {
-            val input = input(type = InputType.text)
-            input.on.keypress { keypressEvent ->
-                println("Key Pressed: ${keypressEvent.key}")
-            }
-        }
+doc.body {
+    val input = input(type = InputType.text)
+    input.on.keypress { keypressEvent ->
+        println("Key Pressed: ${keypressEvent.key}")
+    }
+}
         // ANCHOR_END: immediate
     }
 }

@@ -19,7 +19,7 @@ class contains a single typed object, which can change over time. For
 example:
 
 ```kotlin
-val counter = KVar(0)
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:create_kvar}}
 ```
 
 Here we create a counter of type *KVar\<Int\>* initialized with the
@@ -28,11 +28,7 @@ value 0.
 We can also read and modify the value of a KVar:
 
 ```kotlin
-println("Counter value ${counter.value}")
-counter.value = 1
-println("Counter value ${counter.value}")
-counter.value++
-println("Counter value ${counter.value}")
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:modify_kvar}}
 ```
 
 Will print:
@@ -46,11 +42,7 @@ Counter value 2
 KVars support powerful mapping semantics to create new KVars:
 
 ```kotlin
-val counterDoubled = counter.map { it * 2 }
-counter.value = 5
-println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
-counter.value = 6
-println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:map_kvar}}
 ```
 
 Will print:
@@ -78,8 +70,7 @@ immutable parameters.
 You can use a KVar (or KVal) to set the text of a DOM element:
 
 ```kotlin
-val name = KVar("John")
-li().text(name)
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:kvar_text}}
 ```
 
 The neat part is that if the value of *name* changes, the DOM element
@@ -103,15 +94,7 @@ and similarly any changes in the browser by the user will be reflected
 immediately in the KVar, for example:
 
 ```kotlin
-Kweb(port = 2395) {
-    doc.body {
-         p().text("What is your name?")
-        val clickMe = input(type = text)
-        val nameKVar = KVar("Peter Pan")
-        clickMe.value = nameKVar
-        p().text(nameKVar.map { n -> "Hi $n!" })
-    }
-}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:map_kvar}}
 ```
 
 This will also work for \<option\> and \<textarea\> elements which also
@@ -130,25 +113,13 @@ This is where the
 function comes in:
 
 ```kotlin
-val list = KVar(listOf("one", "two", "three"))
-
-Kweb(port = 16097) {
-    doc.body {
-        render(list) { rList ->
-            ul {
-                for (item in rList) {
-                    li().text(item)
-                }
-            }
-        }
-    }
-}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:render_1}}
 ```
 
 Here, if we were to change the list:
 
 ```kotlin
-list.value = listOf("four", "five", "six")
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:render_2}}
 ```
 
 Then the relevant part of the DOM will be redrawn instantly.
@@ -181,11 +152,7 @@ can use Kvar.property() to create a KVar from one of its properties
 which will update the original KVar if changed:
 
 ```kotlin
-data class User(val name : String)
-val user = KVar(User("Ian"))
-val name = user.property(User::name)
-name.value = "John"
-println(user) // Will print: KVar(User(name = "John"))
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:data_class}}
 ```
 
 ## Reversible mapping
@@ -207,17 +174,7 @@ function which takes a *ReversibleFunction* implementation. This version
 of *map* will produce a KVar which can be modified, as follows:
 
 ```kotlin
-val counterDoubled = counter.map(object : ReversibleFunction<Int, Int>("doubledCounter") {
-    override fun invoke(from: Int) = from * 2
-    override fun reverse(original: Int, change: Int) = change / 2
-})
-counter.value = 5
-println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
-// output: counter: 5, doubled: 10
-
-counterDoubled.value = 12 // <-- Couldn't do this with a KVal
-println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
-// output: counter: 6, doubled: 12
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:reversible_1}}
 ```
 
 ::: note
