@@ -502,6 +502,9 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
             synchronized(this) {
                 if (_valueKvar == null) {
                     value = KVar(initialValue ?: "")
+                    this.creator?.onCleanup(true) {
+                        value.close(CloseReason("Parent element closed"))
+                    }
                 }
             }
             return _valueKvar!!
