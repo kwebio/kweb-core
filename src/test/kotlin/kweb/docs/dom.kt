@@ -30,7 +30,7 @@ button.delete()
             // ANCHOR: attr2
 button {
     attr {
-        setAttribute("class", "bigbutton")
+        classes("bigbutton")
         setAttribute("autofocus", true)
     }
     text("Click Me!")
