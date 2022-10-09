@@ -148,7 +148,7 @@
 <p>Most if not all JavaScript event types are supported, and you can read
 event data like which key was pressed:</p>
 <pre><code class="language-kotlin">doc.body {
-    val input = input(type = text)
+    val input = input(type = InputType.text)
     input.on.keypress { keypressEvent -&gt;
         println(&quot;Key Pressed: ${keypressEvent.key}&quot;)
     }
@@ -161,13 +161,12 @@ DOM caused by the event handler. This was a common complaint about
 previous server-driven web frameworks like Vaadin, inhibiting their
 adoption.</p>
 <p>Fortunately, Kweb has a solution:</p>
-<pre><code class="language-kotlin">doc.body {
-    val label = h1()
-    label.text(&quot;Click Me&quot;)
-    label.onImmediate.click {
-        label.text(&quot;Clicked!&quot;)
-    }
-}
+<pre><code class="language-kotlin">        doc.body {
+            val input = input(type = InputType.text)
+            input.on.keypress { keypressEvent -&gt;
+                println(&quot;Key Pressed: ${keypressEvent.key}&quot;)
+            }
+        }
 </code></pre>
 <p>This is identical to the first event listener example, except <em>on</em> has
 been replaced by <em>onImmediate</em>.</p>
