@@ -226,11 +226,11 @@ which you can find <a href="https://github.com/kwebio/kweb-core/releases">here</
 <pre><code class="language-kotlin">import kweb.*
 
 fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      h1().text(&quot;Hello World!&quot;)
+    Kweb(port = 16097) {
+        doc.body {
+            h1().text(&quot;Hello World!&quot;)
+        }
     }
- }
 }
 </code></pre>
 <p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
@@ -255,18 +255,15 @@ web browser, while also listening for and handing DOM events.</p>
 <p>Importantly, this DSL can also do anything Kotlin can do, including
 features like for loops, functions, coroutines, and classes.</p>
 <p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
-<pre><code class="language-kotlin">import kweb.*
-
-fun main() {
-  Kweb(port = 16097) {
+<pre><code class="language-kotlin">fun helloWorld2() {
+Kweb(port = 16097) {
     doc.body {
-      ul {
-          for (x in 1..5) {
-             li().text(&quot;Hello World $x!&quot;)
-          }
-      }
+        ul {
+            for (x in 1..5) {
+                li().text(&quot;Hello World $x!&quot;)
+            }
+        }
     }
- }
 }
 </code></pre>
 <p>To produce...</p>
@@ -281,20 +278,20 @@ fun main() {
 &lt;/body&gt;
 </code></pre>
 <p>You can use functions for modularization and reuse:</p>
-<pre><code class="language-kotlin">fun main() {
+<pre><code class="language-kotlin">fun helloWorld3() {
     Kweb(port = 16097) {
         doc.body {
             ul {
+                fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
+                    li().text(&quot;Hello World $x!&quot;)
+                }
+
                 for (x in 1..5) {
-                    createMessage(x)
+                    this.createMessage(x)
                 }
             }
         }
     }
-}
-
-private fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
-    li().text(&quot;Hello World $x!&quot;)
 }
 </code></pre>
 <p>As you can see this is an extension function, which allows you to use
