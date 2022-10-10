@@ -15,7 +15,7 @@
 
 ## Quick Start
 
-Read [Getting Started](https://docs.kweb.io/book/gettingstarted.html) from the [Kweb Book](https://docs.kweb.io/book/).
+Read the [Introduction](https://docs.kweb.io/book/intro.html) or [Getting Started](https://docs.kweb.io/book/gettingstarted.html) from the [Kweb Book](https://docs.kweb.io/book/).
 
 ## Overview
 
