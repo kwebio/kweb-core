@@ -5,6 +5,10 @@ on:
     branches: [ master ]
     paths-ignore: [ 'docs/**', 'README.md' ]
 
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +19,7 @@ jobs:
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
+        distribution: temurin
         java-version: 17
 
     - name: Setup Gradle
