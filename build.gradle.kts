@@ -7,13 +7,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-}
-
 tasks.test {
     useJUnitPlatform()
     systemProperty("sel.jup.default.browser", System.getProperty("sel.jup.default.browser"))
