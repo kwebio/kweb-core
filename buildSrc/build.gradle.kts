@@ -15,7 +15,6 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
     implementation("org.jetbrains.kotlin:kotlin-serialization")
-    implementation("org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:0.11.1")
 }
 
 val gradleJvmTarget = 11
