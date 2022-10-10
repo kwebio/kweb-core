@@ -9,7 +9,7 @@ dependencies {
     implementation(platform(kotlin("bom")))
 }
 
-val gradleJvmTarget = 17
+val gradleJvmTarget = 11
 
 kotlin {
     jvmToolchain {
