@@ -10,11 +10,11 @@ plugins {
 allprojects {
     repositories {
         mavenCentral()
-        maven { url("https://jitpack.io") }
+        maven("https://jitpack.io")
     }
 }
 
-tasks.named("test") {
+tasks.test {
     useJUnitPlatform()
     systemProperty("sel.jup.default.browser", System.getProperty("sel.jup.default.browser"))
 }
@@ -65,13 +65,13 @@ dependencies {
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine")
 }
 
-tasks.named("dokkaHtml") {
+tasks.dokkaHtml {
     dokkaSourceSets {
         configureEach {
-            samples.from(files("src/main/kotlin/samples.kt"))
+            samples.from(layout.projectDirectory.dir("src/main/kotlin/samples.kt"))
         }
     }
 }
@@ -79,7 +79,7 @@ tasks.named("dokkaHtml") {
 afterEvaluate {
     publishing {
         publications {
-            create(MavenPublication) {
+            create<MavenPublication>("mavenJava") {
                 groupId = "com.github.kwebio"
                 artifactId = "kweb-core"
                 version = version
