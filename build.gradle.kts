@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.github.ben-manes.versions") version "0.42.0"
-    id("org.jetbrains.kotlin.plugin.serialization")
+    kotlin("plugin.serialization")
 }
 
 group = "com.github.kwebio"
