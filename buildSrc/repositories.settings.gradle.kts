@@ -19,5 +19,10 @@ dependencyResolutionManagement {
 }
 
 fun RepositoryHandler.jitpack() {
-    maven("https://jitpack.io")
+    maven("https://jitpack.io") {
+        mavenContent {
+            // https://github.com/ben-manes/gradle-versions-plugin/issues/541#issuecomment-878461574
+            excludeGroup("com.github.ben-manes")
+        }
+    }
 }

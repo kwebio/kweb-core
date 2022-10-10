@@ -1,0 +1,135 @@
+[versions]
+
+kotlin = "1.7.20"
+ktor = "2.1.2"
+jsoup = "1.15.3"
+kotlinxCoroutines = "1.6.4"
+kotlinSerialization = "1.4.0"
+kotlinDokka = "1.7.10"
+
+apacheCommons-text = "1.10.0"
+
+junit = "5.9.1"
+kotest = "5.5.0"
+
+[libraries]
+
+
+## Gradle plugins ##
+gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradlePlugin-kotlinSerialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
+gradlePlugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "kotlinDokka" }
+gradlePlugin-shadow = { module = "gradle.plugin.com.github.johnrengelman:shadow", version = "7.1.2" }
+gradlePlugin-gradleVersions = { module = "com.github.ben-manes:gradle-versions-plugin", version = "0.42.0" }
+
+
+## misc libs ##
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+
+apacheCommons-text = { module = "org.apache.commons:commons-text", version.ref = "apacheCommons-text" }
+google-guava = { module = "com.google.guava:guava", version = "31.1-jre" }
+galimatias = { module = "io.mola.galimatias:galimatias", version = "0.2.1" }
+
+
+## Kotlin ##
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version = "1.7.20" }
+
+
+## logging ##
+kotlinLogging = { module = "io.github.microutils:kotlin-logging", version = "3.0.0" }
+logbackClassic = { module = "ch.qos.logback:logback-classic", version = "1.4.3" }
+
+
+## Kotlinx Coroutines ##
+kotlinxCoroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinxCoroutines" }
+kotlinxCoroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
+kotlinxCoroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8" }
+
+
+## Kotlinx Serialization ##
+kotlinxSerialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinSerialization" }
+kotlinxSerialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core" }
+kotlinxSerialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor" }
+kotlinxSerialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon" }
+kotlinxSerialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json" }
+kotlinxSerialization-properties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties" }
+kotlinxSerialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf" }
+kotlinxSerialization-jsonOkio = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-okio" }
+
+## Ktor ##
+ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
+
+ktorSerialization-kotlinxJson = { module = "io.ktor:ktor-serialization-kotlinx-json" }
+
+ktorClient-core = { module = "io.ktor:ktor-client-core" }
+ktorClient-auth = { module = "io.ktor:ktor-client-auth" }
+ktorClient-cio = { module = "io.ktor:ktor-client-cio" }
+ktorClient-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation" }
+ktorClient-encoding = { module = "io.ktor:ktor-client-encoding" }
+ktorClient-logging = { module = "io.ktor:ktor-client-logging" }
+ktorClient-resources = { module = "io.ktor:ktor-client-resources" }
+ktorClient-websockets = { module = "io.ktor:ktor-client-websockets" }
+
+ktorClient-testMock = { module = "io.ktor:ktor-client-mock" }
+
+ktorServer-core = { module = "io.ktor:ktor-server-core" }
+ktorServer-auth = { module = "io.ktor:ktor-server-auth" }
+ktorServer-authJwt = { module = "io.ktor:ktor-server-auth-jwt" }
+ktorServer-autoHeadResponse = { module = "io.ktor:ktor-server-auto-head-response" }
+ktorServer-cachingHeaders = { module = "io.ktor:ktor-server-caching-headers" }
+ktorServer-callId = { module = "io.ktor:ktor-server-call-id" }
+ktorServer-callLogging = { module = "io.ktor:ktor-server-call-logging" }
+ktorServer-compression = { module = "io.ktor:ktor-server-compression" }
+ktorServer-conditionalHeaders = { module = "io.ktor:ktor-server-conditional-headers" }
+ktorServer-contentNegotiaion = { module = "io.ktor:ktor-server-content-negotiation" }
+ktorServer-cors = { module = "io.ktor:ktor-server-cors" }
+ktorServer-dataConversion = { module = "io.ktor:ktor-server-data-conversion" }
+ktorServer-defaultHeaders = { module = "io.ktor:ktor-server-default-headers" }
+ktorServer-forwardedHeader = { module = "io.ktor:ktor-server-forwarded-header" }
+ktorServer-hsts = { module = "io.ktor:ktor-server-hsts" }
+ktorServer-httpRedirect = { module = "io.ktor:ktor-server-http-redirect" }
+ktorServer-netty = { module = "io.ktor:ktor-server-netty" }
+ktorServer-jetty = { module = "io.ktor:ktor-server-jetty" }
+ktorServer-cio = { module = "io.ktor:ktor-server-cio" }
+ktorServer-partialContent = { module = "io.ktor:ktor-server-partial-content" }
+ktorServer-resources = { module = "io.ktor:ktor-server-resources" }
+ktorServer-sessions = { module = "io.ktor:ktor-server-sessions" }
+ktorServer-statusPages = { module = "io.ktor:ktor-server-status-pages" }
+ktorServer-websockets = { module = "io.ktor:ktor-server-websockets" }
+
+ktorServer-testHost = { module = "io.ktor:ktor-server-test-host" }
+
+ktorNetwork-core = { module = "io.ktor:ktor-network" }
+ktorNetwork-tls = { module = "io.ktor:ktor-network-tls" }
+ktorNetwork-tlsCertificates = { module = "io.ktor:ktor-network-tls-certificates" }
+
+
+## kotest ##
+kotest-bom = { module = "io.kotest:kotest-bom", version.ref = "kotest" }
+kotest-assertionsCore = { module = "io.kotest:kotest-assertions-core" }
+kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
+kotest-assertionsJson = { module = "io.kotest:kotest-assertions-json" }
+kotest-property = { module = "io.kotest:kotest-property" }
+kotest-frameworkEngine = { module = "io.kotest:kotest-framework-engine" }
+kotest-runnerJunit5 = { module = "io.kotest:kotest-runner-junit5" }
+
+
+## selenium ##
+selenium-operaDriver = { module = "org.seleniumhq.selenium:selenium-opera-driver", version = "4.4.0" }
+selenium-chromeDriver = { module = "org.seleniumhq.selenium:selenium-chrome-driver", version = "4.5.0" }
+selenium-java = { module = "org.seleniumhq.selenium:selenium-java", version = "4.5.0" }
+selenium-jupiter = { module = "io.github.bonigarcia:selenium-jupiter", version = "4.3.1" }
+
+
+## junit ##
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junitJupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
+junitJupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+
+
+[bundles]
+
+
+[plugins]
+# Prefer not to use the [plugins] block, because this block uses Gradle plugin IDs, and we prefer defining plugins in
+# buildSrc/build.gradle.kts using Maven coodinates.
