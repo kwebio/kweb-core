@@ -1,21 +1,13 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.7.20"
-    id("maven-publish")
+    buildsrc.conventions.`kotlin-jvm`
+    `maven-publish`
     id("org.jetbrains.dokka") version "1.7.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.github.ben-manes.versions") version "0.42.0"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 tasks.test {
-    useJUnitPlatform()
     systemProperty("sel.jup.default.browser", System.getProperty("sel.jup.default.browser"))
 }
 
