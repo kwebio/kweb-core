@@ -1,2 +1,6 @@
 jdk:
-  - openjdk16
+  - openjdk17
+before_install:
+  # https://endoflife.date/java
+  - sdk install java 17.0.4.1-tem
+  - sdk use java 17.0.4.1-tem
