@@ -1,6 +1,6 @@
 plugins {
     buildsrc.conventions.`kotlin-jvm`
-    `maven-publish`
+    buildsrc.conventions.`maven-publish`
     id("org.jetbrains.dokka") version "1.7.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.github.ben-manes.versions") version "0.42.0"
@@ -60,26 +60,13 @@ dependencies {
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
 tasks.dokkaHtml {
     dokkaSourceSets {
         configureEach {
             samples.from(layout.projectDirectory.dir("src/main/kotlin/samples.kt"))
-        }
-    }
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                groupId = "com.github.kwebio"
-                artifactId = "kweb-core"
-                version = version
-                from(components["java"])
-            }
         }
     }
 }
