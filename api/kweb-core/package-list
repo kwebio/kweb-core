@@ -269,6 +269,8 @@ $dokka.location:kweb.html.style////PointingToDeclaration/kweb-core/kweb.html.st
 $dokka.location:kweb.html.style/StyleReceiver.DisplayValues.block///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb.html.style/-style-receiver/-display-values/block/index.html
 $dokka.location:kweb.html.style/StyleReceiver.DisplayValues.none///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb.html.style/-style-receiver/-display-values/none/index.html
 $dokka.location:kweb.html.style/StyleReceiver.DisplayValues///PointingToDeclaration/kweb-core/kweb.html.style/-style-receiver/-display-values/index.html
+$dokka.location:kweb.html.style/StyleReceiver.DisplayValues/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb.html.style/-style-receiver/-display-values/value-of.html
+$dokka.location:kweb.html.style/StyleReceiver.DisplayValues/values/#/PointingToDeclaration/kweb-core/kweb.html.style/-style-receiver/-display-values/values.html
 $dokka.location:kweb.html.style/StyleReceiver///PointingToDeclaration/kweb-core/kweb.html.style/-style-receiver/index.html
 $dokka.location:kweb.html.style/StyleReceiver/StyleReceiver/#kweb.Element/PointingToDeclaration/kweb-core/kweb.html.style/-style-receiver/-style-receiver.html
 $dokka.location:kweb.html.style/StyleReceiver/remove/#/PointingToDeclaration/kweb-core/kweb.html.style/-style-receiver/remove.html
@@ -326,6 +328,8 @@ $dokka.location:kweb.html/StorageReceiver/type/#/PointingToDeclaration/kweb-cor
 $dokka.location:kweb.html/StorageType.local///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb.html/-storage-type/local/index.html
 $dokka.location:kweb.html/StorageType.session///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb.html/-storage-type/session/index.html
 $dokka.location:kweb.html/StorageType///PointingToDeclaration/kweb-core/kweb.html/-storage-type/index.html
+$dokka.location:kweb.html/StorageType/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb.html/-storage-type/value-of.html
+$dokka.location:kweb.html/StorageType/values/#/PointingToDeclaration/kweb-core/kweb.html/-storage-type/values.html
 $dokka.location:kweb.html/TitleElement///PointingToDeclaration/kweb-core/kweb.html/-title-element/index.html
 $dokka.location:kweb.html/TitleElement/TitleElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb.html/-title-element/-title-element.html
 $dokka.location:kweb.html/Window///PointingToDeclaration/kweb-core/kweb.html/-window/index.html
@@ -566,6 +570,8 @@ $dokka.location:kweb.plugins.fomanticUI/FomanticUIPlugin/decorate/#org.jsoup.nod
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver.DimmerAction.hide///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/-dimmer-action/hide/index.html
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver.DimmerAction.show///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/-dimmer-action/show/index.html
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver.DimmerAction///PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/-dimmer-action/index.html
+$dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver.DimmerAction/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/-dimmer-action/value-of.html
+$dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver.DimmerAction/values/#/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/-dimmer-action/values.html
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver///PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/index.html
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver/JQuerySUIReceiver/#kweb.plugins.jqueryCore.JQueryReceiver/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/-j-query-s-u-i-receiver.html
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver/dimmer/#kweb.plugins.fomanticUI.JQuerySUIReceiver.DimmerAction/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/dimmer.html
@@ -628,6 +634,8 @@ $dokka.location:kweb.plugins.viewport/ViewportPlugin/width/#/PointingToDeclarati
 $dokka.location:kweb.plugins.viewport/ViewportWidth.DeviceWidth///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb.plugins.viewport/-viewport-width/-device-width/index.html
 $dokka.location:kweb.plugins.viewport/ViewportWidth///PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-width/index.html
 $dokka.location:kweb.plugins.viewport/ViewportWidth/text/#/PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-width/text.html
+$dokka.location:kweb.plugins.viewport/ViewportWidth/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-width/value-of.html
+$dokka.location:kweb.plugins.viewport/ViewportWidth/values/#/PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-width/values.html
 $dokka.location:kweb.plugins////PointingToDeclaration/kweb-core/kweb.plugins/index.html
 $dokka.location:kweb.plugins/KwebPlugin///PointingToDeclaration/kweb-core/kweb.plugins/-kweb-plugin/index.html
 $dokka.location:kweb.plugins/KwebPlugin/KwebPlugin/#kotlin.collections.Set[kweb.plugins.KwebPlugin]/PointingToDeclaration/kweb-core/kweb.plugins/-kweb-plugin/-kweb-plugin.html
@@ -743,7 +751,6 @@ $dokka.location:kweb.util//random/#/PointingToDeclaration/kweb-core/kweb.util/r
 $dokka.location:kweb.util//scheduledExecutorService/#/PointingToDeclaration/kweb-core/kweb.util/scheduled-executor-service.html
 $dokka.location:kweb.util//warnIfBlocking/#kotlin.Long#kotlin.Function1[java.lang.Thread,kotlin.Unit]#kotlin.Function0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kweb-core/kweb.util/warn-if-blocking.html
 $dokka.location:kweb.util/KWebDSL///PointingToDeclaration/kweb-core/kweb.util/-k-web-d-s-l/index.html
-$dokka.location:kweb.util/KWebDSL/KWebDSL/#/PointingToDeclaration/kweb-core/kweb.util/-k-web-d-s-l/-k-web-d-s-l.html
 $dokka.location:kweb.util/NotFoundException///PointingToDeclaration/kweb-core/kweb.util/-not-found-exception/index.html
 $dokka.location:kweb.util/NotFoundException/NotFoundException/#kotlin.String/PointingToDeclaration/kweb-core/kweb.util/-not-found-exception/-not-found-exception.html
 $dokka.location:kweb.util/NotFoundException/message/#/PointingToDeclaration/kweb-core/kweb.util/-not-found-exception/message.html
@@ -836,6 +843,8 @@ $dokka.location:kweb/ButtonType.button///PointingToDeclaration/{"org.jetbrains.d
 $dokka.location:kweb/ButtonType.reset///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-button-type/reset/index.html
 $dokka.location:kweb/ButtonType.submit///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-button-type/submit/index.html
 $dokka.location:kweb/ButtonType///PointingToDeclaration/kweb-core/kweb/-button-type/index.html
+$dokka.location:kweb/ButtonType/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-button-type/value-of.html
+$dokka.location:kweb/ButtonType/values/#/PointingToDeclaration/kweb-core/kweb/-button-type/values.html
 $dokka.location:kweb/CanvasElement///PointingToDeclaration/kweb-core/kweb/-canvas-element/index.html
 $dokka.location:kweb/CanvasElement/CanvasElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-canvas-element/-canvas-element.html
 $dokka.location:kweb/CookieReceiver///PointingToDeclaration/kweb-core/kweb/-cookie-receiver/index.html
@@ -976,6 +985,8 @@ $dokka.location:kweb/InputType.time///PointingToDeclaration/{"org.jetbrains.dokk
 $dokka.location:kweb/InputType.url///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-input-type/url/index.html
 $dokka.location:kweb/InputType.week///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-input-type/week/index.html
 $dokka.location:kweb/InputType///PointingToDeclaration/kweb-core/kweb/-input-type/index.html
+$dokka.location:kweb/InputType/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-input-type/value-of.html
+$dokka.location:kweb/InputType/values/#/PointingToDeclaration/kweb-core/kweb/-input-type/values.html
 $dokka.location:kweb/Kweb.Feature.Configuration///PointingToDeclaration/kweb-core/kweb/-kweb/-feature/-configuration/index.html
 $dokka.location:kweb/Kweb.Feature.Configuration/Configuration/#/PointingToDeclaration/kweb-core/kweb/-kweb/-feature/-configuration/-configuration.html
 $dokka.location:kweb/Kweb.Feature.Configuration/buildPage/#/PointingToDeclaration/kweb-core/kweb/-kweb/-feature/-configuration/build-page.html
@@ -1016,6 +1027,8 @@ $dokka.location:kweb/PElement/PElement/#kweb.Element/PointingToDeclaration/kweb
 $dokka.location:kweb/Scheme.http///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-scheme/http/index.html
 $dokka.location:kweb/Scheme.https///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-scheme/https/index.html
 $dokka.location:kweb/Scheme///PointingToDeclaration/kweb-core/kweb/-scheme/index.html
+$dokka.location:kweb/Scheme/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-scheme/value-of.html
+$dokka.location:kweb/Scheme/values/#/PointingToDeclaration/kweb-core/kweb/-scheme/values.html
 $dokka.location:kweb/SectionElement///PointingToDeclaration/kweb-core/kweb/-section-element/index.html
 $dokka.location:kweb/SectionElement/SectionElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-section-element/-section-element.html
 $dokka.location:kweb/SelectElement///PointingToDeclaration/kweb-core/kweb/-select-element/index.html
@@ -1057,6 +1070,8 @@ $dokka.location:kweb/WebBrowser.CatcherType.EVENT///PointingToDeclaration/{"org.
 $dokka.location:kweb/WebBrowser.CatcherType.IMMEDIATE_EVENT///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-web-browser/-catcher-type/-i-m-m-e-d-i-a-t-e_-e-v-e-n-t/index.html
 $dokka.location:kweb/WebBrowser.CatcherType.RENDER///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-web-browser/-catcher-type/-r-e-n-d-e-r/index.html
 $dokka.location:kweb/WebBrowser.CatcherType///PointingToDeclaration/kweb-core/kweb/-web-browser/-catcher-type/index.html
+$dokka.location:kweb/WebBrowser.CatcherType/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-web-browser/-catcher-type/value-of.html
+$dokka.location:kweb/WebBrowser.CatcherType/values/#/PointingToDeclaration/kweb-core/kweb/-web-browser/-catcher-type/values.html
 $dokka.location:kweb/WebBrowser.FuncDeclaration///PointingToDeclaration/kweb-core/kweb/-web-browser/-func-declaration/index.html
 $dokka.location:kweb/WebBrowser.FuncDeclaration/FuncDeclaration/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb/-web-browser/-func-declaration/-func-declaration.html
 $dokka.location:kweb/WebBrowser.FuncDeclaration/js/#/PointingToDeclaration/kweb-core/kweb/-web-browser/-func-declaration/js.html
