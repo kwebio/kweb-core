@@ -39,7 +39,7 @@ dependencies {
 
     api("io.mola.galimatias:galimatias:0.2.1")
 
-    implementation("io.github.microutils:kotlin-logging:3.0.0")
+    implementation("io.github.microutils:kotlin-logging:3.0.2")
 
     ///////////////////////////
     // Dependencies for testing
