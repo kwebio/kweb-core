@@ -47,7 +47,7 @@ fun main(args: Array<String>) {
 
 ### Result
 
-![video](readme-video.webm)
+![video](readme-video.gif)
 
 ## API Stability
 
