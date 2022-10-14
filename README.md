@@ -47,12 +47,11 @@ fun main(args: Array<String>) {
 
 ### Result
 
+This demo illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
+[modifying elements](https://docs.kweb.io/book/dom.html#adding-attributes), binding [input elements](https://docs.kweb.io/book/dom.html#input-elements),
+and [KVars](https://docs.kweb.io/book/state.html#building-blocks).
+
 ![video](readme-video.gif)
-
-## API Stability
-
-Kweb's API is likely to change between now and our 1.0.0 release, so you may need to modify your code to stay current 
-with Kweb versions. We won't do this without a good reason.
 
 ## Learn More
 
