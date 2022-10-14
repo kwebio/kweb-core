@@ -36,9 +36,7 @@ fun main(args: Array<String>) {
                 h1().text("Enter Your Name")
                 val nameInput = input(type = text)
                 br()
-                span {
-                    text(nameInput.value.map { "Hello, $it" })
-                }
+                span().text(nameInput.value.map { "Hello, $it" })
             }
         }
     }
