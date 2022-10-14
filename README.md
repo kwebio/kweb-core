@@ -25,15 +25,29 @@ Kweb is a new way to create beautiful, efficient, and scalable websites in [Kotl
 
 ```kotlin
 import kweb.*
+import kweb.InputType.text
+import kweb.plugins.fomanticUI.fomantic
+import kweb.plugins.fomanticUI.fomanticUIPlugin
 
-fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      h1().text("Hello World!")
+fun main(args: Array<String>) {
+    Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
+        doc.body.new {
+            div(fomantic.ui.segment) {
+                h1().text("Enter Your Name")
+                val nameInput = input(type = text)
+                br()
+                span {
+                    text(nameInput.value.map { "Hello, $it" })
+                }
+            }
+        }
     }
-  }
 }
 ```
+
+### Result
+
+![video](readme-video.webm)
 
 ## API Stability
 

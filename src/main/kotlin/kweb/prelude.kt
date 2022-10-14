@@ -130,7 +130,6 @@ fun ElementCreator<Element>.form(
 }
 
 open class AElement(parent: Element) : Element(parent) {
-
     /**
      * A convenience property to set the href attribute of this anchor element. If the value begins with
      * "/" (a relative URL) then this will override the default click behavior and set the [WebBrowser.url]
@@ -446,7 +445,11 @@ fun ElementCreator<Element>.textArea(
     }
 }
 
-open class LabelElement(wrapped: Element) : Element(wrapped)
+open class LabelElement(wrapped: Element) : Element(wrapped) {
+    fun setFor(forId: String) = setAttribute("for", forId)
+    fun setFor(forId: KVal<String>) = setAttribute("for", forId.map { JsonPrimitive(it) })
+
+}
 
 fun ElementCreator<Element>.label(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
