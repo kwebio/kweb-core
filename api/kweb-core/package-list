@@ -1014,6 +1014,8 @@ $dokka.location:kweb/LIElement///PointingToDeclaration/kweb-core/kweb/-l-i-elem
 $dokka.location:kweb/LIElement/LIElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-l-i-element/-l-i-element.html
 $dokka.location:kweb/LabelElement///PointingToDeclaration/kweb-core/kweb/-label-element/index.html
 $dokka.location:kweb/LabelElement/LabelElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-label-element/-label-element.html
+$dokka.location:kweb/LabelElement/setFor/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-label-element/set-for.html
+$dokka.location:kweb/LabelElement/setFor/#kweb.state.KVal[kotlin.String]/PointingToDeclaration/kweb-core/kweb/-label-element/set-for.html
 $dokka.location:kweb/MetaElement///PointingToDeclaration/kweb-core/kweb/-meta-element/index.html
 $dokka.location:kweb/MetaElement/MetaElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-meta-element/-meta-element.html
 $dokka.location:kweb/NavElement///PointingToDeclaration/kweb-core/kweb/-nav-element/index.html
