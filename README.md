@@ -48,8 +48,9 @@ fun main(args: Array<String>) {
 ### Result
 
 This demo illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
-[modifying elements](https://docs.kweb.io/book/dom.html#adding-attributes), binding [input elements](https://docs.kweb.io/book/dom.html#input-elements),
-and [KVars](https://docs.kweb.io/book/state.html#building-blocks).
+[modifying elements](https://docs.kweb.io/book/dom.html#adding-attributes), 
+[KVars](https://docs.kweb.io/book/state.html#building-blocks), and binding 
+[input elements](https://docs.kweb.io/book/dom.html#input-elements).
 
 ![video](readme-video.gif)
 
