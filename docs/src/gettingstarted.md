@@ -26,7 +26,7 @@ dependencies {
   implementation 'com.github.kwebio:kweb-core:KWEB_VERSION'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+  implementation 'org.slf4j:slf4j-simple:2.0.3'
 }
 ```
 
