@@ -28,8 +28,6 @@ val jqueryCore = JQueryCorePlugin()
 
 /**
  * Selects the element based on id, then executes the provided js
- *
- * // @sample table().executeOnSelf(".tablesort()")
  */
 fun Element.executeOnSelf(js: String) {
     callJsFunction("$('#' + {})$js", id.json)

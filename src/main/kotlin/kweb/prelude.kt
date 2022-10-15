@@ -395,8 +395,6 @@ class SelectElement(parent: Element, initialValue: String? = null) :
 
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
- *
- * // @sample select_sample
  */
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
@@ -411,20 +409,6 @@ fun ElementCreator<Element>.select(
         )
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null))
-    }
-}
-
-private fun select_sample() {
-    Kweb(port= 7668) {
-        doc.body {
-            val select = select(name = "pets") {
-                option().setAttribute("value", "dog").text("Dog")
-                option().setAttribute("value", "cat").text("Cat")
-            }
-            select.value.addListener { old, new ->
-                println("Value of select changed from $old to $new")
-            }
-        }
     }
 }
 
@@ -497,8 +481,6 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
      * A KVar bidirectionally synchronized with the [value of a select element](https://www.w3schools.com/jsref/prop_select_value.asp).
      * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
      * if the KVar is changed.
-     *
-     * // @sample select_sample
      */
     var value: KVar<String>
         get() {
@@ -737,8 +719,6 @@ fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCr
 
 /**
  * Create a [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
- *
- * // @sample fileReaderSample
  */
 fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, JsonPrimitive> = attr): FileFormInput {
     val inputElement = input(attributes, InputType.file, name, initialValue, size, placeholder)
@@ -747,17 +727,63 @@ fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = nu
     return formInput
 }
 
-fun fileReaderSample() {
-    val imageString = KVar(JsonPrimitive(""))
-    Kweb(port = 123) {
-        doc.body.new {
-            val input = fileInput()
-            input.onFileSelect {
-                input.retrieveFile {
-                    imageString.value = JsonPrimitive(it.base64Content)
-                }
-            }
-            img().setAttribute("src", imageString)
-        }
+fun ElementCreator<Element>.table(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TableElement>.() -> Unit)? = null
+): TableElement {
+    return TableElement(element("table", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
+
+open class TableElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.thead(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TheadElement>.() -> Unit)? = null
+): TheadElement {
+    return TheadElement(element("thead", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class TheadElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.th(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<ThElement>.() -> Unit)? = null
+): ThElement {
+    return ThElement(element("th", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class ThElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.tbody(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TbodyElement>.() -> Unit)? = null
+): TbodyElement {
+    return TbodyElement(element("tbody", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class TbodyElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.tr(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TrElement>.() -> Unit)? = null
+): TrElement {
+    return TrElement(element("tr", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class TrElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.td(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TdElement>.() -> Unit)? = null
+): TdElement {
+    return TdElement(element("td", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+class TdElement(parent: Element) : Element(parent)

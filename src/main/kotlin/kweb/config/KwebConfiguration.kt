@@ -66,8 +66,6 @@ abstract class KwebConfiguration {
     /**
      * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
      * which may be used to return whatever you wish.
-     *
-     * // @sample robots_txt_sample
      */
     open suspend fun robotsTxt(call: ApplicationCall) {
         call.response.status(HttpStatusCode.NotFound)
@@ -77,8 +75,6 @@ abstract class KwebConfiguration {
     /**
      * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
      * which may be used to return whatever you wish.
-     *
-     * // @sample favicon_sample
      */
     open suspend fun faviconIco(call: ApplicationCall) {
         call.respondText("favicons not currently supported by kweb", status = HttpStatusCode.NotFound)

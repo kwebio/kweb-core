@@ -153,8 +153,6 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
      *
      * If your JavaScript needs to use an empty JavaScript map, just insert a space
      * between the {}s, eg. `{ }`
-     *
-     * // @sample kweb.callJsFunction_sample
      */
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         val functionCall  = if (cachedFunctions[jsBody] != null) {

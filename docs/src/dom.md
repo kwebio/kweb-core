@@ -5,19 +5,25 @@
 Let's create a `<button>` as a child of the `<body>` element:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/dom.kt:create}}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:create1}}
+```
+
+The Kweb DSL can be used to create nested elements:
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:create2}}
 ```
 
 ## Element Attributes
 
-If you assign the button element to a val then you can also modify its
+If you assign the button element to a val then you can also set its
 attributes:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr}}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:setattributes}}
 ```
 
-Attributes can also be specified in an `attr` block:
+Attributes can also be specified in an `element` block:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr2}}

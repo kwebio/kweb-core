@@ -3,7 +3,7 @@ package kweb.docs
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 
-// ANCHOR: create
+// ANCHOR: create1
 fun main() {
     Kweb(port = 16097) {
         doc.body {
@@ -11,17 +11,40 @@ fun main() {
         }
     }
 }
-// ANCHOR_END: create
+// ANCHOR_END: create1
+
+fun create2() {
+    Kweb(port = 16097) {
+// ANCHOR: create2
+doc.body {
+    table {
+        tr {
+            td().text("Name")
+            td().text("Age")
+        }
+        tr {
+            td().text("Alice")
+            td().text("21")
+        }
+        tr {
+            td().text("Bob")
+            td().text("22")
+        }
+    }
+}
+// ANCHOR_END: create2
+    }
+}
 
 fun foo() {
     Kweb(port = 16097) {
         doc.body {
-            // ANCHOR: attr
+            // ANCHOR: setattributes
 val button = button()
 button.text("Click Me!")
 button.classes("bigbutton")
 button.setAttribute("autofocus", true)
-            // ANCHOR_END: attr
+            // ANCHOR_END: setattributes
 
             // ANCHOR: delete
 button.delete()
@@ -29,7 +52,7 @@ button.delete()
 
             // ANCHOR: attr2
 button {
-    attr {
+    element {
         classes("bigbutton")
         setAttribute("autofocus", true)
     }
