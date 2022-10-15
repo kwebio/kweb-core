@@ -430,8 +430,8 @@ fun ElementCreator<Element>.textArea(
 }
 
 open class LabelElement(wrapped: Element) : Element(wrapped) {
-    fun setFor(forId: String) = setAttribute("for", forId)
-    fun setFor(forId: KVal<String>) = setAttribute("for", forId.map { JsonPrimitive(it) })
+    fun setFor(forId: String) = this.set("for", forId)
+    fun setFor(forId: KVal<String>) = set("for", forId.map { JsonPrimitive(it) })
 
 }
 

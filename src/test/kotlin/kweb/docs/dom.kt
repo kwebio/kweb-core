@@ -14,26 +14,26 @@ fun main() {
 // ANCHOR_END: create1
 
 fun create2() {
-    Kweb(port = 16097) {
 // ANCHOR: create2
-doc.body {
-    table {
-        tr {
-            td().text("Name")
-            td().text("Age")
-        }
-        tr {
-            td().text("Alice")
-            td().text("21")
-        }
-        tr {
-            td().text("Bob")
-            td().text("22")
+Kweb(port = 16097) {
+    doc.body {
+        table {
+            tr {
+                td().text("Name")
+                td().text("Age")
+            }
+            tr {
+                td().text("Alice")
+                td().text("21")
+            }
+            tr {
+                td().text("Bob")
+                td().text("22")
+            }
         }
     }
 }
 // ANCHOR_END: create2
-    }
 }
 
 fun foo() {
@@ -43,7 +43,7 @@ fun foo() {
 val button = button()
 button.text("Click Me!")
 button.classes("bigbutton")
-button.setAttribute("autofocus", true)
+button["autofocus"] = true
             // ANCHOR_END: setattributes
 
             // ANCHOR: delete
@@ -54,7 +54,7 @@ button.delete()
 button {
     element {
         classes("bigbutton")
-        setAttribute("autofocus", true)
+        this["autofocus"] = true
     }
     text("Click Me!")
 }

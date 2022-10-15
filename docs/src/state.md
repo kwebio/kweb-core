@@ -15,8 +15,11 @@ automatically to the browser.
 
 A
 [KVar](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt)
-class contains a single typed object, which can change over time. For
-example:
+class contains a single typed object, which can change over time, similar to an 
+[AtomicReference](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html). 
+You can add listeners to a KVar to be notified immediately when it changes.
+
+For example:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:createkvar}}
@@ -97,11 +100,10 @@ immediately in the KVar, for example:
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:mapkvar}}
 ```
 
-This will also work for \<option\> and \<textarea\> elements which also
-have values.
+This will also work for `<option>` and `<textarea>` elements which also have values.
 
 See also:
-[ValueElement.value](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L232)
+[ValueElement.value](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L485)
 
 ## Rendering state to a DOM fragment
 

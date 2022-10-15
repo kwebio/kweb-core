@@ -88,7 +88,7 @@ open class Element(
 
     /**
      * A utility function to set multiple attributes in a single call, in the
-     * style of [mapOf]. This is a wrapper around [setAttribute].
+     * style of [mapOf]. This is a wrapper around [set].
      */
     fun setAttributes(vararg pair: Pair<String, JsonPrimitive>): Element {
         pair.forEach { (k, v) -> set(k, v) }
@@ -99,7 +99,7 @@ open class Element(
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
      * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
      */
-    operator fun set(name: String, value: JsonPrimitive) = setAttribute(name, value, null)
+    operator fun set(name: String, value: JsonPrimitive) = set(name, value, null)
 
     /**
      * Set an attribute of this element.  For example `element["href"] = "http://kweb.io"`
@@ -133,6 +133,27 @@ open class Element(
         return this
     }
 
+    operator fun set(name: String, value: String) = set(name, JsonPrimitive(value))
+
+    operator fun set(name: String, value: Boolean) = set(name, JsonPrimitive(value))
+
+    operator fun set(name: String, value: Number) = set(name, JsonPrimitive(value))
+
+    /**
+     * Set an attribute to the value in a [KVal], if the value changes the attribute
+     * value will be updated automatically.
+     */
+    operator fun set(name: String, value: KVal<out JsonPrimitive>): Element {
+        set(name, value.value)
+        val handle = value.addListener { _, newValue ->
+            set(name, newValue)
+        }
+        this.creator?.onCleanup(true) {
+            value.removeListener(handle)
+        }
+        return this
+    }
+
     /**
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
      * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
@@ -146,38 +167,33 @@ open class Element(
         return set(name, value, namespace)
     }
 
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
     fun setAttributeRaw(name: String, value: JsonPrimitive) = setAttribute(name, value)
 
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
     fun setAttributeRaw(name: String, value: String) = setAttribute(name, JsonPrimitive(value))
 
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
     fun setAttributeRaw(name: String, value: Boolean) = setAttribute(name, JsonPrimitive(value))
 
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
     fun setAttributeRaw(name: String, value: Number) = setAttribute(name, JsonPrimitive(value))
 
-    fun setAttribute(name: String, value: String) = setAttribute(name, JsonPrimitive(value))
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: String) = set(name, JsonPrimitive(value))
 
-    fun setAttribute(name: String, value: Boolean) = setAttribute(name, JsonPrimitive(value))
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: Boolean) = set(name, JsonPrimitive(value))
 
-    fun setAttribute(name: String, value: Number) = setAttribute(name, JsonPrimitive(value))
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: Number) = set(name, JsonPrimitive(value))
 
     /**
      * Set an attribute to the value in a [KVal], if the value changes the attribute
      * value will be updated automatically.
      */
-    fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
-        setAttribute(name, oValue.value)
-        val handle = oValue.addListener { _, newValue ->
-            setAttribute(name, newValue)
-        }
-        this.creator?.onCleanup(true) {
-            oValue.removeListener(handle)
-        }
-        return this
-    }
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: KVal<out JsonPrimitive>) = set(name, value)
 
     fun removeAttribute(name: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
