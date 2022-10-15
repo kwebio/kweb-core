@@ -907,6 +907,8 @@ $dokka.location:kweb/Element/removeChildAt/#kotlin.Int/PointingToDeclaration/kw
 $dokka.location:kweb/Element/removeChildren/#/PointingToDeclaration/kweb-core/kweb/-element/remove-children.html
 $dokka.location:kweb/Element/removeChildrenBetweenSpans/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element/remove-children-between-spans.html
 $dokka.location:kweb/Element/removeClasses/#kotlin.Array[kotlin.String]#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-element/remove-classes.html
+$dokka.location:kweb/Element/set/#kotlin.String#kotlinx.serialization.json.JsonPrimitive#kotlin.String?/PointingToDeclaration/kweb-core/kweb/-element/set.html
+$dokka.location:kweb/Element/set/#kotlin.String#kotlinx.serialization.json.JsonPrimitive/PointingToDeclaration/kweb-core/kweb/-element/set.html
 $dokka.location:kweb/Element/setAttribute/#kotlin.String#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-element/set-attribute.html
 $dokka.location:kweb/Element/setAttribute/#kotlin.String#kotlin.Number/PointingToDeclaration/kweb-core/kweb/-element/set-attribute.html
 $dokka.location:kweb/Element/setAttribute/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element/set-attribute.html
@@ -930,10 +932,12 @@ $dokka.location:kweb/ElementCreator/ElementCreator/#TypeParam(bounds=[kweb.Eleme
 $dokka.location:kweb/ElementCreator/attr/#kotlin.Function1[TypeParam(bounds=[kweb.Element]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-element-creator/attr.html
 $dokka.location:kweb/ElementCreator/browser/#/PointingToDeclaration/kweb-core/kweb/-element-creator/browser.html
 $dokka.location:kweb/ElementCreator/cleanup/#/PointingToDeclaration/kweb-core/kweb/-element-creator/cleanup.html
+$dokka.location:kweb/ElementCreator/element/#kotlin.Function1[TypeParam(bounds=[kweb.Element]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-element-creator/element.html
 $dokka.location:kweb/ElementCreator/element/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.String?/PointingToDeclaration/kweb-core/kweb/-element-creator/element.html
 $dokka.location:kweb/ElementCreator/elementsCreatedCount/#/PointingToDeclaration/kweb-core/kweb/-element-creator/elements-created-count.html
 $dokka.location:kweb/ElementCreator/insertBefore/#/PointingToDeclaration/kweb-core/kweb/-element-creator/insert-before.html
 $dokka.location:kweb/ElementCreator/onCleanup/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-element-creator/on-cleanup.html
+$dokka.location:kweb/ElementCreator/parent/#/PointingToDeclaration/kweb-core/kweb/-element-creator/parent.html
 $dokka.location:kweb/ElementCreator/parentCreator/#/PointingToDeclaration/kweb-core/kweb/-element-creator/parent-creator.html
 $dokka.location:kweb/ElementCreator/require/#kotlin.Array[kotlin.reflect.KClass[kweb.plugins.KwebPlugin]]/PointingToDeclaration/kweb-core/kweb/-element-creator/require.html
 $dokka.location:kweb/ElementCreator/text/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element-creator/text.html
