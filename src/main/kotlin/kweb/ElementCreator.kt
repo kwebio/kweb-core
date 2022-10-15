@@ -25,7 +25,7 @@ typealias Cleaner = () -> Unit
  */
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
-    internal val element: PARENT_TYPE,
+    val element: PARENT_TYPE,
     val parentCreator: ElementCreator<*>? = element.creator,
     val insertBefore: String? = null
 )  {
