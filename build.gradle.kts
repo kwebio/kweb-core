@@ -5,6 +5,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.github.ben-manes.versions") version "0.42.0"
     kotlin("plugin.serialization")
+
+    id("info.solidsoft.pitest") version "1.7.4"
 }
 
 group = "com.github.kwebio"
@@ -69,4 +71,13 @@ tasks.dokkaHtml {
             samples.from(layout.projectDirectory.dir("src/main/kotlin/samples.kt"))
         }
     }
+}
+
+configure<info.solidsoft.gradle.pitest.PitestPluginExtension> {
+    junit5PluginVersion.set("1.1.0")
+    avoidCallsTo.set(setOf("kotlin.jvm.internal"))
+    mutators.set(setOf("STRONGER"))
+    targetClasses.set(setOf("kweb.*"))  //by default "${project.group}.*"
+    targetTests.set(setOf("kweb.*Test"))
+    threads.set(Runtime.getRuntime().availableProcessors())
 }
