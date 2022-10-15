@@ -145,17 +145,35 @@
     }
 }
 </code></pre>
+<p>The Kweb DSL can be used to create nested elements:</p>
+<pre><code class="language-kotlin">doc.body {
+    table {
+        tr {
+            td().text(&quot;Name&quot;)
+            td().text(&quot;Age&quot;)
+        }
+        tr {
+            td().text(&quot;Alice&quot;)
+            td().text(&quot;21&quot;)
+        }
+        tr {
+            td().text(&quot;Bob&quot;)
+            td().text(&quot;22&quot;)
+        }
+    }
+}
+</code></pre>
 <h2 id="element-attributes"><a class="header" href="#element-attributes">Element Attributes</a></h2>
-<p>If you assign the button element to a val then you can also modify its
+<p>If you assign the button element to a val then you can also set its
 attributes:</p>
 <pre><code class="language-kotlin">val button = button()
 button.text(&quot;Click Me!&quot;)
 button.classes(&quot;bigbutton&quot;)
 button.setAttribute(&quot;autofocus&quot;, true)
 </code></pre>
-<p>Attributes can also be specified in an <code>attr</code> block:</p>
+<p>Attributes can also be specified in an <code>element</code> block:</p>
 <pre><code class="language-kotlin">button {
-    attr {
+    element {
         classes(&quot;bigbutton&quot;)
         setAttribute(&quot;autofocus&quot;, true)
     }
