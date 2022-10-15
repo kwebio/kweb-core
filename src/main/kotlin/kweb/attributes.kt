@@ -3,7 +3,6 @@ package kweb
  import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.JsonNull
  import kweb.util.json
-
 val attr: MutableMap<String, JsonPrimitive> get() = AttributeBuilder()
 
 open class AttributeBuilder : MutableMap<String, JsonPrimitive> by LinkedHashMap()

@@ -25,8 +25,8 @@ typealias Cleaner = () -> Unit
  */
 @KWebDSL
 open class ElementCreator<out PARENT_TYPE : Element>(
-    internal val parent: PARENT_TYPE,
-    val parentCreator: ElementCreator<*>? = parent.creator,
+    internal val element: PARENT_TYPE,
+    val parentCreator: ElementCreator<*>? = element.creator,
     val insertBefore: String? = null
 )  {
 
@@ -41,7 +41,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     val elementsCreatedCount: Int get() = elementsCreatedCountAtomic.get()
     private val elementsCreatedCountAtomic = AtomicInteger(0)
 
-    val browser: WebBrowser get() = parent.browser
+    val browser: WebBrowser get() = element.browser
 
     /**
      * Create a new element, specifying its [tag](https://www.javatpoint.com/html-tags) and
@@ -67,11 +67,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
         when {
             htmlDoc != null -> {
-                val parentElement = when (parent) {
+                val parentElement = when (element) {
                     is HeadElement -> htmlDoc.head()
                     is BodyElement -> htmlDoc.body()
-                    else -> htmlDoc.getElementById(parent.id)
-                } ?: error("Can't find element with id ${parent.id}")
+                    else -> htmlDoc.getElementById(element.id)
+                } ?: error("Can't find element with id ${element.id}")
                 val jsElement =
                     if (insertBefore != null) {
                         val ne = htmlDoc.createElement(tag)
@@ -84,7 +84,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     jsElement.attr(k, v.content)
                 }
             }
-            parent.browser.isCatchingOutbound() != null -> {
+            element.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
                 val createElementJs = """
                     console.log("Creating new element")
@@ -112,7 +112,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                 """.trimIndent()
                 browser.callJsFunction(
                     createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
-                    JsonPrimitive(parent.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                    JsonPrimitive(element.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
                 )
             }
             else -> {
@@ -141,15 +141,15 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                parent.callJsFunction(
+                element.callJsFunction(
                     createElementJs, tag.json, JsonObject(mutAttributes), id.json,
-                    parent.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                    element.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
                 )
             }
         }
-        val newElement = Element(parent.browser, this, tag = tag, id = id)
+        val newElement = Element(element.browser, this, tag = tag, id = id)
         elementsCreatedCountAtomic.incrementAndGet()
-        for (plugin in parent.browser.kweb.plugins) {
+        for (plugin in element.browser.kweb.plugins) {
             plugin.elementCreationHook(newElement)
         }
         onCleanup(withParent = false) {
@@ -162,7 +162,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     /**
      * Specify that a specific plugin be provided in [Kweb.plugins], throws an exception if not.
      */
-    fun require(vararg plugins: KClass<out KwebPlugin>) = parent.browser.require(*plugins)
+    fun require(vararg plugins: KClass<out KwebPlugin>) = element.browser.require(*plugins)
 
     /**
      * Specify a listener to be called when this element is removed from the DOM.
@@ -196,14 +196,22 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     }
 
     fun text(text: String) {
-        this.parent.text(text)
+        this.element.text(text)
     }
 
     fun text(text: KVal<String>) {
-        this.parent.text(text)
+        this.element.text(text)
     }
 
+    @Deprecated("Use element {} instead (as of v0.12.8)", ReplaceWith("element(receiver)", "kweb.ElementCreator.element"))
     fun attr(receiver : (PARENT_TYPE).() -> Unit) {
-        receiver(parent)
+        receiver(element)
+    }
+
+    @Deprecated("Use element instead (as of v0.12.8)", ReplaceWith("element", "kweb.ElementCreator.element"))
+    val parent get() = element
+
+    fun element(receiver : (PARENT_TYPE).() -> Unit) {
+        receiver(element)
     }
 }

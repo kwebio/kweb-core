@@ -44,8 +44,8 @@ fun <T : Any?> ElementCreator<*>.render(
     val renderState = AtomicReference(NOT_RENDERING)
 
     //TODO this could possibly be improved
-    val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
-        parent.browser.batch(WebBrowser.CatcherType.RENDER) {
+    val renderFragment: RenderFragment = if (element.browser.isCatchingOutbound() == null) {
+        element.browser.batch(WebBrowser.CatcherType.RENDER) {
             val startSpan = span().classes(RenderSpanNames.startMarkerClassName)
             val endSpan = span().classes(RenderSpanNames.endMarkerClassName)
             RenderFragment(startSpan.id, endSpan.id)
@@ -57,14 +57,14 @@ fun <T : Any?> ElementCreator<*>.render(
     }
 
     fun eraseBetweenSpans() {
-        parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
+        element.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
         previousElementCreator.getAndSet(null)?.cleanup()
     }
 
     fun eraseAndRender() {
         eraseBetweenSpans()
 
-        previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
+        previousElementCreator.set(ElementCreator<Element>(this.element, this, insertBefore = renderFragment.endId))
         renderState.set(RENDERING_NO_PENDING_CHANGE)
         val elementCreator = previousElementCreator.get()
         if (elementCreator != null) {
@@ -83,8 +83,8 @@ fun <T : Any?> ElementCreator<*>.render(
     //It's purpose is to monitor renderState, and call eraseAndRender() if the page is rendering.
     fun renderLoop() {
         do {
-            if (parent.browser.isCatchingOutbound() == null) {
-                parent.browser.batch(WebBrowser.CatcherType.RENDER) {
+            if (element.browser.isCatchingOutbound() == null) {
+                element.browser.batch(WebBrowser.CatcherType.RENDER) {
                     eraseAndRender()
                 }
             } else {
@@ -345,7 +345,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
             renderHandles[position].renderFragment.startId
         }
         val itemElementCreator =
-            ElementCreator<Element>(this.parent, this, nextElementRenderMarkerStartId)
+            ElementCreator<Element>(this.element, this, nextElementRenderMarkerStartId)
         val kvar = KVar(newItem)
         val newFragment = itemElementCreator.render(kvar) { item ->
             itemRenderer(item)
@@ -398,7 +398,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
         )
     }
 
-    ElementCreator<Element>(this.parent, this.parentCreator, insertBefore = listFragment.endId).apply {
+    ElementCreator<Element>(this.element, this.parentCreator, insertBefore = listFragment.endId).apply {
 
         //These renderFragments must be kept in sync with the items in observableList that they're rendering
         val renderHandles = ArrayList<RenderHandle<ITEM>>()

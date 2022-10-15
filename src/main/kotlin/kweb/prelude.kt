@@ -26,7 +26,7 @@ fun ElementCreator<HeadElement>.title(
         new: (ElementCreator<TitleElement>.() -> Unit)? = null
 ): TitleElement {
     return TitleElement(element("title", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -37,7 +37,7 @@ fun ElementCreator<Element>.ul(
     new: (ElementCreator<ULElement>.() -> Unit)? = null
 ): ULElement {
     return ULElement(element("ul", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -48,7 +48,7 @@ fun ElementCreator<Element>.ol(
     new: (ElementCreator<OLElement>.() -> Unit)? = null
 ): OLElement {
     return OLElement(element("ol", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -59,7 +59,7 @@ fun ElementCreator<Element>.li(
     new: (ElementCreator<LIElement>.() -> Unit)? = null
 ): LIElement {
     return LIElement(element("li", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -81,7 +81,7 @@ fun ElementCreator<Element>.button(
                 .set("autofocus", JsonPrimitive(autofocus))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -92,7 +92,7 @@ fun ElementCreator<Element>.span(
     new: (ElementCreator<SpanElement>.() -> Unit)? = null
 ): SpanElement {
     return SpanElement(element("span", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -103,7 +103,7 @@ fun ElementCreator<Element>.div(
     new: (ElementCreator<DivElement>.() -> Unit)? = null
 ): DivElement {
     return DivElement(element("div", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -114,7 +114,7 @@ fun ElementCreator<Element>.i(
     new: (ElementCreator<IElement>.() -> Unit)? = null
 ): IElement {
     return IElement(element("i", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -125,7 +125,7 @@ fun ElementCreator<Element>.form(
     new: (ElementCreator<FormElement>.() -> Unit)? = null
 ): FormElement {
     return FormElement(element("form", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -160,7 +160,7 @@ fun ElementCreator<Element>.a(
     new: (ElementCreator<AElement>.() -> Unit)? = null
 ): AElement {
     return AElement(element("a", attributes.set("href", JsonPrimitive(href)))).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -172,7 +172,7 @@ fun ElementCreator<Element>.option(
     new: (ElementCreator<OptionElement>.() -> Unit)? = null
 ): OptionElement {
     return OptionElement(element("option", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -183,7 +183,7 @@ fun ElementCreator<Element>.h1(
     new: (ElementCreator<H1Element>.() -> Unit)? = null
 ): H1Element {
     return H1Element(element("h1", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -194,7 +194,7 @@ fun ElementCreator<Element>.h2(
     new: (ElementCreator<H2Element>.() -> Unit)? = null
 ): H2Element {
     return H2Element(element("h2", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -205,7 +205,7 @@ fun ElementCreator<Element>.h3(
     new: (ElementCreator<H3Element>.() -> Unit)? = null
 ): H3Element {
     return H3Element(element("h3", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -216,7 +216,7 @@ fun ElementCreator<Element>.h4(
     new: (ElementCreator<H4Element>.() -> Unit)? = null
 ): H4Element {
     return H4Element(element("h4", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -227,7 +227,7 @@ fun ElementCreator<Element>.h5(
     new: (ElementCreator<H5Element>.() -> Unit)? = null
 ): H5Element {
     return H5Element(element("h5", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -238,7 +238,7 @@ fun ElementCreator<Element>.p(
     new: (ElementCreator<PElement>.() -> Unit)? = null
 ): PElement {
     return PElement(element("p", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -249,7 +249,7 @@ fun ElementCreator<Element>.nav(
     new: (ElementCreator<NavElement>.() -> Unit)? = null
 ): NavElement {
     return NavElement(element("nav", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -260,7 +260,7 @@ fun ElementCreator<Element>.section(
     new: (ElementCreator<SectionElement>.() -> Unit)? = null
 ): SectionElement {
     return SectionElement(element("section", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -271,7 +271,7 @@ fun ElementCreator<Element>.img(
     new: (ElementCreator<ImageElement>.() -> Unit)? = null
 ): ImageElement {
     return ImageElement(element("img", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -289,7 +289,7 @@ fun ElementCreator<Element>.canvas(
                 .set("width", JsonPrimitive(width)).set("height", JsonPrimitive(height))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -300,7 +300,7 @@ fun ElementCreator<Element>.br(
     new: (ElementCreator<BrElement>.() -> Unit)? = null
 ): BrElement {
     return BrElement(element("br", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -319,7 +319,7 @@ fun ElementCreator<Element>.meta(
                 .set("charset", JsonPrimitive(charset))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -367,7 +367,7 @@ fun ElementCreator<Element>.input(
                 .set("size", JsonPrimitive(size))
         ), initialValue = initialValue
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -383,7 +383,7 @@ fun ElementCreator<Element>.textArea(
                 .set("required", JsonPrimitive(required))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -410,7 +410,7 @@ fun ElementCreator<Element>.select(
                 .set("required", JsonPrimitive(required))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -441,7 +441,7 @@ fun ElementCreator<Element>.textArea(
     new: (ElementCreator<TextAreaElement>.() -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(element("textArea", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -456,7 +456,7 @@ fun ElementCreator<Element>.label(
     new: (ElementCreator<LabelElement>.() -> Unit)? = null
 ): LabelElement {
     return LabelElement(element("label", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 

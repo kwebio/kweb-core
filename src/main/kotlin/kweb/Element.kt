@@ -91,19 +91,25 @@ open class Element(
      * style of [mapOf]. This is a wrapper around [setAttribute].
      */
     fun setAttributes(vararg pair: Pair<String, JsonPrimitive>): Element {
-        pair.forEach { (k, v) -> setAttribute(k, v) }
+        pair.forEach { (k, v) -> set(k, v) }
         return this
     }
 
     /**
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
      * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
+     */
+    operator fun set(name: String, value: JsonPrimitive) = setAttribute(name, value, null)
+
+    /**
+     * Set an attribute of this element.  For example `element["href"] = "http://kweb.io"`
+     * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
      *
      * @param namespace If non-null elements will be created with [Element.setAttributeNS()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttributeNS)
      *                  with the specified namespace. If null then Kweb will use [Element.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
 
      */
-    fun setAttribute(name: String, value: JsonPrimitive, namespace: String? = null): Element {
+    fun set(name : String, value : JsonPrimitive, namespace : String? = null) : Element {
         val jsoupDoc = browser.htmlDocument.get()
         val setAttributeJavaScript = when (namespace) {
             null -> "document.getElementById({}).setAttribute({}, {});"
@@ -125,6 +131,19 @@ open class Element(
             this.id = value.toString()
         }
         return this
+    }
+
+    /**
+     * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
+     * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
+     *
+     * @param namespace If non-null elements will be created with [Element.setAttributeNS()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttributeNS)
+     *                  with the specified namespace. If null then Kweb will use [Element.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
+
+     */
+    @Deprecated("Use set() instead", ReplaceWith("set(name, value, namespace)"))
+    fun setAttribute(name: String, value: JsonPrimitive, namespace: String? = null): Element {
+        return set(name, value, namespace)
     }
 
     @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
@@ -668,7 +687,7 @@ fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
          *           [ElementCreator]
          * @Param position What position among the parent's children should the new element have?
          */
-        ElementCreator(parent = this, insertBefore = insertBefore)
+        ElementCreator(element = this, insertBefore = insertBefore)
     )
 }
 
