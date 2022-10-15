@@ -1,4 +1,4 @@
-name: documentation
+name: mdbook docs
 
 on:
   push:
@@ -27,6 +27,13 @@ jobs:
         run: |
           cd docs
           mdbook build
+      - name: Substituting version
+        // If this is a release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd docs
+          V=$(git describe --abbrev=0 --tags)
+          sed -i "s/VERSION/$V/g" src/gettingstarted.md
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:

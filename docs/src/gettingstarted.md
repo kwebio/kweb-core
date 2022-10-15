@@ -10,9 +10,6 @@ some familiarity with HTML.
 
 Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
-**NOTE:** Replace `LATEST_VERSION` with the latest version of Kweb,
-which you can find [here](https://github.com/kwebio/kweb-core/releases).
-
 ### Gradle
 
 #### Groovy
@@ -26,7 +23,7 @@ repositories {
 
 ```ruby
 dependencies {
-  implementation 'com.github.kwebio:kweb-core:LATEST_VERSION'
+  implementation 'com.github.kwebio:kweb-core:VERSION'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
@@ -44,7 +41,7 @@ repositories {
 
 ```kotlin
 dependencies {
-  implementation("com.github.kwebio:kweb-core:LATEST_VERSION")
+  implementation("com.github.kwebio:kweb-core:VERSION")
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation("org.slf4j:slf4j-simple:2.0.3")
