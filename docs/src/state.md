@@ -157,10 +157,10 @@ which will update the original KVar if changed:
 
 ## Reversible mapping
 
-If you check the type of *counterDoubled*, you```ll notice that it```s a
+If you check the type of *counterDoubled*, you'll notice that it's a
 *KVal* rather than a *KVar*.
 [KVal](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html)```s
-values may not be modified directly, so this won```t be permitted:
+values may not be modified directly, so this won't be permitted:
 
 ```kotlin
 val counter = KVar(0)

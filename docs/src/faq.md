@@ -102,13 +102,13 @@ on the programmer.
 
 Picking a framework is stressful. Pick the wrong one and perhaps the
 company behind it goes out of business, meaning your entire app is now
-built on something obsolete. We```ve been there.
+built on something obsolete. We've been there.
 
-Kweb```s development is driven by a community of volunteers. We welcome
-contributions from anyone, but Kweb doesn```t depend on any sponsoring
+Kweb's development is driven by a community of volunteers. We welcome
+contributions from anyone, but Kweb doesn't depend on any sponsoring
 company.
 
-Because of the powerful abstractions it```s built on, Kweb also has the
+Because of the powerful abstractions it's built on, Kweb also has the
 advantage of simplicity (\<5k loc). This makes it easier for people to
 contribute, and less code means fewer bugs.
 
