@@ -118,12 +118,16 @@ frequent.
 
 ## How is "Kweb" pronounced?
 
-"Kay-web".
+One syllable, like **qu** from **qu**ick - **qu**-**web**.
 
 ## Can Kweb be embedded in an existing Ktor app?
 
 Yes! Please see [this
 example](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
+
+## How do I enable auto-reloading?
+
+See Ktor's [auto-reloading](https://ktor.io/docs/auto-reload.html) documentation.
 
 ## I have a question not answered here
 
