@@ -23,7 +23,7 @@ jobs:
           mkdir mdbook
           curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=./mdbook
           echo `pwd`/mdbook >> $GITHUB_PATH
-      - name: Substituting version
+      - name: Substituting KWEB_VERSION
         run: |
           cd docs
           V=$(git describe --abbrev=0 --tags)

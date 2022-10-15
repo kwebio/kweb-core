@@ -45,11 +45,6 @@ Kweb as a Feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/
     communication
 -   Very lightweight, Kweb is less than 5,000 lines of code
 
-## Professional Services
-
-If you're interested in professional services related to Kweb from the
-people who built Kweb please email <services@kweb.io>.
-
 ## Relevant Links
 
 * [Github repository](https://github.com/kwebio/kweb-core)
