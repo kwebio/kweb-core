@@ -31,6 +31,7 @@ jobs:
         run: |
           cd docs
           V=$(git describe --abbrev=0 --tags)
+          echo "Substituting version $V"
           sed -i "s/VERSION/$V/g" src/gettingstarted.md
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
