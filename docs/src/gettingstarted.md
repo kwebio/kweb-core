@@ -11,7 +11,6 @@ some familiarity with HTML.
 Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
 ### Gradle
-{::comment} NOTE: KWEB_VERSION will be substituted by the mdbook-docs.yml {:/comment}
 #### Groovy
 
 ```ruby
