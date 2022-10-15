@@ -3,7 +3,7 @@ name: Deploy static content to Pages
 
 on:
   workflow_run:
-    workflows: ["build", "documentation"]
+    workflows: ["build", "mdbook-docs"]
     types:
       - completed
 

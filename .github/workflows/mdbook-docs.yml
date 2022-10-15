@@ -1,4 +1,4 @@
-name: mdbook docs
+name: mdbook-docs
 
 on:
   push:
