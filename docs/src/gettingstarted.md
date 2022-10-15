@@ -14,14 +14,14 @@ Add these to your repositories and dependencies in your `build.gradle` or `build
 
 #### Groovy
 
-```ruby
+```kotlin
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
 }
 ```
 
-```ruby
+```kotlin
 dependencies {
   implementation 'com.github.kwebio:kweb-core:KWEB_VERSION'
 
