@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square" alt="continuous integration status" />
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
-    <img src="https://img.shields.io/badge/chat-online-green?style=flat-square" alt="matrix" />
+    <img src="https://img.shields.io/badge/chat-online-blue?style=flat-square" alt="matrix" />
   </a>
   <a href="https://jitpack.io/#kwebio/kweb-core">
     <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=dependency&sort=semver&flat-square&color=bluevilot" />
