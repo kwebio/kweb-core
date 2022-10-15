@@ -95,10 +95,10 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     let insertBefore = {};
                     console.log("insertBefore = " + insertBefore)
                     let newEl = $createElementStatement
-                    newEl["id"] = myId;
+                    newEl.setAttribute("id", myId);
                     for (const key in attributes) {
                         if ( key !== "id") {
-                            newEl[key] = attributes[key];
+                            newEl.setAttribute(key, attributes[key]);
                         }
                     }
                     let parentElement = document.getElementById(parentId);
