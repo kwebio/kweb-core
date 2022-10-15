@@ -208,8 +208,10 @@ some familiarity with HTML.</p>
 </code></pre>
 <h4 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h4>
 <pre><code class="language-kotlin">repositories {
-  maven(&quot;https://maven.pkg.github.com/kwebio/kweb-core&quot;)
-  jcenter()
+  mavenCentral()
+  maven {
+      url = uri(&quot;https://jitpack.io&quot;)
+  }  
 }
 </code></pre>
 <pre><code class="language-kotlin">dependencies {
