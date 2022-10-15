@@ -18,10 +18,8 @@ event data like which key was pressed:
 ## Immediate events
 
 Since the code to respond to events runs on the server, there may be a
-short lag between the action causing the event and any changes to the
-DOM caused by the event handler. This was a common complaint about
-previous server-driven web frameworks like Vaadin, inhibiting their
-adoption.
+short but sometimes noticeable delay before the page updates in response
+to an event.
 
 Fortunately, Kweb has a solution:
 
