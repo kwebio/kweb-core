@@ -156,10 +156,8 @@ event data like which key was pressed:</p>
 </code></pre>
 <h2 id="immediate-events"><a class="header" href="#immediate-events">Immediate events</a></h2>
 <p>Since the code to respond to events runs on the server, there may be a
-short lag between the action causing the event and any changes to the
-DOM caused by the event handler. This was a common complaint about
-previous server-driven web frameworks like Vaadin, inhibiting their
-adoption.</p>
+short but sometimes noticeable delay before the page updates in response
+to an event.</p>
 <p>Fortunately, Kweb has a solution:</p>
 <pre><code class="language-kotlin">doc.body {
     val input = button(type = ButtonType.button)
