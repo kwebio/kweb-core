@@ -505,15 +505,8 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counter: 6, doubled: 12
 </code></pre>
 <p>Note that <code>counterDoubled</code> updates automatically, because mapped KVars listen to the original for changes.</p>
-<p>::: note
-::: title
-Note
-:::</p>
-<p>KVars should only be used to store values that are themselves immutable,
-such as an Int, String, or a Kotlin <a href="https://kotlinlang.org/docs/reference/data-classes.html">data
-class</a> with
-immutable parameters.
-:::</p>
+<p><em>Note:</em> KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
+Kotlin <a href="https://kotlinlang.org/docs/reference/data-classes.html">data class</a> with immutable parameters.</p>
 <h2 id="kvars-and-the-dom"><a class="header" href="#kvars-and-the-dom">KVars and the DOM</a></h2>
 <p>You can use a KVar (or KVal) to set the text of a DOM element:</p>
 <pre><code class="language-kotlin">Kweb(port = 2135) {
