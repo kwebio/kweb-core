@@ -29,13 +29,10 @@ Fortunately, Kweb has a solution:
 {{#include ../../src/test/kotlin/kweb/docs/events.kt:immediate}}
 ```
 
-This is identical to the first event listener example, except *on* has
-been replaced by *onImmediate*.
-
 Kweb executes this event handler *on page render* and records the
 changes it makes to the DOM. It then \"pre-loads\" these instructions to
-the browser such that they are executed immediately when the event
-occurs without any server round-trip.
+the browser such that they are executed immediately without a server
+round trip.
 
 **Warning:** Due to this pre-loading mechanism, the event handler for an
 *onImmediate* must limit itself to simple DOM modifications. Kweb

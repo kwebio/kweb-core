@@ -25,9 +25,10 @@ doc.body {
 
         // ANCHOR: immediate
 doc.body {
-    val input = input(type = InputType.text)
-    input.on.keypress { keypressEvent ->
-        println("Key Pressed: ${keypressEvent.key}")
+    val input = button(type = ButtonType.button)
+    val label = span().text("Not clicked")
+    input.onImmediate.click {
+        label.text("Clicked!")
     }
 }
         // ANCHOR_END: immediate
