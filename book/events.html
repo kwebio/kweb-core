@@ -162,18 +162,17 @@ previous server-driven web frameworks like Vaadin, inhibiting their
 adoption.</p>
 <p>Fortunately, Kweb has a solution:</p>
 <pre><code class="language-kotlin">doc.body {
-    val input = input(type = InputType.text)
-    input.on.keypress { keypressEvent -&gt;
-        println(&quot;Key Pressed: ${keypressEvent.key}&quot;)
+    val input = button(type = ButtonType.button)
+    val label = span().text(&quot;Not clicked&quot;)
+    input.onImmediate.click {
+        label.text(&quot;Clicked!&quot;)
     }
 }
 </code></pre>
-<p>This is identical to the first event listener example, except <em>on</em> has
-been replaced by <em>onImmediate</em>.</p>
 <p>Kweb executes this event handler <em>on page render</em> and records the
 changes it makes to the DOM. It then &quot;pre-loads&quot; these instructions to
-the browser such that they are executed immediately when the event
-occurs without any server round-trip.</p>
+the browser such that they are executed immediately without a server
+round trip.</p>
 <p><strong>Warning:</strong> Due to this pre-loading mechanism, the event handler for an
 <em>onImmediate</em> must limit itself to simple DOM modifications. Kweb
 includes some runtime safeguards against this but they can't catch
