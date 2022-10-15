@@ -11,6 +11,7 @@ some familiarity with HTML.
 Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
 ### Gradle
+
 #### Groovy
 
 ```ruby
@@ -33,8 +34,10 @@ dependencies {
 
 ```kotlin
 repositories {
-  maven("https://maven.pkg.github.com/kwebio/kweb-core")
-  jcenter()
+  mavenCentral()
+  maven {
+      url = uri("https://jitpack.io")
+  }  
 }
 ```
 
