@@ -906,8 +906,12 @@ $dokka.location:kweb/Element/removeChildAt/#kotlin.Int/PointingToDeclaration/kw
 $dokka.location:kweb/Element/removeChildren/#/PointingToDeclaration/kweb-core/kweb/-element/remove-children.html
 $dokka.location:kweb/Element/removeChildrenBetweenSpans/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element/remove-children-between-spans.html
 $dokka.location:kweb/Element/removeClasses/#kotlin.Array[kotlin.String]#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-element/remove-classes.html
+$dokka.location:kweb/Element/set/#kotlin.String#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-element/set.html
+$dokka.location:kweb/Element/set/#kotlin.String#kotlin.Number/PointingToDeclaration/kweb-core/kweb/-element/set.html
+$dokka.location:kweb/Element/set/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element/set.html
 $dokka.location:kweb/Element/set/#kotlin.String#kotlinx.serialization.json.JsonPrimitive#kotlin.String?/PointingToDeclaration/kweb-core/kweb/-element/set.html
 $dokka.location:kweb/Element/set/#kotlin.String#kotlinx.serialization.json.JsonPrimitive/PointingToDeclaration/kweb-core/kweb/-element/set.html
+$dokka.location:kweb/Element/set/#kotlin.String#kweb.state.KVal[kotlinx.serialization.json.JsonPrimitive]/PointingToDeclaration/kweb-core/kweb/-element/set.html
 $dokka.location:kweb/Element/setAttribute/#kotlin.String#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-element/set-attribute.html
 $dokka.location:kweb/Element/setAttribute/#kotlin.String#kotlin.Number/PointingToDeclaration/kweb-core/kweb/-element/set-attribute.html
 $dokka.location:kweb/Element/setAttribute/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element/set-attribute.html
