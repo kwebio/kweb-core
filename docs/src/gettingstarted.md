@@ -11,6 +11,9 @@ some familiarity with HTML.
 Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
 ### Gradle
+{::comment} NOTE: KWEB_VERSION will be substituted by the mdbook-docs.yml workflow {:/comment}
+```groovy
+{:/comment}
 
 #### Groovy
 
@@ -23,7 +26,7 @@ repositories {
 
 ```ruby
 dependencies {
-  implementation 'com.github.kwebio:kweb-core:VERSION'
+  implementation 'com.github.kwebio:kweb-core:KWEB_VERSION'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
@@ -41,7 +44,7 @@ repositories {
 
 ```kotlin
 dependencies {
-  implementation("com.github.kwebio:kweb-core:VERSION")
+  implementation("com.github.kwebio:kweb-core:KWEB_VERSION")
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation("org.slf4j:slf4j-simple:2.0.3")

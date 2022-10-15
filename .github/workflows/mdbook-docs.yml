@@ -28,7 +28,7 @@ jobs:
           cd docs
           V=$(git describe --abbrev=0 --tags)
           echo "Substituting version $V"
-          sed -i "s/VERSION/$V/g" src/gettingstarted.md
+          sed -i "s/KWEB_VERSION/$V/g" src/gettingstarted.md
       - name: Build MDBook
         run: |
           cd docs
