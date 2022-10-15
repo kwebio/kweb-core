@@ -28,7 +28,6 @@ jobs:
           cd docs
           mdbook build
       - name: Substituting version
-        // If this is a release
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd docs
