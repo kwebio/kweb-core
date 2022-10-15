@@ -48,16 +48,8 @@ important differences:
 
 ## Is there a larger working example?
 
-Yes, here is a simple [todo
-list](https://github.com/kwebio/kweb-demos/tree/master/todoList)
-implementation which demonstrates many of Kweb's features.
-
-You can find a copy of this demo running here:
-<http://demo.kweb.io:7659/>
-
-It's running on a \$50/month EC2 instance. Try visiting the same list
-URL in two different browser windows and notice how they synchronize in
-realtime.
+Yes, [freenet.org](https://github.com/freenet/freenetorg-website/) is running on Kweb,
+which is in-turn running on Google Cloud Platform with FireStore as a database.
 
 You can see a number of other example Kweb projects here:
 [kwebio/kweb-demos](https://github.com/kwebio/kweb-demos/tree/master/)
