@@ -55,7 +55,7 @@ counter: 5, doubled: 10
 counter: 6, doubled: 12
 ```
 
-Note that counterDoubled updates automatically.
+Note that `counterDoubled` updates automatically, because mapped KVars listen to the original for changes.
 
 ::: note
 ::: title
