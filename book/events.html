@@ -174,15 +174,10 @@ been replaced by <em>onImmediate</em>.</p>
 changes it makes to the DOM. It then &quot;pre-loads&quot; these instructions to
 the browser such that they are executed immediately when the event
 occurs without any server round-trip.</p>
-<p>::: warning
-::: title
-Warning
-:::</p>
-<p>Due to this pre-loading mechanism, the event handler for an
+<p><strong>Warning:</strong> Due to this pre-loading mechanism, the event handler for an
 <em>onImmediate</em> must limit itself to simple DOM modifications. Kweb
 includes some runtime safeguards against this but they can't catch
-every problem so please use with caution.
-:::</p>
+every problem so please use with caution.</p>
 <h2 id="combination-event-handlers"><a class="header" href="#combination-event-handlers">Combination event handlers</a></h2>
 <p>A common pattern is to use both types of event handler on a DOM element.
 The immediate handler might disable a clicked button, or temporarily
