@@ -3,7 +3,7 @@
 <div align="center">
   <!-- Github Actions -->
   <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
-    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square" alt="continuous integration status" />
+    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square&logo=github%20actions" alt="continuous integration status" />
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
     <img src="https://img.shields.io/badge/chat-online-blue?style=flat-square&logo=matrix" alt="matrix" />
