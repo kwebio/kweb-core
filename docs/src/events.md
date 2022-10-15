@@ -37,7 +37,7 @@ round trip.
 includes some runtime safeguards against this but they can't catch
 everything so please use with caution.
 
-## Combination event handlers
+## The best of both worlds
 
 A common pattern is to use both types of event handler on a DOM element.
 The immediate handler might disable a clicked button, or temporarily
