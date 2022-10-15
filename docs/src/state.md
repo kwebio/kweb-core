@@ -57,16 +57,8 @@ counter: 6, doubled: 12
 
 Note that `counterDoubled` updates automatically, because mapped KVars listen to the original for changes.
 
-::: note
-::: title
-Note
-:::
-
-KVars should only be used to store values that are themselves immutable,
-such as an Int, String, or a Kotlin [data
-class](https://kotlinlang.org/docs/reference/data-classes.html) with
-immutable parameters.
-:::
+*Note:* KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
+Kotlin [data class](https://kotlinlang.org/docs/reference/data-classes.html) with immutable parameters.
 
 ## KVars and the DOM
 
