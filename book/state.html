@@ -272,9 +272,10 @@ name.value = &quot;John&quot;
 println(user) // Will print: KVar(User(name = &quot;John&quot;))
 </code></pre>
 <h2 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h2>
-<p>If you check the type of <em>counterDoubled</em>, you<code>ll notice that it</code>s a
+<p>If you check the type of <em>counterDoubled</em>, you'll notice that it's a
 <em>KVal</em> rather than a <em>KVar</em>.
-<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html">KVal</a><code>s values may not be modified directly, so this won</code>t be permitted:</p>
+<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html">KVal</a>```s
+values may not be modified directly, so this won't be permitted:</p>
 <pre><code class="language-kotlin">val counter = KVar(0)
 val counterDoubled = counter.map { it * 2 }
 counterDoubled.value = 20 // &lt;--- This won't compile
