@@ -146,8 +146,10 @@ automatically to the browser.</p>
 <h2 id="building-blocks"><a class="header" href="#building-blocks">Building blocks</a></h2>
 <p>A
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt">KVar</a>
-class contains a single typed object, which can change over time. For
-example:</p>
+class contains a single typed object, which can change over time, similar to an 
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a>. 
+You can add listeners to a KVar to be notified immediately when it changes.</p>
+<p>For example:</p>
 <pre><code class="language-kotlin">val counter = KVar(0)
 </code></pre>
 <p>Here we create a counter of type <em>KVar&lt;Int&gt;</em> initialized with the
@@ -215,10 +217,9 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counter.value = 6
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 </code></pre>
-<p>This will also work for &lt;option&gt; and &lt;textarea&gt; elements which also
-have values.</p>
+<p>This will also work for <code>&lt;option&gt;</code> and <code>&lt;textarea&gt;</code> elements which also have values.</p>
 <p>See also:
-<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L232">ValueElement.value</a></p>
+<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L485">ValueElement.value</a></p>
 <h2 id="rendering-state-to-a-dom-fragment"><a class="header" href="#rendering-state-to-a-dom-fragment">Rendering state to a DOM fragment</a></h2>
 <p>But what if you want to do more than just modify a single element based
 on a KVar, what if you want to modify a whole tree of elements?</p>

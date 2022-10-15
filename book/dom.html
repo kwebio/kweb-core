@@ -136,7 +136,7 @@
                     <main>
                         <h1 id="dom-basics"><a class="header" href="#dom-basics">DOM Basics</a></h1>
 <h2 id="creating-dom-elements-and-fragments"><a class="header" href="#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></h2>
-<p>Let's create a <code>&lt;button&gt;</code> as a child of the <code>&lt;body&gt;</code> element:</p>
+<p>Let's create a <code>&lt;button&gt;</code> as a child of the <code>&lt;body&gt;</code> element and set its text:</p>
 <pre><code class="language-kotlin">fun main() {
     Kweb(port = 16097) {
         doc.body {
@@ -146,19 +146,21 @@
 }
 </code></pre>
 <p>The Kweb DSL can be used to create nested elements:</p>
-<pre><code class="language-kotlin">doc.body {
-    table {
-        tr {
-            td().text(&quot;Name&quot;)
-            td().text(&quot;Age&quot;)
-        }
-        tr {
-            td().text(&quot;Alice&quot;)
-            td().text(&quot;21&quot;)
-        }
-        tr {
-            td().text(&quot;Bob&quot;)
-            td().text(&quot;22&quot;)
+<pre><code class="language-kotlin">Kweb(port = 16097) {
+    doc.body {
+        table {
+            tr {
+                td().text(&quot;Name&quot;)
+                td().text(&quot;Age&quot;)
+            }
+            tr {
+                td().text(&quot;Alice&quot;)
+                td().text(&quot;21&quot;)
+            }
+            tr {
+                td().text(&quot;Bob&quot;)
+                td().text(&quot;22&quot;)
+            }
         }
     }
 }
@@ -169,13 +171,13 @@ attributes:</p>
 <pre><code class="language-kotlin">val button = button()
 button.text(&quot;Click Me!&quot;)
 button.classes(&quot;bigbutton&quot;)
-button.setAttribute(&quot;autofocus&quot;, true)
+button[&quot;autofocus&quot;] = true
 </code></pre>
 <p>Attributes can also be specified in an <code>element</code> block:</p>
 <pre><code class="language-kotlin">button {
     element {
         classes(&quot;bigbutton&quot;)
-        setAttribute(&quot;autofocus&quot;, true)
+        this[&quot;autofocus&quot;] = true
     }
     text(&quot;Click Me!&quot;)
 }
@@ -191,8 +193,7 @@ together:</p>
     li().text(&quot;Two&quot;)
 }
 </code></pre>
-<p>Alternatively we can use the [new {}]{.title-ref} function on Elements
-to add children to a pre-existing Element:</p>
+<p>Alternatively we can use the <code>new {}</code> function to add children to a pre-existing Element:</p>
 <pre><code class="language-kotlin">val unorderedList : ULElement = ul()
 unorderedList.new {
     li().text(&quot;One&quot;)
@@ -213,15 +214,9 @@ inputKVar.addListener { old, new -&gt;
 <p>Events can evaluate a JavaScript expression and send the result to the
 server, in this case we give it an expression that will retrieve the
 value of an InputElement, conveniently provided by valueJsExpression.</p>
-<p>::: note
-::: title
-Note
-:::</p>
-<p>See the <a href="https://docs.kweb.io/en/latest/state.html#binding-a-kvar-to-an-input-element-s-value">Observer Pattern &amp;
+<p><strong>Note:</strong> See the <a href="https://docs.kweb.io/book/state.html#binding-a-kvar-to-an-input-elements-value">Observer Pattern &amp;
 State</a>
-section for
-:::</p>
-<p>another way to read input element values.</p>
+section for another way to read input element values.</p>
 <h2 id="supported-html-tags"><a class="header" href="#supported-html-tags">Supported HTML tags</a></h2>
 <p>Kweb supports a significant subset of HTML tags like <em>button()</em>, <em>p()</em>,
 <em>a()</em>, <em>table()</em>, and so on. You can find a more complete list in
