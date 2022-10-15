@@ -143,12 +143,12 @@ some familiarity with HTML.</p>
 <p>Add these to your repositories and dependencies in your <code>build.gradle</code> or <code>build.gradle.kt</code> files.</p>
 <h3 id="gradle"><a class="header" href="#gradle">Gradle</a></h3>
 <h4 id="groovy"><a class="header" href="#groovy">Groovy</a></h4>
-<pre><code class="language-ruby">repositories {
+<pre><code class="language-kotlin">repositories {
     mavenCentral()
     maven { url &quot;https://jitpack.io&quot; }
 }
 </code></pre>
-<pre><code class="language-ruby">dependencies {
+<pre><code class="language-kotlin">dependencies {
   implementation 'com.github.kwebio:kweb-core:0.12.7'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
