@@ -690,7 +690,7 @@ $dokka.location:kweb.state/ObservableList.Modification.Move/newPosition/#/Pointi
 $dokka.location:kweb.state/ObservableList.Modification.Move/oldPosition/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/-modification/-move/old-position.html
 $dokka.location:kweb.state/ObservableList.Modification///PointingToDeclaration/kweb-core/kweb.state/-observable-list/-modification/index.html
 $dokka.location:kweb.state/ObservableList///PointingToDeclaration/kweb-core/kweb.state/-observable-list/index.html
-$dokka.location:kweb.state/ObservableList/ObservableList/#kotlin.collections.MutableList[TypeParam(bounds=[kotlin.Any])]#kotlin.Int/PointingToDeclaration/kweb-core/kweb.state/-observable-list/-observable-list.html
+$dokka.location:kweb.state/ObservableList/ObservableList/#kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]#kotlin.Int/PointingToDeclaration/kweb-core/kweb.state/-observable-list/-observable-list.html
 $dokka.location:kweb.state/ObservableList/add/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add.html
 $dokka.location:kweb.state/ObservableList/add/#kotlin.Int#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add.html
 $dokka.location:kweb.state/ObservableList/addAll/#kotlin.Int#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-all.html
@@ -703,7 +703,6 @@ $dokka.location:kweb.state/ObservableList/containsAll/#kotlin.collections.Collec
 $dokka.location:kweb.state/ObservableList/get/#kotlin.Int/PointingToDeclaration/kweb-core/kweb.state/-observable-list/get.html
 $dokka.location:kweb.state/ObservableList/getItems/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/get-items.html
 $dokka.location:kweb.state/ObservableList/indexOf/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/index-of.html
-$dokka.location:kweb.state/ObservableList/initialItems/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/initial-items.html
 $dokka.location:kweb.state/ObservableList/isEmpty/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/is-empty.html
 $dokka.location:kweb.state/ObservableList/iterator/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/iterator.html
 $dokka.location:kweb.state/ObservableList/lastIndexOf/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/last-index-of.html
