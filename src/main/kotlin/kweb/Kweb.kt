@@ -104,7 +104,6 @@ class Kweb private constructor(
      *     }
      * ```
      *
-     * @see kweb.demos.feature.kwebFeature for an example
      */
     companion object Feature : BaseApplicationPlugin<Application, Feature.Configuration, Kweb> {
         // Note that this is not KwebConfiguration, which is a different thing
@@ -112,8 +111,6 @@ class Kweb private constructor(
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
             var kwebConfig: KwebConfiguration = KwebDefaultConfiguration()
-
-
 
             @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
             var buildPage: (WebBrowser.() -> Unit)? = null
@@ -127,7 +124,7 @@ class Kweb private constructor(
             val feature = Kweb(configuration.debug, configuration.plugins, configuration.kwebConfig)
 
             configuration.buildPage?.let {
-                logger.info { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
+                logger.warn { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
                 pipeline.installKwebOnRemainingRoutes(it)
             }
             feature.installRequiredKwebComponents(pipeline)
