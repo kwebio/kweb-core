@@ -19,28 +19,27 @@ Of all web frameworks we're aware of, [Vaadin](https://vaadin.com/) is
 the closest in design and philosophy to Kweb, but there are also
 important differences:
 
--   Kweb is *far* more lightweight than Vaadin. At the time of writing,
+- Kweb is *far* more lightweight than Vaadin. At the time of writing,
     [kweb-core](https://github.com/kwebio/kweb-core) is about 4,351
     lines of code, while
     [vaadin/framework](https://github.com/vaadin/framework) is currently
     502,398 lines of code, almost a 100:1 ratio!
--   Vaadin doesn't have any equivalent feature to Kweb's [immediate
+- Vaadin doesn't have any equivalent feature to Kweb's [immediate
     events](https://docs.kweb.io/book/events.html#immediate-events),
     which has led to frequent complaints of sluggishness from Vaadin
     users because a server round-trip is required to update the DOM.
--   Vaadin brought a more desktop-style of user interface to the web
+- Vaadin brought a more desktop-style of user interface to the web
     browser, but since then we've realized that users generally prefer
     their websites to look like websites.
--   This is why Kweb's philosophy is to be a thin interface between
+- This is why Kweb's philosophy is to be a thin interface between
     server logic and the user's browser, leveraging existing tools from
-    the JavaScript ecosystem [when it makes
-    sense](https://docs.kweb.io/book/style.html).
--   Kweb was built natively for Kotlin, and takes advantage of all of
+    the JavaScript ecosystem.
+- Kweb was built natively for Kotlin, and takes advantage of all of
     its language features like
     [coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
     and the flexible DSL-like syntax. Because of this Kweb code can be a
     lot more concise, without sacrificing readability.
--   In Vaadin's favor, it has been a commercial product since 2006, it
+- In Vaadin's favor, it has been a commercial product since 2006, it
     is extremely mature and has a vast developer ecosystem, while Kweb
     is still relatively new.
 
