@@ -168,16 +168,16 @@ open class Element(
     }
 
     @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
-    fun setAttributeRaw(name: String, value: JsonPrimitive) = setAttribute(name, value)
+    fun setAttributeRaw(name: String, value: JsonPrimitive) = set(name, value)
 
     @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
-    fun setAttributeRaw(name: String, value: String) = setAttribute(name, JsonPrimitive(value))
+    fun setAttributeRaw(name: String, value: String) = set(name, JsonPrimitive(value))
 
     @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
-    fun setAttributeRaw(name: String, value: Boolean) = setAttribute(name, JsonPrimitive(value))
+    fun setAttributeRaw(name: String, value: Boolean) = set(name, JsonPrimitive(value))
 
     @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
-    fun setAttributeRaw(name: String, value: Number) = setAttribute(name, JsonPrimitive(value))
+    fun setAttributeRaw(name: String, value: Number) = set(name, JsonPrimitive(value))
 
     @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
     fun setAttribute(name: String, value: String) = set(name, JsonPrimitive(value))
@@ -258,11 +258,11 @@ open class Element(
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
      * this is a wrapper around [setAttribute].
      */
-    fun classes(value: KVal<String>) = setAttribute("class", value.map { it.json })
+    fun classes(value: KVal<String>) = set("class", value.map { it.json })
 
     /**
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
-     * this is a wrapper around [setAttribute].
+     * this is a wrapper around [set].
      */
     fun classes(vararg value: String) = setClasses(*value)
 
@@ -271,7 +271,7 @@ open class Element(
      * this is a wrapper around [setAttribute].
      */
     fun setClasses(vararg value: String): Element {
-        setAttribute("class", value.joinToString(separator = " ").json)
+        set("class", value.joinToString(separator = " ").json)
         return this
     }
 
@@ -350,7 +350,7 @@ open class Element(
     }
 
     fun disable(): Element {
-        setAttribute("disabled", JsonPrimitive(true))
+        set("disabled", JsonPrimitive(true))
         return this
     }
 
@@ -647,7 +647,7 @@ open class Element(
     /**
      * Determines whether this element will be [spellchecked](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck).
      */
-    fun spellcheck(spellcheck: Boolean = true) = setAttribute("spellcheck", JsonPrimitive(spellcheck))
+    fun spellcheck(spellcheck: Boolean = true) = set("spellcheck", JsonPrimitive(spellcheck))
 
     /**
      * Some convenience functions for modifying an element's [style attribute](https://www.w3schools.com/tags/att_style.asp).

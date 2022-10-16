@@ -123,6 +123,7 @@ class Kweb private constructor(
             configuration.kwebConfig.validate()
             val feature = Kweb(configuration.debug, configuration.plugins, configuration.kwebConfig)
 
+            @Suppress("DEPRECATION")
             configuration.buildPage?.let {
                 logger.warn { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
                 pipeline.installKwebOnRemainingRoutes(it)
