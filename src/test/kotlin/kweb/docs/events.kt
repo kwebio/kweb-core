@@ -2,6 +2,10 @@ package kweb.docs
 
 import kweb.*
 
+/*
+ * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
+ */
+
 fun main() {
     Kweb(port = 16097) {
 // ANCHOR: attach_1

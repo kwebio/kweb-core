@@ -3,6 +3,10 @@ package kweb.docs
 import kweb.*
 import kweb.state.*
 
+/*
+ * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
+ */
+
 fun state1() {
     // ANCHOR: createkvar
 val counter = KVar(0)

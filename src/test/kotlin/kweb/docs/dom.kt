@@ -3,6 +3,10 @@ package kweb.docs
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 
+/*
+ * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
+ */
+
 // ANCHOR: create1
 fun main() {
     Kweb(port = 16097) {
