@@ -5,7 +5,7 @@ import kweb.InputType.text
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
 
-fun main(args: Array<String>) {
+fun main() {
     Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
         doc.body {
             div {

@@ -87,6 +87,7 @@ inputKVar.addListener { old, new ->
             // ANCHOR: blink
 val blink = element("blink").text("I am annoying!")
             // ANCHOR_END: blink
+            blink.id // Remove unused warning
         }
     }
 }
