@@ -26,10 +26,8 @@ important differences:
     502,398 lines of code, almost a 100:1 ratio!
 -   Vaadin doesn't have any equivalent feature to Kweb's [immediate
     events](https://docs.kweb.io/book/events.html#immediate-events),
-    which has led to frequent
-    [complaints](https://stackoverflow.com/a/22848521/16050) of
-    sluggishness from Vaadin users because a server round-trip is
-    required to update the DOM.
+    which has led to frequent complaints of sluggishness from Vaadin
+    users because a server round-trip is required to update the DOM.
 -   Vaadin brought a more desktop-style of user interface to the web
     browser, but since then we've realized that users generally prefer
     their websites to look like websites.
