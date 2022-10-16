@@ -252,16 +252,16 @@ automatically updating the rendered DOM in response to changes in the list.
 The items must be stored in an <code>ObservableList</code>, which implements the 
 <code>MutableList</code> interface.</p>
 <pre><code class="language-kotlin">doc.body {
-    val list = ObservableList(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
+    val obsList = ObservableList(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
     ul {
-        renderEach(list) { item -&gt;
+        renderEach(obsList) { item -&gt;
             li().text(item)
         }
     }
-    list.add(1, &quot;one and a half&quot;)
-    list.removeAt(2)
-    list.move(0, 1)
-    list[0] = &quot;ONE&quot;
+    obsList.add(1, &quot;one and a half&quot;)
+    obsList.removeAt(2)
+    obsList.move(0, 1)
+    obsList[0] = &quot;ONE&quot;
 }
 </code></pre>
 <h2 id="extracting-data-class-properties"><a class="header" href="#extracting-data-class-properties">Extracting data class properties</a></h2>
