@@ -27,7 +27,9 @@ println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 counter.value = 6
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
     // ANCHOR_END: mapkvar
+}
 
+fun state2() {
     // ANCHOR: kvartext
 Kweb(port = 2135) {
     doc.body {
@@ -74,16 +76,16 @@ list.value = listOf("four", "five", "six")
         Kweb(port = 16097) {
             // ANCHOR: rendereach
 doc.body {
-    val list = ObservableList(listOf("one", "two", "three"))
+    val obsList = ObservableList(listOf("one", "two", "three"))
     ul {
-        renderEach(list) { item ->
+        renderEach(obsList) { item ->
             li().text(item)
         }
     }
-    list.add(1, "one and a half")
-    list.removeAt(2)
-    list.move(0, 1)
-    list[0] = "ONE"
+    obsList.add(1, "one and a half")
+    obsList.removeAt(2)
+    obsList.move(0, 1)
+    obsList[0] = "ONE"
 }
             // ANCHOR_END: rendereach
         }
