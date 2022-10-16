@@ -132,7 +132,7 @@ function is a powerful tool for manipulating KVals and KVars without unwrapping 
 
 ## Rendering lists with renderEach
 
-The *renderEach()* function allows you to render a list of items, while 
+The `renderEach()` function allows you to render a list of items, while 
 automatically updating the rendered DOM in response to changes in the list. 
 The items must be stored in an `ObservableList`, which implements the 
 `MutableList` interface.
