@@ -260,14 +260,6 @@ public class kweb/InputElement : kweb/ValueElement {
 	public final fun setSelectionRange (II)V
 }
 
-public abstract interface class kweb/InputEventsReceiver {
-}
-
-public final class kweb/InputEventsReceiverKt {
-	public static final fun input (Lkweb/html/events/OnImmediateReceiver;Lkotlin/jvm/functions/Function0;)Lkweb/InputEventsReceiver;
-	public static final fun input (Lkweb/html/events/OnReceiver;Lkotlin/jvm/functions/Function1;)Lkweb/InputEventsReceiver;
-}
-
 public final class kweb/InputType : java/lang/Enum {
 	public static final field button Lkweb/InputType;
 	public static final field checkbox Lkweb/InputType;

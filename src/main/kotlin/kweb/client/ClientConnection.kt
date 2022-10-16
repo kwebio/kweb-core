@@ -24,12 +24,11 @@ sealed class ClientConnection {
         private val sendBuffer = Channel<Frame>(capacity = 1000)
 
         init {
-            GlobalScope.launch {
+            runBlocking {
                 for (frame in sendBuffer) {
                     channel.send(frame)
                 }
             }
-
         }
 
         override fun send(message: String) {

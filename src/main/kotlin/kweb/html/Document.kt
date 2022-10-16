@@ -85,8 +85,8 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Document {
         val callbackId = Math.abs(random.nextInt())
-        val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
-        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
+        val retrieveJsSnippet = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
+        val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJsSnippet + "}"
         val js = """
             document.addEventListener({}, function(event) {
                 ${if (preventDefault) "event.preventDefault();" else ""}

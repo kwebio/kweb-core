@@ -123,6 +123,7 @@ class Kweb private constructor(
             configuration.kwebConfig.validate()
             val feature = Kweb(configuration.debug, configuration.plugins, configuration.kwebConfig)
 
+            @Suppress("DEPRECATION")
             configuration.buildPage?.let {
                 logger.warn { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
                 pipeline.installKwebOnRemainingRoutes(it)
@@ -140,8 +141,6 @@ class Kweb private constructor(
             rl.value?.triggerCloseListeners()
         }
         .build()
-
-    //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
 
     private var server: JettyApplicationEngine? = null
 
@@ -471,8 +470,6 @@ class Kweb private constructor(
             }
         }
     }
-
-
 }
 
 data class DebugInfo(val js: String, val action: String, val throwable: Throwable)

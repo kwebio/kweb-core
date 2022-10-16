@@ -27,17 +27,16 @@ fun Map<String, JsonPrimitive>.id(id: String): Map<String, JsonPrimitive> = set(
 
 fun Map<String, JsonPrimitive>.classes(classes: Iterable<String>, condition: Boolean = true): Map<String, JsonPrimitive> {
     if (condition) {
-        var existing: List<String>? = null
+        val existing: List<String>?
         val classAttributeValue = if (get("class") != null) {
             get("class")!!.content
         } else {
-            ""
+            null
         }
-        existing = when (classAttributeValue) {
-            "" -> listOf()
-            is String -> classAttributeValue.split(' ')
-            else -> listOf()
-        }
+        when (classAttributeValue) {
+            null -> listOf()
+            else -> classAttributeValue.split(' ')
+        }.also { existing = it }
         // TODO: This is inefficient when classes() is called multiple times
         val classString = if (existing != null) {
             JsonPrimitive((existing + classes).joinToString(separator = " "))
