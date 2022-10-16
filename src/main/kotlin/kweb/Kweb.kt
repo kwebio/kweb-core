@@ -460,7 +460,7 @@ class Kweb private constructor(
      * If there are a large number of connected clients this could place a lot of load on the server.  An
      * unexpected page refresh may also confuse website visitors or cause the loss of unsaved form data.
      */
-    fun refreshAllPages() = GlobalScope.launch(Dispatchers.Default) {
+    fun refreshAllPages() {
         if (!debug) {
             logger.warn { "refreshAllPages() called but Kweb is not in debug mode, ignored" }
         } else {
