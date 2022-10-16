@@ -1,10 +1,7 @@
 package kweb.docs
 
 import kweb.*
-import kweb.state.KVar
-import kweb.state.ReversibleFunction
-import kweb.state.property
-import kweb.state.render
+import kweb.state.*
 
 fun state1() {
     // ANCHOR: createkvar
@@ -69,16 +66,33 @@ Kweb(port = 16097) {
 list.value = listOf("four", "five", "six")
     // ANCHOR_END: render2
 
-    // ANCHOR: dataclass
+    fun renderEach1() {
+        Kweb(port = 16097) {
+            // ANCHOR: rendereach
+doc.body {
+    val list = ObservableList(listOf("one", "two", "three"))
+    ul {
+        renderEach(list) { item ->
+            li().text(item)
+        }
+    }
+    list.add(1, "one and a half")
+    list.removeAt(2)
+    list.move(0, 1)
+    list[0] = "ONE"
+}
+            // ANCHOR_END: rendereach
+        }
+    }
+
+// ANCHOR: dataclass
 data class User(val name: String)
 
 val user = KVar(User("Ian"))
 val name = user.property(User::name)
 name.value = "John"
 println(user) // Will print: KVar(User(name = "John"))
-    // ANCHOR_END: dataclass
-
-}
+// ANCHOR_END: dataclass
 
 fun state2() {
     val counter = KVar(0)
@@ -96,3 +110,5 @@ println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 // output: counter: 6, doubled: 12
 // ANCHOR_END: reversible1
     }
+}
+

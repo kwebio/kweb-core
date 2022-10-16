@@ -708,7 +708,7 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
 fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCreator<Element>.(value: KVar<T>) -> Unit) {
     /*
      * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing
-     *       DOM elements - this is inefficient.
+     *       DOM elements - this is inefficient and should use renderEach() with an ObservableList instead.
      */
     render(list.map { it.size }) { size ->
         for (ix in 0 until size) {

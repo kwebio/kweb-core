@@ -1802,7 +1802,6 @@ public final class kweb/state/ObservableList : java/util/List, kotlin/jvm/intern
 	public fun contains (Ljava/lang/Object;)Z
 	public fun containsAll (Ljava/util/Collection;)Z
 	public fun get (I)Ljava/lang/Object;
-	public final fun getInitialItems ()Ljava/util/List;
 	public final fun getItems ()Ljava/util/ArrayList;
 	public fun getSize ()I
 	public fun indexOf (Ljava/lang/Object;)I
@@ -1851,6 +1850,10 @@ public final class kweb/state/ObservableList$Modification$Move : kweb/state/Obse
 	public final fun getOldPosition ()I
 }
 
+public final class kweb/state/RenderEachKt {
+	public static final fun renderEach (Lkweb/ElementCreator;Lkweb/state/ObservableList;Lkotlin/jvm/functions/Function2;)V
+}
+
 public final class kweb/state/RenderFragment {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public final fun delete ()V
@@ -1867,7 +1870,6 @@ public final class kweb/state/RenderHandle {
 public final class kweb/state/RenderKt {
 	public static final fun closeOnElementCreatorCleanup (Lkweb/ElementCreator;Lkweb/state/KVal;)V
 	public static final fun render (Lkweb/ElementCreator;Lkweb/state/KVal;Lkotlin/jvm/functions/Function2;)Lkweb/state/RenderFragment;
-	public static final fun renderEach (Lkweb/ElementCreator;Lkweb/state/ObservableList;Lkotlin/jvm/functions/Function2;)V
 }
 
 public final class kweb/state/RenderSpanNames {

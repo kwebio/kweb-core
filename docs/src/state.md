@@ -130,6 +130,17 @@ actually changes so you should avoid \"unwrapping\" KVars with a
 The [KVal.map {}](https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html)
 function is a powerful tool for manipulating KVals and KVars without unwrapping them.
 
+## Rendering lists with renderEach
+
+The *renderEach()* function allows you to render a list of items, while 
+automatically updating the rendered DOM in response to changes in the list. 
+The items must be stored in an `ObservableList`, which implements the 
+`MutableList` interface.
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:rendereach}}
+```
+
 ## Extracting data class properties
 
 If your KVar contains a [data
