@@ -81,23 +81,6 @@ $dokka.location:kweb.config/KwebDefaultConfiguration/KwebDefaultConfiguration/#/
 $dokka.location:kweb.config/KwebDefaultConfiguration/buildpageTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/buildpage-timeout.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/clientStateStatsEnabled/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-stats-enabled.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/clientStateTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-timeout.html
-$dokka.location:kweb.demos.testPages////PointingToDeclaration/kweb-core/kweb.demos.testPages/index.html
-$dokka.location:kweb.demos.testPages//main/#/PointingToDeclaration/kweb-core/kweb.demos.testPages/main.html
-$dokka.location:kweb.demos.testPages/DiffTestPage///PointingToDeclaration/kweb-core/kweb.demos.testPages/-diff-test-page/index.html
-$dokka.location:kweb.demos.testPages/DiffTestPage/DiffTestPage/#/PointingToDeclaration/kweb-core/kweb.demos.testPages/-diff-test-page/-diff-test-page.html
-$dokka.location:kweb.demos.testPages/DiffTestPage/plugins/#/PointingToDeclaration/kweb-core/kweb.demos.testPages/-diff-test-page/plugins.html
-$dokka.location:kweb.demos.testPages/DiffTestPage/server/#/PointingToDeclaration/kweb-core/kweb.demos.testPages/-diff-test-page/server.html
-$dokka.location:kweb.demos.testPages/DiffTestPage/username/#/PointingToDeclaration/kweb-core/kweb.demos.testPages/-diff-test-page/username.html
-$dokka.location:kweb.demos.todo////PointingToDeclaration/kweb-core/kweb.demos.todo/index.html
-$dokka.location:kweb.demos.todo//main/#/PointingToDeclaration/kweb-core/kweb.demos.todo/main.html
-$dokka.location:kweb.demos.todo/TodoApp.TodoList///PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/-todo-list/index.html
-$dokka.location:kweb.demos.todo/TodoApp.TodoList/TodoList/#kotlin.String#kweb.state.ObservableList[kotlin.String]/PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/-todo-list/-todo-list.html
-$dokka.location:kweb.demos.todo/TodoApp.TodoList/title/#/PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/-todo-list/title.html
-$dokka.location:kweb.demos.todo/TodoApp.TodoList/todoItems/#/PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/-todo-list/todo-items.html
-$dokka.location:kweb.demos.todo/TodoApp///PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/index.html
-$dokka.location:kweb.demos.todo/TodoApp/TodoApp/#/PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/-todo-app.html
-$dokka.location:kweb.demos.todo/TodoApp/plugins/#/PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/plugins.html
-$dokka.location:kweb.demos.todo/TodoApp/server/#/PointingToDeclaration/kweb-core/kweb.demos.todo/-todo-app/server.html
 $dokka.location:kweb.html.events////PointingToDeclaration/kweb-core/kweb.html.events/index.html
 $dokka.location:kweb.html.events//main/#/PointingToDeclaration/kweb-core/kweb.html.events/main.html
 $dokka.location:kweb.html.events/Event///PointingToDeclaration/kweb-core/kweb.html.events/-event/index.html
@@ -1114,8 +1097,6 @@ $dokka.location:kweb/WebBrowser/window/#/PointingToDeclaration/kweb-core/kweb/-
 kweb
 kweb.client
 kweb.config
-kweb.demos.testPages
-kweb.demos.todo
 kweb.html
 kweb.html.events
 kweb.html.fileUpload
