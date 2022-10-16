@@ -913,37 +913,6 @@ public class kweb/config/KwebDefaultConfiguration : kweb/config/KwebConfiguratio
 	public fun getClientStateTimeout ()Ljava/time/Duration;
 }
 
-public final class kweb/demos/testPages/DiffTestPage {
-	public fun <init> ()V
-	public final fun getPlugins ()Ljava/util/List;
-	public final fun getServer ()Lkweb/Kweb;
-	public final fun getUsername ()Lkweb/state/KVar;
-	public final fun setUsername (Lkweb/state/KVar;)V
-}
-
-public final class kweb/demos/testPages/DiffTestPageKt {
-	public static final fun main ()V
-	public static synthetic fun main ([Ljava/lang/String;)V
-}
-
-public final class kweb/demos/todo/TodoApp {
-	public fun <init> ()V
-	public final fun getPlugins ()Ljava/util/List;
-	public final fun getServer ()Lkweb/Kweb;
-}
-
-public final class kweb/demos/todo/TodoApp$TodoList {
-	public fun <init> (Ljava/lang/String;Lkweb/state/ObservableList;)V
-	public final fun getTitle ()Ljava/lang/String;
-	public final fun getTodoItems ()Lkweb/state/ObservableList;
-	public final fun setTitle (Ljava/lang/String;)V
-}
-
-public final class kweb/demos/todo/TodoAppKt {
-	public static final fun main ()V
-	public static synthetic fun main ([Ljava/lang/String;)V
-}
-
 public final class kweb/html/BodyElement : kweb/Element {
 	public fun <init> (Lkweb/WebBrowser;Ljava/lang/String;)V
 }
