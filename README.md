@@ -13,8 +13,6 @@
   </a>
 </div>
 
-<img alt="Matrix" src="https://img.shields.io/matrix/kweb:matrix.org">
-
 ## Quick Start
 
 Read the [Introduction](https://docs.kweb.io/book/intro.html) or [Getting Started](https://docs.kweb.io/book/gettingstarted.html) from the [Kweb Book](https://docs.kweb.io/book/).
