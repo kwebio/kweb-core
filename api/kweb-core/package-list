@@ -771,8 +771,6 @@ $dokka.location:kweb//h5/kweb.ElementCreator[kweb.Element]#kotlin.collections.Ma
 $dokka.location:kweb//i/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function1[kweb.ElementCreator[kweb.IElement],kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/i.html
 $dokka.location:kweb//id/kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.String/PointingToDeclaration/kweb-core/kweb/id.html
 $dokka.location:kweb//img/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function1[kweb.ElementCreator[kweb.ImageElement],kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/img.html
-$dokka.location:kweb//input/TypeParam(bounds=[kweb.html.events.OnImmediateReceiver[TypeParam(bounds=[kweb.InputEventsReceiver])]])#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/input.html
-$dokka.location:kweb//input/TypeParam(bounds=[kweb.html.events.OnReceiver[TypeParam(bounds=[kweb.InputEventsReceiver])]])#kotlin.Function1[kweb.html.events.Event,kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/input.html
 $dokka.location:kweb//input/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kweb.InputType?#kotlin.String?#kotlin.String?#kotlin.Int?#kotlin.String?#kotlin.Function1[kweb.ElementCreator[kweb.InputElement],kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/input.html
 $dokka.location:kweb//installKwebOnRemainingRoutes/io.ktor.server.application.Application#kotlin.Function1[kweb.WebBrowser,kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/install-kweb-on-remaining-routes.html
 $dokka.location:kweb//label/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function1[kweb.ElementCreator[kweb.LabelElement],kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/label.html
@@ -951,7 +949,6 @@ $dokka.location:kweb/InputElement/element/#/PointingToDeclaration/kweb-core/kwe
 $dokka.location:kweb/InputElement/select/#/PointingToDeclaration/kweb-core/kweb/-input-element/select.html
 $dokka.location:kweb/InputElement/setReadOnly/#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-input-element/set-read-only.html
 $dokka.location:kweb/InputElement/setSelectionRange/#kotlin.Int#kotlin.Int/PointingToDeclaration/kweb-core/kweb/-input-element/set-selection-range.html
-$dokka.location:kweb/InputEventsReceiver///PointingToDeclaration/kweb-core/kweb/-input-events-receiver/index.html
 $dokka.location:kweb/InputType.button///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-input-type/button/index.html
 $dokka.location:kweb/InputType.checkbox///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-input-type/checkbox/index.html
 $dokka.location:kweb/InputType.color///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-input-type/color/index.html
