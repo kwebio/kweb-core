@@ -6,7 +6,7 @@ Modern websites consist of at least two [tightly
 coupled](https://en.wikipedia.org/wiki/Coupling_(computer_programming))
 components, one runs in the browser, the other on the server. These are
 often written in different programming languages and must communicate
-with each other over an HTTP connection.
+with each other over an HTTP(S) connection.
 
 Kweb's goal is to eliminate this server/browser separation so that your
 webapp's architecture is determined by the problem you're solving,
