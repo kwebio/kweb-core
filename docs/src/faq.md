@@ -25,7 +25,7 @@ important differences:
     [vaadin/framework](https://github.com/vaadin/framework) is currently
     502,398 lines of code, almost a 100:1 ratio!
 -   Vaadin doesn't have any equivalent feature to Kweb's [immediate
-    events](https://docs.kweb.io/en/latest/events.html#immediate-events),
+    events](https://docs.kweb.io/book/events.html#immediate-events),
     which has led to frequent
     [complaints](https://stackoverflow.com/a/22848521/16050) of
     sluggishness from Vaadin users because a server round-trip is
@@ -36,7 +36,7 @@ important differences:
 -   This is why Kweb's philosophy is to be a thin interface between
     server logic and the user's browser, leveraging existing tools from
     the JavaScript ecosystem [when it makes
-    sense](https://docs.kweb.io/en/latest/style.html).
+    sense](https://docs.kweb.io/book/style.html).
 -   Kweb was built natively for Kotlin, and takes advantage of all of
     its language features like
     [coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
@@ -44,7 +44,7 @@ important differences:
     lot more concise, without sacrificing readability.
 -   In Vaadin's favor, it has been a commercial product since 2006, it
     is extremely mature and has a vast developer ecosystem, while Kweb
-    is still pre-1.0.
+    is still relatively new.
 
 ## Is there a larger working example?
 
