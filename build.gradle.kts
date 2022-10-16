@@ -5,6 +5,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.github.ben-manes.versions") version "0.42.0"
     kotlin("plugin.serialization")
+
+    // See api/API_README.md
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.11.1"
 }
 
