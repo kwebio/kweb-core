@@ -6,7 +6,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.42.0"
     kotlin("plugin.serialization")
 
-    // See api/API_README.md
+    // See api/API_README.md for details
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.11.1"
 }
 
