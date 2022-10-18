@@ -11,7 +11,6 @@ plugins {
 }
 
 group = "com.github.kwebio"
-version = "0.0.1-SNAPSHOT"
 
 tasks.test {
     systemProperty("sel.jup.default.browser", System.getProperty("sel.jup.default.browser"))
