@@ -55,7 +55,7 @@ This demo illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html
 ## Learn More
 
 * [The Kweb Book](http://docs.kweb.io/book) (user manual)
-* [API Documentation](https://docs.kweb/io/api)
+* [API Documentation](https://docs.kweb.io/api)
 * [Example Project](https://github.com/freenet/freenetorg-website/)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
 * [Chat with us](https://matrix.to/#/#kweb:matrix.org)
