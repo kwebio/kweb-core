@@ -71,7 +71,7 @@ dependencies {
 tasks.dokkaHtml {
     dokkaSourceSets {
         configureEach {
-            samples.from(layout.projectDirectory.dir("src/main/kotlin/samples.kt"))
+            includes.from("src/main/kotlin/packages.md")
         }
     }
 }
