@@ -644,6 +644,7 @@ $dokka.location:kweb.state/CloseReason/explanation/#/PointingToDeclaration/kweb
 $dokka.location:kweb.state/KVal///PointingToDeclaration/kweb-core/kweb.state/-k-val/index.html
 $dokka.location:kweb.state/KVal/KVal/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb.state/-k-val/-k-val.html
 $dokka.location:kweb.state/KVal/addListener/#kotlin.Function2[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-k-val/add-listener.html
+$dokka.location:kweb.state/KVal/close/#/PointingToDeclaration/kweb-core/kweb.state/-k-val/close.html
 $dokka.location:kweb.state/KVal/close/#kweb.state.CloseReason/PointingToDeclaration/kweb-core/kweb.state/-k-val/close.html
 $dokka.location:kweb.state/KVal/map/#kotlin.Function1[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kweb-core/kweb.state/-k-val/map.html
 $dokka.location:kweb.state/KVal/onClose/#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-k-val/on-close.html
@@ -672,14 +673,16 @@ $dokka.location:kweb.state/ObservableList.Modification.Move/newPosition/#/Pointi
 $dokka.location:kweb.state/ObservableList.Modification.Move/oldPosition/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/-modification/-move/old-position.html
 $dokka.location:kweb.state/ObservableList.Modification///PointingToDeclaration/kweb-core/kweb.state/-observable-list/-modification/index.html
 $dokka.location:kweb.state/ObservableList///PointingToDeclaration/kweb-core/kweb.state/-observable-list/index.html
-$dokka.location:kweb.state/ObservableList/ObservableList/#kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]#kotlin.Int/PointingToDeclaration/kweb-core/kweb.state/-observable-list/-observable-list.html
+$dokka.location:kweb.state/ObservableList/ObservableList/#kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/-observable-list.html
 $dokka.location:kweb.state/ObservableList/add/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add.html
 $dokka.location:kweb.state/ObservableList/add/#kotlin.Int#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add.html
 $dokka.location:kweb.state/ObservableList/addAll/#kotlin.Int#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-all.html
 $dokka.location:kweb.state/ObservableList/addAll/#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-all.html
+$dokka.location:kweb.state/ObservableList/addCloseListener/#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-close-listener.html
 $dokka.location:kweb.state/ObservableList/addListener/#kotlin.Function1[kotlin.collections.List[kweb.state.ObservableList.Modification[TypeParam(bounds=[kotlin.Any])]],kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-listener.html
 $dokka.location:kweb.state/ObservableList/applyModifications/#kotlin.collections.List[kweb.state.ObservableList.Modification[TypeParam(bounds=[kotlin.Any])]]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/apply-modifications.html
 $dokka.location:kweb.state/ObservableList/clear/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/clear.html
+$dokka.location:kweb.state/ObservableList/close/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/close.html
 $dokka.location:kweb.state/ObservableList/contains/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/contains.html
 $dokka.location:kweb.state/ObservableList/containsAll/#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/contains-all.html
 $dokka.location:kweb.state/ObservableList/get/#kotlin.Int/PointingToDeclaration/kweb-core/kweb.state/-observable-list/get.html
@@ -694,6 +697,7 @@ $dokka.location:kweb.state/ObservableList/move/#kotlin.Int#kotlin.Int/PointingTo
 $dokka.location:kweb.state/ObservableList/remove/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/remove.html
 $dokka.location:kweb.state/ObservableList/removeAll/#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/remove-all.html
 $dokka.location:kweb.state/ObservableList/removeAt/#kotlin.Int/PointingToDeclaration/kweb-core/kweb.state/-observable-list/remove-at.html
+$dokka.location:kweb.state/ObservableList/removeCloseListener/#kotlin.Long/PointingToDeclaration/kweb-core/kweb.state/-observable-list/remove-close-listener.html
 $dokka.location:kweb.state/ObservableList/removeListener/#kotlin.Long/PointingToDeclaration/kweb-core/kweb.state/-observable-list/remove-listener.html
 $dokka.location:kweb.state/ObservableList/retainAll/#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/retain-all.html
 $dokka.location:kweb.state/ObservableList/set/#kotlin.Int#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/set.html
