@@ -12,6 +12,9 @@ plugins {
 
 group = "com.github.kwebio"
 
+// Don't set version here, it must be set in gradle.properties so it can be overridden
+// by the build script
+
 tasks.test {
     systemProperty("sel.jup.default.browser", System.getProperty("sel.jup.default.browser"))
 }
