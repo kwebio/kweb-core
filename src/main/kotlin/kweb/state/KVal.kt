@@ -11,7 +11,7 @@ private val logger = KotlinLogging.logger {}
  * A KVal is a **read-only** observable container for a value of type T. These are typically created by
  * [KVal.map] or [KVar.map], but can also be created directly.
  */
-open class KVal<T : Any?>(value: T) {
+open class KVal<T : Any?>(value: T) : AutoCloseable{
 
     @Volatile
     protected var closeReason: CloseReason? = null
@@ -91,6 +91,10 @@ open class KVal<T : Any?>(value: T) {
             mappedKVal.close(CloseReason("KVar this was mapped from was closed"))
         }
         return mappedKVal
+    }
+
+    override fun close() {
+        close(CloseReason("Kval.close() was called"))
     }
 
     /**

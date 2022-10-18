@@ -1720,9 +1720,10 @@ public final class kweb/state/CloseReason {
 	public fun toString ()Ljava/lang/String;
 }
 
-public class kweb/state/KVal {
+public class kweb/state/KVal : java/lang/AutoCloseable {
 	public fun <init> (Ljava/lang/Object;)V
 	public final fun addListener (Lkotlin/jvm/functions/Function2;)J
+	public fun close ()V
 	public final fun close (Lkweb/state/CloseReason;)V
 	protected final fun finalize ()V
 	protected final fun getCloseReason ()Lkweb/state/CloseReason;
@@ -1749,16 +1750,19 @@ public final class kweb/state/KVarKt {
 	public static synthetic fun notNull$default (Lkweb/state/KVar;Ljava/lang/Object;ZILjava/lang/Object;)Lkweb/state/KVar;
 }
 
-public final class kweb/state/ObservableList : java/util/List, kotlin/jvm/internal/markers/KMutableList {
-	public fun <init> (Ljava/util/List;I)V
-	public synthetic fun <init> (Ljava/util/List;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+public final class kweb/state/ObservableList : java/lang/AutoCloseable, java/util/List, kotlin/jvm/internal/markers/KMutableList {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun add (ILjava/lang/Object;)V
 	public fun add (Ljava/lang/Object;)Z
 	public fun addAll (ILjava/util/Collection;)Z
 	public fun addAll (Ljava/util/Collection;)Z
+	public final fun addCloseListener (Lkotlin/jvm/functions/Function0;)J
 	public final fun addListener (Lkotlin/jvm/functions/Function1;)J
 	public final fun applyModifications (Ljava/util/List;)V
 	public fun clear ()V
+	public fun close ()V
 	public fun contains (Ljava/lang/Object;)Z
 	public fun containsAll (Ljava/util/Collection;)Z
 	public fun get (I)Ljava/lang/Object;
@@ -1775,6 +1779,7 @@ public final class kweb/state/ObservableList : java/util/List, kotlin/jvm/intern
 	public fun remove (Ljava/lang/Object;)Z
 	public fun removeAll (Ljava/util/Collection;)Z
 	public fun removeAt (I)Ljava/lang/Object;
+	public final fun removeCloseListener (J)V
 	public final fun removeListener (J)V
 	public fun retainAll (Ljava/util/Collection;)Z
 	public fun set (ILjava/lang/Object;)Ljava/lang/Object;

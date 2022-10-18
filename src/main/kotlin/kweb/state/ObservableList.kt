@@ -7,9 +7,8 @@ import java.util.concurrent.ConcurrentHashMap
  * [renderEach].
  */
 class ObservableList<ITEM : Any>(
-    initialItems: List<ITEM>,
-    override val size: Int = initialItems.size
-) : MutableList<ITEM>{
+    initialItems: List<ITEM> = emptyList(),
+) : MutableList<ITEM>, AutoCloseable {
 
     private val items = ArrayList(initialItems)
     fun getItems(): ArrayList<ITEM> {
@@ -19,14 +18,23 @@ class ObservableList<ITEM : Any>(
     }
 
     private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
+
+    private val closeListeners = HashMap<Long, () -> Unit>()
     private fun insert(position: Int, item: ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
-    private fun change(position: Int, newItem: ITEM) = applyModifications(listOf(Modification.Change(position, newItem)))
+    private fun change(position: Int, newItem: ITEM) =
+        applyModifications(listOf(Modification.Change(position, newItem)))
+
     private fun delete(position: Int) = applyModifications(listOf(Modification.Deletion(position)))
+
+    override val size: Int get() = items.size
 
     fun move(oldPosition: Int, newPosition: Int) =
         applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
 
     fun applyModifications(modifications: List<Modification<ITEM>>) {
+        if (closed) {
+            throw IllegalStateException("Cannot modify closed ObservableList")
+        }
         synchronized(items) {
             for (change in modifications) {
                 when (change) {
@@ -51,8 +59,10 @@ class ObservableList<ITEM : Any>(
                         } else { //change.newPosition > change.oldPosition
                             items.removeAt(change.oldPosition)
                             items.add(change.newPosition, item)
-                            println("Items size: ${items.size}" +
-                                    "\nItems Contents: $items")
+                            println(
+                                "Items size: ${items.size}" +
+                                        "\nItems Contents: $items"
+                            )
                         }
                     }
                 }
@@ -69,44 +79,72 @@ class ObservableList<ITEM : Any>(
     }
 
     fun addListener(changes: (List<Modification<ITEM>>) -> Unit): Long {
+        if (closed) {
+            throw IllegalStateException("Cannot add listener to closed ObservableList")
+        }
         val handle = kweb.util.random.nextLong()
         listeners[handle] = changes
         return handle
     }
 
     fun removeListener(handle: Long) {
+        if (closed) {
+            throw IllegalStateException("Cannot remove listener from closed ObservableList")
+        }
         listeners.remove(handle)
     }
 
     override fun contains(element: ITEM): Boolean {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.contains(element)
     }
 
     override fun containsAll(elements: Collection<ITEM>): Boolean {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.containsAll(elements)
     }
 
     override fun get(index: Int): ITEM {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items[index]
     }
 
     override fun indexOf(element: ITEM): Int {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.indexOf(element)
     }
 
     override fun isEmpty(): Boolean {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.isEmpty()
     }
 
     override fun iterator(): MutableIterator<ITEM> {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.iterator()
     }
 
     override fun lastIndexOf(element: ITEM): Int {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.lastIndexOf(element)
     }
 
     override fun add(element: ITEM): Boolean {
+
         insert(items.size, element)
         return true
     }
@@ -130,16 +168,22 @@ class ObservableList<ITEM : Any>(
     }
 
     override fun clear() {
-        while(items.size > 0) {
+        while (items.size > 0) {
             delete(0)
         }
     }
 
     override fun listIterator(): MutableListIterator<ITEM> {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.listIterator()
     }
 
     override fun listIterator(index: Int): MutableListIterator<ITEM> {
+        if (closed) {
+            throw IllegalStateException("Cannot read closed ObservableList")
+        }
         return items.listIterator(index)
     }
 
@@ -154,27 +198,38 @@ class ObservableList<ITEM : Any>(
     }
 
     override fun removeAll(elements: Collection<ITEM>): Boolean {
-        return if (containsAll(elements)) {
-            items.clear()
-            true
-        } else {
-            false
+        var removed = false
+        for (element in elements) {
+            if (remove(element)) {
+                removed = true
+            }
         }
+        return removed
     }
 
     override fun removeAt(index: Int): ITEM {
+        if (closed) {
+            throw IllegalStateException("Cannot modify closed ObservableList")
+        }
         val itemToRemove = items[index]
         delete(index)
         return itemToRemove
     }
 
     override fun retainAll(elements: Collection<ITEM>): Boolean {
+        if (closed) {
+            throw IllegalStateException("Cannot modify closed ObservableList")
+        }
         items.clear()
         addAll(elements)
         return true
     }
 
     override operator fun set(index: Int, element: ITEM): ITEM {
+        if (closed) {
+            throw IllegalStateException("Cannot set element of closed ObservableList")
+        }
+
         val previousElement = items[index]
         change(index, element)
         return previousElement
@@ -183,5 +238,31 @@ class ObservableList<ITEM : Any>(
     //TODO: Documentation will need a note explaining that any modifications to the returned sublist will not propagate in the DOM
     override fun subList(fromIndex: Int, toIndex: Int): MutableList<ITEM> {
         return items.subList(fromIndex, toIndex)
+    }
+
+    private @Volatile
+    var closed = false
+
+    fun addCloseListener(listener: () -> Unit): Long {
+        val handle = kweb.util.random.nextLong()
+        synchronized(closeListeners) {
+            closeListeners[handle] = listener
+        }
+        return handle
+    }
+
+    fun removeCloseListener(handle: Long) {
+        synchronized(closeListeners) {
+            closeListeners.remove(handle)
+        }
+    }
+
+    override fun close() {
+        if (!closed) {
+            closed = true
+            synchronized(closeListeners) {
+                closeListeners.values.forEach { it() }
+            }
+        }
     }
 }
