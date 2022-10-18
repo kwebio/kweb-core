@@ -195,6 +195,15 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
     }
 
+    /**
+     * Close this AutoCloseable when this ElementCreator is cleaned up.
+     */
+    fun closeOnCleanup(closeable: AutoCloseable) {
+        onCleanup(withParent = true) {
+            closeable.close()
+        }
+    }
+
     fun text(text: String) {
         this.element.text(text)
     }

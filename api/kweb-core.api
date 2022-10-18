@@ -194,6 +194,7 @@ public class kweb/ElementCreator {
 	public synthetic fun <init> (Lkweb/Element;Lkweb/ElementCreator;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun attr (Lkotlin/jvm/functions/Function1;)V
 	public final fun cleanup ()V
+	public final fun closeOnCleanup (Ljava/lang/AutoCloseable;)V
 	public final fun element (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;)Lkweb/Element;
 	public final fun element (Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun element$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)Lkweb/Element;
