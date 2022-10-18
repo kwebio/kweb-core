@@ -33,7 +33,8 @@ jobs:
     - name: Generate API documentation
       if: ${{github.event_name == 'push'}}
       run: |
-        NEW_VERSION=$(echo "${GITHUB_REF}" | cut -d "/" -f3)
+        # Set NEW_VERSION to the most recent release tag
+        NEW_VERSION=$(git describe --abbrev=0 --tags)
         echo "New version: ${NEW_VERSION}"
         echo "Github username: ${GITHUB_ACTOR}"
         ./gradlew -Pversion=${NEW_VERSION} dokkaHtml
