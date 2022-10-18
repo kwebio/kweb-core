@@ -462,10 +462,10 @@ state.</p>
 server and the DOM within the end-user's web browser. Once this mapping
 is defined, simply modify this state and the change will propagate
 automatically to the browser.</p>
-<h2 id="building-blocks"><a class="header" href="#building-blocks">Building blocks</a></h2>
+<h2 id="the-kvar-class"><a class="header" href="#the-kvar-class">The KVar Class</a></h2>
 <p>A
-<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt">KVar</a>
-class contains a single typed object, which can change over time, similar to an 
+<a href="https://docs.kweb.io/api/kweb-core/kweb.state/index.html#253448562%2FClasslikes%2F769193423">KVar</a>
+is an observable container. It contains a single typed object, which can change over time, similar to an 
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a>. 
 You can add listeners to a KVar to be notified immediately when it changes.</p>
 <p>For example:</p>
@@ -497,6 +497,8 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 counter: 6, doubled: 12
 </code></pre>
 <p>Note that <code>counterDoubled</code> updates automatically, because mapped KVars listen to the original for changes.</p>
+<p>The <code>KVar</code> class is a subclass of <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>, 
+which is a read-only version of <code>KVar</code>.</p>
 <p><em>Note:</em> KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
 Kotlin <a href="https://kotlinlang.org/docs/reference/data-classes.html">data class</a> with immutable parameters.</p>
 <h2 id="kvars-and-the-dom"><a class="header" href="#kvars-and-the-dom">KVars and the DOM</a></h2>
@@ -597,9 +599,8 @@ println(user) // Will print: KVar(User(name = &quot;John&quot;))
 </code></pre>
 <h2 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h2>
 <p>If you check the type of <em>counterDoubled</em>, you'll notice that it's a
-<em>KVal</em> rather than a <em>KVar</em>.
-<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html">KVal</a>```s
-values may not be modified directly, so this won't be permitted:</p>
+<em>KVal</em> rather than a <em>KVar</em>, meaning it cannot be modified. This will
+result in a compilation error:</p>
 <pre><code class="language-kotlin">val counter = KVar(0)
 val counterDoubled = counter.map { it * 2 }
 counterDoubled.value = 20 // &lt;--- This won't compile
