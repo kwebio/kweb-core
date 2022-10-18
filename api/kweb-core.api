@@ -1745,7 +1745,6 @@ public final class kweb/state/KVar : kweb/state/KVal {
 }
 
 public final class kweb/state/KVarKt {
-	public static final fun modify (Lkweb/state/KVar;Lkotlin/jvm/functions/Function1;)V
 	public static final fun notNull (Lkweb/state/KVar;Ljava/lang/Object;Z)Lkweb/state/KVar;
 	public static synthetic fun notNull$default (Lkweb/state/KVar;Ljava/lang/Object;ZILjava/lang/Object;)Lkweb/state/KVar;
 }

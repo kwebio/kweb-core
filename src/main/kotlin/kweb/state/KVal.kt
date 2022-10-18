@@ -17,6 +17,9 @@ open class KVal<T : Any?>(value: T) {
     protected val listeners = ConcurrentHashMap<Long, (T, T) -> Unit>()
     private val closeHandlers = ConcurrentLinkedDeque<() -> Unit>()
 
+    /**
+     * Add a listener to this KVar. The listener will be called whenever the [value] property changes.
+     */
     fun addListener(listener: (T, T) -> Unit): Long {
         verifyNotClosed("add a listener")
         val handle = random.nextLong()
@@ -27,18 +30,31 @@ open class KVal<T : Any?>(value: T) {
     @Volatile
     private var pValue: T = value
 
+    /**
+     * The current value of this KVal, this can be read but not modified - but it may change if this [KVal] was
+     * created by mapping another [KVal] or using [KVal.map]. If you want to modify this value then you should
+     * be using a [KVar] instead.
+     */
     open val value: T
         get() {
             verifyNotClosed("retrieve KVal.value")
             return pValue
         }
 
+    /**
+     * Remove a listener from this KVar.  The listener will no longer be called when the [value] property
+     * changes.
+     */
     fun removeListener(handle: Long) {
         listeners.remove(handle)
     }
 
-    // TODO: A cachetime could be specified, to limit recalculation, could be quite broadly useful for expensive
-    //       mappings
+    /**
+     * Create another KVal that is a mapping of this KVal.  The mapping function will be called whenever this KVal
+     * changes, and the new KVal will be updated with the result of the mapping function.
+     *
+     * For bi-directional mappings, see [KVar.map].
+     */
     fun <O : Any?> map(mapper: (T) -> O): KVal<O> {
         if (isClosed) {
             error("Can't map this var because it was closed due to $closeReason")
@@ -73,34 +89,19 @@ open class KVal<T : Any?>(value: T) {
         return mappedKVal
     }
 
-    // TODO: Temporary for debugging
-    private var closedStack: Array<out StackTraceElement>? = null
-
+    /**
+     * Close this KVal, and notify all handlers that it has been closed.
+     */
     fun close(reason: CloseReason) {
-        if (isClosed) {
-            val firstStackTrace = closedStack!!
-            val secondStackTrace = Thread.currentThread().stackTrace
-            logger.trace {
-                val st = secondStackTrace
-                        .filter { it.methodName != "close" }
-                        .filterNot { firstStackTrace.contains(it) }
-                        .joinToString { it.toString() }
-                "Second stack trace:\t$st"
-            }
-            logger.trace {
-                val st = firstStackTrace
-                        .filter { it.methodName != "close" }
-                        .filterNot { secondStackTrace.contains(it) }
-                        .joinToString { it.toString() }
-                "First stack trace:\t$st"
-            }
-        } else {
+        if (!isClosed) {
             closeReason = reason
-            closedStack = Thread.currentThread().stackTrace
             closeHandlers.forEach { it.invoke() }
         }
     }
 
+    /**
+     * Add a handler to be called when this KVal is closed.
+     */
     fun onClose(handler: () -> Unit) {
         verifyNotClosed("add a close handler")
         closeHandlers += handler
@@ -111,6 +112,9 @@ open class KVal<T : Any?>(value: T) {
         return "KVal($value)"
     }
 
+    /**
+     * Throw an exception if this KVal is closed.
+     */
     protected fun verifyNotClosed(triedTo: String) {
         closeReason.let { closeReason ->
             if (closeReason != null) {

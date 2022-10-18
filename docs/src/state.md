@@ -11,11 +11,11 @@ server and the DOM within the end-user's web browser. Once this mapping
 is defined, simply modify this state and the change will propagate
 automatically to the browser.
 
-## Building blocks
+## The KVar Class
 
 A
-[KVar](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt)
-class contains a single typed object, which can change over time, similar to an 
+[KVar](https://docs.kweb.io/api/kweb-core/kweb.state/index.html#253448562%2FClasslikes%2F769193423)
+is an observable container. It contains a single typed object, which can change over time, similar to an 
 [AtomicReference](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html). 
 You can add listeners to a KVar to be notified immediately when it changes.
 
@@ -56,6 +56,9 @@ counter: 6, doubled: 12
 ```
 
 Note that `counterDoubled` updates automatically, because mapped KVars listen to the original for changes.
+
+The `KVar` class is a subclass of [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html), 
+which is a read-only version of `KVar`.
 
 *Note:* KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
 Kotlin [data class](https://kotlinlang.org/docs/reference/data-classes.html) with immutable parameters.
@@ -155,9 +158,8 @@ which will update the original KVar if changed:
 ## Reversible mapping
 
 If you check the type of *counterDoubled*, you'll notice that it's a
-*KVal* rather than a *KVar*.
-[KVal](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html)```s
-values may not be modified directly, so this won't be permitted:
+*KVal* rather than a *KVar*, meaning it cannot be modified. This will
+result in a compilation error:
 
 ```kotlin
 val counter = KVar(0)
