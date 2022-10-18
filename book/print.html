@@ -464,7 +464,7 @@ is defined, simply modify this state and the change will propagate
 automatically to the browser.</p>
 <h2 id="the-kvar-class"><a class="header" href="#the-kvar-class">The KVar Class</a></h2>
 <p>A
-<a href="https://docs.kweb.io/api/kweb-core/kweb.state/index.html#253448562%2FClasslikes%2F769193423">KVar</a>
+<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html">KVar</a>
 is an observable container. It contains a single typed object, which can change over time, similar to an 
 <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a>. 
 You can add listeners to a KVar to be notified immediately when it changes.</p>
@@ -533,13 +533,13 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 </code></pre>
 <p>This will also work for <code>&lt;option&gt;</code> and <code>&lt;textarea&gt;</code> elements which also have values.</p>
 <p>See also:
-<a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L485">ValueElement.value</a></p>
+<a href="https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html#-178499702%2FProperties%2F769193423">ValueElement.value</a></p>
 <h2 id="rendering-state-to-a-dom-fragment"><a class="header" href="#rendering-state-to-a-dom-fragment">Rendering state to a DOM fragment</a></h2>
 <p>But what if you want to do more than just modify a single element based
 on a KVar, what if you want to modify a whole tree of elements?</p>
 <p>This is where the
-<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state.persistent/render.html">render</a>
-function comes in:</p>
+<a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">render</a></p>
+<p>function comes in:</p>
 <pre><code class="language-kotlin">val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
 
 Kweb(port = 16097) {
@@ -569,8 +569,13 @@ actually changes so you should avoid &quot;unwrapping&quot; KVars with a
 function is a powerful tool for manipulating KVals and KVars without unwrapping them.</p>
 <h2 id="rendering-lists-with-rendereach"><a class="header" href="#rendering-lists-with-rendereach">Rendering lists with renderEach</a></h2>
 <p>The <code>renderEach()</code> function allows you to render a list of items, while 
-automatically updating the rendered DOM in response to changes in the list. 
-The items must be stored in an <code>ObservableList</code>, which implements the 
+automatically updating the rendered DOM in response to changes in the list. </p>
+<p>While a <code>KVar&lt;List&lt;FooBar&gt;&gt;</code> could be passed to <code>render()</code>, it would be
+very inefficient because the entire list would be re-rendered every time.
+<code>renderEach()</code> will only re-render the elements that have changed.</p>
+<pre><code class="language-kotlin">
+</code></pre>
+<p>The items must be stored in an <code>ObservableList</code>, which implements the 
 <code>MutableList</code> interface.</p>
 <pre><code class="language-kotlin">doc.body {
     val obsList = ObservableList(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
@@ -606,7 +611,7 @@ val counterDoubled = counter.map { it * 2 }
 counterDoubled.value = 20 // &lt;--- This won't compile
 </code></pre>
 <p>The <em>KVar</em> class has a second
-<a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-var/map.html">map()</a>
+<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/map.html">map()</a>
 function which takes a <em>ReversibleFunction</em> implementation. This version
 of <em>map</em> will produce a KVar which can be modified, as follows:</p>
 <pre><code class="language-kotlin">val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
@@ -623,7 +628,7 @@ println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 </code></pre>
 <p>Reversible mappings are an advanced feature that you only need if you
 want the mapped value to be a mutable KVar. Most of the time the simple
-<a href="https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html">KVal.map {}</a>
+<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/map.html">KVal.map {}</a>
 function is what you need.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="url-routing"><a class="header" href="#url-routing">URL Routing</a></h1>
 <p>In a web application, routing is the process of using URLs to drive the
