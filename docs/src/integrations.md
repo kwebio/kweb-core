@@ -1,4 +1,4 @@
-# Integration
+# Integrations
 
 Kweb can be integrated in other frameworks like Spring Boot, and possibly others. Thanks to Ktor's [ServletApplicationEngine](https://ktor.io/docs/war.html#configure-ktor), one can basically run any Ktor application within a supported servlet container like Spring Boot.
 
