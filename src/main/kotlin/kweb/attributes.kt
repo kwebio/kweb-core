@@ -29,11 +29,8 @@ fun Map<String, JsonPrimitive>.classes(classes: Iterable<String>, condition: Boo
     return if (condition) {
         val attributeValue : String? = get("class")?.content
         val existing : List<String> = attributeValue?.split(' ') ?: emptyList()
-        val classString = if (existing.isEmpty()) {
-            JsonPrimitive((existing + classes).joinToString(separator = " "))
-        } else {
-            JsonPrimitive(classes.joinToString(separator = ""))
-        }
+        val classString = JsonPrimitive((existing + classes).joinToString(separator = " "))
+
         set("class", classString)
     } else {
         this
