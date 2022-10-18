@@ -33,6 +33,7 @@ jobs:
       if: ${{github.event_name == 'push'}}
       run: |
         VERSION=$(git tag --sort=committerdate | tail -1)
+        echo "Generating API documentation for version $VERSION"
         ./gradlew -Pversion=$VERSION dokkaHtml
 
     - name: Deploy API documentation to Github Pages
