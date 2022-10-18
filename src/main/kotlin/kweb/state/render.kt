@@ -34,6 +34,10 @@ object RenderSpanNames{
     const val listEndMarkerClassName = "rLEnd"
 }
 
+/**
+ * Render the value of a [KVal] into DOM elements, and automatically re-render those
+ * elements whenever the value changes.
+ */
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
     block: ElementCreator<Element>.(T) -> Unit
