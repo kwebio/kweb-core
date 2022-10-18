@@ -7,6 +7,10 @@ import java.util.concurrent.ConcurrentLinkedDeque
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * A KVal is a **read-only** observable container for a value of type T. These are typically created by
+ * [KVal.map] or [KVar.map], but can also be created directly.
+ */
 open class KVal<T : Any?>(value: T) {
 
     @Volatile

@@ -12,7 +12,7 @@ import kotlin.reflect.full.memberFunctions
 private val logger = KotlinLogging.logger {}
 
 /**
- * A KVar is an observable container for a value of type T.  It must be initialized with a value, and
+ * A KVar is an observable container for a value of type T.  It must be initialized with [initialValue], and
  * this can then be modified by setting the [KVar.value] property. Listeners may be added using
  * [KVar.addListener], and these will be called whenever the value is changed.
  */
