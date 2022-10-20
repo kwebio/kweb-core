@@ -49,9 +49,7 @@ dependencies {
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    // Pinned to 5.4.2 for now since there are issues with test discovery in 5.5.0
-    // See: https://github.com/kotest/kotest/issues/3223
-    testApi(platform("io.kotest:kotest-bom:5.4.2"))
+    testApi(platform("io.kotest:kotest-bom:5.5.1"))
     testApi(platform("org.junit:junit-bom:5.9.1"))
 
     testImplementation("io.kotest:kotest-runner-junit5")
