@@ -1761,7 +1761,7 @@ public final class kweb/state/ObservableList : java/lang/AutoCloseable, java/uti
 	public fun addAll (Ljava/util/Collection;)Z
 	public final fun addCloseListener (Lkotlin/jvm/functions/Function0;)J
 	public final fun addListener (Lkotlin/jvm/functions/Function1;)J
-	public final fun applyModifications (Ljava/util/List;)V
+	public final fun applyModifications (Ljava/lang/Iterable;)V
 	public fun clear ()V
 	public fun close ()V
 	public fun contains (Ljava/lang/Object;)Z

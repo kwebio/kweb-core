@@ -17,7 +17,7 @@ class ObservableList<ITEM : Any>(
         }
     }
 
-    private val listeners = ConcurrentHashMap<Long, (List<Modification<ITEM>>) -> Unit>()
+    private val listeners = ConcurrentHashMap<Long, (Iterable<Modification<ITEM>>) -> Unit>()
 
     private val closeListeners = HashMap<Long, () -> Unit>()
     private fun insert(position: Int, item: ITEM) = applyModifications(listOf(Modification.Insertion(position, item)))
@@ -31,7 +31,7 @@ class ObservableList<ITEM : Any>(
     fun move(oldPosition: Int, newPosition: Int) =
         applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
 
-    fun applyModifications(modifications: List<Modification<ITEM>>) {
+    fun applyModifications(modifications: Iterable<Modification<ITEM>>) {
         if (closed) {
             throw IllegalStateException("Cannot modify closed ObservableList")
         }
@@ -78,7 +78,7 @@ class ObservableList<ITEM : Any>(
         class Deletion<ITEM>(val position: Int) : Modification<ITEM>()
     }
 
-    fun addListener(changes: (List<Modification<ITEM>>) -> Unit): Long {
+    fun addListener(changes: (Iterable<Modification<ITEM>>) -> Unit): Long {
         if (closed) {
             throw IllegalStateException("Cannot add listener to closed ObservableList")
         }
