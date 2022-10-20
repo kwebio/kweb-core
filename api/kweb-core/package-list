@@ -679,8 +679,8 @@ $dokka.location:kweb.state/ObservableList/add/#kotlin.Int#TypeParam(bounds=[kotl
 $dokka.location:kweb.state/ObservableList/addAll/#kotlin.Int#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-all.html
 $dokka.location:kweb.state/ObservableList/addAll/#kotlin.collections.Collection[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-all.html
 $dokka.location:kweb.state/ObservableList/addCloseListener/#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-close-listener.html
-$dokka.location:kweb.state/ObservableList/addListener/#kotlin.Function1[kotlin.collections.List[kweb.state.ObservableList.Modification[TypeParam(bounds=[kotlin.Any])]],kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-listener.html
-$dokka.location:kweb.state/ObservableList/applyModifications/#kotlin.collections.List[kweb.state.ObservableList.Modification[TypeParam(bounds=[kotlin.Any])]]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/apply-modifications.html
+$dokka.location:kweb.state/ObservableList/addListener/#kotlin.Function1[kotlin.collections.Iterable[kweb.state.ObservableList.Modification[TypeParam(bounds=[kotlin.Any])]],kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/add-listener.html
+$dokka.location:kweb.state/ObservableList/applyModifications/#kotlin.collections.Iterable[kweb.state.ObservableList.Modification[TypeParam(bounds=[kotlin.Any])]]/PointingToDeclaration/kweb-core/kweb.state/-observable-list/apply-modifications.html
 $dokka.location:kweb.state/ObservableList/clear/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/clear.html
 $dokka.location:kweb.state/ObservableList/close/#/PointingToDeclaration/kweb-core/kweb.state/-observable-list/close.html
 $dokka.location:kweb.state/ObservableList/contains/#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb.state/-observable-list/contains.html
