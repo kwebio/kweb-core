@@ -33,6 +33,10 @@ jobs:
         run: |
           cd docs
           mdbook build
+      - name: Validate hyperlinks
+        uses: untitaker/hyperlink@0.1.26
+        with:
+          args: docs/book --sources src/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
