@@ -165,7 +165,7 @@ class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override v
     fun move(oldPosition: Int, newPosition: Int) =
         applyModifications(listOf(Modification.Move(oldPosition, newPosition)))
 
-    fun applyModifications(modifications: List<Modification<ITEM>>) {
+    private fun applyModifications(modifications: List<Modification<ITEM>>) {
         synchronized(items) {
             for (change in modifications) {
                 when (change) {

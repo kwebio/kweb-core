@@ -10,6 +10,7 @@ import kweb.html.events.EventGenerator
 import kweb.html.events.OnImmediateReceiver
 import kweb.html.events.OnReceiver
 import kweb.util.random
+import kotlin.math.abs
 
 /**
  * Represents the in-browser Document Object Model, corresponding to the JavaScript
@@ -84,7 +85,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Document {
-        val callbackId = Math.abs(random.nextInt())
+        val callbackId = abs(random.nextInt())
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """

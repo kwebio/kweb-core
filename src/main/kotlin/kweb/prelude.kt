@@ -720,6 +720,7 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
 /**
  * Render each element of a List
  */
+@Deprecated("Use kweb.state.renderEach instead", ReplaceWith("renderEach(list, block)", "kweb.state.renderEach"))
 fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCreator<Element>.(value: KVar<T>) -> Unit) {
     /*
      * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing

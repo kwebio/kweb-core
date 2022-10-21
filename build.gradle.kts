@@ -8,6 +8,8 @@ plugins {
 }
 
 group = "com.github.kwebio"
+
+// This will be overridden by Github Actions to use the correct release version
 version = "0.0.1-SNAPSHOT"
 
 tasks.test {
