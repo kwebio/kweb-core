@@ -2,6 +2,10 @@ package kweb.docs
 
 import kweb.*
 
+/*
+ * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
+ */
+
 fun main() {
     Kweb(port = 16097) {
 // ANCHOR: attach_1
@@ -25,9 +29,10 @@ doc.body {
 
         // ANCHOR: immediate
 doc.body {
-    val input = input(type = InputType.text)
-    input.on.keypress { keypressEvent ->
-        println("Key Pressed: ${keypressEvent.key}")
+    val input = button(type = ButtonType.button)
+    val label = span().text("Not clicked")
+    input.onImmediate.click {
+        label.text("Clicked!")
     }
 }
         // ANCHOR_END: immediate

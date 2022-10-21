@@ -3,7 +3,6 @@ package kweb
  import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.JsonNull
  import kweb.util.json
-
 val attr: MutableMap<String, JsonPrimitive> get() = AttributeBuilder()
 
 open class AttributeBuilder : MutableMap<String, JsonPrimitive> by LinkedHashMap()
@@ -27,27 +26,14 @@ fun Map<String, JsonPrimitive>.set(key: String, value: JsonPrimitive): Map<Strin
 fun Map<String, JsonPrimitive>.id(id: String): Map<String, JsonPrimitive> = set("id", id.json)
 
 fun Map<String, JsonPrimitive>.classes(classes: Iterable<String>, condition: Boolean = true): Map<String, JsonPrimitive> {
-    if (condition) {
-        var existing: List<String>? = null
-        val classAttributeValue = if (get("class") != null) {
-            get("class")!!.content
-        } else {
-            ""
-        }
-        existing = when (classAttributeValue) {
-            "" -> listOf()
-            is String -> classAttributeValue.split(' ')
-            else -> listOf()
-        }
-        // TODO: This is inefficient when classes() is called multiple times
-        val classString = if (existing != null) {
-            JsonPrimitive((existing + classes).joinToString(separator = " "))
-        } else {
-            JsonPrimitive(classes.joinToString(separator = ""))
-        }
-        return set("class", classString)
+    return if (condition) {
+        val attributeValue : String? = get("class")?.content
+        val existing : List<String> = attributeValue?.split(' ') ?: emptyList()
+        val classString = JsonPrimitive((existing + classes).joinToString(separator = " "))
+
+        set("class", classString)
     } else {
-        return this
+        this
     }
 }
 

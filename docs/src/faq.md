@@ -19,45 +19,34 @@ Of all web frameworks we're aware of, [Vaadin](https://vaadin.com/) is
 the closest in design and philosophy to Kweb, but there are also
 important differences:
 
--   Kweb is *far* more lightweight than Vaadin. At the time of writing,
+- Kweb is *far* more lightweight than Vaadin. At the time of writing,
     [kweb-core](https://github.com/kwebio/kweb-core) is about 4,351
     lines of code, while
     [vaadin/framework](https://github.com/vaadin/framework) is currently
     502,398 lines of code, almost a 100:1 ratio!
--   Vaadin doesn't have any equivalent feature to Kweb's [immediate
-    events](https://docs.kweb.io/en/latest/events.html#immediate-events),
-    which has led to frequent
-    [complaints](https://stackoverflow.com/a/22848521/16050) of
-    sluggishness from Vaadin users because a server round-trip is
-    required to update the DOM.
--   Vaadin brought a more desktop-style of user interface to the web
+- Vaadin doesn't have any equivalent feature to Kweb's [immediate
+    events](https://docs.kweb.io/book/events.html#immediate-events),
+    which has led to frequent complaints of sluggishness from Vaadin
+    users because a server round-trip is required to update the DOM.
+- Vaadin brought a more desktop-style of user interface to the web
     browser, but since then we've realized that users generally prefer
     their websites to look like websites.
--   This is why Kweb's philosophy is to be a thin interface between
+- This is why Kweb's philosophy is to be a thin interface between
     server logic and the user's browser, leveraging existing tools from
-    the JavaScript ecosystem [when it makes
-    sense](https://docs.kweb.io/en/latest/style.html).
--   Kweb was built natively for Kotlin, and takes advantage of all of
+    the JavaScript ecosystem.
+- Kweb was built natively for Kotlin, and takes advantage of all of
     its language features like
     [coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
     and the flexible DSL-like syntax. Because of this Kweb code can be a
     lot more concise, without sacrificing readability.
--   In Vaadin's favor, it has been a commercial product since 2006, it
+- In Vaadin's favor, it has been a commercial product since 2006, it
     is extremely mature and has a vast developer ecosystem, while Kweb
-    is still pre-1.0.
+    is still relatively new.
 
 ## Is there a larger working example?
 
-Yes, here is a simple [todo
-list](https://github.com/kwebio/kweb-demos/tree/master/todoList)
-implementation which demonstrates many of Kweb's features.
-
-You can find a copy of this demo running here:
-<http://demo.kweb.io:7659/>
-
-It's running on a \$50/month EC2 instance. Try visiting the same list
-URL in two different browser windows and notice how they synchronize in
-realtime.
+Yes, [freenet.org](https://github.com/freenet/freenetorg-website/) is running on Kweb,
+which is in-turn running on Google Cloud Platform with FireStore as a database.
 
 You can see a number of other example Kweb projects here:
 [kwebio/kweb-demos](https://github.com/kwebio/kweb-demos/tree/master/)
@@ -102,13 +91,13 @@ on the programmer.
 
 Picking a framework is stressful. Pick the wrong one and perhaps the
 company behind it goes out of business, meaning your entire app is now
-built on something obsolete. We```ve been there.
+built on something obsolete. We've been there.
 
-Kweb```s development is driven by a community of volunteers. We welcome
-contributions from anyone, but Kweb doesn```t depend on any sponsoring
+Kweb's development is driven by a community of volunteers. We welcome
+contributions from anyone, but Kweb doesn't depend on any sponsoring
 company.
 
-Because of the powerful abstractions it```s built on, Kweb also has the
+Because of the powerful abstractions it's built on, Kweb also has the
 advantage of simplicity (\<5k loc). This makes it easier for people to
 contribute, and less code means fewer bugs.
 
@@ -118,12 +107,16 @@ frequent.
 
 ## How is "Kweb" pronounced?
 
-"Kay-web".
+One syllable, like **qu** from **qu**ick - **qu**-**web**.
 
 ## Can Kweb be embedded in an existing Ktor app?
 
 Yes! Please see [this
 example](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
+
+## How do I enable auto-reloading?
+
+See Ktor's [auto-reloading](https://ktor.io/docs/auto-reload.html) documentation.
 
 ## I have a question not answered here
 

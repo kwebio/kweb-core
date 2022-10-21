@@ -104,7 +104,6 @@ class Kweb private constructor(
      *     }
      * ```
      *
-     * @see kweb.demos.feature.kwebFeature for an example
      */
     companion object Feature : BaseApplicationPlugin<Application, Feature.Configuration, Kweb> {
         // Note that this is not KwebConfiguration, which is a different thing
@@ -112,8 +111,6 @@ class Kweb private constructor(
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
             var kwebConfig: KwebConfiguration = KwebDefaultConfiguration()
-
-
 
             @Deprecated("Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode")
             var buildPage: (WebBrowser.() -> Unit)? = null
@@ -126,8 +123,9 @@ class Kweb private constructor(
             configuration.kwebConfig.validate()
             val feature = Kweb(configuration.debug, configuration.plugins, configuration.kwebConfig)
 
+            @Suppress("DEPRECATION")
             configuration.buildPage?.let {
-                logger.info { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
+                logger.warn { "Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version" }
                 pipeline.installKwebOnRemainingRoutes(it)
             }
             feature.installRequiredKwebComponents(pipeline)
@@ -461,13 +459,17 @@ class Kweb private constructor(
      * code-change, for example.
      *
      * If there are a large number of connected clients this could place a lot of load on the server.  An
-     * unexpected page refresh may also confuse website visitors.
+     * unexpected page refresh may also confuse website visitors or cause the loss of unsaved form data.
      */
-    fun refreshAllPages() = GlobalScope.launch(Dispatchers.Default) {
-        for (client in clientState.asMap().values) {
-            val refreshCall = FunctionCall(js = "window.location.reload(true);")
-            val message = Server2ClientMessage(client.id, refreshCall)
-            client.clientConnection.send(Json.encodeToString(message))
+    fun refreshAllPages() {
+        if (!debug) {
+            logger.warn { "refreshAllPages() called but Kweb is not in debug mode, ignored" }
+        } else {
+            for (client in clientState.asMap().values) {
+                val refreshCall = FunctionCall(js = "window.location.reload(true);")
+                val message = Server2ClientMessage(client.id, refreshCall)
+                client.clientConnection.send(Json.encodeToString(message))
+            }
         }
     }
 

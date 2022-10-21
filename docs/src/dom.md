@@ -2,22 +2,28 @@
 
 ## Creating DOM Elements and Fragments
 
-Let's create a `<button>` as a child of the `<body>` element:
+Let's create a `<button>` as a child of the `<body>` element and set its text:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/dom.kt:create}}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:create1}}
+```
+
+The Kweb DSL can be used to create nested elements:
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:create2}}
 ```
 
 ## Element Attributes
 
-If you assign the button element to a val then you can also modify its
+If you assign the button element to a val then you can also set its
 attributes:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr}}
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:setattributes}}
 ```
 
-Attributes can also be specified in an `attr` block:
+Attributes can also be specified in an `element` block:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr2}}
@@ -38,8 +44,7 @@ together:
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:children}}
 ```
 
-Alternatively we can use the [new {}]{.title-ref} function on Elements
-to add children to a pre-existing Element:
+Alternatively we can use the `new {}` function to add children to a pre-existing Element:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:children_new}}
@@ -59,17 +64,9 @@ Events can evaluate a JavaScript expression and send the result to the
 server, in this case we give it an expression that will retrieve the
 value of an InputElement, conveniently provided by valueJsExpression.
 
-::: note
-::: title
-Note
-:::
-
-See the [Observer Pattern &
-State](https://docs.kweb.io/en/latest/state.html#binding-a-kvar-to-an-input-element-s-value)
-section for
-:::
-
-another way to read input element values.
+**Note:** See the [Observer Pattern &
+State](https://docs.kweb.io/book/state.html#binding-a-kvar-to-an-input-elements-value)
+section for another way to read input element values.
 
 ## Supported HTML tags
 

@@ -11,12 +11,15 @@ server and the DOM within the end-user's web browser. Once this mapping
 is defined, simply modify this state and the change will propagate
 automatically to the browser.
 
-## Building blocks
+## The KVar Class
 
 A
-[KVar](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/state/KVar.kt)
-class contains a single typed object, which can change over time. For
-example:
+[KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)
+is an observable container. It contains a single typed object, which can change over time, similar to an 
+[AtomicReference](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html). 
+You can add listeners to a KVar to be notified immediately when it changes.
+
+For example:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:createkvar}}
@@ -52,18 +55,13 @@ counter: 5, doubled: 10
 counter: 6, doubled: 12
 ```
 
-Note that counterDoubled updates automatically.
+Note that `counterDoubled` updates automatically, because mapped KVars listen to the original for changes.
 
-::: note
-::: title
-Note
-:::
+The `KVar` class is a subclass of [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html), 
+which is a read-only version of `KVar`.
 
-KVars should only be used to store values that are themselves immutable,
-such as an Int, String, or a Kotlin [data
-class](https://kotlinlang.org/docs/reference/data-classes.html) with
-immutable parameters.
-:::
+*Note:* KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
+Kotlin [data class](https://kotlinlang.org/docs/reference/data-classes.html) with immutable parameters.
 
 ## KVars and the DOM
 
@@ -97,11 +95,10 @@ immediately in the KVar, for example:
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:mapkvar}}
 ```
 
-This will also work for \<option\> and \<textarea\> elements which also
-have values.
+This will also work for `<option>` and `<textarea>` elements which also have values.
 
 See also:
-[ValueElement.value](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/prelude.kt#L232)
+[ValueElement.value](https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html#-178499702%2FProperties%2F769193423)
 
 ## Rendering state to a DOM fragment
 
@@ -109,7 +106,8 @@ But what if you want to do more than just modify a single element based
 on a KVar, what if you want to modify a whole tree of elements?
 
 This is where the
-[render](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state.persistent/render.html)
+[render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html)
+
 function comes in:
 
 ```kotlin
@@ -129,20 +127,32 @@ render {} blocks can be nested, it's possible to be very selective
 about what parts of the DOM must be modified in response to changes in
 state.
 
-::: note
-::: title
-Note
-:::
-
-Kweb will only re-render a DOM fragment if the value of the KVar
+**Note:** Kweb will only re-render a DOM fragment if the value of the KVar
 actually changes so you should avoid \"unwrapping\" KVars with a
 *render()* or *.text()* call before you need to.
 
-The [KVal.map
-{}](https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html)
-function is a powerful tool for manipulating KVals and KVars without
-unwrapping them.
-:::
+The [KVal.map {}](https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html)
+function is a powerful tool for manipulating KVals and KVars without unwrapping them.
+
+## Rendering lists with renderEach
+
+The `renderEach()` function allows you to render a list of items, while 
+automatically updating the rendered DOM in response to changes in the list. 
+
+While a `KVar<List<FooBar>>` could be passed to `render()`, it would be
+very inefficient because the entire list would be re-rendered every time.
+`renderEach()` will only re-render the elements that have changed.
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:renderEach}}
+```
+
+The items must be stored in an `ObservableList`, which implements the 
+`MutableList` interface.
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:rendereach}}
+```
 
 ## Extracting data class properties
 
@@ -157,10 +167,9 @@ which will update the original KVar if changed:
 
 ## Reversible mapping
 
-If you check the type of *counterDoubled*, you```ll notice that it```s a
-*KVal* rather than a *KVar*.
-[KVal](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/index.html)```s
-values may not be modified directly, so this won```t be permitted:
+If you check the type of *counterDoubled*, you'll notice that it's a
+*KVal* rather than a *KVar*, meaning it cannot be modified. This will
+result in a compilation error:
 
 ```kotlin
 val counter = KVar(0)
@@ -169,7 +178,7 @@ counterDoubled.value = 20 // <--- This won't compile
 ```
 
 The *KVar* class has a second
-[map()](https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-var/map.html)
+[map()](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/map.html)
 function which takes a *ReversibleFunction* implementation. This version
 of *map* will produce a KVar which can be modified, as follows:
 
@@ -179,6 +188,6 @@ of *map* will produce a KVar which can be modified, as follows:
 
 Reversible mappings are an advanced feature that you only need if you
 want the mapped value to be a mutable KVar. Most of the time the simple
-[KVal.map {}](https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html)
+[KVal.map {}](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/map.html)
 function is what you need.
 

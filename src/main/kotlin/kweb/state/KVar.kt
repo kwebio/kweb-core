@@ -11,7 +11,17 @@ import kotlin.reflect.full.memberFunctions
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * A KVar is an observable container for a value of type T.  It must be initialized with [initialValue], and
+ * this can then be modified by setting the [KVar.value] property. Listeners may be added using
+ * [KVar.addListener], and these will be called whenever the value is changed.
+ */
 class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
+
+    /**
+     * The current value of this KVar.  Setting this property to a different value will notify
+     * all listeners, but if the new value is the same as the old value then it will be ignored.
+     */
     override var value: T by Delegates.observable(initialValue) { _, old, new ->
         if (old != new) {
             verifyNotClosed("modify KVar.value")
@@ -25,6 +35,13 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
         }
     }
 
+    /**
+     * Create another KVar that is a bi-directional mapping of this KVar.  [ReversibleFunction.invoke] will be called
+     * whenever this KVar changes, and the new KVar will be updated with the result of this mapping function.
+     *
+     * Similarly, if the other KVar is modified then this KVar will be updated with the result of the
+     * [ReversibleFunction.reverse] function.
+     */
     fun <O : Any?> map(reversibleFunction: ReversibleFunction<T, O>): KVar<O> {
         verifyNotClosed("create a mapping")
         val mappedKVar = KVar(reversibleFunction(value))
@@ -53,6 +70,10 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 
 }
 
+/**
+ * Use reflection to create a [KVar] that bi-directionally maps to a mutable property of an
+ * object.
+ */
 inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): KVar<O> {
     return this.map(object : ReversibleFunction<T, O>("prop: ${property.name}") {
 
@@ -70,6 +91,9 @@ inline fun <O, reified T : Any?> KVar<T>.property(property: KProperty1<T, O>): K
     })
 }
 
+/**
+ * Bi-directionally map a [KVar] with nullable type to its non-nullable equivalent.
+ */
 fun <O : Any> KVar<O?>.notNull(default: O? = null, invertDefault: Boolean = true): KVar<O> {
     return this.map(object : ReversibleFunction<O?, O>(label = "notNull") {
         override fun invoke(from: O?): O = from ?: default!!
@@ -80,12 +104,3 @@ fun <O : Any> KVar<O?>.notNull(default: O? = null, invertDefault: Boolean = true
 
     })
 }
-
-@ExperimentalContracts
-fun <T : Any> KVar<T>.modify(f: (T) -> T) {
-    contract {
-        callsInPlace(f, InvocationKind.EXACTLY_ONCE)
-    }
-    this.value = f(this.value)
-}
-

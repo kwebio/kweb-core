@@ -1,10 +1,11 @@
 package kweb.docs
 
 import kweb.*
-import kweb.state.KVar
-import kweb.state.ReversibleFunction
-import kweb.state.property
-import kweb.state.render
+import kweb.state.*
+
+/*
+ * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
+ */
 
 fun state1() {
     // ANCHOR: createkvar
@@ -26,7 +27,9 @@ println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 counter.value = 6
 println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
     // ANCHOR_END: mapkvar
+}
 
+fun state2() {
     // ANCHOR: kvartext
 Kweb(port = 2135) {
     doc.body {
@@ -69,16 +72,33 @@ Kweb(port = 16097) {
 list.value = listOf("four", "five", "six")
     // ANCHOR_END: render2
 
-    // ANCHOR: dataclass
+    fun renderEach1() {
+        Kweb(port = 16097) {
+            // ANCHOR: rendereach
+doc.body {
+    val obsList = ObservableList(listOf("one", "two", "three"))
+    ul {
+        renderEach(obsList) { item ->
+            li().text(item)
+        }
+    }
+    obsList.add(1, "one and a half")
+    obsList.removeAt(2)
+    obsList.move(0, 1)
+    obsList[0] = "ONE"
+}
+            // ANCHOR_END: rendereach
+        }
+    }
+
+// ANCHOR: dataclass
 data class User(val name: String)
 
 val user = KVar(User("Ian"))
 val name = user.property(User::name)
 name.value = "John"
 println(user) // Will print: KVar(User(name = "John"))
-    // ANCHOR_END: dataclass
-
-}
+// ANCHOR_END: dataclass
 
 fun state2() {
     val counter = KVar(0)
@@ -96,3 +116,5 @@ println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 // output: counter: 6, doubled: 12
 // ANCHOR_END: reversible1
     }
+}
+
