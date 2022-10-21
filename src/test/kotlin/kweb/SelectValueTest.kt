@@ -61,8 +61,8 @@ class SelectValueTestApp {
     val server: Kweb = Kweb(port = 7668) {
         doc.body {
             val select = select(name = "pets") {
-                option().setAttribute("value", "dog").text("Dog")
-                option().setAttribute("value", "cat").text("Cat")
+                option().set("value", "dog").text("Dog")
+                option().set("value", "cat").text("Cat")
             }
             selectValue = select.value
             selectValue.addListener { old, new ->

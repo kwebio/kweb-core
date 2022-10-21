@@ -3,13 +3,13 @@
 <div align="center">
   <!-- Github Actions -->
   <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
-    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=CI&style=flat-square" alt="continuous integration status" />
+    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square&logo=github%20actions" alt="continuous integration status" />
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
-    <img src="https://img.shields.io/matrix/kweb:matrix.org?label=matrix&logo=matrix&style=flat-square&color=blue" alt="matrix" />
+    <img src="https://img.shields.io/matrix/kweb:matrix.org?style=flat-square&color=blue&logo=matrix" alt="matrix" />
   </a>
   <a href="https://jitpack.io/#kwebio/kweb-core">
-    <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=latest&sort=semver&flat-square&color=bluevilot" />
+    <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=dependency&sort=semver&style=flat-square&color=blueviolet&logo=gradle&include_prereleases" />
   </a>
 </div>
 
@@ -25,28 +25,38 @@ Kweb is a new way to create beautiful, efficient, and scalable websites in [Kotl
 
 ```kotlin
 import kweb.*
+import kweb.InputType.text
+import kweb.plugins.fomanticUI.fomantic
+import kweb.plugins.fomanticUI.fomanticUIPlugin
 
-fun main() {
-  Kweb(port = 16097) {
-    doc.body {
-      h1().text("Hello World!")
+fun main(args: Array<String>) {
+    Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
+        doc.body {
+            div(fomantic.ui.segment) {
+                h1().text("Enter Your Name")
+                val nameInput = input(type = text)
+                br()
+                span().text(nameInput.value.map { "Hello, $it" })
+            }
+        }
     }
-  }
 }
 ```
 
-## API Stability
+### Result
 
-Kweb's API is likely to change between now and our 1.0.0 release, so you may need to modify your code to stay current 
-with Kweb versions. We won't do this without a good reason.
+This demo illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
+[modifying elements](https://docs.kweb.io/book/dom.html#adding-attributes), 
+[KVars](https://docs.kweb.io/book/state.html#building-blocks), and binding 
+[input elements](https://docs.kweb.io/book/dom.html#input-elements).
+
+![video](readme-video.gif)
 
 ## Learn More
 
 * [The Kweb Book](http://docs.kweb.io/book) (user manual)
-* [API Documentation](https://docs.kweb/io/api)
-* [Example Project](https://github.com/freenet/freenetorg-website/tree/staging/src/main/kotlin/org/freenet/website)
-* [Template Repo](https://github.com/kwebio/kweb-template)
-* [Examples](https://github.com/kwebio/kweb-demos)
+* [API Documentation](https://docs.kweb.io/api)
+* [Example Project](https://github.com/freenet/freenetorg-website/)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
 * [Chat with us](https://matrix.to/#/#kweb:matrix.org)
 * [Frequently Asked Questions](https://docs.kweb.io/book/faq.html)

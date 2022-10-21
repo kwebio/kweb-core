@@ -1,5 +1,6 @@
 [book]
 authors = ["Ian Clarke"]
+description = "User manual for the Kweb web framework"
 language = "en"
 multilingual = false
 src = "src"

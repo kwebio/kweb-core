@@ -26,7 +26,7 @@ fun ElementCreator<HeadElement>.title(
         new: (ElementCreator<TitleElement>.() -> Unit)? = null
 ): TitleElement {
     return TitleElement(element("title", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -37,7 +37,7 @@ fun ElementCreator<Element>.ul(
     new: (ElementCreator<ULElement>.() -> Unit)? = null
 ): ULElement {
     return ULElement(element("ul", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -48,7 +48,7 @@ fun ElementCreator<Element>.ol(
     new: (ElementCreator<OLElement>.() -> Unit)? = null
 ): OLElement {
     return OLElement(element("ol", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -59,7 +59,7 @@ fun ElementCreator<Element>.li(
     new: (ElementCreator<LIElement>.() -> Unit)? = null
 ): LIElement {
     return LIElement(element("li", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -81,7 +81,7 @@ fun ElementCreator<Element>.button(
                 .set("autofocus", JsonPrimitive(autofocus))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -92,7 +92,7 @@ fun ElementCreator<Element>.span(
     new: (ElementCreator<SpanElement>.() -> Unit)? = null
 ): SpanElement {
     return SpanElement(element("span", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -103,7 +103,7 @@ fun ElementCreator<Element>.div(
     new: (ElementCreator<DivElement>.() -> Unit)? = null
 ): DivElement {
     return DivElement(element("div", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -114,7 +114,7 @@ fun ElementCreator<Element>.i(
     new: (ElementCreator<IElement>.() -> Unit)? = null
 ): IElement {
     return IElement(element("i", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -125,12 +125,11 @@ fun ElementCreator<Element>.form(
     new: (ElementCreator<FormElement>.() -> Unit)? = null
 ): FormElement {
     return FormElement(element("form", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
 open class AElement(parent: Element) : Element(parent) {
-
     /**
      * A convenience property to set the href attribute of this anchor element. If the value begins with
      * "/" (a relative URL) then this will override the default click behavior and set the [WebBrowser.url]
@@ -161,7 +160,7 @@ fun ElementCreator<Element>.a(
     new: (ElementCreator<AElement>.() -> Unit)? = null
 ): AElement {
     return AElement(element("a", attributes.set("href", JsonPrimitive(href)))).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -173,7 +172,7 @@ fun ElementCreator<Element>.option(
     new: (ElementCreator<OptionElement>.() -> Unit)? = null
 ): OptionElement {
     return OptionElement(element("option", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -184,7 +183,7 @@ fun ElementCreator<Element>.h1(
     new: (ElementCreator<H1Element>.() -> Unit)? = null
 ): H1Element {
     return H1Element(element("h1", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -195,7 +194,7 @@ fun ElementCreator<Element>.h2(
     new: (ElementCreator<H2Element>.() -> Unit)? = null
 ): H2Element {
     return H2Element(element("h2", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -206,7 +205,7 @@ fun ElementCreator<Element>.h3(
     new: (ElementCreator<H3Element>.() -> Unit)? = null
 ): H3Element {
     return H3Element(element("h3", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -217,7 +216,7 @@ fun ElementCreator<Element>.h4(
     new: (ElementCreator<H4Element>.() -> Unit)? = null
 ): H4Element {
     return H4Element(element("h4", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -228,7 +227,7 @@ fun ElementCreator<Element>.h5(
     new: (ElementCreator<H5Element>.() -> Unit)? = null
 ): H5Element {
     return H5Element(element("h5", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -239,7 +238,7 @@ fun ElementCreator<Element>.p(
     new: (ElementCreator<PElement>.() -> Unit)? = null
 ): PElement {
     return PElement(element("p", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -250,7 +249,7 @@ fun ElementCreator<Element>.nav(
     new: (ElementCreator<NavElement>.() -> Unit)? = null
 ): NavElement {
     return NavElement(element("nav", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -261,7 +260,7 @@ fun ElementCreator<Element>.section(
     new: (ElementCreator<SectionElement>.() -> Unit)? = null
 ): SectionElement {
     return SectionElement(element("section", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -272,7 +271,7 @@ fun ElementCreator<Element>.img(
     new: (ElementCreator<ImageElement>.() -> Unit)? = null
 ): ImageElement {
     return ImageElement(element("img", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -290,7 +289,7 @@ fun ElementCreator<Element>.canvas(
                 .set("width", JsonPrimitive(width)).set("height", JsonPrimitive(height))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -301,7 +300,7 @@ fun ElementCreator<Element>.br(
     new: (ElementCreator<BrElement>.() -> Unit)? = null
 ): BrElement {
     return BrElement(element("br", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -320,7 +319,7 @@ fun ElementCreator<Element>.meta(
                 .set("charset", JsonPrimitive(charset))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -368,7 +367,7 @@ fun ElementCreator<Element>.input(
                 .set("size", JsonPrimitive(size))
         ), initialValue = initialValue
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -384,7 +383,7 @@ fun ElementCreator<Element>.textArea(
                 .set("required", JsonPrimitive(required))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -396,8 +395,6 @@ class SelectElement(parent: Element, initialValue: String? = null) :
 
 /**
  * [<SELECT>](https://www.w3schools.com/tags/tag_select.asp)
- *
- * // @sample select_sample
  */
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
@@ -411,21 +408,7 @@ fun ElementCreator<Element>.select(
                 .set("required", JsonPrimitive(required))
         )
     ).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
-    }
-}
-
-private fun select_sample() {
-    Kweb(port= 7668) {
-        doc.body {
-            val select = select(name = "pets") {
-                option().setAttribute("value", "dog").text("Dog")
-                option().setAttribute("value", "cat").text("Cat")
-            }
-            select.value.addListener { old, new ->
-                println("Value of select changed from $old to $new")
-            }
-        }
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -442,18 +425,22 @@ fun ElementCreator<Element>.textArea(
     new: (ElementCreator<TextAreaElement>.() -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(element("textArea", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
-open class LabelElement(wrapped: Element) : Element(wrapped)
+open class LabelElement(wrapped: Element) : Element(wrapped) {
+    fun setFor(forId: String) = this.set("for", forId)
+    fun setFor(forId: KVal<String>) = set("for", forId.map { JsonPrimitive(it) })
+
+}
 
 fun ElementCreator<Element>.label(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<LabelElement>.() -> Unit)? = null
 ): LabelElement {
     return LabelElement(element("label", attributes)).also {
-        if (new != null) new(ElementCreator(parent = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
 
@@ -494,8 +481,6 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
      * A KVar bidirectionally synchronized with the [value of a select element](https://www.w3schools.com/jsref/prop_select_value.asp).
      * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
      * if the KVar is changed.
-     *
-     * // @sample select_sample
      */
     var value: KVar<String>
         get() {
@@ -724,7 +709,7 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
 fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCreator<Element>.(value: KVar<T>) -> Unit) {
     /*
      * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing
-     *       DOM elements - this is inefficient.
+     *       DOM elements - this is inefficient and should use renderEach() with an ObservableList instead.
      */
     render(list.map { it.size }) { size ->
         for (ix in 0 until size) {
@@ -735,8 +720,6 @@ fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCr
 
 /**
  * Create a [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
- *
- * // @sample fileReaderSample
  */
 fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, JsonPrimitive> = attr): FileFormInput {
     val inputElement = input(attributes, InputType.file, name, initialValue, size, placeholder)
@@ -745,17 +728,63 @@ fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = nu
     return formInput
 }
 
-fun fileReaderSample() {
-    val imageString = KVar(JsonPrimitive(""))
-    Kweb(port = 123) {
-        doc.body.new {
-            val input = fileInput()
-            input.onFileSelect {
-                input.retrieveFile {
-                    imageString.value = JsonPrimitive(it.base64Content)
-                }
-            }
-            img().setAttribute("src", imageString)
-        }
+fun ElementCreator<Element>.table(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TableElement>.() -> Unit)? = null
+): TableElement {
+    return TableElement(element("table", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
     }
 }
+
+open class TableElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.thead(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TheadElement>.() -> Unit)? = null
+): TheadElement {
+    return TheadElement(element("thead", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class TheadElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.th(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<ThElement>.() -> Unit)? = null
+): ThElement {
+    return ThElement(element("th", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class ThElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.tbody(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TbodyElement>.() -> Unit)? = null
+): TbodyElement {
+    return TbodyElement(element("tbody", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class TbodyElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.tr(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TrElement>.() -> Unit)? = null
+): TrElement {
+    return TrElement(element("tr", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+open class TrElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.td(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TdElement>.() -> Unit)? = null
+): TdElement {
+    return TdElement(element("td", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+    }
+}
+class TdElement(parent: Element) : Element(parent)

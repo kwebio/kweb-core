@@ -3,7 +3,7 @@ name: Deploy static content to Pages
 
 on:
   workflow_run:
-    workflows: ["build", "documentation"]
+    workflows: ["build", "mdbook-docs"]
     types:
       - completed
 
@@ -19,7 +19,9 @@ permissions:
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  #  Set to false by @sanity because cancellations are reported as failures
+  #  which is annoying.
+  cancel-in-progress: false
 
 jobs:
   # Single deploy job since we're just deploying

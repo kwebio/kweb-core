@@ -34,6 +34,10 @@ object RenderSpanNames{
     const val listEndMarkerClassName = "rLEnd"
 }
 
+/**
+ * Render the value of a [KVal] into DOM elements, and automatically re-render those
+ * elements whenever the value changes.
+ */
 fun <T : Any?> ElementCreator<*>.render(
     value: KVal<T>,
     block: ElementCreator<Element>.(T) -> Unit
@@ -44,8 +48,8 @@ fun <T : Any?> ElementCreator<*>.render(
     val renderState = AtomicReference(NOT_RENDERING)
 
     //TODO this could possibly be improved
-    val renderFragment: RenderFragment = if (parent.browser.isCatchingOutbound() == null) {
-        parent.browser.batch(WebBrowser.CatcherType.RENDER) {
+    val renderFragment: RenderFragment = if (element.browser.isCatchingOutbound() == null) {
+        element.browser.batch(WebBrowser.CatcherType.RENDER) {
             val startSpan = span().classes(RenderSpanNames.startMarkerClassName)
             val endSpan = span().classes(RenderSpanNames.endMarkerClassName)
             RenderFragment(startSpan.id, endSpan.id)
@@ -57,14 +61,14 @@ fun <T : Any?> ElementCreator<*>.render(
     }
 
     fun eraseBetweenSpans() {
-        parent.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
+        element.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
         previousElementCreator.getAndSet(null)?.cleanup()
     }
 
     fun eraseAndRender() {
         eraseBetweenSpans()
 
-        previousElementCreator.set(ElementCreator<Element>(this.parent, this, insertBefore = renderFragment.endId))
+        previousElementCreator.set(ElementCreator<Element>(this.element, this, insertBefore = renderFragment.endId))
         renderState.set(RENDERING_NO_PENDING_CHANGE)
         val elementCreator = previousElementCreator.get()
         if (elementCreator != null) {
@@ -83,8 +87,8 @@ fun <T : Any?> ElementCreator<*>.render(
     //It's purpose is to monitor renderState, and call eraseAndRender() if the page is rendering.
     fun renderLoop() {
         do {
-            if (parent.browser.isCatchingOutbound() == null) {
-                parent.browser.batch(WebBrowser.CatcherType.RENDER) {
+            if (element.browser.isCatchingOutbound() == null) {
+                element.browser.batch(WebBrowser.CatcherType.RENDER) {
                     eraseAndRender()
                 }
             } else {
@@ -149,6 +153,7 @@ class RenderFragment(val startId: String, val endId: String) {
 
 class RenderHandle<ITEM : Any>(val renderFragment: RenderFragment, val kvar: KVar<ITEM>)
 
+<<<<<<< HEAD
 class ObservableList<ITEM : Any>(val initialItems: MutableList<ITEM>, override val size: Int = initialItems.size) : MutableList<ITEM>{
 
     private val items = ArrayList(initialItems)
@@ -469,6 +474,8 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
     }
 }
 
+=======
+>>>>>>> 7a9419425fb93f45388d332584a6de47d42bd980
 private enum class RenderState {
     NOT_RENDERING, RENDERING_NO_PENDING_CHANGE, RENDERING_WITH_PENDING_CHANGE
 }

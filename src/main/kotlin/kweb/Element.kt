@@ -88,22 +88,28 @@ open class Element(
 
     /**
      * A utility function to set multiple attributes in a single call, in the
-     * style of [mapOf]. This is a wrapper around [setAttribute].
+     * style of [mapOf]. This is a wrapper around [set].
      */
     fun setAttributes(vararg pair: Pair<String, JsonPrimitive>): Element {
-        pair.forEach { (k, v) -> setAttribute(k, v) }
+        pair.forEach { (k, v) -> set(k, v) }
         return this
     }
 
     /**
      * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
      * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
+     */
+    operator fun set(name: String, value: JsonPrimitive) = set(name, value, null)
+
+    /**
+     * Set an attribute of this element.  For example `element["href"] = "http://kweb.io"`
+     * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
      *
      * @param namespace If non-null elements will be created with [Element.setAttributeNS()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttributeNS)
      *                  with the specified namespace. If null then Kweb will use [Element.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
 
      */
-    fun setAttribute(name: String, value: JsonPrimitive, namespace: String? = null): Element {
+    fun set(name : String, value : JsonPrimitive, namespace : String? = null) : Element {
         val jsoupDoc = browser.htmlDocument.get()
         val setAttributeJavaScript = when (namespace) {
             null -> "document.getElementById({}).setAttribute({}, {});"
@@ -127,38 +133,67 @@ open class Element(
         return this
     }
 
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name: String, value: JsonPrimitive) = setAttribute(name, value)
+    operator fun set(name: String, value: String) = set(name, JsonPrimitive(value))
 
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name: String, value: String) = setAttribute(name, JsonPrimitive(value))
+    operator fun set(name: String, value: Boolean) = set(name, JsonPrimitive(value))
 
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name: String, value: Boolean) = setAttribute(name, JsonPrimitive(value))
-
-    @Deprecated("use setAttribute() instead", replaceWith = ReplaceWith(expression = "setAttribute(name, value)"))
-    fun setAttributeRaw(name: String, value: Number) = setAttribute(name, JsonPrimitive(value))
-
-    fun setAttribute(name: String, value: String) = setAttribute(name, JsonPrimitive(value))
-
-    fun setAttribute(name: String, value: Boolean) = setAttribute(name, JsonPrimitive(value))
-
-    fun setAttribute(name: String, value: Number) = setAttribute(name, JsonPrimitive(value))
+    operator fun set(name: String, value: Number) = set(name, JsonPrimitive(value))
 
     /**
      * Set an attribute to the value in a [KVal], if the value changes the attribute
      * value will be updated automatically.
      */
-    fun setAttribute(name: String, oValue: KVal<out JsonPrimitive>): Element {
-        setAttribute(name, oValue.value)
-        val handle = oValue.addListener { _, newValue ->
-            setAttribute(name, newValue)
+    operator fun set(name: String, value: KVal<out JsonPrimitive>): Element {
+        set(name, value.value)
+        val handle = value.addListener { _, newValue ->
+            set(name, newValue)
         }
         this.creator?.onCleanup(true) {
-            oValue.removeListener(handle)
+            value.removeListener(handle)
         }
         return this
     }
+
+    /**
+     * Set an attribute of this element.  For example `a().setAttribute("href", "http://kweb.io")`
+     * will create an `<a>` element and set it to `<a href="http://kweb.io/">`.
+     *
+     * @param namespace If non-null elements will be created with [Element.setAttributeNS()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttributeNS)
+     *                  with the specified namespace. If null then Kweb will use [Element.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
+
+     */
+    @Deprecated("Use set() instead", ReplaceWith("set(name, value, namespace)"))
+    fun setAttribute(name: String, value: JsonPrimitive, namespace: String? = null): Element {
+        return set(name, value, namespace)
+    }
+
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttributeRaw(name: String, value: JsonPrimitive) = set(name, value)
+
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttributeRaw(name: String, value: String) = set(name, JsonPrimitive(value))
+
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttributeRaw(name: String, value: Boolean) = set(name, JsonPrimitive(value))
+
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttributeRaw(name: String, value: Number) = set(name, JsonPrimitive(value))
+
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: String) = set(name, JsonPrimitive(value))
+
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: Boolean) = set(name, JsonPrimitive(value))
+
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: Number) = set(name, JsonPrimitive(value))
+
+    /**
+     * Set an attribute to the value in a [KVal], if the value changes the attribute
+     * value will be updated automatically.
+     */
+    @Deprecated("use set() instead", replaceWith = ReplaceWith(expression = "set(name, value)"))
+    fun setAttribute(name: String, value: KVal<out JsonPrimitive>) = set(name, value)
 
     fun removeAttribute(name: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
@@ -223,11 +258,11 @@ open class Element(
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
      * this is a wrapper around [setAttribute].
      */
-    fun classes(value: KVal<String>) = setAttribute("class", value.map { it.json })
+    fun classes(value: KVal<String>) = set("class", value.map { it.json })
 
     /**
      * A convenience function to set the [class attribute](https://www.w3schools.com/html/html_classes.asp),
-     * this is a wrapper around [setAttribute].
+     * this is a wrapper around [set].
      */
     fun classes(vararg value: String) = setClasses(*value)
 
@@ -236,7 +271,7 @@ open class Element(
      * this is a wrapper around [setAttribute].
      */
     fun setClasses(vararg value: String): Element {
-        setAttribute("class", value.joinToString(separator = " ").json)
+        set("class", value.joinToString(separator = " ").json)
         return this
     }
 
@@ -315,7 +350,7 @@ open class Element(
     }
 
     fun disable(): Element {
-        setAttribute("disabled", JsonPrimitive(true))
+        set("disabled", JsonPrimitive(true))
         return this
     }
 
@@ -526,8 +561,6 @@ open class Element(
      * Return a KVar that is tied to a property related to an element, which will update when an specified
      * event fires on this element. This is a convenience wrapper around [bind].
      *
-     * // @sample kweb.InputElement.checked
-     *
      * @param accessor Function that takes an element id and returns a JavaScript expression to access that element
      * @param updateOnEvent The event to listen for that signifies this element has been updated
      * @param initialValue The initial value of the KVar
@@ -548,8 +581,6 @@ open class Element(
     /**
      * Return a KVar that is tied to a property related to an element, which will update when an specified
      * event fires on this element.
-     *
-     * // @sample kweb.InputElement.checked
      *
      * @param reader Function that takes an element id and returns a JavaScript expression to read that element
      * @param writer Function that takes an element id and a new value, and returns a JavaScript expression to
@@ -616,7 +647,7 @@ open class Element(
     /**
      * Determines whether this element will be [spellchecked](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck).
      */
-    fun spellcheck(spellcheck: Boolean = true) = setAttribute("spellcheck", JsonPrimitive(spellcheck))
+    fun spellcheck(spellcheck: Boolean = true) = set("spellcheck", JsonPrimitive(spellcheck))
 
     /**
      * Some convenience functions for modifying an element's [style attribute](https://www.w3schools.com/tags/att_style.asp).
@@ -637,8 +668,6 @@ open class Element(
      * in [Event.retrieved] when an event fires in the browser.
      * @param preventDefault Whether [preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
      *                       will be called on the event object.
-     *
-     * // @sample kweb.ValueElement.getValue
      */
     fun on(retrieveJs: String? = null, preventDefault: Boolean = false) = OnReceiver(this, retrieveJs, preventDefault)
 
@@ -668,7 +697,7 @@ fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
          *           [ElementCreator]
          * @Param position What position among the parent's children should the new element have?
          */
-        ElementCreator(parent = this, insertBefore = insertBefore)
+        ElementCreator(element = this, insertBefore = insertBefore)
     )
 }
 

@@ -1,6 +1,5 @@
 package buildsrc.conventions
 
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -12,6 +11,10 @@ val projectJvmVersion = 11
 
 kotlin {
     jvmToolchain(projectJvmVersion)
+}
+
+java {
+    withSourcesJar()
 }
 
 tasks.withType<KotlinCompile>().configureEach {

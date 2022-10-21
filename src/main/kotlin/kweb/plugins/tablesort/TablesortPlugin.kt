@@ -63,7 +63,7 @@ fun tablesortSample() {
                     tableRow("Walt (ghost)", 118, 130_000_000_000)
                 }
                 // returning self so we don't have to create a val
-                parent
+                element
             }.sort()
             div(fomantic.ui.segment).text("""
                 Try sorting the age and net column.

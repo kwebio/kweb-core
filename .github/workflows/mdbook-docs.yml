@@ -1,4 +1,4 @@
-name: documentation
+name: mdbook-docs
 
 on:
   push:
@@ -23,10 +23,20 @@ jobs:
           mkdir mdbook
           curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=./mdbook
           echo `pwd`/mdbook >> $GITHUB_PATH
+      - name: Substituting KWEB_VERSION
+        run: |
+          cd docs
+          V=$(git describe --abbrev=0 --tags)
+          echo "Substituting version $V"
+          sed -i "s/KWEB_VERSION/$V/g" src/gettingstarted.md
       - name: Build MDBook
         run: |
           cd docs
           mdbook build
+      - name: Validate hyperlinks
+        uses: untitaker/hyperlink@0.1.26
+        with:
+          args: docs/book --sources src/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:

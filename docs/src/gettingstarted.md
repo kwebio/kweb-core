@@ -10,26 +10,23 @@ some familiarity with HTML.
 
 Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
-**NOTE:** Replace `LATEST_VERSION` with the latest version of Kweb,
-which you can find [here](https://github.com/kwebio/kweb-core/releases).
-
 ### Gradle
 
 #### Groovy
 
-```ruby
+```kotlin
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
 }
 ```
 
-```ruby
+```kotlin
 dependencies {
-  implementation 'com.github.kwebio:kweb-core:LATEST_VERSION'
+  implementation 'com.github.kwebio:kweb-core:KWEB_VERSION'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+  implementation 'org.slf4j:slf4j-simple:2.0.3'
 }
 ```
 
@@ -37,14 +34,16 @@ dependencies {
 
 ```kotlin
 repositories {
-  maven("https://maven.pkg.github.com/kwebio/kweb-core")
-  jcenter()
+  mavenCentral()
+  maven {
+      url = uri("https://jitpack.io")
+  }  
 }
 ```
 
 ```kotlin
 dependencies {
-  implementation("com.github.kwebio:kweb-core:LATEST_VERSION")
+  implementation("com.github.kwebio:kweb-core:KWEB_VERSION")
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation("org.slf4j:slf4j-simple:2.0.3")
@@ -115,8 +114,8 @@ You can use functions for modularization and reuse:
 As you can see this is an extension function, which allows you to use
 the Kweb DSL within the newly created function.
 
-Don't worry if you```re unsure about this because you can use
-IntelliJ```s [extract
+Don't worry if you're unsure about this because you can use
+IntelliJ's [extract
 function](https://www.jetbrains.com/help/idea/extract-method.html)
 refactoring to create these functions automatically.
 

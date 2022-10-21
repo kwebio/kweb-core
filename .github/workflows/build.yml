@@ -4,6 +4,8 @@ on:
   push:
     branches: [ master ]
     paths-ignore: [ 'docs/**', 'README.md' ]
+  release:
+    types: [published]
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
@@ -13,9 +15,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
     - uses: actions/checkout@v3
-
+      with:
+        fetch-depth: 0
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -31,10 +33,9 @@ jobs:
     - name: Generate API documentation
       if: ${{github.event_name == 'push'}}
       run: |
-        NEW_VERSION=$(echo "${GITHUB_REF}" | cut -d "/" -f3)
-        echo "New version: ${NEW_VERSION}"
-        echo "Github username: ${GITHUB_ACTOR}"
-        ./gradlew -Pversion=${NEW_VERSION} dokkaHtml
+        VERSION=$(git tag --sort=committerdate | tail -1)
+        echo Generating API documentation for version $VERSION
+        ./gradlew -Pversion=$VERSION dokkaHtml
 
     - name: Deploy API documentation to Github Pages
       if: ${{github.event_name == 'push'}}

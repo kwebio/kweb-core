@@ -2,8 +2,7 @@ package kweb
 
 import kotlinx.serialization.json.*
 import kotlinx.serialization.serializer
-import kweb.util.KWebDSL
-import kweb.util.json
+import kweb.util.*
 import java.time.Duration
 
 @KWebDSL

@@ -3,7 +3,11 @@ package kweb.docs
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
 
-// ANCHOR: create
+/*
+ * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
+ */
+
+// ANCHOR: create1
 fun main() {
     Kweb(port = 16097) {
         doc.body {
@@ -11,17 +15,40 @@ fun main() {
         }
     }
 }
-// ANCHOR_END: create
+// ANCHOR_END: create1
+
+fun create2() {
+// ANCHOR: create2
+Kweb(port = 16097) {
+    doc.body {
+        table {
+            tr {
+                td().text("Name")
+                td().text("Age")
+            }
+            tr {
+                td().text("Alice")
+                td().text("21")
+            }
+            tr {
+                td().text("Bob")
+                td().text("22")
+            }
+        }
+    }
+}
+// ANCHOR_END: create2
+}
 
 fun foo() {
     Kweb(port = 16097) {
         doc.body {
-            // ANCHOR: attr
+            // ANCHOR: setattributes
 val button = button()
 button.text("Click Me!")
 button.classes("bigbutton")
-button.setAttribute("autofocus", true)
-            // ANCHOR_END: attr
+button["autofocus"] = true
+            // ANCHOR_END: setattributes
 
             // ANCHOR: delete
 button.delete()
@@ -29,9 +56,9 @@ button.delete()
 
             // ANCHOR: attr2
 button {
-    attr {
+    element {
         classes("bigbutton")
-        setAttribute("autofocus", true)
+        this["autofocus"] = true
     }
     text("Click Me!")
 }
@@ -64,6 +91,7 @@ inputKVar.addListener { old, new ->
             // ANCHOR: blink
 val blink = element("blink").text("I am annoying!")
             // ANCHOR_END: blink
+            blink.id // Remove unused warning
         }
     }
 }

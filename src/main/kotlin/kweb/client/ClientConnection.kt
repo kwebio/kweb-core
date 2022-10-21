@@ -3,10 +3,8 @@ package kweb.client
 import io.ktor.websocket.Frame
 import io.ktor.websocket.Frame.Text
 import io.ktor.websocket.WebSocketSession
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -24,12 +22,12 @@ sealed class ClientConnection {
         private val sendBuffer = Channel<Frame>(capacity = 1000)
 
         init {
+            // Probably shouldn't use GlobalScope here, but I'm not sure what the best alternative is
             GlobalScope.launch {
                 for (frame in sendBuffer) {
                     channel.send(frame)
                 }
             }
-
         }
 
         override fun send(message: String) {
