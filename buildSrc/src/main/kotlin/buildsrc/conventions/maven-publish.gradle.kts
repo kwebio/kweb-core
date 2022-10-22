@@ -1,5 +1,7 @@
 package buildsrc.conventions
 
+import java.util.Base64
+
 plugins {
     id("buildsrc.conventions.base")
     `maven-publish`
@@ -11,7 +13,9 @@ plugins {
 // https://docs.gradle.org/current/userguide/build_environment.html#sec:project_properties
 
 val signingKeyId = providers.gradleProperty("signingKeyId")
-val signingKey = providers.gradleProperty("signingKey")
+val signingKey = providers
+    .gradleProperty("signingKey")
+    .map { String(Base64.getDecoder().decode(it)) }
 val signingPassword = providers.gradleProperty("signingPassword")
 
 val signingPropertiesPresent = provider {

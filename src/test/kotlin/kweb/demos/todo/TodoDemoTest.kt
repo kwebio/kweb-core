@@ -95,7 +95,6 @@ class TodoDemoTest {
         site.addTodoItem(firstItem)
         site.addTodoItem(secondItem)
         site.addTodoItem(thirdItem)
-
         site.deleteItemByText(secondItem)
 
         val allItems = site.getAllItems()
