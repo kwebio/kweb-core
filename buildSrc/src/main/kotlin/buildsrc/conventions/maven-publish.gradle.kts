@@ -4,20 +4,22 @@ plugins {
     id("buildsrc.conventions.base")
     `maven-publish`
     signing
-    // NOTE: external plugin version is specified in implementation dependency artifact of the project's build file
-    id("io.github.gradle-nexus.publish-plugin")
 }
 
-val signingKey = providers.gradleProperty("signingKeyB64")
+// the Signing and OSSRH Properties should be defined in $GRADLE_USER_HOME (on developer's machines
+// or in environment variables prefixed with ORG_GRADLE_PROJECT_ on CI/CD
+// https://docs.gradle.org/current/userguide/build_environment.html#sec:project_properties
+
+val signingKeyId = providers.gradleProperty("signingKeyId")
+val signingKey = providers.gradleProperty("signingKey")
 val signingPassword = providers.gradleProperty("signingPassword")
-//val signingSecretKeyRingFile = providers.gradleProperty("signingSecretKeyRingFile")
+val signingSecretKeyRingFile = providers.gradleProperty("signingSecretKeyRingFile")
 
 val signingPropertiesPresent = provider {
-    signingKey.isPresent && signingPassword.isPresent
+    signingKey.isPresent && signingKeyId.isPresent && signingPassword.isPresent && signingSecretKeyRingFile.isPresent
 }
 
 val ossrhUsername = providers.gradleProperty("ossrhUsername")
-
 val ossrhPassword = providers.gradleProperty("ossrhPassword")
 
 val isSnapshotVersion = provider { version.toString().endsWith("SNAPSHOT") }
@@ -28,24 +30,33 @@ val javadocJarStub by tasks.creating(Jar::class) {
     archiveClassifier.set("javadoc")
 }
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            // This was a guess, trying without
-            // this.stagingProfileId.set("io.kweb")
-            username.set(ossrhUsername.get())
-            password.set(ossrhPassword.get())
-        }
-    }
-}
-/*
+
 publishing {
     publications.withType<MavenPublication>().configureEach {
+        groupId = "io.kweb"
+        artifactId = "kweb-core"
+        version = project.version.toString()
 
         artifact(javadocJarStub)
 
         // apply default configs for all Maven publications
         pom {
+            name.set("Kweb")
+            description.set("A Kotlin web framework")
+            url.set("https://kweb.io/")
+            licenses {
+                license {
+                    name.set("GNU Lesser General Public License v3.0")
+                    url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
+                }
+            }
+            developers {
+                developer {
+                    id.set("sanity")
+                    name.set("Ian Clarke")
+                    email.set("ian.clarke@gmail.com")
+                }
+            }
             scm {
                 connection.set("scm:git:git://github.com/kwebio/kweb-core.git")
                 developerConnection.set("scm:git:ssh://github.com:kwebio/kweb-core.git")
@@ -83,39 +94,12 @@ publishing {
         }
     }
 }
-*/
+
 plugins.withType<JavaPlugin>().configureEach {
     // only create a Java publication when the Java plugin is applied
     publishing {
         publications {
             create<MavenPublication>("mavenJava") {
-                groupId = "io.kweb"
-                artifactId = "kweb-core"
-                version = project.version.toString()
-                pom {
-                    name.set("Kweb")
-                    description.set("A Kotlin web framework")
-                    url.set("https://kweb.io/")
-                    licenses {
-                        license {
-                            name.set("GNU Lesser General Public License v3.0")
-                            url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("sanity")
-                            name.set("Ian Clarke")
-                            email.set("ian.clarke@gmail.com")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:git://github.com/kwebio/kweb-core.git")
-                        developerConnection.set("scm:git:ssh://github.com:kwebio/kweb-core.git")
-                        url.set("https://github.com/kwebio/kweb-core")
-                    }
-                }
-
                 from(components["java"])
             }
         }
@@ -134,11 +118,14 @@ tasks.withType<AbstractPublishToMaven>().configureEach {
 }
 
 signing {
-
     if (signingPropertiesPresent.get()) {
-        val decodedKey = String(java.util.Base64.getDecoder().decode(signingKey.get()))
-        logger.debug("[${project.displayName}] Signing is enabled")
-        useInMemoryPgpKeys(decodedKey, signingPassword.get())
-        sign(publishing.publications)
+        logger.lifecycle("[${project.displayName}] Signing is enabled")
+        useInMemoryPgpKeys(signingKey.get(), signingPassword.get())
+
+        // Gradle hasn't updated the signing plugin to be compatible with lazy-configuration,
+        // so it needs weird workarounds: https://github.com/gradle/gradle/issues/19903
+        sign(closureOf<SignOperation> { sign(publishing.publications) })
+    } else {
+        logger.info("Signing is not enabled")
     }
 }
