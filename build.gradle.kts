@@ -8,6 +8,9 @@ plugins {
 
     // See api/API_README.md for details
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.0"
+
+    // Coverage
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 group = "com.github.kwebio"
@@ -64,6 +67,8 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+    testImplementation("org.awaitility:awaitility:4.2.0")
 }
 
 tasks.dokkaHtml {

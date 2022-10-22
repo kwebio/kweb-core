@@ -5,6 +5,7 @@ import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
+import org.awaitility.Awaitility
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -43,14 +44,11 @@ class SelectValueTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) 
     fun mainTest() {
         driver.get("http://localhost:7668/")
         val select = Select(driver.findElement(By.tagName("select")))
-        selectValueTestApp.selectValue.value shouldBe ""
-        Thread.sleep(100)
+        Awaitility.await().untilAsserted { selectValueTestApp.selectValue.value shouldBe "" }
         select.selectByValue("cat")
-        Thread.sleep(100)
-        selectValueTestApp.selectValue.value shouldBe "cat"
+        Awaitility.await().untilAsserted { selectValueTestApp.selectValue.value shouldBe "cat" }
         select.selectByValue("dog")
-        Thread.sleep(100)
-        selectValueTestApp.selectValue.value shouldBe "dog"
+        Awaitility.await().untilAsserted { selectValueTestApp.selectValue.value shouldBe "dog" }
     }
 }
 
