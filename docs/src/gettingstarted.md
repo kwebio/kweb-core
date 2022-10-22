@@ -10,10 +10,6 @@ some familiarity with HTML.
 
 Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
-**Note:** Prior to Kweb 1.0.0 we used JitPack for distribution, but we now also distribute via Maven Central
-so the JitPack repository is no longer required. The groupId for the Maven Central version is `io.kweb`,
-while JitPack still uses `com.github.kwebio`.
-
 ### Gradle
 
 #### Groovy
