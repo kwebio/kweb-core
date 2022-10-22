@@ -190,13 +190,9 @@ some familiarity with HTML.</p>
 <h2 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h2>
 <p>Add these to your dependencies in your <code>build.gradle</code> or <code>build.gradle.kt</code> files, ensure <code>mavenCentral()</code> 
 is added to your <code>repositories</code> block.</p>
-<pre><code class="language-groovy">
-### Gradle
-
-#### Groovy
-
-```kotlin
-dependencies {
+<h3 id="gradle"><a class="header" href="#gradle">Gradle</a></h3>
+<h4 id="groovy"><a class="header" href="#groovy">Groovy</a></h4>
+<pre><code class="language-kotlin">dependencies {
   implementation 'io.kweb:kweb-core:1.0.0'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
