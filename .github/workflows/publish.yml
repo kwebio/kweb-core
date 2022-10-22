@@ -1,4 +1,4 @@
-name: "Tests"
+name: "Publish"
 
 on:
   workflow_dispatch:
@@ -6,6 +6,15 @@ on:
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
   cancel-in-progress: true
+
+env:
+  SONATYPE_USERNAME: ${{ secrets.OSSRHUSERNAME }}
+  SONATYPE_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
+  SONATYPE_ossrhUsername: ${{ secrets.OSSRHUSERNAME }}
+  SONATYPE_ossrhPassword: ${{ secrets.OSSRHPASSWORD }}
+  ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNINGKEYID }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNINGKEY }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNINGPASSWORD }}
 
 jobs:
   tests:
@@ -51,13 +60,4 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build and run tests
-        with:
-          env:
-            SONATYPE_USERNAME: ${{ secrets.OSSRHUSERNAME }}
-            SONATYPE_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
-            SONATYPE_ossrhUsername: ${{ secrets.OSSRHUSERNAME }}
-            SONATYPE_ossrhPassword: ${{ secrets.OSSRHPASSWORD }}
-            ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNINGKEYID }}
-            ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNINGKEY }}
-            ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNINGPASSWORD }}
         run: ./gradlew publishAllPublicationsToSonatypeProductionRepository

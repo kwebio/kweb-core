@@ -57,7 +57,6 @@ publishing {
                 developer {
                     id.set("sanity")
                     name.set("Ian Clarke")
-                    email.set("ian.clarke@gmail.com")
                 }
             }
             scm {
