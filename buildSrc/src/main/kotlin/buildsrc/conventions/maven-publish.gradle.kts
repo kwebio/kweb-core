@@ -76,6 +76,7 @@ publishing {
         }
 
         if (ossrhUsername.isPresent && ossrhPassword.isPresent) {
+         /*
             maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
                 name = "SonatypeStaging"
                 credentials {
@@ -83,7 +84,7 @@ publishing {
                     password = ossrhPassword.get()
                 }
             }
-
+*/
             if (!isSnapshotVersion.get()) {
                 maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
                     name = "SonatypeProduction"
