@@ -8,15 +8,16 @@ some familiarity with HTML.
 
 ## Adding Kweb to your Gradle project
 
-Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
+Add these to your dependencies in your `build.gradle` or `build.gradle.kt` files, ensure `mavenCentral()` 
+is added to your `repositories` block.
+
+```groovy
 
 ### Gradle
 
 #### Groovy
 
 ```kotlin
-// Assumes mavenCentral() specified in repositories block
-
 dependencies {
   implementation 'io.kweb:kweb-core:KWEB_VERSION'
 
