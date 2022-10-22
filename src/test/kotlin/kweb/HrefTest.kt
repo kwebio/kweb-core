@@ -5,6 +5,7 @@ import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
+import org.awaitility.Awaitility
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -49,10 +50,9 @@ class HrefTest(@Arguments("--headless") private var unprotectedDriver: ChromeDri
         hrefTestApp.appUrl.value shouldBe "/"
         hrefTestApp.renderCount.value shouldBe 1
         aElement.click()
-        Thread.sleep(100)
-        hrefTestApp.appUrl.value shouldBe "/two"
+        Awaitility.await().untilAsserted { hrefTestApp.appUrl.value shouldBe "/two" }
         // Page shouldn't have been re-rendered for a relative link
-        hrefTestApp.renderCount.value shouldBe 1
+        Awaitility.await().untilAsserted { hrefTestApp.renderCount.value shouldBe 1 }
     }
 
 

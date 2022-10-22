@@ -291,7 +291,7 @@ class Kweb private constructor(
                                 message.callback != null -> {
                                     val (resultId, result) = message.callback
                                     val resultHandler = remoteClientState.handlers[resultId]
-                                        ?: error("No data handler for $resultId for client ${remoteClientState.id}")
+                                        ?: error("No resultHandler for $resultId, for client ${remoteClientState.id}")
                                     resultHandler(result)
                                 }
                                 message.keepalive -> {

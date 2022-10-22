@@ -8,6 +8,9 @@ plugins {
 
     // See api/API_README.md for details
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.0"
+
+    // Coverage
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 // This is overridden by the maven release process
@@ -59,12 +62,14 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.4.4")
 
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
-    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.5.0")
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.5.0")
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.5.2")
+    testImplementation("org.seleniumhq.selenium:selenium-java:4.5.2")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+    testImplementation("org.awaitility:awaitility:4.2.0")
 }
 
 tasks.dokkaHtml {
