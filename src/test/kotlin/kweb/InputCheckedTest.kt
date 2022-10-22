@@ -5,6 +5,8 @@ import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
+import org.awaitility.Awaitility
+import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -44,17 +46,13 @@ class InputCheckedTest(@Arguments("--headless") unprotectedDriver: ChromeDriver)
         val input = driver.findElement(By.tagName("input"))
         inputCheckedTestApp.checkKVar.value shouldBe false
         input.click()
-        Thread.sleep(100)
-        inputCheckedTestApp.checkKVar.value shouldBe true
-        Thread.sleep(100)
+        await().untilAsserted { inputCheckedTestApp.checkKVar.value shouldBe true }
         input.click()
-        Thread.sleep(100)
-        inputCheckedTestApp.checkKVar.value shouldBe false
+        await().untilAsserted { inputCheckedTestApp.checkKVar.value shouldBe false }
 
-        input.getAttribute("checked") shouldBe null
+        await().untilAsserted { input.getAttribute("checked") shouldBe null }
         inputCheckedTestApp.checkKVar.value = true
-        Thread.sleep(100)
-        input.getAttribute("checked") shouldBe "true"
+        await().untilAsserted { input.getAttribute("checked") shouldBe "true" }
     }
 }
 

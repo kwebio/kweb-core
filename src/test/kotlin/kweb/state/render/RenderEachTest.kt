@@ -6,6 +6,8 @@ import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.ObservableList
 import kweb.state.renderEach
+import org.awaitility.Awaitility
+import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
@@ -49,13 +51,14 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
-        Thread.sleep(50)
-        val labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Moose"
-        labels[1].text shouldBe "Dog"
-        labels[2].text shouldBe "Cat"
-        labels[3].text shouldBe "Bear"
-        labels[4].text shouldBe "Horse"
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
+            labels[0].text shouldBe "Moose"
+            labels[1].text shouldBe "Dog"
+            labels[2].text shouldBe "Cat"
+            labels[3].text shouldBe "Bear"
+            labels[4].text shouldBe "Horse"
+        }
         server.close()
     }
 
@@ -81,13 +84,14 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
-        Thread.sleep(50)
         val labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe ("Dog")
-        labels[1].text shouldBe ("Cat")
-        labels[2].text shouldBe ("Bear")
-        labels[3].text shouldBe ("Horse")
-        labels[4].text shouldBe ("Moose")
+        await().untilAsserted {
+            labels[0].text shouldBe ("Dog")
+            labels[1].text shouldBe ("Cat")
+            labels[2].text shouldBe ("Bear")
+            labels[3].text shouldBe ("Horse")
+            labels[4].text shouldBe ("Moose")
+        }
         server.close()
     }
 
@@ -113,13 +117,14 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
-        Thread.sleep(50)
-        val labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Dog"
-        labels[1].text shouldBe "Cat"
-        labels[2].text shouldBe "Moose"
-        labels[3].text shouldBe "Bear"
-        labels[4].text shouldBe "Horse"
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
+            labels[0].text shouldBe "Dog"
+            labels[1].text shouldBe "Cat"
+            labels[2].text shouldBe "Moose"
+            labels[3].text shouldBe "Bear"
+            labels[4].text shouldBe "Horse"
+        }
         server.close()
     }
 
@@ -145,9 +150,10 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
-        Thread.sleep(50)
         val labels = driver.findElements(By.tagName("h1"))
-        labels[1].text shouldBe "Horse"
+        await().untilAsserted {
+            labels[1].text shouldBe "Horse"
+        }
         server.close()
     }
 
@@ -183,25 +189,29 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
-        Thread.sleep(50)
-        var labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Aardvark"
-        labels[1].text shouldBe "Cow"
-        labels[2].text shouldBe "Dog"
-        labels[3].text shouldBe "Elephant"
+
+        await().pollInSameThread().untilAsserted {
+            var labels = driver.findElements(By.tagName("h1"))
+            labels[0].text shouldBe "Aardvark"
+            labels[1].text shouldBe "Cow"
+            labels[2].text shouldBe "Dog"
+            labels[3].text shouldBe "Elephant"
+        }
 
         button[1].click()
-        Thread.sleep(50)
-        labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Cow"
-        labels[1].text shouldBe "Dog"
-        labels[2].text shouldBe "Elephant"
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
+            labels[0].text shouldBe "Cow"
+            labels[1].text shouldBe "Dog"
+            labels[2].text shouldBe "Elephant"
+        }
 
         button[2].click()
-        Thread.sleep(50)
-        labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Cow"
-        labels[1].text shouldBe "Dog"
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
+            labels[0].text shouldBe "Cow"
+            labels[1].text shouldBe "Dog"
+        }
         server.close()
     }
 
@@ -227,13 +237,14 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElement(By.tagName("button"))
         button.click()
-        Thread.sleep(50)
-        val labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Dog"
-        labels[1].text shouldBe "Cat"
-        labels[2].text shouldBe "Horse"
-        labels[3].text shouldBe "Bear"
-        labels[4].text shouldBe "Moose"
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
+            labels[0].text shouldBe "Dog"
+            labels[1].text shouldBe "Cat"
+            labels[2].text shouldBe "Horse"
+            labels[3].text shouldBe "Bear"
+            labels[4].text shouldBe "Moose"
+        }
         server.close()
     }
 
@@ -259,13 +270,14 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElement(By.tagName("button"))
         button.click()
-        Thread.sleep(50)
-        val labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Cat"
-        labels[1].text shouldBe "Bear"
-        labels[2].text shouldBe "Moose"
-        labels[3].text shouldBe "Horse"
-        labels[4].text shouldBe "Dog"
+       await().pollInSameThread().untilAsserted {
+           val labels = driver.findElements(By.tagName("h1"))
+           labels[0].text shouldBe "Cat"
+           labels[1].text shouldBe "Bear"
+           labels[2].text shouldBe "Moose"
+           labels[3].text shouldBe "Horse"
+           labels[4].text shouldBe "Dog"
+       }
         server.close()
     }
 
@@ -291,13 +303,14 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElement(By.tagName("button"))
         button.click()
-        Thread.sleep(50)
-        val labels = driver.findElements(By.tagName("h1"))
-        labels[0].text shouldBe "Horse"
-        labels[1].text shouldBe "Dog"
-        labels[2].text shouldBe "Cat"
-        labels[3].text shouldBe "Bear"
-        labels[4].text shouldBe "Moose"
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
+            labels[0].text shouldBe "Horse"
+            labels[1].text shouldBe "Dog"
+            labels[2].text shouldBe "Cat"
+            labels[3].text shouldBe "Bear"
+            labels[4].text shouldBe "Moose"
+        }
         server.close()
     }
 
@@ -323,9 +336,10 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1234")
         val button = driver.findElement(By.tagName("button"))
         button.click()
-        Thread.sleep(50)
-        val labels = driver.findElements(By.tagName("h1"))
-        labels.size shouldBe 0
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
+            labels.size shouldBe 0
+        }
         server.close()
     }
 
