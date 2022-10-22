@@ -19,7 +19,7 @@ env:
 jobs:
 #  tests:
 #    uses: ./.github/workflows/tests.yml
-  - name: publish-sonatype-staging
+  publish-sonatype-staging:
     runs-on: ubuntu-latest
     needs: tests
     steps:
@@ -39,7 +39,7 @@ jobs:
       - name: Build and run tests
         run: ./gradlew publishAllPublicationsToSonatypeStagingRepository
 
-  - name: publish-sonatype-production
+  publish-sonatype-production:
     runs-on: ubuntu-latest
     needs: tests
 
