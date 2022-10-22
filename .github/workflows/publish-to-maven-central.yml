@@ -38,7 +38,11 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Publish to Sonatype
-        run: ./gradlew publish
+        run: |
+          run: |
+          VERSION=$(git tag --sort=committerdate | tail -1)
+          echo Publishing $VERSION to Sonatype
+          ./gradlew -Pversion=$VERSION publish
   release:
     name: Close and Release Sonatype staging repository
     runs-on: ubuntu-latest
