@@ -51,6 +51,6 @@ jobs:
         with:
           username: ${{ secrets.OSSRHUSERNAME }}
           password: ${{ secrets.OSSRHPASSWORD }}
-          staging_repository_id: ${{ needs.create_staging_repository.outputs.repository-id }}
+          staging_repository_id: ${{ secrets.SONATYPE_REPOSITORY_ID }}
           description: Closed ${{ github.repository }}#${{ github.run_number }}
           close_only: false
