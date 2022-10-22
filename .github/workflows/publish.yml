@@ -21,7 +21,7 @@ jobs:
 #    uses: ./.github/workflows/tests.yml
   publish-sonatype-staging:
     runs-on: ubuntu-latest
-    needs: tests
+#    needs: tests
     steps:
       - uses: actions/checkout@v3
         with:
@@ -41,8 +41,7 @@ jobs:
 
   publish-sonatype-production:
     runs-on: ubuntu-latest
-    needs: tests
-
+#    needs: tests
     steps:
       - uses: actions/checkout@v3
         with:
