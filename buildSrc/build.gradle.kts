@@ -5,6 +5,10 @@ plugins {
     kotlin("jvm") version embeddedKotlinVersion
 }
 
+repositories {
+    gradlePluginPortal()
+}
+
 dependencies {
     implementation(platform(kotlin("bom")))
 
@@ -15,6 +19,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20")
     implementation("org.jetbrains.kotlin:kotlin-serialization")
+
+    implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
 }
 
 val gradleJvmTarget = 11

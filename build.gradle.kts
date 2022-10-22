@@ -10,6 +10,7 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.0"
 }
 
+// This is overridden by the maven release process
 group = "com.github.kwebio"
 
 // Don't set version here, it must be set in gradle.properties so it can be overridden
