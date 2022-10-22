@@ -52,6 +52,7 @@ jobs:
         # replace '@main' with the latest commit sha, see https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
         uses: nexus-actions/release-nexus-staging-repo@f2b4c7f64ecec2cb0d24349182c1bbeda5c4c056
         with:
+          base_url: https://s01.oss.sonatype.org/service/local/
           username: ${{ secrets.OSSRHUSERNAME }}
           password: ${{ secrets.OSSRHPASSWORD }}
           staging_repository_id: ${{ secrets.SONATYPE_REPOSITORY_ID }}
