@@ -10,6 +10,8 @@ on:
 #  cancel-in-progress: true
 
 env:
+  SONATYPE_USERNAME: ${{ secrets.OSSRHUSERNAME }}
+  SONATYPE_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
   ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.OSSRHUSERNAME }}
   ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSRHPASSWORD }}
   ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNINGKEYID }}
