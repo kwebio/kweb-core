@@ -51,4 +51,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build and run tests
+        with:
+          env:
+            SONATYPE_USERNAME: ${{ secrets.OSSRHUSERNAME }}
+            SONATYPE_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
+            SONATYPE_ossrhUsername: ${{ secrets.OSSRHUSERNAME }}
+            SONATYPE_ossrhPassword: ${{ secrets.OSSRHPASSWORD }}
+            ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNINGKEYID }}
+            ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNINGKEY }}
+            ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNINGPASSWORD }}
         run: ./gradlew publishAllPublicationsToSonatypeProductionRepository

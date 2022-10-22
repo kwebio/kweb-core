@@ -13,10 +13,9 @@ plugins {
 val signingKeyId = providers.gradleProperty("signingKeyId")
 val signingKey = providers.gradleProperty("signingKey")
 val signingPassword = providers.gradleProperty("signingPassword")
-val signingSecretKeyRingFile = providers.gradleProperty("signingSecretKeyRingFile")
 
 val signingPropertiesPresent = provider {
-    signingKey.isPresent && signingKeyId.isPresent && signingPassword.isPresent && signingSecretKeyRingFile.isPresent
+    signingKey.isPresent && signingKeyId.isPresent && signingPassword.isPresent
 }
 
 val ossrhUsername = providers.gradleProperty("ossrhUsername")
