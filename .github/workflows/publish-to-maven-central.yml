@@ -12,18 +12,17 @@ on:
 env:
   SONATYPE_USERNAME: ${{ secrets.OSSRHUSERNAME }}
   SONATYPE_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
-  SONATYPE_ossrhUsername: ${{ secrets.OSSRHUSERNAME }}
-  SONATYPE_ossrhPassword: ${{ secrets.OSSRHPASSWORD }}
   ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNINGKEYID }}
   ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNINGKEY }}
   ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNINGPASSWORD }}
 
 jobs:
-  tests:
+  test:
     uses: ./.github/workflows/tests.yml
-  publish-to-sonatype:
+  publish:
+    name: Build and Publish to Sonatype
     runs-on: ubuntu-latest
-    needs: tests
+    needs: test
     steps:
       - uses: actions/checkout@v3
         with:
@@ -38,5 +37,20 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Build and run tests
+      - name: Publish to Sonatype
         run: ./gradlew publish
+  release:
+    name: Close and Release Sonatype staging repository
+    runs-on: ubuntu-latest
+    needs: [test, publish]
+    if: ${{ always() && needs.build.result == 'success' }}
+    steps:
+      - name: Release
+        # replace '@main' with the latest commit sha, see https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+        uses: nexus-actions/release-nexus-staging-repo@f2b4c7f64ecec2cb0d24349182c1bbeda5c4c056
+        with:
+          username: ${{ secrets.OSSRHUSERNAME }}
+          password: ${{ secrets.OSSRHPASSWORD }}
+          staging_repository_id: ${{ needs.create_staging_repository.outputs.repository-id }}
+          description: Closed ${{ github.repository }}#${{ github.run_number }}
+          close_only: false
