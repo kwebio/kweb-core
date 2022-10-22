@@ -33,7 +33,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun prependItemTest() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1240, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -48,7 +48,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1240")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
         await().pollInSameThread().untilAsserted {
@@ -66,7 +66,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun appendItemTest() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1241, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -81,7 +81,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1241")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
         val labels = driver.findElements(By.tagName("h1"))
@@ -99,7 +99,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun insertItemTest() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1242, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -114,7 +114,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1242")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
         await().pollInSameThread().untilAsserted {
@@ -132,7 +132,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun changeItemTest() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1243, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -147,11 +147,10 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
-        val button = driver.findElements(By.tagName("button"))
-        button[0].click()
-        val labels = driver.findElements(By.tagName("h1"))
-        await().untilAsserted {
+        driver.get("http://localhost:1243")
+        driver.findElements(By.tagName("button")).first().click()
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
             labels[1].text shouldBe "Horse"
         }
         server.close()
@@ -161,7 +160,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun deleteItemTest() {
         val animals = ObservableList(mutableListOf("Aardvark", "Bear", "Cow", "Dog", "Elephant"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1244, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -186,7 +185,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1244")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
 
@@ -219,7 +218,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun moveItemFromEndToCenterTest() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1245, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -234,7 +233,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1245")
         val button = driver.findElement(By.tagName("button"))
         button.click()
         await().pollInSameThread().untilAsserted {
@@ -252,7 +251,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun moveItemFromStartToEnd() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1246, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -267,7 +266,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1246")
         val button = driver.findElement(By.tagName("button"))
         button.click()
        await().pollInSameThread().untilAsserted {
@@ -285,7 +284,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun moveItemFromEndToStart() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1247, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -300,7 +299,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1247")
         val button = driver.findElement(By.tagName("button"))
         button.click()
         await().pollInSameThread().untilAsserted {
@@ -318,7 +317,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun ClearItemsTest() {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1248, buildPage = {
             doc.body.new {
                 renderEach(animals) { animal ->
                     div().new {
@@ -333,7 +332,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1248")
         val button = driver.findElement(By.tagName("button"))
         button.click()
         await().pollInSameThread().untilAsserted {
@@ -353,7 +352,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         planets.add(saturn)
         planets.add(neptune)
 
-        val server = Kweb(port = 1234, buildPage = {
+        val server = Kweb(port = 1249, buildPage = {
             doc.body.new {
                 renderEach(planets) { planet ->
                     renderEach(planet as ObservableList<*>) { moon ->
@@ -377,7 +376,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             }
         })
 
-        driver.get("http://localhost:1234")
+        driver.get("http://localhost:1249")
         val buttons = driver.findElements(By.tagName("button"))
         for (button in buttons) {
             button.click()
