@@ -141,30 +141,23 @@ is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also ha
 some familiarity with HTML.</p>
 <h2 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h2>
 <p>Add these to your repositories and dependencies in your <code>build.gradle</code> or <code>build.gradle.kt</code> files.</p>
+<p><strong>Note:</strong> Prior to Kweb 1.0.0 we used JitPack for distribution, but we now also distribute via Maven Central
+so the JitPack repository is no longer required. The groupId for the Maven Central version is <code>io.kweb</code>,
+while JitPack still uses <code>com.github.kwebio</code>.</p>
 <h3 id="gradle"><a class="header" href="#gradle">Gradle</a></h3>
 <h4 id="groovy"><a class="header" href="#groovy">Groovy</a></h4>
-<pre><code class="language-kotlin">repositories {
-    mavenCentral()
-    maven { url &quot;https://jitpack.io&quot; }
-}
-</code></pre>
-<pre><code class="language-kotlin">dependencies {
-  implementation 'com.github.kwebio:kweb-core:1.0.0'
+<pre><code class="language-kotlin">// Assumes mavenCentral() specified in repositories block
+
+dependencies {
+  implementation 'io.kweb:kweb-core:1.0.0'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation 'org.slf4j:slf4j-simple:2.0.3'
 }
 </code></pre>
 <h4 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h4>
-<pre><code class="language-kotlin">repositories {
-  mavenCentral()
-  maven {
-      url = uri(&quot;https://jitpack.io&quot;)
-  }  
-}
-</code></pre>
 <pre><code class="language-kotlin">dependencies {
-  implementation(&quot;com.github.kwebio:kweb-core:1.0.0&quot;)
+  implementation(&quot;io.kweb:kweb-core:1.0.0&quot;)
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
