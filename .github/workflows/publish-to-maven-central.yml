@@ -10,8 +10,8 @@ on:
 #  cancel-in-progress: true
 
 env:
-  SONATYPE_USERNAME: ${{ secrets.OSSRHUSERNAME }}
-  SONATYPE_PASSWORD: ${{ secrets.OSSRHPASSWORD }}
+  ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.OSSRHUSERNAME }}
+  ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSRHPASSWORD }}
   ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.SIGNINGKEYID }}
   ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNINGKEY }}
   ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNINGPASSWORD }}
@@ -49,7 +49,6 @@ jobs:
     if: ${{ always() && needs.test.result == 'success' && needs.publish.result == 'success' }}
     steps:
       - name: Release
-        # replace '@main' with the latest commit sha, see https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
         uses: nexus-actions/release-nexus-staging-repo@f2b4c7f64ecec2cb0d24349182c1bbeda5c4c056
         with:
           base_url: https://s01.oss.sonatype.org/service/local/
