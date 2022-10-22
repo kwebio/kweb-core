@@ -8,7 +8,7 @@
   <a href="https://matrix.to/#/#kweb:matrix.org">
     <img src="https://img.shields.io/matrix/kweb:matrix.org?style=flat-square&color=blue&logo=matrix" alt="matrix" />
   </a>
-  <a href="https://jitpack.io/#kwebio/kweb-core">
+  <a href="https://docs.kweb.io/book/gettingstarted.html">
     <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=dependency&sort=semver&style=flat-square&color=blueviolet&logo=gradle&include_prereleases" />
   </a>
 </div>
