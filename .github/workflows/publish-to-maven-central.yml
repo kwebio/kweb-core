@@ -39,7 +39,6 @@ jobs:
 
       - name: Publish to Sonatype
         run: |
-          run: |
           VERSION=$(git tag --sort=committerdate | tail -1)
           echo Publishing $VERSION to Sonatype
           ./gradlew -Pversion=$VERSION publish
