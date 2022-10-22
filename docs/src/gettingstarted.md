@@ -8,42 +8,25 @@ some familiarity with HTML.
 
 ## Adding Kweb to your Gradle project
 
-Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
+Add these to your dependencies in your `build.gradle` or `build.gradle.kt` files, ensure `mavenCentral()` 
+is added to your `repositories` block.
 
-### Gradle
-
-#### Groovy
-
-```kotlin
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
-}
-```
+### Groovy
 
 ```kotlin
 dependencies {
-  implementation 'com.github.kwebio:kweb-core:KWEB_VERSION'
+  implementation 'io.kweb:kweb-core:KWEB_VERSION'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation 'org.slf4j:slf4j-simple:2.0.3'
 }
 ```
 
-#### Kotlin
-
-```kotlin
-repositories {
-  mavenCentral()
-  maven {
-      url = uri("https://jitpack.io")
-  }  
-}
-```
+### Kotlin
 
 ```kotlin
 dependencies {
-  implementation("com.github.kwebio:kweb-core:KWEB_VERSION")
+  implementation("io.kweb:kweb-core:KWEB_VERSION")
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation("org.slf4j:slf4j-simple:2.0.3")

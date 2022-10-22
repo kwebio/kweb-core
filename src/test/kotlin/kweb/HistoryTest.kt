@@ -15,16 +15,18 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ThreadGuard
+import org.awaitility.Awaitility.*
+import java.time.Duration
 
 @ExtendWith(SeleniumJupiter::class)
-class HistoryTest(@Arguments("--headless")  unprotectedDriver: ChromeDriver) {
+class HistoryTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
-    val driver : WebDriver
+    val driver: WebDriver
 
     init {
         //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
         //This should make this test thread safe.
-         driver = ThreadGuard.protect(unprotectedDriver)
+        driver = ThreadGuard.protect(unprotectedDriver)
     }
 
     companion object {
@@ -47,27 +49,30 @@ class HistoryTest(@Arguments("--headless")  unprotectedDriver: ChromeDriver) {
     fun testBackButton() {
         historyTestApp.reloadCount.value shouldBe 0
         driver.get("http://localhost:7665/0")
-        driver.findElement(By.tagName("a")).let { aElement ->
-            historyTestApp.url.value shouldBe "/0"
-            aElement.click()
-            Thread.sleep(100)
-            historyTestApp.url.value shouldBe "/1"
+
+        historyTestApp.url.value shouldBe "/0"
+        driver.findElement(By.tagName("a")).click()
+
+        await().untilAsserted { historyTestApp.url.value shouldBe "/1" }
+
+        await().pollInSameThread().untilAsserted {
+            // For some reason was getting a StaleElementReferenceException intermittently, so put this
+            // inside an await()
+            driver.findElement(By.tagName("a")).click()
         }
-        driver.findElement(By.tagName("a")).let { aElement ->
-            aElement.click()
-            Thread.sleep(100)
-            historyTestApp.url.value shouldBe "/2"
-            historyTestApp.reloadCount.value shouldBe 1
-        }
+
+        await().untilAsserted { historyTestApp.url.value shouldBe "/2" }
+        await().untilAsserted { historyTestApp.reloadCount.value shouldBe 1 }
+
         driver.navigate().back()
-        Thread.sleep(100)
-        historyTestApp.url.value shouldBe "/1"
-        historyTestApp.reloadCount.value shouldBe 1
+
+        await().untilAsserted { historyTestApp.url.value shouldBe "/1" }
+        await().untilAsserted { historyTestApp.reloadCount.value shouldBe 1 }
 
         driver.navigate().forward()
-        Thread.sleep(100)
-        historyTestApp.url.value shouldBe "/2"
-        historyTestApp.reloadCount.value shouldBe 1
+
+        await().untilAsserted { historyTestApp.url.value shouldBe "/2" }
+        await().untilAsserted { historyTestApp.reloadCount.value shouldBe 1 }
     }
 }
 
@@ -88,9 +93,11 @@ class HistoryTestApp {
             route {
                 path("/{num}") { p ->
                     render(p["num"]!!.toInt()) { num ->
-                        a().apply {
+                        a {
+                            element {
+                                href = "/${num + 1}"
+                            }
                             text("Next ($num)")
-                            href = "/${num + 1}"
                         }
                     }
                 }
