@@ -55,7 +55,11 @@ class HistoryTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
         await().untilAsserted { historyTestApp.url.value shouldBe "/1" }
 
-        driver.findElement(By.tagName("a")).click()
+        await().pollInSameThread().untilAsserted {
+            // For some reason was getting a StaleElementReferenceException intermittently, so put this
+            // inaide an await()
+            driver.findElement(By.tagName("a")).click()
+        }
 
         await().untilAsserted { historyTestApp.url.value shouldBe "/2" }
         await().untilAsserted { historyTestApp.reloadCount.value shouldBe 1 }
