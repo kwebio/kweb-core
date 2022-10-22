@@ -11,7 +11,7 @@
   <a href="https://docs.kweb.io/book/gettingstarted.html">
     <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=dependency&sort=semver&style=flat-square&color=blueviolet&logo=gradle&include_prereleases" />
   <a href="https://github.com/kwebio/kweb-core/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=61a6c2" \>
+    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=4a5e7d" \>
   </a>
 </div>
 
