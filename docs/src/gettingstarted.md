@@ -11,9 +11,7 @@ some familiarity with HTML.
 Add these to your dependencies in your `build.gradle` or `build.gradle.kt` files, ensure `mavenCentral()` 
 is added to your `repositories` block.
 
-### Gradle
-
-#### Groovy
+### Groovy
 
 ```kotlin
 dependencies {
@@ -24,7 +22,7 @@ dependencies {
 }
 ```
 
-#### Kotlin
+### Kotlin
 
 ```kotlin
 dependencies {

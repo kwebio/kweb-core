@@ -57,7 +57,7 @@ class HistoryTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
         await().pollInSameThread().untilAsserted {
             // For some reason was getting a StaleElementReferenceException intermittently, so put this
-            // inaide an await()
+            // inside an await()
             driver.findElement(By.tagName("a")).click()
         }
 
