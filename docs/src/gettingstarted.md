@@ -10,20 +10,19 @@ some familiarity with HTML.
 
 Add these to your repositories and dependencies in your `build.gradle` or `build.gradle.kt` files.
 
+**Note:** Prior to Kweb 1.0.0 we used JitPack for distribution, but we now also distribute via Maven Central
+so the JitPack repository is no longer required. The groupId for the Maven Central version is `io.kweb`,
+while JitPack still uses `com.github.kwebio`.
+
 ### Gradle
 
 #### Groovy
 
 ```kotlin
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
-}
-```
+// Assumes mavenCentral() specified in repositories block
 
-```kotlin
 dependencies {
-  implementation 'com.github.kwebio:kweb-core:KWEB_VERSION'
+  implementation 'io.kweb:kweb-core:KWEB_VERSION'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation 'org.slf4j:slf4j-simple:2.0.3'
@@ -33,17 +32,8 @@ dependencies {
 #### Kotlin
 
 ```kotlin
-repositories {
-  mavenCentral()
-  maven {
-      url = uri("https://jitpack.io")
-  }  
-}
-```
-
-```kotlin
 dependencies {
-  implementation("com.github.kwebio:kweb-core:KWEB_VERSION")
+  implementation("io.kweb:kweb-core:KWEB_VERSION")
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation("org.slf4j:slf4j-simple:2.0.3")
