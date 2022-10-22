@@ -5,6 +5,10 @@ plugins {
     kotlin("jvm") version embeddedKotlinVersion
 }
 
+repositories {
+    gradlePluginPortal()
+}
+
 dependencies {
     implementation(platform(kotlin("bom")))
 

@@ -13,6 +13,7 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
+// This is overridden by the maven release process
 group = "com.github.kwebio"
 
 // Don't set version here, it must be set in gradle.properties so it can be overridden

@@ -1,25 +1,31 @@
 package buildsrc.conventions
 
+import java.util.Base64
+
 plugins {
     id("buildsrc.conventions.base")
     `maven-publish`
     signing
 }
 
+// the Signing and OSSRH Properties should be defined in $GRADLE_USER_HOME (on developer's machines
+// or in environment variables prefixed with ORG_GRADLE_PROJECT_ on CI/CD
+// https://docs.gradle.org/current/userguide/build_environment.html#sec:project_properties
 
 val signingKeyId = providers.gradleProperty("signingKeyId")
+val signingKey = providers
+    .gradleProperty("signingKey")
+    .map { String(Base64.getDecoder().decode(it)) }
 val signingPassword = providers.gradleProperty("signingPassword")
-val signingSecretKeyRingFile = providers.gradleProperty("signingSecretKeyRingFile")
 
 val signingPropertiesPresent = provider {
-    signingKeyId.isPresent && signingPassword.isPresent && signingSecretKeyRingFile.isPresent
+    signingKey.isPresent && signingKeyId.isPresent && signingPassword.isPresent
 }
 
 val ossrhUsername = providers.gradleProperty("ossrhUsername")
 val ossrhPassword = providers.gradleProperty("ossrhPassword")
 
 val isSnapshotVersion = provider { version.toString().endsWith("SNAPSHOT") }
-
 
 val javadocJarStub by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
@@ -30,11 +36,30 @@ val javadocJarStub by tasks.creating(Jar::class) {
 
 publishing {
     publications.withType<MavenPublication>().configureEach {
+        groupId = "io.kweb"
+        artifactId = "kweb-core"
+        version = project.version.toString()
 
         artifact(javadocJarStub)
 
         // apply default configs for all Maven publications
         pom {
+            name.set("Kweb")
+            description.set("A Kotlin web framework")
+            url.set("https://kweb.io/")
+            licenses {
+                license {
+                    name.set("GNU Lesser General Public License v3.0")
+                    url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
+                }
+            }
+            developers {
+                developer {
+                    id.set("sanity")
+                    name.set("Ian Clarke")
+                    email.set("ian.clarke@gmail.com")
+                }
+            }
             scm {
                 connection.set("scm:git:git://github.com/kwebio/kweb-core.git")
                 developerConnection.set("scm:git:ssh://github.com:kwebio/kweb-core.git")
@@ -52,8 +77,8 @@ publishing {
         }
 
         if (ossrhUsername.isPresent && ossrhPassword.isPresent) {
-            maven("https://oss.sonatype.org/content/repositories/snapshots/") {
-                name = "SonartypeStaging"
+            maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                name = "SonatypeStaging"
                 credentials {
                     username = ossrhUsername.get()
                     password = ossrhPassword.get()
@@ -61,7 +86,7 @@ publishing {
             }
 
             if (!isSnapshotVersion.get()) {
-                maven("https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
                     name = "SonatypeProduction"
                     credentials {
                         username = ossrhUsername.get()
@@ -72,7 +97,6 @@ publishing {
         }
     }
 }
-
 
 plugins.withType<JavaPlugin>().configureEach {
     // only create a Java publication when the Java plugin is applied
@@ -98,9 +122,13 @@ tasks.withType<AbstractPublishToMaven>().configureEach {
 
 signing {
     if (signingPropertiesPresent.get()) {
-        logger.debug("[${project.displayName}] Signing is enabled")
-        useGpgCmd()
-        useInMemoryPgpKeys(signingKeyId.get(), signingPassword.get())
-        sign(publishing.publications)
+        logger.lifecycle("[${project.displayName}] Signing is enabled")
+        useInMemoryPgpKeys(signingKey.get(), signingPassword.get())
+
+        // Gradle hasn't updated the signing plugin to be compatible with lazy-configuration,
+        // so it needs weird workarounds: https://github.com/gradle/gradle/issues/19903
+        sign(closureOf<SignOperation> { sign(publishing.publications) })
+    } else {
+        logger.info("Signing is not enabled")
     }
 }
