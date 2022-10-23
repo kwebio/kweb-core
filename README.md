@@ -3,15 +3,15 @@
 <div align="center">
   <!-- Github Actions -->
   <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
-    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square&logo=github%20actions&color=4a5e7d" alt="continuous integration status" />
+    <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square&logo=github%20actions" alt="continuous integration status" />
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
-    <img src="https://img.shields.io/badge/chat-matrix-blue?style=flat-square&logo=matrix&color=7d4a78" alt="matrix" />
+    <img src="https://img.shields.io/badge/chat-matrix-blue?style=flat-square&logo=matrix" alt="matrix" />
   </a>
   <a href="https://docs.kweb.io/book/gettingstarted.html">
-    <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=dependency&sort=semver&style=flat-square&color=7d694a&logo=gradle&include_prereleases" />
+    <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=dependency&sort=semver&style=flat-square&logo=gradle&include_prereleases" />
   <a href="https://github.com/kwebio/kweb-core/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=4a5e7d" \>
+    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu" \>
   </a>
 </div>
 
