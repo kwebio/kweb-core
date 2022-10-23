@@ -145,20 +145,20 @@ with each other over an HTTP(S) connection.</p>
 webapp's architecture is determined by the problem you're solving,
 rather than the limitations of today's tools.</p>
 <h2 id="how-does-it-work"><a class="header" href="#how-does-it-work">How does it work?</a></h2>
-<p>Kweb is a self-contained Kotlin library that can be added easily to new
-or existing projects. When Kweb receives a HTTP request it responds with
-the initial HTML page, and some JavaScript that connects back to the web
-server via a WebSocket. The page then waits and listens for instructions
-from the server, while notifying the server of relevant browser events.</p>
-<p>A common concern about this approach is that the user interface might
-feel sluggish if it is server driven. Kweb solves this problem by
+<p>Kweb is a remote interface to the web browser's DOM. You can create and
+manipulate DOM elements, and listen for and handle DOM events.</p>
+<p>Kweb has a state system that lets you <a href="state.html">easily</a> bind values in your realtime 
+database to DOM elements. This way, the elements are automatically updated when the
+database changes.</p>
+<p>A common concern about this approach is that the user interface might feel
+sluggish if it is server-driven. Kweb solves this problem by
 <a href="https://docs.kweb.io/en/latest/events.html#immediate-events">preloading</a>
-instructions to the browser to be executed immediately on browser events
-without a server round-trip.</p>
-<p>Kweb is built on the excellent <a href="https://ktor.io/">Ktor</a> framework, which
-handles HTTP, HTTPS, and WebSocket transport. You don't need to know
+instructions to the browser. This way, the instructions are executed
+immediately on browser events without a server round-trip.</p>
+<p>Kweb is built on the <a href="https://ktor.io/">Ktor</a> framework, which handles
+HTTP, HTTPS, and WebSocket transport. You don't need to know
 Ktor to use Kweb, but if you've already got a Ktor app you can <a href="https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt">embed
-Kweb as a Feature</a>.</p>
+Kweb as a feature</a>.</p>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
 <li>Allows the problem to determine your architecture, not the
