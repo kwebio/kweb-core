@@ -16,9 +16,9 @@ focus on building your website or user interface, not on the plumbing.
 Kweb is a remote interface to the web browser's DOM. You can create and
 manipulate DOM elements, and listen for and handle DOM events.
 
-Kweb has a state system that lets you [easily](state.md) bind values in your realtime 
-database to DOM elements. This way, the elements are automatically updated when the
-database changes.
+Kweb has a state system that lets you [easily](state.md) bind mutable
+values to DOM elements. This allows you to build [reactive user interfaces](https://en.wikipedia.org/wiki/Reactive_user_interface)
+that automatically update when the state changes.
 
 A common concern about this approach is that the user interface might feel
 sluggish if it is server-driven. Kweb solves this problem by
