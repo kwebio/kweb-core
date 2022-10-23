@@ -3,6 +3,9 @@ name: mdbook-docs
 on:
   push:
     branches: [master]
+  schedule:
+    # Once per day at midnight to ensure docs are using current Maven version as retrieved from Maven Central
+    - cron: '0 0 * * *'
 
 permissions:
   contents: write
