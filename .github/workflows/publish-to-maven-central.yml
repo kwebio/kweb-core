@@ -56,6 +56,6 @@ jobs:
           base_url: https://s01.oss.sonatype.org/service/local/
           username: ${{ secrets.OSSRHUSERNAME }}
           password: ${{ secrets.OSSRHPASSWORD }}
-          staging_repository_id: ${{ secrets.SONATYPE_REPOSITORY_ID }}
+          staging_repository_id: no ${{ secrets.SONATYPE_REPOSITORY_ID }}
           description: Closed ${{ github.repository }}#${{ github.run_number }}
           close_only: false

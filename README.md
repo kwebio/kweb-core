@@ -34,11 +34,13 @@ import kweb.plugins.fomanticUI.fomanticUIPlugin
 fun main(args: Array<String>) {
     Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
         doc.body {
+            val name = KVar("")
             div(fomantic.ui.segment) {
                 h1().text("Enter Your Name")
-                val nameInput = input(type = text)
-                br()
-                span().text(nameInput.value.map { "Hello, $it" })
+                input(type = text).value = name
+            }
+            div(fomantic.ui.segment) {
+                span().text(name.map { "Hello, $it" })
             }
         }
     }
