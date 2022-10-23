@@ -2,6 +2,8 @@ package kweb.html
 
 import io.ktor.server.routing.*
 import kweb.plugins.KwebPlugin
+import kweb.plugins.staticFiles.ResourceFolder
+import kweb.plugins.staticFiles.StaticFilesPlugin
 import kweb.state.RenderSpanNames
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.DocumentType
@@ -39,7 +41,7 @@ internal object HtmlDocumentSupplier {
 
                 head.appendElement("link")
                     .attr("rel", "stylesheet")
-                    .attr("href", "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css")
+                    .attr("href", "/static/toastify/toastify.min.css")
             }
 
             html.appendElement("body").let { body: Element ->
@@ -53,7 +55,7 @@ internal object HtmlDocumentSupplier {
                             | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
                             | requires JavaScript to be enabled.""".trimMargin())
                 body.appendElement("script")
-                    .attr("src", "https://cdn.jsdelivr.net/npm/toastify-js")
+                    .attr("src", "/static/toastify/toastify.js")
             }
         }
 

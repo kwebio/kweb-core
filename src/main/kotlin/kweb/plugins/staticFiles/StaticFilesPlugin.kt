@@ -56,9 +56,4 @@ class StaticFilesPlugin private constructor(private val servedRoute: String, pri
 
 }
 
-/* TODO: This probably needs a rethink, it should be possible to interrogate a [StaticFilePlugin]
-   TODO: to determine the static file path, we shouldn't be hardwiring it like this.
-*/
-internal const val internalStaticFilePath = "/static"
-
 data class ResourceFolder(val resourceFolder: String)

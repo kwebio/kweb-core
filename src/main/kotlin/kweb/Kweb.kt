@@ -16,9 +16,6 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.websocket.*
 import io.ktor.util.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -29,6 +26,8 @@ import kweb.config.KwebConfiguration
 import kweb.config.KwebDefaultConfiguration
 import kweb.html.HtmlDocumentSupplier
 import kweb.plugins.KwebPlugin
+import kweb.plugins.staticFiles.ResourceFolder
+import kweb.plugins.staticFiles.StaticFilesPlugin
 import kweb.util.*
 import kweb.util.NotFoundException
 import mu.KotlinLogging
@@ -42,9 +41,13 @@ private val logger = KotlinLogging.logger {}
 
 class Kweb private constructor(
     val debug: Boolean,
-    val plugins: List<KwebPlugin>,
+    plugins: List<KwebPlugin>,
     val kwebConfig: KwebConfiguration,
 ) : Closeable {
+
+    // This StaticFilesPlugin is used to serve static files required by Kweb and bundled plugins, it's
+    // added to the plugin list implicitly.
+    val plugins = plugins + StaticFilesPlugin(ResourceFolder("kweb.static"), "/static")
 
     /**
      *
@@ -134,15 +137,13 @@ class Kweb private constructor(
         }
     }
 
-    val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
+    private val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
         .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
         .removalListener<String, RemoteClientState> { rl ->
             rl.value?.triggerCloseListeners()
         }
         .build()
-
-    //: ConcurrentHashMap<String, RemoteClientState> = ConcurrentHashMap()
 
     private var server: JettyApplicationEngine? = null
 

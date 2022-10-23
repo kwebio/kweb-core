@@ -1,25 +1,18 @@
 package kweb.plugins.jqueryCore
 
-import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.plugins.KwebPlugin
-import kweb.plugins.staticFiles.ResourceFolder
-import kweb.plugins.staticFiles.StaticFilesPlugin
-import kweb.plugins.staticFiles.internalStaticFilePath
-import kweb.table
 import kweb.util.json
 import org.jsoup.nodes.Document
 
-private const val resourceFolder = "kweb/plugins/jqueryCore/static"
-private const val resourceRoute = "$internalStaticFilePath/jquery"
 
 /**
  * Created by ian on 1/9/17.
  */
-class JQueryCorePlugin : KwebPlugin(dependsOn = setOf(StaticFilesPlugin(ResourceFolder(resourceFolder), resourceRoute))) {
+class JQueryCorePlugin : KwebPlugin() {
     override fun decorate(doc: Document) {
         doc.head().appendElement("script")
-                .attr("src", "$resourceRoute/jquery-3.4.1.min.js")
+                .attr("src", "/static/plugins/jquery/jquery-3.4.1.min.js")
                 .attr("crossorigin", "anonymous")
     }
 }
