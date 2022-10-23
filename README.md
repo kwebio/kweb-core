@@ -53,12 +53,14 @@ Ktor to use Kweb, but if you've already got a Ktor app you can [embed
 Kweb as a feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
 
 ## Example
-
+  
 ```kotlin
 import kweb.*
 import kweb.InputType.text
+import kweb.state.KVar
 
-fun main(args: Array<String>) {
+
+fun main() {
     Kweb(port = 16097) {
         doc.body {
             val name = KVar("")
