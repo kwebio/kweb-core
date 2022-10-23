@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting Started - The Kweb Book</title>
+        <title>CSS &amp; Style - The Kweb Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="User manual for the Kweb web framework">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html" class="active"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">8.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">9.</strong> Frequently Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html" class="active"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">8.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">9.</strong> Frequently Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,137 +134,62 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
-<ul>
-<li><a href="#requirements">Requirements</a></li>
-<li><a href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a>
-<ul>
-<li><a href="#groovy">Groovy</a></li>
-<li><a href="#kotlin">Kotlin</a></li>
-</ul>
-</li>
-<li><a href="#hello-world">Hello world</a></li>
-<li><a href="#hello-world%C2%B2">Hello world²</a></li>
-<li><a href="#template-repository">Template Repository</a></li>
-</ul>
-<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
-<p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
-is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
-some familiarity with HTML.</p>
-<h2 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h2>
-<p>Add these to your dependencies in your <code>build.gradle</code> or <code>build.gradle.kt</code> files, ensure <code>mavenCentral()</code> 
-is added to your <code>repositories</code> block.</p>
-<h3 id="groovy"><a class="header" href="#groovy">Groovy</a></h3>
-<pre><code class="language-kotlin">dependencies {
-  implementation 'io.kweb:kweb-core:1.0.0'
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation 'org.slf4j:slf4j-simple:2.0.3'
-}
-</code></pre>
-<h3 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h3>
-<pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:1.0.0&quot;)
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
-}
-</code></pre>
-<h2 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h2>
-<p>Create a new Kotlin file and type this:</p>
-<pre><code class="language-kotlin">import kweb.*
+                        <h1 id="css--style"><a class="header" href="#css--style">CSS &amp; Style</a></h1>
+<p>Kweb has out-of-the-box support for the excellent <a href="https://fomantic-ui.com">Fomantic
+UI</a> framework, which helps create beautiful,
+responsive layouts using human-friendly HTML.</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h2>
+<p>First tell Kweb to use the Fomantic UI plugin:</p>
+<pre><code class="language-kotlin">import kweb.plugins.fomanticUI.*
 
 fun main() {
-    Kweb(port = 16097) {
-        doc.body {
-            h1().text(&quot;Hello World!&quot;)
-        }
+    Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
+        // ...
     }
 }
 </code></pre>
-<p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
-see the traditional greeting, translating to the following HTML body:</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;h1&gt;Hello World!&lt;/h1&gt;
-&lt;/body&gt;
+<p>Now the plugin will add the Fomantic CSS and JavaScript code to your
+website automatically.</p>
+<p>Let's look at one of the simple examples from the <a href="https://Fomantic-ui.com/elements/input.html">Fomantic
+UI</a> documentation:</p>
+<pre><code class="language-html">&lt;div class=&quot;ui icon input&quot;&gt;
+  &lt;input type=&quot;text&quot; placeholder=&quot;Search...&quot;&gt;
+  &lt;i class=&quot;search icon&quot;&gt;&lt;/i&gt;
+&lt;/div&gt;
 </code></pre>
-<p>This simple example already illustrates some important features of Kweb:</p>
-<ul>
-<li>Getting a kwebsite up and running is a breeze, no messing around
-with servlets, or third party webservers</li>
-<li>Your Kweb code will loosely mirror the structure of the HTML it
-generates</li>
-</ul>
-<h2 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h2>
-<p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
-(DSL)</a> for
-building and manipulating a
-<a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> in a remote
-web browser, while also listening for and handing DOM events.</p>
-<p>Importantly, this DSL can also do anything Kotlin can do, including
-features like for loops, functions, coroutines, and classes.</p>
-<p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
-<pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body {
-        ul {
-            for (x in 1..5) {
-                li().text(&quot;Hello World $x!&quot;)
-            }
-        }
-    }
-}
-</code></pre>
-<p>To produce...</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;ul&gt;
-      &lt;li&gt;Hello World 1!&lt;/li&gt;
-      &lt;li&gt;Hello World 2!&lt;/li&gt;
-      &lt;li&gt;Hello World 3!&lt;/li&gt;
-      &lt;li&gt;Hello World 4!&lt;/li&gt;
-      &lt;li&gt;Hello World 5!&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/body&gt;
-</code></pre>
-<p>You can use functions for modularization and reuse:</p>
-<pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body {
-        ul {
-            // We can modify the UL element we just created in an element {} block
-            element {
-                // Here we add a CSS class to the UL element
-                classes(&quot;list&quot;)
-            }
-            // We can define functions as an extension to ElementCreator allowing us to use it
-            // within the DSL
-            fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
-                li().text(&quot;Hello World $x!&quot;)
-            }
+<p>This translates to the Kotlin:</p>
+<pre><code class="language-kotlin">import kweb.plugins.fomanticUI.*
+import kweb.dom.element.creation.tags.InputType.*
 
-            for (x in 1..5) {
-                createMessage(x)
-            }
+fun main() {
+    Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)4) {
+        div(fomantic.ui.icon.input).new {
+            input(type = text, placeholder = &quot;Search...&quot;)
+            i(fomantic.search.icon)
         }
     }
 }
 </code></pre>
-<p>As you can see this is an extension function, which allows you to use
-the Kweb DSL within the newly created function.</p>
-<p>Don't worry if you're unsure about this because you can use
-IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
-function</a>
-refactoring to create these functions automatically.</p>
-<h2 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h2>
-<p>You can find a simple template Kweb project in
-<a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
+<p>Take a look at the <a href="https://fomantic-ui.com">Fomantic UI documentation</a>
+to see everything else it can do.</p>
+<h2 id="other-ui-frameworks"><a class="header" href="#other-ui-frameworks">Other UI Frameworks</a></h2>
+<p>Kweb is known to work well with a number of other CSS frameworks -
+particularly those that work through pure HTML, such as
+<a href="https://tailwindcss.com/">Tailwind</a>.</p>
+<h2 id="example-and-demo"><a class="header" href="#example-and-demo">Example and Demo</a></h2>
+<ul>
+<li><a href="https://github.com/freenet/freenetorg-website/">freenet.org</a>
+A Kweb website built on Google Cloud Platform with Fomantic styling.</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="routing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="dom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="integrations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -273,10 +198,10 @@ refactoring to create these functions automatically.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="routing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="dom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="integrations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
