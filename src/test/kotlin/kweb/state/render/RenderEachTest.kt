@@ -84,8 +84,8 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:1241")
         val button = driver.findElements(By.tagName("button"))
         button[0].click()
-        val labels = driver.findElements(By.tagName("h1"))
-        await().untilAsserted {
+        await().pollInSameThread().untilAsserted {
+            val labels = driver.findElements(By.tagName("h1"))
             labels[0].text shouldBe ("Dog")
             labels[1].text shouldBe ("Cat")
             labels[2].text shouldBe ("Bear")

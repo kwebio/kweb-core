@@ -4,6 +4,7 @@ import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -97,10 +98,12 @@ class TodoDemoTest {
         site.addTodoItem(thirdItem)
         site.deleteItemByText(secondItem)
 
-        val allItems = site.getAllItems()
-        allItems.find { it.text == firstItem } shouldNotBe null
-        allItems.find { it.text == secondItem } shouldBe null
-        allItems.find { it.text == thirdItem } shouldNotBe null
+        await().pollInSameThread().untilAsserted {
+            val allItems = site.getAllItems()
+            allItems.find { it.text == firstItem } shouldNotBe null
+            allItems.find { it.text == secondItem } shouldBe null
+            allItems.find { it.text == thirdItem } shouldNotBe null
+        }
     }
 
     @Test
