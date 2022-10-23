@@ -1,7 +1,5 @@
 # URL Routing
 
-<!-- toc -->
-
 In a web application, routing is the process of using URLs to drive the
 user interface (UI). URLs are a prominent feature in every web browser,
 and have several main functions:

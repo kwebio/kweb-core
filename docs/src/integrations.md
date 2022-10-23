@@ -63,7 +63,9 @@ fun main(args: Array<String>) {
 }
 ```
 
-## Google Cloud Platform's FireStore
+## Google Cloud Platform
+
+### FireStore
 
 Kweb can be used with Google Cloud Platform's FireStore. Our demo website defines some utility methods in
 [firestore.kt](https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/util/firestore.kt),

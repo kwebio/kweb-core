@@ -1,5 +1,7 @@
 # DOM Basics
 
+## Table of Contents
+
 <!-- toc -->
 
 ## Creating DOM Elements and Fragments
