@@ -991,7 +991,6 @@ $dokka.location:kweb/Kweb///PointingToDeclaration/kweb-core/kweb/-kweb/index.ht
 $dokka.location:kweb/Kweb/Kweb/#kotlin.Int#kotlin.Boolean#kotlin.collections.List[kweb.plugins.KwebPlugin]#io.ktor.server.engine.EngineSSLConnectorConfig?#kweb.config.KwebConfiguration#kotlin.Function1[kweb.WebBrowser,kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-kweb/-kweb.html
 $dokka.location:kweb/Kweb/addCallback/#kotlin.String#kotlin.Int#kotlin.Function1[kotlinx.serialization.json.JsonElement,kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-kweb/add-callback.html
 $dokka.location:kweb/Kweb/callJs/#kotlin.String#kweb.client.FunctionCall#kweb.DebugInfo?/PointingToDeclaration/kweb-core/kweb/-kweb/call-js.html
-$dokka.location:kweb/Kweb/clientState/#/PointingToDeclaration/kweb-core/kweb/-kweb/client-state.html
 $dokka.location:kweb/Kweb/close/#/PointingToDeclaration/kweb-core/kweb/-kweb/close.html
 $dokka.location:kweb/Kweb/debug/#/PointingToDeclaration/kweb-core/kweb/-kweb/debug.html
 $dokka.location:kweb/Kweb/determineClientPrefix/#io.ktor.server.application.ApplicationCall/PointingToDeclaration/kweb-core/kweb/-kweb/determine-client-prefix.html
