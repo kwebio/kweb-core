@@ -1,5 +1,7 @@
 # DOM Basics
 
+<!-- toc -->
+
 ## Creating DOM Elements and Fragments
 
 Let's create a `<button>` as a child of the `<body>` element and set its text:

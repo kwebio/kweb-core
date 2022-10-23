@@ -1,5 +1,7 @@
 # Observer Pattern & State
 
+<!-- toc -->
+
 ## Overview
 
 Kweb uses the [observer

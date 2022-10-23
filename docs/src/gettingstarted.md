@@ -1,5 +1,7 @@
 # Getting Started
 
+<!-- toc -->
+
 ## Requirements
 
 Some familiarity with [Kotlin](https://kotlinlang.org/) is assumed, as

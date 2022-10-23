@@ -1,5 +1,7 @@
 # Event Handling
 
+<!-- toc -->
+
 ## Listening for events
 
 You can attach event handlers to DOM elements:

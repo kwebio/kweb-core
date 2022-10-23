@@ -20,9 +20,8 @@ jobs:
           fetch-depth: 0
       - name: Install mdbook
         run: |
-          mkdir mdbook
-          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=./mdbook
-          echo `pwd`/mdbook >> $GITHUB_PATH
+          curl --proto '=https' --tlsv1.2 -sSf https://rossmacarthur.github.io/install/crate.sh | bash -s -- --repo "rust-lang/mdBook" --bin mdbook --to ~/.cargo/bin
+          curl --proto '=https' --tlsv1.2 -sSf https://rossmacarthur.github.io/install/crate.sh | bash -s -- --repo "badboy/mdbook-toc" --to ~/.cargo/bin
       - name: Substituting KWEB_VERSION
         run: |
           cd docs
@@ -31,6 +30,8 @@ jobs:
           sed -i "s/KWEB_VERSION/$V/g" src/gettingstarted.md
       - name: Build MDBook
         run: |
+          mdbook --version
+          mdbook-toc --version
           cd docs
           mdbook build
       - name: Validate hyperlinks

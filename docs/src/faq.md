@@ -1,5 +1,7 @@
 # Frequently Asked Questions
 
+<!-- toc -->
+
 ## Won't Kweb be slow relative to client-side web frameworks?
 
 No, Kweb's [immediate

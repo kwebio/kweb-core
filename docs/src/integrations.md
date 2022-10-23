@@ -1,5 +1,7 @@
 # Integrations
 
+<!-- toc -->
+
 Kweb can be integrated in other frameworks like Spring Boot, and possibly others. Thanks to Ktor's [ServletApplicationEngine](https://ktor.io/docs/war.html#configure-ktor), one can basically run any Ktor application within a supported servlet container like Spring Boot.
 
 ## Spring Boot
@@ -61,3 +63,9 @@ fun main(args: Array<String>) {
 }
 ```
 
+## Google Cloud Platform's FireStore
+
+Kweb can be used with Google Cloud Platform's FireStore. Our demo website defines some utility methods in
+[firestore.kt](https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/util/firestore.kt),
+and you can see how they're used in [news.kt](https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/news.kt)
+and [landing.kt](https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/landing.kt#L85).
