@@ -135,6 +135,10 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
+<ul>
+<li><a href="#spring-boot">Spring Boot</a></li>
+<li><a href="#google-cloud-platforms-firestore">Google Cloud Platform's FireStore</a></li>
+</ul>
 <p>Kweb can be integrated in other frameworks like Spring Boot, and possibly others. Thanks to Ktor's <a href="https://ktor.io/docs/war.html#configure-ktor">ServletApplicationEngine</a>, one can basically run any Ktor application within a supported servlet container like Spring Boot.</p>
 <h2 id="spring-boot"><a class="header" href="#spring-boot">Spring Boot</a></h2>
 <p>To integrate Kweb into a Spring Boot Web application you need a Spring Boot project with the web starter, which can be easily obtained from <a href="https://start.spring.io/#!language=kotlin&amp;dependencies=web">Spring initializr</a>.
@@ -191,6 +195,11 @@ fun main(args: Array&lt;String&gt;) {
     runApplication&lt;KwebSpringBootApplication&gt;(*args)
 }
 </code></pre>
+<h2 id="google-cloud-platforms-firestore"><a class="header" href="#google-cloud-platforms-firestore">Google Cloud Platform's FireStore</a></h2>
+<p>Kweb can be used with Google Cloud Platform's FireStore. Our demo website defines some utility methods in
+<a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/util/firestore.kt">firestore.kt</a>,
+and you can see how they're used in <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/news.kt">news.kt</a>
+and <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/landing.kt#L85">landing.kt</a>.</p>
 
                     </main>
 

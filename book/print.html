@@ -182,6 +182,18 @@ communication</li>
 <li>Chat with us on <a href="https://matrix.to/#/#kweb:matrix.org">Matrix</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<ul>
+<li><a href="gettingstarted.html#requirements">Requirements</a></li>
+<li><a href="gettingstarted.html#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a>
+<ul>
+<li><a href="gettingstarted.html#groovy">Groovy</a></li>
+<li><a href="gettingstarted.html#kotlin">Kotlin</a></li>
+</ul>
+</li>
+<li><a href="gettingstarted.html#hello-world">Hello world</a></li>
+<li><a href="gettingstarted.html#hello-world%C2%B2">Hello world²</a></li>
+<li><a href="gettingstarted.html#template-repository">Template Repository</a></li>
+</ul>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
 <p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
 is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
@@ -292,6 +304,14 @@ refactoring to create these functions automatically.</p>
 <p>You can find a simple template Kweb project in
 <a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dom-basics"><a class="header" href="#dom-basics">DOM Basics</a></h1>
+<ul>
+<li><a href="dom.html#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></li>
+<li><a href="dom.html#element-attributes">Element Attributes</a></li>
+<li><a href="dom.html#adding-children-to-an-existing-element">Adding children to an existing element</a></li>
+<li><a href="dom.html#reading-from-the-dom">Reading from the DOM</a></li>
+<li><a href="dom.html#supported-html-tags">Supported HTML tags</a></li>
+<li><a href="dom.html#further-reading">Further Reading</a></li>
+</ul>
 <h2 id="creating-dom-elements-and-fragments"><a class="header" href="#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></h2>
 <p>Let's create a <code>&lt;button&gt;</code> as a child of the <code>&lt;body&gt;</code> element and set its text:</p>
 <pre><code class="language-kotlin">fun main() {
@@ -390,6 +410,11 @@ For example, here is how you might use the infamous and now-obsolete
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/Element.kt">Element</a>
 class provides many other useful ways to interact with DOM elements.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="event-handling"><a class="header" href="#event-handling">Event Handling</a></h1>
+<ul>
+<li><a href="events.html#listening-for-events">Listening for events</a></li>
+<li><a href="events.html#immediate-events">Immediate events</a></li>
+<li><a href="events.html#the-best-of-both-worlds">The best of both worlds</a></li>
+</ul>
 <h2 id="listening-for-events"><a class="header" href="#listening-for-events">Listening for events</a></h2>
 <p>You can attach event handlers to DOM elements:</p>
 <pre><code class="language-kotlin">doc.body {
@@ -437,6 +462,16 @@ display some form of <a href="https://loading.io/css/">spinner</a>. The normal
 handler would then do what it needs on the server, and then perhaps
 re-enable the button and remove the spinner.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="observer-pattern--state"><a class="header" href="#observer-pattern--state">Observer Pattern &amp; State</a></h1>
+<ul>
+<li><a href="state.html#overview">Overview</a></li>
+<li><a href="state.html#the-kvar-class">The KVar Class</a></li>
+<li><a href="state.html#kvars-and-the-dom">KVars and the DOM</a></li>
+<li><a href="state.html#binding-a-kvar-to-an-input-elements-value">Binding a KVar to an input element's value</a></li>
+<li><a href="state.html#rendering-state-to-a-dom-fragment">Rendering state to a DOM fragment</a></li>
+<li><a href="state.html#rendering-lists-with-rendereach">Rendering lists with renderEach</a></li>
+<li><a href="state.html#extracting-data-class-properties">Extracting data class properties</a></li>
+<li><a href="state.html#reversible-mapping">Reversible mapping</a></li>
+</ul>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>Kweb uses the <a href="https://en.wikipedia.org/wiki/Observer_pattern">observer
 pattern</a> to manage
@@ -614,6 +649,11 @@ want the mapped value to be a mutable KVar. Most of the time the simple
 <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/map.html">KVal.map {}</a>
 function is what you need.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="url-routing"><a class="header" href="#url-routing">URL Routing</a></h1>
+<ul>
+<li><a href="routing.html#a-simple-example">A simple example</a></li>
+<li><a href="routing.html#handing-404s">Handing 404s</a></li>
+<li><a href="routing.html#modifying-the-url">Modifying the URL</a></li>
+</ul>
 <p>In a web application, routing is the process of using URLs to drive the
 user interface (UI). URLs are a prominent feature in every web browser,
 and have several main functions:</p>
@@ -720,6 +760,10 @@ can be incremented via its <code>value</code> property. This will cause the page
 URL to update, which will in-turn cause the DOM to update to reflect the
 new URL. All of this is handled for you automatically by Kweb.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
+<ul>
+<li><a href="integrations.html#spring-boot">Spring Boot</a></li>
+<li><a href="integrations.html#google-cloud-platforms-firestore">Google Cloud Platform's FireStore</a></li>
+</ul>
 <p>Kweb can be integrated in other frameworks like Spring Boot, and possibly others. Thanks to Ktor's <a href="https://ktor.io/docs/war.html#configure-ktor">ServletApplicationEngine</a>, one can basically run any Ktor application within a supported servlet container like Spring Boot.</p>
 <h2 id="spring-boot"><a class="header" href="#spring-boot">Spring Boot</a></h2>
 <p>To integrate Kweb into a Spring Boot Web application you need a Spring Boot project with the web starter, which can be easily obtained from <a href="https://start.spring.io/#!language=kotlin&amp;dependencies=web">Spring initializr</a>.
@@ -776,7 +820,26 @@ fun main(args: Array&lt;String&gt;) {
     runApplication&lt;KwebSpringBootApplication&gt;(*args)
 }
 </code></pre>
+<h2 id="google-cloud-platforms-firestore"><a class="header" href="#google-cloud-platforms-firestore">Google Cloud Platform's FireStore</a></h2>
+<p>Kweb can be used with Google Cloud Platform's FireStore. Our demo website defines some utility methods in
+<a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/util/firestore.kt">firestore.kt</a>,
+and you can see how they're used in <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/news.kt">news.kt</a>
+and <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/landing.kt#L85">landing.kt</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
+<ul>
+<li><a href="faq.html#wont-kweb-be-slow-relative-to-client-side-web-frameworks">Won't Kweb be slow relative to client-side web frameworks?</a></li>
+<li><a href="faq.html#whats-the-difference-between-kweb-and-vaadin">What's the difference between Kweb and Vaadin?</a></li>
+<li><a href="faq.html#is-there-a-larger-working-example">Is there a larger working example?</a></li>
+<li><a href="faq.html#how-do-i-enable-https">How do I enable HTTPS?</a></li>
+<li><a href="faq.html#can-i-embed-kweb-within-an-android-app">Can I embed Kweb within an Android app?</a></li>
+<li><a href="faq.html#i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider">I want to deploy a Kweb Application behind a load balancer, what do i need to consider?</a></li>
+<li><a href="faq.html#what-about-templates">What about templates?</a></li>
+<li><a href="faq.html#why-risk-my-project-on-a-framework-i-just-heard-of">Why risk my project on a framework I just heard of?</a></li>
+<li><a href="faq.html#how-is-kweb-pronounced">How is &quot;Kweb&quot; pronounced?</a></li>
+<li><a href="faq.html#can-kweb-be-embedded-in-an-existing-ktor-app">Can Kweb be embedded in an existing Ktor app?</a></li>
+<li><a href="faq.html#how-do-i-enable-auto-reloading">How do I enable auto-reloading?</a></li>
+<li><a href="faq.html#i-have-a-question-not-answered-here">I have a question not answered here</a></li>
+</ul>
 <h2 id="wont-kweb-be-slow-relative-to-client-side-web-frameworks"><a class="header" href="#wont-kweb-be-slow-relative-to-client-side-web-frameworks">Won't Kweb be slow relative to client-side web frameworks?</a></h2>
 <p>No, Kweb's <a href="https://docs.kweb.io/en/latest/events.html#immediate-events">immediate
 events</a>
