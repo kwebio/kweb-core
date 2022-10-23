@@ -25,7 +25,7 @@ jobs:
       - name: Substituting KWEB_VERSION
         run: |
           cd docs
-          V=$(git describe --abbrev=0 --tags)
+          V=$(curl --silent "https://search.maven.org/solrsearch/select?q=g:io.kweb+AND+a:kweb-core&rows=20&wt=json" | jq -r '.response.docs[0].latestVersion')
           echo "Substituting version $V"
           sed -i "s/KWEB_VERSION/$V/g" src/gettingstarted.md
       - name: Build MDBook
