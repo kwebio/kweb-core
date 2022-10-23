@@ -304,6 +304,7 @@ refactoring to create these functions automatically.</p>
 <p>You can find a simple template Kweb project in
 <a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dom-basics"><a class="header" href="#dom-basics">DOM Basics</a></h1>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
 <ul>
 <li><a href="dom.html#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></li>
 <li><a href="dom.html#element-attributes">Element Attributes</a></li>
@@ -649,11 +650,6 @@ want the mapped value to be a mutable KVar. Most of the time the simple
 <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/map.html">KVal.map {}</a>
 function is what you need.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="url-routing"><a class="header" href="#url-routing">URL Routing</a></h1>
-<ul>
-<li><a href="routing.html#a-simple-example">A simple example</a></li>
-<li><a href="routing.html#handing-404s">Handing 404s</a></li>
-<li><a href="routing.html#modifying-the-url">Modifying the URL</a></li>
-</ul>
 <p>In a web application, routing is the process of using URLs to drive the
 user interface (UI). URLs are a prominent feature in every web browser,
 and have several main functions:</p>
@@ -762,7 +758,11 @@ new URL. All of this is handled for you automatically by Kweb.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
 <ul>
 <li><a href="integrations.html#spring-boot">Spring Boot</a></li>
-<li><a href="integrations.html#google-cloud-platforms-firestore">Google Cloud Platform's FireStore</a></li>
+<li><a href="integrations.html#google-cloud-platform">Google Cloud Platform</a>
+<ul>
+<li><a href="integrations.html#firestore">FireStore</a></li>
+</ul>
+</li>
 </ul>
 <p>Kweb can be integrated in other frameworks like Spring Boot, and possibly others. Thanks to Ktor's <a href="https://ktor.io/docs/war.html#configure-ktor">ServletApplicationEngine</a>, one can basically run any Ktor application within a supported servlet container like Spring Boot.</p>
 <h2 id="spring-boot"><a class="header" href="#spring-boot">Spring Boot</a></h2>
@@ -820,7 +820,8 @@ fun main(args: Array&lt;String&gt;) {
     runApplication&lt;KwebSpringBootApplication&gt;(*args)
 }
 </code></pre>
-<h2 id="google-cloud-platforms-firestore"><a class="header" href="#google-cloud-platforms-firestore">Google Cloud Platform's FireStore</a></h2>
+<h2 id="google-cloud-platform"><a class="header" href="#google-cloud-platform">Google Cloud Platform</a></h2>
+<h3 id="firestore"><a class="header" href="#firestore">FireStore</a></h3>
 <p>Kweb can be used with Google Cloud Platform's FireStore. Our demo website defines some utility methods in
 <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/util/firestore.kt">firestore.kt</a>,
 and you can see how they're used in <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/news.kt">news.kt</a>
