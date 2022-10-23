@@ -1,6 +1,6 @@
 # Introduction
 
-## Motivation
+## Why another web framework?
 
 Modern websites consist of at least two [tightly
 coupled](https://en.wikipedia.org/wiki/Coupling_(computer_programming))
@@ -12,7 +12,7 @@ Kweb's goal is to eliminate this server/browser separation so that your
 webapp's architecture is determined by the problem you're solving,
 rather than the limitations of today's tools.
 
-## How does it work?
+## What is Kweb?
 
 Kweb is a remote interface to the web browser's DOM. You can create and
 manipulate DOM elements, and listen for and handle DOM events.
