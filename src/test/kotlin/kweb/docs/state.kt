@@ -76,16 +76,25 @@ list.value = listOf("four", "five", "six")
         Kweb(port = 16097) {
             // ANCHOR: rendereach
 doc.body {
-    val obsList = ObservableList(listOf("one", "two", "three"))
-    ul {
+    data class Pet(val name : String, val age : Int)
+
+    val obsList = ObservableList(listOf(
+        Pet("Sammy", 7),
+        Pet("Halley", 5),
+        Pet("Buddy", 3)
+    ))
+    table {
         renderEach(obsList) { item ->
-            li().text(item)
+            tr {
+                td().text(item.name)
+                td().text(item.age.toString())
+            }
         }
     }
-    obsList.add(1, "one and a half")
+    obsList.add(1, Pet("Bella", 2))
     obsList.removeAt(2)
     obsList.move(0, 1)
-    obsList[0] = "ONE"
+    obsList[0] = Pet("Joe", 1)
 }
             // ANCHOR_END: rendereach
         }
