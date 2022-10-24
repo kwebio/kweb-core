@@ -1,5 +1,6 @@
 package kweb.docs
 
+import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
 
 /*
@@ -36,5 +37,26 @@ doc.body {
     }
 }
         // ANCHOR_END: immediate
-    }
+
+
+        doc.body {
+            val inputButton = button(type = ButtonType.button)
+            val label = span().text("Not clicked")
+            // ANCHOR: retrieveJs
+inputButton.on(retrieveJs = "(new Date()).getTime()").click { event ->
+    label.text("Clicked at ${event.retrieved.jsonPrimitive.content}")
 }
+            // ANCHOR_END: retrieveJs
+        }
+        doc.body {
+                // ANCHOR: retrieveJs2
+val textInput = input(type = InputType.text)
+val inputButton = button(type = ButtonType.button)
+val label = span().text("Not clicked")
+inputButton.on(retrieveJs = textInput.valueJsExpression).click { event ->
+    label.text("Read textInput: ${event.retrieved.jsonPrimitive.content}")
+}
+                // ANCHOR_END: retrieveJs2
+            }
+        }
+    }

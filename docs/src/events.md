@@ -26,7 +26,7 @@ to an event.
 Fortunately, Kweb has a solution:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/events.kt:immediate}}
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs}}
 ```
 
 Kweb executes this event handler *on page render* and records the
@@ -39,10 +39,33 @@ round trip.
 includes some runtime safeguards against this but they can't catch
 everything so please use with caution.
 
-## The best of both worlds
+### Using events and immediate events together
 
 A common pattern is to use both types of event handler on a DOM element.
 The immediate handler might disable a clicked button, or temporarily
 display some form of [spinner](https://loading.io/css/). The normal
 handler would then do what it needs on the server, and then perhaps
 re-enable the button and remove the spinner.
+
+## Efficiently retrieving DOM data when an event is triggered
+
+Sometimes you need to know the state of the DOM when an event is triggered.
+
+You could query it from within the event handler but this would add a server 
+round trip. 
+
+Alternatively you can use `retrieveJs`, in this case to retrieve
+the time the browser thinks it is:
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs}}
+```
+
+For [ValueElement](https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html)s
+such as [InputElement](https://docs.kweb.io/api/kweb-core/kweb/-input-element/index.html)
+there is a convenience property `valueJsExpression` that you can use to retrieve
+the current value of the element:
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs2}}
+```
