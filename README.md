@@ -78,13 +78,15 @@ fun main() {
 
 ### Result
 
-This demo illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
+This example illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
 [modifying elements](https://docs.kweb.io/book/dom.html#adding-attributes), 
 [KVars](https://docs.kweb.io/book/state.html#building-blocks), and binding 
 [input elements](https://docs.kweb.io/book/dom.html#input-elements).
 
-![kweb-readme-demo](https://user-images.githubusercontent.com/23075/197428328-9a42d5e2-f6c9-43f8-9d7c-62fe1a445dab.gif)
-
+  <kbd>
+<img src="https://user-images.githubusercontent.com/23075/197428328-9a42d5e2-f6c9-43f8-9d7c-62fe1a445dab.gif" />
+  </kbd>
+  
 ## Learn More
 
 * [The Kweb Book](http://docs.kweb.io/book) (user manual)
