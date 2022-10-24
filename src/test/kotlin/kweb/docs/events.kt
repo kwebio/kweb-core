@@ -65,10 +65,10 @@ inputButton.on(retrieveJs = textInput.valueJsExpression).click { event ->
 
         doc.body {
             // ANCHOR: preventDefault
-            val inputButton = button(type = ButtonType.button)
-            inputButton.on(preventDefault = true).click {
-                logger.debug("Clicked!")
-            }
+val inputButton = button(type = ButtonType.button)
+inputButton.on(preventDefault = true).click {
+    logger.debug("Clicked!")
+}
             // ANCHOR_END: preventDefault
         }
 
