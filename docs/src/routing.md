@@ -46,12 +46,9 @@ fun main() {
 
 Now, if you visit <http://localhost:16097/users/997>, you will see:
 
-```html
-<h1>User id: 997</h1>
-```
-
-You can have as many path()s as you need, each with it's own path
-definition. The definition can contain parameters wrapped in `{braces}`.
+<kbd>
+User id: 997
+</kbd>
 
 The value of these parameters can then be retrieved from the *params*
 map, but note that the values are wrapped in a `KVar<String>` object.
