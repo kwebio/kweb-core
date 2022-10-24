@@ -77,4 +77,6 @@ You can also prevent the default action of an event from occurring by setting th
 `preventDefault` parameter to true - this is the equivalent of JavaScript's [Event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
 function.
 
+```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/events.kt:preventDefault}}
+```
