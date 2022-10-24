@@ -9,3 +9,6 @@ title = "The Kweb Book"
 [preprocessor.toc]
 command = "mdbook-toc"
 renderer = ["html"]
+
+[output.html]
+edit-url-template = "https://github.com/kwebio/kweb-core/edit/master/{path}"
