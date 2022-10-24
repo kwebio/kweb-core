@@ -213,10 +213,10 @@ inputButton.on(retrieveJs = textInput.valueJsExpression).click { event -&gt;
 <p>You can also prevent the default action of an event from occurring by setting the
 <code>preventDefault</code> parameter to true - this is the equivalent of JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault">Event.preventDefault()</a>
 function.</p>
-<pre><code class="language-kotlin">            val inputButton = button(type = ButtonType.button)
-            inputButton.on(preventDefault = true).click {
-                logger.debug(&quot;Clicked!&quot;)
-            }
+<pre><code class="language-kotlin">val inputButton = button(type = ButtonType.button)
+inputButton.on(preventDefault = true).click {
+    logger.debug(&quot;Clicked!&quot;)
+}
 </code></pre>
 
                     </main>
