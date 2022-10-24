@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/badge/chat-matrix-blue?style=flat-square&logo=matrix&color=informational" alt="matrix" />
   </a>
   <a href="https://docs.kweb.io/book/gettingstarted.html">
-    <img src="https://img.shields.io/github/v/release/kwebio/kweb-core?label=dependency&sort=semver&style=flat-square&logo=gradle&color=blueviolet&include_prereleases" />
+    <img src="https://img.shields.io/maven-central/v/io.kweb/kweb-core?style=flat-square&logo=maven&color=blueviolet" />
   <a href="https://github.com/kwebio/kweb-core/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=informational" \>
   </a>
@@ -78,13 +78,15 @@ fun main() {
 
 ### Result
 
-This demo illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
+This example illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
 [modifying elements](https://docs.kweb.io/book/dom.html#adding-attributes), 
 [KVars](https://docs.kweb.io/book/state.html#building-blocks), and binding 
 [input elements](https://docs.kweb.io/book/dom.html#input-elements).
 
-![video](readme-video.gif)
-
+  <kbd>
+<img src="https://user-images.githubusercontent.com/23075/197428328-9a42d5e2-f6c9-43f8-9d7c-62fe1a445dab.gif" />
+  </kbd>
+  
 ## Learn More
 
 * [The Kweb Book](http://docs.kweb.io/book) (user manual)
