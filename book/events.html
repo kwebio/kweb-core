@@ -170,7 +170,7 @@ short but sometimes noticeable delay before the page updates in response
 to an event.</p>
 <p>Fortunately, Kweb has a solution:</p>
 <pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
-label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
+    label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
 }
 </code></pre>
 <p>Kweb executes this event handler <em>on page render</em> and records the
@@ -195,7 +195,7 @@ round trip which is inefficient.</p>
 This will execute the JavaScript expression you provide when the event fires and return the 
 result in the <a href="https://docs.kweb.io/api/kweb-core/kweb.html.events/-event/retrieved.html?query=val%20retrieved:%20JsonElement">retrieved</a> property of the event:</p>
 <pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
-label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
+    label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
 }
 </code></pre>
 <p>For <a href="https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html">ValueElement</a>s
