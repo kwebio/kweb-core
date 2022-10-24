@@ -1,11 +1,11 @@
-# Observer Pattern & State
+# Rendering State
 
 <!-- toc -->
 
 ## Overview
 
 A Kweb app is a function that maps state on the server to the DOM in the user's web browser. Once this 
-mapping is defined, you can change the state and the change will automatically propagate to the browser.
+mapping is defined, you can change the state and the browser will update automatically.
 
 ## The KVar Class
 
