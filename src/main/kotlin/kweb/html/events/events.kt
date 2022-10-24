@@ -56,7 +56,9 @@ data class MouseEvent(
     val shiftKey: Boolean,
     val x: Float = clientX,
     val y: Float = clientY,
-    /** @see kweb.Element.on **/
+    /** If `elementX.on(retrieveJs = "...") was provided, this will contain the value returned by the
+     * JavaScript expression.  If no `retrieveJs` was specified it will be JsonNull.
+     **/
     val retrieved: JsonElement = JsonNull
 )
 
