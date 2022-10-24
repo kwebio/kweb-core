@@ -275,16 +275,25 @@ very inefficient because the entire list would be re-rendered every time.
 <p>The items must be stored in an <code>ObservableList</code>, which implements the 
 <code>MutableList</code> interface.</p>
 <pre><code class="language-kotlin">doc.body {
-    val obsList = ObservableList(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
-    ul {
+    data class Pet(val name : String, val age : Int)
+
+    val obsList = ObservableList(listOf(
+        Pet(&quot;Sammy&quot;, 7),
+        Pet(&quot;Halley&quot;, 5),
+        Pet(&quot;Buddy&quot;, 3)
+    ))
+    table {
         renderEach(obsList) { item -&gt;
-            li().text(item)
+            tr {
+                td().text(item.name)
+                td().text(item.age.toString())
+            }
         }
     }
-    obsList.add(1, &quot;one and a half&quot;)
+    obsList.add(1, Pet(&quot;Bella&quot;, 2))
     obsList.removeAt(2)
     obsList.move(0, 1)
-    obsList[0] = &quot;ONE&quot;
+    obsList[0] = Pet(&quot;Joe&quot;, 1)
 }
 </code></pre>
 <h2 id="extracting-data-class-properties"><a class="header" href="#extracting-data-class-properties">Extracting data class properties</a></h2>
