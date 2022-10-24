@@ -50,7 +50,6 @@ re-enable the button and remove the spinner.
 ## Efficiently retrieving DOM data when an event is triggered
 
 Sometimes you need to know the state of the DOM when an event is triggered.
-
 You could query it from within the event handler but this would add a server 
 round trip. 
 
