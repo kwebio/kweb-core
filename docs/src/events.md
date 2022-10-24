@@ -51,11 +51,11 @@ re-enable the button and remove the spinner.
 
 Sometimes you need to know the state of the DOM when an event is triggered.
 You could query it from within the event handler but this would add a server 
-round trip. 
+round trip which is inefficient.
 
-Alternatively you can use [retrieveJs](https://docs.kweb.io/api/kweb-core/kweb.html.events/-on-receiver/-on-receiver.html). This will execute the JavaScript
-expression you provide and return the result in the [kweb.html.events.Event.retrieved]
-property of the event:
+Alternatively you can use [retrieveJs](https://docs.kweb.io/api/kweb-core/kweb.html.events/-on-receiver/-on-receiver.html). 
+This will execute the JavaScript expression you provide when the event fires and return the 
+result in the [retrieved](https://docs.kweb.io/api/kweb-core/kweb.html.events/-event/retrieved.html?query=val%20retrieved:%20JsonElement) property of the event:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs}}
@@ -65,7 +65,7 @@ property of the event:
 For [ValueElement](https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html)s
 such as [InputElement](https://docs.kweb.io/api/kweb-core/kweb/-input-element/index.html)
 there is a convenience property `valueJsExpression` that you can use to retrieve
-the current value of the element:
+the current [value](https://www.w3schools.com/tags/att_input_value.asp) of the element:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs2}}
