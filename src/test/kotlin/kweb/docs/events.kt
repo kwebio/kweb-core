@@ -54,7 +54,7 @@ val textInput = input(type = InputType.text)
 val inputButton = button(type = ButtonType.button)
 val label = span().text("Not clicked")
 inputButton.on(retrieveJs = textInput.valueJsExpression).click { event ->
-    label.text("Read textInput: ${event.retrieved.content}")
+    label.text("Read textInput: ${event.retrieved.jsonPrimitive.content}")
 }
             // ANCHOR_END: retrieveJs2
         }
