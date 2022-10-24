@@ -181,10 +181,9 @@ fun main() {
 }
 </code></pre>
 <p>Now, if you visit <a href="http://localhost:16097/users/997">http://localhost:16097/users/997</a>, you will see:</p>
-<pre><code class="language-html">&lt;h1&gt;User id: 997&lt;/h1&gt;
-</code></pre>
-<p>You can have as many path()s as you need, each with it's own path
-definition. The definition can contain parameters wrapped in <code>{braces}</code>.</p>
+<kbd>
+User id: 997
+</kbd>
 <p>The value of these parameters can then be retrieved from the <em>params</em>
 map, but note that the values are wrapped in a <code>KVar&lt;String&gt;</code> object.
 This means that you can use all of Kweb's <a href="https://docs.kweb.io/en/latest/state.html">state
