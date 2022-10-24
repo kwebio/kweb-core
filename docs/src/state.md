@@ -4,19 +4,12 @@
 
 ## Overview
 
-Kweb uses the [observer
-pattern](https://en.wikipedia.org/wiki/Observer_pattern) to manage
-state.
-
-A Kweb app can be viewed as a mapping function between state on the
-server and the DOM within the end-user's web browser. Once this mapping
-is defined, simply modify this state and the change will propagate
-automatically to the browser.
+A Kweb app is a function that maps state on the server to the DOM in the user's web browser. Once this 
+mapping is defined, you can change the state and the change will automatically propagate to the browser.
 
 ## The KVar Class
 
-A
-[KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)
+A [KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)
 is an observable container. It contains a single typed object, which can change over time, similar to an 
 [AtomicReference](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html). 
 You can add listeners to a KVar to be notified immediately when it changes.
