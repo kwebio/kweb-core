@@ -479,8 +479,11 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
 
     /**
      * A KVar bidirectionally synchronized with the [value of a select element](https://www.w3schools.com/jsref/prop_select_value.asp).
-     * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify the element value
-     * if the KVar is changed.
+     * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify
+     * the element value if the KVar is changed.
+     *
+     * [value] can be set to a `KVar<String>` to synchronize with an existing KVar, or it will create a new `KVar("")`
+     * if not set.
      */
     var value: KVar<String>
         get() {
