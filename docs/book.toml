@@ -11,4 +11,6 @@ command = "mdbook-toc"
 renderer = ["html"]
 
 [output.html]
-edit-url-template = "https://github.com/kwebio/kweb-core/edit/master/{path}"
+git-repository-url = "https://github.com/kwebio/kweb-core"
+edit-url-template = "https://github.com/kwebio/kweb-core/edit/master/docs/{path}"
+site-url = "/book/"
