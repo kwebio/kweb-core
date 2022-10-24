@@ -481,7 +481,7 @@ the current value of the element:</p>
 val inputButton = button(type = ButtonType.button)
 val label = span().text(&quot;Not clicked&quot;)
 inputButton.on(retrieveJs = textInput.valueJsExpression).click { event -&gt;
-    label.text(&quot;Read textInput: ${event.retrieved.jsonPrimitive.content}&quot;)
+    label.text(&quot;Read textInput: ${event.retrieved.content}&quot;)
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="observer-pattern--state"><a class="header" href="#observer-pattern--state">Observer Pattern &amp; State</a></h1>
