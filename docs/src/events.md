@@ -70,3 +70,11 @@ the current [value](https://www.w3schools.com/tags/att_input_value.asp) of the e
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs2}}
 ```
+
+## Preventing the default event action
+
+You can also prevent the default action of an event from occurring by setting the
+`preventDefault` parameter to true - this is the equivalent of JavaScript's [Event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)
+function.
+
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:preventDefault}}

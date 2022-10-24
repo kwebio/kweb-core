@@ -2,10 +2,13 @@ package kweb.docs
 
 import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
+import mu.KotlinLogging
 
 /*
  * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
  */
+
+val logger = KotlinLogging.logger {}
 
 fun main() {
     Kweb(port = 16097) {
@@ -23,7 +26,7 @@ doc.body {
 doc.body {
     val input = input(type = InputType.text)
     input.on.keypress { keypressEvent ->
-        println("Key Pressed: ${keypressEvent.key}")
+        logger.info("Key Pressed: ${keypressEvent.key}")
     }
 }
         // ANCHOR_END: read
@@ -44,10 +47,11 @@ doc.body {
             val label = span().text("Not clicked")
             // ANCHOR: retrieveJs
 inputButton.on(retrieveJs = "(new Date()).getTime()").click { event ->
-    label.text("Clicked at ${event.retrieved.jsonPrimitive.content}")
+label.text("Clicked at ${event.retrieved.jsonPrimitive.content}")
 }
             // ANCHOR_END: retrieveJs
         }
+
         doc.body {
             // ANCHOR: retrieveJs2
 val textInput = input(type = InputType.text)
@@ -58,5 +62,15 @@ inputButton.on(retrieveJs = textInput.valueJsExpression).click { event ->
 }
             // ANCHOR_END: retrieveJs2
         }
+
+        doc.body {
+            // ANCHOR: preventDefault
+            val inputButton = button(type = ButtonType.button)
+            inputButton.on(preventDefault = true).click {
+                logger.debug("Clicked!")
+            }
+            // ANCHOR_END: preventDefault
+        }
+
     }
 }
