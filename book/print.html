@@ -465,10 +465,10 @@ re-enable the button and remove the spinner.</p>
 <h2 id="querying-the-dom-when-an-event-is-triggered"><a class="header" href="#querying-the-dom-when-an-event-is-triggered">Querying the DOM when an event is triggered</a></h2>
 <p>Sometimes you need to know the state of the DOM when an event is triggered.
 You could query it from within the event handler but this would add a server 
-round trip. </p>
-<p>Alternatively you can use <a href="https://docs.kweb.io/api/kweb-core/kweb.html.events/-on-receiver/-on-receiver.html">retrieveJs</a>. This will execute the JavaScript
-expression you provide and return the result in the [kweb.html.events.Event.retrieved]
-property of the event:</p>
+round trip which is inefficient.</p>
+<p>Alternatively you can use <a href="https://docs.kweb.io/api/kweb-core/kweb.html.events/-on-receiver/-on-receiver.html">retrieveJs</a>. 
+This will execute the JavaScript expression you provide when the event fires and return the 
+result in the <a href="https://docs.kweb.io/api/kweb-core/kweb.html.events/-event/retrieved.html?query=val%20retrieved:%20JsonElement">retrieved</a> property of the event:</p>
 <pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
     label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
 }
@@ -476,7 +476,7 @@ property of the event:</p>
 <p>For <a href="https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html">ValueElement</a>s
 such as <a href="https://docs.kweb.io/api/kweb-core/kweb/-input-element/index.html">InputElement</a>
 there is a convenience property <code>valueJsExpression</code> that you can use to retrieve
-the current value of the element:</p>
+the current <a href="https://www.w3schools.com/tags/att_input_value.asp">value</a> of the element:</p>
 <pre><code class="language-kotlin">val textInput = input(type = InputType.text)
 val inputButton = button(type = ButtonType.button)
 val label = span().text(&quot;Not clicked&quot;)
