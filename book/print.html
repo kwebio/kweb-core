@@ -419,6 +419,7 @@ class provides many other useful ways to interact with DOM elements.</p>
 </ul>
 </li>
 <li><a href="events.html#querying-the-dom-when-an-event-is-triggered">Querying the DOM when an event is triggered</a></li>
+<li><a href="events.html#preventing-the-default-event-action">Preventing the default event action</a></li>
 </ul>
 <h2 id="listening-for-events"><a class="header" href="#listening-for-events">Listening for events</a></h2>
 <p>You can attach event handlers to DOM elements:</p>
@@ -435,7 +436,7 @@ event data like which key was pressed:</p>
 <pre><code class="language-kotlin">doc.body {
     val input = input(type = InputType.text)
     input.on.keypress { keypressEvent -&gt;
-        println(&quot;Key Pressed: ${keypressEvent.key}&quot;)
+        logger.info(&quot;Key Pressed: ${keypressEvent.key}&quot;)
     }
 }
 </code></pre>
@@ -445,7 +446,7 @@ short but sometimes noticeable delay before the page updates in response
 to an event.</p>
 <p>Fortunately, Kweb has a solution:</p>
 <pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
-    label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
+label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
 }
 </code></pre>
 <p>Kweb executes this event handler <em>on page render</em> and records the
@@ -470,7 +471,7 @@ round trip which is inefficient.</p>
 This will execute the JavaScript expression you provide when the event fires and return the 
 result in the <a href="https://docs.kweb.io/api/kweb-core/kweb.html.events/-event/retrieved.html?query=val%20retrieved:%20JsonElement">retrieved</a> property of the event:</p>
 <pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
-    label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
+label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
 }
 </code></pre>
 <p>For <a href="https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html">ValueElement</a>s
@@ -483,6 +484,15 @@ val label = span().text(&quot;Not clicked&quot;)
 inputButton.on(retrieveJs = textInput.valueJsExpression).click { event -&gt;
     label.text(&quot;Read textInput: ${event.retrieved.jsonPrimitive.content}&quot;)
 }
+</code></pre>
+<h2 id="preventing-the-default-event-action"><a class="header" href="#preventing-the-default-event-action">Preventing the default event action</a></h2>
+<p>You can also prevent the default action of an event from occurring by setting the
+<code>preventDefault</code> parameter to true - this is the equivalent of JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault">Event.preventDefault()</a>
+function.</p>
+<pre><code>        val inputButton = button(type = ButtonType.button)
+        inputButton.on(preventDefault = true).click {
+            logger.debug(&quot;Clicked!&quot;)
+        }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="observer-pattern--state"><a class="header" href="#observer-pattern--state">Observer Pattern &amp; State</a></h1>
 <ul>
