@@ -10,32 +10,32 @@ import kweb.*
 fun main() {
     Kweb(port = 16097) {
 // ANCHOR: attach_1
-        doc.body {
-            val label = h1()
-            label.text("Click Me")
-            label.on.click {
-                label.text("Clicked!")
-            }
-        }
+doc.body {
+    val label = h1()
+    label.text("Click Me")
+    label.on.click {
+        label.text("Clicked!")
+    }
+}
 // ANCHOR_END: attach_1
 
         // ANCHOR: read
-        doc.body {
-            val input = input(type = InputType.text)
-            input.on.keypress { keypressEvent ->
-                println("Key Pressed: ${keypressEvent.key}")
-            }
-        }
+doc.body {
+    val input = input(type = InputType.text)
+    input.on.keypress { keypressEvent ->
+        println("Key Pressed: ${keypressEvent.key}")
+    }
+}
         // ANCHOR_END: read
 
         // ANCHOR: immediate
-        doc.body {
-            val input = button(type = ButtonType.button)
-            val label = span().text("Not clicked")
-            input.onImmediate.click {
-                label.text("Clicked!")
-            }
-        }
+doc.body {
+    val input = button(type = ButtonType.button)
+    val label = span().text("Not clicked")
+    input.onImmediate.click {
+        label.text("Clicked!")
+    }
+}
         // ANCHOR_END: immediate
 
 
@@ -43,19 +43,19 @@ fun main() {
             val inputButton = button(type = ButtonType.button)
             val label = span().text("Not clicked")
             // ANCHOR: retrieveJs
-            inputButton.on(retrieveJs = "(new Date()).getTime()").click { event ->
-                label.text("Clicked at ${event.retrieved.jsonPrimitive.content}")
-            }
+inputButton.on(retrieveJs = "(new Date()).getTime()").click { event ->
+    label.text("Clicked at ${event.retrieved.jsonPrimitive.content}")
+}
             // ANCHOR_END: retrieveJs
         }
         doc.body {
             // ANCHOR: retrieveJs2
-            val textInput = input(type = InputType.text)
-            val inputButton = button(type = ButtonType.button)
-            val label = span().text("Not clicked")
-            inputButton.on(retrieveJs = textInput.valueJsExpression).click { event ->
-                label.text("Read textInput: ${event.retrieved.jsonPrimitive.content}")
-            }
+val textInput = input(type = InputType.text)
+val inputButton = button(type = ButtonType.button)
+val label = span().text("Not clicked")
+inputButton.on(retrieveJs = textInput.valueJsExpression).click { event ->
+    label.text("Read textInput: ${event.retrieved.jsonPrimitive.content}")
+}
             // ANCHOR_END: retrieveJs2
         }
     }
