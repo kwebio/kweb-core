@@ -55,7 +55,7 @@ Note that `counterDoubled` updates automatically, because mapped KVars listen to
 The `KVar` class is a subclass of [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html), 
 which is a read-only version of `KVar`.
 
-*Note:* KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
+**Note:** KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
 Kotlin [data class](https://kotlinlang.org/docs/reference/data-classes.html) with immutable parameters.
 
 ## KVars and the DOM
