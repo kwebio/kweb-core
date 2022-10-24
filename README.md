@@ -53,17 +53,6 @@ Ktor to use Kweb, but if you've already got a Ktor app you can [embed
 Kweb as a feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
 
 ## Example
-
-Add the Kweb dependency to your `build.gradle.kts`:
-  
-```kotlin
-dependencies {
-    // ...
-    implementation("io.kweb:kweb-core:1.0.0") 
-}
-```
-
-Then create your first Kwebsite:
   
 ```kotlin
 import kweb.*
