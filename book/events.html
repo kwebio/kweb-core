@@ -187,8 +187,8 @@ display some form of <a href="https://loading.io/css/">spinner</a>. The normal
 handler would then do what it needs on the server, and then perhaps
 re-enable the button and remove the spinner.</p>
 <h2 id="efficiently-retrieving-dom-data-when-an-event-is-triggered"><a class="header" href="#efficiently-retrieving-dom-data-when-an-event-is-triggered">Efficiently retrieving DOM data when an event is triggered</a></h2>
-<p>Sometimes you need to know the state of the DOM when an event is triggered.</p>
-<p>You could query it from within the event handler but this would add a server 
+<p>Sometimes you need to know the state of the DOM when an event is triggered.
+You could query it from within the event handler but this would add a server 
 round trip. </p>
 <p>Alternatively you can use <code>retrieveJs</code>, in this case to retrieve
 the time the browser thinks it is:</p>
