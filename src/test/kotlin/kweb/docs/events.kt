@@ -8,7 +8,7 @@ import mu.KotlinLogging
  * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!
  */
 
-val logger = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 
 fun main() {
     Kweb(port = 16097) {
@@ -47,7 +47,7 @@ doc.body {
             val label = span().text("Not clicked")
             // ANCHOR: retrieveJs
 inputButton.on(retrieveJs = "(new Date()).getTime()").click { event ->
-label.text("Clicked at ${event.retrieved.jsonPrimitive.content}")
+    label.text("Clicked at ${event.retrieved.jsonPrimitive.content}")
 }
             // ANCHOR_END: retrieveJs
         }
