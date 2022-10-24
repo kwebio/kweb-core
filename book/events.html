@@ -146,31 +146,31 @@
 </ul>
 <h2 id="listening-for-events"><a class="header" href="#listening-for-events">Listening for events</a></h2>
 <p>You can attach event handlers to DOM elements:</p>
-<pre><code class="language-kotlin">        doc.body {
-            val label = h1()
-            label.text(&quot;Click Me&quot;)
-            label.on.click {
-                label.text(&quot;Clicked!&quot;)
-            }
-        }
+<pre><code class="language-kotlin">doc.body {
+    val label = h1()
+    label.text(&quot;Click Me&quot;)
+    label.on.click {
+        label.text(&quot;Clicked!&quot;)
+    }
+}
 </code></pre>
 <p>Most if not all JavaScript event types are supported, and you can read
 event data like which key was pressed:</p>
-<pre><code class="language-kotlin">        doc.body {
-            val input = input(type = InputType.text)
-            input.on.keypress { keypressEvent -&gt;
-                println(&quot;Key Pressed: ${keypressEvent.key}&quot;)
-            }
-        }
+<pre><code class="language-kotlin">doc.body {
+    val input = input(type = InputType.text)
+    input.on.keypress { keypressEvent -&gt;
+        println(&quot;Key Pressed: ${keypressEvent.key}&quot;)
+    }
+}
 </code></pre>
 <h2 id="immediate-events"><a class="header" href="#immediate-events">Immediate events</a></h2>
 <p>Since the code to respond to events runs on the server, there may be a
 short but sometimes noticeable delay before the page updates in response
 to an event.</p>
 <p>Fortunately, Kweb has a solution:</p>
-<pre><code class="language-kotlin">            inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
-                label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
-            }
+<pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
+    label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
+}
 </code></pre>
 <p>Kweb executes this event handler <em>on page render</em> and records the
 changes it makes to the DOM. It then &quot;pre-loads&quot; these instructions to
@@ -192,20 +192,20 @@ You could query it from within the event handler but this would add a server
 round trip. </p>
 <p>Alternatively you can use <code>retrieveJs</code>, in this case to retrieve
 the time the browser thinks it is:</p>
-<pre><code class="language-kotlin">            inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
-                label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
-            }
+<pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
+    label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
+}
 </code></pre>
 <p>For <a href="https://docs.kweb.io/api/kweb-core/kweb/-value-element/index.html">ValueElement</a>s
 such as <a href="https://docs.kweb.io/api/kweb-core/kweb/-input-element/index.html">InputElement</a>
 there is a convenience property <code>valueJsExpression</code> that you can use to retrieve
 the current value of the element:</p>
-<pre><code class="language-kotlin">            val textInput = input(type = InputType.text)
-            val inputButton = button(type = ButtonType.button)
-            val label = span().text(&quot;Not clicked&quot;)
-            inputButton.on(retrieveJs = textInput.valueJsExpression).click { event -&gt;
-                label.text(&quot;Read textInput: ${event.retrieved.jsonPrimitive.content}&quot;)
-            }
+<pre><code class="language-kotlin">val textInput = input(type = InputType.text)
+val inputButton = button(type = ButtonType.button)
+val label = span().text(&quot;Not clicked&quot;)
+inputButton.on(retrieveJs = textInput.valueJsExpression).click { event -&gt;
+    label.text(&quot;Read textInput: ${event.retrieved.jsonPrimitive.content}&quot;)
+}
 </code></pre>
 
                     </main>
