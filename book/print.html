@@ -497,7 +497,7 @@ inputButton.on(preventDefault = true).click {
     logger.debug(&quot;Clicked!&quot;)
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="observer-pattern--state"><a class="header" href="#observer-pattern--state">Observer Pattern &amp; State</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rendering-state"><a class="header" href="#rendering-state">Rendering State</a></h1>
 <ul>
 <li><a href="state.html#overview">Overview</a></li>
 <li><a href="state.html#the-kvar-class">The KVar Class</a></li>
@@ -510,7 +510,7 @@ inputButton.on(preventDefault = true).click {
 </ul>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
 <p>A Kweb app is a function that maps state on the server to the DOM in the user's web browser. Once this 
-mapping is defined, you can change the state and the change will automatically propagate to the browser.</p>
+mapping is defined, you can change the state and the browser will update automatically.</p>
 <h2 id="the-kvar-class"><a class="header" href="#the-kvar-class">The KVar Class</a></h2>
 <p>A <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html">KVar</a>
 is an observable container. It contains a single typed object, which can change over time, similar to an 
