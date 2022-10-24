@@ -47,14 +47,15 @@ display some form of [spinner](https://loading.io/css/). The normal
 handler would then do what it needs on the server, and then perhaps
 re-enable the button and remove the spinner.
 
-## Efficiently retrieving DOM data when an event is triggered
+## Querying the DOM when an event is triggered
 
 Sometimes you need to know the state of the DOM when an event is triggered.
 You could query it from within the event handler but this would add a server 
 round trip. 
 
-Alternatively you can use `retrieveJs`, in this case to retrieve
-the time the browser thinks it is:
+Alternatively you can use [retrieveJs](https://docs.kweb.io/api/kweb-core/kweb.html.events/-on-receiver/-on-receiver.html). This will execute the JavaScript
+expression you provide and return the result in the [kweb.html.events.Event.retrieved]
+property of the event:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs}}
