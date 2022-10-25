@@ -620,9 +620,7 @@ automatically updating the rendered DOM in response to changes in the list. </p>
 <p>While a <code>KVar&lt;List&lt;FooBar&gt;&gt;</code> could be passed to <code>render()</code>, it would be
 very inefficient because the entire list would be re-rendered every time.
 <code>renderEach()</code> will only re-render the elements that have changed.</p>
-<pre><code class="language-kotlin">
-</code></pre>
-<p>The items must be stored in an <code>ObservableList</code>, which implements the 
+<p>The items are provided in an <a href="https://docs.kweb.io/api/kweb-core/kweb.state/index.html#183886605%2FClasslikes%2F769193423">ObservableList</a>, which implements the 
 <code>MutableList</code> interface.</p>
 <pre><code class="language-kotlin">doc.body {
     data class Pet(val name : String, val age : Int)
