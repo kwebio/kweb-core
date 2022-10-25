@@ -79,7 +79,7 @@ route {
 
 ## Modifying the URL
 
-You can obtain *and modify* the URL of the current page using
+You can obtain **and modify** the URL of the current page using
 [WebBrowser.url](https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/WebBrowser.kt#L98).
 
 This returns a `KVar<String>` which contains the URL relative to the
@@ -119,8 +119,7 @@ see a hyperlink with text `Number 1`. If you click on this link you'll
 see that the number increments (both in the URL and in the link text),
 also without a page refresh.
 
-The line `num.value++` is worthy of additional attention as there is
-more going on here than meets the eye. `num` is a `KVar<Int>`, and so it
-can be incremented via its `value` property. This will cause the page
-URL to update, which will in-turn cause the DOM to update to reflect the
-new URL. All of this is handled for you automatically by Kweb.
+`num.value++` is worthy of additional attention. `num` is a `KVar<Int>`, 
+and so it can be incremented via its `value` property. This will cause the 
+page URL to update, which will in-turn cause the DOM to update to reflect 
+the new URL. All of this is handled for you automatically by Kweb.
