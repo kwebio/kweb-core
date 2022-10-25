@@ -15,7 +15,7 @@ plugins {
 val signingKeyId = providers.gradleProperty("signingKeyId")
 val signingKey = providers
     .gradleProperty("signingKey")
-    .map { String(Base64.getUrlDecoder().decode(it)) }
+    .map { String(Base64.getDecoder().decode(it)) }
 val signingPassword = providers.gradleProperty("signingPassword")
 
 val signingPropertiesPresent = provider {
