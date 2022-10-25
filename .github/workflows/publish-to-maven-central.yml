@@ -3,11 +3,9 @@ name: "Publish to Maven Central"
 on:
   workflow_dispatch:
 
-## This was causing the job to fail, said there was a higher priority task - seems like a conflict between
-## this and the concurrency check in tests.yml, not sure the best solution.
-#concurrency:
-#  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
-#  cancel-in-progress: true
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
 
 env:
   SONATYPE_USERNAME: ${{ secrets.OSSRHUSERNAME }}
@@ -19,8 +17,6 @@ env:
   ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNINGPASSWORD }}
 
 jobs:
-  test:
-    uses: ./.github/workflows/tests.yml
   publish:
     name: Build and Publish to Sonatype
     runs-on: ubuntu-latest
@@ -38,6 +34,9 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: Build and run tests
+        run: ./gradlew build
 
       - name: Publish to Sonatype
         run: |
