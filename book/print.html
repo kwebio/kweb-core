@@ -753,7 +753,7 @@ with the style of your overall website:</p>
 }
 </code></pre>
 <h2 id="modifying-the-url"><a class="header" href="#modifying-the-url">Modifying the URL</a></h2>
-<p>You can obtain <em>and modify</em> the URL of the current page using
+<p>You can obtain <strong>and modify</strong> the URL of the current page using
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/WebBrowser.kt#L98">WebBrowser.url</a>.</p>
 <p>This returns a <code>KVar&lt;String&gt;</code> which contains the URL relative to the
 origin - so for the page <code>http://foo/bar/z</code> the <code>url</code> would be <code>/bar/z</code>.</p>
@@ -787,11 +787,10 @@ to <code>http://localhost:16097/number/1</code> without a page refresh, and you'
 see a hyperlink with text <code>Number 1</code>. If you click on this link you'll
 see that the number increments (both in the URL and in the link text),
 also without a page refresh.</p>
-<p>The line <code>num.value++</code> is worthy of additional attention as there is
-more going on here than meets the eye. <code>num</code> is a <code>KVar&lt;Int&gt;</code>, and so it
-can be incremented via its <code>value</code> property. This will cause the page
-URL to update, which will in-turn cause the DOM to update to reflect the
-new URL. All of this is handled for you automatically by Kweb.</p>
+<p><code>num.value++</code> is worthy of additional attention. <code>num</code> is a <code>KVar&lt;Int&gt;</code>, 
+and so it can be incremented via its <code>value</code> property. This will cause the 
+page URL to update, which will in-turn cause the DOM to update to reflect 
+the new URL. All of this is handled for you automatically by Kweb.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="css--style"><a class="header" href="#css--style">CSS &amp; Style</a></h1>
 <p>Kweb has out-of-the-box support for the excellent <a href="https://fomantic-ui.com">Fomantic
 UI</a> framework, which helps create beautiful,
