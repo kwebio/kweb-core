@@ -1,4 +1,4 @@
-# Kweb - A server-driven remote interface to the web browser
+# Kweb - A remote interface to the web browser
 
 <div align="center">
   <!-- Github Actions -->
