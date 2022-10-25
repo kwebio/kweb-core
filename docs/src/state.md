@@ -137,11 +137,7 @@ While a `KVar<List<FooBar>>` could be passed to `render()`, it would be
 very inefficient because the entire list would be re-rendered every time.
 `renderEach()` will only re-render the elements that have changed.
 
-```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:renderEach}}
-```
-
-The items must be stored in an `ObservableList`, which implements the 
+The items are provided in an [ObservableList](https://docs.kweb.io/api/kweb-core/kweb.state/index.html#183886605%2FClasslikes%2F769193423), which implements the 
 `MutableList` interface.
 
 ```kotlin
