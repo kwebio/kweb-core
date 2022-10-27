@@ -33,24 +33,12 @@ Kweb's goal is to eliminate this server/browser separation so you can
 focus on building your website or user interface, not on the plumbing.
 
 ## What is Kweb?
+  
+Kweb is a remote interface to the web browser's DOM, driven by the server. With Kweb, you can create and manipulate DOM elements, and bind values in your realtime database to DOM elements so that they are automatically updated when the database changes. 
 
-Kweb is a remote interface to the web browser's DOM. You can create and
-manipulate DOM elements, and listen for and handle DOM events.
+Kweb is built on the [Ktor](https://ktor.io/) framework, which handles HTTP, HTTPS, and WebSocket transport. You don't need to know Ktor to use Kweb, but if you already have a Ktor app, you can [embed Kweb as a feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
 
-Kweb has a state system that lets you [easily](https://docs.kweb.io/book/state.html) 
-bind values in your realtime database to DOM elements. This way, the 
-elements are automatically updated when the database changes.
-
-A common concern about this approach is that the user interface might feel
-sluggish if it is server-driven. Kweb solves this problem by
-[preloading](https://docs.kweb.io/en/latest/events.html#immediate-events)
-instructions to the browser. This way, the instructions are executed
-immediately on browser events without a server round-trip.
-
-Kweb is built on the [Ktor](https://ktor.io/) framework, which handles
-HTTP, HTTPS, and WebSocket transport. You don't need to know
-Ktor to use Kweb, but if you've already got a Ktor app you can [embed
-Kweb as a feature](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
+A common concern about server-driven interfaces is that they can feel sluggish. However, Kweb solves this problem by preloading instructions to the browser so that they are executed immediately on browser events, without the need for a round-trip to the server. 
 
 ## Example
   
