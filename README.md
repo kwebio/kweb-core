@@ -1,4 +1,4 @@
-# Kweb - A server-driven remote interface to the web browser
+# Kweb - The Kotlin web framework for backend developers
 
 <div align="center">
   <!-- Github Actions -->
