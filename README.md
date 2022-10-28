@@ -1,5 +1,5 @@
 # Kweb - The Kotlin web framework for backend developers
-<!--
+
 <div align="center">
   <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
     <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square&logo=github%20actions" alt="continuous integration status" />
@@ -13,7 +13,6 @@
     <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=informational" \>
   </a>
 </div>
--->
 
 ## Quick Start
 
