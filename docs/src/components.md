@@ -1,5 +1,9 @@
 # Managing Complexity 
 
+<!-- toc -->
+
+## Motivation
+
 Composable components help manage complexity in a software project by allowing developers to break down
 a complex problem into smaller, more manageable pieces.
 
