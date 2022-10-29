@@ -15,7 +15,7 @@ is a simple but powerful abstraction to create reusable UI components in Kweb.
 This component can then be passed to [ElementCreator.render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html):
 
 ```kotlin
-{{#include ../../src/main/kotlin/kweb/state/render.kt:component_usage}}
+{{#include ../../src/main/kotlin/kweb/docs/components.kt:component_usage}}
 ```
 
 ### A Simple Example
