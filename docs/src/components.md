@@ -3,10 +3,10 @@
 Composable components help manage complexity in a software project by allowing developers to break down
 a complex problem into smaller, more manageable pieces.
 
-## Components
+## The Component Interface
 
 **Component** ([api](https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E)) 
-is a simple but powerful abstraction to create reusable UI components in Kweb.
+is a simple but powerful abstraction to create reusable UI components in Kweb:
 
 ```kotlin
 {{#include ../../src/main/kotlin/kweb/state/render.kt:component_definition}}
