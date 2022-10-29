@@ -23,7 +23,7 @@ This component can then be passed to [ElementCreator.render](https://docs.kweb.i
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:component_usage}}
 ```
 
-### A Simple Example
+## A Simple Example
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:simple_component}}
@@ -43,7 +43,7 @@ parameters, while the most complex might use a [DSL builder](https://in-kotlin.c
 **Component**'s can be rendered by calling their **render()** method, which can return
 a generically typed value (or **Unit** if no value is returned).
 
-### A more complex example
+## A more complex example
 
 In this example we create a **Component** that wraps an [\<input\> element](https://bulma.io/documentation/form/input/)
 styled using the [Bulma CSS framework](https://bulma.io/):
