@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting Started - The Kweb Book</title>
+        <title>Managing Complexity with Components - The Kweb Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="User manual for the Kweb web framework">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html" class="active"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Managing Complexity with Components</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">9.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">10.</strong> Frequently Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html" class="active"><strong aria-hidden="true">8.</strong> Managing Complexity with Components</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">9.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">10.</strong> Frequently Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -113,7 +113,7 @@
                         <a href="https://github.com/kwebio/kweb-core" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/kwebio/kweb-core/edit/master/docs/src/gettingstarted.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/kwebio/kweb-core/edit/master/docs/src/components.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                     </div>
@@ -140,137 +140,56 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+                        <h1 id="managing-complexity-with-components"><a class="header" href="#managing-complexity-with-components">Managing Complexity with Components</a></h1>
+<p><code>Component</code> is a simple but powerful abstraction to create reusable composable components. 
+It has a simple interface with a single method:</p>
+<pre><code class="language-kotlin">It has a single method [kweb.state.Component.render]:
+
+```kotlin
+/**
+ * A [Component] is a value that can be rendered into DOM elements
+ */
+interface Component&lt;R&gt; {
+
+    /**
+     * Render this [Component] into DOM elements, returning an arbitrary
+     * value of type [R] that can be used to manipulate the rendered elements, or `Unit`
+     * if no such value is needed.
+     */
+    fun render(elementCreator: ElementCreator&lt;*&gt;) : R
+}
+</code></pre>
+<h3 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h3>
+<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:simple_component}}
+</code></pre>
+<p><code>Component</code>s are configured through their constructors, typically through
+a mixture of:</p>
 <ul>
-<li><a href="#requirements">Requirements</a></li>
-<li><a href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a>
-<ul>
-<li><a href="#groovy">Groovy</a></li>
-<li><a href="#kotlin">Kotlin</a></li>
+<li><code>KVal</code>s for values that can change</li>
+<li><code>KVar</code>s for values that can change or be changed by the Component</li>
+<li><code>ObservableList</code>s for lists of values that can change</li>
+<li>Other normal classes like <code>String</code>, for things that are immutable</li>
 </ul>
-</li>
-<li><a href="#hello-world">Hello world</a></li>
-<li><a href="#hello-world%C2%B2">Hello world²</a></li>
-<li><a href="#template-repository">Template Repository</a></li>
-</ul>
-<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
-<p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
-is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
-some familiarity with HTML.</p>
-<h2 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h2>
-<p>Add these to your dependencies in your <code>build.gradle</code> or <code>build.gradle.kt</code> files, ensure <code>mavenCentral()</code> 
-is added to your <code>repositories</code> block.</p>
-<h3 id="groovy"><a class="header" href="#groovy">Groovy</a></h3>
-<pre><code class="language-kotlin">dependencies {
-  implementation 'io.kweb:kweb-core:1.0.1'
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation 'org.slf4j:slf4j-simple:2.0.3'
-}
+<p>The simplest <code>Component</code>s may have no constructor at all, or just one or two, 
+parameters, while the most complex might use a sophisticated <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
+<p><code>Component</code>s can be rendered by calling their <code>render</code> method, which can return
+a generically typed value (or <code>Unit</code> if no value is returned).</p>
+<h3 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h3>
+<p>In this example we create a Component component that wraps an <a href="https://bulma.io/documentation/form/input/"><input> element</a>
+styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
+<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_with_state}}
 </code></pre>
-<h3 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h3>
-<pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:1.0.1&quot;)
-
-  // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
-}
+<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_input_example}}
 </code></pre>
-<h2 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h2>
-<p>Create a new Kotlin file and type this:</p>
-<pre><code class="language-kotlin">import kweb.*
-
-fun main() {
-    Kweb(port = 16097) {
-        doc.body {
-            h1().text(&quot;Hello World!&quot;)
-        }
-    }
-}
-</code></pre>
-<p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
-see the traditional greeting, translating to the following HTML body:</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;h1&gt;Hello World!&lt;/h1&gt;
-&lt;/body&gt;
-</code></pre>
-<p>This simple example already illustrates some important features of Kweb:</p>
-<ul>
-<li>Getting a kwebsite up and running is a breeze, no messing around
-with servlets, or third party webservers</li>
-<li>Your Kweb code will loosely mirror the structure of the HTML it
-generates</li>
-</ul>
-<h2 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h2>
-<p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
-(DSL)</a> for
-building and manipulating a
-<a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> in a remote
-web browser, while also listening for and handing DOM events.</p>
-<p>Importantly, this DSL can also do anything Kotlin can do, including
-features like for loops, functions, coroutines, and classes.</p>
-<p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
-<pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body {
-        ul {
-            for (x in 1..5) {
-                li().text(&quot;Hello World $x!&quot;)
-            }
-        }
-    }
-}
-</code></pre>
-<p>To produce...</p>
-<pre><code class="language-html">&lt;body&gt;
-  &lt;ul&gt;
-      &lt;li&gt;Hello World 1!&lt;/li&gt;
-      &lt;li&gt;Hello World 2!&lt;/li&gt;
-      &lt;li&gt;Hello World 3!&lt;/li&gt;
-      &lt;li&gt;Hello World 4!&lt;/li&gt;
-      &lt;li&gt;Hello World 5!&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/body&gt;
-</code></pre>
-<p>You can use functions for modularization and reuse:</p>
-<pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body {
-        ul {
-            // We can modify the UL element we just created in an element {} block
-            element {
-                // Here we add a CSS class to the UL element
-                classes(&quot;list&quot;)
-            }
-            // We can define functions as an extension to ElementCreator allowing us to use it
-            // within the DSL
-            fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
-                li().text(&quot;Hello World $x!&quot;)
-            }
-
-            for (x in 1..5) {
-                createMessage(x)
-            }
-        }
-    }
-}
-</code></pre>
-<p>As you can see this is an extension function, which allows you to use
-the Kweb DSL within the newly created function.</p>
-<p>Don't worry if you're unsure about this because you can use
-IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
-function</a>
-refactoring to create these functions automatically.</p>
-<h2 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h2>
-<p>You can find a simple template Kweb project in
-<a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="intro.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="style.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="dom.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="integrations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -279,10 +198,10 @@ refactoring to create these functions automatically.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="intro.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="style.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="dom.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="integrations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

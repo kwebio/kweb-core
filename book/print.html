@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">8.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">9.</strong> Frequently Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Managing Complexity with Components</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">9.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">10.</strong> Frequently Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -550,10 +550,12 @@ which is a read-only version of <code>KVar</code>.</p>
 <p><strong>Note:</strong> KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
 Kotlin <a href="https://kotlinlang.org/docs/reference/data-classes.html">data class</a> with immutable parameters.</p>
 <h2 id="kvars-and-the-dom"><a class="header" href="#kvars-and-the-dom">KVars and the DOM</a></h2>
-<p>You can use a KVar (or KVal) to set the text of a DOM element:</p>
+<p>Within the Kotlin DSL you can use the <code>kvar()</code> function to create a <code>KVar</code>. This has the advantage of calling
+<code>KVar.close()</code> when this DOM fragment is cleaned up which will free up resources, and avoids having to import 
+the <code>KVar</code> class.</p>
 <pre><code class="language-kotlin">Kweb(port = 2135) {
     doc.body {
-        val name = KVar(&quot;John&quot;)
+        val name = kvar(&quot;John&quot;)
         li().text(name)
     }
 }
@@ -835,6 +837,47 @@ particularly those that work through pure HTML, such as
 <li><a href="https://github.com/freenet/freenetorg-website/">freenet.org</a>
 A Kweb website built on Google Cloud Platform with Fomantic styling.</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="managing-complexity-with-components"><a class="header" href="#managing-complexity-with-components">Managing Complexity with Components</a></h1>
+<p><code>Component</code> is a simple but powerful abstraction to create reusable composable components. 
+It has a simple interface with a single method:</p>
+<pre><code class="language-kotlin">It has a single method [kweb.state.Component.render]:
+
+```kotlin
+/**
+ * A [Component] is a value that can be rendered into DOM elements
+ */
+interface Component&lt;R&gt; {
+
+    /**
+     * Render this [Component] into DOM elements, returning an arbitrary
+     * value of type [R] that can be used to manipulate the rendered elements, or `Unit`
+     * if no such value is needed.
+     */
+    fun render(elementCreator: ElementCreator&lt;*&gt;) : R
+}
+</code></pre>
+<h3 id="a-simple-example-1"><a class="header" href="#a-simple-example-1">A Simple Example</a></h3>
+<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:simple_component}}
+</code></pre>
+<p><code>Component</code>s are configured through their constructors, typically through
+a mixture of:</p>
+<ul>
+<li><code>KVal</code>s for values that can change</li>
+<li><code>KVar</code>s for values that can change or be changed by the Component</li>
+<li><code>ObservableList</code>s for lists of values that can change</li>
+<li>Other normal classes like <code>String</code>, for things that are immutable</li>
+</ul>
+<p>The simplest <code>Component</code>s may have no constructor at all, or just one or two, 
+parameters, while the most complex might use a sophisticated <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
+<p><code>Component</code>s can be rendered by calling their <code>render</code> method, which can return
+a generically typed value (or <code>Unit</code> if no value is returned).</p>
+<h3 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h3>
+<p>In this example we create a Component component that wraps an <a href="https://bulma.io/documentation/form/input/"><input> element</a>
+styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
+<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_with_state}}
+</code></pre>
+<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_input_example}}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
 <ul>
 <li><a href="integrations.html#spring-boot">Spring Boot</a></li>
