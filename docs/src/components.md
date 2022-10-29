@@ -32,7 +32,7 @@ a generically typed value (or `Unit` if no value is returned).
 
 ### A more complex example
 
-In this example we create a Component component that wraps an [<input> element](https://bulma.io/documentation/form/input/)
+In this example we create a `Component` that wraps an [\<input\> element](https://bulma.io/documentation/form/input/)
 styled using the [Bulma CSS framework](https://bulma.io/):
 
 ```kotlin
