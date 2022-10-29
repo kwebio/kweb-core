@@ -27,9 +27,9 @@ This component can then be passed to [ElementCreator.render](https://docs.kweb.i
 Components are configured through constructor parameters, typically through
 a mixture of:
 
-* **KVal**s for values that can change
-* **KVar**s for values that can change or be changed by the Component
-* **ObservableList**s for lists of values that can change
+* [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s for values that can change
+* [KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)s for values that can change or be changed by the Component
+* [ObservableList](https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html)s for lists of values that can change
 * Other normal classes like **String** for immutable values
 
 The simplest Component's may have no constructor at all, or just one or two, 
