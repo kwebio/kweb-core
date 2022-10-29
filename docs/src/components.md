@@ -4,8 +4,9 @@
 
 ## Motivation
 
-Composable components help manage complexity in a software project by allowing developers to break down
-a complex problem into smaller, more manageable pieces.
+Composable components help manage software complexity by allowing developers to break down
+a complex problem into smaller, more manageable pieces. Other benefits include
+reusability, testability, and the ability to reason about a system in isolation.
 
 ## The Component Interface
 
