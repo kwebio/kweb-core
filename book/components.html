@@ -143,12 +143,9 @@
                         <h1 id="managing-complexity"><a class="header" href="#managing-complexity">Managing Complexity</a></h1>
 <ul>
 <li><a href="#motivation">Motivation</a></li>
-<li><a href="#the-component-interface">The Component Interface</a>
-<ul>
+<li><a href="#the-component-interface">The Component Interface</a></li>
 <li><a href="#a-simple-example">A Simple Example</a></li>
 <li><a href="#a-more-complex-example">A more complex example</a></li>
-</ul>
-</li>
 </ul>
 <h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
 <p>Composable components help manage software complexity by allowing developers to break down
@@ -176,7 +173,7 @@ interface Component&lt;R&gt; {
     }
 }
 </code></pre>
-<h3 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h3>
+<h2 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h2>
 <pre><code class="language-kotlin">class SimpleComponent(
     val prompt: String = &quot;Enter Your Name&quot;,
     val name: KVar&lt;String&gt;
@@ -206,7 +203,7 @@ a mixture of:</p>
 parameters, while the most complex might use a <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
 <p><strong>Component</strong>'s can be rendered by calling their <strong>render()</strong> method, which can return
 a generically typed value (or <strong>Unit</strong> if no value is returned).</p>
-<h3 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h3>
+<h2 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h2>
 <p>In this example we create a <strong>Component</strong> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
 styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 <pre><code class="language-kotlin">class BulmaInput(
