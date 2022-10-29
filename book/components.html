@@ -144,8 +144,8 @@
 <p>Composable components help manage complexity in a software project by allowing developers to break down
 a complex problem into smaller, more manageable pieces.</p>
 <h2 id="components"><a class="header" href="#components">Components</a></h2>
-<p>Component (<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E">api</a>) 
-is a simple but powerful abstraction to create reusable user interface components in Kweb.</p>
+<p><strong>Component</strong> (<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E">api</a>) 
+is a simple but powerful abstraction to create reusable UI components in Kweb.</p>
 <pre><code class="language-kotlin">/**
  * [Component]s can be rendered into DOM elements by calling [Component.render].
  */
@@ -157,6 +157,9 @@ interface Component&lt;R&gt; {
      */
     fun render(elementCreator: ElementCreator&lt;*&gt;) : R
 }
+</code></pre>
+<p>This component can then be passed to <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">ElementCreator.render</a>:</p>
+<pre><code class="language-kotlin">
 </code></pre>
 <h3 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h3>
 <pre><code class="language-kotlin">class SimpleComponent(
