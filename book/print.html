@@ -856,7 +856,11 @@ interface Component&lt;R&gt; {
 }
 </code></pre>
 <p>This component can then be passed to <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">ElementCreator.render</a>:</p>
-<pre><code class="language-kotlin">{{#include ../../src/main/kotlin/kweb/docs/components.kt:component_usage}}
+<pre><code class="language-kotlin">Kweb(port = 16097) {
+    doc.body.new {
+        render(SimpleComponent(name = kvar(&quot;World&quot;)))
+    }
+}
 </code></pre>
 <h3 id="a-simple-example-1"><a class="header" href="#a-simple-example-1">A Simple Example</a></h3>
 <pre><code class="language-kotlin">class SimpleComponent(
