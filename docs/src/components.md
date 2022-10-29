@@ -1,7 +1,7 @@
 # Managing Complexity with Components
 
-`Component` is a simple but powerful abstraction to create reusable composable components. 
-It has a simple interface with a single method:
+`Component` is a simple but powerful abstraction to create reusable user interface
+components in Kweb, it has a simple interface:
 
 ```kotlin
 It has a single method [kweb.state.Component.render]:

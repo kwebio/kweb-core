@@ -134,14 +134,13 @@ fun <R> ElementCreator<*>.render(component: Component<R>) : R {
 
 // ANCHOR: component_definition
 /**
- * A [Component] is a value that can be rendered into DOM elements
+ * [Component]s can be rendered into DOM elements by calling [Component.render].
  */
 interface Component<R> {
 
     /**
      * Render this [Component] into DOM elements, returning an arbitrary
-     * value of type [R] that can be used to manipulate the rendered elements, or `Unit`
-     * if no such value is needed.
+     * value of type [R].
      */
     fun render(elementCreator: ElementCreator<*>) : R
 }
