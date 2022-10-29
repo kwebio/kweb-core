@@ -44,9 +44,5 @@ In this example we create a **Component** that wraps an [\<input\> element](http
 styled using the [Bulma CSS framework](https://bulma.io/):
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/components.kt:component_with_state}}
-```
-
-```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:component_input_example}}
 ```
