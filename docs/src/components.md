@@ -17,16 +17,16 @@ is a simple but powerful abstraction to create reusable UI components in Kweb:
 {{#include ../../src/main/kotlin/kweb/state/render.kt:component_definition}}
 ```
 
-This component can then be passed to [ElementCreator.render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html):
-
-```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/components.kt:component_usage}}
-```
-
 ## A Simple Example
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:simple_component}}
+```
+
+This component can then be passed to [ElementCreator.render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html):
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/components.kt:component_usage}}
 ```
 
 Components are configured through constructor parameters, typically through
