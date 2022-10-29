@@ -161,8 +161,10 @@ class TodoSite(private val driver: ChromeDriver) {
 
     fun deleteItemByText(itemText: String) {
         val item = getItemByText(itemText)
-        val delButton = item.findElement(By.tagName("button"))
-        delButton.click()
+        await().pollInSameThread().untilAsserted {
+            val delButton = item.findElement(By.tagName("button"))
+            delButton.click()
+        }
     }
 
     init {
