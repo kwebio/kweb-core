@@ -7,5 +7,6 @@
 - [Observer Pattern & State](state.md)
 - [URL Routing](routing.md)
 - [CSS & Style](style.md)
+- [Managing Complexity with Components](components.md)
 - [Integrations](integrations.md)
 - [Frequently Asked Questions](faq.md)

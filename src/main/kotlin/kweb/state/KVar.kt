@@ -107,3 +107,30 @@ fun <O : Any> KVar<O?>.notNull(default: O? = null, invertDefault: Boolean = true
 
     })
 }
+
+fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
+    val newKVar = KVar(this.first.value to this.second.value)
+    val listener1 = this.first.addListener { _, n -> newKVar.value = n to this.second.value }
+    val listener2 = this.second.addListener { _, n -> newKVar.value = this.first.value to n }
+
+    newKVar.addListener { o, n ->
+        this.first.value = n.first
+        this.second.value = n.second
+    }
+
+    this.first.onClose {
+        newKVar.close(CloseReason("Closed because first KVar was closed"))
+    }
+
+    this.second.onClose {
+        newKVar.close(CloseReason("Closed because second KVar was closed"))
+    }
+
+    newKVar.onClose {
+        this.first.removeListener(listener1)
+        this.second.removeListener(listener2)
+    }
+
+    return newKVar
+}
+

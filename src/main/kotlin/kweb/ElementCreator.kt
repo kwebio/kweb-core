@@ -236,4 +236,15 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
         return kv
     }
+
+    /**
+     * Create a new [KVar], and call [KVar.close()] when this ElementCreator is cleaned up.
+     */
+    fun <T> kval(initialValue: T): KVal<T> {
+        val kv = KVal(initialValue)
+        onCleanup(withParent = true) {
+            kv.close(CloseReason("ElementCreator cleaned up"))
+        }
+        return kv
+    }
 }

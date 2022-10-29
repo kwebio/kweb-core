@@ -141,4 +141,11 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
 
 }
 
+operator fun <O : Any> KVal<List<O>>.plus(other : KVal<List<O>>) : KVal<List<O>> {
+    val newKVar = KVar(this.value + other.value)
+    this.addListener { _, new -> newKVar.value = new + other.value }
+    other.addListener { _, new -> newKVar.value = this.value + new }
+    return newKVar
+}
+
 data class CloseReason(val explanation: String, val cause: Throwable? = null)
