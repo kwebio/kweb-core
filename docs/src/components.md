@@ -3,7 +3,6 @@
 `Component` is a simple but powerful abstraction to create reusable user interface
 components in Kweb, it has a simple interface:
 
-```kotlin
 It has a single method [kweb.state.Component.render]:
 
 ```kotlin
