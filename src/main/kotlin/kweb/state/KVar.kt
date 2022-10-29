@@ -15,6 +15,9 @@ private val logger = KotlinLogging.logger {}
  * A KVar is an observable container for a value of type T.  It must be initialized with [initialValue], and
  * this can then be modified by setting the [KVar.value] property. Listeners may be added using
  * [KVar.addListener], and these will be called whenever the value is changed.
+ *
+ * From within Kweb's DSL, you can use the [ElementCreator.kvar] function to create a KVar without needing
+ * to import KVar, and which will also call [KVar.close] when this part of the DOM is cleaned up.
  */
 class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 

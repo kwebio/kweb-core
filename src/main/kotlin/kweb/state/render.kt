@@ -135,6 +135,18 @@ fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
     }
 }
 
+/**
+ * Render the value of a [KVar] into DOM elements, and automatically re-render those
+ * elements whenever the value changes.
+ */
+fun ElementCreator<*>.render(renderable: Renderable) {
+    renderable.render(this)
+}
+
+interface Renderable {
+    fun render(element: ElementCreator<*>)
+}
+
 class RenderFragment(val startId: String, val endId: String) {
     private val deletionListeners = ArrayList<() -> Unit>()
 

@@ -60,7 +60,9 @@ Kotlin [data class](https://kotlinlang.org/docs/reference/data-classes.html) wit
 
 ## KVars and the DOM
 
-You can use a KVar (or KVal) to set the text of a DOM element:
+Within the Kotlin DSL you can use the `kvar()` function to create a `KVar`. This has the advantage of calling
+`KVar.close()` when this DOM fragment is cleaned up which will free up resources, and avoids having to import 
+the `KVar` class.
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:kvartext}}
