@@ -27,6 +27,7 @@ dependencies {
     api("org.jsoup:jsoup:1.15.3")
     implementation("org.apache.commons:commons-text:1.10.0")
     implementation("com.google.guava:guava:31.1-jre")
+    api("dev.forkhandles:result4k:2.3.0.0")
 
     //////////////////////////////
     // Kotlin library dependencies
@@ -37,7 +38,7 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     ////////////////////
-    // Ktor dependencies
+    // Ktor dependencvies
     ////////////////////
     api("io.ktor:ktor-server-jetty:2.1.3")
     api("io.ktor:ktor-server-websockets:2.1.3")

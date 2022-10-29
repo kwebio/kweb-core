@@ -204,6 +204,8 @@ public class kweb/ElementCreator {
 	public final fun getInsertBefore ()Ljava/lang/String;
 	public final fun getParent ()Lkweb/Element;
 	public final fun getParentCreator ()Lkweb/ElementCreator;
+	public final fun kval (Ljava/lang/Object;)Lkweb/state/KVal;
+	public final fun kvar (Ljava/lang/Object;)Lkweb/state/KVar;
 	public final fun onCleanup (ZLkotlin/jvm/functions/Function0;)V
 	public final fun require ([Lkotlin/reflect/KClass;)V
 	public final fun text (Ljava/lang/String;)V
@@ -1720,6 +1722,10 @@ public final class kweb/state/CloseReason {
 	public fun toString ()Ljava/lang/String;
 }
 
+public abstract interface class kweb/state/Component {
+	public abstract fun render (Lkweb/ElementCreator;)Ljava/lang/Object;
+}
+
 public class kweb/state/KVal : java/lang/AutoCloseable {
 	public fun <init> (Ljava/lang/Object;)V
 	public final fun addListener (Lkotlin/jvm/functions/Function2;)J
@@ -1737,6 +1743,10 @@ public class kweb/state/KVal : java/lang/AutoCloseable {
 	protected final fun verifyNotClosed (Ljava/lang/String;)V
 }
 
+public final class kweb/state/KValKt {
+	public static final fun plus (Lkweb/state/KVal;Lkweb/state/KVal;)Lkweb/state/KVal;
+}
+
 public final class kweb/state/KVar : kweb/state/KVal {
 	public fun <init> (Ljava/lang/Object;)V
 	public fun getValue ()Ljava/lang/Object;
@@ -1746,6 +1756,7 @@ public final class kweb/state/KVar : kweb/state/KVal {
 }
 
 public final class kweb/state/KVarKt {
+	public static final fun combine (Lkotlin/Pair;)Lkweb/state/KVar;
 	public static final fun notNull (Lkweb/state/KVar;Ljava/lang/Object;Z)Lkweb/state/KVar;
 	public static synthetic fun notNull$default (Lkweb/state/KVar;Ljava/lang/Object;ZILjava/lang/Object;)Lkweb/state/KVar;
 }
@@ -1834,6 +1845,7 @@ public final class kweb/state/RenderHandle {
 
 public final class kweb/state/RenderKt {
 	public static final fun closeOnElementCreatorCleanup (Lkweb/ElementCreator;Lkweb/state/KVal;)V
+	public static final fun render (Lkweb/ElementCreator;Lkweb/state/Component;)Ljava/lang/Object;
 	public static final fun render (Lkweb/ElementCreator;Lkweb/state/KVal;Lkotlin/jvm/functions/Function2;)Lkweb/state/RenderFragment;
 }
 
@@ -1862,7 +1874,6 @@ public abstract interface annotation class kweb/util/KWebDSL : java/lang/annotat
 }
 
 public final class kweb/util/MiscKt {
-	public static final fun combine (Lkotlin/Pair;)Lkweb/state/KVar;
 	public static final fun createNonce (I)Ljava/lang/String;
 	public static synthetic fun createNonce$default (IILjava/lang/Object;)Ljava/lang/String;
 	public static final fun escapeEcma (Ljava/lang/String;)Ljava/lang/String;

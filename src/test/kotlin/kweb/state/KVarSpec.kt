@@ -2,7 +2,6 @@ package kweb.state
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
-import kweb.util.combine
 
 class KVarSpec : FreeSpec({
     "a KVar with value `dog`" - {
@@ -45,6 +44,23 @@ class KVarSpec : FreeSpec({
             newKV.value = (9 to 10)
             kvarPair.first.value shouldBe 9
             kvarPair.second.value shouldBe 10
+        }
+    }
+
+    "Two KVar<List>s can be combined" - {
+        val kv1 = KVar(listOf(1, 2, 3))
+        val kv2 = KVar(listOf(4, 5, 6))
+        val combined = kv1 + kv2
+        "should have the correct initial value" {
+            combined.value shouldBe listOf(1, 2, 3, 4, 5, 6)
+        }
+        "should update correctly when the first KVar is updated" {
+            kv1.value = listOf(7, 8, 9)
+            combined.value shouldBe listOf(7, 8, 9, 4, 5, 6)
+        }
+        "should update correctly when the second KVar is updated" {
+            kv2.value = listOf(10, 11, 12)
+            combined.value shouldBe listOf(7, 8, 9, 10, 11, 12)
         }
     }
 })

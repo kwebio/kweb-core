@@ -1,26 +1,15 @@
 package kweb.state
 
-import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.ElementCreator
 import kweb.WebBrowser
 import kweb.span
 import kweb.state.RenderState.*
-import kweb.util.random
 import mu.KotlinLogging
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.ArrayList
-import kotlin.collections.Collection
-import kotlin.collections.List
-import kotlin.collections.MutableIterator
-import kotlin.collections.MutableList
-import kotlin.collections.MutableListIterator
 import kotlin.collections.forEach
-import kotlin.collections.listOf
 import kotlin.collections.plusAssign
-import kotlin.collections.set
-import kotlin.collections.withIndex
 
 /**
  * Created by ian on 6/18/17.
@@ -134,6 +123,29 @@ fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
         kv.close(CloseReason("Closed because a parent ElementCreator was cleaned up"))
     }
 }
+
+/**
+ * Render the value of a [KVar] into DOM elements, and automatically re-render those
+ * elements whenever the value changes.
+ */
+fun <R> ElementCreator<*>.render(component: Component<R>) : R {
+    return component.render(this)
+}
+
+// ANCHOR: component_definition
+/**
+ * A [Component] is a value that can be rendered into DOM elements
+ */
+interface Component<R> {
+
+    /**
+     * Render this [Component] into DOM elements, returning an arbitrary
+     * value of type [R] that can be used to manipulate the rendered elements, or `Unit`
+     * if no such value is needed.
+     */
+    fun render(elementCreator: ElementCreator<*>) : R
+}
+// ANCHOR_END: component_definition
 
 class RenderFragment(val startId: String, val endId: String) {
     private val deletionListeners = ArrayList<() -> Unit>()

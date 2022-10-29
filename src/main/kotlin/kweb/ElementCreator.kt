@@ -5,7 +5,9 @@ import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.BodyElement
 import kweb.html.HeadElement
 import kweb.plugins.KwebPlugin
+import kweb.state.CloseReason
 import kweb.state.KVal
+import kweb.state.KVar
 import kweb.util.KWebDSL
 import kweb.util.json
 import mu.KLogging
@@ -222,5 +224,27 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
     fun element(receiver : (PARENT_TYPE).() -> Unit) {
         receiver(element)
+    }
+
+    /**
+     * Create a new [KVar], and call [KVar.close()] when this ElementCreator is cleaned up.
+     */
+    fun <T> kvar(initialValue: T): KVar<T> {
+        val kv = KVar(initialValue)
+        onCleanup(withParent = true) {
+            kv.close(CloseReason("ElementCreator cleaned up"))
+        }
+        return kv
+    }
+
+    /**
+     * Create a new [KVar], and call [KVar.close()] when this ElementCreator is cleaned up.
+     */
+    fun <T> kval(initialValue: T): KVal<T> {
+        val kv = KVal(initialValue)
+        onCleanup(withParent = true) {
+            kv.close(CloseReason("ElementCreator cleaned up"))
+        }
+        return kv
     }
 }

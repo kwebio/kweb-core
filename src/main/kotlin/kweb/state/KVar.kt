@@ -15,6 +15,9 @@ private val logger = KotlinLogging.logger {}
  * A KVar is an observable container for a value of type T.  It must be initialized with [initialValue], and
  * this can then be modified by setting the [KVar.value] property. Listeners may be added using
  * [KVar.addListener], and these will be called whenever the value is changed.
+ *
+ * From within Kweb's DSL, you can use the [ElementCreator.kvar] function to create a KVar without needing
+ * to import KVar, and which will also call [KVar.close] when this part of the DOM is cleaned up.
  */
 class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
 
@@ -104,3 +107,30 @@ fun <O : Any> KVar<O?>.notNull(default: O? = null, invertDefault: Boolean = true
 
     })
 }
+
+fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
+    val newKVar = KVar(this.first.value to this.second.value)
+    val listener1 = this.first.addListener { _, n -> newKVar.value = n to this.second.value }
+    val listener2 = this.second.addListener { _, n -> newKVar.value = this.first.value to n }
+
+    newKVar.addListener { o, n ->
+        this.first.value = n.first
+        this.second.value = n.second
+    }
+
+    this.first.onClose {
+        newKVar.close(CloseReason("Closed because first KVar was closed"))
+    }
+
+    this.second.onClose {
+        newKVar.close(CloseReason("Closed because second KVar was closed"))
+    }
+
+    newKVar.onClose {
+        this.first.removeListener(listener1)
+        this.second.removeListener(listener2)
+    }
+
+    return newKVar
+}
+

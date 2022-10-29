@@ -33,7 +33,7 @@ fun state2() {
     // ANCHOR: kvartext
 Kweb(port = 2135) {
     doc.body {
-        val name = KVar("John")
+        val name = kvar("John")
         li().text(name)
     }
 }
