@@ -633,14 +633,19 @@ $dokka.location:kweb.routing/RouteReceiver/notFound/#kotlin.Function2[kweb.Eleme
 $dokka.location:kweb.routing/RouteReceiver/path/#kotlin.String#kotlin.Function2[kweb.ElementCreator[*],kotlin.collections.Map[kotlin.String,kweb.state.KVar[kotlin.String]],kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.routing/-route-receiver/path.html
 $dokka.location:kweb.state////PointingToDeclaration/kweb-core/kweb.state/index.html
 $dokka.location:kweb.state//closeOnElementCreatorCleanup/kweb.ElementCreator[*]#kweb.state.KVal[*]/PointingToDeclaration/kweb-core/kweb.state/close-on-element-creator-cleanup.html
+$dokka.location:kweb.state//combine/kotlin.Pair[kweb.state.KVar[TypeParam(bounds=[kotlin.Any?])],kweb.state.KVar[TypeParam(bounds=[kotlin.Any?])]]#/PointingToDeclaration/kweb-core/kweb.state/combine.html
 $dokka.location:kweb.state//notNull/kweb.state.KVar[TypeParam(bounds=[kotlin.Any])?]#TypeParam(bounds=[kotlin.Any])?#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb.state/not-null.html
+$dokka.location:kweb.state//plus/kweb.state.KVal[kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]]#kweb.state.KVal[kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]]/PointingToDeclaration/kweb-core/kweb.state/plus.html
 $dokka.location:kweb.state//property/kweb.state.KVar[TypeParam(bounds=[kotlin.Any?])]#kotlin.reflect.KProperty1[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kweb-core/kweb.state/property.html
+$dokka.location:kweb.state//render/kweb.ElementCreator[*]#kweb.state.Component[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kweb-core/kweb.state/render.html
 $dokka.location:kweb.state//render/kweb.ElementCreator[*]#kweb.state.KVal[TypeParam(bounds=[kotlin.Any?])]#kotlin.Function2[kweb.ElementCreator[kweb.Element],TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/render.html
 $dokka.location:kweb.state//renderEach/kweb.ElementCreator[TypeParam(bounds=[kweb.Element])]#kweb.state.ObservableList[TypeParam(bounds=[kotlin.Any])]#kotlin.Function2[kweb.ElementCreator[kweb.Element],TypeParam(bounds=[kotlin.Any]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/render-each.html
 $dokka.location:kweb.state/CloseReason///PointingToDeclaration/kweb-core/kweb.state/-close-reason/index.html
 $dokka.location:kweb.state/CloseReason/CloseReason/#kotlin.String#kotlin.Throwable?/PointingToDeclaration/kweb-core/kweb.state/-close-reason/-close-reason.html
 $dokka.location:kweb.state/CloseReason/cause/#/PointingToDeclaration/kweb-core/kweb.state/-close-reason/cause.html
 $dokka.location:kweb.state/CloseReason/explanation/#/PointingToDeclaration/kweb-core/kweb.state/-close-reason/explanation.html
+$dokka.location:kweb.state/Component///PointingToDeclaration/kweb-core/kweb.state/-component/index.html
+$dokka.location:kweb.state/Component/render/#kweb.ElementCreator[*]/PointingToDeclaration/kweb-core/kweb.state/-component/render.html
 $dokka.location:kweb.state/KVal///PointingToDeclaration/kweb-core/kweb.state/-k-val/index.html
 $dokka.location:kweb.state/KVal/KVal/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb.state/-k-val/-k-val.html
 $dokka.location:kweb.state/KVal/addListener/#kotlin.Function2[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-k-val/add-listener.html
@@ -723,7 +728,6 @@ $dokka.location:kweb.state/ReversibleFunction/invoke/#TypeParam(bounds=[kotlin.A
 $dokka.location:kweb.state/ReversibleFunction/label/#/PointingToDeclaration/kweb-core/kweb.state/-reversible-function/label.html
 $dokka.location:kweb.state/ReversibleFunction/reverse/#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb.state/-reversible-function/reverse.html
 $dokka.location:kweb.util////PointingToDeclaration/kweb-core/kweb.util/index.html
-$dokka.location:kweb.util//combine/kotlin.Pair[kweb.state.KVar[TypeParam(bounds=[kotlin.Any?])],kweb.state.KVar[TypeParam(bounds=[kotlin.Any?])]]#/PointingToDeclaration/kweb-core/kweb.util/combine.html
 $dokka.location:kweb.util//createNonce/#kotlin.Int/PointingToDeclaration/kweb-core/kweb.util/create-nonce.html
 $dokka.location:kweb.util//escapeEcma/kotlin.String#/PointingToDeclaration/kweb-core/kweb.util/escape-ecma.html
 $dokka.location:kweb.util//json/kotlin.Boolean#/PointingToDeclaration/kweb-core/kweb.util/json.html
@@ -924,6 +928,8 @@ $dokka.location:kweb/ElementCreator/element/#kotlin.Function1[TypeParam(bounds=[
 $dokka.location:kweb/ElementCreator/element/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.String?/PointingToDeclaration/kweb-core/kweb/-element-creator/element.html
 $dokka.location:kweb/ElementCreator/elementsCreatedCount/#/PointingToDeclaration/kweb-core/kweb/-element-creator/elements-created-count.html
 $dokka.location:kweb/ElementCreator/insertBefore/#/PointingToDeclaration/kweb-core/kweb/-element-creator/insert-before.html
+$dokka.location:kweb/ElementCreator/kval/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb/-element-creator/kval.html
+$dokka.location:kweb/ElementCreator/kvar/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb/-element-creator/kvar.html
 $dokka.location:kweb/ElementCreator/onCleanup/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-element-creator/on-cleanup.html
 $dokka.location:kweb/ElementCreator/parent/#/PointingToDeclaration/kweb-core/kweb/-element-creator/parent.html
 $dokka.location:kweb/ElementCreator/parentCreator/#/PointingToDeclaration/kweb-core/kweb/-element-creator/parent-creator.html
