@@ -13,7 +13,7 @@ It has a single method [kweb.state.Component.render]:
 ### A Simple Example
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/organization.kt:simple_component}}
+{{#include ../../src/test/kotlin/kweb/docs/components.kt:simple_component}}
 ```
 
 `Component`s are configured through their constructors, typically through
@@ -36,9 +36,9 @@ In this example we create a `Component` that wraps an [\<input\> element](https:
 styled using the [Bulma CSS framework](https://bulma.io/):
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_with_state}}
+{{#include ../../src/test/kotlin/kweb/docs/components.kt:component_with_state}}
 ```
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_input_example}}
+{{#include ../../src/test/kotlin/kweb/docs/components.kt:component_input_example}}
 ```
