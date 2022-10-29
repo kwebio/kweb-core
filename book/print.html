@@ -838,20 +838,19 @@ particularly those that work through pure HTML, such as
 A Kweb website built on Google Cloud Platform with Fomantic styling.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-complexity-with-components"><a class="header" href="#managing-complexity-with-components">Managing Complexity with Components</a></h1>
-<p><code>Component</code> is a simple but powerful abstraction to create reusable composable components. 
-It has a simple interface with a single method:</p>
+<p><code>Component</code> is a simple but powerful abstraction to create reusable user interface
+components in Kweb, it has a simple interface:</p>
 <pre><code class="language-kotlin">It has a single method [kweb.state.Component.render]:
 
 ```kotlin
 /**
- * A [Component] is a value that can be rendered into DOM elements
+ * [Component]s can be rendered into DOM elements by calling [Component.render].
  */
 interface Component&lt;R&gt; {
 
     /**
      * Render this [Component] into DOM elements, returning an arbitrary
-     * value of type [R] that can be used to manipulate the rendered elements, or `Unit`
-     * if no such value is needed.
+     * value of type [R].
      */
     fun render(elementCreator: ElementCreator&lt;*&gt;) : R
 }
@@ -872,7 +871,7 @@ parameters, while the most complex might use a sophisticated <a href="https://in
 <p><code>Component</code>s can be rendered by calling their <code>render</code> method, which can return
 a generically typed value (or <code>Unit</code> if no value is returned).</p>
 <h3 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h3>
-<p>In this example we create a Component component that wraps an <a href="https://bulma.io/documentation/form/input/"><input> element</a>
+<p>In this example we create a <code>Component</code> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
 styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 <pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_with_state}}
 </code></pre>
