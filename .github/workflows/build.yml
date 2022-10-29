@@ -1,9 +1,11 @@
-name: build
+name: Build and Test
 
 on:
   push:
     branches: [ master ]
     paths-ignore: [ 'docs/**', 'README.md' ]
+  pull_request:
+    branches: [ master ]
   release:
     types: [published]
 
