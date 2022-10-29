@@ -159,7 +159,22 @@ interface Component&lt;R&gt; {
 }
 </code></pre>
 <h3 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h3>
-<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:simple_component}}
+<pre><code class="language-kotlin">class SimpleComponent(
+    val prompt: String = &quot;Enter Your Name&quot;,
+    val name: KVar&lt;String&gt;
+) : Component&lt;Unit&gt; {
+    override fun render(elementCreator: ElementCreator&lt;*&gt;) {
+        with(elementCreator) {
+            div {
+                h1().text(prompt)
+                input(type = text).value = name
+            }
+            div {
+                span().text(name.map { &quot;Hello, $it&quot; })
+            }
+        }
+    }
+}
 </code></pre>
 <p><code>Component</code>s are configured through their constructors, typically through
 a mixture of:</p>
@@ -176,9 +191,79 @@ a generically typed value (or <code>Unit</code> if no value is returned).</p>
 <h3 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h3>
 <p>In this example we create a <code>Component</code> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
 styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
-<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_with_state}}
+<pre><code class="language-kotlin">
 </code></pre>
-<pre><code class="language-kotlin">{{#include ../../src/test/kotlin/kweb/docs/organization.kt:component_input_example}}
+<pre><code class="language-kotlin">class BulmaInput(
+    val type : InputType,
+    val color: KVal&lt;BulmaColor&gt;? = null,
+    val size: KVal&lt;BulmaSize&gt;? = null,
+    val style: KVal&lt;BulmaStyle&gt;? = null,
+    val state: KVal&lt;BulmaState&gt;? = null,
+    val disabled: KVal&lt;Boolean&gt;? = null,
+    val value: KVar&lt;String&gt;
+) : Component&lt;InputElement&gt; {
+    override fun render(elementCreator: ElementCreator&lt;*&gt;) : InputElement {
+        with(elementCreator) {
+            val renderedInput = input(type = type) {
+                var inputClassList: KVal&lt;List&lt;String&gt;&gt; = kval(listOf(&quot;input&quot;))
+                element {
+
+                    if (color != null) {
+                        inputClassList += color.map { listOf(it.className) }
+                    }
+                    if (size != null) {
+                        inputClassList += size.map { listOf(it.className) }
+                    }
+                    if (this@BulmaInput.style != null) {
+                        inputClassList += this@BulmaInput.style.map { listOf(it.className) }
+                    }
+                    if (state != null) {
+                        inputClassList += state.map { listOf(it.className) }
+                    }
+
+                    if (disabled != null) {
+                        this[&quot;disabled&quot;] = disabled.map { it.json }
+                    }
+
+                    classes(inputClassList.map { it.joinToString(&quot; &quot;) })
+
+                    this.value = this@BulmaInput.value
+
+                }
+            }
+
+            return renderedInput
+        }
+    }
+
+    enum class BulmaColor(val className: String) {
+        PRIMARY(&quot;is-primary&quot;),
+        LINK(&quot;is-link&quot;),
+        INFO(&quot;is-info&quot;),
+        SUCCESS(&quot;is-success&quot;),
+        WARNING(&quot;is-warning&quot;),
+        DANGER(&quot;is-danger&quot;)
+    }
+
+    enum class BulmaSize(val className: String) {
+        SMALL(&quot;is-small&quot;),
+        NORMAL(&quot;is-normal&quot;),
+        MEDIUM(&quot;is-medium&quot;),
+        LARGE(&quot;is-large&quot;)
+    }
+
+    enum class BulmaStyle(val className: String) {
+        ROUNDED(&quot;is-rounded&quot;),
+        FOCUSED(&quot;is-focused&quot;)
+    }
+
+    enum class BulmaState(val className: String) {
+        NORMAL(&quot;is-normal&quot;),
+        HOVER(&quot;is-hovered&quot;),
+        FOCUS(&quot;is-focused&quot;),
+        LOADING(&quot;is-loading&quot;),
+    }
+}
 </code></pre>
 
                     </main>
