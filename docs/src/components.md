@@ -1,6 +1,6 @@
 # Managing Complexity with Components
 
-`Component` is a simple but powerful abstraction to create reusable user interface
+Component ([api](https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E)) is a simple but powerful abstraction to create reusable user interface
 components in Kweb, it has a simple interface:
 
 It has a single method [kweb.state.Component.render]:
