@@ -25,6 +25,17 @@ class SimpleComponent(
 }
 // ANCHOR_END: simple_component
 
+fun simple_component() {
+    // ANCHOR: component_usage
+Kweb(port = 16097) {
+    doc.body.new {
+        render(SimpleComponent(name = kvar("World")))
+    }
+}
+    // ANCHOR_END: component_usage
+}
+
+
 // ANCHOR: component_input_example
 class BulmaInput(
     val type : InputType,

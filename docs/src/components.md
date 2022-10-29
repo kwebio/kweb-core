@@ -5,11 +5,17 @@ a complex problem into smaller, more manageable pieces.
 
 ## Components
 
-Component ([api](https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E)) 
-is a simple but powerful abstraction to create reusable user interface components in Kweb.
+**Component** ([api](https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E)) 
+is a simple but powerful abstraction to create reusable UI components in Kweb.
 
 ```kotlin
 {{#include ../../src/main/kotlin/kweb/state/render.kt:component_definition}}
+```
+
+This component can then be passed to [ElementCreator.render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html):
+
+```kotlin
+{{#include ../../src/main/kotlin/kweb/state/render.kt:component_usage}}
 ```
 
 ### A Simple Example
