@@ -101,7 +101,7 @@ class TodoDemoTest {
         await().pollInSameThread().untilAsserted {
             val allItems = site.getAllItems()
             allItems.find { it.text == firstItem } shouldNotBe null
-            allItems.find { it.text == secondItem } shouldBe null
+            allItems.find { it.text == secondItem } shouldNotBe null // DELIBERATE BUG TO TEST TESTS
             allItems.find { it.text == thirdItem } shouldNotBe null
         }
     }
