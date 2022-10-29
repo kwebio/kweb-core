@@ -863,13 +863,6 @@ interface Component&lt;R&gt; {
     fun render(elementCreator: ElementCreator&lt;*&gt;) : R
 }
 </code></pre>
-<p>This component can then be passed to <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">ElementCreator.render</a>:</p>
-<pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body.new {
-        render(SimpleComponent(name = kvar(&quot;World&quot;)))
-    }
-}
-</code></pre>
 <h2 id="a-simple-example-1"><a class="header" href="#a-simple-example-1">A Simple Example</a></h2>
 <pre><code class="language-kotlin">class SimpleComponent(
     val prompt: String = &quot;Enter Your Name&quot;,
@@ -885,6 +878,13 @@ interface Component&lt;R&gt; {
                 span().text(name.map { &quot;Hello, $it&quot; })
             }
         }
+    }
+}
+</code></pre>
+<p>This component can then be passed to <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">ElementCreator.render</a>:</p>
+<pre><code class="language-kotlin">Kweb(port = 16097) {
+    doc.body.new {
+        render(SimpleComponent(name = kvar(&quot;World&quot;)))
     }
 }
 </code></pre>
