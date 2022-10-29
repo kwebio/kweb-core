@@ -838,9 +838,8 @@ particularly those that work through pure HTML, such as
 A Kweb website built on Google Cloud Platform with Fomantic styling.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-complexity-with-components"><a class="header" href="#managing-complexity-with-components">Managing Complexity with Components</a></h1>
-<p>Component (<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E">api</a>) is a simple but powerful abstraction to create reusable user interface
-components in Kweb, it has a simple interface:</p>
-<p>It has a single method [kweb.state.Component.render]:</p>
+<p>Component (<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E">api</a>) 
+is a simple but powerful abstraction to create reusable user interface components in Kweb.</p>
 <pre><code class="language-kotlin">/**
  * [Component]s can be rendered into DOM elements by calling [Component.render].
  */
@@ -871,20 +870,20 @@ interface Component&lt;R&gt; {
     }
 }
 </code></pre>
-<p><code>Component</code>s are configured through their constructors, typically through
+<p>Components are configured through constructor parameters, typically through
 a mixture of:</p>
 <ul>
-<li><code>KVal</code>s for values that can change</li>
-<li><code>KVar</code>s for values that can change or be changed by the Component</li>
-<li><code>ObservableList</code>s for lists of values that can change</li>
-<li>Other normal classes like <code>String</code>, for things that are immutable</li>
+<li><strong>KVal</strong>s for values that can change</li>
+<li><strong>KVar</strong>s for values that can change or be changed by the Component</li>
+<li><strong>ObservableList</strong>s for lists of values that can change</li>
+<li>Other normal classes like <strong>String</strong> for immutable values</li>
 </ul>
-<p>The simplest <code>Component</code>s may have no constructor at all, or just one or two, 
-parameters, while the most complex might use a sophisticated <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
-<p><code>Component</code>s can be rendered by calling their <code>render</code> method, which can return
-a generically typed value (or <code>Unit</code> if no value is returned).</p>
+<p>The simplest Component's may have no constructor at all, or just one or two, 
+parameters, while the most complex might use a <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
+<p><strong>Component</strong>'s can be rendered by calling their <strong>render()</strong> method, which can return
+a generically typed value (or <strong>Unit</strong> if no value is returned).</p>
 <h3 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h3>
-<p>In this example we create a <code>Component</code> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
+<p>In this example we create a <strong>Component</strong> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
 styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 <pre><code class="language-kotlin">
 </code></pre>
