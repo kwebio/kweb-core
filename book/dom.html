@@ -241,7 +241,9 @@ statically-typed HTML DSL, fully integrated with the Kotlin language.</p>
 <p>If a tag doesn't have explicit support in Kweb that's not a problem.
 For example, here is how you might use the infamous and now-obsolete
 &lt;blink&gt; tag:</p>
-<pre><code class="language-kotlin">val blink = element(&quot;blink&quot;).text(&quot;I am annoying!&quot;)
+<pre><code class="language-kotlin">element(&quot;blink&quot;) {
+    span().text(&quot;Blinking Text&quot;)
+}
 </code></pre>
 <h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
 <p>The
