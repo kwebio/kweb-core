@@ -4,6 +4,8 @@ import kweb.ElementCreator
 import kweb.*
 import kweb.InputType.text
 import kweb.docs.BulmaInput.BulmaColor
+import kweb.docs.BulmaInput.BulmaColor.SUCCESS
+import kweb.docs.BulmaInput.BulmaColor.WARNING
 import kweb.state.*
 import kweb.util.json
 
@@ -117,11 +119,7 @@ fun bulmaComponentUsageExample() {
 Kweb(port = 12354) {
     doc.body {
         val username = kvar("")
-        val color: KVal<BulmaColor> = username.map { name -> if (name.length < 5) {
-            BulmaColor.WARNING
-        } else {
-            BulmaColor.SUCCESS
-        }
+        val color = username.map { if (it.length < 5) { WARNING } else { SUCCESS }
         }
         render(BulmaInput(type = text, value = username, color = color))
     }
