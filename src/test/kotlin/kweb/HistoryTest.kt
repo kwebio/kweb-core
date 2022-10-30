@@ -96,8 +96,9 @@ class HistoryTestApp {
                         a {
                             element {
                                 href = "/${num + 1}"
+                                text("Next ($num)")
                             }
-                            text("Next ($num)")
+
                         }
                     }
                 }

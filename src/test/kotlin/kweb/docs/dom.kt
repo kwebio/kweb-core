@@ -59,8 +59,8 @@ button {
     element {
         classes("bigbutton")
         this["autofocus"] = true
+        text("Click Me!")
     }
-    text("Click Me!")
 }
             // ANCHOR_END: attr2
 

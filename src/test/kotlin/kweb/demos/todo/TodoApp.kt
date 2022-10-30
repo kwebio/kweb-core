@@ -131,7 +131,7 @@ class TodoApp {
                         renderRemoveButton(activeListKey, item)
                     }
                     div(fomantic.content) {
-                        text(item)
+                        element.text(item)
                     }
                 }
             }
