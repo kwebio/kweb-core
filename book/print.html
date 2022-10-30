@@ -920,16 +920,16 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
                 element {
 
                     if (color != null) {
-                        inputClassList += color.map { listOf(it.className) }
+                        inputClassList += color.map { listOf(it.cssClassName) }
                     }
                     if (size != null) {
-                        inputClassList += size.map { listOf(it.className) }
+                        inputClassList += size.map { listOf(it.cssClassName) }
                     }
                     if (this@BulmaInput.style != null) {
-                        inputClassList += this@BulmaInput.style.map { listOf(it.className) }
+                        inputClassList += this@BulmaInput.style.map { listOf(it.cssClassName) }
                     }
                     if (state != null) {
-                        inputClassList += state.map { listOf(it.className) }
+                        inputClassList += state.map { listOf(it.cssClassName) }
                     }
 
                     if (disabled != null) {
@@ -947,7 +947,7 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
         }
     }
 
-    enum class BulmaColor(val className: String) {
+    enum class BulmaColor(val cssClassName: String) {
         PRIMARY(&quot;is-primary&quot;),
         LINK(&quot;is-link&quot;),
         INFO(&quot;is-info&quot;),
@@ -956,19 +956,19 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
         DANGER(&quot;is-danger&quot;)
     }
 
-    enum class BulmaSize(val className: String) {
+    enum class BulmaSize(val cssClassName: String) {
         SMALL(&quot;is-small&quot;),
         NORMAL(&quot;is-normal&quot;),
         MEDIUM(&quot;is-medium&quot;),
         LARGE(&quot;is-large&quot;)
     }
 
-    enum class BulmaStyle(val className: String) {
+    enum class BulmaStyle(val cssClassName: String) {
         ROUNDED(&quot;is-rounded&quot;),
         FOCUSED(&quot;is-focused&quot;)
     }
 
-    enum class BulmaState(val className: String) {
+    enum class BulmaState(val cssClassName: String) {
         NORMAL(&quot;is-normal&quot;),
         HOVER(&quot;is-hovered&quot;),
         FOCUS(&quot;is-focused&quot;),
