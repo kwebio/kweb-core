@@ -1676,17 +1676,6 @@ public final class kweb/plugins/staticFiles/StaticFilesPlugin : kweb/plugins/Kwe
 	public fun appServerConfigurator (Lio/ktor/server/routing/Routing;)V
 }
 
-public final class kweb/plugins/tablesort/TablesortPlugin : kweb/plugins/KwebPlugin {
-	public fun <init> ()V
-	public fun decorate (Lorg/jsoup/nodes/Document;)V
-}
-
-public final class kweb/plugins/tablesort/TablesortPluginKt {
-	public static final fun getTableSortPlugin ()Lkweb/plugins/tablesort/TablesortPlugin;
-	public static final fun sort (Lkweb/TableElement;)Lkweb/TableElement;
-	public static final fun tablesortSample ()V
-}
-
 public final class kweb/plugins/viewport/ViewportPlugin : kweb/plugins/KwebPlugin {
 	public fun <init> ()V
 	public fun <init> (Lkweb/plugins/viewport/ViewportWidth;D)V
