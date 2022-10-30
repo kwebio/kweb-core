@@ -39,7 +39,7 @@ fun TableElement.sort() =
 
 fun tablesortSample() {
     Kweb(port = 4200, plugins = listOf(fomanticUIPlugin, tableSortPlugin), buildPage = {
-        doc.body.new {
+        doc.body {
             table(fomantic.ui.sortable.celled.striped.table.fixed).new {
                 thead().new {
                     tr().new {

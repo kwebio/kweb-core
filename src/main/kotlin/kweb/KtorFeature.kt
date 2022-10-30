@@ -49,7 +49,7 @@ suspend fun ApplicationCall.respondKweb(buildPage: WebBrowser.() -> Unit) =
  */
 suspend fun ApplicationCall.respondKwebRender(pathReceiver: PathReceiver) =
     respondKweb {
-        doc.body.new { span().new { pathReceiver(this, emptyMap()) } }
+        doc.body { span().new { pathReceiver(this, emptyMap()) } }
     }
 
 /**

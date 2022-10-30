@@ -57,7 +57,7 @@ class RenderTest {
 
 class RenderTestApp {
     val server: Kweb = Kweb(port = 7659) {
-        doc.body.new {
+        doc.body {
             val outerKvar = KVar(false)
             val innerKvar = KVar(false)
             render(outerKvar) {

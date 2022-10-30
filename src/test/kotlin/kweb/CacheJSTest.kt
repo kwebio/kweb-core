@@ -54,7 +54,7 @@ class CacheJSApp {
     private lateinit var button: ButtonElement
 
     val server: Kweb = Kweb(port = 7659) {
-        doc.body.new {
+        doc.body {
             button = button()
             button.text("Alert")
             button["autofocus"] = JsonPrimitive(true)

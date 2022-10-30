@@ -3,6 +3,7 @@ package kweb.docs
 import kweb.ElementCreator
 import kweb.*
 import kweb.InputType.text
+import kweb.docs.BulmaInput.BulmaColor
 import kweb.state.*
 import kweb.util.json
 
@@ -28,7 +29,7 @@ class SimpleComponent(
 fun simple_component() {
     // ANCHOR: component_usage
 Kweb(port = 16097) {
-    doc.body.new {
+    doc.body {
         render(SimpleComponent(name = kvar("World")))
     }
 }
@@ -36,7 +37,7 @@ Kweb(port = 16097) {
 }
 
 
-// ANCHOR: component_input_example
+// ANCHOR: bulma_component_example
 class BulmaInput(
     val type : InputType,
     val color: KVal<BulmaColor>? = null,
@@ -46,6 +47,7 @@ class BulmaInput(
     val disabled: KVal<Boolean>? = null,
     val value: KVar<String>
 ) : Component<InputElement> {
+
     override fun render(elementCreator: ElementCreator<*>) : InputElement {
         with(elementCreator) {
             val renderedInput = input(type = type) {
@@ -108,13 +110,21 @@ class BulmaInput(
         LOADING("is-loading"),
     }
 }
-// ANCHOR_END: component_input_example
+// ANCHOR_END: bulma_component_example
 
-fun editableFieldExample1() {
-    Kweb(port = 12354) {
-        doc.body {
-            val username = kvar("")
-            render(BulmaInput(type = text, value = username))
+fun bulmaComponentUsageExample() {
+    // ANCHOR: bulma_component_usage
+Kweb(port = 12354) {
+    doc.body {
+        val username = kvar("")
+        val color: KVal<BulmaColor> = username.map { name -> if (name.length < 5) {
+            BulmaColor.WARNING
+        } else {
+            BulmaColor.SUCCESS
         }
+        }
+        render(BulmaInput(type = text, value = username, color = color))
     }
+}
+    // ANCHOR_END: bulma_component_usage
 }

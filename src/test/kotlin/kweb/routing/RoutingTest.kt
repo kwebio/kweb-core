@@ -60,7 +60,7 @@ class RoutingTestApp {
 
     val server: Kweb = Kweb(port = 7659, plugins = listOf(fomanticUIPlugin)) {
 
-        doc.body.new {
+        doc.body {
             val uri = gurl.path
             route {
                 path("/this/has/four/{segments}") {

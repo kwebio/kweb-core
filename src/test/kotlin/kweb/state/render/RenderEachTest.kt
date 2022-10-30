@@ -34,7 +34,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
         val server = Kweb(port = 1240, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -67,7 +67,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
         val server = Kweb(port = 1241, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -100,7 +100,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
         val server = Kweb(port = 1242, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -133,7 +133,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
 
         val server = Kweb(port = 1243, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -161,7 +161,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Aardvark", "Bear", "Cow", "Dog", "Elephant"))
 
         val server = Kweb(port = 1244, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -219,7 +219,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1245, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -252,7 +252,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1246, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -285,7 +285,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1247, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -318,7 +318,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1248, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(animals) { animal ->
                     div().new {
                         h1().text(animal)
@@ -353,7 +353,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         planets.add(neptune)
 
         val server = Kweb(port = 1249, buildPage = {
-            doc.body.new {
+            doc.body {
                 renderEach(planets) { planet ->
                     renderEach(planet as ObservableList<*>) { moon ->
                         h1().text(moon.toString())
