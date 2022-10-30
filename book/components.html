@@ -283,11 +283,7 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 <pre><code class="language-kotlin">Kweb(port = 12354) {
     doc.body {
         val username = kvar(&quot;&quot;)
-        val color: KVal&lt;BulmaColor&gt; = username.map { name -&gt; if (name.length &lt; 5) {
-            BulmaColor.WARNING
-        } else {
-            BulmaColor.SUCCESS
-        }
+        val color = username.map { if (it.length &lt; 5) { WARNING } else { SUCCESS }
         }
         render(BulmaInput(type = text, value = username, color = color))
     }
