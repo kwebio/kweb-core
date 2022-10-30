@@ -186,7 +186,7 @@ interface Component&lt;R&gt; {
 </code></pre>
 <p>This component can then be passed to <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">ElementCreator.render</a>:</p>
 <pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body.new {
+    doc.body {
         render(SimpleComponent(name = kvar(&quot;World&quot;)))
     }
 }
@@ -215,6 +215,7 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
     val disabled: KVal&lt;Boolean&gt;? = null,
     val value: KVar&lt;String&gt;
 ) : Component&lt;InputElement&gt; {
+
     override fun render(elementCreator: ElementCreator&lt;*&gt;) : InputElement {
         with(elementCreator) {
             val renderedInput = input(type = type) {
@@ -275,6 +276,20 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
         HOVER(&quot;is-hovered&quot;),
         FOCUS(&quot;is-focused&quot;),
         LOADING(&quot;is-loading&quot;),
+    }
+}
+</code></pre>
+<p>This component can then be used like this:</p>
+<pre><code class="language-kotlin">Kweb(port = 12354) {
+    doc.body {
+        val username = kvar(&quot;&quot;)
+        val color: KVal&lt;BulmaColor&gt; = username.map { name -&gt; if (name.length &lt; 5) {
+            BulmaColor.WARNING
+        } else {
+            BulmaColor.SUCCESS
+        }
+        }
+        render(BulmaInput(type = text, value = username, color = color))
     }
 }
 </code></pre>
