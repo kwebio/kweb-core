@@ -55,16 +55,16 @@ class BulmaInput(
                 element {
 
                     if (color != null) {
-                        inputClassList += color.map { listOf(it.className) }
+                        inputClassList += color.map { listOf(it.cssClassName) }
                     }
                     if (size != null) {
-                        inputClassList += size.map { listOf(it.className) }
+                        inputClassList += size.map { listOf(it.cssClassName) }
                     }
                     if (this@BulmaInput.style != null) {
-                        inputClassList += this@BulmaInput.style.map { listOf(it.className) }
+                        inputClassList += this@BulmaInput.style.map { listOf(it.cssClassName) }
                     }
                     if (state != null) {
-                        inputClassList += state.map { listOf(it.className) }
+                        inputClassList += state.map { listOf(it.cssClassName) }
                     }
 
                     if (disabled != null) {
@@ -82,7 +82,7 @@ class BulmaInput(
         }
     }
 
-    enum class BulmaColor(val className: String) {
+    enum class BulmaColor(val cssClassName: String) {
         PRIMARY("is-primary"),
         LINK("is-link"),
         INFO("is-info"),
@@ -91,19 +91,19 @@ class BulmaInput(
         DANGER("is-danger")
     }
 
-    enum class BulmaSize(val className: String) {
+    enum class BulmaSize(val cssClassName: String) {
         SMALL("is-small"),
         NORMAL("is-normal"),
         MEDIUM("is-medium"),
         LARGE("is-large")
     }
 
-    enum class BulmaStyle(val className: String) {
+    enum class BulmaStyle(val cssClassName: String) {
         ROUNDED("is-rounded"),
         FOCUSED("is-focused")
     }
 
-    enum class BulmaState(val className: String) {
+    enum class BulmaState(val cssClassName: String) {
         NORMAL("is-normal"),
         HOVER("is-hovered"),
         FOCUS("is-focused"),
