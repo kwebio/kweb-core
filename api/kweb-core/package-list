@@ -601,13 +601,6 @@ $dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin///PointingToDeclarati
 $dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/StaticFilesPlugin/#java.io.File#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/-static-files-plugin.html
 $dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/StaticFilesPlugin/#kweb.plugins.staticFiles.ResourceFolder#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/-static-files-plugin.html
 $dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/appServerConfigurator/#io.ktor.server.routing.Routing/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/app-server-configurator.html
-$dokka.location:kweb.plugins.tablesort////PointingToDeclaration/kweb-core/kweb.plugins.tablesort/index.html
-$dokka.location:kweb.plugins.tablesort//sort/kweb.TableElement#/PointingToDeclaration/kweb-core/kweb.plugins.tablesort/sort.html
-$dokka.location:kweb.plugins.tablesort//tableSortPlugin/#/PointingToDeclaration/kweb-core/kweb.plugins.tablesort/table-sort-plugin.html
-$dokka.location:kweb.plugins.tablesort//tablesortSample/#/PointingToDeclaration/kweb-core/kweb.plugins.tablesort/tablesort-sample.html
-$dokka.location:kweb.plugins.tablesort/TablesortPlugin///PointingToDeclaration/kweb-core/kweb.plugins.tablesort/-tablesort-plugin/index.html
-$dokka.location:kweb.plugins.tablesort/TablesortPlugin/TablesortPlugin/#/PointingToDeclaration/kweb-core/kweb.plugins.tablesort/-tablesort-plugin/-tablesort-plugin.html
-$dokka.location:kweb.plugins.tablesort/TablesortPlugin/decorate/#org.jsoup.nodes.Document/PointingToDeclaration/kweb-core/kweb.plugins.tablesort/-tablesort-plugin/decorate.html
 $dokka.location:kweb.plugins.viewport////PointingToDeclaration/kweb-core/kweb.plugins.viewport/index.html
 $dokka.location:kweb.plugins.viewport/ViewportPlugin///PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-plugin/index.html
 $dokka.location:kweb.plugins.viewport/ViewportPlugin/ViewportPlugin/#kweb.plugins.viewport.ViewportWidth#kotlin.Double/PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-plugin/-viewport-plugin.html
@@ -1113,7 +1106,6 @@ kweb.plugins.fomanticUI
 kweb.plugins.jqueryCore
 kweb.plugins.specificKeyUp
 kweb.plugins.staticFiles
-kweb.plugins.tablesort
 kweb.plugins.viewport
 kweb.routing
 kweb.state
