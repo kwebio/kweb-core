@@ -57,7 +57,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
      *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
      */
-    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace: String? = null): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace: String? = null, new: (ElementCreator<*>.() -> Unit)? = null): Element {
 
         val mutAttributes = HashMap(attributes)
 
@@ -158,6 +158,11 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             logger.debug { "Deleting element ${newElement.id}" }
             newElement.deleteIfExists()
         }
+
+        if (new != null) {
+            newElement.new { new() }
+        }
+
         return newElement
     }
 
@@ -206,10 +211,14 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
     }
 
+    // text() Deprecated because these may create confusion about whether element properties
+    // are set on the Element or the ElementCreator
+    @Deprecated("Use element.text() instead", ReplaceWith("element.text(text)"))
     fun text(text: String) {
         this.element.text(text)
     }
 
+    @Deprecated("Use element.text() instead", ReplaceWith("element.text(text)"))
     fun text(text: KVal<String>) {
         this.element.text(text)
     }

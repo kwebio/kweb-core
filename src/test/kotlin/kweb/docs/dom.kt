@@ -89,9 +89,10 @@ inputKVar.addListener { old, new ->
             // ANCHOR_END: read_value
 
             // ANCHOR: blink
-val blink = element("blink").text("I am annoying!")
+element("blink") {
+    span().text("Blinking Text")
+}
             // ANCHOR_END: blink
-            blink.id // Remove unused warning
         }
     }
 }
