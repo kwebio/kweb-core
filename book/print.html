@@ -206,7 +206,7 @@ some familiarity with HTML.</p>
 is added to your <code>repositories</code> block.</p>
 <h3 id="groovy"><a class="header" href="#groovy">Groovy</a></h3>
 <pre><code class="language-kotlin">dependencies {
-  implementation 'io.kweb:kweb-core:1.0.2'
+  implementation 'io.kweb:kweb-core:1.0.2.1'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation 'org.slf4j:slf4j-simple:2.0.3'
@@ -214,7 +214,7 @@ is added to your <code>repositories</code> block.</p>
 </code></pre>
 <h3 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h3>
 <pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:1.0.2&quot;)
+  implementation(&quot;io.kweb:kweb-core:1.0.2.1&quot;)
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
@@ -280,10 +280,7 @@ features like for loops, functions, coroutines, and classes.</p>
     doc.body {
         ul {
             // We can modify the UL element we just created in an element {} block
-            element {
-                // Here we add a CSS class to the UL element
-                classes(&quot;list&quot;)
-            }
+            it.classes(&quot;list&quot;)
             // We can define functions as an extension to ElementCreator allowing us to use it
             // within the DSL
             fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
@@ -354,9 +351,11 @@ button.text(&quot;Click Me!&quot;)
 button.classes(&quot;bigbutton&quot;)
 button[&quot;autofocus&quot;] = true
 </code></pre>
-<p>Attributes can also be specified in an <code>element</code> block:</p>
-<pre><code class="language-kotlin">button {
-    element {
+<p>The created <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> 
+is passed to the <code>{block}</code> as a parameter, which can be used to set attributes on the 
+element, add listeners, or set the element's text or innerHtml:</p>
+<pre><code class="language-kotlin">button { btnEl -&gt;
+    with(btnEl) {
         classes(&quot;bigbutton&quot;)
         this[&quot;autofocus&quot;] = true
         text(&quot;Click Me!&quot;)
@@ -380,7 +379,6 @@ unorderedList.new {
     li().text(&quot;One&quot;)
     li().text(&quot;Two&quot;)
 }
-
 </code></pre>
 <h2 id="reading-from-the-dom"><a class="header" href="#reading-from-the-dom">Reading from the DOM</a></h2>
 <p>Kweb can also read from the DOM, in this case the value of an <code>&lt;input&gt;</code>
@@ -917,9 +915,9 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 
     override fun render(elementCreator: ElementCreator&lt;*&gt;) : InputElement {
         with(elementCreator) {
-            val renderedInput = input(type = type) {
+            val renderedInput = input(type = type) { inputElement -&gt;
                 var inputClassList: KVal&lt;List&lt;String&gt;&gt; = kval(listOf(&quot;input&quot;))
-                element {
+                with(inputElement) {
 
                     if (color != null) {
                         inputClassList += color.map { listOf(it.cssClassName) }

@@ -188,9 +188,11 @@ button.text(&quot;Click Me!&quot;)
 button.classes(&quot;bigbutton&quot;)
 button[&quot;autofocus&quot;] = true
 </code></pre>
-<p>Attributes can also be specified in an <code>element</code> block:</p>
-<pre><code class="language-kotlin">button {
-    element {
+<p>The created <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> 
+is passed to the <code>{block}</code> as a parameter, which can be used to set attributes on the 
+element, add listeners, or set the element's text or innerHtml:</p>
+<pre><code class="language-kotlin">button { btnEl -&gt;
+    with(btnEl) {
         classes(&quot;bigbutton&quot;)
         this[&quot;autofocus&quot;] = true
         text(&quot;Click Me!&quot;)
@@ -214,7 +216,6 @@ unorderedList.new {
     li().text(&quot;One&quot;)
     li().text(&quot;Two&quot;)
 }
-
 </code></pre>
 <h2 id="reading-from-the-dom"><a class="header" href="#reading-from-the-dom">Reading from the DOM</a></h2>
 <p>Kweb can also read from the DOM, in this case the value of an <code>&lt;input&gt;</code>

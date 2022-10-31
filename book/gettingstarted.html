@@ -162,7 +162,7 @@ some familiarity with HTML.</p>
 is added to your <code>repositories</code> block.</p>
 <h3 id="groovy"><a class="header" href="#groovy">Groovy</a></h3>
 <pre><code class="language-kotlin">dependencies {
-  implementation 'io.kweb:kweb-core:1.0.2'
+  implementation 'io.kweb:kweb-core:1.0.2.1'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation 'org.slf4j:slf4j-simple:2.0.3'
@@ -170,7 +170,7 @@ is added to your <code>repositories</code> block.</p>
 </code></pre>
 <h3 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h3>
 <pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:1.0.2&quot;)
+  implementation(&quot;io.kweb:kweb-core:1.0.2.1&quot;)
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
@@ -236,10 +236,7 @@ features like for loops, functions, coroutines, and classes.</p>
     doc.body {
         ul {
             // We can modify the UL element we just created in an element {} block
-            element {
-                // Here we add a CSS class to the UL element
-                classes(&quot;list&quot;)
-            }
+            it.classes(&quot;list&quot;)
             // We can define functions as an extension to ElementCreator allowing us to use it
             // within the DSL
             fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {

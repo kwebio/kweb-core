@@ -218,9 +218,9 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 
     override fun render(elementCreator: ElementCreator&lt;*&gt;) : InputElement {
         with(elementCreator) {
-            val renderedInput = input(type = type) {
+            val renderedInput = input(type = type) { inputElement -&gt;
                 var inputClassList: KVal&lt;List&lt;String&gt;&gt; = kval(listOf(&quot;input&quot;))
-                element {
+                with(inputElement) {
 
                     if (color != null) {
                         inputClassList += color.map { listOf(it.cssClassName) }
