@@ -1001,8 +1001,6 @@ directly with the browser's JavaScript interpreter:</p>
 <li><a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function.html">WebBrowser.callJsFunction()</a></li>
 <li><a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">WebBrowser.callJsFunctionWithResult()</a></li>
 </ul>
-<p><a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> has two similar functions that
-are convenience wrappers around these WebBrowser functions.</p>
 <p>Note that this is unrelated to Kotlin's ability to <a href="https://kotlinlang.org/docs/js-overview.html">compile to JavaScript</a>.</p>
 <h2 id="calling-a-javascript-function"><a class="header" href="#calling-a-javascript-function">Calling a JavaScript function</a></h2>
 <pre><code class="language-kotlin">doc.body {
@@ -1012,11 +1010,11 @@ are convenience wrappers around these WebBrowser functions.</p>
 <h2 id="calling-with-parameters"><a class="header" href="#calling-with-parameters">Calling with parameters</a></h2>
 <p>You can pass parameters to a JavaScript function by passing them as arguments to the <code>callJsFunction()</code> function,
 using <code>{}</code> for substitution:</p>
-<pre><code class="language-kotlin">        doc.body {
-            val greeting = &quot;Hello&quot;.json
-            val name = &quot;World&quot;.json
-            browser.callJsFunction(&quot;&quot;&quot;alert(&quot;{} {}!&quot;)&quot;&quot;&quot;, greeting, name)
-        }
+<pre><code class="language-kotlin">doc.body {
+    val greeting = &quot;Hello&quot;.json
+    val name = &quot;World&quot;.json
+    browser.callJsFunction(&quot;&quot;&quot;alert(&quot;{} {}!&quot;)&quot;&quot;&quot;, greeting, name)
+}
 </code></pre>
 <p>Parameters must be converted to a <a href="https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-element/">JsonElement</a>,
 for example by using the <a href="https://docs.kweb.io/api/kweb-core/kweb.util/json.html">json</a> extension property.</p>
