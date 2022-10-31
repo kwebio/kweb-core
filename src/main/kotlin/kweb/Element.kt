@@ -79,7 +79,7 @@ open class Element(
     /**
      * Obtain the instance of a plugin by its [KClass].
      */
-    // TODO: Does this prevent the use of multiple plugins of the same class?
+    // TODO [$635f2be19f96970007b18075]: Does this prevent the use of multiple plugins of the same class?
     fun <P : KwebPlugin> plugin(plugin: KClass<P>) = browser.plugin(plugin)
 
     /*********

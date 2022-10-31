@@ -39,9 +39,9 @@ class StaticFilesPlugin private constructor(private val servedRoute: String, pri
         routeHandler.static(servedRoute) {
             install(CachingHeaders) {
                 /*
-                TODO: Ideally the asset path would contain a hash of the file content
-                TODO: so that we can set a very long cache time (> 1 year).  For now it defaults
-                TODO: to one hour.
+                TODO [$635f2be19f96970007b1807e]: Ideally the asset path would contain a hash of the file content
+                TODO [$635f2be19f96970007b1807f]: so that we can set a very long cache time (> 1 year).  For now it defaults
+                TODO [$635f2be19f96970007b18080]: to one hour.
                  */
                 options { call, content ->
                     CachingOptions(CacheControl.MaxAge(maxAgeSeconds = maxCacheAgeSeconds))
