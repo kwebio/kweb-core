@@ -12,8 +12,8 @@ import org.jsoup.nodes.Document
 class JQueryCorePlugin : KwebPlugin() {
     override fun decorate(doc: Document) {
         doc.head().appendElement("script")
-                .attr("src", "/kweb_static/plugins/jquery/jquery-3.4.1.min.js")
-                .attr("crossorigin", "anonymous")
+            .attr("src", "/kweb_static/plugins/jquery/jquery-3.4.1.min.js")
+            .attr("crossorigin", "anonymous")
     }
 }
 
@@ -23,5 +23,5 @@ val jqueryCore = JQueryCorePlugin()
  * Selects the element based on id, then executes the provided js
  */
 fun Element.executeOnSelf(js: String) {
-    callJsFunction("$('#' + {})$js", id.json)
+    browser.callJsFunction("$('#' + {})$js", id.json)
 }

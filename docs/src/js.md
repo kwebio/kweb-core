@@ -10,9 +10,6 @@ directly with the browser's JavaScript interpreter:
 * [WebBrowser.callJsFunction()](https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function.html)
 * [WebBrowser.callJsFunctionWithResult()](https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html)
 
-[Element](https://docs.kweb.io/api/kweb-core/kweb/-element/index.html) has two similar functions that
-are convenience wrappers around these WebBrowser functions.
-
 Note that this is unrelated to Kotlin's ability to [compile to JavaScript](https://kotlinlang.org/docs/js-overview.html).
 
 ## Calling a JavaScript function

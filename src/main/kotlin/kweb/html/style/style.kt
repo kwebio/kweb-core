@@ -9,11 +9,19 @@ import kweb.Element
 
 class StyleReceiver(private val parent: Element) {
     fun setDisplay(value: DisplayValues) {
-        parent.callJsFunction("document.getElementById({}).style.display = {}", JsonPrimitive(parent.id), JsonPrimitive(value.toString()))
+        parent.browser.callJsFunction(
+            "document.getElementById({}).style.display = {}",
+            JsonPrimitive(parent.id),
+            JsonPrimitive(value.toString())
+        )
     }
 
     fun setWidth(value: String) {
-        parent.callJsFunction("document.getElementById({}).style.width = {}", JsonPrimitive(parent.id), JsonPrimitive(value))
+        parent.browser.callJsFunction(
+            "document.getElementById({}).style.width = {}",
+            JsonPrimitive(parent.id),
+            JsonPrimitive(value)
+        )
     }
 
     fun remove() {

@@ -16,11 +16,11 @@ doc.body {
         // ANCHOR_END: alert
 
         // ANCHOR: parameters
-        doc.body {
-            val greeting = "Hello".json
-            val name = "World".json
-            browser.callJsFunction("""alert("{} {}!")""", greeting, name)
-        }
+doc.body {
+    val greeting = "Hello".json
+    val name = "World".json
+    browser.callJsFunction("""alert("{} {}!")""", greeting, name)
+}
         // ANCHOR_END: parameters
 
         // ANCHOR: with_result

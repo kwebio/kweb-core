@@ -89,6 +89,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     jsElement.attr(k, v.content)
                 }
             }
+
             element.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
                 val createElementJs = """
@@ -120,6 +121,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     JsonPrimitive(element.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
                 )
             }
+
             else -> {
                 //The way I have written this function, instead of attributes.get(), we now use attributes[].
                 //language=JavaScript
@@ -146,7 +148,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                         parentElement.appendChild(newEl);
                     }
                 """.trimIndent()
-                element.callJsFunction(
+                element.browser.callJsFunction(
                     createElementJs, tag.json, JsonObject(mutAttributes), id.json,
                     element.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
                 )

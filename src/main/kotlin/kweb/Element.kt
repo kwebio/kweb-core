@@ -33,37 +33,6 @@ open class Element(
     EventGenerator<Element> {
     constructor(element: Element) : this(element.browser, element.creator, tag = element.tag, id = element.id)
 
-    /**
-     * Execute some JavaScript in the browser.  This is the
-     * foundation upon which most other DOM modification functions in this class
-     * are based. `{}`s in the js String will be replaced by the `args` values
-     * in the order in which they're present in the js String.
-     *
-     * Note that this will cache functions in the browser to avoid unnecessary
-     * re-interpretation, making this fairly efficient.
-     *
-     * This is a convenience wrapper for [WebBrowser.callJsFunction]
-     */
-    fun callJsFunction(js: String, vararg args: JsonElement) {
-        browser.callJsFunction(js, *args)
-    }
-
-    /**
-     * Evaluate some JavaScript in the browser and return the result via a Future.
-     * This the foundation upon which most DOM-querying functions in this class
-     * are based.
-     *
-     * This uses the same template mechanism as [callJsFunction]
-     */
-    suspend fun <O> callJsFunctionWithResult(
-        js: String,
-        outputMapper: (JsonElement) -> O,
-        vararg args: JsonElement
-    ): O? {
-        val result = browser.callJsFunctionWithResult(js, *args)
-        return outputMapper.invoke(result)
-    }
-
     /*********
      ********* Utilities for plugin creators
      *********/
@@ -109,7 +78,7 @@ open class Element(
      *                  with the specified namespace. If null then Kweb will use [Element.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
 
      */
-    fun set(name : String, value : JsonPrimitive, namespace : String? = null) : Element {
+    fun set(name: String, value: JsonPrimitive, namespace: String? = null): Element {
         val jsoupDoc = browser.htmlDocument.get()
         val setAttributeJavaScript = when (namespace) {
             null -> "document.getElementById({}).setAttribute({}, {});"
@@ -121,7 +90,7 @@ open class Element(
             }
 
             else -> {
-                callJsFunction(
+                browser.callJsFunction(
                     setAttributeJavaScript,
                     id.json, name.json, value
                 )
@@ -203,7 +172,7 @@ open class Element(
             }
 
             else -> {
-                callJsFunction("document.getElementById({}).removeAttribute({})", id.json, JsonPrimitive(name))
+                browser.callJsFunction("document.getElementById({}).removeAttribute({})", id.json, JsonPrimitive(name))
             }
 
         }
@@ -223,7 +192,7 @@ open class Element(
             }
 
             else -> {
-                callJsFunction("document.getElementById({}).innerHTML = {}", id.json, JsonPrimitive(html))
+                browser.callJsFunction("document.getElementById({}).innerHTML = {}", id.json, JsonPrimitive(html))
             }
         }
         return this
@@ -245,12 +214,12 @@ open class Element(
     }
 
     fun focus(): Element {
-        callJsFunction("document.getElementById({}).focus();", id.json)
+        browser.callJsFunction("document.getElementById({}).focus();", id.json)
         return this
     }
 
     fun blur(): Element {
-        callJsFunction("document.getElementById({}).blur();", id.json)
+        browser.callJsFunction("document.getElementById({}).blur();", id.json)
         return this
     }
 
@@ -286,20 +255,21 @@ open class Element(
                     val thisEl = jsoupDoc.getElementById(this.id)!!
                     classes.forEach { thisEl.addClass(it) }
                 }
+
                 else -> {
                     for (class_ in classes) {
                         if (class_.contains(' ')) {
                             error("Class names must not contain spaces")
                         }
                         //language=JavaScript
-                        callJsFunction(
+                        browser.callJsFunction(
                             """
-                    let id = {};
-                    let className = {};
-                    let el = document.getElementById(id);
-                    if (el.classList) el.classList.add(className);
-                    else if (!hasClass(el, className)) el.className += " " + className;
-                """.trimIndent(), id.json, JsonPrimitive(class_)
+                                    let id = {};
+                                    let className = {};
+                                    let el = document.getElementById(id);
+                                    if (el.classList) el.classList.add(className);
+                                    else if (!hasClass(el, className)) el.className += " " + className;
+                                """.trimIndent(), id.json, JsonPrimitive(class_)
                         )
                     }
                 }
@@ -322,17 +292,17 @@ open class Element(
                     error("Class names must not contain spaces")
                 }
                 //language=JavaScript
-                callJsFunction(
+                browser.callJsFunction(
                     """
-                    let id = {};
-                    let className = {};
-                    let el = document.getElementById(id);
-                    if (el.classList) el.classList.remove(className);
-                    else if (hasClass(el, className)) {
-                        var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
-                        el.className = el.className.replace(reg, " ");
-                    }
-                """.trimIndent(), id.json, JsonPrimitive(class_)
+                            let id = {};
+                            let className = {};
+                            let el = document.getElementById(id);
+                            if (el.classList) el.classList.remove(className);
+                            else if (hasClass(el, className)) {
+                                var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
+                                el.className = el.className.replace(reg, " ");
+                            }
+                        """.trimIndent(), id.json, JsonPrimitive(class_)
                 )
             }
         }
@@ -369,16 +339,16 @@ open class Element(
 
             else -> {
                 //language=JavaScript
-                callJsFunction(
+                browser.callJsFunction(
                     """
-                    let id = {};
-                    if (document.getElementById(id) != null) {
-                        let element = document.getElementById(id);
-                        while (element.firstChild) {
-                            element.removeChild(element.firstChild);
-                        }
-                    }
-                """.trimIndent(), id.json
+                            let id = {};
+                            if (document.getElementById(id) != null) {
+                                let element = document.getElementById(id);
+                                while (element.firstChild) {
+                                    element.removeChild(element.firstChild);
+                                }
+                            }
+                        """.trimIndent(), id.json
                 )
             }
         }
@@ -404,16 +374,16 @@ open class Element(
 
             else -> {
                 //language=JavaScript
-                callJsFunction(
+                browser.callJsFunction(
                     """
-                    let startSpan = document.getElementById({});
-                    let endSpan = document.getElementById({});
-                    let nextSibling = startSpan.nextSibling;
-                    while(nextSibling != endSpan) {
-                        startSpan.parentNode.removeChild(startSpan.nextSibling);
-                        nextSibling = startSpan.nextSibling;
-                    }
-                """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId)
+                            let startSpan = document.getElementById({});
+                            let endSpan = document.getElementById({});
+                            let nextSibling = startSpan.nextSibling;
+                            while(nextSibling != endSpan) {
+                                startSpan.parentNode.removeChild(startSpan.nextSibling);
+                                nextSibling = startSpan.nextSibling;
+                            }
+                        """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId)
                 )
             }
         }
@@ -431,11 +401,11 @@ open class Element(
             }
 
             else -> {
-                callJsFunction(
+                browser.callJsFunction(
                     """
-                        let element = document.getElementById({});
-                        element.removeChild(element.children[{}]);
-                """.trimIndent(), id.json, position.json
+                                let element = document.getElementById({});
+                                element.removeChild(element.children[{}]);
+                        """.trimIndent(), id.json, position.json
                 )
             }
         }
@@ -457,7 +427,7 @@ open class Element(
             }
 
             else -> {
-                callJsFunction(setTextJS, id.json, JsonPrimitive(value))
+                browser.callJsFunction(setTextJS, id.json, JsonPrimitive(value))
             }
         }
         return this
@@ -502,7 +472,7 @@ open class Element(
             }
 
             else -> {
-                callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
+                browser.callJsFunction(createTextNodeJs, JsonPrimitive(value), id.json)
             }
         }
         return this
@@ -599,13 +569,13 @@ open class Element(
             kv.value = event.retrieved
         }
         val kvChangeHandler = kv.addListener { _, new ->
-            callJsFunction(writer(this.id, "{}") + ";", new)
+            browser.callJsFunction(writer(this.id, "{}") + ";", new)
         }
         creator?.onCleanup(true) {
             kv.removeListener(kvChangeHandler)
             kv.close(CloseReason("Ancestor ElementCreator cleaned up"))
         }
-        callJsFunction(writer(this.id, "{}") + ";", initialValue)
+        browser.callJsFunction(writer(this.id, "{}") + ";", initialValue)
         return kv
     }
 
@@ -615,7 +585,7 @@ open class Element(
      */
     fun delete() {
         //language=JavaScript
-        callJsFunction(
+        browser.callJsFunction(
             """
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
@@ -630,16 +600,16 @@ open class Element(
     fun deleteIfExists() {
         try {
             //language=JavaScript
-            callJsFunction(
+            browser.callJsFunction(
                 """
-            let id = {}
-            if (document.getElementById(id)) {
-                let element = document.getElementById(id);
-                element.parentNode.removeChild(element);
-            }
-        """.trimIndent(), id.json
+                let id = {}
+                if (document.getElementById(id)) {
+                    let element = document.getElementById(id);
+                    element.parentNode.removeChild(element);
+                }
+            """.trimIndent(), id.json
             )
-        } catch (e : IllegalStateException) {
+        } catch (e: IllegalStateException) {
 
         }
     }

@@ -22,8 +22,8 @@ import kotlin.collections.set
  */
 
 fun ElementCreator<HeadElement>.title(
-        attributes: Map<String, JsonPrimitive> = emptyMap(),
-        new: (ElementCreator<TitleElement>.(TitleElement) -> Unit)? = null
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<TitleElement>.(TitleElement) -> Unit)? = null
 ): TitleElement {
     return TitleElement(element("title", attributes)).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
@@ -139,19 +139,20 @@ open class AElement(parent: Element) : Element(parent) {
      *
      * TODO: Should this be a KVar rather than a String?
      */
-    var href : String? get() {
-        error("The href property may only be set, but not read")
-    }
-    set(hrefValue) {
-        if (hrefValue != null) {
-            setAttribute("href", hrefValue)
-            if (hrefValue.startsWith('/')) {
-                this.on(preventDefault = true).click {
-                    this.browser.url.value = hrefValue
+    var href: String?
+        get() {
+            error("The href property may only be set, but not read")
+        }
+        set(hrefValue) {
+            if (hrefValue != null) {
+                set("href", hrefValue)
+                if (hrefValue.startsWith('/')) {
+                    this.on(preventDefault = true).click {
+                        this.browser.url.value = hrefValue
+                    }
                 }
             }
         }
-    }
 }
 
 fun ElementCreator<Element>.a(
@@ -325,18 +326,29 @@ fun ElementCreator<Element>.meta(
 
 open class InputElement(override val element: Element, initialValue: String? = null) :
     ValueElement(element, initialValue = initialValue) {
-    fun select() = element.callJsFunction("document.getElementById({}).select();", id.json)
+    fun select() {
+        element.browser.callJsFunction("document.getElementById({}).select();", id.json)
+    }
 
-    fun setSelectionRange(start: Int, end: Int) = element.callJsFunction(
+    fun setSelectionRange(start: Int, end: Int) {
+        element.browser.callJsFunction(
             "document.getElementById({}).setSelectionRange({}, {});",
-            id.json, start.json, end.json)
+            id.json, start.json, end.json
+        )
+    }
 
-    fun setReadOnly(ro: Boolean) = element.callJsFunction("document.getElementById({}).readOnly = {};",
-            id.json, ro.json)
+    fun setReadOnly(ro: Boolean) {
+        element.browser.callJsFunction(
+            "document.getElementById({}).readOnly = {};",
+            id.json, ro.json
+        )
+    }
 
-    fun checked(initialValue : Boolean = false) : KVar<Boolean> {
-        val kv = bind(accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change",
-            initialValue = JsonPrimitive(initialValue))
+    fun checked(initialValue: Boolean = false): KVar<Boolean> {
+        val kv = bind(
+            accessor = { "document.getElementById(\"$it\").checked" }, updateOnEvent = "change",
+            initialValue = JsonPrimitive(initialValue)
+        )
         return kv.map(object : ReversibleFunction<JsonElement, Boolean>("") {
             override fun invoke(from: JsonElement) = from.jsonPrimitive.boolean
 
@@ -449,20 +461,28 @@ fun ElementCreator<Element>.label(
  *
  * @param kvarUpdateEvent The [value] of this element will update on this event, defaults to [input](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event)
  */
-abstract class ValueElement(open val element: Element, val kvarUpdateEvent: String = "input",
-                            val initialValue: String? = null) : Element(element) {
-    val valueJsExpression : String by lazy { "document.getElementById(\"$id\").value" }
+abstract class ValueElement(
+    open val element: Element, val kvarUpdateEvent: String = "input",
+    val initialValue: String? = null
+) : Element(element) {
+    val valueJsExpression: String by lazy { "document.getElementById(\"$id\").value" }
 
-    suspend fun getValue():String = element.
-    callJsFunctionWithResult("return document.getElementById({}).value;", outputMapper = { when (it) {
-        is JsonPrimitive -> it.content
-        else -> error("Needs to be JsonPrimitive")
-    } }, id.json)
-        ?: error("Not sure why .evaluate() would return null")
+    suspend fun getValue(): String {
+        return when (val result =
+            element.browser.callJsFunctionWithResult("return document.getElementById({}).value;", id.json)) {
+            is JsonPrimitive -> result.content
+            else -> error("Needs to be JsonPrimitive")
+        }
+    }
 
     //language=JavaScript
-    fun setValue(newValue: String) = element.callJsFunction("document.getElementById({}).value = {};",
-            element.id.json, newValue.json)
+    fun setValue(newValue: String) {
+        element.browser.callJsFunction(
+            "document.getElementById({}).value = {};",
+            element.id.json, newValue.json
+        )
+    }
+
     fun setValue(newValue: KVal<String>) {
         val initialValue = newValue.value
         setValue(initialValue)
@@ -511,16 +531,18 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     @Serializable
     data class DiffData(val prefixEndIndex: Int, val postfixOffset: Int, val diffString: String)
 
-    private fun applyDiff(oldString: String, diffData: DiffData) : String {
+    private fun applyDiff(oldString: String, diffData: DiffData): String {
 
         val newString = when {
             diffData.postfixOffset == -1 -> {//these 2 edge cases prevent the prefix or the postfix from being
                 // repeated when you append text to the beginning of the text or the end of the text
                 oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString
             }
+
             diffData.prefixEndIndex == 0 -> {
                 diffData.diffString + oldString.substring(oldString.length - diffData.postfixOffset)
             }
+
             else -> {
                 oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString +
                         oldString.substring(oldString.length - diffData.postfixOffset)
@@ -532,16 +554,17 @@ abstract class ValueElement(open val element: Element, val kvarUpdateEvent: Stri
     private fun updateKVar(toBind: KVar<String>, updateOn: String = "input") {
         on(
             //language=JavaScript
-            retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))")
+            retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))"
+        )
             .event<Event>(updateOn) {
-            //TODO, this check shouldn't be necessary. It should be impossible for get_diff_changes() to return a null,
-            //but we had a null check previously, so I went ahead and added it.
-            if (it.retrieved != JsonNull) {
-                val diffDataJson = it.retrieved
-                val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
-                toBind.value = applyDiff(toBind.value, diffData)
+                //TODO, this check shouldn't be necessary. It should be impossible for get_diff_changes() to return a null,
+                //but we had a null check previously, so I went ahead and added it.
+                if (it.retrieved != JsonNull) {
+                    val diffDataJson = it.retrieved
+                    val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
+                    toBind.value = applyDiff(toBind.value, diffData)
+                }
             }
-        }
     }
 
 }
@@ -626,13 +649,14 @@ operator fun <K : Any, V : Any> KVar<Map<K, V>>.get(k: K): KVar<V?> {
     })
 }
 
-fun <T : Any> KVar<List<T>>.subList(fromIx: Int, toIx: Int): KVar<List<T>> = this.map(object : ReversibleFunction<List<T>, List<T>>("subList($fromIx, $toIx)") {
-    override fun invoke(from: List<T>): List<T> = from.subList(fromIx, toIx)
+fun <T : Any> KVar<List<T>>.subList(fromIx: Int, toIx: Int): KVar<List<T>> =
+    this.map(object : ReversibleFunction<List<T>, List<T>>("subList($fromIx, $toIx)") {
+        override fun invoke(from: List<T>): List<T> = from.subList(fromIx, toIx)
 
-    override fun reverse(original: List<T>, change: List<T>): List<T> {
-        return original.subList(0, fromIx) + change + original.subList(toIx, original.size)
-    }
-})
+        override fun reverse(original: List<T>, change: List<T>): List<T> {
+            return original.subList(0, fromIx) + change + original.subList(toIx, original.size)
+        }
+    })
 
 fun <T : Any> KVal<List<T>>.subList(fromIx: Int, toIx: Int): KVal<List<T>> = this.map { it.subList(fromIx, toIx) }
 
@@ -709,7 +733,10 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
  * Render each element of a List
  */
 @Deprecated("Use kweb.state.renderEach instead", ReplaceWith("renderEach(list, block)", "kweb.state.renderEach"))
-fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCreator<Element>.(value: KVar<T>) -> Unit) {
+fun <T : Any> ElementCreator<*>.renderEach(
+    list: KVar<List<T>>,
+    block: ElementCreator<Element>.(value: KVar<T>) -> Unit
+) {
     /*
      * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing
      *       DOM elements - this is inefficient and should use renderEach() with an ObservableList instead.
@@ -724,7 +751,13 @@ fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCr
 /**
  * Create a [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
  */
-fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = null, size: Int? = null, placeholder: String? = null, attributes: Map<String, JsonPrimitive> = attr): FileFormInput {
+fun ElementCreator<*>.fileInput(
+    name: String? = null,
+    initialValue: String? = null,
+    size: Int? = null,
+    placeholder: String? = null,
+    attributes: Map<String, JsonPrimitive> = attr
+): FileFormInput {
     val inputElement = input(attributes, InputType.file, name, initialValue, size, placeholder)
     val formInput = FileFormInput()
     formInput.setInputElement(inputElement)
@@ -750,6 +783,7 @@ fun ElementCreator<Element>.thead(
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
+
 open class TheadElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.th(
@@ -760,6 +794,7 @@ fun ElementCreator<Element>.th(
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
+
 open class ThElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.tbody(
@@ -770,6 +805,7 @@ fun ElementCreator<Element>.tbody(
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
+
 open class TbodyElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.tr(
@@ -780,6 +816,7 @@ fun ElementCreator<Element>.tr(
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
+
 open class TrElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.td(
@@ -790,4 +827,5 @@ fun ElementCreator<Element>.td(
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
+
 class TdElement(parent: Element) : Element(parent)

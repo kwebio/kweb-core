@@ -131,8 +131,6 @@ public class kweb/Element : kweb/html/events/EventGenerator {
 	public static synthetic fun bind$default (Lkweb/Element;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/state/KVar;
 	public static synthetic fun bind$default (Lkweb/Element;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/state/KVar;
 	public final fun blur ()Lkweb/Element;
-	public final fun callJsFunction (Ljava/lang/String;[Lkotlinx/serialization/json/JsonElement;)V
-	public final fun callJsFunctionWithResult (Ljava/lang/String;Lkotlin/jvm/functions/Function1;[Lkotlinx/serialization/json/JsonElement;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun classes (Lkweb/state/KVal;)Lkweb/Element;
 	public final fun classes ([Ljava/lang/String;)Lkweb/Element;
 	public final fun deactivate ()Lkweb/Element;
