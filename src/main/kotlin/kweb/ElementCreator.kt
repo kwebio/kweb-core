@@ -1,6 +1,7 @@
 package kweb
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.json.JsonObject
@@ -268,7 +269,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      */
     @SinceKotlin("1.1.1")
     fun kwebScope(): CoroutineScope {
-        val scope = MainScope()
+        val scope = CoroutineScope(Dispatchers.IO)
         onCleanup(withParent = true) {
             scope.cancel()
         }

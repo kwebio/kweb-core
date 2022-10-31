@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 private val logger = KotlinLogging.logger {}
 
 sealed class ClientConnection {
+
     abstract fun send(message: String)
 
     //@ObsoleteCoroutinesApi // TODO: For Channel.consumeEach, which will apparently become obsolete
@@ -22,8 +23,7 @@ sealed class ClientConnection {
         private val sendBuffer = Channel<Frame>(capacity = 1000)
 
         init {
-            // Probably shouldn't use GlobalScope here, but I'm not sure what the best alternative is
-            GlobalScope.launch {
+            channel.launch {
                 for (frame in sendBuffer) {
                     channel.send(frame)
                 }

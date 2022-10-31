@@ -66,10 +66,11 @@ class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
     }
 
     suspend fun getString(key: String): String? {
-        val result = Json.decodeFromJsonElement<String>(receiver.callJsFunctionWithResult("return $obj.getItem({});", JsonPrimitive(key)))
-        return when (result) {
+        return when (val result = Json
+            .decodeFromJsonElement<String>(
+                receiver.callJsFunctionWithResult("return $obj.getItem({});", JsonPrimitive(key)))) {
             "" -> null
-            else -> result.toString()
+            else -> result
         }
     }
 

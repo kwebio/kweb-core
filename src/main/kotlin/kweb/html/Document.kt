@@ -1,7 +1,6 @@
 package kweb.html
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.*
@@ -19,6 +18,8 @@ import kotlin.math.abs
  * Passed in as `doc` to the `buildPage` lambda of the [Kweb] constructor.
  */
 class Document(val receiver: WebBrowser) : EventGenerator<Document> {
+
+    private val documentScope = CoroutineScope(Dispatchers.IO)
 
     fun getElementById(id: String) = Element(receiver, null, "return document.getElementById(\"$id\")", id = id)
 
@@ -78,7 +79,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
                 $jsCode
             });
         """.trimIndent()
-        GlobalScope.launch {
+        documentScope.launch {
             receiver.callJsFunctionWithResult(wrappedJS, JsonPrimitive(eventName))
         }
     }
@@ -115,4 +116,5 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
     val onImmediate get() = OnImmediateReceiver(this)
+
 }
