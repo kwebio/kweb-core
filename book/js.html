@@ -174,6 +174,8 @@ using <code>{}</code> for substitution:</p>
 </code></pre>
 <p>Parameters must be converted to a <a href="https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-element/">JsonElement</a>,
 for example by using the <a href="https://docs.kweb.io/api/kweb-core/kweb.util/json.html">json</a> extension property.</p>
+<p>Note that if you need an empty JavaScript object just use <code>{ }</code> instead of <code>{}</code>, which will prevent
+it from being interpreted as a parameter.</p>
 <h2 id="function-caching-and-preloading"><a class="header" href="#function-caching-and-preloading">Function caching and preloading</a></h2>
 <p>Kotlin automatically caches JavaScript functions in the browser for efficiency. If the function is 
 first called during initial page render, it will be parsed and cached as part of the initial page load.</p>
