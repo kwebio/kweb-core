@@ -1,5 +1,8 @@
 package kweb
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.html.BodyElement
@@ -258,5 +261,17 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             kv.close(CloseReason("ElementCreator cleaned up"))
         }
         return kv
+    }
+
+    /**
+     * Creates a CoroutineScope that will be cancelled when this ElementCreator is cleaned up.
+     */
+    @SinceKotlin("1.1.1")
+    fun kwebScope(): CoroutineScope {
+        val scope = MainScope()
+        onCleanup(withParent = true) {
+            scope.cancel()
+        }
+        return scope
     }
 }
