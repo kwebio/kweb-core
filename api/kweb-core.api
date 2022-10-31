@@ -198,6 +198,7 @@ public class kweb/ElementCreator {
 	public final fun element (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/Element;
 	public final fun element (Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun element$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/Element;
+	public final fun elementScope ()Lkotlinx/coroutines/CoroutineScope;
 	public final fun getBrowser ()Lkweb/WebBrowser;
 	public final fun getElement ()Lkweb/Element;
 	public final fun getElementsCreatedCount ()I
@@ -206,7 +207,6 @@ public class kweb/ElementCreator {
 	public final fun getParentCreator ()Lkweb/ElementCreator;
 	public final fun kval (Ljava/lang/Object;)Lkweb/state/KVal;
 	public final fun kvar (Ljava/lang/Object;)Lkweb/state/KVar;
-	public final fun kwebScope ()Lkotlinx/coroutines/CoroutineScope;
 	public final fun onCleanup (ZLkotlin/jvm/functions/Function0;)V
 	public final fun require ([Lkotlin/reflect/KClass;)V
 	public final fun text (Ljava/lang/String;)V

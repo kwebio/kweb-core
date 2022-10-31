@@ -2,7 +2,6 @@ package kweb.docs
 
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.int
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
@@ -26,7 +25,7 @@ doc.body {
 
         // ANCHOR: with_result
 doc.body {
-    kwebScope().launch {
+    elementScope().launch {
         val result : JsonElement = browser.callJsFunctionWithResult("Date.now()")
         println("Result: ${result.jsonPrimitive.intOrNull}")
     }
