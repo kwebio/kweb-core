@@ -28,7 +28,7 @@ class CacheJSTest(@Arguments("--headless") private var driver: ChromeDriver) {
         }
     }
 
-    // TODO [$635f2be19f96970007b18084]: Reenable?
+    // TODO: Reenable?
     //This test just makes sure our cache is populated with a couple sample functions.
     /*@Test
     fun checkCacheSize() {

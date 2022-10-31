@@ -137,7 +137,7 @@ open class AElement(parent: Element) : Element(parent) {
      *
      * *Note:* This property may only be set, attempting to read this property will throw an error.
      *
-     * TODO [$635f2be19f96970007b18081]: Should this be a KVar rather than a String?
+     * TODO: Should this be a KVar rather than a String?
      */
     var href : String? get() {
         error("The href property may only be set, but not read")
@@ -711,7 +711,7 @@ fun KVar<String>.toInt() = this.map(object : ReversibleFunction<String, Int>(lab
 @Deprecated("Use kweb.state.renderEach instead", ReplaceWith("renderEach(list, block)", "kweb.state.renderEach"))
 fun <T : Any> ElementCreator<*>.renderEach(list: KVar<List<T>>, block: ElementCreator<Element>.(value: KVar<T>) -> Unit) {
     /*
-     * TODO [$635f2be19f96970007b18082]: This will currently re-render the collection if the list size changes, rather than modifying existing
+     * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing
      *       DOM elements - this is inefficient and should use renderEach() with an ObservableList instead.
      */
     render(list.map { it.size }) { size ->

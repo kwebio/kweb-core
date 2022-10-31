@@ -104,7 +104,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
 
         val handle = observableList.addListener { changes ->
             synchronized(renderHandles) {
-                // TODO [$635f2be19f96970007b18083]: Consider replacing change in changes with, "mods in modifications", to remove confusion between change, and Modification.Change
+                // TODO: Consider replacing change in changes with, "mods in modifications", to remove confusion between change, and Modification.Change
                 for (change in changes) {
                     // Apply change to DOM using renderHandles, and update renderHandles to keep it in sync with observableList
                     when (change) {

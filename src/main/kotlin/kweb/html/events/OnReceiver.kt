@@ -23,7 +23,7 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
     }
 
     inline fun <reified U : Any> event(eventName: String, crossinline callback: (event: U) -> Unit): T {
-        // TODO [$635f2be19f96970007b1807b]: Should probably cache this rather than do the reflection every time
+        // TODO: Should probably cache this rather than do the reflection every time
         val eventPropertyNames = memberProperties(U::class)
 
         val serializer = serializer<U>()
@@ -175,7 +175,7 @@ class OnReceiver<T : EventGenerator<T>>(val source: T, private val retrieveJs: S
     fun waiting(callback: (event: Event) -> Unit) = event("waiting",  callback = callback)
     */
 
-    /** TODO [$635f2be19f96970007b1807c]: Add more to https://www.w3schools.com/jsref/dom_obj_event.asp
+    /** TODO: Add more to https://www.w3schools.com/jsref/dom_obj_event.asp
      * Missing:
      * * Server-Sent Events
      * * Misc Events

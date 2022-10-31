@@ -449,8 +449,8 @@ class Kweb private constructor(
         val logStatementBuilder = StringBuilder()
         logStatementBuilder.appendLine("JavaScript message: '${error.error.message}'")
         logStatementBuilder.appendLine("Caused by ${debugInfo.action}: '${debugInfo.js}':")
-        // TODO [$635f2be19f96970007b18077]: Filtering the stacktrace like this seems a bit kludgy, although I can't think
-        // TODO [$635f2be19f96970007b18078]: of a specific reason why it would be bad.
+        // TODO: Filtering the stacktrace like this seems a bit kludgy, although I can't think
+        // TODO: of a specific reason why it would be bad.
         debugInfo.throwable.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
         logger.error(logStatementBuilder.toString())
     }

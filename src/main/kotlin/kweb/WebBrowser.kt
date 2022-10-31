@@ -92,7 +92,7 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         return Pair(jsList, r)
     }
 
-    // TODO [$635f2be19f96970007b18079]: Maybe use contract callsInPlace on f
+    // TODO: Maybe use contract callsInPlace on f
     fun <R> batch(catchingType: CatcherType, f: () -> R) : R {
         val catchOutboundRet = catchOutbound(catchingType, f)
         val server2ClientMessage = Server2ClientMessage(sessionId, catchOutboundRet.first)
