@@ -1026,7 +1026,7 @@ first called during initial page render, it will be parsed and cached as part of
 <h2 id="calling-a-javascript-function-with-a-result"><a class="header" href="#calling-a-javascript-function-with-a-result">Calling a JavaScript function with a result</a></h2>
 <p>You can also retrieve a result from a function call using <a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">callJsFunctionWithResult()</a>:</p>
 <pre><code class="language-kotlin">doc.body {
-    kwebScope().launch {
+    elementScope().launch {
         val result : JsonElement = browser.callJsFunctionWithResult(&quot;Date.now()&quot;)
         println(&quot;Result: ${result.jsonPrimitive.intOrNull}&quot;)
     }
