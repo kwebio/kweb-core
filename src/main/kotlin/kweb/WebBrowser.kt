@@ -151,8 +151,11 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
      * Calls a JavaScript function in the browser passing it the supplied arguments, which
      * will be substituted into [jsBody] wherever a `{}` is present.
      *
-     * If your JavaScript needs to use an empty JavaScript map, just insert a space
-     * between the {}s, eg. `{ }`
+     * Notes:
+     * * The `{}` will be replaced by a variable so `"one {} three"` won't work, use '"one " + {} + " three"'
+     *   instead.
+     * * If your JavaScript needs to use an empty JavaScript map, just insert a space
+     *   between the {}s, eg. `{ }`
      */
     fun callJsFunction(jsBody: String, vararg args: JsonElement) {
         val functionCall  = if (cachedFunctions[jsBody] != null) {
