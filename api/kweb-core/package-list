@@ -862,8 +862,6 @@ $dokka.location:kweb/Element/bind/#kotlin.Function1[kotlin.String,kotlin.String]
 $dokka.location:kweb/Element/bind/#kotlin.Function1[kotlin.String,kotlin.String]#kotlin.String#kotlinx.serialization.json.JsonElement/PointingToDeclaration/kweb-core/kweb/-element/bind.html
 $dokka.location:kweb/Element/blur/#/PointingToDeclaration/kweb-core/kweb/-element/blur.html
 $dokka.location:kweb/Element/browser/#/PointingToDeclaration/kweb-core/kweb/-element/browser.html
-$dokka.location:kweb/Element/callJsFunction/#kotlin.String#kotlin.Array[kotlinx.serialization.json.JsonElement]/PointingToDeclaration/kweb-core/kweb/-element/call-js-function.html
-$dokka.location:kweb/Element/callJsFunctionWithResult/#kotlin.String#kotlin.Function1[kotlinx.serialization.json.JsonElement,TypeParam(bounds=[kotlin.Any?])]#kotlin.Array[kotlinx.serialization.json.JsonElement]/PointingToDeclaration/kweb-core/kweb/-element/call-js-function-with-result.html
 $dokka.location:kweb/Element/classes/#kotlin.Array[kotlin.String]/PointingToDeclaration/kweb-core/kweb/-element/classes.html
 $dokka.location:kweb/Element/classes/#kweb.state.KVal[kotlin.String]/PointingToDeclaration/kweb-core/kweb/-element/classes.html
 $dokka.location:kweb/Element/creator/#/PointingToDeclaration/kweb-core/kweb/-element/creator.html
