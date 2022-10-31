@@ -206,6 +206,7 @@ public class kweb/ElementCreator {
 	public final fun getParentCreator ()Lkweb/ElementCreator;
 	public final fun kval (Ljava/lang/Object;)Lkweb/state/KVal;
 	public final fun kvar (Ljava/lang/Object;)Lkweb/state/KVar;
+	public final fun kwebScope ()Lkotlinx/coroutines/CoroutineScope;
 	public final fun onCleanup (ZLkotlin/jvm/functions/Function0;)V
 	public final fun require ([Lkotlin/reflect/KClass;)V
 	public final fun text (Ljava/lang/String;)V
