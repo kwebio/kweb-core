@@ -155,8 +155,9 @@ directly with the browser's JavaScript interpreter:</p>
 <li><a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function.html">WebBrowser.callJsFunction()</a></li>
 <li><a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">WebBrowser.callJsFunctionWithResult()</a></li>
 </ul>
-<p>Note that <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> has two similar functions that
-are convenience wrappers around the WebBrowser functions.</p>
+<p><a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> has two similar functions that
+are convenience wrappers around these WebBrowser functions.</p>
+<p>Note that this is unrelated to Kotlin's ability to <a href="https://kotlinlang.org/docs/js-overview.html">compile to JavaScript</a>.</p>
 <h2 id="calling-a-javascript-function"><a class="header" href="#calling-a-javascript-function">Calling a JavaScript function</a></h2>
 <pre><code class="language-kotlin">doc.body {
     browser.callJsFunction(&quot;&quot;&quot;alert(&quot;Hello World!&quot;)&quot;&quot;&quot;)
