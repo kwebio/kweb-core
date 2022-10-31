@@ -68,7 +68,7 @@ for an example.
 
 Please make sure to enable session affinity so that repeated requests
 from the same client end up at the same kweb instance. Kweb does not
-share it's internal state between multiple instances, so it is
+share its internal state between multiple instances, so it is
 important to make sure that each request from a single user ends up at
 always the same instance.
 
