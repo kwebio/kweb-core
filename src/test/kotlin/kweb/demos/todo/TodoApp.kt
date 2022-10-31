@@ -84,7 +84,7 @@ class TodoApp {
         })
     }
 
-    private fun ElementCreator<*>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.() -> Unit) {
+    private fun ElementCreator<*>.pageBorderAndTitle(title: String, content: ElementCreator<DivElement>.(DivElement) -> Unit) {
         div(fomantic.ui.main.container) {
             div(fomantic.column) {
                 div(fomantic.ui.vertical.segment) {
@@ -106,7 +106,7 @@ class TodoApp {
 
                 div(fomantic.ui.vertical.segment) {
                     h1(fomantic.ui.dividing.header).text(title)
-                    content(this)
+                    content(it)
                 }
             }
         }

@@ -23,10 +23,10 @@ import kotlin.collections.set
 
 fun ElementCreator<HeadElement>.title(
         attributes: Map<String, JsonPrimitive> = emptyMap(),
-        new: (ElementCreator<TitleElement>.() -> Unit)? = null
+        new: (ElementCreator<TitleElement>.(TitleElement) -> Unit)? = null
 ): TitleElement {
     return TitleElement(element("title", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -34,10 +34,10 @@ open class ULElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.ul(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<ULElement>.() -> Unit)? = null
+    new: (ElementCreator<ULElement>.(ULElement) -> Unit)? = null
 ): ULElement {
     return ULElement(element("ul", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -45,10 +45,10 @@ open class OLElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.ol(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<OLElement>.() -> Unit)? = null
+    new: (ElementCreator<OLElement>.(OLElement) -> Unit)? = null
 ): OLElement {
     return OLElement(element("ol", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -56,10 +56,10 @@ open class LIElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.li(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<LIElement>.() -> Unit)? = null
+    new: (ElementCreator<LIElement>.(LIElement) -> Unit)? = null
 ): LIElement {
     return LIElement(element("li", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -72,7 +72,7 @@ fun ElementCreator<Element>.button(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     type: ButtonType? = ButtonType.button,
     autofocus: Boolean? = null,
-    new: (ElementCreator<ButtonElement>.() -> Unit)? = null,
+    new: (ElementCreator<ButtonElement>.(ButtonElement) -> Unit)? = null,
 ): ButtonElement {
     return ButtonElement(
         element(
@@ -81,7 +81,7 @@ fun ElementCreator<Element>.button(
                 .set("autofocus", JsonPrimitive(autofocus))
         )
     ).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -89,10 +89,10 @@ open class SpanElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.span(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<SpanElement>.() -> Unit)? = null
+    new: (ElementCreator<SpanElement>.(SpanElement) -> Unit)? = null
 ): SpanElement {
     return SpanElement(element("span", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -100,10 +100,10 @@ open class DivElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.div(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<DivElement>.() -> Unit)? = null
+    new: (ElementCreator<DivElement>.(DivElement) -> Unit)? = null
 ): DivElement {
     return DivElement(element("div", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -111,10 +111,10 @@ open class IElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.i(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<IElement>.() -> Unit)? = null
+    new: (ElementCreator<IElement>.(IElement) -> Unit)? = null
 ): IElement {
     return IElement(element("i", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -122,10 +122,10 @@ open class FormElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.form(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<FormElement>.() -> Unit)? = null
+    new: (ElementCreator<FormElement>.(FormElement) -> Unit)? = null
 ): FormElement {
     return FormElement(element("form", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -157,10 +157,10 @@ open class AElement(parent: Element) : Element(parent) {
 fun ElementCreator<Element>.a(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     href: String? = null,
-    new: (ElementCreator<AElement>.() -> Unit)? = null
+    new: (ElementCreator<AElement>.(AElement) -> Unit)? = null
 ): AElement {
     return AElement(element("a", attributes.set("href", JsonPrimitive(href)))).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -169,10 +169,10 @@ open class OptionElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.option(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<OptionElement>.() -> Unit)? = null
+    new: (ElementCreator<OptionElement>.(OptionElement) -> Unit)? = null
 ): OptionElement {
     return OptionElement(element("option", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -180,10 +180,10 @@ open class H1Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h1(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<H1Element>.() -> Unit)? = null
+    new: (ElementCreator<H1Element>.(H1Element) -> Unit)? = null
 ): H1Element {
     return H1Element(element("h1", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -191,10 +191,10 @@ open class H2Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h2(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<H2Element>.() -> Unit)? = null
+    new: (ElementCreator<H2Element>.(H2Element) -> Unit)? = null
 ): H2Element {
     return H2Element(element("h2", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -202,10 +202,10 @@ open class H3Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h3(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<H3Element>.() -> Unit)? = null
+    new: (ElementCreator<H3Element>.(H3Element) -> Unit)? = null
 ): H3Element {
     return H3Element(element("h3", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -213,10 +213,10 @@ open class H4Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h4(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<H4Element>.() -> Unit)? = null
+    new: (ElementCreator<H4Element>.(H4Element) -> Unit)? = null
 ): H4Element {
     return H4Element(element("h4", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -224,10 +224,10 @@ open class H5Element(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.h5(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<H5Element>.() -> Unit)? = null
+    new: (ElementCreator<H5Element>.(H5Element) -> Unit)? = null
 ): H5Element {
     return H5Element(element("h5", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -235,10 +235,10 @@ open class PElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.p(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<PElement>.() -> Unit)? = null
+    new: (ElementCreator<PElement>.(PElement) -> Unit)? = null
 ): PElement {
     return PElement(element("p", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -246,10 +246,10 @@ open class NavElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.nav(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<NavElement>.() -> Unit)? = null
+    new: (ElementCreator<NavElement>.(NavElement) -> Unit)? = null
 ): NavElement {
     return NavElement(element("nav", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -257,10 +257,10 @@ open class SectionElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.section(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<SectionElement>.() -> Unit)? = null
+    new: (ElementCreator<SectionElement>.(SectionElement) -> Unit)? = null
 ): SectionElement {
     return SectionElement(element("section", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -268,10 +268,10 @@ open class ImageElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.img(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<ImageElement>.() -> Unit)? = null
+    new: (ElementCreator<ImageElement>.(ImageElement) -> Unit)? = null
 ): ImageElement {
     return ImageElement(element("img", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -280,7 +280,7 @@ open class CanvasElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.canvas(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     width: Int, height: Int,
-    new: (ElementCreator<CanvasElement>.() -> Unit)? = null
+    new: (ElementCreator<CanvasElement>.(CanvasElement) -> Unit)? = null
 ): CanvasElement {
     return CanvasElement(
         element(
@@ -289,7 +289,7 @@ fun ElementCreator<Element>.canvas(
                 .set("width", JsonPrimitive(width)).set("height", JsonPrimitive(height))
         )
     ).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -297,10 +297,10 @@ open class BrElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.br(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<BrElement>.() -> Unit)? = null
+    new: (ElementCreator<BrElement>.(BrElement) -> Unit)? = null
 ): BrElement {
     return BrElement(element("br", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -309,7 +309,7 @@ open class MetaElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.meta(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     name: String, content: String, httpEquiv: String? = null, charset: String? = null,
-    new: (ElementCreator<MetaElement>.() -> Unit)? = null
+    new: (ElementCreator<MetaElement>.(MetaElement) -> Unit)? = null
 ): MetaElement {
     return MetaElement(
         element(
@@ -319,7 +319,7 @@ fun ElementCreator<Element>.meta(
                 .set("charset", JsonPrimitive(charset))
         )
     ).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -356,7 +356,7 @@ fun ElementCreator<Element>.input(
     initialValue: String? = null,
     size: Int? = null,
     placeholder: String? = null,
-    new: (ElementCreator<InputElement>.() -> Unit)? = null
+    new: (ElementCreator<InputElement>.(InputElement) -> Unit)? = null
 ): InputElement {
     return InputElement(
         element(
@@ -367,14 +367,14 @@ fun ElementCreator<Element>.input(
                 .set("size", JsonPrimitive(size))
         ), initialValue = initialValue
     ).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
 fun ElementCreator<Element>.textArea(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     rows: Int? = null, cols: Int? = null, required: Boolean? = null,
-    new: (ElementCreator<TextAreaElement>.() -> Unit)? = null
+    new: (ElementCreator<TextAreaElement>.(TextAreaElement) -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(
         element(
@@ -383,7 +383,7 @@ fun ElementCreator<Element>.textArea(
                 .set("required", JsonPrimitive(required))
         )
     ).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -399,7 +399,7 @@ class SelectElement(parent: Element, initialValue: String? = null) :
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     name: String? = null, required: Boolean? = null,
-    new: (ElementCreator<SelectElement>.() -> Unit)? = null
+    new: (ElementCreator<SelectElement>.(SelectElement) -> Unit)? = null
 ): SelectElement {
     return SelectElement(
         element(
@@ -408,7 +408,7 @@ fun ElementCreator<Element>.select(
                 .set("required", JsonPrimitive(required))
         )
     ).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -422,10 +422,10 @@ class TextAreaElement(parent: Element, initialValue: String? = null) : ValueElem
  */
 fun ElementCreator<Element>.textArea(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<TextAreaElement>.() -> Unit)? = null
+    new: (ElementCreator<TextAreaElement>.(TextAreaElement) -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(element("textArea", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -437,10 +437,10 @@ open class LabelElement(wrapped: Element) : Element(wrapped) {
 
 fun ElementCreator<Element>.label(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<LabelElement>.() -> Unit)? = null
+    new: (ElementCreator<LabelElement>.(LabelElement) -> Unit)? = null
 ): LabelElement {
     return LabelElement(element("label", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -733,10 +733,10 @@ fun ElementCreator<*>.fileInput(name: String? = null, initialValue: String? = nu
 
 fun ElementCreator<Element>.table(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<TableElement>.() -> Unit)? = null
+    new: (ElementCreator<TableElement>.(TableElement) -> Unit)? = null
 ): TableElement {
     return TableElement(element("table", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 
@@ -744,50 +744,50 @@ open class TableElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.thead(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<TheadElement>.() -> Unit)? = null
+    new: (ElementCreator<TheadElement>.(TheadElement) -> Unit)? = null
 ): TheadElement {
     return TheadElement(element("thead", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 open class TheadElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.th(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<ThElement>.() -> Unit)? = null
+    new: (ElementCreator<ThElement>.(ThElement) -> Unit)? = null
 ): ThElement {
     return ThElement(element("th", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 open class ThElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.tbody(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<TbodyElement>.() -> Unit)? = null
+    new: (ElementCreator<TbodyElement>.(TbodyElement) -> Unit)? = null
 ): TbodyElement {
     return TbodyElement(element("tbody", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 open class TbodyElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.tr(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<TrElement>.() -> Unit)? = null
+    new: (ElementCreator<TrElement>.(TrElement) -> Unit)? = null
 ): TrElement {
     return TrElement(element("tr", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 open class TrElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.td(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<TdElement>.() -> Unit)? = null
+    new: (ElementCreator<TdElement>.(TdElement) -> Unit)? = null
 ): TdElement {
     return TdElement(element("td", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null))
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
 class TdElement(parent: Element) : Element(parent)

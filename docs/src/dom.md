@@ -27,7 +27,9 @@ attributes:
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:setattributes}}
 ```
 
-Attributes can also be specified in an `element` block:
+The created [Element](https://docs.kweb.io/api/kweb-core/kweb/-element/index.html) 
+is passed to the `{block}` as a parameter, which can be used to set attributes on the 
+element, add listeners, or set the element's text or innerHtml:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr2}}
@@ -52,7 +54,6 @@ Alternatively we can use the `new {}` function to add children to a pre-existing
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:children_new}}
-
 ```
 
 ## Reading from the DOM

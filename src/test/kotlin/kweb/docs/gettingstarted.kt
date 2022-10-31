@@ -36,10 +36,7 @@ Kweb(port = 16097) {
     doc.body {
         ul {
             // We can modify the UL element we just created in an element {} block
-            element {
-                // Here we add a CSS class to the UL element
-                classes("list")
-            }
+            it.classes("list")
             // We can define functions as an extension to ElementCreator allowing us to use it
             // within the DSL
             fun ElementCreator<ULElement>.createMessage(x: Int) {
