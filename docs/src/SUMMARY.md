@@ -8,5 +8,6 @@
 - [URL Routing](routing.md)
 - [CSS & Style](style.md)
 - [Components](components.md)
+- [JavaScript Interop](js.md)
 - [Integrations](integrations.md)
 - [Frequently Asked Questions](faq.md)

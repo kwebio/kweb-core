@@ -47,7 +47,7 @@ class Kweb private constructor(
 
     // This StaticFilesPlugin is used to serve static files required by Kweb and bundled plugins, it's
     // added to the plugin list implicitly.
-    val plugins = plugins + StaticFilesPlugin(ResourceFolder("kweb.static"), "/static")
+    val plugins = plugins + StaticFilesPlugin(ResourceFolder("kweb.static"), "/kweb_static")
 
     /**
      *
