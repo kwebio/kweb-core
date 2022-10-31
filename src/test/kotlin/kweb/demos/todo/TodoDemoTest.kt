@@ -4,6 +4,7 @@ import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.ktor.util.*
 import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -16,8 +17,6 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
-import org.openqa.selenium.support.ui.WebDriverWait
-import java.time.Duration
 
 /**
  * Test for the todoApp demo
@@ -66,7 +65,9 @@ class TodoDemoTest {
         val todoItem = "Right eyelids closed, both feet behind"
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
-        site.getItemByText(todoItem).isDisplayed shouldBe true
+        await().pollInSameThread().untilAsserted {
+            site.driver.findElement(By.xpath("//${"div"}[text()='$todoItem']")).isDisplayed shouldBe true
+        }
     }
 
     @Test
@@ -83,7 +84,9 @@ class TodoDemoTest {
         site.addTodoItem(todoItem)
 
         //make sure it appears for second driver
-        site2.getItemByText(todoItem).isDisplayed shouldBe true
+        await().pollInSameThread().untilAsserted {
+            site2.driver.findElement(By.xpath("//${"div"}[text()='$todoItem']")).isDisplayed shouldBe true
+        }
     }
 
     @Test
@@ -115,7 +118,7 @@ class TodoDemoTest {
     }
 }
 
-class TodoSite(private val driver: ChromeDriver) {
+class TodoSite(val driver: ChromeDriver) {
 
     @FindBy(tagName = "title")
     val title: WebElement? = null
@@ -148,21 +151,10 @@ class TodoSite(private val driver: ChromeDriver) {
         return driver.findElements(By.xpath("//div[@class='item']"))
     }
 
-    /**
-     * Returns the webelement for a single item in the todolist.
-     * Waits 5 seconds for it to appear, then throws ElementNotFoundException.
-     * itemText cannot contain single quotes (') because those are used in the xpath to delimit the search string
-     */
-    fun getItemByText(itemText: String): WebElement {
-        return WebDriverWait(driver, Duration.ofSeconds(5)).until {
-            driver.findElement(By.xpath("//div[contains(descendant::text(),'$itemText') and @class='item']"))
-        }
-    }
-
     fun deleteItemByText(itemText: String) {
-        val item = getItemByText(itemText)
         await().pollInSameThread().untilAsserted {
-            val delButton = item.findElement(By.tagName("button"))
+            val items = driver.findElements(By.xpath("//div[@class='item']"))
+            val delButton = items.first { it.text.contains(itemText) }.findElement(By.tagName("button"))
             delButton.click()
         }
     }
