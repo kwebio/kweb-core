@@ -919,11 +919,11 @@ $dokka.location:kweb/ElementCreator/closeOnCleanup/#java.lang.AutoCloseable/Poin
 $dokka.location:kweb/ElementCreator/element/#/PointingToDeclaration/kweb-core/kweb/-element-creator/element.html
 $dokka.location:kweb/ElementCreator/element/#kotlin.Function1[TypeParam(bounds=[kweb.Element]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-element-creator/element.html
 $dokka.location:kweb/ElementCreator/element/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.String?#kotlin.Function2[kweb.ElementCreator[*],kweb.Element,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/-element-creator/element.html
+$dokka.location:kweb/ElementCreator/elementScope/#/PointingToDeclaration/kweb-core/kweb/-element-creator/element-scope.html
 $dokka.location:kweb/ElementCreator/elementsCreatedCount/#/PointingToDeclaration/kweb-core/kweb/-element-creator/elements-created-count.html
 $dokka.location:kweb/ElementCreator/insertBefore/#/PointingToDeclaration/kweb-core/kweb/-element-creator/insert-before.html
 $dokka.location:kweb/ElementCreator/kval/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb/-element-creator/kval.html
 $dokka.location:kweb/ElementCreator/kvar/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb/-element-creator/kvar.html
-$dokka.location:kweb/ElementCreator/kwebScope/#/PointingToDeclaration/kweb-core/kweb/-element-creator/kweb-scope.html
 $dokka.location:kweb/ElementCreator/onCleanup/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/kweb-core/kweb/-element-creator/on-cleanup.html
 $dokka.location:kweb/ElementCreator/parent/#/PointingToDeclaration/kweb-core/kweb/-element-creator/parent.html
 $dokka.location:kweb/ElementCreator/parentCreator/#/PointingToDeclaration/kweb-core/kweb/-element-creator/parent-creator.html
