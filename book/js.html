@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - The Kweb Book</title>
-        <base href="/book/">
+        <title>JavaScript Interop - The Kweb Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="User manual for the Kweb web framework">
@@ -76,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">10.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">11.</strong> Frequently Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html" class="active"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">10.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">11.</strong> Frequently Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -114,6 +113,9 @@
                         <a href="https://github.com/kwebio/kweb-core" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
+                        <a href="https://github.com/kwebio/kweb-core/edit/master/docs/src/js.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -138,19 +140,77 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="javascript-interop"><a class="header" href="#javascript-interop">JavaScript Interop</a></h1>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#calling-a-javascript-function">Calling a JavaScript function</a></li>
+<li><a href="#calling-with-parameters">Calling with parameters</a></li>
+<li><a href="#function-caching-and-preloading">Function caching and preloading</a></li>
+<li><a href="#calling-a-javascript-function-with-a-result">Calling a JavaScript function with a result</a></li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Kweb's DOM interaction functionality is build on top of two functions that allow you to interact
+directly with the browser's JavaScript interpreter:</p>
+<ul>
+<li><a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function.html">WebBrowser.callJsFunction()</a></li>
+<li><a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">WebBrowser.callJsFunctionWithResult()</a></li>
+</ul>
+<p>Note that <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> has two similar functions that
+are convenience wrappers around the WebBrowser functions.</p>
+<h2 id="calling-a-javascript-function"><a class="header" href="#calling-a-javascript-function">Calling a JavaScript function</a></h2>
+<pre><code class="language-kotlin">doc.body {
+    browser.callJsFunction(&quot;&quot;&quot;alert(&quot;Hello World!&quot;)&quot;&quot;&quot;)
+}
+</code></pre>
+<h2 id="calling-with-parameters"><a class="header" href="#calling-with-parameters">Calling with parameters</a></h2>
+<p>You can pass parameters to a JavaScript function by passing them as arguments to the <code>callJsFunction()</code> function,
+using <code>{}</code> for substitution:</p>
+<pre><code class="language-kotlin">        doc.body {
+            val greeting = &quot;Hello&quot;.json
+            val name = &quot;World&quot;.json
+            browser.callJsFunction(&quot;&quot;&quot;alert(&quot;{} {}!&quot;)&quot;&quot;&quot;, greeting, name)
+        }
+</code></pre>
+<p>Parameters must be converted to a <a href="https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-element/">JsonElement</a>,
+for example by using the <a href="https://docs.kweb.io/api/kweb-core/kweb.util/json.html">json</a> extension property.</p>
+<h2 id="function-caching-and-preloading"><a class="header" href="#function-caching-and-preloading">Function caching and preloading</a></h2>
+<p>Kotlin automatically caches JavaScript functions in the browser for efficiency. If the function is 
+first called during initial page render, it will be parsed and cached as part of the initial page load.</p>
+<h2 id="calling-a-javascript-function-with-a-result"><a class="header" href="#calling-a-javascript-function-with-a-result">Calling a JavaScript function with a result</a></h2>
+<p>You can also retrieve a result from a function call using <a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">callJsFunctionWithResult()</a>:</p>
+<pre><code class="language-kotlin">doc.body {
+    kwebScope().launch {
+        val result : JsonElement = browser.callJsFunctionWithResult(&quot;Date.now()&quot;)
+        println(&quot;Result: ${result.jsonPrimitive.intOrNull}&quot;)
+    }
+}
+</code></pre>
+<p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>. 
+You can create one within Kweb's DSL using <strong>kwebScope()</strong>. This scope will be cancelled automatically
+when this part of the DOM is no-longer needed.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="components.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="integrations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="components.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="integrations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
