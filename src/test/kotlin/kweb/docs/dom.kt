@@ -55,8 +55,8 @@ button.delete()
             // ANCHOR_END: delete
 
             // ANCHOR: attr2
-button {
-    element {
+button { btnEl ->
+    with(btnEl) {
         classes("bigbutton")
         this["autofocus"] = true
         text("Click Me!")

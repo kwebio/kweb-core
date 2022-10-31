@@ -52,9 +52,9 @@ class BulmaInput(
 
     override fun render(elementCreator: ElementCreator<*>) : InputElement {
         with(elementCreator) {
-            val renderedInput = input(type = type) {
+            val renderedInput = input(type = type) { inputElement ->
                 var inputClassList: KVal<List<String>> = kval(listOf("input"))
-                element {
+                with(inputElement) {
 
                     if (color != null) {
                         inputClassList += color.map { listOf(it.cssClassName) }

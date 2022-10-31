@@ -195,9 +195,9 @@ public class kweb/ElementCreator {
 	public final fun attr (Lkotlin/jvm/functions/Function1;)V
 	public final fun cleanup ()V
 	public final fun closeOnCleanup (Ljava/lang/AutoCloseable;)V
-	public final fun element (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkweb/Element;
+	public final fun element (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/Element;
 	public final fun element (Lkotlin/jvm/functions/Function1;)V
-	public static synthetic fun element$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/Element;
+	public static synthetic fun element$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/Element;
 	public final fun getBrowser ()Lkweb/WebBrowser;
 	public final fun getElement ()Lkweb/Element;
 	public final fun getElementsCreatedCount ()I
@@ -216,8 +216,8 @@ public final class kweb/ElementCreator$Companion : mu/KLogging {
 }
 
 public final class kweb/ElementKt {
-	public static final fun new (Lkweb/Element;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static synthetic fun new$default (Lkweb/Element;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun new (Lkweb/Element;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public static synthetic fun new$default (Lkweb/Element;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public class kweb/FormElement : kweb/Element {
@@ -365,89 +365,89 @@ public class kweb/PElement : kweb/Element {
 }
 
 public final class kweb/PreludeKt {
-	public static final fun a (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkweb/AElement;
-	public static synthetic fun a$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/AElement;
+	public static final fun a (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/AElement;
+	public static synthetic fun a$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/AElement;
 	public static final fun attr (Ljava/lang/String;Lkweb/state/KVar;)Lkweb/state/KVal;
 	public static final fun attr (Lkweb/state/KVar;Ljava/lang/String;)Lkweb/state/KVal;
-	public static final fun br (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/BrElement;
-	public static synthetic fun br$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/BrElement;
-	public static final fun button (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ButtonType;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function1;)Lkweb/ButtonElement;
-	public static synthetic fun button$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ButtonType;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/ButtonElement;
-	public static final fun canvas (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function1;)Lkweb/CanvasElement;
-	public static synthetic fun canvas$default (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/CanvasElement;
-	public static final fun div (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/DivElement;
-	public static synthetic fun div$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/DivElement;
+	public static final fun br (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/BrElement;
+	public static synthetic fun br$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/BrElement;
+	public static final fun button (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ButtonType;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/ButtonElement;
+	public static synthetic fun button$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ButtonType;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ButtonElement;
+	public static final fun canvas (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function2;)Lkweb/CanvasElement;
+	public static synthetic fun canvas$default (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/CanvasElement;
+	public static final fun div (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/DivElement;
+	public static synthetic fun div$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/DivElement;
 	public static final fun fileInput (Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/Map;)Lkweb/html/fileUpload/FileFormInput;
 	public static synthetic fun fileInput$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lkweb/html/fileUpload/FileFormInput;
-	public static final fun form (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/FormElement;
-	public static synthetic fun form$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/FormElement;
+	public static final fun form (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/FormElement;
+	public static synthetic fun form$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/FormElement;
 	public static final fun get (Lkweb/state/KVar;I)Lkweb/state/KVar;
 	public static final fun get (Lkweb/state/KVar;Ljava/lang/Object;)Lkweb/state/KVar;
 	public static final fun getPath (Lkweb/state/KVar;)Lkweb/state/KVar;
 	public static final fun getPathQueryFragment (Lkweb/state/KVar;)Lkweb/state/KVar;
 	public static final fun getPathSegments (Lkweb/state/KVar;)Lkweb/state/KVar;
 	public static final fun getQuery (Lkweb/state/KVar;)Lkweb/state/KVar;
-	public static final fun h1 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/H1Element;
-	public static synthetic fun h1$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/H1Element;
-	public static final fun h2 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/H2Element;
-	public static synthetic fun h2$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/H2Element;
-	public static final fun h3 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/H3Element;
-	public static synthetic fun h3$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/H3Element;
-	public static final fun h4 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/H4Element;
-	public static synthetic fun h4$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/H4Element;
-	public static final fun h5 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/H5Element;
-	public static synthetic fun h5$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/H5Element;
-	public static final fun i (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/IElement;
-	public static synthetic fun i$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/IElement;
-	public static final fun img (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/ImageElement;
-	public static synthetic fun img$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/ImageElement;
-	public static final fun input (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkweb/InputElement;
-	public static synthetic fun input$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/InputElement;
-	public static final fun label (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/LabelElement;
-	public static synthetic fun label$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/LabelElement;
-	public static final fun li (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/LIElement;
-	public static synthetic fun li$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/LIElement;
-	public static final fun meta (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lkweb/MetaElement;
-	public static synthetic fun meta$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/MetaElement;
-	public static final fun nav (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/NavElement;
-	public static synthetic fun nav$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/NavElement;
-	public static final fun ol (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/OLElement;
-	public static synthetic fun ol$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/OLElement;
-	public static final fun option (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/OptionElement;
-	public static synthetic fun option$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/OptionElement;
-	public static final fun p (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/PElement;
-	public static synthetic fun p$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/PElement;
+	public static final fun h1 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H1Element;
+	public static synthetic fun h1$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H1Element;
+	public static final fun h2 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H2Element;
+	public static synthetic fun h2$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H2Element;
+	public static final fun h3 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H3Element;
+	public static synthetic fun h3$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H3Element;
+	public static final fun h4 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H4Element;
+	public static synthetic fun h4$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H4Element;
+	public static final fun h5 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H5Element;
+	public static synthetic fun h5$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H5Element;
+	public static final fun i (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/IElement;
+	public static synthetic fun i$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/IElement;
+	public static final fun img (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ImageElement;
+	public static synthetic fun img$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ImageElement;
+	public static final fun input (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/InputElement;
+	public static synthetic fun input$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/InputElement;
+	public static final fun label (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LabelElement;
+	public static synthetic fun label$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LabelElement;
+	public static final fun li (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LIElement;
+	public static synthetic fun li$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LIElement;
+	public static final fun meta (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/MetaElement;
+	public static synthetic fun meta$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/MetaElement;
+	public static final fun nav (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/NavElement;
+	public static synthetic fun nav$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/NavElement;
+	public static final fun ol (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/OLElement;
+	public static synthetic fun ol$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/OLElement;
+	public static final fun option (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/OptionElement;
+	public static synthetic fun option$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/OptionElement;
+	public static final fun p (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/PElement;
+	public static synthetic fun p$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/PElement;
 	public static final fun renderEach (Lkweb/ElementCreator;Lkweb/state/KVar;Lkotlin/jvm/functions/Function2;)V
 	public static final fun route (Lkweb/ElementCreator;Lkotlin/jvm/functions/Function1;)V
-	public static final fun section (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/SectionElement;
-	public static synthetic fun section$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/SectionElement;
-	public static final fun select (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function1;)Lkweb/SelectElement;
-	public static synthetic fun select$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/SelectElement;
-	public static final fun span (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/SpanElement;
-	public static synthetic fun span$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/SpanElement;
+	public static final fun section (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/SectionElement;
+	public static synthetic fun section$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SectionElement;
+	public static final fun select (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/SelectElement;
+	public static synthetic fun select$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SelectElement;
+	public static final fun span (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/SpanElement;
+	public static synthetic fun span$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SpanElement;
 	public static final fun subList (Lkweb/state/KVal;II)Lkweb/state/KVal;
 	public static final fun subList (Lkweb/state/KVar;II)Lkweb/state/KVar;
-	public static final fun table (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/TableElement;
-	public static synthetic fun table$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/TableElement;
-	public static final fun tbody (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/TbodyElement;
-	public static synthetic fun tbody$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/TbodyElement;
-	public static final fun td (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/TdElement;
-	public static synthetic fun td$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/TdElement;
-	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function1;)Lkweb/TextAreaElement;
-	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/TextAreaElement;
-	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/TextAreaElement;
-	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/TextAreaElement;
-	public static final fun th (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/ThElement;
-	public static synthetic fun th$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/ThElement;
-	public static final fun thead (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/TheadElement;
-	public static synthetic fun thead$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/TheadElement;
-	public static final fun title (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/html/TitleElement;
-	public static synthetic fun title$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/html/TitleElement;
+	public static final fun table (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TableElement;
+	public static synthetic fun table$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TableElement;
+	public static final fun tbody (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TbodyElement;
+	public static synthetic fun tbody$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TbodyElement;
+	public static final fun td (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TdElement;
+	public static synthetic fun td$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TdElement;
+	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
+	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
+	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
+	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
+	public static final fun th (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ThElement;
+	public static synthetic fun th$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ThElement;
+	public static final fun thead (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TheadElement;
+	public static synthetic fun thead$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TheadElement;
+	public static final fun title (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/html/TitleElement;
+	public static synthetic fun title$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/html/TitleElement;
 	public static final fun toInt (Lkweb/state/KVar;)Lkweb/state/KVar;
-	public static final fun tr (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/TrElement;
-	public static synthetic fun tr$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/TrElement;
-	public static final fun ul (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;)Lkweb/ULElement;
-	public static synthetic fun ul$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/ULElement;
+	public static final fun tr (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TrElement;
+	public static synthetic fun tr$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TrElement;
+	public static final fun ul (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ULElement;
+	public static synthetic fun ul$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ULElement;
 }
 
 public final class kweb/Scheme : java/lang/Enum {
@@ -916,8 +916,8 @@ public final class kweb/html/Document : kweb/html/events/EventGenerator {
 	public synthetic fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Lkweb/html/Document;
 	public fun addImmediateEventCode (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun body (Lkotlin/jvm/functions/Function1;)Lkweb/html/BodyElement;
-	public static synthetic fun body$default (Lkweb/html/Document;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/html/BodyElement;
+	public final fun body (Lkotlin/jvm/functions/Function2;)Lkweb/html/BodyElement;
+	public static synthetic fun body$default (Lkweb/html/Document;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/html/BodyElement;
 	public final fun execCommand (Ljava/lang/String;)V
 	public final fun getBody ()Lkweb/html/BodyElement;
 	public fun getBrowser ()Lkweb/WebBrowser;
@@ -930,8 +930,8 @@ public final class kweb/html/Document : kweb/html/events/EventGenerator {
 	public final fun getOrigin (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getReceiver ()Lkweb/WebBrowser;
 	public final fun getSessionStorage ()Lkweb/html/StorageReceiver;
-	public final fun head (Lkotlin/jvm/functions/Function1;)Lkweb/html/HeadElement;
-	public static synthetic fun head$default (Lkweb/html/Document;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/html/HeadElement;
+	public final fun head (Lkotlin/jvm/functions/Function2;)Lkweb/html/HeadElement;
+	public static synthetic fun head$default (Lkweb/html/Document;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/html/HeadElement;
 	public final fun on (Ljava/lang/String;Z)Lkweb/html/events/OnReceiver;
 	public static synthetic fun on$default (Lkweb/html/Document;Ljava/lang/String;ZILjava/lang/Object;)Lkweb/html/events/OnReceiver;
 }

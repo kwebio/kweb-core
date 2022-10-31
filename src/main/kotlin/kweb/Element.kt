@@ -685,19 +685,11 @@ open class Element(
  */
 fun <ELEMENT_TYPE : Element, RETURN_VALUE_TYPE> ELEMENT_TYPE.new(
     insertBefore: String? = null,
-    receiver: ElementCreator<ELEMENT_TYPE>.() -> RETURN_VALUE_TYPE
+    receiver: ElementCreator<ELEMENT_TYPE>.(ELEMENT_TYPE) -> RETURN_VALUE_TYPE
 )
         : RETURN_VALUE_TYPE {
     return receiver(
-        /**
-         * Returns an [ElementCreator] which can be used to create new elements and add them
-         * as children of the receiver element.
-         *
-         * @receiver This will be the parent element of any elements created with the returned
-         *           [ElementCreator]
-         * @Param position What position among the parent's children should the new element have?
-         */
-        ElementCreator(element = this, insertBefore = insertBefore)
+        ElementCreator(element = this, insertBefore = insertBefore), this
     )
 }
 

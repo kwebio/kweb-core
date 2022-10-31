@@ -93,8 +93,8 @@ class HistoryTestApp {
             route {
                 path("/{num}") { p ->
                     render(p["num"]!!.toInt()) { num ->
-                        a {
-                            element {
+                        a { aElement ->
+                            with(aElement) {
                                 href = "/${num + 1}"
                                 text("Next ($num)")
                             }

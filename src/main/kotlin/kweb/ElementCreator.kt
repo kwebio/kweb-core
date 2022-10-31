@@ -57,7 +57,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
      * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
      *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
      */
-    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace: String? = null, new: (ElementCreator<*>.() -> Unit)? = null): Element {
+    fun element(tag: String, attributes: Map<String, JsonPrimitive> = attr, namespace: String? = null, new: (ElementCreator<*>.(Element) -> Unit)? = null): Element {
 
         val mutAttributes = HashMap(attributes)
 
@@ -160,7 +160,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
         }
 
         if (new != null) {
-            newElement.new { new() }
+            newElement.new { new(newElement) }
         }
 
         return newElement
@@ -231,6 +231,9 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     @Deprecated("Use element instead (as of v0.12.8)", ReplaceWith("element", "kweb.ElementCreator.element"))
     val parent get() = element
 
+    @Deprecated("div { element { set(\"foo\", \"bar\")} } ===> div { it.set(\"foo\", \"bar\") }",
+        ReplaceWith("receiver(element)")
+    )
     fun element(receiver : (PARENT_TYPE).() -> Unit) {
         receiver(element)
     }
