@@ -1173,7 +1173,7 @@ for an example.</p>
 <h2 id="i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider"><a class="header" href="#i-want-to-deploy-a-kweb-application-behind-a-load-balancer-what-do-i-need-to-consider">I want to deploy a Kweb Application behind a load balancer, what do i need to consider?</a></h2>
 <p>Please make sure to enable session affinity so that repeated requests
 from the same client end up at the same kweb instance. Kweb does not
-share it's internal state between multiple instances, so it is
+share its internal state between multiple instances, so it is
 important to make sure that each request from a single user ends up at
 always the same instance.</p>
 <p>If the load balancer uses e.g. round robin strategy for load balancing,
