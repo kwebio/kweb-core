@@ -86,8 +86,11 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
 
     override fun addEventListener(eventName: String, returnEventFields: Set<String>, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -> Unit): Document {
-        val callbackId = abs(random.nextInt())
+        val callbackId = createId()
+
+        @Suppress("NAME_SHADOWING")
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
+
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
             document.addEventListener({}, function(event) {
@@ -116,5 +119,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
      * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
      */
     val onImmediate get() = OnImmediateReceiver(this)
+
+    private fun createId() = abs(random.nextInt())
 
 }
