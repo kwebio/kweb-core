@@ -1,4 +1,4 @@
-name: mdbook-docs
+name: Generate Kweb Book using mdbook
 
 on:
   push:
