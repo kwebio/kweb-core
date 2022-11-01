@@ -75,7 +75,7 @@ This example illustrates [creating DOM elements](https://docs.kweb.io/book/dom.h
   
 ## Learn More
 
-* [The Kweb Book](http://docs.kweb.io/book) (user manual)
+* [The Kweb User Manual](http://docs.kweb.io/book)
 * [API Documentation](https://docs.kweb.io/api)
 * [Example Project](https://github.com/freenet/freenetorg-website/)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
