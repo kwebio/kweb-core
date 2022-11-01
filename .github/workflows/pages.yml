@@ -3,7 +3,7 @@ name: Deploy static content to Pages
 
 on:
   workflow_run:
-    workflows: ["build", "Generate User Manual"]
+    workflows: ["Build and Test", "Generate User Manual"]
     types:
       - completed
 
