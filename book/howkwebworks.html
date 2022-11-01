@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Optimizations - The Kweb User Manual</title>
+        <title>How Kweb Works - The Kweb User Manual</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="User manual for the Kweb web framework">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="optimizations.html" class="active"><strong aria-hidden="true">10.</strong> Optimizations</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">11.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">12.</strong> Frequently Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="howkwebworks.html" class="active"><strong aria-hidden="true">10.</strong> How Kweb Works</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">11.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">12.</strong> Frequently Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -113,7 +113,7 @@
                         <a href="https://github.com/kwebio/kweb-core" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/kwebio/kweb-core/edit/master/docs/src/optimizations.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/kwebio/kweb-core/edit/master/docs/src/howkwebworks.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                     </div>
@@ -140,13 +140,43 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="optimizations"><a class="header" href="#optimizations">Optimizations</a></h1>
+                        <h1 id="how-kweb-works"><a class="header" href="#how-kweb-works">How Kweb Works</a></h1>
 <p>Kweb is designed to be efficient, both in the browser and on the server. This chapter documents some of the 
-optimizations that Kweb performs behind the scenes.</p>
+advanced techniques that Kweb uses to achieve this.</p>
 <ul>
 <li><a href="#server-side-rendering">Server-side rendering</a></li>
+<li><a href="#hydration">Hydration</a></li>
+<li><a href="#websockets">WebSockets</a></li>
+<li><a href="#immediate-events">Immediate events</a></li>
+<li><a href="#javascript-caching">JavaScript caching</a></li>
+<li><a href="#input-field-diffing">Input field diffing</a></li>
 </ul>
 <h2 id="server-side-rendering"><a class="header" href="#server-side-rendering">Server-side rendering</a></h2>
+<p>Kweb uses the excellent <a href="https://jsoup.org/">JSoup</a> library to render the initial HTML page, which is supplied to
+the browser when the page first loads. This leads to a much faster initial page load because the browser can 
+start rendering the page before the JavaScript has loaded.</p>
+<h2 id="hydration"><a class="header" href="#hydration">Hydration</a></h2>
+<p>Kweb uses a technique called <a href="https://en.wikipedia.org/wiki/Hydration_(web_development)">hydration</a> to add
+JavaScript listeners to the DOM elements that were rendered by the server.</p>
+<h2 id="websockets"><a class="header" href="#websockets">WebSockets</a></h2>
+<p>After the initial page load Kweb uses WebSockets to communicate with the browser. This is more efficient than
+HTTP because messages can be initiated by either the browser or the server, and the connection is kept open
+between messages.</p>
+<h2 id="immediate-events"><a class="header" href="#immediate-events">Immediate events</a></h2>
+<p>Normal DOM events are reported to the Kweb server which then decides how to handle them. In some situations this
+can cause a short but noticeable delay. <a href="events.html#immediate-events">Immediate events</a> address this by allowing
+the event handler's DOM changes to be &quot;recorded&quot; by Kweb and sent to the browser in advance so it can be executed
+immediately.</p>
+<h2 id="javascript-caching"><a class="header" href="#javascript-caching">JavaScript caching</a></h2>
+<p>After the initial page load, Kweb modifies the DOM by sending JavaScript to the browser. Much of this JavaScript
+is sent as part of the initial page load, but some is sent dynamically as the user interacts with the page.
+This JavaScript is parsed using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>
+(which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>, 
+and then cached in the browser for future use.</p>
+<h2 id="input-field-diffing"><a class="header" href="#input-field-diffing">Input field diffing</a></h2>
+<p>When an <code>&lt;input&gt;</code> or <code>&lt;textarea&gt;</code> field is modified, Kweb only sends the change to the browser rather than the
+entire field. This is essential for performance when the field is large, or when its being synchronised on
+every keypress.</p>
 
                     </main>
 
