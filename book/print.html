@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">10.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">11.</strong> Frequently Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="optimizations.html"><strong aria-hidden="true">10.</strong> Optimizations</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">11.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">12.</strong> Frequently Asked Questions</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -206,7 +206,7 @@ some familiarity with HTML.</p>
 is added to your <code>repositories</code> block.</p>
 <h3 id="groovy"><a class="header" href="#groovy">Groovy</a></h3>
 <pre><code class="language-kotlin">dependencies {
-  implementation 'io.kweb:kweb-core:1.0.2.1'
+  implementation 'io.kweb:kweb-core:1.1.1'
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation 'org.slf4j:slf4j-simple:2.0.3'
@@ -214,7 +214,7 @@ is added to your <code>repositories</code> block.</p>
 </code></pre>
 <h3 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h3>
 <pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:1.0.2.1&quot;)
+  implementation(&quot;io.kweb:kweb-core:1.1.1&quot;)
 
   // This (or another SLF4J binding) is required for Kweb to log errors
   implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
@@ -1013,7 +1013,7 @@ using <code>{}</code> for substitution:</p>
 <pre><code class="language-kotlin">doc.body {
     val greeting = &quot;Hello&quot;.json
     val name = &quot;World&quot;.json
-    browser.callJsFunction(&quot;&quot;&quot;alert(&quot;{} {}!&quot;)&quot;&quot;&quot;, greeting, name)
+    browser.callJsFunction(&quot;&quot;&quot;alert({} + &quot; &quot; + {} + &quot;!&quot;)&quot;&quot;&quot;, greeting, name)
 }
 </code></pre>
 <p>Parameters must be converted to a <a href="https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-element/">JsonElement</a>,
@@ -1035,6 +1035,13 @@ first called during initial page render, it will be parsed and cached as part of
 <p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>. 
 You can create one within Kweb's DSL using <strong>kwebScope()</strong>. This scope will be cancelled automatically
 when this part of the DOM is no-longer needed.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="optimizations"><a class="header" href="#optimizations">Optimizations</a></h1>
+<p>Kweb is designed to be efficient, both in the browser and on the server. This chapter documents some of the 
+optimizations that Kweb performs behind the scenes.</p>
+<ul>
+<li><a href="optimizations.html#server-side-rendering">Server-side rendering</a></li>
+</ul>
+<h2 id="server-side-rendering"><a class="header" href="#server-side-rendering">Server-side rendering</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
 <ul>
 <li><a href="integrations.html#spring-boot">Spring Boot</a></li>
