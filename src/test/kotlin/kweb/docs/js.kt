@@ -19,7 +19,7 @@ doc.body {
 doc.body {
     val greeting = "Hello".json
     val name = "World".json
-    browser.callJsFunction("""alert("{} {}!")""", greeting, name)
+    browser.callJsFunction("""alert({} + " " + {} + "!")""", greeting, name)
 }
         // ANCHOR_END: parameters
 
