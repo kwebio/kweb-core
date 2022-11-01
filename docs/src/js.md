@@ -28,10 +28,8 @@ using `{}` for substitution:
 ```
 
 Parameters must be converted to a [JsonElement](https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-element/),
-for example by using the [json](https://docs.kweb.io/api/kweb-core/kweb.util/json.html) extension property.
-
-Note that if you need an empty JavaScript object just use `{ }` instead of `{}`, which will prevent
-it from being interpreted as a parameter.
+for example by using the [json](https://docs.kweb.io/api/kweb-core/kweb.util/json.html) extension property. Within
+the JavaScript code the `{}` should be treated like a variable, so `alert({})` is ok but `alert("{}")` will not work.
 
 ## Function caching and preloading
 
