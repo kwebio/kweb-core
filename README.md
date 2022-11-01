@@ -18,7 +18,7 @@
 
 Read the [Introduction](https://docs.kweb.io/book/intro.html) or 
 [Getting Started](https://docs.kweb.io/book/gettingstarted.html) from 
-the [Kweb Book](https://docs.kweb.io/book/).
+the [Kweb User Manual](https://docs.kweb.io/book/).
 
 ## Why another web framework?
 

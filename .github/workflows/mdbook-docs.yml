@@ -1,4 +1,4 @@
-name: Generate Kweb Book using mdbook
+name: Generate Kweb User Manual using mdbook
 
 on:
   push:

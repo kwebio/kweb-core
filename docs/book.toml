@@ -4,7 +4,7 @@ description = "User manual for the Kweb web framework"
 language = "en"
 multilingual = false
 src = "src"
-title = "The Kweb Book"
+title = "The Kweb User Manual"
 
 [preprocessor.toc]
 command = "mdbook-toc"
