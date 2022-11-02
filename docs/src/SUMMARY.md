@@ -9,6 +9,6 @@
 - [CSS & Style](style.md)
 - [Components](components.md)
 - [JavaScript Interop](js.md)
-- [How Kweb Works](howkwebworks.md)
 - [Integrations](integrations.md)
-- [Frequently Asked Questions](faq.md)
+- [Speed & Efficiency](speed.md)
+- [FAQ](faq.md)

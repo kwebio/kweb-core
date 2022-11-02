@@ -1,7 +1,7 @@
-# How Kweb Works
+# Speed & Efficiency
 
-Kweb is designed to be efficient, both in the browser and on the server. This chapter documents some of the 
-advanced techniques that Kweb uses to achieve this.
+Kweb is designed to be fast and efficient, both in the browser and on the server. This chapter documents some
+of the techniques Kweb uses to achieve this.
 
 <!-- toc -->
 
