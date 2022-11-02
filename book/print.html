@@ -978,6 +978,15 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 </code></pre>
 <p>This component can then be used like this:</p>
 <pre><code class="language-kotlin">Kweb(port = 12354) {
+    doc.head {
+        element(&quot;link&quot;,
+            attributes = mapOf(
+                &quot;rel&quot; to &quot;stylesheet&quot;.json,
+                &quot;href&quot; to &quot;https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css&quot;.json
+            )
+        )
+    }
+
     doc.body {
         val username = kvar(&quot;&quot;)
         val color = username.map { if (it.length &lt; 5) { WARNING } else { SUCCESS }
