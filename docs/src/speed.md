@@ -34,7 +34,7 @@ immediately.
 After the initial page load, Kweb modifies the DOM by sending JavaScript to the browser. Much of this JavaScript
 is sent as part of the initial page load, but some is sent dynamically as the user interacts with the page.
 This JavaScript is parsed using [Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
-(which is more efficient than [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval), 
+(which is more efficient than [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)), 
 and then cached in the browser for future use.
 
 ## Input field diffing
