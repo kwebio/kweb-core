@@ -171,7 +171,7 @@ immediately.</p>
 <p>After the initial page load, Kweb modifies the DOM by sending JavaScript to the browser. Much of this JavaScript
 is sent as part of the initial page load, but some is sent dynamically as the user interacts with the page.
 This JavaScript is parsed using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>
-(which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>, 
+(which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>), 
 and then cached in the browser for future use.</p>
 <h2 id="input-field-diffing"><a class="header" href="#input-field-diffing">Input field diffing</a></h2>
 <p>When an <code>&lt;input&gt;</code> or <code>&lt;textarea&gt;</code> field is modified, Kweb only sends the change to the browser rather than the
