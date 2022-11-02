@@ -383,6 +383,29 @@ fun ElementCreator<Element>.input(
     }
 }
 
+fun ElementCreator<Element>.link(
+    rel: LinkRelationship,
+    href: java.net.URL,
+    hreflang: String? = null,
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+): Element {
+    return LinkElement(
+        element(
+            "link",
+            attributes = attributes
+                .set("rel", rel.name.json)
+                .set("href", href.toString().json)
+                .set("hreflang", JsonPrimitive(hreflang))
+        )
+    )
+}
+
+enum class LinkRelationship {
+    alternate, author, bookmark, help, icon, license, next, nofollow, noreferrer, prefetch, prev, search, stylesheet, tag, `dns-prefetch`, preconnect, preload
+}
+
+class LinkElement(parent: Element) : Element(parent)
+
 fun ElementCreator<Element>.textArea(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     rows: Int? = null, cols: Int? = null, required: Boolean? = null,

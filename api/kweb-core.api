@@ -343,6 +343,32 @@ public class kweb/LabelElement : kweb/Element {
 	public final fun setFor (Lkweb/state/KVal;)Lkweb/Element;
 }
 
+public final class kweb/LinkElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/LinkRelationship : java/lang/Enum {
+	public static final field alternate Lkweb/LinkRelationship;
+	public static final field author Lkweb/LinkRelationship;
+	public static final field bookmark Lkweb/LinkRelationship;
+	public static final field dns-prefetch Lkweb/LinkRelationship;
+	public static final field help Lkweb/LinkRelationship;
+	public static final field icon Lkweb/LinkRelationship;
+	public static final field license Lkweb/LinkRelationship;
+	public static final field next Lkweb/LinkRelationship;
+	public static final field nofollow Lkweb/LinkRelationship;
+	public static final field noreferrer Lkweb/LinkRelationship;
+	public static final field preconnect Lkweb/LinkRelationship;
+	public static final field prefetch Lkweb/LinkRelationship;
+	public static final field preload Lkweb/LinkRelationship;
+	public static final field prev Lkweb/LinkRelationship;
+	public static final field search Lkweb/LinkRelationship;
+	public static final field stylesheet Lkweb/LinkRelationship;
+	public static final field tag Lkweb/LinkRelationship;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/LinkRelationship;
+	public static fun values ()[Lkweb/LinkRelationship;
+}
+
 public class kweb/MetaElement : kweb/Element {
 	public fun <init> (Lkweb/Element;)V
 }
@@ -406,6 +432,8 @@ public final class kweb/PreludeKt {
 	public static synthetic fun label$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LabelElement;
 	public static final fun li (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LIElement;
 	public static synthetic fun li$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LIElement;
+	public static final fun link (Lkweb/ElementCreator;Lkweb/LinkRelationship;Ljava/net/URL;Ljava/lang/String;Ljava/util/Map;)Lkweb/Element;
+	public static synthetic fun link$default (Lkweb/ElementCreator;Lkweb/LinkRelationship;Ljava/net/URL;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lkweb/Element;
 	public static final fun meta (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/MetaElement;
 	public static synthetic fun meta$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/MetaElement;
 	public static final fun nav (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/NavElement;

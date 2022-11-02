@@ -12,7 +12,7 @@ import org.jsoup.nodes.Document
 class JQueryCorePlugin : KwebPlugin() {
     override fun decorate(doc: Document) {
         doc.head().appendElement("script")
-            .attr("src", "/kweb_static/plugins/jquery/jquery-3.4.1.min.js")
+            .attr("src", "/kweb_static/plugins/jquery/jquery-3.6.1.min.js")
             .attr("crossorigin", "anonymous")
     }
 }
