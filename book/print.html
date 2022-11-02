@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="howkwebworks.html"><strong aria-hidden="true">10.</strong> How Kweb Works</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">11.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">12.</strong> Frequently Asked Questions</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">10.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="speed.html"><strong aria-hidden="true">11.</strong> Speed & Efficiency</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">12.</strong> FAQ</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -1034,43 +1034,6 @@ first called during initial page render, it will be parsed and cached as part of
 <p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>. 
 You can create one within Kweb's DSL using <strong>kwebScope()</strong>. This scope will be cancelled automatically
 when this part of the DOM is no-longer needed.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="how-kweb-works"><a class="header" href="#how-kweb-works">How Kweb Works</a></h1>
-<p>Kweb is designed to be efficient, both in the browser and on the server. This chapter documents some of the 
-advanced techniques that Kweb uses to achieve this.</p>
-<ul>
-<li><a href="howkwebworks.html#server-side-rendering">Server-side rendering</a></li>
-<li><a href="howkwebworks.html#hydration">Hydration</a></li>
-<li><a href="howkwebworks.html#websockets">WebSockets</a></li>
-<li><a href="howkwebworks.html#immediate-events">Immediate events</a></li>
-<li><a href="howkwebworks.html#javascript-caching">JavaScript caching</a></li>
-<li><a href="howkwebworks.html#input-field-diffing">Input field diffing</a></li>
-</ul>
-<h2 id="server-side-rendering"><a class="header" href="#server-side-rendering">Server-side rendering</a></h2>
-<p>Kweb uses the excellent <a href="https://jsoup.org/">JSoup</a> library to render the initial HTML page, which is supplied to
-the browser when the page first loads. This leads to a much faster initial page load because the browser can 
-start rendering the page before the JavaScript has loaded.</p>
-<h2 id="hydration"><a class="header" href="#hydration">Hydration</a></h2>
-<p>Kweb uses a technique called <a href="https://en.wikipedia.org/wiki/Hydration_(web_development)">hydration</a> to add
-JavaScript listeners to the DOM elements that were rendered by the server.</p>
-<h2 id="websockets"><a class="header" href="#websockets">WebSockets</a></h2>
-<p>After the initial page load Kweb uses WebSockets to communicate with the browser. This is more efficient than
-HTTP because messages can be initiated by either the browser or the server, and the connection is kept open
-between messages.</p>
-<h2 id="immediate-events-1"><a class="header" href="#immediate-events-1">Immediate events</a></h2>
-<p>Normal DOM events are reported to the Kweb server which then decides how to handle them. In some situations this
-can cause a short but noticeable delay. <a href="events.html#immediate-events">Immediate events</a> address this by allowing
-the event handler's DOM changes to be &quot;recorded&quot; by Kweb and sent to the browser in advance so it can be executed
-immediately.</p>
-<h2 id="javascript-caching"><a class="header" href="#javascript-caching">JavaScript caching</a></h2>
-<p>After the initial page load, Kweb modifies the DOM by sending JavaScript to the browser. Much of this JavaScript
-is sent as part of the initial page load, but some is sent dynamically as the user interacts with the page.
-This JavaScript is parsed using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>
-(which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>, 
-and then cached in the browser for future use.</p>
-<h2 id="input-field-diffing"><a class="header" href="#input-field-diffing">Input field diffing</a></h2>
-<p>When an <code>&lt;input&gt;</code> or <code>&lt;textarea&gt;</code> field is modified, Kweb only sends the change to the browser rather than the
-entire field. This is essential for performance when the field is large, or when its being synchronised on
-every keypress.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
 <ul>
 <li><a href="integrations.html#spring-boot">Spring Boot</a></li>
@@ -1141,6 +1104,43 @@ fun main(args: Array&lt;String&gt;) {
 <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/util/firestore.kt">firestore.kt</a>,
 and you can see how they're used in <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/news.kt">news.kt</a>
 and <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/landing.kt#L85">landing.kt</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="speed--efficiency"><a class="header" href="#speed--efficiency">Speed &amp; Efficiency</a></h1>
+<p>Kweb is designed to be fast and efficient, both in the browser and on the server. This chapter documents some
+of the techniques Kweb uses to achieve this.</p>
+<ul>
+<li><a href="speed.html#server-side-rendering">Server-side rendering</a></li>
+<li><a href="speed.html#hydration">Hydration</a></li>
+<li><a href="speed.html#websockets">WebSockets</a></li>
+<li><a href="speed.html#immediate-events">Immediate events</a></li>
+<li><a href="speed.html#javascript-caching">JavaScript caching</a></li>
+<li><a href="speed.html#input-field-diffing">Input field diffing</a></li>
+</ul>
+<h2 id="server-side-rendering"><a class="header" href="#server-side-rendering">Server-side rendering</a></h2>
+<p>Kweb uses the excellent <a href="https://jsoup.org/">JSoup</a> library to render the initial HTML page, which is supplied to
+the browser when the page first loads. This leads to a much faster initial page load because the browser can 
+start rendering the page before the JavaScript has loaded.</p>
+<h2 id="hydration"><a class="header" href="#hydration">Hydration</a></h2>
+<p>Kweb uses a technique called <a href="https://en.wikipedia.org/wiki/Hydration_(web_development)">hydration</a> to add
+JavaScript listeners to the DOM elements that were rendered by the server.</p>
+<h2 id="websockets"><a class="header" href="#websockets">WebSockets</a></h2>
+<p>After the initial page load Kweb uses WebSockets to communicate with the browser. This is more efficient than
+HTTP because messages can be initiated by either the browser or the server, and the connection is kept open
+between messages.</p>
+<h2 id="immediate-events-1"><a class="header" href="#immediate-events-1">Immediate events</a></h2>
+<p>Normal DOM events are reported to the Kweb server which then decides how to handle them. In some situations this
+can cause a short but noticeable delay. <a href="events.html#immediate-events">Immediate events</a> address this by allowing
+the event handler's DOM changes to be &quot;recorded&quot; by Kweb and sent to the browser in advance so it can be executed
+immediately.</p>
+<h2 id="javascript-caching"><a class="header" href="#javascript-caching">JavaScript caching</a></h2>
+<p>After the initial page load, Kweb modifies the DOM by sending JavaScript to the browser. Much of this JavaScript
+is sent as part of the initial page load, but some is sent dynamically as the user interacts with the page.
+This JavaScript is parsed using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>
+(which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>, 
+and then cached in the browser for future use.</p>
+<h2 id="input-field-diffing"><a class="header" href="#input-field-diffing">Input field diffing</a></h2>
+<p>When an <code>&lt;input&gt;</code> or <code>&lt;textarea&gt;</code> field is modified, Kweb only sends the change to the browser rather than the
+entire field. This is essential for performance when the field is large, or when its being synchronised on
+every keypress.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
 <ul>
 <li><a href="faq.html#wont-kweb-be-slow-relative-to-client-side-web-frameworks">Won't Kweb be slow relative to client-side web frameworks?</a></li>
