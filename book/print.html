@@ -1041,7 +1041,7 @@ first called during initial page render, it will be parsed and cached as part of
 }
 </code></pre>
 <p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>. 
-You can create one within Kweb's DSL using <strong>kwebScope()</strong>. This scope will be cancelled automatically
+You can create one within Kweb's DSL using <strong>elementScope()</strong>. This scope will be cancelled automatically
 when this part of the DOM is no-longer needed.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
 <ul>
