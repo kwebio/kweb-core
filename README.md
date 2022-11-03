@@ -10,7 +10,7 @@
   <a href="https://docs.kweb.io/book/gettingstarted.html">
     <img src="https://img.shields.io/maven-central/v/io.kweb/kweb-core?style=flat-square&logo=maven&color=blueviolet" >
   <a href="https://github.com/kwebio/kweb-core/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=informational" >
+    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=3DA751" >
   </a>
   <a href="https://twitter.com/kwebio">
     <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/kwebio?logo=twitter&color=1DA1F2&style=flat-square&label=%40kwebio" >
