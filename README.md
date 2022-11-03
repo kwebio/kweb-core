@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/chat-matrix-blue?style=flat-square&logo=matrix&color=informational" alt="matrix" >
   </a>
   <a href="https://docs.kweb.io/book/gettingstarted.html">
-    <img src="https://img.shields.io/maven-central/v/io.kweb/kweb-core?style=flat-square&logo=maven&color=blueviolet" >
+    <img src="https://img.shields.io/maven-central/v/io.kweb/kweb-core?style=flat-square&logo=maven&color=374991" >
   <a href="https://github.com/kwebio/kweb-core/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=3DA751" >
   </a>
