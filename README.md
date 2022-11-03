@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=informational" >
   </a>
   <a href="https://twitter.com/kwebio">
-    <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/kwebio?logo=twitter&style=flat-square&label=%40kwebio" >
+    <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/kwebio?logo=twitter&color=yellow&style=flat-square&label=%40kwebio" >
   </a>
 </div>
 
