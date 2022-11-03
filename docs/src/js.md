@@ -45,5 +45,5 @@ You can also retrieve a result from a function call using [callJsFunctionWithRes
 ```
 
 `callJsFunctionWithResult()` is a suspend function so it must be called inside a [CoroutineScope](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/). 
-You can create one within Kweb's DSL using **kwebScope()**. This scope will be cancelled automatically
+You can create one within Kweb's DSL using **elementScope()**. This scope will be cancelled automatically
 when this part of the DOM is no-longer needed.
