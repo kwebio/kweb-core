@@ -5,15 +5,15 @@
     <img src="https://img.shields.io/github/workflow/status/kwebio/kweb-core/build?label=tests&style=flat-square&logo=github%20actions" alt="continuous integration status" >
   </a>
   <a href="https://matrix.to/#/#kweb:matrix.org">
-    <img src="https://img.shields.io/badge/chat-matrix-blue?style=flat-square&logo=matrix&color=informational" alt="matrix" >
+    <img src="https://img.shields.io/badge/chat-matrix-blue?style=flat-square&logo=matrix&color=0B9CD6" alt="matrix" >
   </a>
   <a href="https://docs.kweb.io/book/gettingstarted.html">
-    <img src="https://img.shields.io/maven-central/v/io.kweb/kweb-core?style=flat-square&logo=maven&color=blueviolet" >
+    <img src="https://img.shields.io/maven-central/v/io.kweb/kweb-core?style=flat-square&logo=maven&color=374991" >
   <a href="https://github.com/kwebio/kweb-core/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=informational" >
+    <img src="https://img.shields.io/github/license/kwebio/kweb-core?style=flat-square&logo=gnu&color=3DA751" >
   </a>
   <a href="https://twitter.com/kwebio">
-    <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/kwebio?logo=twitter&style=flat-square&label=%40kwebio" >
+    <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/kwebio?logo=twitter&color=1DA1F2&style=flat-square&label=%40kwebio" >
   </a>
 </div>
 
