@@ -128,23 +128,41 @@ fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
  * Render the value of a [KVar] into DOM elements, and automatically re-render those
  * elements whenever the value changes.
  */
-fun <R> ElementCreator<*>.render(component: Component<R>) : R {
+fun <PARENT_ELEMENT_TYPE : Element, RETURN_TYPE> ElementCreator<PARENT_ELEMENT_TYPE>.render(
+    component: AdvancedComponent<PARENT_ELEMENT_TYPE, RETURN_TYPE>
+) : RETURN_TYPE {
     return component.render(this)
 }
 
 // ANCHOR: component_definition
 /**
- * [Component]s can be rendered into DOM elements by calling [Component.render].
+ * [AdvancedComponent]s can be rendered into DOM elements by calling [AdvancedComponent.render].
+ *
+ * Unlike [Component], [AdvancedComponent]s allows the parent element type to be configured, and a return
+ * type to be specified.
  */
-interface Component<R> {
+interface AdvancedComponent<in PARENT_ELEMENT_TYPE : Element, out RETURN_TYPE> {
 
     /**
      * Render this [Component] into DOM elements, returning an arbitrary
-     * value of type [R].
+     * value of type [RETURN_TYPE].
      */
-    fun render(elementCreator: ElementCreator<*>) : R
+    fun render(elementCreator: ElementCreator<PARENT_ELEMENT_TYPE>) : RETURN_TYPE
 }
 // ANCHOR_END: component_definition
+
+/**
+ * [Component]s can be rendered into DOM elements by calling [Component.render].
+ *
+ * For more flexibility, see [AdvancedComponent].
+ */
+interface Component : AdvancedComponent<Element, Unit> {
+
+    /**
+     * Render this [Component] into DOM elements
+     */
+    override fun render(elementCreator: ElementCreator<Element>)
+}
 
 class RenderFragment(val startId: String, val endId: String) {
     private val deletionListeners = ArrayList<() -> Unit>()
