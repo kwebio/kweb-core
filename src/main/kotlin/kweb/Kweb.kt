@@ -11,7 +11,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.engine.*
-import io.ktor.server.jetty.*
+import io.ktor.server.netty.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.websocket.*
@@ -145,7 +145,7 @@ class Kweb private constructor(
         }
         .build()
 
-    private var server: JettyApplicationEngine? = null
+    private var server: ApplicationEngine? = null
 
     fun sendMessage(sessionId: String, server2ClientMessage: Server2ClientMessage) {
         val wsClientData = clientState.getIfPresent(sessionId) ?: error("Client id $sessionId not found")
@@ -188,8 +188,8 @@ class Kweb private constructor(
         port: Int,
         httpsConfig: EngineSSLConnectorConfig?,
         buildPage: WebBrowser.() -> Unit
-    ): JettyApplicationEngine {
-        return embeddedServer(Jetty, applicationEngineEnvironment {
+    ): ApplicationEngine {
+        return embeddedServer(Netty, applicationEngineEnvironment {
             this.module {
                 install(DefaultHeaders)
                 install(Compression)
