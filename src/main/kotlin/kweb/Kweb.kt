@@ -11,7 +11,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.engine.*
-import io.ktor.server.netty.*
+import io.ktor.server.jetty.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.websocket.*
@@ -189,7 +189,7 @@ class Kweb private constructor(
         httpsConfig: EngineSSLConnectorConfig?,
         buildPage: WebBrowser.() -> Unit
     ): ApplicationEngine {
-        return embeddedServer(Netty, applicationEngineEnvironment {
+        return embeddedServer(Jetty, applicationEngineEnvironment {
             this.module {
                 install(DefaultHeaders)
                 install(Compression)
