@@ -155,23 +155,26 @@ reusability, testability, and the ability to reason about a system in isolation.
 <p><strong>Component</strong> (<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E">api</a>) 
 is a simple but powerful abstraction to create reusable UI components in Kweb:</p>
 <pre><code class="language-kotlin">/**
- * [Component]s can be rendered into DOM elements by calling [Component.render].
+ * [AdvancedComponent]s can be rendered into DOM elements by calling [AdvancedComponent.render].
+ *
+ * Unlike [Component], [AdvancedComponent]s allows the parent element type to be configured, and a return
+ * type to be specified.
  */
-interface Component&lt;R&gt; {
+interface AdvancedComponent&lt;in PARENT_ELEMENT_TYPE : Element, out RETURN_TYPE&gt; {
 
     /**
      * Render this [Component] into DOM elements, returning an arbitrary
-     * value of type [R].
+     * value of type [RETURN_TYPE].
      */
-    fun render(elementCreator: ElementCreator&lt;*&gt;) : R
+    fun render(elementCreator: ElementCreator&lt;PARENT_ELEMENT_TYPE&gt;) : RETURN_TYPE
 }
 </code></pre>
 <h2 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h2>
 <pre><code class="language-kotlin">class SimpleComponent(
     val prompt: String = &quot;Enter Your Name&quot;,
     val name: KVar&lt;String&gt;
-) : Component&lt;Unit&gt; {
-    override fun render(elementCreator: ElementCreator&lt;*&gt;) {
+) : Component {
+    override fun render(elementCreator: ElementCreator&lt;Element&gt;) {
         with(elementCreator) {
             div {
                 h1().text(prompt)
@@ -214,11 +217,11 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
     val state: KVal&lt;BulmaState&gt;? = null,
     val disabled: KVal&lt;Boolean&gt;? = null,
     val value: KVar&lt;String&gt;
-) : Component&lt;InputElement&gt; {
+) : Component {
 
-    override fun render(elementCreator: ElementCreator&lt;*&gt;) : InputElement {
+    override fun render(elementCreator: ElementCreator&lt;*&gt;) {
         with(elementCreator) {
-            val renderedInput = input(type = type) { inputElement -&gt;
+            input(type = type) { inputElement -&gt;
                 var inputClassList: KVal&lt;List&lt;String&gt;&gt; = kval(listOf(&quot;input&quot;))
                 with(inputElement) {
 
@@ -245,8 +248,6 @@ styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
 
                 }
             }
-
-            return renderedInput
         }
     }
 
