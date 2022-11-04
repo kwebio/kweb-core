@@ -13,8 +13,8 @@ import kweb.util.json
 class SimpleComponent(
     val prompt: String = "Enter Your Name",
     val name: KVar<String>
-) : Component<Unit> {
-    override fun render(elementCreator: ElementCreator<*>) {
+) : Component {
+    override fun render(elementCreator: ElementCreator<Element>) {
         with(elementCreator) {
             div {
                 h1().text(prompt)
@@ -48,11 +48,11 @@ class BulmaInput(
     val state: KVal<BulmaState>? = null,
     val disabled: KVal<Boolean>? = null,
     val value: KVar<String>
-) : Component<InputElement> {
+) : Component {
 
-    override fun render(elementCreator: ElementCreator<*>) : InputElement {
+    override fun render(elementCreator: ElementCreator<*>) {
         with(elementCreator) {
-            val renderedInput = input(type = type) { inputElement ->
+            input(type = type) { inputElement ->
                 var inputClassList: KVal<List<String>> = kval(listOf("input"))
                 with(inputElement) {
 
@@ -79,8 +79,6 @@ class BulmaInput(
 
                 }
             }
-
-            return renderedInput
         }
     }
 
