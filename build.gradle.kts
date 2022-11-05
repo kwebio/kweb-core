@@ -49,12 +49,12 @@ dependencies {
 
     api("io.mola.galimatias:galimatias:0.2.1")
 
-    implementation("io.github.microutils:kotlin-logging:3.0.2")
+    implementation("io.github.microutils:kotlin-logging:3.0.4")
 
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    testApi(platform("io.kotest:kotest-bom:5.5.3"))
+    testApi(platform("io.kotest:kotest-bom:5.5.4"))
     testApi(platform("org.junit:junit-bom:5.9.1"))
 
     testImplementation("io.kotest:kotest-runner-junit5")
