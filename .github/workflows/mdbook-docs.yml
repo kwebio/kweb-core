@@ -1,6 +1,8 @@
 name: Generate User Manual
 
 on:
+  release:
+    types: [ published ]
   push:
     branches: [master]
     paths-ignore: [ 'README.md' ]
