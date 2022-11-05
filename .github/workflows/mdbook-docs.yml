@@ -6,9 +6,6 @@ on:
   push:
     branches: [master]
     paths-ignore: [ 'README.md' ]
-  schedule:
-    # Once per day at midnight to ensure docs are using current Maven version as retrieved from Maven Central
-    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
