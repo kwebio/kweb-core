@@ -223,7 +223,7 @@ class Kweb private constructor(
                 kwebConfig.faviconIco(call)
             }
 
-            get("/{visitedUrl...}") {
+            get("${kwebConfig.urlPathPrefix}/{visitedUrl...}") {
                 respondKweb(call, buildPage)
             }
 
@@ -237,7 +237,7 @@ class Kweb private constructor(
         HtmlDocumentSupplier.createDocTemplate(plugins, application.routing { })
 
         application.routing {
-            webSocket("/ws") {
+            webSocket("/kweb_ws") {
                 listenForWebsocketConnection()
             }
         }
