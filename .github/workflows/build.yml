@@ -39,7 +39,6 @@ jobs:
         ./gradlew -Pversion=$VERSION dokkaHtml
 
     - name: Deploy API documentation to Github Pages
-      if: ${{github.event_name == 'push'}}
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
