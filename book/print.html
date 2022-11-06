@@ -575,11 +575,15 @@ connect them bidirectionally.</p>
 <p>Any changes to the KVar will be reflected in realtime in the browser,
 and similarly any changes in the browser by the user will be reflected
 immediately in the KVar, for example:</p>
-<pre><code class="language-kotlin">val counterDoubled = counter.map { it * 2 }
-counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
-counter.value = 6
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+<pre><code class="language-kotlin">Kweb(port = 2395) {
+    doc.body {
+        p().text(&quot;What is your name?&quot;)
+        val clickMe = input(type = InputType.text)
+        val nameKVar = KVar(&quot;Peter Pan&quot;)
+        clickMe.value = nameKVar
+        p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
+    }
+}
 </code></pre>
 <p>This will also work for <code>&lt;option&gt;</code> and <code>&lt;textarea&gt;</code> elements which also have values.</p>
 <p>See also:
