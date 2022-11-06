@@ -88,14 +88,18 @@ abstract class KwebConfiguration {
 
     /**
      * By default, Kweb will handle all paths under `/`, but this may not be desirable if you have other
-     * Ktor route handlers. This function allows you to add a prefix to the Kweb route handler, e.g. `/my_kweb_site`.
+     * Ktor route handlers. This function allows you to add a prefix to the Kweb route handler, e.g. `/my_kweb_site`,
+     * so that only URLs under that path will be handled by Kweb.
      *
      * ```kotlin
      *    cfg.urlPathPrefix = ""
      *    path("/users/{userId}") { } // will be accessible at /users/1234
      *
      *    cfg.urlPathPrefix = "/my_kweb_site"
-     *    path("/users/{userId}") { } // will be accessible at /my_kweb_site/users/1234
+     *    path("/my_kweb_site/users/{userId}") { } // will be accessible at /my_kweb_site/users/1234
+     *
+     *    cfg.urlPathPrefix = "/my_kweb_site"
+     *    path("/users/{userId}") { } // Will **NOT** be accessible
      * ```
      *
      * The path used for the WebSocket connection (`/kweb_ws`) and static assets (`/kweb_static/`) will be
