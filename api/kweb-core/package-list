@@ -75,6 +75,7 @@ $dokka.location:kweb.config/KwebConfiguration/clientStateTimeout/#/PointingToDec
 $dokka.location:kweb.config/KwebConfiguration/faviconIco/#io.ktor.server.application.ApplicationCall/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/favicon-ico.html
 $dokka.location:kweb.config/KwebConfiguration/onWebsocketMessageHandlingFailure/#java.lang.Exception/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/on-websocket-message-handling-failure.html
 $dokka.location:kweb.config/KwebConfiguration/robotsTxt/#io.ktor.server.application.ApplicationCall/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/robots-txt.html
+$dokka.location:kweb.config/KwebConfiguration/urlPathPrefix/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/url-path-prefix.html
 $dokka.location:kweb.config/KwebConfiguration/validate/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/validate.html
 $dokka.location:kweb.config/KwebDefaultConfiguration///PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/index.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/KwebDefaultConfiguration/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/-kweb-default-configuration.html
