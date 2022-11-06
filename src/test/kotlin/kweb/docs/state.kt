@@ -44,10 +44,10 @@ Kweb(port = 2135) {
 Kweb(port = 2395) {
     doc.body {
         p().text("What is your name?")
-        val clickMe = input(type = InputType.text)
-        val nameKVar = KVar("Peter Pan")
-        clickMe.value = nameKVar
-        p().text(nameKVar.map { n -> "Hi $n!" })
+        val input = input(type = InputType.text)
+        input.value = KVar("Peter Pan")
+        val greeting = input.value.map { name -> "Hi $name!" }
+        p().text(greeting)
     }
 }
     // ANCHOR_END: bindinput
