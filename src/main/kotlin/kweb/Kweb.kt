@@ -223,7 +223,7 @@ class Kweb private constructor(
                 kwebConfig.faviconIco(call)
             }
 
-            get("/{visitedUrl...}") {
+            get("${kwebConfig.urlPathPrefix}/{visitedUrl...}") {
                 respondKweb(call, buildPage)
             }
 
@@ -237,7 +237,7 @@ class Kweb private constructor(
         HtmlDocumentSupplier.createDocTemplate(plugins, application.routing { })
 
         application.routing {
-            webSocket("/ws") {
+            webSocket("/kweb_ws") {
                 listenForWebsocketConnection()
             }
         }
@@ -329,7 +329,7 @@ class Kweb private constructor(
     suspend fun respondKweb(call: ApplicationCall, buildPage: WebBrowser.() -> Unit) {
         val htmlDocument = HtmlDocumentSupplier.getTemplateCopy()
 
-        // The client prefix allows to monitor the ressource usage (#Sessions, State Size) per User
+        // The client prefix allows to monitor the resource usage (#Sessions, State Size) per User
         val clientPrefix = determineClientPrefix(call)
         val kwebSessionId = clientPrefix + ":" + createNonce()
 

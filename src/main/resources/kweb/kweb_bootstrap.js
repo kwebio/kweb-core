@@ -93,7 +93,7 @@ function debugErr(debugToken, err, errMsg) {
 }
 
 function connectWs() {
-    var wsURL = toWSUrl("ws");
+    var wsURL = toWSUrl("kweb_ws");
     console.debug("Establishing websocket connection", wsURL);
     socket = new WebSocket(wsURL);
     if (window.WebSocket === undefined) {
