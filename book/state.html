@@ -221,10 +221,10 @@ immediately in the KVar, for example:</p>
 <pre><code class="language-kotlin">Kweb(port = 2395) {
     doc.body {
         p().text(&quot;What is your name?&quot;)
-        val clickMe = input(type = InputType.text)
-        val nameKVar = KVar(&quot;Peter Pan&quot;)
-        clickMe.value = nameKVar
-        p().text(nameKVar.map { n -&gt; &quot;Hi $n!&quot; })
+        val input = input(type = InputType.text)
+        input.value = KVar(&quot;Peter Pan&quot;)
+        val greeting = input.value.map { name -&gt; &quot;Hi $name!&quot; }
+        p().text(greeting)
     }
 }
 </code></pre>
