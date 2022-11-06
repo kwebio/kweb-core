@@ -89,7 +89,7 @@ and similarly any changes in the browser by the user will be reflected
 immediately in the KVar, for example:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/state.kt:mapkvar}}
+{{#include ../../src/test/kotlin/kweb/docs/state.kt:bindinput}}
 ```
 
 This will also work for `<option>` and `<textarea>` elements which also have values.
