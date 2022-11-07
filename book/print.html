@@ -1131,8 +1131,8 @@ of the techniques Kweb uses to achieve this.</p>
 </ul>
 <h2 id="server-side-rendering"><a class="header" href="#server-side-rendering">Server-side rendering</a></h2>
 <p>Kweb uses the excellent <a href="https://jsoup.org/">JSoup</a> library to render the initial HTML page, which is supplied to
-the browser when the page first loads. This leads to a much faster initial page load because the browser can 
-start rendering the page before the JavaScript has loaded.</p>
+the browser when the page first loads. This leads to a faster initial page load, eliminates flicker on load, and 
+allows search engines to index the page even if they aren't JavaScript aware.</p>
 <h2 id="hydration"><a class="header" href="#hydration">Hydration</a></h2>
 <p>Kweb uses a technique called <a href="https://en.wikipedia.org/wiki/Hydration_(web_development)">hydration</a> to add
 JavaScript listeners to the DOM elements that were rendered by the server.</p>
