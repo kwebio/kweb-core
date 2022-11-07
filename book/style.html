@@ -146,7 +146,8 @@ UI</a> framework, which helps create beautiful,
 responsive layouts using human-friendly HTML.</p>
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h2>
 <p>First tell Kweb to use the Fomantic UI plugin:</p>
-<pre><code class="language-kotlin">import kweb.plugins.fomanticUI.*
+<pre><code class="language-kotlin">import kweb.*
+import kweb.plugins.fomanticUI.*
 
 fun main() {
     Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
@@ -164,14 +165,17 @@ UI</a> documentation:</p>
 &lt;/div&gt;
 </code></pre>
 <p>This translates to the Kotlin:</p>
-<pre><code class="language-kotlin">import kweb.plugins.fomanticUI.*
-import kweb.dom.element.creation.tags.InputType.*
+<pre><code class="language-kotlin">import kweb.*
+import kweb.plugins.fomanticUI.*
+import kweb.InputType.*
 
 fun main() {
-    Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)4) {
-        div(fomantic.ui.icon.input).new {
-            input(type = text, placeholder = &quot;Search...&quot;)
-            i(fomantic.search.icon)
+    Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
+        doc.body {
+            div(fomantic.ui.icon.input).new {
+                input(type = text, placeholder = &quot;Search...&quot;)
+                i(fomantic.search.icon)
+            }
         }
     }
 }
