@@ -1,10 +1,15 @@
 # CSS & Style
 
+Kweb can integrate easily with most CSS frameworks, particularly those
+that don't have a heavy reliance on JavaScript.
+
+<!-- toc -->
+
+## Fomantic UI
+
 Kweb has out-of-the-box support for the excellent [Fomantic
 UI](https://fomantic-ui.com) framework, which helps create beautiful,
 responsive layouts using human-friendly HTML.
-
-## Fomantic UI
 
 ### Getting started
 
