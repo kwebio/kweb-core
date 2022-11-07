@@ -307,8 +307,9 @@ println(user) // Will print: KVar(User(name = &quot;John&quot;))
 </code></pre>
 <h2 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h2>
 <p>If you check the type of <em>counterDoubled</em>, you'll notice that it's a
-<em>KVal</em> rather than a <em>KVar</em>, meaning it cannot be modified. This will
-result in a compilation error:</p>
+<em>KVal</em> rather than a <em>KVar</em>, meaning it cannot be modified directly, only by
+changing the <em>KVar</em> it was mapped from. </p>
+<p>So this will result in a compilation error:</p>
 <pre><code class="language-kotlin">val counter = KVar(0)
 val counterDoubled = counter.map { it * 2 }
 counterDoubled.value = 20 // &lt;--- This won't compile
@@ -329,6 +330,8 @@ counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
 println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
 // output: counter: 6, doubled: 12
 </code></pre>
+<p>If the mapped <em>Kvar</em> is changed the original KVar it was mapped from will also
+change.</p>
 <p>Reversible mappings are an advanced feature that you only need if you
 want the mapped value to be a mutable KVar. Most of the time the simple
 <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/map.html">KVal.map {}</a>
