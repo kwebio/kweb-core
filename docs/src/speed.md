@@ -8,8 +8,8 @@ of the techniques Kweb uses to achieve this.
 ## Server-side rendering
 
 Kweb uses the excellent [JSoup](https://jsoup.org/) library to render the initial HTML page, which is supplied to
-the browser when the page first loads. This leads to a much faster initial page load because the browser can 
-start rendering the page before the JavaScript has loaded.
+the browser when the page first loads. This leads to a faster initial page load, eliminates flicker on load, and 
+allows search engines to index the page even if they aren't JavaScript aware.
 
 ## Hydration
 
