@@ -15,7 +15,7 @@ fun main2() {
     // ANCHOR: search
 Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
     doc.body {
-        div(fomantic.ui.icon.input).new {
+        div(fomantic.ui.icon.input) {
             input(type = InputType.text, placeholder = "Search...")
             i(fomantic.search.icon)
         }
