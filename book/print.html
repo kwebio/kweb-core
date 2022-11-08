@@ -836,7 +836,7 @@ UI</a> documentation:</p>
 <p>This translates to the Kotlin:</p>
 <pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
     doc.body {
-        div(fomantic.ui.icon.input).new {
+        div(fomantic.ui.icon.input) {
             input(type = InputType.text, placeholder = &quot;Search...&quot;)
             i(fomantic.search.icon)
         }
