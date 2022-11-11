@@ -176,42 +176,19 @@ class ObservableList<ITEM : Any>(
         if (closed) {
             throw IllegalStateException("Cannot read closed ObservableList")
         }
-        return object : MutableListIterator<ITEM> {
-            @Volatile var currentIndex = index
-            override fun hasNext(): Boolean {
-                return currentIndex < items.size
-            }
-
-            override fun next(): ITEM {
-                return items[currentIndex++]
-            }
-
-            override fun hasPrevious(): Boolean {
-                return currentIndex > 0
-            }
-
-            override fun previous(): ITEM {
-                return items[--currentIndex]
-            }
-
-            override fun nextIndex(): Int {
-                return currentIndex + 1
-            }
-
-            override fun previousIndex(): Int {
-                return currentIndex - 1
-            }
-
-            override fun remove() {
-                delete(--currentIndex)
-            }
-
+        // Clone the list so that we can iterate over it without worrying about
+        // concurrent modification
+        return object : MutableListIterator<ITEM> by ArrayList(items).listIterator(index) {
             override fun set(element: ITEM) {
-                change(currentIndex-1, element)
+                throw UnsupportedOperationException("Cannot set element via iterator in ObservableList")
             }
 
             override fun add(element: ITEM) {
-                insert(currentIndex, element)
+                throw UnsupportedOperationException("Cannot add element via iterator to ObservableList")
+            }
+
+            override fun remove() {
+                throw UnsupportedOperationException("Cannot remove element via iterator from ObservableList")
             }
         }
     }

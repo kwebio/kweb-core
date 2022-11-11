@@ -1,5 +1,6 @@
 package kweb.state
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.timing.eventually
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -47,7 +48,7 @@ class ObservableListSpec : FreeSpec({
             list.addListener { modifications ->
                 modifications.forEach { modification ->
                     if (modification is ObservableList.Modification.Deletion) {
-                        if (modification.position == 2 ) {
+                        if (modification.position == 2) {
                             notified.set(true)
                         }
                     }
@@ -109,31 +110,31 @@ class ObservableListSpec : FreeSpec({
             }
         }
 
-        "listIterator" - {
-            "should remove element correctly" {
-                val list = ObservableList(listOf(1, 2, 3, 4))
-                val listIterator = list.listIterator()
-                listIterator.next() shouldBe 1
-                listIterator.next() shouldBe 2
-                listIterator.remove()
-                list shouldBe listOf(1, 3, 4)
+        "iterator should throw UnsupportedOperationException if user attempts to modify" {
+            val list = ObservableList(listOf(1, 2, 3, 4))
+            val iterator = list.iterator()
+            shouldThrow<UnsupportedOperationException> {
+                iterator.remove()
             }
-            "should insert element correctly" {
-                val list = ObservableList(listOf(1, 2, 3, 4))
-                val listIterator = list.listIterator()
-                listIterator.next() shouldBe 1
-                listIterator.next() shouldBe 2
-                listIterator.add(5)
-                list shouldBe listOf(1, 2, 5, 3, 4)
+        }
+
+        "listIterator should throw UnsupportedOperationException if user attempts to modify" {
+            val list = ObservableList(listOf(1, 2, 3, 4))
+            val iterator = list.listIterator()
+
+            iterator.next() shouldBe 1
+            iterator.next() shouldBe 2
+            shouldThrow<UnsupportedOperationException> {
+                iterator.add(99)
             }
-            "should set element correctly" {
-                val list = ObservableList(listOf(1, 2, 3, 4))
-                val listIterator = list.listIterator()
-                listIterator.next() shouldBe 1
-                listIterator.next() shouldBe 2
-                listIterator.set(5)
-                list shouldBe listOf(1, 5, 3, 4)
+            shouldThrow<UnsupportedOperationException> {
+                iterator.remove()
+            }
+            shouldThrow<UnsupportedOperationException> {
+                iterator.set(99)
             }
         }
     }
+
+
 })
