@@ -155,13 +155,20 @@ open class AElement(parent: Element) : Element(parent) {
         }
 }
 
+/**
+ * Create an anchor element.
+ *
+ * @param href @see [AElement.href]
+ */
 fun ElementCreator<Element>.a(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     href: String? = null,
     new: (ElementCreator<AElement>.(AElement) -> Unit)? = null
 ): AElement {
-    return AElement(element("a", attributes.set("href", JsonPrimitive(href)))).also {
+    return AElement(element("a")).also {
+        if (href != null) it.href = href
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+        attributes.forEach { (k, v) -> it[k] = v }
     }
 }
 
