@@ -368,6 +368,7 @@ fun ElementCreator<Element>.input(
     initialValue: String? = null,
     size: Int? = null,
     placeholder: String? = null,
+    required: Boolean? = null,
     new: (ElementCreator<InputElement>.(InputElement) -> Unit)? = null
 ): InputElement {
     return InputElement(
@@ -377,6 +378,7 @@ fun ElementCreator<Element>.input(
                 .set("value", JsonPrimitive(initialValue))
                 .set("placeholder", JsonPrimitive(placeholder))
                 .set("size", JsonPrimitive(size))
+                .set("required", JsonPrimitive(required))
         ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)

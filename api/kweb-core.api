@@ -426,8 +426,8 @@ public final class kweb/PreludeKt {
 	public static synthetic fun i$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/IElement;
 	public static final fun img (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ImageElement;
 	public static synthetic fun img$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ImageElement;
-	public static final fun input (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/InputElement;
-	public static synthetic fun input$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/InputElement;
+	public static final fun input (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/InputElement;
+	public static synthetic fun input$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/InputElement;
 	public static final fun label (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LabelElement;
 	public static synthetic fun label$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LabelElement;
 	public static final fun li (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LIElement;
