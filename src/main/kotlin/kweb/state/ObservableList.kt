@@ -130,10 +130,7 @@ class ObservableList<ITEM : Any>(
     }
 
     override fun iterator(): MutableIterator<ITEM> {
-        if (closed) {
-            throw IllegalStateException("Cannot read closed ObservableList")
-        }
-        return items.iterator()
+        return listIterator()
     }
 
     override fun lastIndexOf(element: ITEM): Int {
@@ -173,18 +170,50 @@ class ObservableList<ITEM : Any>(
         }
     }
 
-    override fun listIterator(): MutableListIterator<ITEM> {
-        if (closed) {
-            throw IllegalStateException("Cannot read closed ObservableList")
-        }
-        return items.listIterator()
-    }
+    override fun listIterator(): MutableListIterator<ITEM> = listIterator(0)
 
     override fun listIterator(index: Int): MutableListIterator<ITEM> {
         if (closed) {
             throw IllegalStateException("Cannot read closed ObservableList")
         }
-        return items.listIterator(index)
+        return object : MutableListIterator<ITEM> {
+            @Volatile var currentIndex = index
+            override fun hasNext(): Boolean {
+                return currentIndex < items.size
+            }
+
+            override fun next(): ITEM {
+                return items[currentIndex++]
+            }
+
+            override fun hasPrevious(): Boolean {
+                return currentIndex > 0
+            }
+
+            override fun previous(): ITEM {
+                return items[--currentIndex]
+            }
+
+            override fun nextIndex(): Int {
+                return currentIndex + 1
+            }
+
+            override fun previousIndex(): Int {
+                return currentIndex - 1
+            }
+
+            override fun remove() {
+                delete(--currentIndex)
+            }
+
+            override fun set(element: ITEM) {
+                change(currentIndex-1, element)
+            }
+
+            override fun add(element: ITEM) {
+                insert(currentIndex, element)
+            }
+        }
     }
 
     override fun remove(element: ITEM): Boolean {
