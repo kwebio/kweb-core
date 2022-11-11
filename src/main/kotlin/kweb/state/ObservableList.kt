@@ -177,7 +177,9 @@ class ObservableList<ITEM : Any>(
             throw IllegalStateException("Cannot read closed ObservableList")
         }
         // Clone the list so that we can iterate over it without worrying about
-        // concurrent modification
+        // concurrent modification. Disallow modifications to the list because
+        // allowing this in a threadsafe way would be non-trivial for questionable
+        // benefit.
         return object : MutableListIterator<ITEM> by ArrayList(items).listIterator(index) {
             override fun set(element: ITEM) {
                 throw UnsupportedOperationException("Cannot set element via iterator in ObservableList")
