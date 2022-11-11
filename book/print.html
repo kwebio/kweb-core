@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="integrations.html"><strong aria-hidden="true">10.</strong> Integrations</a></li><li class="chapter-item expanded "><a href="speed.html"><strong aria-hidden="true">11.</strong> Speed & Efficiency</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">12.</strong> FAQ</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="speed.html"><strong aria-hidden="true">10.</strong> Speed & Efficiency</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">11.</strong> FAQ</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -1062,76 +1062,6 @@ first called during initial page render, it will be parsed and cached as part of
 <p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>. 
 You can create one within Kweb's DSL using <strong>elementScope()</strong>. This scope will be cancelled automatically
 when this part of the DOM is no-longer needed.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="integrations"><a class="header" href="#integrations">Integrations</a></h1>
-<ul>
-<li><a href="integrations.html#spring-boot">Spring Boot</a></li>
-<li><a href="integrations.html#google-cloud-platform">Google Cloud Platform</a>
-<ul>
-<li><a href="integrations.html#firestore">FireStore</a></li>
-</ul>
-</li>
-</ul>
-<h2 id="spring-boot"><a class="header" href="#spring-boot">Spring Boot</a></h2>
-<p>To integrate Kweb into a Spring Boot Web application you need a Spring Boot project with the web starter, which can be easily obtained from <a href="https://start.spring.io/#!language=kotlin&amp;dependencies=web">Spring initializr</a>.
-Once you have a Spring Boot Web project, simply follow the <a href="https://docs.kweb.io/book/gettingstarted.html">Getting Started</a> guide to add Kweb to your project.</p>
-<p>For ease of demonstration here is all the code you need to integrate Kweb into Spring Boot:</p>
-<pre><code class="language-kotlin">package com.example.kwebspringboot
-
-import io.ktor.server.application.*
-import io.ktor.server.plugins.compression.*
-import io.ktor.server.plugins.defaultheaders.*
-import io.ktor.server.servlet.*
-import io.ktor.server.websocket.*
-import kweb.*
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.boot.web.servlet.ServletComponentScan
-import java.time.Duration
-import javax.servlet.annotation.WebServlet
-
-@ServletComponentScan
-@SpringBootApplication
-class KwebSpringBootApplication {
-
-    @WebServlet(urlPatterns = [&quot;/*&quot;], asyncSupported = true)
-    class KwebServlet : ServletApplicationEngine() {
-
-        override fun init() {
-            super.init()
-
-            application.install(DefaultHeaders)
-            application.install(Compression)
-            application.install(WebSockets) {
-                pingPeriod = Duration.ofSeconds(10)
-                timeout = Duration.ofSeconds(30)
-            }
-
-            application.install(Kweb) {
-                buildPage = {
-                    doc.body {
-                        div {
-                            h1().text(&quot;Enter Your Name&quot;)
-                            val nameInput = input(type = InputType.text)
-                            br()
-                            span().text(nameInput.value.map { &quot;Hello, $it&quot; })
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun main(args: Array&lt;String&gt;) {
-    runApplication&lt;KwebSpringBootApplication&gt;(*args)
-}
-</code></pre>
-<h2 id="google-cloud-platform"><a class="header" href="#google-cloud-platform">Google Cloud Platform</a></h2>
-<h3 id="firestore"><a class="header" href="#firestore">FireStore</a></h3>
-<p>Kweb can be used with Google Cloud Platform's FireStore. Our demo website defines some utility methods in
-<a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/util/firestore.kt">firestore.kt</a>,
-and you can see how they're used in <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/news.kt">news.kt</a>
-and <a href="https://github.com/freenet/freenetorg-website/blob/staging/src/main/kotlin/org/freenet/website/landing/landing.kt#L85">landing.kt</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="speed--efficiency"><a class="header" href="#speed--efficiency">Speed &amp; Efficiency</a></h1>
 <p>Kweb is designed to be fast and efficient, both in the browser and on the server. This chapter documents some
 of the techniques Kweb uses to achieve this.</p>
