@@ -130,10 +130,7 @@ class ObservableList<ITEM : Any>(
     }
 
     override fun iterator(): MutableIterator<ITEM> {
-        if (closed) {
-            throw IllegalStateException("Cannot read closed ObservableList")
-        }
-        return items.iterator()
+        return listIterator()
     }
 
     override fun lastIndexOf(element: ITEM): Int {
@@ -173,18 +170,27 @@ class ObservableList<ITEM : Any>(
         }
     }
 
-    override fun listIterator(): MutableListIterator<ITEM> {
-        if (closed) {
-            throw IllegalStateException("Cannot read closed ObservableList")
-        }
-        return items.listIterator()
-    }
+    override fun listIterator(): MutableListIterator<ITEM> = listIterator(0)
 
     override fun listIterator(index: Int): MutableListIterator<ITEM> {
         if (closed) {
             throw IllegalStateException("Cannot read closed ObservableList")
         }
-        return items.listIterator(index)
+        // Clone the list so that we can iterate over it without worrying about
+        // concurrent modification
+        return object : MutableListIterator<ITEM> by ArrayList(items).listIterator(index) {
+            override fun set(element: ITEM) {
+                throw UnsupportedOperationException("Cannot set element via iterator in ObservableList")
+            }
+
+            override fun add(element: ITEM) {
+                throw UnsupportedOperationException("Cannot add element via iterator to ObservableList")
+            }
+
+            override fun remove() {
+                throw UnsupportedOperationException("Cannot remove element via iterator from ObservableList")
+            }
+        }
     }
 
     override fun remove(element: ITEM): Boolean {
