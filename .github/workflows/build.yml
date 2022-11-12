@@ -1,3 +1,5 @@
+name: Build, test, and deploy docs if triggered push to master
+
 on:
   push:
     branches: [ master ]
