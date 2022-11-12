@@ -11,6 +11,7 @@ plugins {
 
     // Coverage
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    id("info.solidsoft.pitest") version "1.9.0"
 }
 
 // This is overridden by the maven release process
@@ -79,4 +80,15 @@ tasks.dokkaHtml {
             includes.from("src/main/kotlin/packages.md")
         }
     }
+}
+
+configure<info.solidsoft.gradle.pitest.PitestPluginExtension> {
+    junit5PluginVersion.set("1.1.0")
+    avoidCallsTo.set(setOf("kotlin.jvm.internal"))
+    mutators.set(setOf("STRONGER"))
+    targetClasses.set(setOf("kweb.*"))  //by default "${project.group}.*"
+    targetTests.set(setOf("kweb.*"))
+//    pitestVersion.set("1.4.0")   //current defined for Gradle plugin PIT version should be used
+    threads.set(Runtime.getRuntime().availableProcessors())
+    outputFormats.set(setOf("XML", "HTML"))
 }
