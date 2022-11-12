@@ -231,31 +231,6 @@ features like for loops, functions, coroutines, and classes.</p>
   &lt;/ul&gt;
 &lt;/body&gt;
 </code></pre>
-<p>You can use functions for modularization and reuse:</p>
-<pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body {
-        ul {
-            // We can modify the UL element we just created in an element {} block
-            it.classes(&quot;list&quot;)
-            // We can define functions as an extension to ElementCreator allowing us to use it
-            // within the DSL
-            fun ElementCreator&lt;ULElement&gt;.createMessage(x: Int) {
-                li().text(&quot;Hello World $x!&quot;)
-            }
-
-            for (x in 1..5) {
-                createMessage(x)
-            }
-        }
-    }
-}
-</code></pre>
-<p>As you can see this is an extension function, which allows you to use
-the Kweb DSL within the newly created function.</p>
-<p>Don't worry if you're unsure about this because you can use
-IntelliJ's <a href="https://www.jetbrains.com/help/idea/extract-method.html">extract
-function</a>
-refactoring to create these functions automatically.</p>
 <h2 id="template-repository"><a class="header" href="#template-repository">Template Repository</a></h2>
 <p>You can find a simple template Kweb project in
 <a href="https://github.com/kwebio/kweb-template">kwebio/kweb-template</a>.</p>
