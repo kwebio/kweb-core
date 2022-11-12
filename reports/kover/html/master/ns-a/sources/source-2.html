@@ -1,0 +1,152 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FomanticUIPlugin</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.plugins.fomanticUI</a>
+</div>
+
+<h1>Coverage Summary for Class: FomanticUIPlugin (kweb.plugins.fomanticUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">FomanticUIPlugin</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (26/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.fomanticUI
+&nbsp;
+&nbsp;import kweb.plugins.KwebPlugin
+&nbsp;import kweb.plugins.jqueryCore.jqueryCore
+&nbsp;import org.jsoup.nodes.Document
+&nbsp;
+&nbsp;
+&nbsp;// NOTE: Static assets should be updated from https://github.com/fomantic/Fomantic-UI-CSS,
+&nbsp;//       only semantic.mic.css, semantic.min.js, components/ and themes/ are required
+&nbsp;//       from this REPO.
+&nbsp;
+&nbsp;/**
+&nbsp; * Includes the Fomantic UI framework, see: https://fomantic-ui.com/
+&nbsp; */
+<b class="fc">&nbsp;class FomanticUIPlugin : KwebPlugin(dependsOn = setOf(jqueryCore)</b>
+&nbsp;) {
+&nbsp;    override fun decorate(doc: Document) {
+<b class="fc">&nbsp;        doc.head().appendElement(&quot;link&quot;)</b>
+<b class="fc">&nbsp;                .attr(&quot;rel&quot;, &quot;stylesheet&quot;)</b>
+<b class="fc">&nbsp;                .attr(&quot;type&quot;, &quot;text/css&quot;)</b>
+<b class="fc">&nbsp;                .attr(&quot;href&quot;, &quot;/kweb_static/plugins/fomantic/semantic.min.css&quot;)</b>
+&nbsp;
+<b class="fc">&nbsp;        doc.head().appendElement(&quot;script&quot;)</b>
+<b class="fc">&nbsp;                .attr(&quot;src&quot;, &quot;/kweb_static/plugins/fomantic/semantic.min.js&quot;)</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;val fomanticUIPlugin get() = FomanticUIPlugin()
+&nbsp;
+&nbsp;val fomantic get() = FomanticUIClasses()
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

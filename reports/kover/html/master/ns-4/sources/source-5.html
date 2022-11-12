@@ -1,0 +1,219 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > HtmlDocumentSupplier</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.html</a>
+</div>
+
+<h1>Coverage Summary for Class: HtmlDocumentSupplier (kweb.html)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">HtmlDocumentSupplier</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62.5%
+  </span>
+  <span class="absValue">
+    (10/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.1%
+  </span>
+  <span class="absValue">
+    (34/35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.7%
+  </span>
+  <span class="absValue">
+    (166/183)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.html
+&nbsp;
+&nbsp;import io.ktor.server.routing.*
+&nbsp;import kweb.plugins.KwebPlugin
+&nbsp;import kweb.plugins.staticFiles.ResourceFolder
+&nbsp;import kweb.plugins.staticFiles.StaticFilesPlugin
+&nbsp;import kweb.state.RenderSpanNames
+&nbsp;import org.jsoup.nodes.Document
+&nbsp;import org.jsoup.nodes.DocumentType
+&nbsp;import org.jsoup.nodes.Element
+&nbsp;
+&nbsp;internal object HtmlDocumentSupplier {
+<b class="nc">&nbsp;    val appliedPlugins: Set&lt;KwebPlugin&gt; get() = mutableAppliedPlugins</b>
+&nbsp;
+<b class="fc">&nbsp;    private val mutableAppliedPlugins: MutableSet&lt;KwebPlugin&gt; = HashSet()</b>
+&nbsp;    private lateinit var docTemplate: Document
+&nbsp;
+&nbsp;    fun createDocTemplate(plugins: List&lt;KwebPlugin&gt;, routing: Routing) {
+<b class="fc">&nbsp;        docTemplate = Document(&quot;&quot;) // TODO: What should this base URL be?</b>
+&nbsp;
+<b class="pc">&nbsp;        docTemplate.appendChild(DocumentType(&quot;html&quot;, &quot;&quot;, &quot;&quot;))</b>
+&nbsp;
+<b class="pc">&nbsp;        docTemplate.appendElement(&quot;html&quot;).let { html: Element -&gt;</b>
+&nbsp;
+<b class="fc">&nbsp;            html.appendElement(&quot;head&quot;).let { head: Element -&gt;</b>
+&nbsp;
+<b class="fc">&nbsp;                head.appendElement(&quot;meta&quot;)</b>
+<b class="fc">&nbsp;                    .attr(&quot;id&quot;, &quot;K_head&quot;)</b>
+<b class="fc">&nbsp;                    .attr(&quot;name&quot;, &quot;viewport&quot;)</b>
+<b class="fc">&nbsp;                    .attr(&quot;content&quot;, &quot;width=device-width, initial-scale=1.0&quot;)</b>
+&nbsp;
+&nbsp;                //these css ids denote spans used in render() and renderEach()
+<b class="fc">&nbsp;                head.appendElement(&quot;style&quot;)</b>
+<b class="fc">&nbsp;                    .html(&quot;&quot;&quot;.rMStart {display: none;}</b>
+&nbsp;                            .${RenderSpanNames.startMarkerClassName} {display: none;}
+&nbsp;                            .${RenderSpanNames.endMarkerClassName} {display: none;}
+&nbsp;                            .${RenderSpanNames.listStartMarkerClassName} {display: none}
+&nbsp;                            .${RenderSpanNames.listEndMarkerClassName} {display: none}
+<b class="fc">&nbsp;                        &quot;&quot;&quot;.trimMargin())</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;                head.appendElement(&quot;link&quot;)</b>
+<b class="fc">&nbsp;                    .attr(&quot;rel&quot;, &quot;stylesheet&quot;)</b>
+<b class="fc">&nbsp;                    .attr(&quot;href&quot;, &quot;/kweb_static/toastify/toastify.min.css&quot;)</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            html.appendElement(&quot;body&quot;).let { body: Element -&gt;</b>
+&nbsp;
+<b class="fc">&nbsp;                body.attr(&quot;onload&quot;, &quot;buildPage()&quot;)</b>
+<b class="fc">&nbsp;                body.attr(&quot;id&quot;, &quot;K_body&quot;)</b>
+&nbsp;
+<b class="fc">&nbsp;                body.appendElement(&quot;noscript&quot;)</b>
+<b class="fc">&nbsp;                    .html(</b>
+&nbsp;                        &quot;&quot;&quot;
+&nbsp;                            | This page is built with &lt;a href=&quot;https://kweb.io/&quot;&gt;Kweb&lt;/a&gt;, which 
+<b class="fc">&nbsp;                            | requires JavaScript to be enabled.&quot;&quot;&quot;.trimMargin())</b>
+<b class="fc">&nbsp;                body.appendElement(&quot;script&quot;)</b>
+<b class="fc">&nbsp;                    .attr(&quot;src&quot;, &quot;/kweb_static/toastify/toastify.js&quot;)</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (plugin in plugins) {</b>
+&nbsp;            // The document will be modified here!
+<b class="pc">&nbsp;            applyPluginWithDependencies(plugin = plugin, appliedPlugins = mutableAppliedPlugins, document = docTemplate, routeHandler = routing)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The base template for pages
+&nbsp;     */
+&nbsp;    fun getTemplateCopy() =
+<b class="pc">&nbsp;        docTemplate.clone()</b>
+&nbsp;
+&nbsp;    private fun applyPluginWithDependencies(
+&nbsp;        plugin: KwebPlugin,
+&nbsp;        appliedPlugins: MutableSet&lt;KwebPlugin&gt;,
+&nbsp;        routeHandler: Routing,
+&nbsp;        document: Document
+&nbsp;    ) {
+<b class="fc">&nbsp;        for (dependantPlugin in plugin.dependsOn) {</b>
+<b class="pc">&nbsp;            if (!appliedPlugins.contains(dependantPlugin)) {</b>
+<b class="fc">&nbsp;                applyPluginWithDependencies(dependantPlugin, appliedPlugins, routeHandler, document)</b>
+<b class="fc">&nbsp;                appliedPlugins.add(dependantPlugin)</b>
+&nbsp;            }
+&nbsp;        }
+<b class="pc">&nbsp;        if (!appliedPlugins.contains(plugin)) {</b>
+<b class="fc">&nbsp;            plugin.decorate(document)</b>
+<b class="fc">&nbsp;            plugin.appServerConfigurator(routeHandler)</b>
+<b class="fc">&nbsp;            appliedPlugins.add(plugin)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,636 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > KwebKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb</a>
+</div>
+
+<h1>Coverage Summary for Class: KwebKt (kweb)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">KwebKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">KwebKt$logger$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb
+&nbsp;
+&nbsp;import com.google.common.cache.Cache
+&nbsp;import com.google.common.cache.CacheBuilder
+&nbsp;import io.ktor.server.application.*
+&nbsp;import io.ktor.server.plugins.*
+&nbsp;import io.ktor.http.*
+&nbsp;import io.ktor.websocket.*
+&nbsp;import io.ktor.websocket.Frame.*
+&nbsp;import io.ktor.server.request.*
+&nbsp;import io.ktor.server.response.*
+&nbsp;import io.ktor.server.routing.*
+&nbsp;import io.ktor.server.engine.*
+&nbsp;import io.ktor.server.jetty.*
+&nbsp;import io.ktor.server.plugins.defaultheaders.*
+&nbsp;import io.ktor.server.plugins.compression.*
+&nbsp;import io.ktor.server.websocket.*
+&nbsp;import io.ktor.util.*
+&nbsp;import kotlinx.serialization.decodeFromString
+&nbsp;import kotlinx.serialization.encodeToString
+&nbsp;import kotlinx.serialization.json.Json
+&nbsp;import kotlinx.serialization.json.JsonElement
+&nbsp;import kweb.client.*
+&nbsp;import kweb.client.ClientConnection.Caching
+&nbsp;import kweb.config.KwebConfiguration
+&nbsp;import kweb.config.KwebDefaultConfiguration
+&nbsp;import kweb.html.HtmlDocumentSupplier
+&nbsp;import kweb.plugins.KwebPlugin
+&nbsp;import kweb.plugins.staticFiles.ResourceFolder
+&nbsp;import kweb.plugins.staticFiles.StaticFilesPlugin
+&nbsp;import kweb.util.*
+&nbsp;import kweb.util.NotFoundException
+&nbsp;import mu.KotlinLogging
+&nbsp;import org.jsoup.nodes.DataNode
+&nbsp;import java.io.Closeable
+&nbsp;import java.time.*
+&nbsp;import java.util.*
+&nbsp;import kotlin.math.abs
+&nbsp;
+<b class="pc">&nbsp;private val logger = KotlinLogging.logger {}</b>
+&nbsp;
+&nbsp;class Kweb private constructor(
+&nbsp;    val debug: Boolean,
+&nbsp;    plugins: List&lt;KwebPlugin&gt;,
+&nbsp;    val kwebConfig: KwebConfiguration,
+&nbsp;) : Closeable {
+&nbsp;
+&nbsp;    // This StaticFilesPlugin is used to serve static files required by Kweb and bundled plugins, it&#39;s
+&nbsp;    // added to the plugin list implicitly.
+&nbsp;    val plugins = plugins + StaticFilesPlugin(ResourceFolder(&quot;kweb.static&quot;), &quot;/kweb_static&quot;)
+&nbsp;
+&nbsp;    /**
+&nbsp;     *
+&nbsp;     * The core kwebserver, and the starting point for almost any Kweb app. This will create a HTTP server and respond
+&nbsp;     * with a javascript page which will establish a websocket connection to retrieve and send instructions and data
+&nbsp;     * between browser and server.
+&nbsp;     *
+&nbsp;     * @property port  The TCP port on which the HTTP server should listen
+&nbsp;     * @property debug Should be set to true during development as it will provide useful warnings and other feedback,
+&nbsp;     *                 but false during production because it is inefficient at scale
+&nbsp;     * @property plugins A list of Kweb plugins to be loaded by this Kweb instance
+&nbsp;     * @property buildPage A lambda which will build the webpage to be served to the user, this is where your code should
+&nbsp;     *                     go
+&nbsp;     */
+&nbsp;    constructor(
+&nbsp;        port: Int,
+&nbsp;        debug: Boolean = true,
+&nbsp;        plugins: List&lt;KwebPlugin&gt; = Collections.emptyList(),
+&nbsp;        httpsConfig: EngineSSLConnectorConfig? = null,
+&nbsp;        kwebConfig: KwebConfiguration = KwebDefaultConfiguration(),
+&nbsp;        buildPage: WebBrowser.() -&gt; Unit,
+&nbsp;    ) : this(
+&nbsp;        debug = debug,
+&nbsp;        plugins = plugins,
+&nbsp;        kwebConfig = kwebConfig,
+&nbsp;    ) {
+&nbsp;        logger.info(&quot;Initializing Kweb listening on port $port&quot;)
+&nbsp;
+&nbsp;        if (debug) {
+&nbsp;            logger.warn(&quot;Debug mode enabled, if in production use KWeb(debug = false)&quot;)
+&nbsp;        }
+&nbsp;
+&nbsp;        kwebConfig.validate()
+&nbsp;
+&nbsp;        server = createServer(port, httpsConfig, buildPage)
+&nbsp;
+&nbsp;        server!!.start()
+&nbsp;        logger.info { &quot;KWeb is listening on port $port&quot; }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * If you have an existing Ktor server, you can use the Kweb class as a feature. Adding this to your code is easy:
+&nbsp;     *
+&nbsp;     * ```
+&nbsp;     *     install(DefaultHeaders)
+&nbsp;     *     install(Compression)
+&nbsp;     *     install(WebSockets) {
+&nbsp;     *         pingPeriod = Duration.ofSeconds(10)
+&nbsp;     *         timeout = Duration.ofSeconds(30)
+&nbsp;     *     }
+&nbsp;     *
+&nbsp;     *     install(Kweb) {
+&nbsp;     *         // Set debug or plugins here, if you&#39;d like
+&nbsp;     *         buildPage = {
+&nbsp;     *             // Your app goes here as it would using the Ktor constructor
+&nbsp;     *         }
+&nbsp;     *     }
+&nbsp;     * ```
+&nbsp;     *
+&nbsp;     */
+&nbsp;    companion object Feature : BaseApplicationPlugin&lt;Application, Feature.Configuration, Kweb&gt; {
+&nbsp;        // Note that this is not KwebConfiguration, which is a different thing
+&nbsp;        class Configuration {
+&nbsp;            var debug: Boolean = true
+&nbsp;            var plugins: List&lt;KwebPlugin&gt; = Collections.emptyList()
+&nbsp;            var kwebConfig: KwebConfiguration = KwebDefaultConfiguration()
+&nbsp;
+&nbsp;            @Deprecated(&quot;Please use the Ktor syntax for defining page handlers instead: $buildPageReplacementCode&quot;)
+&nbsp;            var buildPage: (WebBrowser.() -&gt; Unit)? = null
+&nbsp;        }
+&nbsp;
+&nbsp;        override val key = AttributeKey&lt;Kweb&gt;(&quot;Kweb&quot;)
+&nbsp;
+&nbsp;        override fun install(pipeline: Application, configure: Configuration.() -&gt; Unit): Kweb {
+&nbsp;            val configuration = Configuration().apply(configure)
+&nbsp;            configuration.kwebConfig.validate()
+&nbsp;            val feature = Kweb(configuration.debug, configuration.plugins, configuration.kwebConfig)
+&nbsp;
+&nbsp;            @Suppress(&quot;DEPRECATION&quot;)
+&nbsp;            configuration.buildPage?.let {
+&nbsp;                logger.warn { &quot;Initializing Kweb with deprecated buildPage, this functionality will be removed in a future version&quot; }
+&nbsp;                pipeline.installKwebOnRemainingRoutes(it)
+&nbsp;            }
+&nbsp;            feature.installRequiredKwebComponents(pipeline)
+&nbsp;
+&nbsp;            return feature
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private val clientState: Cache&lt;String, RemoteClientState&gt; = CacheBuilder.newBuilder()
+&nbsp;        .expireAfterAccess(kwebConfig.clientStateTimeout)
+&nbsp;        .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
+&nbsp;        .removalListener&lt;String, RemoteClientState&gt; { rl -&gt;
+&nbsp;            rl.value?.triggerCloseListeners()
+&nbsp;        }
+&nbsp;        .build()
+&nbsp;
+&nbsp;    private var server: ApplicationEngine? = null
+&nbsp;
+&nbsp;    fun sendMessage(sessionId: String, server2ClientMessage: Server2ClientMessage) {
+&nbsp;        val wsClientData = clientState.getIfPresent(sessionId) ?: error(&quot;Client id $sessionId not found&quot;)
+&nbsp;        //TODO, do we need to change lastModified here? callJs will set it when the functionCall is originally created.
+&nbsp;        wsClientData.lastModified = Instant.now()
+&nbsp;        wsClientData.send(server2ClientMessage)
+&nbsp;    }
+&nbsp;
+&nbsp;    fun callJs(sessionId: String, funcCall: FunctionCall, debugInfo: DebugInfo? = null) {
+&nbsp;        val wsClientData = clientState.getIfPresent(sessionId)
+&nbsp;            ?: error(&quot;Client id $sessionId not found&quot;)
+&nbsp;        wsClientData.lastModified = Instant.now()
+&nbsp;        if (debug) {
+&nbsp;            val dt = abs(random.nextLong()).toString(16)
+&nbsp;            debugInfo?.let {
+&nbsp;                wsClientData.debugTokens[dt] = it
+&nbsp;            }
+&nbsp;        }
+&nbsp;        wsClientData.send(Server2ClientMessage(sessionId, funcCall))
+&nbsp;    }
+&nbsp;
+&nbsp;    fun addCallback(sessionId: String, callbackId: Int, callback: (JsonElement) -&gt; Unit) {
+&nbsp;        val wsClientData = clientState.getIfPresent(sessionId)
+&nbsp;            ?: error(&quot;Can not add callback because: Client id $sessionId not found&quot;)
+&nbsp;        wsClientData.lastModified = Instant.now()
+&nbsp;        wsClientData.handlers[callbackId] = callback
+&nbsp;    }
+&nbsp;
+&nbsp;    fun removeCallback(clientId: String, callbackId: Int) {
+&nbsp;        clientState.getIfPresent(clientId)?.handlers?.remove(callbackId)
+&nbsp;    }
+&nbsp;
+&nbsp;    override fun close() {
+&nbsp;        logger.info(&quot;Shutting down Kweb&quot;)
+&nbsp;        server?.stop(0, 0)
+&nbsp;        clientState.asMap().values.forEach { it.triggerCloseListeners() }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun createServer(
+&nbsp;        port: Int,
+&nbsp;        httpsConfig: EngineSSLConnectorConfig?,
+&nbsp;        buildPage: WebBrowser.() -&gt; Unit
+&nbsp;    ): ApplicationEngine {
+&nbsp;        return embeddedServer(Jetty, applicationEngineEnvironment {
+&nbsp;            this.module {
+&nbsp;                install(DefaultHeaders)
+&nbsp;                install(Compression)
+&nbsp;                install(WebSockets) {
+&nbsp;                    pingPeriod = Duration.ofSeconds(10)
+&nbsp;                    timeout = Duration.ofSeconds(30)
+&nbsp;                }
+&nbsp;
+&nbsp;                setupKweb(this, buildPage)
+&nbsp;            }
+&nbsp;
+&nbsp;            connector {
+&nbsp;                this.port = port
+&nbsp;                this.host = &quot;0.0.0.0&quot;
+&nbsp;            }
+&nbsp;
+&nbsp;            if (httpsConfig != null)
+&nbsp;                connectors.add(httpsConfig)
+&nbsp;        })
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun setupKweb(application: Application, buildPage: WebBrowser.() -&gt; Unit) {
+&nbsp;
+&nbsp;        application.routing {
+&nbsp;
+&nbsp;            get(&quot;/robots.txt&quot;) {
+&nbsp;                kwebConfig.robotsTxt(call)
+&nbsp;            }
+&nbsp;
+&nbsp;            get(&quot;/favicon.ico&quot;) {
+&nbsp;                kwebConfig.faviconIco(call)
+&nbsp;            }
+&nbsp;
+&nbsp;            get(&quot;${kwebConfig.urlPathPrefix}/{visitedUrl...}&quot;) {
+&nbsp;                respondKweb(call, buildPage)
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;        installRequiredKwebComponents(application)
+&nbsp;    }
+&nbsp;
+&nbsp;    // We can&#39;t convert this param to receiver because it&#39;s called on receiver in the companion Feature
+&nbsp;    private fun installRequiredKwebComponents(application: Application) {
+&nbsp;        HtmlDocumentSupplier.createDocTemplate(plugins, application.routing { })
+&nbsp;
+&nbsp;        application.routing {
+&nbsp;            webSocket(&quot;/kweb_ws&quot;) {
+&nbsp;                listenForWebsocketConnection()
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private suspend fun RemoteClientState?.ensureSessionExists(sock: DefaultWebSocketSession, sessionId: String) : RemoteClientState{
+&nbsp;        if(this == null) {
+&nbsp;            sock.close(CloseReason(CloseReason.Codes.NOT_CONSISTENT, &quot;Session not found. Please reload&quot;))
+&nbsp;            error(&quot;Unable to find server state corresponding to client id ${sessionId}&quot;)
+&nbsp;        }
+&nbsp;        return this
+&nbsp;    }
+&nbsp;
+&nbsp;    private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
+&nbsp;        val hello = Json.decodeFromString&lt;Client2ServerMessage&gt;((incoming.receive() as Text).readText())
+&nbsp;
+&nbsp;        if (hello.hello == null) {
+&nbsp;            error(&quot;First message from client isn&#39;t &#39;hello&#39;&quot;)
+&nbsp;        }
+&nbsp;
+&nbsp;        val remoteClientState = clientState.getIfPresent(hello.id).ensureSessionExists(this, hello.id)
+&nbsp;
+&nbsp;        assert(remoteClientState.clientConnection is Caching)
+&nbsp;        logger.debug { &quot;Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache&quot; }
+&nbsp;        val cachedConnection = remoteClientState.clientConnection as Caching
+&nbsp;        val webSocketClientConnection = ClientConnection.WebSocket(this)
+&nbsp;        remoteClientState.clientConnection = webSocketClientConnection
+&nbsp;        logger.debug { &quot;Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages&quot; }
+&nbsp;        cachedConnection.read().forEach { webSocketClientConnection.send(it) }
+&nbsp;
+&nbsp;
+&nbsp;        try {
+&nbsp;            for (frame in incoming) {
+&nbsp;
+&nbsp;                logger.debug { &quot;WebSocket frame of type ${frame.frameType} received&quot; }
+&nbsp;
+&nbsp;                // Retrieve the clientState so that it doesn&#39;t expire, replace it if it
+&nbsp;                // has expired.
+&nbsp;                clientState.get(hello.id) { remoteClientState }
+&nbsp;
+&nbsp;                try {
+&nbsp;                    logger.debug { &quot;Message received from client&quot; }
+&nbsp;
+&nbsp;                    if (frame is Text) {
+&nbsp;                        val message = Json.decodeFromString&lt;Client2ServerMessage&gt;(frame.readText())
+&nbsp;
+&nbsp;                        logger.debug { &quot;Message received: $message&quot; }
+&nbsp;                        if (message.error != null) {
+&nbsp;                            handleError(message.error, remoteClientState)
+&nbsp;                        } else {
+&nbsp;                            when {
+&nbsp;                                message.callback != null -&gt; {
+&nbsp;                                    val (resultId, result) = message.callback
+&nbsp;                                    val resultHandler = remoteClientState.handlers[resultId]
+&nbsp;                                        ?: error(&quot;No resultHandler for $resultId, for client ${remoteClientState.id}&quot;)
+&nbsp;                                    resultHandler(result)
+&nbsp;                                }
+&nbsp;                                message.keepalive -&gt; {
+&nbsp;                                    logger.debug { &quot;keepalive received from client ${hello.id}&quot; }
+&nbsp;                                }
+&nbsp;
+&nbsp;                            }
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                } catch (e: Exception) {
+&nbsp;                    logger.error(&quot;Exception while receiving websocket message&quot;, e)
+&nbsp;                    kwebConfig.onWebsocketMessageHandlingFailure(e)
+&nbsp;                }
+&nbsp;            }
+&nbsp;        } finally {
+&nbsp;            logger.info(&quot;WS session disconnected for client id: ${remoteClientState.id}&quot;)
+&nbsp;            remoteClientState.clientConnection = Caching()
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun determineClientPrefix(call:ApplicationCall) : String{
+&nbsp;        val kwClientPrefixCookieName = &quot;kwebClientPrefix&quot;
+&nbsp;        val currentPrefix = call.request.cookies.get(kwClientPrefixCookieName)
+&nbsp;        return if(currentPrefix != null) {
+&nbsp;            currentPrefix
+&nbsp;        }
+&nbsp;        else {
+&nbsp;            val newClientPrefix = createNonce(6)
+&nbsp;            call.response.cookies.append(kwClientPrefixCookieName, newClientPrefix)
+&nbsp;            newClientPrefix
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    suspend fun respondKweb(call: ApplicationCall, buildPage: WebBrowser.() -&gt; Unit) {
+&nbsp;        val htmlDocument = HtmlDocumentSupplier.getTemplateCopy()
+&nbsp;
+&nbsp;        // The client prefix allows to monitor the resource usage (#Sessions, State Size) per User
+&nbsp;        val clientPrefix = determineClientPrefix(call)
+&nbsp;        val kwebSessionId = clientPrefix + &quot;:&quot; + createNonce()
+&nbsp;
+&nbsp;        val remoteClientState = clientState.get(kwebSessionId) {
+&nbsp;            RemoteClientState(id = kwebSessionId, clientConnection = Caching())
+&nbsp;        }
+&nbsp;
+&nbsp;        val httpRequestInfo = HttpRequestInfo(call.request)
+&nbsp;
+&nbsp;        try {
+&nbsp;            val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
+&nbsp;
+&nbsp;            remoteClientState.addCloseHandler { webBrowser.close() }
+&nbsp;
+&nbsp;            webBrowser.htmlDocument.set(htmlDocument)
+&nbsp;            if (debug) {
+&nbsp;                warnIfBlocking(maxTimeMs = kwebConfig.buildpageTimeout.toMillis(), onBlock = { thread -&gt;
+&nbsp;                    logger.warn { &quot;buildPage lambda must return immediately but has taken &gt; ${kwebConfig.buildpageTimeout}.  More info at DEBUG loglevel&quot; }
+&nbsp;
+&nbsp;                    val logStatementBuilder = StringBuilder()
+&nbsp;                    logStatementBuilder.appendLine(&quot;buildPage lambda must return immediately but has taken &gt; ${kwebConfig.buildpageTimeout}, appears to be blocking here:&quot;)
+&nbsp;
+&nbsp;                    thread.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
+&nbsp;                    val logStatement = logStatementBuilder.toString()
+&nbsp;                    logger.debug { logStatement }
+&nbsp;                }) {
+&nbsp;                    try {
+&nbsp;                        buildPage(webBrowser)
+&nbsp;                    } catch (e: Exception) {
+&nbsp;                        logger.error(&quot;Exception thrown building page&quot;, e)
+&nbsp;                    }
+&nbsp;                    logger.debug { &quot;Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}&quot; }
+&nbsp;                }
+&nbsp;            } else {
+&nbsp;                try {
+&nbsp;                    buildPage(webBrowser)
+&nbsp;                } catch (e: Exception) {
+&nbsp;                    logger.error(&quot;Exception thrown building page&quot;, e)
+&nbsp;                }
+&nbsp;                logger.debug { &quot;Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}&quot; }
+&nbsp;            }
+&nbsp;            for (plugin in plugins) {
+&nbsp;                //this code block looks a little funny now, but I still think moving the message creation out of Kweb.callJs() was the right move
+&nbsp;                val js = plugin.executeAfterPageCreation()
+&nbsp;                //A plugin with an empty js string was breaking functionality.
+&nbsp;                if (js != &quot;&quot;) {
+&nbsp;                    val pluginFunction = FunctionCall(js = js)
+&nbsp;                    callJs(kwebSessionId, pluginFunction)
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            webBrowser.htmlDocument.set(null) // Don&#39;t think this webBrowser will be used again, but not going to risk it
+&nbsp;
+&nbsp;            val initialCachedMessages = remoteClientState.clientConnection as Caching
+&nbsp;
+&nbsp;            remoteClientState.clientConnection = Caching()
+&nbsp;
+&nbsp;            val initialMessages = initialCachedMessages.read()//the initialCachedMessages queue can only be read once
+&nbsp;
+&nbsp;            val cachedFunctions = mutableListOf&lt;String&gt;()
+&nbsp;            val cachedIds = mutableListOf&lt;Int&gt;()
+&nbsp;            for (msg in initialMessages) {
+&nbsp;                val deserialedMsg = Json.decodeFromString&lt;Server2ClientMessage&gt;(msg)
+&nbsp;
+&nbsp;                //We have a special case where some functions do not have jsId&#39;s. Trying to add one of those to the cache would cause problems.
+&nbsp;                for (funcCall in deserialedMsg.functionCalls) {
+&nbsp;                    if (funcCall.jsId != null) {
+&nbsp;                        if (!cachedIds.contains(funcCall.jsId)) {
+&nbsp;                            val cachedFunction =
+&nbsp;                                &quot;&quot;&quot;${funcCall.jsId} : function(${funcCall.parameters}) { ${funcCall.js} }&quot;&quot;&quot;
+&nbsp;                            cachedFunctions.add(cachedFunction)
+&nbsp;                            cachedIds.add(funcCall.jsId)
+&nbsp;                        }
+&nbsp;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            val functionCacheString = &quot;let cachedFunctions = { \n${cachedFunctions.joinToString(separator = &quot;,\n&quot;)} };&quot;
+&nbsp;
+&nbsp;            val bootstrapJS = BootstrapJs.hydrate(
+&nbsp;                kwebSessionId,
+&nbsp;                initialMessages.joinToString(separator = &quot;\n&quot;) { &quot;handleInboundMessage($it);&quot; },
+&nbsp;                functionCacheString,
+&nbsp;                kwebConfig.clientOfflineToastTextTemplate
+&nbsp;            )
+&nbsp;
+&nbsp;            htmlDocument.head().appendElement(&quot;script&quot;)
+&nbsp;                .attr(&quot;language&quot;, &quot;JavaScript&quot;)
+&nbsp;                .appendChild(DataNode(bootstrapJS))
+&nbsp;            htmlDocument.outputSettings().prettyPrint(debug)
+&nbsp;
+&nbsp;
+&nbsp;            call.respondText(htmlDocument.outerHtml(), ContentType.Text.Html)
+&nbsp;        } catch (nfe: NotFoundException) {
+&nbsp;            call.response.status(HttpStatusCode.NotFound)
+&nbsp;            call.respondText(&quot;URL ${call.request.uri} not found.&quot;, ContentType.parse(&quot;text/plain&quot;))
+&nbsp;        } catch (e: Exception) {
+&nbsp;            val logToken = random.nextLong().toString(16)
+&nbsp;
+&nbsp;            logger.error(e) { &quot;Exception thrown while rendering page, code $logToken&quot; }
+&nbsp;
+&nbsp;            call.response.status(HttpStatusCode.InternalServerError)
+&nbsp;            call.respondText(
+&nbsp;                &quot;&quot;&quot;
+&nbsp;                        Internal Server Error.
+&nbsp;
+&nbsp;                        Please include code $logToken in any error report to help us track it down.
+&nbsp;&quot;&quot;&quot;.trimIndent()
+&nbsp;            )
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun handleError(error: Client2ServerMessage.ErrorMessage, remoteClientState: RemoteClientState) {
+&nbsp;        val debugInfo = remoteClientState.debugTokens[error.debugToken]
+&nbsp;            ?: error(&quot;DebugInfo message not found&quot;)
+&nbsp;        val logStatementBuilder = StringBuilder()
+&nbsp;        logStatementBuilder.appendLine(&quot;JavaScript message: &#39;${error.error.message}&#39;&quot;)
+&nbsp;        logStatementBuilder.appendLine(&quot;Caused by ${debugInfo.action}: &#39;${debugInfo.js}&#39;:&quot;)
+&nbsp;        // TODO: Filtering the stacktrace like this seems a bit kludgy, although I can&#39;t think
+&nbsp;        // TODO: of a specific reason why it would be bad.
+&nbsp;        debugInfo.throwable.stackTrace.pruneAndDumpStackTo(logStatementBuilder)
+&nbsp;        logger.error(logStatementBuilder.toString())
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Forces all currently connected clients to refresh their pages.  This can be useful if there has been a
+&nbsp;     * code-change, for example.
+&nbsp;     *
+&nbsp;     * If there are a large number of connected clients this could place a lot of load on the server.  An
+&nbsp;     * unexpected page refresh may also confuse website visitors or cause the loss of unsaved form data.
+&nbsp;     */
+&nbsp;    fun refreshAllPages() {
+&nbsp;        if (!debug) {
+&nbsp;            logger.warn { &quot;refreshAllPages() called but Kweb is not in debug mode, ignored&quot; }
+&nbsp;        } else {
+&nbsp;            for (client in clientState.asMap().values) {
+&nbsp;                val refreshCall = FunctionCall(js = &quot;window.location.reload(true);&quot;)
+&nbsp;                val message = Server2ClientMessage(client.id, refreshCall)
+&nbsp;                client.clientConnection.send(Json.encodeToString(message))
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;data class DebugInfo(val js: String, val action: String, val throwable: Throwable)
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

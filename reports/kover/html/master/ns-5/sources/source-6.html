@@ -1,0 +1,391 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > OnImmediateReceiverKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.html.events</a>
+</div>
+
+<h1>Coverage Summary for Class: OnImmediateReceiverKt (kweb.html.events)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">OnImmediateReceiverKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">OnImmediateReceiverKt$main$server$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">OnImmediateReceiverKt$main$server$1$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">OnImmediateReceiverKt$main$server$1$1$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">OnImmediateReceiverKt$main$server$1$1$1$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/54)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.html.events
+&nbsp;
+&nbsp;import kweb.*
+&nbsp;import kweb.plugins.fomanticUI.fomantic
+&nbsp;import kweb.state.KVar
+&nbsp;import kweb.state.render
+&nbsp;import kweb.util.KWebDSL
+&nbsp;
+&nbsp;@KWebDSL
+&nbsp;class OnImmediateReceiver&lt;T: EventGenerator&lt;T&gt;&gt;(internal val source: T) {
+&nbsp;    fun event(eventName: String, callback: () -&gt; Unit): T {
+&nbsp;        val caughtJsFunctions = source.browser.catchOutbound(WebBrowser.CatcherType.IMMEDIATE_EVENT) {
+&nbsp;            callback()
+&nbsp;        }
+&nbsp;        val immediateJs = mutableListOf&lt;String&gt;()
+&nbsp;        for (jsFunction in caughtJsFunctions.first) {
+&nbsp;            if (jsFunction.arguments.isNotEmpty()) {
+&nbsp;                val argStrings = mutableListOf&lt;String&gt;()
+&nbsp;                for (arg in jsFunction.arguments) {
+&nbsp;                    argStrings.add(arg.toString())
+&nbsp;                }
+&nbsp;                immediateJs.add(&quot;cachedFunctions[${jsFunction.jsId}](${argStrings.joinToString(&quot;,&quot;)})&quot;)
+&nbsp;            } else {
+&nbsp;                immediateJs.add(&quot;cachedFunctions[${jsFunction.jsId}]()&quot;)
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;        source.addImmediateEventCode(eventName, immediateJs.joinToString(separator = &quot;&quot;))
+&nbsp;        return source
+&nbsp;    }
+&nbsp;
+&nbsp;    // Mouse events
+&nbsp;    fun click(callback: () -&gt; Unit) = event(&quot;click&quot;, callback)
+&nbsp;    fun contextmenu(callback: () -&gt; Unit) = event(&quot;contextmenu&quot;, callback)
+&nbsp;    fun dblclick(callback: () -&gt; Unit) = event(&quot;dblclick&quot;, callback)
+&nbsp;    fun mousedown(callback: () -&gt; Unit) = event(&quot;mousedown&quot;, callback)
+&nbsp;    fun mouseenter(callback: () -&gt; Unit) = event(&quot;mouseenter&quot;, callback)
+&nbsp;    fun mouseleave(callback: () -&gt; Unit) = event(&quot;mouseleave&quot;, callback)
+&nbsp;    fun mousemove(callback: () -&gt; Unit) = event(&quot;mousemove&quot;, callback)
+&nbsp;    fun mouseover(callback: () -&gt; Unit) = event(&quot;mouseover&quot;, callback)
+&nbsp;    fun mouseout(callback: () -&gt; Unit) = event(&quot;mouseout&quot;, callback)
+&nbsp;    fun mouseup(callback: () -&gt; Unit) = event(&quot;mouseup&quot;, callback)
+&nbsp;
+&nbsp;    // Keyboard events
+&nbsp;    fun keydown(callback: () -&gt; Unit) = event(&quot;keydown&quot;, callback)
+&nbsp;    fun keypress(callback: () -&gt; Unit) = event(&quot;keypress&quot;, callback)
+&nbsp;    fun keyup(callback: () -&gt; Unit) = event(&quot;keyup&quot;, callback)
+&nbsp;
+&nbsp;    // Focus Events
+&nbsp;    // https://www.w3schools.com/jsref/obj_focusevent.asp
+&nbsp;    fun blur(callback: () -&gt; Unit) = event(&quot;blur&quot;, callback)
+&nbsp;    fun focus(callback: () -&gt; Unit) = event(&quot;focus&quot;, callback)
+&nbsp;    fun focusin(callback: () -&gt; Unit) = event(&quot;focusin&quot;, callback)
+&nbsp;    fun focusout(callback: () -&gt; Unit) = event(&quot;focusout&quot;, callback)
+&nbsp;
+&nbsp;    // Frame / Object Events
+&nbsp;    fun abort(callback: () -&gt; Unit) = event(&quot;abort&quot;, callback)
+&nbsp;    fun beforeunload(callback: () -&gt; Unit) = event(&quot;beforeunload&quot;, callback)
+&nbsp;    fun error(callback: () -&gt; Unit) = event(&quot;error&quot;, callback)
+&nbsp;    fun hashchange(callback: () -&gt; Unit) = event(&quot;hashchange&quot;, callback)
+&nbsp;    fun load(callback: () -&gt; Unit) = event(&quot;load&quot;, callback)
+&nbsp;    fun pageshow(callback: () -&gt; Unit) = event(&quot;blur&quot;, callback)
+&nbsp;    fun pagehide(callback: () -&gt; Unit) = event(&quot;pagehide&quot;, callback)
+&nbsp;    fun resize(callback: () -&gt; Unit) = event(&quot;resize&quot;, callback)
+&nbsp;    fun scroll(callback: () -&gt; Unit) = event(&quot;scroll&quot;, callback)
+&nbsp;    fun unload(callback: () -&gt; Unit) = event(&quot;unload&quot;, callback)
+&nbsp;
+&nbsp;    // Form Events
+&nbsp;    fun change(callback: () -&gt; Unit) = event(&quot;change&quot;, callback)
+&nbsp;    fun input(callback: () -&gt; Unit) = event(&quot;input&quot;, callback)
+&nbsp;    fun invalid(callback: () -&gt; Unit) = event(&quot;invalid&quot;, callback)
+&nbsp;    fun reset(callback: () -&gt; Unit) = event(&quot;reset&quot;, callback)
+&nbsp;    fun search(callback: () -&gt; Unit) = event(&quot;search&quot;, callback)
+&nbsp;    fun select(callback: () -&gt; Unit) = event(&quot;select&quot;, callback)
+&nbsp;    fun submit(callback: () -&gt; Unit) = event(&quot;submit&quot;, callback)
+&nbsp;
+&nbsp;    // Drag Events
+&nbsp;    fun drag(callback: () -&gt; Unit) = event(&quot;drag&quot;, callback)
+&nbsp;    fun dragend(callback: () -&gt; Unit) = event(&quot;dragend&quot;, callback)
+&nbsp;    fun dragenter(callback: () -&gt; Unit) = event(&quot;dragenter&quot;, callback)
+&nbsp;    fun dragleave(callback: () -&gt; Unit) = event(&quot;dragleave&quot;, callback)
+&nbsp;    fun dragover(callback: () -&gt; Unit) = event(&quot;dragover&quot;, callback)
+&nbsp;    fun dragstart(callback: () -&gt; Unit) = event(&quot;dragstart&quot;, callback)
+&nbsp;    fun drop(callback: () -&gt; Unit) = event(&quot;drop&quot;, callback)
+&nbsp;
+&nbsp;    // Clipboard Events
+&nbsp;    fun copy(callback: () -&gt; Unit) = event(&quot;copy&quot;, callback)
+&nbsp;    fun cut(callback: () -&gt; Unit) = event(&quot;cut&quot;, callback)
+&nbsp;    fun paste(callback: () -&gt; Unit) = event(&quot;paste&quot;, callback)
+&nbsp;
+&nbsp;    // Print Events
+&nbsp;    fun afterprint(callback: () -&gt; Unit) = event(&quot;afterprint&quot;, callback)
+&nbsp;    fun beforeprint(callback: () -&gt; Unit) = event(&quot;beforeprint&quot;, callback)
+&nbsp;
+&nbsp;    // Selection Events
+&nbsp;    fun selectstart(callback: () -&gt; Unit) = event(&quot;selectstart&quot;, callback = callback)
+&nbsp;    fun selectionchange(callback: () -&gt; Unit) = event(&quot;selectionchange&quot;,  callback = callback)
+&nbsp;
+&nbsp;    // Media events
+&nbsp;    /*
+&nbsp;    fun abort(callback: () -&gt; Unit) = event(&quot;abort&quot;, callback)
+&nbsp;    fun canplay(callback: () -&gt; Unit) = event(&quot;canplay&quot;, callback)
+&nbsp;    fun canplaythrough(callback: () -&gt; Unit) = event(&quot;canplaythrough&quot;, callback)
+&nbsp;    fun durationchange(callback: () -&gt; Unit) = event(&quot;durationchange&quot;, callback)
+&nbsp;    fun emptied(callback: () -&gt; Unit) = event(&quot;emptied&quot;, callback)
+&nbsp;    fun ended(callback: () -&gt; Unit) = event(&quot;ended&quot;, callback)
+&nbsp;    fun message(callback: () -&gt; Unit) = event(&quot;message&quot;, callback)
+&nbsp;    fun loadeddata(callback: () -&gt; Unit) = event(&quot;loadeddata&quot;, callback)
+&nbsp;    fun loadedmetadata(callback: () -&gt; Unit) = event(&quot;loadedmetadata&quot;, callback)
+&nbsp;    fun loadstart(callback: () -&gt; Unit) = event(&quot;loadstart&quot;, callback)
+&nbsp;    fun pause(callback: () -&gt; Unit) = event(&quot;pause&quot;, callback)
+&nbsp;    fun play(callback: () -&gt; Unit) = event(&quot;play&quot;, callback)
+&nbsp;    fun playing(callback: () -&gt; Unit) = event(&quot;playing&quot;, callback)
+&nbsp;    fun progress(callback: () -&gt; Unit) = event(&quot;progress&quot;, callback)
+&nbsp;    fun ratechange(callback: () -&gt; Unit) = event(&quot;ratechange&quot;, callback)
+&nbsp;    fun seeked(callback: () -&gt; Unit) = event(&quot;seeked&quot;, callback)
+&nbsp;    fun seeking(callback: () -&gt; Unit) = event(&quot;seeking&quot;, callback)
+&nbsp;    fun stalled(callback: () -&gt; Unit) = event(&quot;stalled&quot;, callback)
+&nbsp;    fun suspend(callback: () -&gt; Unit) = event(&quot;suspend&quot;, callback)
+&nbsp;    fun timeupdate(callback: () -&gt; Unit) = event(&quot;timeupdate&quot;, callback)
+&nbsp;    fun volumechange(callback: () -&gt; Unit) = event(&quot;volumechange&quot;, callback)
+&nbsp;    fun waiting(callback: () -&gt; Unit) = event(&quot;waiting&quot;, callback)
+&nbsp;    fun animationend(callback: () -&gt; Unit) = event(&quot;animationend&quot;, callback)
+&nbsp;    fun animationiteration(callback: () -&gt; Unit) = event(&quot;animationiteration&quot;, callback)
+&nbsp;    fun animationstart(callback: () -&gt; Unit) = event(&quot;animationstart&quot;, callback)
+&nbsp;    fun transitionend(callback: () -&gt; Unit) = event(&quot;transitionend&quot;, callback)
+&nbsp;     */
+&nbsp;}
+&nbsp;
+&nbsp;fun main() {
+<b class="nc">&nbsp;    val server: Kweb = Kweb(port= 7660) {</b>
+<b class="nc">&nbsp;        doc.body {</b>
+<b class="nc">&nbsp;            div(fomantic.content) {</b>
+<b class="nc">&nbsp;                val label = h1(fomantic.ui)</b>
+<b class="nc">&nbsp;                label.text(&quot;Click Me&quot;)</b>
+<b class="nc">&nbsp;                label.onImmediate.click {</b>
+<b class="nc">&nbsp;                    label.text(&quot;Clicked!&quot;)</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

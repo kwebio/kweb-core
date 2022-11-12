@@ -1,0 +1,240 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > StorageReceiver</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.html</a>
+</div>
+
+<h1>Coverage Summary for Class: StorageReceiver (kweb.html)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">StorageReceiver</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/211)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">StorageReceiver$getString$1</td>
+    <td class="coverageStat"/>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/211)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.html
+&nbsp;
+&nbsp;import kotlinx.serialization.json.*
+&nbsp;import kotlinx.serialization.serializer
+&nbsp;import kweb.WebBrowser
+&nbsp;import kweb.util.KWebDSL
+&nbsp;
+&nbsp;/**
+&nbsp; * Created by ian on 1/14/17.
+&nbsp; */
+<b class="nc">&nbsp;@KWebDSL</b>
+<b class="nc">&nbsp;class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {</b>
+<b class="nc">&nbsp;    private val obj = &quot;${type.name}Storage&quot;</b>
+&nbsp;
+&nbsp;    operator fun set(key: String, value: String) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Int) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Float) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Double) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Short) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Long) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Boolean) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Char) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value.toString()))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: Byte) {
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    operator fun set(key: String, value: JsonElement) {
+<b class="nc">&nbsp;        if (value == JsonNull || value.toString() == &quot;&quot;) {</b>
+<b class="nc">&nbsp;            throw IllegalArgumentException(&quot;$obj cannot store the value \&quot;\&quot;&quot;)</b>
+&nbsp;        }
+&nbsp;        //language=JavaScript
+<b class="nc">&nbsp;        receiver.callJsFunction(&quot;$obj.setItem({}, {});&quot;, JsonPrimitive(key), value)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    suspend inline fun &lt;reified V : Any&gt; get(name: String): V? {
+<b class="nc">&nbsp;        val result = getString(name)</b>
+<b class="nc">&nbsp;        val serializer = serializer&lt;V&gt;()</b>
+<b class="nc">&nbsp;        return when(result) {</b>
+<b class="nc">&nbsp;            null -&gt; null</b>
+<b class="nc">&nbsp;            else -&gt; Json.decodeFromString(serializer, result)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    suspend fun getString(key: String): String? {</b>
+<b class="nc">&nbsp;        return when (val result = Json</b>
+<b class="nc">&nbsp;            .decodeFromJsonElement&lt;String&gt;(</b>
+<b class="nc">&nbsp;                receiver.callJsFunctionWithResult(&quot;return $obj.getItem({});&quot;, JsonPrimitive(key)))) {</b>
+<b class="nc">&nbsp;            &quot;&quot; -&gt; null</b>
+<b class="nc">&nbsp;            else -&gt; result</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun remove(key: String) {
+&nbsp;        //language=JavaScript
+<b class="nc">&nbsp;        receiver.callJsFunction(&quot;$obj.removeItem({});&quot;, JsonPrimitive(key))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;enum class StorageType {
+&nbsp;    local, session
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

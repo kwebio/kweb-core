@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > SSLConfig</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.https</a>
+</div>
+
+<h1>Coverage Summary for Class: SSLConfig (kweb.https)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">SSLConfig</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/120)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SSLConfig$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">SSLConfig$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/130)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.https
+&nbsp;
+&nbsp;import io.ktor.network.tls.certificates.buildKeyStore
+&nbsp;import io.ktor.network.tls.extensions.HashAlgorithm
+&nbsp;import io.ktor.network.tls.extensions.SignatureAlgorithm
+&nbsp;import io.ktor.server.engine.ConnectorType
+&nbsp;import io.ktor.server.engine.EngineSSLConnectorConfig
+&nbsp;import java.io.File
+&nbsp;import java.security.KeyStore
+&nbsp;import kotlin.text.toCharArray
+&nbsp;
+&nbsp;val defaultKeyStore by lazy {
+&nbsp;    buildKeyStore {
+&nbsp;        certificate(&quot;test&quot;) {
+&nbsp;            hash = HashAlgorithm.SHA1
+&nbsp;            sign = SignatureAlgorithm.RSA
+&nbsp;            password = &quot;changeit&quot;
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+<b class="nc">&nbsp;data class SSLConfig constructor(</b>
+<b class="nc">&nbsp;        override val port: Int = 9091,</b>
+<b class="nc">&nbsp;        override val host: String = &quot;0.0.0.0&quot;,</b>
+<b class="nc">&nbsp;        override val keyStore: KeyStore = defaultKeyStore,</b>
+<b class="nc">&nbsp;        override val keyStorePath: File? = null,</b>
+<b class="nc">&nbsp;        override val keyAlias: String = &quot;mykey&quot;,</b>
+<b class="nc">&nbsp;        override val keyStorePassword: () -&gt; CharArray = { &quot;changeit&quot;.toCharArray() },</b>
+<b class="nc">&nbsp;        override val privateKeyPassword: () -&gt; CharArray = { &quot;changeit&quot;.toCharArray() },</b>
+<b class="nc">&nbsp;        override val trustStore: KeyStore? = null,</b>
+<b class="nc">&nbsp;        override val trustStorePath: File? = null</b>
+&nbsp;) : EngineSSLConnectorConfig {
+<b class="nc">&nbsp;    override val type: ConnectorType = ConnectorType.HTTPS</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

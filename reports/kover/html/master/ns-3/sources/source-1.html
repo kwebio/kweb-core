@@ -1,0 +1,360 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > KwebConfiguration</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.config</a>
+</div>
+
+<h1>Coverage Summary for Class: KwebConfiguration (kweb.config)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">KwebConfiguration</td>
+<td class="coverageStat">
+  <span class="percent">
+    40%
+  </span>
+  <span class="absValue">
+    (2/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (5/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    40.4%
+  </span>
+  <span class="absValue">
+    (23/57)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">KwebConfiguration$Accessor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.9%
+  </span>
+  <span class="absValue">
+    (31/32)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">KwebConfiguration$logger$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">KwebConfiguration$validate$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (5/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    61.5%
+  </span>
+  <span class="absValue">
+    (8/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    61.1%
+  </span>
+  <span class="absValue">
+    (55/90)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.config
+&nbsp;
+&nbsp;import io.ktor.server.application.*
+&nbsp;import io.ktor.http.*
+&nbsp;import io.ktor.server.response.*
+&nbsp;import kweb.Kweb
+&nbsp;import mu.KotlinLogging
+&nbsp;import java.time.Duration
+&nbsp;import java.util.*
+&nbsp;
+&nbsp;/**
+&nbsp; * A configuration class for Kweb parameterization. Extend this if you have custom needs
+&nbsp; * on how to inject configuration values, otherwise [KwebDefaultConfiguration] is probably
+&nbsp; * good enough for your use case
+&nbsp; *
+&nbsp; * Please note this is not [Kweb.Feature.Configuration], which is a Ktor specific config block
+&nbsp; */
+<b class="fc">&nbsp;abstract class KwebConfiguration {</b>
+<b class="pc">&nbsp;    private val logger = KotlinLogging.logger {}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * If [Kweb.debug] is enabled, then pages that take longer than [buildpageTimeout]
+&nbsp;     * to load will display a warning message
+&nbsp;     *
+&nbsp;     * See [Duration.parse] for valid formats, e.g PT5S, or PT48H
+&nbsp;     */
+&nbsp;    abstract val buildpageTimeout: Duration
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Enable stats for the client state cache. Small performance penalty per operation,
+&nbsp;     * large gains in observability. Consider this in production.
+&nbsp;     */
+&nbsp;    abstract val clientStateStatsEnabled: Boolean
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clients that last connected more than [clientStateTimeout] will be cleaned
+&nbsp;     * up every minute.
+&nbsp;     *
+&nbsp;     * Don&#39;t put this too low, you may end up cleaning semi-active clients, e.g someone
+&nbsp;     * who left a page open for a long duration without actions, such as a monitoring page.
+&nbsp;     */
+&nbsp;    abstract val clientStateTimeout: Duration
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Values are initialized eagerly, but objects are not, so be sure to &quot;touch&quot; this class
+&nbsp;     * on initialization for failing fast.
+&nbsp;     *
+&nbsp;     * We can also add some smarter validation here later if needed
+&nbsp;     */
+&nbsp;    fun validate() {
+<b class="fc">&nbsp;        logger.debug { &quot;Configuration has been initialized successfully&quot; }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Override this function to handle uncaught exceptions of client callbacks.
+&nbsp;     * E.g. if the browser sends a websocket message back to the kweb instance
+&nbsp;     * and the message handler throws an uncaught exception, kweb will invoke
+&nbsp;     * this exception handler to expose the fact that a message could not be
+&nbsp;     * properly handled
+&nbsp;     */
+&nbsp;    open fun onWebsocketMessageHandlingFailure(ex: Exception){
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Override the default robots.txt behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
+&nbsp;     * which may be used to return whatever you wish.
+&nbsp;     */
+&nbsp;    open suspend fun robotsTxt(call: ApplicationCall) {
+<b class="nc">&nbsp;        call.response.status(HttpStatusCode.NotFound)</b>
+<b class="nc">&nbsp;        call.respondText(&quot;robots.txt has not been specified)&quot;)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Override the default favicon.ico behavior, which is to return with a 404. Passed a Ktor [ApplicationCall]
+&nbsp;     * which may be used to return whatever you wish.
+&nbsp;     */
+&nbsp;    open suspend fun faviconIco(call: ApplicationCall) {
+<b class="nc">&nbsp;        call.respondText(&quot;404 favicon.ico not found&quot;, status = HttpStatusCode.NotFound)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Message that is shown to a disconnected client.
+&nbsp;     *
+&nbsp;     */
+<b class="fc">&nbsp;    open val clientOfflineToastTextTemplate: String = &quot;Connection to server lost, attempting to reconnect&quot;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * By default, Kweb will handle all paths under `/`, but this may not be desirable if you have other
+&nbsp;     * Ktor route handlers. This config option allows you to add a prefix to the Kweb route handler,
+&nbsp;     * e.g. `/my_kweb_site`, so that only URLs under that path will be handled by Kweb.
+&nbsp;
+&nbsp;     *
+&nbsp;     * ```kotlin
+&nbsp;     *    cfg.urlPathPrefix = &quot;&quot;
+&nbsp;     *    path(&quot;/users/{userId}&quot;) { } // will be accessible at /users/1234
+&nbsp;     *
+&nbsp;     *    cfg.urlPathPrefix = &quot;/my_kweb_site&quot;
+&nbsp;     *    path(&quot;/my_kweb_site/users/{userId}&quot;) { } // will be accessible at /my_kweb_site/users/1234
+&nbsp;     *
+&nbsp;     *    cfg.urlPathPrefix = &quot;/my_kweb_site&quot;
+&nbsp;     *    path(&quot;/users/{userId}&quot;) { } // Will **NOT** be accessible
+&nbsp;     * ```
+&nbsp;     *
+&nbsp;     * The path used for the WebSocket connection (`/kweb_ws`) and static assets (`/kweb_static/`) will be
+&nbsp;     * unaffected by this setting.
+&nbsp;     */
+<b class="fc">&nbsp;    open val urlPathPrefix : String = &quot;&quot;</b>
+&nbsp;
+&nbsp;    protected object Accessor {
+<b class="fc">&nbsp;        private val env = System.getenv()</b>
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Gets the value of the given property by searching runtime properties,
+&nbsp;         * then env, then uppercase ENV. Each case is only examined if the previous one failed.
+&nbsp;         *
+&nbsp;         * So, if you provide a [key] value such as &quot;kweb.test&quot;, the following will happen
+&nbsp;         * - First &quot;kweb.test&quot; will be looked up as a run argument
+&nbsp;         * - Then &quot;kweb.test&quot; is looked up in env variables (the JVM is kinda bad at lowercase ENV vars in my experience)
+&nbsp;         * - Then &quot;KWEB_TEST&quot; is looked up in env variables
+&nbsp;         * - Then null is returned
+&nbsp;         */
+&nbsp;        fun getProperty(key: String): String? =
+<b class="pc">&nbsp;            System.getProperty(key, env[key] ?: env[key.uppercase(Locale.getDefault()).replace(&#39;.&#39;, &#39;_&#39;)])</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

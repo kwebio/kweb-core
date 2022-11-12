@@ -1,0 +1,237 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CookieReceiver</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb</a>
+</div>
+
+<h1>Coverage Summary for Class: CookieReceiver (kweb)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">CookieReceiver</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.2%
+  </span>
+  <span class="absValue">
+    (1/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.4%
+  </span>
+  <span class="absValue">
+    (2/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    1.4%
+  </span>
+  <span class="absValue">
+    (7/503)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CookieReceiver$getString$1</td>
+    <td class="coverageStat"/>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    4.2%
+  </span>
+  <span class="absValue">
+    (1/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.4%
+  </span>
+  <span class="absValue">
+    (2/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    1.4%
+  </span>
+  <span class="absValue">
+    (7/503)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb
+&nbsp;
+&nbsp;import kotlinx.serialization.json.*
+&nbsp;import kotlinx.serialization.serializer
+&nbsp;import kweb.util.*
+&nbsp;import java.time.Duration
+&nbsp;
+<b class="fc">&nbsp;@KWebDSL</b>
+<b class="fc">&nbsp;class CookieReceiver(val receiver: WebBrowser) {</b>
+<b class="nc">&nbsp;    fun set(key: String, value: String, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Int, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Float, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Double, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Short, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Long, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Boolean, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Char, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, JsonPrimitive(value.toString()), expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: Byte, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        set(key, value.json, expires, path, domain)</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    fun set(key: String, value: JsonElement, expires: Duration? = null, path: String? = null, domain: String? = null) {</b>
+<b class="nc">&nbsp;        val keyArg = JsonPrimitive(key)</b>
+<b class="nc">&nbsp;        val expiresArg = if (expires != null) JsonPrimitive(expires.seconds.toString()) else JsonNull</b>
+<b class="nc">&nbsp;        val pathArg = if (path != null) JsonPrimitive(path) else JsonNull</b>
+<b class="nc">&nbsp;        val domainArg = if (domain != null) JsonPrimitive(domain) else JsonNull</b>
+&nbsp;
+&nbsp;        // Calls kweb_bootstrap.js setItem function
+&nbsp;        //setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure)
+&nbsp;        //TODO this setJson function didn&#39;t have an argument for bSecure, so I decided to just explicitly pass a JsonNull,
+&nbsp;        //Maybe we should add a parameter to the kotlin function for bSecure?
+&nbsp;        //language=JavaScript
+<b class="nc">&nbsp;        receiver.callJsFunction(&quot;docCookies.setItem({},{},{},{},{},{});&quot;, keyArg, value, expiresArg, pathArg, domainArg, JsonNull)</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    suspend inline fun &lt;reified V : Any&gt; get(name: String): V? {
+<b class="nc">&nbsp;        val result = getString(name)</b>
+<b class="nc">&nbsp;        val serializer = serializer&lt;V&gt;()</b>
+<b class="nc">&nbsp;        return when(result) {</b>
+<b class="nc">&nbsp;            null -&gt; null</b>
+<b class="nc">&nbsp;            else -&gt; Json.decodeFromString(serializer, result)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    suspend fun getString(name: String): String? {</b>
+<b class="nc">&nbsp;        val result = Json.decodeFromJsonElement&lt;String&gt;(receiver.callJsFunctionWithResult(&quot;return docCookies.getItem({});&quot;, JsonPrimitive(name)))</b>
+<b class="nc">&nbsp;        return if (result == &quot;__COOKIE_NOT_FOUND_TOKEN__&quot;) {</b>
+<b class="nc">&nbsp;            null</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            result</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun remove(name: String) {
+&nbsp;        //language=JavaScript
+<b class="nc">&nbsp;        receiver.callJsFunction(&quot;docCookies.removeItem({});&quot;, JsonPrimitive(name))</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

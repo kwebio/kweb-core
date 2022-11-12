@@ -1,0 +1,244 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Server2ClientMessage</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.client</a>
+</div>
+
+<h1>Coverage Summary for Class: Server2ClientMessage (kweb.client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">Server2ClientMessage</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Server2ClientMessage$$serializer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.7%
+  </span>
+  <span class="absValue">
+    (122/153)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Server2ClientMessage$Companion</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82%
+  </span>
+  <span class="absValue">
+    (141/172)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.client
+&nbsp;
+&nbsp;import kotlinx.serialization.SerialName
+&nbsp;import kotlinx.serialization.Serializable
+&nbsp;import kotlinx.serialization.json.JsonElement
+&nbsp;
+&nbsp;/**
+&nbsp; * Server2client message
+&nbsp; *
+&nbsp; * @property yourId
+&nbsp; * @property debugToken
+&nbsp; * @property jsId The id used to store/retrieve a function from the client&#39;s cache. When set to null the client will ignore caching,
+&nbsp; * and simply execute whatever JavaScript code is in this message
+&nbsp; * @property js The Javascript code to execute. Can be null if the function has already been cached.
+&nbsp; * @property parameters A comma separated string of parameter names for the Javascript function
+&nbsp; * @property callbackId The Id used to handle callbacks. Can be null.
+&nbsp; * @property arguments A list of arguments to supply to the Javascript function. The default value is an empty list.
+&nbsp; * When set to null, the client will take the javascript function and cache it, but not actually run/execute the code.
+&nbsp; * This special case is used to cache functions on page render before they are to be called
+&nbsp; */
+<b class="pc">&nbsp;@Serializable</b>
+&nbsp;@SerialName(&quot;Server2ClientMessage&quot;)
+&nbsp;data class Server2ClientMessage(
+<b class="fc">&nbsp;        val yourId: String,</b>
+<b class="fc">&nbsp;        val functionCalls : List&lt;FunctionCall&gt;</b>
+&nbsp;) {
+<b class="fc">&nbsp;    constructor(yourId : String, functionCall : FunctionCall) : this(yourId, listOf(functionCall))</b>
+&nbsp;}
+&nbsp;
+&nbsp;@Serializable
+&nbsp;data class FunctionCall(
+&nbsp;        val debugToken: String? = null,
+&nbsp;        val jsId: Int? = null,
+&nbsp;        val js: String? = null,
+&nbsp;        val parameters: String? = null,
+&nbsp;        val callbackId: Int? = null,
+&nbsp;        val arguments: List&lt;JsonElement&gt; = emptyList(),
+&nbsp;)
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

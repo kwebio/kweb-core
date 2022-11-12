@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BootstrapJs</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb</a>
+</div>
+
+<h1>Coverage Summary for Class: BootstrapJs (kweb)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">BootstrapJs</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/32)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BootstrapJs$template$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.7%
+  </span>
+  <span class="absValue">
+    (77/78)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99.1%
+  </span>
+  <span class="absValue">
+    (109/110)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb
+&nbsp;
+&nbsp;import kweb.util.Template
+&nbsp;
+&nbsp;object BootstrapJs {
+&nbsp;    private const val clientIdToken = &quot;--CLIENT-ID-PLACEHOLDER--&quot;
+&nbsp;    private const val buildPageToken = &quot;&lt;!-- BUILD PAGE PAYLOAD PLACEHOLDER --&gt;&quot;
+&nbsp;    private const val functionCacheToken = &quot;// FUNCTION CACHE PLACEHOLDER //&quot;
+&nbsp;    //private const val functionCacheToken = &quot;&lt;!-- FUNCTION CACHE PLACEHOLDER --&gt;&quot;
+&nbsp;    private const val offlineToastMessage = &quot;-- TOAST MESSAGE PLACEHOLDER --&quot;
+&nbsp;
+<b class="fc">&nbsp;    private val template: Template by lazy {</b>
+<b class="fc">&nbsp;        Kweb::class.java.getResourceAsStream(&quot;kweb_bootstrap.js&quot;).use { resourceStream -&gt;</b>
+<b class="pc">&nbsp;            checkNotNull(resourceStream) { &quot;Could not load kweb_bootstrap.js&quot; }</b>
+<b class="fc">&nbsp;            val jsAsString = resourceStream.reader().readText()</b>
+&nbsp;            // By storing the Template we only need to locate the tokens once
+<b class="fc">&nbsp;            Template(jsAsString, clientIdToken, buildPageToken, functionCacheToken, offlineToastMessage)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Efficiently inject required data into kweb_bootstrap.js
+&nbsp;     */
+&nbsp;    fun hydrate(clientId: String, pageBuildInstructions: String, functionCache: String, offlineToastMessageStr: String): String {
+<b class="fc">&nbsp;        return template.apply(clientId, pageBuildInstructions, functionCache, offlineToastMessageStr)</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

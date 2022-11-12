@@ -1,0 +1,985 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > H4Element</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb</a>
+</div>
+
+<h1>Coverage Summary for Class: H4Element (kweb)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">H4Element</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb
+&nbsp;
+&nbsp;import io.ktor.server.routing.*
+&nbsp;import io.mola.galimatias.URL
+&nbsp;import kotlinx.serialization.Serializable
+&nbsp;import kotlinx.serialization.json.*
+&nbsp;import kweb.html.HeadElement
+&nbsp;import kweb.html.TitleElement
+&nbsp;import kweb.html.events.Event
+&nbsp;import kweb.html.fileUpload.FileFormInput
+&nbsp;import kweb.routing.PathTemplate
+&nbsp;import kweb.routing.RouteReceiver
+&nbsp;import kweb.routing.UrlToPathSegmentsRF
+&nbsp;import kweb.state.*
+&nbsp;import kweb.util.json
+&nbsp;import kweb.util.pathQueryFragment
+&nbsp;import kotlin.collections.set
+&nbsp;
+&nbsp;/*
+&nbsp; * Mostly extension functions (and any simple classes they depend on), placed here such that an `import kweb.*`
+&nbsp; * will pick them up.
+&nbsp; */
+&nbsp;
+&nbsp;fun ElementCreator&lt;HeadElement&gt;.title(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;TitleElement&gt;.(TitleElement) -&gt; Unit)? = null
+&nbsp;): TitleElement {
+&nbsp;    return TitleElement(element(&quot;title&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class ULElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.ul(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;ULElement&gt;.(ULElement) -&gt; Unit)? = null
+&nbsp;): ULElement {
+&nbsp;    return ULElement(element(&quot;ul&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class OLElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.ol(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;OLElement&gt;.(OLElement) -&gt; Unit)? = null
+&nbsp;): OLElement {
+&nbsp;    return OLElement(element(&quot;ol&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class LIElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.li(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;LIElement&gt;.(LIElement) -&gt; Unit)? = null
+&nbsp;): LIElement {
+&nbsp;    return LIElement(element(&quot;li&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class ButtonElement(val wrapped: Element) : Element(wrapped)
+&nbsp;enum class ButtonType {
+&nbsp;    button, reset, submit
+&nbsp;}
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.button(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    type: ButtonType? = ButtonType.button,
+&nbsp;    autofocus: Boolean? = null,
+&nbsp;    new: (ElementCreator&lt;ButtonElement&gt;.(ButtonElement) -&gt; Unit)? = null,
+&nbsp;): ButtonElement {
+&nbsp;    return ButtonElement(
+&nbsp;        element(
+&nbsp;            &quot;button&quot;, attributes
+&nbsp;                .set(&quot;type&quot;, JsonPrimitive(type?.name))
+&nbsp;                .set(&quot;autofocus&quot;, JsonPrimitive(autofocus))
+&nbsp;        )
+&nbsp;    ).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class SpanElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.span(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;SpanElement&gt;.(SpanElement) -&gt; Unit)? = null
+&nbsp;): SpanElement {
+&nbsp;    return SpanElement(element(&quot;span&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class DivElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.div(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;DivElement&gt;.(DivElement) -&gt; Unit)? = null
+&nbsp;): DivElement {
+&nbsp;    return DivElement(element(&quot;div&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class IElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.i(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;IElement&gt;.(IElement) -&gt; Unit)? = null
+&nbsp;): IElement {
+&nbsp;    return IElement(element(&quot;i&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class FormElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.form(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;FormElement&gt;.(FormElement) -&gt; Unit)? = null
+&nbsp;): FormElement {
+&nbsp;    return FormElement(element(&quot;form&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class AElement(parent: Element) : Element(parent) {
+&nbsp;    /**
+&nbsp;     * A convenience property to set the href attribute of this anchor element. If the value begins with
+&nbsp;     * &quot;/&quot; (a relative URL) then this will override the default click behavior and set the [WebBrowser.url]
+&nbsp;     * to the appropriate value, avoiding a page refresh.
+&nbsp;     *
+&nbsp;     * *Note:* This property may only be set, attempting to read this property will throw an error.
+&nbsp;     *
+&nbsp;     * TODO: Should this be a KVar rather than a String?
+&nbsp;     */
+&nbsp;    var href: String?
+&nbsp;        get() {
+&nbsp;            error(&quot;The href property may only be set, but not read&quot;)
+&nbsp;        }
+&nbsp;        set(hrefValue) {
+&nbsp;            if (hrefValue != null) {
+&nbsp;                set(&quot;href&quot;, hrefValue)
+&nbsp;                if (hrefValue.startsWith(&#39;/&#39;)) {
+&nbsp;                    this.on(preventDefault = true).click {
+&nbsp;                        this.browser.url.value = hrefValue
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Create an anchor element.
+&nbsp; *
+&nbsp; * @param href @see [AElement.href]
+&nbsp; */
+&nbsp;fun ElementCreator&lt;Element&gt;.a(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    href: String? = null,
+&nbsp;    new: (ElementCreator&lt;AElement&gt;.(AElement) -&gt; Unit)? = null
+&nbsp;): AElement {
+&nbsp;    return AElement(element(&quot;a&quot;)).also {
+&nbsp;        if (href != null) it.href = href
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;        attributes.forEach { (k, v) -&gt; it[k] = v }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+&nbsp;open class OptionElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.option(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;OptionElement&gt;.(OptionElement) -&gt; Unit)? = null
+&nbsp;): OptionElement {
+&nbsp;    return OptionElement(element(&quot;option&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class H1Element(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.h1(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;H1Element&gt;.(H1Element) -&gt; Unit)? = null
+&nbsp;): H1Element {
+&nbsp;    return H1Element(element(&quot;h1&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class H2Element(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.h2(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;H2Element&gt;.(H2Element) -&gt; Unit)? = null
+&nbsp;): H2Element {
+&nbsp;    return H2Element(element(&quot;h2&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class H3Element(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.h3(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;H3Element&gt;.(H3Element) -&gt; Unit)? = null
+&nbsp;): H3Element {
+&nbsp;    return H3Element(element(&quot;h3&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+<b class="nc">&nbsp;open class H4Element(parent: Element) : Element(parent)</b>
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.h4(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;H4Element&gt;.(H4Element) -&gt; Unit)? = null
+&nbsp;): H4Element {
+&nbsp;    return H4Element(element(&quot;h4&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class H5Element(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.h5(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;H5Element&gt;.(H5Element) -&gt; Unit)? = null
+&nbsp;): H5Element {
+&nbsp;    return H5Element(element(&quot;h5&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class PElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.p(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;PElement&gt;.(PElement) -&gt; Unit)? = null
+&nbsp;): PElement {
+&nbsp;    return PElement(element(&quot;p&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class NavElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.nav(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;NavElement&gt;.(NavElement) -&gt; Unit)? = null
+&nbsp;): NavElement {
+&nbsp;    return NavElement(element(&quot;nav&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class SectionElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.section(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;SectionElement&gt;.(SectionElement) -&gt; Unit)? = null
+&nbsp;): SectionElement {
+&nbsp;    return SectionElement(element(&quot;section&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class ImageElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.img(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;ImageElement&gt;.(ImageElement) -&gt; Unit)? = null
+&nbsp;): ImageElement {
+&nbsp;    return ImageElement(element(&quot;img&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class CanvasElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.canvas(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    width: Int, height: Int,
+&nbsp;    new: (ElementCreator&lt;CanvasElement&gt;.(CanvasElement) -&gt; Unit)? = null
+&nbsp;): CanvasElement {
+&nbsp;    return CanvasElement(
+&nbsp;        element(
+&nbsp;            &quot;canvas&quot;,
+&nbsp;            attributes
+&nbsp;                .set(&quot;width&quot;, JsonPrimitive(width)).set(&quot;height&quot;, JsonPrimitive(height))
+&nbsp;        )
+&nbsp;    ).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class BrElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.br(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;BrElement&gt;.(BrElement) -&gt; Unit)? = null
+&nbsp;): BrElement {
+&nbsp;    return BrElement(element(&quot;br&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class MetaElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.meta(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    name: String, content: String, httpEquiv: String? = null, charset: String? = null,
+&nbsp;    new: (ElementCreator&lt;MetaElement&gt;.(MetaElement) -&gt; Unit)? = null
+&nbsp;): MetaElement {
+&nbsp;    return MetaElement(
+&nbsp;        element(
+&nbsp;            &quot;meta&quot;, attributes.set(&quot;name&quot;, name.json)
+&nbsp;                .set(&quot;content&quot;, content.json)
+&nbsp;                .set(&quot;http-equiv&quot;, JsonPrimitive(httpEquiv))
+&nbsp;                .set(&quot;charset&quot;, JsonPrimitive(charset))
+&nbsp;        )
+&nbsp;    ).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class InputElement(override val element: Element, initialValue: String? = null) :
+&nbsp;    ValueElement(element, initialValue = initialValue) {
+&nbsp;    fun select() {
+&nbsp;        element.browser.callJsFunction(&quot;document.getElementById({}).select();&quot;, id.json)
+&nbsp;    }
+&nbsp;
+&nbsp;    fun setSelectionRange(start: Int, end: Int) {
+&nbsp;        element.browser.callJsFunction(
+&nbsp;            &quot;document.getElementById({}).setSelectionRange({}, {});&quot;,
+&nbsp;            id.json, start.json, end.json
+&nbsp;        )
+&nbsp;    }
+&nbsp;
+&nbsp;    fun setReadOnly(ro: Boolean) {
+&nbsp;        element.browser.callJsFunction(
+&nbsp;            &quot;document.getElementById({}).readOnly = {};&quot;,
+&nbsp;            id.json, ro.json
+&nbsp;        )
+&nbsp;    }
+&nbsp;
+&nbsp;    fun checked(initialValue: Boolean = false): KVar&lt;Boolean&gt; {
+&nbsp;        val kv = bind(
+&nbsp;            accessor = { &quot;document.getElementById(\&quot;$it\&quot;).checked&quot; }, updateOnEvent = &quot;change&quot;,
+&nbsp;            initialValue = JsonPrimitive(initialValue)
+&nbsp;        )
+&nbsp;        return kv.map(object : ReversibleFunction&lt;JsonElement, Boolean&gt;(&quot;&quot;) {
+&nbsp;            override fun invoke(from: JsonElement) = from.jsonPrimitive.boolean
+&nbsp;
+&nbsp;            override fun reverse(original: JsonElement, change: Boolean) = JsonPrimitive(change)
+&nbsp;        })
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;enum class InputType {
+&nbsp;    button, checkbox, color, date, datetime, email, file, hidden, image, month, number, password, radio, range, reset, search, submit, tel, text, time, url, week
+&nbsp;}
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.input(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    type: InputType? = null,
+&nbsp;    name: String? = null,
+&nbsp;    initialValue: String? = null,
+&nbsp;    size: Int? = null,
+&nbsp;    placeholder: String? = null,
+&nbsp;    required: Boolean? = null,
+&nbsp;    new: (ElementCreator&lt;InputElement&gt;.(InputElement) -&gt; Unit)? = null
+&nbsp;): InputElement {
+&nbsp;    return InputElement(
+&nbsp;        element(
+&nbsp;            &quot;input&quot;, attributes.set(&quot;type&quot;, JsonPrimitive(type?.name))
+&nbsp;                .set(&quot;name&quot;, JsonPrimitive(name))
+&nbsp;                .set(&quot;value&quot;, JsonPrimitive(initialValue))
+&nbsp;                .set(&quot;placeholder&quot;, JsonPrimitive(placeholder))
+&nbsp;                .set(&quot;size&quot;, JsonPrimitive(size))
+&nbsp;                .set(&quot;required&quot;, JsonPrimitive(required))
+&nbsp;        ), initialValue = initialValue
+&nbsp;    ).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.link(
+&nbsp;    rel: LinkRelationship,
+&nbsp;    href: java.net.URL,
+&nbsp;    hreflang: String? = null,
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;): Element {
+&nbsp;    return LinkElement(
+&nbsp;        element(
+&nbsp;            &quot;link&quot;,
+&nbsp;            attributes = attributes
+&nbsp;                .set(&quot;rel&quot;, rel.name.json)
+&nbsp;                .set(&quot;href&quot;, href.toString().json)
+&nbsp;                .set(&quot;hreflang&quot;, JsonPrimitive(hreflang))
+&nbsp;        )
+&nbsp;    )
+&nbsp;}
+&nbsp;
+&nbsp;enum class LinkRelationship {
+&nbsp;    alternate, author, bookmark, help, icon, license, next, nofollow, noreferrer, prefetch, prev, search, stylesheet, tag, `dns-prefetch`, preconnect, preload
+&nbsp;}
+&nbsp;
+&nbsp;class LinkElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.textArea(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    rows: Int? = null, cols: Int? = null, required: Boolean? = null,
+&nbsp;    initialValue: String? = null,
+&nbsp;    new: (ElementCreator&lt;TextAreaElement&gt;.(TextAreaElement) -&gt; Unit)? = null
+&nbsp;): TextAreaElement {
+&nbsp;    return TextAreaElement(
+&nbsp;        element(
+&nbsp;            &quot;textArea&quot;, attributes.set(&quot;rows&quot;, JsonPrimitive(rows))
+&nbsp;                .set(&quot;cols&quot;, JsonPrimitive(cols))
+&nbsp;                .set(&quot;required&quot;, JsonPrimitive(required))
+&nbsp;        ), initialValue = initialValue
+&nbsp;    ).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * [&lt;SELECT&gt;](https://www.w3schools.com/tags/tag_select.asp)
+&nbsp; */
+&nbsp;class SelectElement(parent: Element, initialValue: String? = null) :
+&nbsp;    ValueElement(parent, kvarUpdateEvent = &quot;change&quot;, initialValue = initialValue)
+&nbsp;
+&nbsp;/**
+&nbsp; * [&lt;SELECT&gt;](https://www.w3schools.com/tags/tag_select.asp)
+&nbsp; */
+&nbsp;fun ElementCreator&lt;Element&gt;.select(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    name: String? = null, required: Boolean? = null,
+&nbsp;    initialValue: String? = null,
+&nbsp;    new: (ElementCreator&lt;SelectElement&gt;.(SelectElement) -&gt; Unit)? = null
+&nbsp;): SelectElement {
+&nbsp;    return SelectElement(
+&nbsp;        element(
+&nbsp;            &quot;select&quot;, attributes
+&nbsp;                .set(&quot;name&quot;, JsonPrimitive(name))
+&nbsp;                .set(&quot;required&quot;, JsonPrimitive(required))
+&nbsp;        ), initialValue = initialValue
+&nbsp;    ).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * https://www.w3schools.com/tags/tag_textarea.asp
+&nbsp; */
+&nbsp;class TextAreaElement(parent: Element, initialValue: String? = null) : ValueElement(parent, initialValue = initialValue)
+&nbsp;
+&nbsp;/**
+&nbsp; * https://www.w3schools.com/tags/tag_textarea.asp
+&nbsp; */
+&nbsp;fun ElementCreator&lt;Element&gt;.textArea(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;TextAreaElement&gt;.(TextAreaElement) -&gt; Unit)? = null
+&nbsp;): TextAreaElement {
+&nbsp;    return TextAreaElement(element(&quot;textArea&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class LabelElement(wrapped: Element) : Element(wrapped) {
+&nbsp;    fun setFor(forId: String) = this.set(&quot;for&quot;, forId)
+&nbsp;    fun setFor(forId: KVal&lt;String&gt;) = set(&quot;for&quot;, forId.map { JsonPrimitive(it) })
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.label(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;LabelElement&gt;.(LabelElement) -&gt; Unit)? = null
+&nbsp;): LabelElement {
+&nbsp;    return LabelElement(element(&quot;label&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract class for the various elements that have a `value` attribute and which support `change` and `input` events.
+&nbsp; *
+&nbsp; * @param kvarUpdateEvent The [value] of this element will update on this event, defaults to [input](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event)
+&nbsp; */
+&nbsp;abstract class ValueElement(
+&nbsp;    open val element: Element, val kvarUpdateEvent: String = &quot;input&quot;,
+&nbsp;    val initialValue: String? = null
+&nbsp;) : Element(element) {
+&nbsp;    val valueJsExpression: String by lazy { &quot;document.getElementById(\&quot;$id\&quot;).value&quot; }
+&nbsp;
+&nbsp;    suspend fun getValue(): String {
+&nbsp;        return when (val result =
+&nbsp;            element.browser.callJsFunctionWithResult(&quot;return document.getElementById({}).value;&quot;, id.json)) {
+&nbsp;            is JsonPrimitive -&gt; result.content
+&nbsp;            else -&gt; error(&quot;Needs to be JsonPrimitive&quot;)
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    //language=JavaScript
+&nbsp;    fun setValue(newValue: String) {
+&nbsp;        element.browser.callJsFunction(
+&nbsp;            &quot;document.getElementById({}).value = {};&quot;,
+&nbsp;            element.id.json, newValue.json
+&nbsp;        )
+&nbsp;    }
+&nbsp;
+&nbsp;    fun setValue(newValue: KVal&lt;String&gt;) {
+&nbsp;        val initialValue = newValue.value
+&nbsp;        setValue(initialValue)
+&nbsp;        val listenerHandle = newValue.addListener { _, new -&gt;
+&nbsp;            setValue(new)
+&nbsp;        }
+&nbsp;        element.creator?.onCleanup(true) {
+&nbsp;            newValue.removeListener(listenerHandle)
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Volatile
+&nbsp;    private var _valueKvar: KVar&lt;String&gt;? = null
+&nbsp;
+&nbsp;    /**
+&nbsp;     * A KVar bidirectionally synchronized with the [value of a select element](https://www.w3schools.com/jsref/prop_select_value.asp).
+&nbsp;     * This [KVar] will update if the select element is changed (depending on [kvarUpdateEvent]), and will modify
+&nbsp;     * the element value if the KVar is changed.
+&nbsp;     *
+&nbsp;     * [value] can be set to a `KVar&lt;String&gt;` to synchronize with an existing KVar, or it will create a new `KVar(&quot;&quot;)`
+&nbsp;     * if not set.
+&nbsp;     */
+&nbsp;    var value: KVar&lt;String&gt;
+&nbsp;        get() {
+&nbsp;            synchronized(this) {
+&nbsp;                if (_valueKvar == null) {
+&nbsp;                    value = KVar(initialValue ?: &quot;&quot;)
+&nbsp;                    this.creator?.onCleanup(true) {
+&nbsp;                        value.close(CloseReason(&quot;Parent element closed&quot;))
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;            return _valueKvar!!
+&nbsp;        }
+&nbsp;        set(v) {
+&nbsp;            if (_valueKvar != null) error(&quot;`value` may only be set once, and cannot be set after it has been retrieved&quot;)
+&nbsp;            updateKVar(v, updateOn = kvarUpdateEvent)
+&nbsp;            _valueKvar = v
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
+&nbsp;     */
+&nbsp;
+&nbsp;    @Serializable
+&nbsp;    data class DiffData(val prefixEndIndex: Int, val postfixOffset: Int, val diffString: String)
+&nbsp;
+&nbsp;    private fun applyDiff(oldString: String, diffData: DiffData): String {
+&nbsp;
+&nbsp;        val newString = when {
+&nbsp;            diffData.postfixOffset == -1 -&gt; {//these 2 edge cases prevent the prefix or the postfix from being
+&nbsp;                // repeated when you append text to the beginning of the text or the end of the text
+&nbsp;                oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString
+&nbsp;            }
+&nbsp;
+&nbsp;            diffData.prefixEndIndex == 0 -&gt; {
+&nbsp;                diffData.diffString + oldString.substring(oldString.length - diffData.postfixOffset)
+&nbsp;            }
+&nbsp;
+&nbsp;            else -&gt; {
+&nbsp;                oldString.substring(0, diffData.prefixEndIndex) + diffData.diffString +
+&nbsp;                        oldString.substring(oldString.length - diffData.postfixOffset)
+&nbsp;            }
+&nbsp;        }
+&nbsp;        return newString
+&nbsp;    }
+&nbsp;
+&nbsp;    private fun updateKVar(toBind: KVar&lt;String&gt;, updateOn: String = &quot;input&quot;) {
+&nbsp;        on(
+&nbsp;            //language=JavaScript
+&nbsp;            retrieveJs = &quot;get_diff_changes(document.getElementById(\&quot;${element.id}\&quot;))&quot;
+&nbsp;        )
+&nbsp;            .event&lt;Event&gt;(updateOn) {
+&nbsp;                //TODO, this check shouldn&#39;t be necessary. It should be impossible for get_diff_changes() to return a null,
+&nbsp;                //but we had a null check previously, so I went ahead and added it.
+&nbsp;                if (it.retrieved != JsonNull) {
+&nbsp;                    val diffDataJson = it.retrieved
+&nbsp;                    val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
+&nbsp;                    toBind.value = applyDiff(toBind.value, diffData)
+&nbsp;                }
+&nbsp;            }
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;/******************************
+&nbsp; * Route extension
+&nbsp; ******************************/
+&nbsp;
+&nbsp;fun ElementCreator&lt;*&gt;.route(routeReceiver: RouteReceiver.() -&gt; Unit) {
+&nbsp;    val rr = RouteReceiver()
+&nbsp;    routeReceiver(rr)
+&nbsp;    val pathKVar: KVar&lt;List&lt;String&gt;&gt; = this.browser.url.map(UrlToPathSegmentsRF)
+&nbsp;    val matchingTemplate: KVal&lt;PathTemplate?&gt; = pathKVar.map { path -&gt;
+&nbsp;        val size = if (path != listOf(&quot;&quot;)) path.size else 0
+&nbsp;        val templatesOfSameLength = rr.templatesByLength[size]
+&nbsp;        val tpl = templatesOfSameLength?.keys?.firstOrNull { tpl -&gt;
+&nbsp;            tpl.isEmpty() || tpl.withIndex().all {
+&nbsp;                val tf = it.value.kind != RoutingPathSegmentKind.Constant || path[it.index] == it.value.value
+&nbsp;                tf
+&nbsp;            }
+&nbsp;        }
+&nbsp;        tpl
+&nbsp;    }
+&nbsp;
+&nbsp;    render(matchingTemplate) { template -&gt;
+&nbsp;        if (template != null) {
+&nbsp;            val parameters = HashMap&lt;String, KVar&lt;String&gt;&gt;()
+&nbsp;            for ((pos, part) in template.withIndex()) {
+&nbsp;                if (part.kind == RoutingPathSegmentKind.Parameter) {
+&nbsp;                    val str = part.value
+&nbsp;                    val paramKVar = pathKVar[pos]
+&nbsp;                    closeOnElementCreatorCleanup(paramKVar)
+&nbsp;                    parameters[str.substring(str.indexOf(&#39;{&#39;) + 1, str.indexOf(&#39;}&#39;))] = paramKVar
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            val pathRenderer = rr.templatesByLength[template.size]?.get(template)
+&nbsp;
+&nbsp;            if (pathRenderer != null) {
+&nbsp;                pathRenderer(this, parameters)
+&nbsp;            } else {
+&nbsp;                error(&quot;Unable to find pathRenderer for template $template&quot;)
+&nbsp;            }
+&nbsp;        } else {
+&nbsp;            rr.notFoundReceiver.invoke(this, this.browser.gurl.path.value)
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/******************************
+&nbsp; * KVar extensions
+&nbsp; ******************************/
+&nbsp;
+&nbsp;operator fun &lt;T : Any&gt; KVar&lt;List&lt;T&gt;&gt;.get(pos: Int): KVar&lt;T&gt; {
+&nbsp;    return this.map(object : ReversibleFunction&lt;List&lt;T&gt;, T&gt;(&quot;get($pos)&quot;) {
+&nbsp;        override fun invoke(from: List&lt;T&gt;): T {
+&nbsp;            return try {
+&nbsp;                from[pos]
+&nbsp;            } catch (e: IndexOutOfBoundsException) {
+&nbsp;                throw IndexOutOfBoundsException(&quot;Index $pos out of bounds in list $from&quot;)
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        override fun reverse(original: List&lt;T&gt;, change: T) = original
+&nbsp;            .subList(0, pos)
+&nbsp;            .plus(change)
+&nbsp;            .plus(original.subList(pos + 1, original.size))
+&nbsp;    })
+&nbsp;}
+&nbsp;
+&nbsp;operator fun &lt;K : Any, V : Any&gt; KVar&lt;Map&lt;K, V&gt;&gt;.get(k: K): KVar&lt;V?&gt; {
+&nbsp;    return this.map(object : ReversibleFunction&lt;Map&lt;K, V&gt;, V?&gt;(&quot;map[$k]&quot;) {
+&nbsp;        override fun invoke(from: Map&lt;K, V&gt;): V? = from[k]
+&nbsp;
+&nbsp;        override fun reverse(original: Map&lt;K, V&gt;, change: V?): Map&lt;K, V&gt; {
+&nbsp;            return if (change != null) {
+&nbsp;                original + (k to change)
+&nbsp;            } else {
+&nbsp;                original - k
+&nbsp;            }
+&nbsp;        }
+&nbsp;    })
+&nbsp;}
+&nbsp;
+&nbsp;fun &lt;T : Any&gt; KVar&lt;List&lt;T&gt;&gt;.subList(fromIx: Int, toIx: Int): KVar&lt;List&lt;T&gt;&gt; =
+&nbsp;    this.map(object : ReversibleFunction&lt;List&lt;T&gt;, List&lt;T&gt;&gt;(&quot;subList($fromIx, $toIx)&quot;) {
+&nbsp;        override fun invoke(from: List&lt;T&gt;): List&lt;T&gt; = from.subList(fromIx, toIx)
+&nbsp;
+&nbsp;        override fun reverse(original: List&lt;T&gt;, change: List&lt;T&gt;): List&lt;T&gt; {
+&nbsp;            return original.subList(0, fromIx) + change + original.subList(toIx, original.size)
+&nbsp;        }
+&nbsp;    })
+&nbsp;
+&nbsp;fun &lt;T : Any&gt; KVal&lt;List&lt;T&gt;&gt;.subList(fromIx: Int, toIx: Int): KVal&lt;List&lt;T&gt;&gt; = this.map { it.subList(fromIx, toIx) }
+&nbsp;
+&nbsp;enum class Scheme {
+&nbsp;    http, https
+&nbsp;}
+&nbsp;
+&nbsp;private val prx = &quot;/&quot;.toRegex()
+&nbsp;
+&nbsp;val KVar&lt;URL&gt;.path
+&nbsp;    get() = this.map(object : ReversibleFunction&lt;URL, String&gt;(&quot;URL.path&quot;) {
+&nbsp;
+&nbsp;        override fun invoke(from: URL): String = from.path()
+&nbsp;
+&nbsp;        override fun reverse(original: URL, change: String): URL =
+&nbsp;            original.withPath(change)
+&nbsp;
+&nbsp;    })
+&nbsp;
+&nbsp;val KVar&lt;URL&gt;.query
+&nbsp;    get() = this.map(object : ReversibleFunction&lt;URL, String?&gt;(&quot;URL.query&quot;) {
+&nbsp;
+&nbsp;        override fun invoke(from: URL): String? = from.query()
+&nbsp;
+&nbsp;        override fun reverse(original: URL, change: String?): URL =
+&nbsp;            original.withQuery(change)
+&nbsp;
+&nbsp;    })
+&nbsp;
+&nbsp;val KVar&lt;URL&gt;.pathSegments
+&nbsp;    get() = this.map(object : ReversibleFunction&lt;URL, List&lt;String&gt;&gt;(&quot;URL.pathSegments&quot;) {
+&nbsp;
+&nbsp;        override fun invoke(from: URL): List&lt;String&gt; {
+&nbsp;            return from.pathSegments()
+&nbsp;        }
+&nbsp;
+&nbsp;        override fun reverse(original: URL, change: List&lt;String&gt;): URL {
+&nbsp;            return original.withPath(&quot;/&quot; + if (change.isEmpty()) &quot;&quot; else change.joinToString(separator = &quot;/&quot;))
+&nbsp;        }
+&nbsp;
+&nbsp;    })
+&nbsp;
+&nbsp;/**
+&nbsp; * Given the URI specification:
+&nbsp; *
+&nbsp; * `URI = scheme:[//authority]path[?query][#fragment]`
+&nbsp; *
+&nbsp; * The `pqf` refers to the `path[?query][#fragment]` and can be used to change the path, query, and/or fragment
+&nbsp; * of the URL in one shot.
+&nbsp; */
+&nbsp;val KVar&lt;URL&gt;.pathQueryFragment
+&nbsp;    get() = this.map(object : ReversibleFunction&lt;URL, String&gt;(&quot;URL.pathQueryFragment&quot;) {
+&nbsp;        override fun invoke(from: URL): String {
+&nbsp;            return from.pathQueryFragment
+&nbsp;        }
+&nbsp;
+&nbsp;        override fun reverse(original: URL, change: String): URL {
+&nbsp;            return original.resolve(change)
+&nbsp;        }
+&nbsp;    })
+&nbsp;
+&nbsp;infix fun KVar&lt;String&gt;.attr(s: String) = this.map { it + s }
+&nbsp;infix fun String.attr(sKV: KVar&lt;String&gt;) = sKV.map { this + it }
+&nbsp;
+&nbsp;fun KVar&lt;String&gt;.toInt() = this.map(object : ReversibleFunction&lt;String, Int&gt;(label = &quot;KVar&lt;String&gt;.toInt()&quot;) {
+&nbsp;    override fun invoke(from: String) = from.toInt()
+&nbsp;
+&nbsp;    override fun reverse(original: String, change: Int): String {
+&nbsp;        return change.toString()
+&nbsp;    }
+&nbsp;})
+&nbsp;
+&nbsp;/**
+&nbsp; * Render each element of a List
+&nbsp; */
+&nbsp;@Deprecated(&quot;Use kweb.state.renderEach instead&quot;, ReplaceWith(&quot;renderEach(list, block)&quot;, &quot;kweb.state.renderEach&quot;))
+&nbsp;fun &lt;T : Any&gt; ElementCreator&lt;*&gt;.renderEach(
+&nbsp;    list: KVar&lt;List&lt;T&gt;&gt;,
+&nbsp;    block: ElementCreator&lt;Element&gt;.(value: KVar&lt;T&gt;) -&gt; Unit
+&nbsp;) {
+&nbsp;    /*
+&nbsp;     * TODO: This will currently re-render the collection if the list size changes, rather than modifying existing
+&nbsp;     *       DOM elements - this is inefficient and should use renderEach() with an ObservableList instead.
+&nbsp;     */
+&nbsp;    render(list.map { it.size }) { size -&gt;
+&nbsp;        for (ix in 0 until size) {
+&nbsp;            block(list[ix])
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Create a [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
+&nbsp; */
+&nbsp;fun ElementCreator&lt;*&gt;.fileInput(
+&nbsp;    name: String? = null,
+&nbsp;    initialValue: String? = null,
+&nbsp;    size: Int? = null,
+&nbsp;    placeholder: String? = null,
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = attr
+&nbsp;): FileFormInput {
+&nbsp;    val inputElement = input(attributes, InputType.file, name, initialValue, size, placeholder)
+&nbsp;    val formInput = FileFormInput()
+&nbsp;    formInput.setInputElement(inputElement)
+&nbsp;    return formInput
+&nbsp;}
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.table(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;TableElement&gt;.(TableElement) -&gt; Unit)? = null
+&nbsp;): TableElement {
+&nbsp;    return TableElement(element(&quot;table&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class TableElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.thead(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;TheadElement&gt;.(TheadElement) -&gt; Unit)? = null
+&nbsp;): TheadElement {
+&nbsp;    return TheadElement(element(&quot;thead&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class TheadElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.th(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;ThElement&gt;.(ThElement) -&gt; Unit)? = null
+&nbsp;): ThElement {
+&nbsp;    return ThElement(element(&quot;th&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class ThElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.tbody(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;TbodyElement&gt;.(TbodyElement) -&gt; Unit)? = null
+&nbsp;): TbodyElement {
+&nbsp;    return TbodyElement(element(&quot;tbody&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class TbodyElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.tr(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;TrElement&gt;.(TrElement) -&gt; Unit)? = null
+&nbsp;): TrElement {
+&nbsp;    return TrElement(element(&quot;tr&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;open class TrElement(parent: Element) : Element(parent)
+&nbsp;
+&nbsp;fun ElementCreator&lt;Element&gt;.td(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    new: (ElementCreator&lt;TdElement&gt;.(TdElement) -&gt; Unit)? = null
+&nbsp;): TdElement {
+&nbsp;    return TdElement(element(&quot;td&quot;, attributes)).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;class TdElement(parent: Element) : Element(parent)
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

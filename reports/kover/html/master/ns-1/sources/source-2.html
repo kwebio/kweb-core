@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AttributeBuilder</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb</a>
+</div>
+
+<h1>Coverage Summary for Class: AttributeBuilder (kweb)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">AttributeBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb
+&nbsp;
+&nbsp; import kotlinx.serialization.json.JsonPrimitive
+&nbsp;import kotlinx.serialization.json.JsonNull
+&nbsp; import kweb.util.json
+&nbsp;val attr: MutableMap&lt;String, JsonPrimitive&gt; get() = AttributeBuilder()
+&nbsp;
+<b class="fc">&nbsp;open class AttributeBuilder : MutableMap&lt;String, JsonPrimitive&gt; by LinkedHashMap()</b>
+&nbsp;
+&nbsp;fun Map&lt;String, JsonPrimitive&gt;.set(key: String, value: JsonPrimitive): Map&lt;String, JsonPrimitive&gt; {
+&nbsp;    if (value != JsonNull) {
+&nbsp;        if (this is AttributeBuilder) {
+&nbsp;            put(key, value)
+&nbsp;            return this
+&nbsp;        } else {
+&nbsp;            val clonedAttributes = AttributeBuilder()
+&nbsp;            clonedAttributes.putAll(this)
+&nbsp;            clonedAttributes.put(key, JsonPrimitive(value.content))
+&nbsp;            return clonedAttributes
+&nbsp;        }
+&nbsp;    } else {
+&nbsp;        return this
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;fun Map&lt;String, JsonPrimitive&gt;.id(id: String): Map&lt;String, JsonPrimitive&gt; = set(&quot;id&quot;, id.json)
+&nbsp;
+&nbsp;fun Map&lt;String, JsonPrimitive&gt;.classes(classes: Iterable&lt;String&gt;, condition: Boolean = true): Map&lt;String, JsonPrimitive&gt; {
+&nbsp;    return if (condition) {
+&nbsp;        val attributeValue : String? = get(&quot;class&quot;)?.content
+&nbsp;        val existing : List&lt;String&gt; = attributeValue?.split(&#39; &#39;) ?: emptyList()
+&nbsp;        val classString = JsonPrimitive((existing + classes).joinToString(separator = &quot; &quot;))
+&nbsp;
+&nbsp;        set(&quot;class&quot;, classString)
+&nbsp;    } else {
+&nbsp;        this
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;val Map&lt;String, JsonPrimitive&gt;.disabled get() = this.set(&quot;disabled&quot;, JsonPrimitive(true))
+&nbsp;
+&nbsp;fun Map&lt;String, JsonPrimitive&gt;.classes(vararg classes: String, onlyIf: Boolean = true): Map&lt;String, JsonPrimitive&gt; = classes(classes.asIterable(), onlyIf)
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

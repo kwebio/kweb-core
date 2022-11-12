@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RemoteClientState</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.client</a>
+</div>
+
+<h1>Coverage Summary for Class: RemoteClientState (kweb.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">RemoteClientState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    81.2%
+  </span>
+  <span class="absValue">
+    (13/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.2%
+  </span>
+  <span class="absValue">
+    (156/181)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.client
+&nbsp;
+&nbsp;import kotlinx.serialization.encodeToString
+&nbsp;import kotlinx.serialization.json.Json
+&nbsp;import kotlinx.serialization.json.JsonElement
+&nbsp;import kweb.DebugInfo
+&nbsp;import kweb.util.random
+&nbsp;import java.time.Instant
+&nbsp;import java.util.concurrent.ConcurrentHashMap
+&nbsp;
+<b class="fc">&nbsp;data class RemoteClientState(val id: String, @Volatile var clientConnection: ClientConnection,</b>
+<b class="fc">&nbsp;                             val handlers: MutableMap&lt;Int, (JsonElement) -&gt; Unit&gt; = HashMap(),</b>
+<b class="fc">&nbsp;                             val onCloseHandlers : ConcurrentHashMap&lt;Int, () -&gt; Unit&gt; = ConcurrentHashMap(),</b>
+<b class="fc">&nbsp;                             val debugTokens: MutableMap&lt;String, DebugInfo&gt; = HashMap(), var lastModified: Instant = Instant.now()) {</b>
+&nbsp;    fun send(message: Server2ClientMessage) {
+<b class="fc">&nbsp;        clientConnection.send(Json.encodeToString(message))</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    fun addCloseHandler(handler: () -&gt; Unit) : Int {
+<b class="fc">&nbsp;        synchronized(this) {</b>
+<b class="fc">&nbsp;            val id = random.nextInt()</b>
+<b class="fc">&nbsp;            onCloseHandlers[id] = handler</b>
+<b class="fc">&nbsp;            return id</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun removeCloseHandler(id: Int) {
+<b class="nc">&nbsp;        synchronized(this) {</b>
+<b class="nc">&nbsp;            onCloseHandlers.remove(id)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun triggerCloseListeners() {
+<b class="fc">&nbsp;        synchronized(this) {</b>
+<b class="fc">&nbsp;            onCloseHandlers.values.forEach { it() }</b>
+<b class="fc">&nbsp;            onCloseHandlers.clear()</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    override fun toString() = &quot;Remote2ClientState(id = $id)&quot;</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

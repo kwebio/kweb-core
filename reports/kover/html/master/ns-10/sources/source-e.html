@@ -1,0 +1,259 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > AdvancedComponent</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.state</a>
+</div>
+
+<h1>Coverage Summary for Class: AdvancedComponent (kweb.state)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+</tr>
+<tr>
+  <td class="name">AdvancedComponent</td>
+    <td class="coverageStat"/>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.state
+&nbsp;
+&nbsp;import kweb.Element
+&nbsp;import kweb.ElementCreator
+&nbsp;import kweb.WebBrowser
+&nbsp;import kweb.span
+&nbsp;import kweb.state.RenderState.*
+&nbsp;import mu.KotlinLogging
+&nbsp;import java.util.concurrent.atomic.AtomicReference
+&nbsp;import kotlin.collections.ArrayList
+&nbsp;import kotlin.collections.forEach
+&nbsp;import kotlin.collections.plusAssign
+&nbsp;
+&nbsp;/**
+&nbsp; * Created by ian on 6/18/17.
+&nbsp; */
+&nbsp;
+&nbsp;private val logger = KotlinLogging.logger {}
+&nbsp;object RenderSpanNames{
+&nbsp;    const val startMarkerClassName = &quot;rMStart&quot;
+&nbsp;    const val endMarkerClassName = &quot;rMEnd&quot;
+&nbsp;    const val listStartMarkerClassName = &quot;rLStart&quot;
+&nbsp;    const val listEndMarkerClassName = &quot;rLEnd&quot;
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Render the value of a [KVal] into DOM elements, and automatically re-render those
+&nbsp; * elements whenever the value changes.
+&nbsp; */
+&nbsp;fun &lt;T : Any?&gt; ElementCreator&lt;*&gt;.render(
+&nbsp;    value: KVal&lt;T&gt;,
+&nbsp;    block: ElementCreator&lt;Element&gt;.(T) -&gt; Unit
+&nbsp;) : RenderFragment {
+&nbsp;
+&nbsp;    val previousElementCreator: AtomicReference&lt;ElementCreator&lt;Element&gt;?&gt; = AtomicReference(null)
+&nbsp;
+&nbsp;    val renderState = AtomicReference(NOT_RENDERING)
+&nbsp;
+&nbsp;    //TODO this could possibly be improved
+&nbsp;    val renderFragment: RenderFragment = if (element.browser.isCatchingOutbound() == null) {
+&nbsp;        element.browser.batch(WebBrowser.CatcherType.RENDER) {
+&nbsp;            val startSpan = span().classes(RenderSpanNames.startMarkerClassName)
+&nbsp;            val endSpan = span().classes(RenderSpanNames.endMarkerClassName)
+&nbsp;            RenderFragment(startSpan.id, endSpan.id)
+&nbsp;        }
+&nbsp;    } else {
+&nbsp;        val startSpan = span().classes(RenderSpanNames.startMarkerClassName)
+&nbsp;        val endSpan = span().classes(RenderSpanNames.endMarkerClassName)
+&nbsp;        RenderFragment(startSpan.id, endSpan.id)
+&nbsp;    }
+&nbsp;
+&nbsp;    fun eraseBetweenSpans() {
+&nbsp;        element.removeChildrenBetweenSpans(renderFragment.startId, renderFragment.endId)
+&nbsp;        previousElementCreator.getAndSet(null)?.cleanup()
+&nbsp;    }
+&nbsp;
+&nbsp;    fun eraseAndRender() {
+&nbsp;        eraseBetweenSpans()
+&nbsp;
+&nbsp;        previousElementCreator.set(ElementCreator&lt;Element&gt;(this.element, this, insertBefore = renderFragment.endId))
+&nbsp;        renderState.set(RENDERING_NO_PENDING_CHANGE)
+&nbsp;        val elementCreator = previousElementCreator.get()
+&nbsp;        if (elementCreator != null) {
+&nbsp;            elementCreator.block(value.value)
+&nbsp;        } else {
+&nbsp;            logger.error(&quot;previousElementCreator.get() was null in eraseAndRender()&quot;)
+&nbsp;            //TODO This warning message could be made more helpful. I can&#39;t think of a situation where this could actually happen
+&nbsp;            //So I&#39;m not sure what we need to say in this message.
+&nbsp;        }
+&nbsp;        if (renderState.get() == RENDERING_NO_PENDING_CHANGE) {
+&nbsp;            renderState.set(NOT_RENDERING)
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    //TODO this function could probably have a clearer name
+&nbsp;    //It&#39;s purpose is to monitor renderState, and call eraseAndRender() if the page is rendering.
+&nbsp;    fun renderLoop() {
+&nbsp;        do {
+&nbsp;            if (element.browser.isCatchingOutbound() == null) {
+&nbsp;                element.browser.batch(WebBrowser.CatcherType.RENDER) {
+&nbsp;                    eraseAndRender()
+&nbsp;                }
+&nbsp;            } else {
+&nbsp;                eraseAndRender()
+&nbsp;            }
+&nbsp;        } while (renderState.get() != NOT_RENDERING)
+&nbsp;    }
+&nbsp;
+&nbsp;    val listenerHandle = value.addListener { _, _ -&gt;
+&nbsp;        when (renderState.get()) {
+&nbsp;            NOT_RENDERING -&gt; {
+&nbsp;                renderLoop()
+&nbsp;            }
+&nbsp;            RENDERING_NO_PENDING_CHANGE -&gt; {
+&nbsp;                renderState.set(RENDERING_WITH_PENDING_CHANGE)
+&nbsp;            }
+&nbsp;            else -&gt; {
+&nbsp;                // This space intentionally left blank
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;    renderFragment.addDeletionListener {
+&nbsp;        value.removeListener(listenerHandle)
+&nbsp;    }
+&nbsp;
+&nbsp;    //we have to make sure to call renderLoop to start the initial render and begin monitoring renderState
+&nbsp;    renderLoop()
+&nbsp;
+&nbsp;    this.onCleanup(false) {
+&nbsp;        //TODO I&#39;m not sure what cleanup needs to be done now that there is no container element
+&nbsp;    }
+&nbsp;
+&nbsp;    this.onCleanup(true) {
+&nbsp;        previousElementCreator.getAndSet(null)?.cleanup()
+&nbsp;        value.removeListener(listenerHandle)
+&nbsp;    }
+&nbsp;
+&nbsp;    return renderFragment
+&nbsp;}
+&nbsp;
+&nbsp;fun ElementCreator&lt;*&gt;.closeOnElementCreatorCleanup(kv: KVal&lt;*&gt;) {
+&nbsp;    this.onCleanup(withParent = true) {
+&nbsp;        kv.close(CloseReason(&quot;Closed because a parent ElementCreator was cleaned up&quot;))
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Render the value of a [KVar] into DOM elements, and automatically re-render those
+&nbsp; * elements whenever the value changes.
+&nbsp; */
+&nbsp;fun &lt;PARENT_ELEMENT_TYPE : Element, RETURN_TYPE&gt; ElementCreator&lt;PARENT_ELEMENT_TYPE&gt;.render(
+&nbsp;    component: AdvancedComponent&lt;PARENT_ELEMENT_TYPE, RETURN_TYPE&gt;
+&nbsp;) : RETURN_TYPE {
+&nbsp;    return component.render(this)
+&nbsp;}
+&nbsp;
+&nbsp;// ANCHOR: component_definition
+&nbsp;/**
+&nbsp; * [AdvancedComponent]s can be rendered into DOM elements by calling [AdvancedComponent.render].
+&nbsp; *
+&nbsp; * Unlike [Component], [AdvancedComponent]s allows the parent element type to be configured, and a return
+&nbsp; * type to be specified.
+&nbsp; */
+&nbsp;interface AdvancedComponent&lt;in PARENT_ELEMENT_TYPE : Element, out RETURN_TYPE&gt; {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Render this [Component] into DOM elements, returning an arbitrary
+&nbsp;     * value of type [RETURN_TYPE].
+&nbsp;     */
+&nbsp;    fun render(elementCreator: ElementCreator&lt;PARENT_ELEMENT_TYPE&gt;) : RETURN_TYPE
+&nbsp;}
+&nbsp;// ANCHOR_END: component_definition
+&nbsp;
+&nbsp;/**
+&nbsp; * [Component]s can be rendered into DOM elements by calling [Component.render].
+&nbsp; *
+&nbsp; * For more flexibility, see [AdvancedComponent].
+&nbsp; */
+&nbsp;interface Component : AdvancedComponent&lt;Element, Unit&gt; {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Render this [Component] into DOM elements
+&nbsp;     */
+&nbsp;    override fun render(elementCreator: ElementCreator&lt;Element&gt;)
+&nbsp;}
+&nbsp;
+&nbsp;class RenderFragment(val startId: String, val endId: String) {
+&nbsp;    private val deletionListeners = ArrayList&lt;() -&gt; Unit&gt;()
+&nbsp;
+&nbsp;    internal fun addDeletionListener(listener: () -&gt; Unit) {
+&nbsp;        synchronized(deletionListeners) {
+&nbsp;            deletionListeners += listener
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    fun delete() {
+&nbsp;        synchronized(deletionListeners) {
+&nbsp;            deletionListeners.forEach { it.invoke() }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;class RenderHandle&lt;ITEM : Any&gt;(val renderFragment: RenderFragment, val kvar: KVar&lt;ITEM&gt;)
+&nbsp;
+&nbsp;private enum class RenderState {
+&nbsp;    NOT_RENDERING, RENDERING_NO_PENDING_CHANGE, RENDERING_WITH_PENDING_CHANGE
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>

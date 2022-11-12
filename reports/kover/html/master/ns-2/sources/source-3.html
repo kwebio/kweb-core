@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ClientConnectionKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.client</a>
+</div>
+
+<h1>Coverage Summary for Class: ClientConnectionKt (kweb.client)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientConnectionKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ClientConnectionKt$logger$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.client
+&nbsp;
+&nbsp;import io.ktor.websocket.Frame
+&nbsp;import io.ktor.websocket.Frame.Text
+&nbsp;import io.ktor.websocket.WebSocketSession
+&nbsp;import kotlinx.coroutines.*
+&nbsp;import kotlinx.coroutines.channels.Channel
+&nbsp;import mu.KotlinLogging
+&nbsp;import java.util.concurrent.ConcurrentLinkedQueue
+&nbsp;
+<b class="pc">&nbsp;private val logger = KotlinLogging.logger {}</b>
+&nbsp;
+&nbsp;sealed class ClientConnection {
+&nbsp;
+&nbsp;    abstract fun send(message: String)
+&nbsp;
+&nbsp;    //@ObsoleteCoroutinesApi // TODO: For Channel.consumeEach, which will apparently become obsolete
+&nbsp;    class WebSocket(private val channel: WebSocketSession) : ClientConnection() {
+&nbsp;
+&nbsp;        @Volatile
+&nbsp;        var sendCount = 0
+&nbsp;
+&nbsp;        private val sendBuffer = Channel&lt;Frame&gt;(capacity = 1000)
+&nbsp;
+&nbsp;        init {
+&nbsp;            channel.launch {
+&nbsp;                for (frame in sendBuffer) {
+&nbsp;                    channel.send(frame)
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        override fun send(message: String) {
+&nbsp;            runBlocking {
+&nbsp;                sendBuffer.send(Text(message))
+&nbsp;            }
+&nbsp;            sendCount++
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    class Caching : ClientConnection() {
+&nbsp;        private @Volatile
+&nbsp;        var queue: ConcurrentLinkedQueue&lt;String&gt;? = ConcurrentLinkedQueue()
+&nbsp;
+&nbsp;        override fun send(message: String) {
+&nbsp;            logger.debug(&quot;Caching &#39;$message&#39; as websocket isn&#39;t yet available&quot;)
+&nbsp;            queue.let {
+&nbsp;                it?.add(message) ?: error(&quot;Can&#39;t write to queue after it has been read&quot;)
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        val size = queue?.size ?: 0
+&nbsp;
+&nbsp;        fun read(): List&lt;String&gt; {
+&nbsp;            queue.let {
+&nbsp;                if (it == null) error(&quot;Queue can only be read once&quot;)
+&nbsp;                else {
+&nbsp;                    val r = it.toList()
+&nbsp;                    queue = null
+&nbsp;                    return r
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        fun queueSize() = queue?.size
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-12 04:42</div>
+</div>
+</body>
+</html>
