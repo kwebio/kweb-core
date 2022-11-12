@@ -418,6 +418,7 @@ class LinkElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.textArea(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     rows: Int? = null, cols: Int? = null, required: Boolean? = null,
+    initialValue: String? = null,
     new: (ElementCreator<TextAreaElement>.(TextAreaElement) -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(
@@ -425,7 +426,7 @@ fun ElementCreator<Element>.textArea(
             "textArea", attributes.set("rows", JsonPrimitive(rows))
                 .set("cols", JsonPrimitive(cols))
                 .set("required", JsonPrimitive(required))
-        )
+        ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
@@ -443,6 +444,7 @@ class SelectElement(parent: Element, initialValue: String? = null) :
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     name: String? = null, required: Boolean? = null,
+    initialValue: String? = null,
     new: (ElementCreator<SelectElement>.(SelectElement) -> Unit)? = null
 ): SelectElement {
     return SelectElement(
@@ -450,7 +452,7 @@ fun ElementCreator<Element>.select(
             "select", attributes
                 .set("name", JsonPrimitive(name))
                 .set("required", JsonPrimitive(required))
-        )
+        ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
