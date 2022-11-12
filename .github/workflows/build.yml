@@ -1,4 +1,4 @@
-name: Build, test, and deploy docs if triggered push to master
+name: Build, test, and deploy docs
 
 on:
   push:
