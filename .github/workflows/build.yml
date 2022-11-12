@@ -33,14 +33,14 @@ jobs:
       run: ./gradlew build
 
     - name: Generate API documentation
-      if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+      if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
       run: |
         VERSION=$(git tag --sort=committerdate | tail -1)
         echo Generating API documentation for version $VERSION
         ./gradlew -Pversion=$VERSION dokkaHtml
 
     - name: Deploy API documentation to Github Pages
-      if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+      if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
