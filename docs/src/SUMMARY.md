@@ -9,6 +9,5 @@
 - [CSS & Style](style.md)
 - [Components](components.md)
 - [JavaScript Interop](js.md)
-- [Integrations](integrations.md)
 - [Speed & Efficiency](speed.md)
 - [FAQ](faq.md)

@@ -155,13 +155,20 @@ open class AElement(parent: Element) : Element(parent) {
         }
 }
 
+/**
+ * Create an anchor element.
+ *
+ * @param href @see [AElement.href]
+ */
 fun ElementCreator<Element>.a(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     href: String? = null,
     new: (ElementCreator<AElement>.(AElement) -> Unit)? = null
 ): AElement {
-    return AElement(element("a", attributes.set("href", JsonPrimitive(href)))).also {
+    return AElement(element("a")).also {
+        if (href != null) it.href = href
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+        attributes.forEach { (k, v) -> it[k] = v }
     }
 }
 
@@ -368,6 +375,7 @@ fun ElementCreator<Element>.input(
     initialValue: String? = null,
     size: Int? = null,
     placeholder: String? = null,
+    required: Boolean? = null,
     new: (ElementCreator<InputElement>.(InputElement) -> Unit)? = null
 ): InputElement {
     return InputElement(
@@ -377,6 +385,7 @@ fun ElementCreator<Element>.input(
                 .set("value", JsonPrimitive(initialValue))
                 .set("placeholder", JsonPrimitive(placeholder))
                 .set("size", JsonPrimitive(size))
+                .set("required", JsonPrimitive(required))
         ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
@@ -409,6 +418,7 @@ class LinkElement(parent: Element) : Element(parent)
 fun ElementCreator<Element>.textArea(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     rows: Int? = null, cols: Int? = null, required: Boolean? = null,
+    initialValue: String? = null,
     new: (ElementCreator<TextAreaElement>.(TextAreaElement) -> Unit)? = null
 ): TextAreaElement {
     return TextAreaElement(
@@ -416,7 +426,7 @@ fun ElementCreator<Element>.textArea(
             "textArea", attributes.set("rows", JsonPrimitive(rows))
                 .set("cols", JsonPrimitive(cols))
                 .set("required", JsonPrimitive(required))
-        )
+        ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
@@ -434,6 +444,7 @@ class SelectElement(parent: Element, initialValue: String? = null) :
 fun ElementCreator<Element>.select(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     name: String? = null, required: Boolean? = null,
+    initialValue: String? = null,
     new: (ElementCreator<SelectElement>.(SelectElement) -> Unit)? = null
 ): SelectElement {
     return SelectElement(
@@ -441,7 +452,7 @@ fun ElementCreator<Element>.select(
             "select", attributes
                 .set("name", JsonPrimitive(name))
                 .set("required", JsonPrimitive(required))
-        )
+        ), initialValue = initialValue
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }

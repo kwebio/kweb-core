@@ -426,8 +426,8 @@ public final class kweb/PreludeKt {
 	public static synthetic fun i$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/IElement;
 	public static final fun img (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ImageElement;
 	public static synthetic fun img$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ImageElement;
-	public static final fun input (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/InputElement;
-	public static synthetic fun input$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/InputElement;
+	public static final fun input (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/InputElement;
+	public static synthetic fun input$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/InputElement;
 	public static final fun label (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LabelElement;
 	public static synthetic fun label$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LabelElement;
 	public static final fun li (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LIElement;
@@ -448,8 +448,8 @@ public final class kweb/PreludeKt {
 	public static final fun route (Lkweb/ElementCreator;Lkotlin/jvm/functions/Function1;)V
 	public static final fun section (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/SectionElement;
 	public static synthetic fun section$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SectionElement;
-	public static final fun select (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/SelectElement;
-	public static synthetic fun select$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SelectElement;
+	public static final fun select (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/SelectElement;
+	public static synthetic fun select$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SelectElement;
 	public static final fun span (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/SpanElement;
 	public static synthetic fun span$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SpanElement;
 	public static final fun subList (Lkweb/state/KVal;II)Lkweb/state/KVal;
@@ -460,9 +460,9 @@ public final class kweb/PreludeKt {
 	public static synthetic fun tbody$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TbodyElement;
 	public static final fun td (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TdElement;
 	public static synthetic fun td$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TdElement;
-	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
+	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
 	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
-	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
+	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
 	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
 	public static final fun th (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ThElement;
 	public static synthetic fun th$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ThElement;

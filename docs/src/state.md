@@ -160,8 +160,10 @@ which will update the original KVar if changed:
 ## Reversible mapping
 
 If you check the type of *counterDoubled*, you'll notice that it's a
-*KVal* rather than a *KVar*, meaning it cannot be modified. This will
-result in a compilation error:
+*KVal* rather than a *KVar*, meaning it cannot be modified directly, only by
+changing the *KVar* it was mapped from. 
+
+So this will result in a compilation error:
 
 ```kotlin
 val counter = KVar(0)
@@ -178,8 +180,10 @@ of *map* will produce a KVar which can be modified, as follows:
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:reversible1}}
 ```
 
+If the mapped *Kvar* is changed the original KVar it was mapped from will also
+change.
+
 Reversible mappings are an advanced feature that you only need if you
 want the mapped value to be a mutable KVar. Most of the time the simple
 [KVal.map {}](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/map.html)
 function is what you need.
-
