@@ -26,7 +26,7 @@ doc.body {
         // ANCHOR: with_result
 doc.body {
     elementScope().launch {
-        val result : JsonElement = browser.callJsFunctionWithResult("Date.now()")
+        val result : JsonElement = browser.callJsFunctionWithResult("return Date.now()")
         println("Result: ${result.jsonPrimitive.intOrNull}")
     }
 }
