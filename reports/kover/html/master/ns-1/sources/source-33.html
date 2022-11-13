@@ -803,6 +803,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        kweb.removeCallback(sessionId, callbackId)</b>
 &nbsp;    }
 &nbsp;
+&nbsp;    /**
+&nbsp;     * Calls a JavaScript function that can return a value, note that to do this [jsBody] **MUST** end with
+&nbsp;     * a `return` statement, eg:
+&nbsp;     *
+&nbsp;     * ```kotlin
+&nbsp;     *   val result = callJsFunctionWithResult(&quot;return 1 + 1&quot;)
+&nbsp;     * ```
+&nbsp;     */
 &nbsp;    suspend fun callJsFunctionWithResult(jsBody: String, vararg args: JsonElement): JsonElement {
 <b class="nc">&nbsp;        require(isCatchingOutbound() == null) {</b>
 <b class="nc">&nbsp;            &quot;You can not read the DOM inside a batched code block&quot;</b>
@@ -933,7 +941,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-12 15:32</div>
+    <div style="float:right;">generated on 2022-11-13 19:11</div>
 </div>
 </body>
 </html>
