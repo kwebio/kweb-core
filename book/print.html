@@ -1026,10 +1026,11 @@ the JavaScript code the <code>{}</code> should be treated like a variable, so <c
 <p>Kotlin automatically caches JavaScript functions in the browser for efficiency. If the function is 
 first called during initial page render, it will be parsed and cached as part of the initial page load.</p>
 <h2 id="calling-a-javascript-function-with-a-result"><a class="header" href="#calling-a-javascript-function-with-a-result">Calling a JavaScript function with a result</a></h2>
-<p>You can also retrieve a result from a function call using <a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">callJsFunctionWithResult()</a>:</p>
+<p>You can also retrieve a result from a function call using <a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">callJsFunctionWithResult()</a>.
+Note that the last line of the <code>jsBody</code> parameter must be a <code>return</code> statement:</p>
 <pre><code class="language-kotlin">doc.body {
     elementScope().launch {
-        val result : JsonElement = browser.callJsFunctionWithResult(&quot;Date.now()&quot;)
+        val result : JsonElement = browser.callJsFunctionWithResult(&quot;return Date.now()&quot;)
         println(&quot;Result: ${result.jsonPrimitive.intOrNull}&quot;)
     }
 }
