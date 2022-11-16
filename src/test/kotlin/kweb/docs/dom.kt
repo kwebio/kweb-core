@@ -23,8 +23,8 @@ Kweb(port = 16097) {
     doc.body {
         table {
             tr {
-                td().text("Name")
-                td().text("Age")
+                th().text("Name")
+                th().text("Age")
             }
             tr {
                 td().text("Alice")

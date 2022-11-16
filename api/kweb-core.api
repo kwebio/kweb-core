@@ -964,17 +964,6 @@ public final class kweb/html/Document : kweb/html/events/EventGenerator {
 	public static synthetic fun on$default (Lkweb/html/Document;Ljava/lang/String;ZILjava/lang/Object;)Lkweb/html/events/OnReceiver;
 }
 
-public class kweb/html/ElementReader {
-	public fun <init> (Lkweb/Element;)V
-	public fun <init> (Lkweb/WebBrowser;Ljava/lang/String;)V
-	public final fun getAttribute (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun getAttributes (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun getInnerHtml (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	protected final fun getReceiver ()Lkweb/WebBrowser;
-	public final fun getTagName (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun getText (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
 public final class kweb/html/HeadElement : kweb/Element {
 	public fun <init> (Lkweb/WebBrowser;Ljava/lang/String;)V
 }
