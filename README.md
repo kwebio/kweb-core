@@ -81,6 +81,7 @@ This example illustrates [creating DOM elements](https://docs.kweb.io/book/dom.h
 * [The Kweb User Manual](http://docs.kweb.io/book)
 * [API Documentation](https://docs.kweb.io/api)
 * [Example Project](https://github.com/freenet/freenetorg-website/)
+* [Unit Test Coverage](https://docs.kweb.io/reports/kover/html/master/) (master branch)
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
 * [Chat with us](https://matrix.to/#/#kweb:matrix.org)
 * [Frequently Asked Questions](https://docs.kweb.io/book/faq.html)

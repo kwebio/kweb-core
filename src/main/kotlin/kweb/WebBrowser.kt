@@ -267,6 +267,14 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         kweb.removeCallback(sessionId, callbackId)
     }
 
+    /**
+     * Calls a JavaScript function that can return a value, note that to do this [jsBody] **MUST** end with
+     * a `return` statement, eg:
+     *
+     * ```kotlin
+     *   val result = callJsFunctionWithResult("return 1 + 1")
+     * ```
+     */
     suspend fun callJsFunctionWithResult(jsBody: String, vararg args: JsonElement): JsonElement {
         require(isCatchingOutbound() == null) {
             "You can not read the DOM inside a batched code block"

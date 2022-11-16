@@ -90,20 +90,6 @@ To produce\...
 </body>
 ```
 
-You can use functions for modularization and reuse:
-
-```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/gettingstarted.kt:hello_world_3}}
-```
-
-As you can see this is an extension function, which allows you to use
-the Kweb DSL within the newly created function.
-
-Don't worry if you're unsure about this because you can use
-IntelliJ's [extract
-function](https://www.jetbrains.com/help/idea/extract-method.html)
-refactoring to create these functions automatically.
-
 ## Template Repository
 
 You can find a simple template Kweb project in

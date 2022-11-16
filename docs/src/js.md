@@ -38,7 +38,8 @@ first called during initial page render, it will be parsed and cached as part of
 
 ## Calling a JavaScript function with a result
 
-You can also retrieve a result from a function call using [callJsFunctionWithResult()](https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html):
+You can also retrieve a result from a function call using [callJsFunctionWithResult()](https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html).
+Note that the last line of the `jsBody` parameter must be a `return` statement:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/js.kt:with_result}}

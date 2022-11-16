@@ -1,7 +1,8 @@
 name: Measure unit test coverage
 
 on:
-  pull_request:
+  push:
+    branches: [master]
 
 jobs:
   build:
@@ -18,13 +19,11 @@ jobs:
         uses: gradle/gradle-build-action@v2
         
       - name: Generate kover coverage report
-        run: ./gradlew koverXmlReport
+        run: ./gradlew koverHtmlReport
 
-      - name: Add coverage report to PR
-        id: kover
-        uses: mi-kas/kover-report@v1
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: ${{ github.workspace }}/build/reports/kover/report.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: Code Coverage
-          update-comment: true
+          branch: gh-pages
+          folder: build/reports/kover/html
+          target-folder: reports/kover/html/master
