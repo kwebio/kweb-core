@@ -1,3 +1,5 @@
+import java.net.URL
+
 plugins {
     buildsrc.conventions.`kotlin-jvm`
     buildsrc.conventions.`maven-publish`
@@ -78,5 +80,15 @@ tasks.dokkaHtml {
         configureEach {
             includes.from("src/main/kotlin/packages.md")
         }
+
+        named("main") {
+            // Convert this to Kotlin
+            sourceLink {
+                localDirectory.set(file("src/main/kotlin"))
+                remoteUrl.set(URL("https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin"))
+            }
+        }
+        // Converted
+
     }
 }
