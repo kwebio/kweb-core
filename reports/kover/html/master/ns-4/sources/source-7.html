@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > StorageType</title>
+  <title>Coverage Report > TitleElement</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -21,7 +21,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">kweb.html</a>
 </div>
 
-<h1>Coverage Summary for Class: StorageType (kweb.html)</h1>
+<h1>Coverage Summary for Class: TitleElement (kweb.html)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -48,38 +48,38 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">StorageType</td>
+  <td class="name">TitleElement</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
     <td class="coverageStat"/>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/14)
+    (3/3)
   </span>
 </td>
 </tr>
@@ -93,90 +93,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package kweb.html
 &nbsp;
-&nbsp;import kotlinx.serialization.json.*
-&nbsp;import kotlinx.serialization.serializer
+&nbsp;import kweb.Element
 &nbsp;import kweb.WebBrowser
-&nbsp;import kweb.util.KWebDSL
 &nbsp;
-&nbsp;/**
-&nbsp; * Created by ian on 1/14/17.
-&nbsp; */
-&nbsp;@KWebDSL
-&nbsp;class StorageReceiver(val receiver: WebBrowser, val type: StorageType) {
-&nbsp;    private val obj = &quot;${type.name}Storage&quot;
-&nbsp;
-&nbsp;    operator fun set(key: String, value: String) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Int) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Float) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Double) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Short) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Long) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Boolean) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Char) {
-&nbsp;        set(key, JsonPrimitive(value.toString()))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: Byte) {
-&nbsp;        set(key, JsonPrimitive(value))
-&nbsp;    }
-&nbsp;
-&nbsp;    operator fun set(key: String, value: JsonElement) {
-&nbsp;        if (value == JsonNull || value.toString() == &quot;&quot;) {
-&nbsp;            throw IllegalArgumentException(&quot;$obj cannot store the value \&quot;\&quot;&quot;)
-&nbsp;        }
-&nbsp;        //language=JavaScript
-&nbsp;        receiver.callJsFunction(&quot;$obj.setItem({}, {});&quot;, JsonPrimitive(key), value)
-&nbsp;    }
-&nbsp;
-&nbsp;    suspend inline fun &lt;reified V : Any&gt; get(name: String): V? {
-&nbsp;        val result = getString(name)
-&nbsp;        val serializer = serializer&lt;V&gt;()
-&nbsp;        return when(result) {
-&nbsp;            null -&gt; null
-&nbsp;            else -&gt; Json.decodeFromString(serializer, result)
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    suspend fun getString(key: String): String? {
-&nbsp;        return when (val result = Json
-&nbsp;            .decodeFromJsonElement&lt;String&gt;(
-&nbsp;                receiver.callJsFunctionWithResult(&quot;return $obj.getItem({});&quot;, JsonPrimitive(key)))) {
-&nbsp;            &quot;&quot; -&gt; null
-&nbsp;            else -&gt; result
-&nbsp;        }
-&nbsp;    }
-&nbsp;
-&nbsp;    fun remove(key: String) {
-&nbsp;        //language=JavaScript
-&nbsp;        receiver.callJsFunction(&quot;$obj.removeItem({});&quot;, JsonPrimitive(key))
-&nbsp;    }
-&nbsp;
-&nbsp;}
-&nbsp;
-&nbsp;enum class StorageType {
-<b class="nc">&nbsp;    local, session</b>
-&nbsp;}
+&nbsp;class HeadElement(webBrowser: WebBrowser, id: String) : Element(webBrowser, null, &quot;head&quot;, id)
+<b class="fc">&nbsp;open class TitleElement(parent: Element) : Element(parent)</b>
 </code>
 </pre>
 </div>
@@ -200,7 +121,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-16 16:30</div>
+    <div style="float:right;">generated on 2022-11-16 18:58</div>
 </div>
 </body>
 </html>

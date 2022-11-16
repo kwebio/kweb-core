@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > TitleElement</title>
+  <title>Coverage Report > Window</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -21,15 +21,12 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">kweb.html</a>
 </div>
 
-<h1>Coverage Summary for Class: TitleElement (kweb.html)</h1>
+<h1>Coverage Summary for Class: Window (kweb.html)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -48,15 +45,42 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">TitleElement</td>
+  <td class="name">Window</td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    50%
   </span>
   <span class="absValue">
-    (1/1)
+    (3/6)
   </span>
 </td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.7%
+  </span>
+  <span class="absValue">
+    (11/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.7%
+  </span>
+  <span class="absValue">
+    (91/127)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Window$addEventListener$1</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -79,11 +103,73 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (3/3)
+    (5/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Window$addEventListener$eventObject$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    62.5%
+  </span>
+  <span class="absValue">
+    (5/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.4%
+  </span>
+  <span class="absValue">
+    (13/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    73.5%
+  </span>
+  <span class="absValue">
+    (100/136)
   </span>
 </td>
 </tr>
-
 </table>
 
 <br/>
@@ -93,11 +179,66 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package kweb.html
 &nbsp;
-&nbsp;import kweb.Element
-&nbsp;import kweb.WebBrowser
+&nbsp;import kotlinx.serialization.json.JsonElement
+&nbsp;import kotlinx.serialization.json.JsonPrimitive
+&nbsp;import kweb.*
+&nbsp;import kweb.html.events.Event
+&nbsp;import kweb.html.events.EventGenerator
+&nbsp;import kweb.html.events.OnImmediateReceiver
+&nbsp;import kweb.html.events.OnReceiver
+&nbsp;import kweb.util.json
+&nbsp;import kweb.util.random
+&nbsp;import kotlin.math.abs
 &nbsp;
-&nbsp;class HeadElement(webBrowser: WebBrowser, id: String) : Element(webBrowser, null, &quot;head&quot;, id)
-<b class="fc">&nbsp;open class TitleElement(parent: Element) : Element(parent)</b>
+&nbsp;/**
+&nbsp; * Represents the in-browser Document Object Model, corresponding to the JavaScript
+&nbsp; * [document](https://www.w3schools.com/jsref/dom_obj_document.asp) object.
+&nbsp; *
+&nbsp; * Passed in as `window` to the `buildPage` receiver of the [Kweb] constructor.
+&nbsp; */
+<b class="fc">&nbsp;class Window(override val browser: WebBrowser) : EventGenerator&lt;Window&gt; {</b>
+&nbsp;
+&nbsp;    override fun addImmediateEventCode(eventName: String, jsCode: String) {
+<b class="nc">&nbsp;        val wrappedJS = &quot;&quot;&quot;</b>
+&nbsp;            return window.addEventListener({}, function(event) {
+<b class="nc">&nbsp;                $jsCode</b>
+&nbsp;            });
+<b class="nc">&nbsp;        &quot;&quot;&quot;.trimIndent()</b>
+<b class="nc">&nbsp;        browser.callJsFunction(wrappedJS, eventName.json)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    override fun addEventListener(eventName: String, returnEventFields: Set&lt;String&gt;, retrieveJs: String?, preventDefault : Boolean, callback: (JsonElement) -&gt; Unit): Window {
+<b class="fc">&nbsp;        val callbackId = abs(random.nextInt())</b>
+<b class="pc">&nbsp;        val retrieveJs = if (retrieveJs != null) &quot;, \&quot;retrieved\&quot; : ($retrieveJs)&quot; else &quot;&quot;</b>
+<b class="fc">&nbsp;        val eventObject = &quot;{&quot; + returnEventFields.joinToString(separator = &quot;, &quot;) { &quot;\&quot;$it\&quot; : event.$it&quot; } + retrieveJs + &quot;}&quot;</b>
+<b class="fc">&nbsp;        val js = &quot;&quot;&quot;</b>
+&nbsp;            window.addEventListener({}, function(event) {
+<b class="pc">&nbsp;                ${if (preventDefault) &quot;event.preventDefault();&quot; else &quot;&quot;}</b>
+<b class="fc">&nbsp;                callbackWs({}, $eventObject);</b>
+&nbsp;            });
+&nbsp;        &quot;&quot;&quot;
+<b class="fc">&nbsp;        browser.callJsFunctionWithCallback(js, callbackId, callback = { payload -&gt;</b>
+<b class="fc">&nbsp;            callback.invoke(payload)</b>
+<b class="fc">&nbsp;        }, eventName.json, callbackId.json)</b>
+<b class="fc">&nbsp;        return this</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * See [here](https://docs.kweb.io/en/latest/dom.html#listening-for-events).
+&nbsp;     */
+<b class="nc">&nbsp;    val on: OnReceiver&lt;Window&gt; get() = OnReceiver(this, preventDefault = false)</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * You can supply a javascript expression `retrieveJs` which will
+&nbsp;     * be available via [Event.retrieved]
+&nbsp;     */
+<b class="fc">&nbsp;    fun on(retrieveJs: String? = null, preventDefault: Boolean = false) = OnReceiver(this, retrieveJs, preventDefault)</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * See [here](https://docs.kweb.io/en/latest/dom.html#immediate-events).
+&nbsp;     */
+<b class="nc">&nbsp;    val onImmediate get() = OnImmediateReceiver(this)</b>
+&nbsp;}
 </code>
 </pre>
 </div>
@@ -121,7 +262,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-16 16:30</div>
+    <div style="float:right;">generated on 2022-11-16 18:58</div>
 </div>
 </body>
 </html>
