@@ -151,7 +151,7 @@
 <li><a href="#further-reading">Further Reading</a></li>
 </ul>
 <h2 id="creating-dom-elements-and-fragments"><a class="header" href="#creating-dom-elements-and-fragments">Creating DOM Elements and Fragments</a></h2>
-<p>Let's create a <code>&lt;button&gt;</code> as a child of the <code>&lt;body&gt;</code> element and set its text:</p>
+<p>Let's create a <code>&lt;button&gt;</code> as a child of the <code>&lt;body&gt;</code> element and set its <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/text.html">text</a>:</p>
 <pre><code class="language-kotlin">fun main() {
     Kweb(port = 16097) {
         doc.body {
@@ -181,8 +181,8 @@
 }
 </code></pre>
 <h2 id="element-attributes"><a class="header" href="#element-attributes">Element Attributes</a></h2>
-<p>If you assign the button element to a val then you can also set its
-attributes:</p>
+<p>If you assign the button element to a val then you can also <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/set.html">set its
+attributes</a>:</p>
 <pre><code class="language-kotlin">val button = button()
 button.text(&quot;Click Me!&quot;)
 button.classes(&quot;bigbutton&quot;)
@@ -202,7 +202,7 @@ together:</p>
 <p>The created
 <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> is passed to the
 <code>{block}</code> as a parameter, which can be used to set attributes on the element, add
-listeners, or set the element's text or innerHtml:</p>
+listeners, or set the element's <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/text.html">text</a> or <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/inner-h-t-m-l.html">innerHtml</a>:</p>
 <pre><code class="language-kotlin">button { btnEl -&gt;
     with(btnEl) {
         classes(&quot;bigbutton&quot;)
