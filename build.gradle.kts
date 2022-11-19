@@ -62,7 +62,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5")
     testImplementation("io.kotest:kotest-assertions-core")
 
-    testImplementation("ch.qos.logback:logback-classic:1.4.4")
+    testImplementation("ch.qos.logback:logback-classic:1.4.5")
 
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.6.0")
