@@ -27,14 +27,6 @@ attributes:
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:setattributes}}
 ```
 
-The created [Element](https://docs.kweb.io/api/kweb-core/kweb/-element/index.html) 
-is passed to the `{block}` as a parameter, which can be used to set attributes on the 
-element, add listeners, or set the element's text or innerHtml:
-
-```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr2}}
-```
-
 Or delete it:
 
 ```kotlin
@@ -50,7 +42,16 @@ together:
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:children}}
 ```
 
-Alternatively we can use the `new {}` function to add children to a pre-existing Element:
+The created
+[Element](https://docs.kweb.io/api/kweb-core/kweb/-element/index.html) is passed to the
+`{block}` as a parameter, which can be used to set attributes on the element, add
+listeners, or set the element's text or innerHtml:
+
+```kotlin
+{{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr2}}
+```
+
+We can also use the `new {}` function to add children to a pre-existing Element:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:children_new}}
