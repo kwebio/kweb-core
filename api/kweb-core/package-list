@@ -282,14 +282,6 @@ $dokka.location:kweb.html/Document/on/#kotlin.String?#kotlin.Boolean/PointingToD
 $dokka.location:kweb.html/Document/onImmediate/#/PointingToDeclaration/kweb-core/kweb.html/-document/on-immediate.html
 $dokka.location:kweb.html/Document/receiver/#/PointingToDeclaration/kweb-core/kweb.html/-document/receiver.html
 $dokka.location:kweb.html/Document/sessionStorage/#/PointingToDeclaration/kweb-core/kweb.html/-document/session-storage.html
-$dokka.location:kweb.html/ElementReader///PointingToDeclaration/kweb-core/kweb.html/-element-reader/index.html
-$dokka.location:kweb.html/ElementReader/ElementReader/#kweb.Element/PointingToDeclaration/kweb-core/kweb.html/-element-reader/-element-reader.html
-$dokka.location:kweb.html/ElementReader/ElementReader/#kweb.WebBrowser#kotlin.String/PointingToDeclaration/kweb-core/kweb.html/-element-reader/-element-reader.html
-$dokka.location:kweb.html/ElementReader/getAttribute/#kotlin.String/PointingToDeclaration/kweb-core/kweb.html/-element-reader/get-attribute.html
-$dokka.location:kweb.html/ElementReader/getAttributes/#/PointingToDeclaration/kweb-core/kweb.html/-element-reader/get-attributes.html
-$dokka.location:kweb.html/ElementReader/getInnerHtml/#/PointingToDeclaration/kweb-core/kweb.html/-element-reader/get-inner-html.html
-$dokka.location:kweb.html/ElementReader/getTagName/#/PointingToDeclaration/kweb-core/kweb.html/-element-reader/get-tag-name.html
-$dokka.location:kweb.html/ElementReader/getText/#/PointingToDeclaration/kweb-core/kweb.html/-element-reader/get-text.html
 $dokka.location:kweb.html/HeadElement///PointingToDeclaration/kweb-core/kweb.html/-head-element/index.html
 $dokka.location:kweb.html/HeadElement/HeadElement/#kweb.WebBrowser#kotlin.String/PointingToDeclaration/kweb-core/kweb.html/-head-element/-head-element.html
 $dokka.location:kweb.html/StorageReceiver///PointingToDeclaration/kweb-core/kweb.html/-storage-receiver/index.html
