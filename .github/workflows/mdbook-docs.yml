@@ -28,7 +28,7 @@ jobs:
         with:
           owner: rust-lang
           repo: mdbook
-        excludes: prerelease, draft
+          excludes: prerelease, draft
       - name: Cache mdbook
         id: cache-mdbook
         uses: actions/cache@v3
@@ -45,7 +45,7 @@ jobs:
         with:
           owner: rust-lang
           repo: mdbook-toc
-        excludes: prerelease, draft
+          excludes: prerelease, draft
       - name: Cache mdbook-toc
         id: cache-mdbook-toc
         uses: actions/cache@v3
