@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
       - name: Determine current mdbook version
         id: mdbook-version
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: pozetroninc/github-action-get-latest-release@v0.5.0
         with:
           owner: rust-lang
           repo: mdbook
@@ -41,7 +41,7 @@ jobs:
           curl --proto '=https' --tlsv1.2 -sSf https://rossmacarthur.github.io/install/crate.sh | bash -s -- --repo "rust-lang/mdBook" --bin mdbook --to ~/.cargo/bin
       - name: Determine current mdbook-toc version
         id: mdbook-toc-version
-        uses: pozetroninc/github-action-get-latest-release@master
+        uses: pozetroninc/github-action-get-latest-release@v0.5.0
         with:
           owner: rust-lang
           repo: mdbook-toc
