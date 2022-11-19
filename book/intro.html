@@ -140,7 +140,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+                        <p>https://ktor.io/# Introduction</p>
 <h2 id="why-another-web-framework"><a class="header" href="#why-another-web-framework">Why another web framework?</a></h2>
 <p>Modern websites consist of at least two <a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)">tightly
 coupled</a>
@@ -150,33 +150,31 @@ with each other over an HTTP(S) connection.</p>
 <p>Kweb's goal is to eliminate this server/browser separation so you can
 focus on building your website or user interface, not on the plumbing.</p>
 <h2 id="what-is-kweb"><a class="header" href="#what-is-kweb">What is Kweb?</a></h2>
-<p>Kweb is a remote interface to the web browser's DOM. You can create and
-manipulate DOM elements, and listen for and handle DOM events.</p>
-<p>Kweb has a state system that lets you <a href="state.html">easily</a> bind mutable
-values to DOM elements. This allows you to build <a href="https://en.wikipedia.org/wiki/Reactive_user_interface">reactive user interfaces</a>
-that automatically update when the state changes.</p>
-<p>A common concern about this approach is that the user interface might feel
-sluggish if it is server-driven. Kweb solves this problem by
-<a href="https://docs.kweb.io/en/latest/events.html#immediate-events">preloading</a>
-instructions to the browser. This way, the instructions are executed
-immediately on browser events without a server round-trip.</p>
-<p>Kweb is built on the <a href="https://ktor.io/">Ktor</a> framework, which handles
-HTTP, HTTPS, and WebSocket transport. You don't need to know
-Ktor to use Kweb, but if you've already got a Ktor app you can <a href="https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt">embed
-Kweb as a feature</a>.</p>
+<p>Kweb is a remote interface to a web browser's DOM. With Kweb, you can create 
+and manipulate DOM elements, and bind mutable values to DOM elements, and listen for 
+and handle events. All of this can be done using an intuitive and convenient domain-specific 
+language that mirrors the structure of the HTML being created. </p>
+<p>Kweb is very efficient, using many <a href="speed.html">optimizations</a> to minimize latency and resource 
+usage both on the server and in the browser. Kweb is built on the <a href="https://ktor.io/">Ktor</a> 
+framework, which handles HTTP, HTTPS, and WebSocket transport.</p>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
-<li>Allows the problem to determine your architecture, not the
-server/browser divide</li>
-<li>End-to-end Kotlin (<a href="https://steve-yegge.blogspot.com/2017/05/why-kotlin-is-better-than-whatever-dumb.html?m=1">Why
-Kotlin?</a>)</li>
-<li>Keep the web page in sync with your back-end data in realtime, Kweb
-does all the plumbing for you</li>
-<li>Server-side HTML rendering with
-<a href="https://developers.google.com/web/updates/2019/02/rendering-on-the-web">rehydration</a></li>
-<li>Efficient instruction preloading to avoid unnecessary server
-communication</li>
-<li>Very lightweight, Kweb is less than 5,000 lines of code</li>
+<li>
+<p>End-to-end Kotlin - write your entire web site or user interface in Kotlin, without needing to communicate between a browser and server (<a href="https://steve-yegge.blogspot.com/2017/05/why-kotlin-is-better-than-whatever-dumb.html?m=1">Why
+Kotlin?</a>)</p>
+</li>
+<li>
+<p>Realtime synchronization of your back-end data with your web page - Kweb takes care of all the plumbing for you</p>
+</li>
+<li>
+<p>Server-side HTML rendering with <a href="https://en.wikipedia.org/wiki/Hydration_(web_development)">hydration</a>, Kweb can render your HTML on the server before sending it to the browser, so that the browser doesn't have to do any rendering</p>
+</li>
+<li>
+<p>Efficient instruction preloading - Kweb can avoid unnecessary server communication by preloading instructions</p>
+</li>
+<li>
+<p>Very lightweight - Kweb is less than 5,000 lines of code</p>
+</li>
 </ul>
 <h2 id="relevant-links"><a class="header" href="#relevant-links">Relevant Links</a></h2>
 <ul>
