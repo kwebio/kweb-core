@@ -99,6 +99,7 @@ class TodoDemoTest {
         site.addTodoItem(firstItem)
         site.addTodoItem(secondItem)
         site.addTodoItem(thirdItem)
+        // This line fails occasionally, but I can't figure out why - ian
         site.deleteItemByText(secondItem)
 
         await().pollInSameThread().untilAsserted {
