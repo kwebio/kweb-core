@@ -22,9 +22,39 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Determine current mdbook version
+        id: mdbook-version
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          owner: rust-lang
+          repo: mdbook
+        excludes: prerelease, draft
+      - name: Cache mdbook
+        id: cache-mdbook
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin/mdbook
+          key: ${{ runner.os }}-mdbook-${{ steps.mdbook-version.outputs.release }}
       - name: Install mdbook
+        if: steps.cache-mdbook.outputs.cache-hit != 'true'
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://rossmacarthur.github.io/install/crate.sh | bash -s -- --repo "rust-lang/mdBook" --bin mdbook --to ~/.cargo/bin
+      - name: Determine current mdbook-toc version
+        id: mdbook-toc-version
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          owner: rust-lang
+          repo: mdbook-toc
+        excludes: prerelease, draft
+      - name: Cache mdbook-toc
+        id: cache-mdbook-toc
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin/mdbook-toc
+          key: ${{ runner.os }}-mdbook-toc-${{ steps.mdbook-toc-version.outputs.release }}
+      - name: Install mdbook-toc
+        if: steps.cache-mdbook-toc.outputs.cache-hit != 'true'
+        run: |
           curl --proto '=https' --tlsv1.2 -sSf https://rossmacarthur.github.io/install/crate.sh | bash -s -- --repo "badboy/mdbook-toc" --to ~/.cargo/bin
       - name: Substituting KWEB_VERSION
         run: |
