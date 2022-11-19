@@ -27,7 +27,7 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@v0.5.0
         with:
           owner: rust-lang
-          repo: mdbook
+          repo: mdBook
           excludes: prerelease, draft
       - name: Cache mdbook
         id: cache-mdbook
@@ -43,7 +43,7 @@ jobs:
         id: mdbook-toc-version
         uses: pozetroninc/github-action-get-latest-release@v0.5.0
         with:
-          owner: rust-lang
+          owner: badboy
           repo: mdbook-toc
           excludes: prerelease, draft
       - name: Cache mdbook-toc
