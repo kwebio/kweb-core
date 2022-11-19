@@ -6,7 +6,7 @@
 
 ## Creating DOM Elements and Fragments
 
-Let's create a `<button>` as a child of the `<body>` element and set its text:
+Let's create a `<button>` as a child of the `<body>` element and set its [text](https://docs.kweb.io/api/kweb-core/kweb/-element/text.html):
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:create1}}
@@ -20,8 +20,8 @@ The Kweb DSL can be used to create nested elements:
 
 ## Element Attributes
 
-If you assign the button element to a val then you can also set its
-attributes:
+If you assign the button element to a val then you can also [set its
+attributes](https://docs.kweb.io/api/kweb-core/kweb/-element/set.html):
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:setattributes}}
@@ -45,7 +45,7 @@ together:
 The created
 [Element](https://docs.kweb.io/api/kweb-core/kweb/-element/index.html) is passed to the
 `{block}` as a parameter, which can be used to set attributes on the element, add
-listeners, or set the element's text or innerHtml:
+listeners, or set the element's [text](https://docs.kweb.io/api/kweb-core/kweb/-element/text.html) or [innerHtml](https://docs.kweb.io/api/kweb-core/kweb/-element/inner-h-t-m-l.html):
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/dom.kt:attr2}}
