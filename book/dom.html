@@ -188,17 +188,6 @@ button.text(&quot;Click Me!&quot;)
 button.classes(&quot;bigbutton&quot;)
 button[&quot;autofocus&quot;] = true
 </code></pre>
-<p>The created <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> 
-is passed to the <code>{block}</code> as a parameter, which can be used to set attributes on the 
-element, add listeners, or set the element's text or innerHtml:</p>
-<pre><code class="language-kotlin">button { btnEl -&gt;
-    with(btnEl) {
-        classes(&quot;bigbutton&quot;)
-        this[&quot;autofocus&quot;] = true
-        text(&quot;Click Me!&quot;)
-    }
-}
-</code></pre>
 <p>Or delete it:</p>
 <pre><code class="language-kotlin">button.delete()
 </code></pre>
@@ -210,7 +199,19 @@ together:</p>
     li().text(&quot;Two&quot;)
 }
 </code></pre>
-<p>Alternatively we can use the <code>new {}</code> function to add children to a pre-existing Element:</p>
+<p>The created
+<a href="https://docs.kweb.io/api/kweb-core/kweb/-element/index.html">Element</a> is passed to the
+<code>{block}</code> as a parameter, which can be used to set attributes on the element, add
+listeners, or set the element's text or innerHtml:</p>
+<pre><code class="language-kotlin">button { btnEl -&gt;
+    with(btnEl) {
+        classes(&quot;bigbutton&quot;)
+        this[&quot;autofocus&quot;] = true
+        text(&quot;Click Me!&quot;)
+    }
+}
+</code></pre>
+<p>We can also use the <code>new {}</code> function to add children to a pre-existing Element:</p>
 <pre><code class="language-kotlin">val unorderedList : ULElement = ul()
 unorderedList.new {
     li().text(&quot;One&quot;)
