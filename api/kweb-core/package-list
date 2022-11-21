@@ -330,6 +330,11 @@ $dokka.location:kweb.https/SSLConfig/privateKeyPassword/#/PointingToDeclaration/
 $dokka.location:kweb.https/SSLConfig/trustStore/#/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/trust-store.html
 $dokka.location:kweb.https/SSLConfig/trustStorePath/#/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/trust-store-path.html
 $dokka.location:kweb.https/SSLConfig/type/#/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/type.html
+$dokka.location:kweb.plugins.css////PointingToDeclaration/kweb-core/kweb.plugins.css/index.html
+$dokka.location:kweb.plugins.css/CSSPlugin///PointingToDeclaration/kweb-core/kweb.plugins.css/-c-s-s-plugin/index.html
+$dokka.location:kweb.plugins.css/CSSPlugin/CSSPlugin/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.css/-c-s-s-plugin/-c-s-s-plugin.html
+$dokka.location:kweb.plugins.css/CSSPlugin/CSSPlugin/#kotlin.String#kotlin.collections.Set[kotlin.String]/PointingToDeclaration/kweb-core/kweb.plugins.css/-c-s-s-plugin/-c-s-s-plugin.html
+$dokka.location:kweb.plugins.css/CSSPlugin/decorate/#org.jsoup.nodes.Document/PointingToDeclaration/kweb-core/kweb.plugins.css/-c-s-s-plugin/decorate.html
 $dokka.location:kweb.plugins.fomanticUI////PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/index.html
 $dokka.location:kweb.plugins.fomanticUI//fomantic/#/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/fomantic.html
 $dokka.location:kweb.plugins.fomanticUI//fomanticUIPlugin/#/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/fomantic-u-i-plugin.html
@@ -1119,6 +1124,7 @@ kweb.html.fileUpload
 kweb.html.style
 kweb.https
 kweb.plugins
+kweb.plugins.css
 kweb.plugins.fomanticUI
 kweb.plugins.jqueryCore
 kweb.plugins.specificKeyUp
