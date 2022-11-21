@@ -6,7 +6,7 @@ import kweb.plugins.staticFiles.StaticFilesPlugin
 import org.jsoup.nodes.Document
 
 /**
- * This Plugin links custom stylesheets in the HTML head tag
+ * Add multiple CSS files to your Kweb app from your resources folder.
  *
  * @property resourceFolder The relative path to the folder in the src/main/resources folder where the .css files are located
  * @property fileNames The list of file names located in the resourceFolder which should be added to the website. Only files with suffix .css (case-insensitive) will be linked

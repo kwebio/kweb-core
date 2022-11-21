@@ -57,8 +57,9 @@ Kweb is known to work well with a number of other CSS frameworks, including:
  * [Bulma](https://bulma.io/)
 
 ## Custom CSS files
-The CSSPlugin can be used to conveniently add multiple CSS files to your website, just
-add it to your resources folder as follows:
+
+The [CSSPlugin](https://docs.kweb.io/api/kweb-core/kweb.plugins.css/-c-s-s-plugin/index.html) can be used to 
+conveniently add multiple CSS files to your website, just add it to your resources folder as follows:
 
 ```
 ├── src
