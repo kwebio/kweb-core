@@ -57,11 +57,8 @@ Kweb is known to work well with a number of other CSS frameworks, including:
  * [Bulma](https://bulma.io/)
 
 ## Custom CSS files
-The CSSPlugin can be used to inject custom CSS files into the website. To do so, 
-create your .css files in a folder located in src/main/resources and 
-add the CSSPlugin to the list of plugins.
-
-As an example, for the folder structure
+The CSSPlugin can be used to conveniently add multiple CSS files to your website, just
+add it to your resources folder as follows:
 
 ```
 ├── src
@@ -71,16 +68,18 @@ As an example, for the folder structure
 │              └── test.css
 ```
 
-the plugin definition would look like this:
+Next add the plugin via the [plugins](https://docs.kweb.io/api/kweb-core/kweb/-kweb/index.html) constructor
+parameter.
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/style.kt:CSSPlugin}}
 ```
 
-You just need to specify the relative path to the folder inside src/main/resources
+Specify the relative path to the folder inside src/main/resources
 and the files to include (either a single file name or a list of file names). 
-The files will then be served under /kweb_static/css and linked in the websites 
-HTML head tag:
+
+The files will be served under /kweb_static/css and linked from the websites 
+HTML head tag, for example:
 
 ```html
 <link rel="stylesheet" type="text/css" href="/kweb_static/css/test.css">
