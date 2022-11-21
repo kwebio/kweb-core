@@ -206,25 +206,24 @@ A Kweb website built on Google Cloud Platform with Fomantic styling.</li>
 <li><a href="https://bulma.io/">Bulma</a></li>
 </ul>
 <h2 id="custom-css-files"><a class="header" href="#custom-css-files">Custom CSS files</a></h2>
-<p>The CSSPlugin can be used to inject custom CSS files into the website. To do so, 
-create your .css files in a folder located in src/main/resources and 
-add the CSSPlugin to the list of plugins.</p>
-<p>As an example, for the folder structure</p>
+<p>The CSSPlugin can be used to conveniently add multiple CSS files to your website, just
+add it to your resources folder as follows:</p>
 <pre><code>├── src
 │  └─── main
 │      └─── resources
 │          └─── css
 │              └── test.css
 </code></pre>
-<p>the plugin definition would look like this:</p>
+<p>Next add the plugin via the <a href="https://docs.kweb.io/api/kweb-core/kweb/-kweb/index.html">plugins</a> constructor
+parameter.</p>
 <pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(CSSPlugin(&quot;css&quot;, &quot;test.css&quot;))) {
     // ...
 }
 </code></pre>
-<p>You just need to specify the relative path to the folder inside src/main/resources
-and the files to include (either a single file name or a list of file names). 
-The files will then be served under /kweb_static/css and linked in the websites 
-HTML head tag:</p>
+<p>Specify the relative path to the folder inside src/main/resources
+and the files to include (either a single file name or a list of file names). </p>
+<p>The files will be served under /kweb_static/css and linked from the websites 
+HTML head tag, for example:</p>
 <pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/kweb_static/css/test.css&quot;&gt;
 </code></pre>
 
