@@ -1,0 +1,331 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Stack</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.util</a>
+</div>
+
+<h1>Coverage Summary for Class: Stack (kweb.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">Stack</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    57.1%
+  </span>
+  <span class="absValue">
+    (8/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.7%
+  </span>
+  <span class="absValue">
+    (63/79)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.util
+&nbsp;
+&nbsp;/**
+&nbsp; * A fast, lightweight string templating system with zero dependencies.
+&nbsp; *
+&nbsp; * You supply a template String and an array of tokens to replace when calling
+&nbsp; * [.apply]. The order of tokens supplied in the constructor
+&nbsp; * corresponds to the order of strings supplied in apply().
+&nbsp; *
+&nbsp; * The io.kweb.util.Template will compile your string into an executable stack, which
+&nbsp; * generates output with extreme efficiency; the only string-matching performed
+&nbsp; * is during io.kweb.util.Template compile, and it processes all tokens in a single,
+&nbsp; * efficient iteration of the template String.
+&nbsp; *
+&nbsp; * This ensures an absolute minimum of processing, and allows large templates
+&nbsp; * with a large number of replacements to scale nicely.
+&nbsp; *
+&nbsp; * Usage:
+&nbsp; *
+&nbsp; * assert
+&nbsp; * new Template(&quot;$1, $2!&quot;, &quot;$1&quot;, &quot;$2&quot;)
+&nbsp; * .apply(&quot;Hello&quot;, &quot;World&quot;)
+&nbsp; * .equals(&quot;Hello, World!&quot;);
+&nbsp; *
+&nbsp; * assert
+&nbsp; * new Template(&quot;(&lt;&gt;[])$.toArray(new Object[$.size()])&quot;, &quot;&lt;&gt;&quot;, &quot;$&quot;)
+&nbsp; * .apply(&quot;String&quot;, &quot;myList&quot;)
+&nbsp; * .equals(&quot;(String[])myList.toArray(new Object[myList.size()])&quot;);
+&nbsp; *
+&nbsp; * @author &quot;James X. Nelson (james@wetheinter.net)&quot;
+&nbsp; */
+&nbsp;class Template(template: String, vararg replaceables: String) : Stack(&quot;&quot;) {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Applies the current template to the supplied arguments.
+&nbsp;     *
+&nbsp;     */
+&nbsp;    override fun apply(vararg args: String?): String {
+&nbsp;        return super.apply(*args)
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Translates a template string into a stack of .toStringable() nodes.
+&nbsp;     */
+&nbsp;    private fun compile(template: String, replaceables: Array&lt;out String&gt;) {
+&nbsp;        var numLive = 0
+&nbsp;        // These are the only two arrays created by the io.kweb.util.Template
+&nbsp;        val tokenPositions = IntArray(replaceables.size)
+&nbsp;        val liveIndices = IntArray(replaceables.size)
+&nbsp;        // Get the first index, if any, of each replaceable token.
+&nbsp;        var i = replaceables.size
+&nbsp;        while (i-- &gt; 0) {
+&nbsp;            val next = template.indexOf(replaceables[i])
+&nbsp;            if (next &gt; -1) { // Record only live tokens (ignore missing replacements)
+&nbsp;                liveIndices[numLive++] = i
+&nbsp;                tokenPositions[i] = template.indexOf(replaceables[i])
+&nbsp;            }
+&nbsp;        }
+&nbsp;        // Try to get off easy
+&nbsp;        if (numLive == 0) {
+&nbsp;            next = Stack(template)
+&nbsp;            return
+&nbsp;        }
+&nbsp;        // Perform a single full sort of live indices
+&nbsp;        crossSort(liveIndices, tokenPositions, numLive - 1)
+&nbsp;        // Recursively fill our stack
+&nbsp;        lexTemplate(this, template, replaceables, liveIndices, tokenPositions, 0, numLive)
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Performs the lexing of the template, filling the io.kweb.util.Template io.kweb.util.Stack.
+&nbsp;     */
+&nbsp;    private fun lexTemplate(
+&nbsp;            head: Stack, template: String, replaceables: Array&lt;out String&gt;,
+&nbsp;            liveIndices: IntArray, tokenPositions: IntArray, curPos: Int, numLive: Int) { // Chop up the template string into nodes.
+&nbsp;        var curPos = curPos
+&nbsp;        var numLive = numLive
+&nbsp;        val nextIndex = liveIndices[0] // Guaranteed the lowest valid position
+&nbsp;        val nextPos = tokenPositions[nextIndex] // token position in template String
+&nbsp;        assert(nextPos &gt; -1)
+&nbsp;        // Pull off the constant string value since last token (might be 0 length)
+&nbsp;        val constant = template.substring(curPos, nextPos)
+&nbsp;        val replaceable = replaceables[nextIndex]
+&nbsp;        // Update our index in the template string
+&nbsp;        curPos = nextPos + replaceable.length
+&nbsp;        // Push a new node onto the stack
+&nbsp;        val tail = head.push(constant, nextIndex)
+&nbsp;        // Update our sort so liveIndices[0] points to next replacement position
+&nbsp;        val newPosition = template.indexOf(replaceable, nextPos + 1)
+&nbsp;        if (newPosition == -1) { // A token is exhausted
+&nbsp;            if (--numLive == 0) { // At the very end, we tack on a tail with any remaining string value
+&nbsp;                tail.next = Stack(if (curPos == template.length) &quot;&quot; else template.substring(curPos))
+&nbsp;                return  // The end of the recursion
+&nbsp;            }
+&nbsp;            // Reusing the same array, just shift values left;
+&nbsp;// We limit our scope to the numLive counter, so no need to copy arrays.
+&nbsp;            System.arraycopy(liveIndices, 1, liveIndices, 0, numLive)
+&nbsp;        } else { // This token has another replacement; we may have to re-sort.
+&nbsp;            tokenPositions[nextIndex] = newPosition
+&nbsp;            if (numLive &gt; 1 &amp;&amp; newPosition &gt; tokenPositions[liveIndices[1]]) { // Only re-sort if the new index isn&#39;t still lowest
+&nbsp;                var test = 1
+&nbsp;                while (newPosition &gt; tokenPositions[liveIndices[test]]) { // Safe to shift backwards
+&nbsp;                    liveIndices[test - 1] = liveIndices[test]
+&nbsp;                    if (++test == numLive) break
+&nbsp;                }
+&nbsp;                // Wherever the loop ended is where the current fragment must go
+&nbsp;                liveIndices[test - 1] = nextIndex
+&nbsp;            }
+&nbsp;        }
+&nbsp;        // If we didn&#39;t return, we must recurse
+&nbsp;        lexTemplate(tail, template, replaceables, liveIndices, tokenPositions, curPos, numLive)
+&nbsp;    }
+&nbsp;
+&nbsp;    companion object {
+&nbsp;        /**
+&nbsp;         * A simple adaptation of the quicksort algorithm; the only difference is that
+&nbsp;         * the values of the array being sorted are pointers to a separate array.
+&nbsp;         *
+&nbsp;         * This method is only performed once per compile,
+&nbsp;         * and then we just keep the pointers sorted as we go.
+&nbsp;         *
+&nbsp;         * @param pointers
+&nbsp;         * - The pointers to sort in ascending order
+&nbsp;         * @param values
+&nbsp;         * - The values used to determine sort order of pointers
+&nbsp;         * @param endIndex
+&nbsp;         * - Max index of pointers to sort (inclusive).
+&nbsp;         */
+&nbsp;        private fun crossSort(pointers: IntArray, values: IntArray, endIndex: Int) {
+&nbsp;            var i = 0
+&nbsp;            var j = i
+&nbsp;            while (i &lt; endIndex) {
+&nbsp;                val ai = pointers[i + 1]
+&nbsp;                while (values[ai] &lt; values[pointers[j]]) {
+&nbsp;                    pointers[j + 1] = pointers[j]
+&nbsp;                    if (j-- == 0) break
+&nbsp;                }
+&nbsp;                pointers[j + 1] = ai
+&nbsp;                j = ++i
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    init {
+&nbsp;        compile(template, replaceables)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * This is the base stack object used in the compiled io.kweb.util.Template.
+&nbsp; *
+&nbsp; * This superclass is used only for the head and tail node, which allows us to
+&nbsp; * limit the number of null checks by ensuring regular nodes never have null pointers.
+&nbsp; *
+&nbsp; * @author &quot;James X. Nelson (james@wetheinter.net)&quot;
+&nbsp; */
+<b class="fc">&nbsp;open class Stack(prefix: String?) {</b>
+&nbsp;
+<b class="fc">&nbsp;    val prefix: String?</b>
+<b class="fc">&nbsp;    var next: Stack? = null</b>
+&nbsp;    open fun apply(vararg values: String?): String {
+<b class="fc">&nbsp;        return prefix + if (next == null) &quot;&quot; else next!!.apply(*values)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Pushes a string constant and a pointer to a token&#39;s replacement position
+&nbsp;     * onto stack.
+&nbsp;     */
+&nbsp;    fun push(prefix: String?, pos: Int): Stack {
+<b class="pc">&nbsp;        assert(next == null)</b>
+<b class="fc">&nbsp;        val sn = StackNode(prefix, pos)</b>
+<b class="fc">&nbsp;        next = sn</b>
+<b class="fc">&nbsp;        return sn</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    init {</b>
+<b class="pc">&nbsp;        assert(prefix != null)</b>
+<b class="fc">&nbsp;        this.prefix = prefix</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * This subclass of io.kweb.util.Stack is for active nodes of the template which have both
+&nbsp; * a string prefix, and a pointer to a replacement value.
+&nbsp; *
+&nbsp; * Each instance of io.kweb.util.StackNode performs one direct lookup of a value during
+&nbsp; * .toString()
+&nbsp; *
+&nbsp; * @author &quot;James X. Nelson (james@wetheinter.net)&quot;
+&nbsp; */
+&nbsp;internal class StackNode(prefix: String?, position: Int) : Stack(prefix) {
+&nbsp;
+&nbsp;    private val position: Int
+&nbsp;    override fun apply(vararg values: String?): String {
+&nbsp;        return (prefix
+&nbsp;                + (if (position &lt; values.size &amp;&amp; values[position] != null) values[position] else &quot;&quot;)
+&nbsp;                + next!!.apply(*values))
+&nbsp;    }
+&nbsp;
+&nbsp;    init {
+&nbsp;        assert(position &gt;= 0)
+&nbsp;        this.position = position
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
+</div>
+</body>
+</html>

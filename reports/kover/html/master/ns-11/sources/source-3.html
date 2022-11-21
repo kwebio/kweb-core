@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > NotFoundException</title>
+  <title>Coverage Report > KValKt</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,18 +18,15 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">kweb.util</a>
+    <a href="../index.html">kweb.state</a>
 </div>
 
-<h1>Coverage Summary for Class: NotFoundException (kweb.util)</h1>
+<h1>Coverage Summary for Class: KValKt (kweb.state)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -48,15 +45,35 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">NotFoundException</td>
+  <td class="name">KValKt</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (2/2)
   </span>
 </td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (36/36)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">KValKt$logger$1</td>
 <td class="coverageStat">
   <span class="percent">
     0%
@@ -74,16 +91,91 @@ Current scope:     <a href="../../index.html">all classes</a>
     (0/1)
   </span>
 </td>
+  </tr>
+  <tr>
+    <td class="name">KValKt$plus$1</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/8)
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">KValKt$plus$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (56/56)
   </span>
 </td>
 </tr>
-
 </table>
 
 <br/>
@@ -91,85 +183,157 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package kweb.util
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.state
 &nbsp;
-&nbsp;import io.mola.galimatias.URL
-&nbsp;import kotlinx.serialization.json.JsonElement
-&nbsp;import kweb.state.KVar
-&nbsp;import org.apache.commons.text.StringEscapeUtils
-&nbsp;import java.util.*
-&nbsp;import java.util.concurrent.Executors
-&nbsp;import java.util.concurrent.ScheduledExecutorService
-&nbsp;import java.util.concurrent.TimeUnit
-&nbsp;import kotlin.reflect.KClass
+&nbsp;import kweb.util.random
+&nbsp;import mu.KotlinLogging
+&nbsp;import java.util.concurrent.ConcurrentHashMap
+&nbsp;import java.util.concurrent.ConcurrentLinkedDeque
+&nbsp;
+<b class="pc">&nbsp;private val logger = KotlinLogging.logger {}</b>
 &nbsp;
 &nbsp;/**
-&nbsp; * Created by ian on 1/7/17.
+&nbsp; * A KVal is a **read-only** observable container for a value of type T. These are typically created by
+&nbsp; * [KVal.map] or [KVar.map], but can also be created directly.
 &nbsp; */
+&nbsp;open class KVal&lt;T : Any?&gt;(value: T) : AutoCloseable{
 &nbsp;
+&nbsp;    @Volatile
+&nbsp;    protected var closeReason: CloseReason? = null
 &nbsp;
-&nbsp;val random = Random()
+&nbsp;    internal val isClosed get() = closeReason != null
 &nbsp;
-&nbsp;fun createNonce(length: Int = 6): String {
-&nbsp;    val ar = ByteArray(size = length * 2)
-&nbsp;    random.nextBytes(ar)
-&nbsp;    return Base64.getUrlEncoder().encodeToString(ar).substring(0, length)
-&nbsp;}
+&nbsp;    protected val listeners = ConcurrentHashMap&lt;Long, (T, T) -&gt; Unit&gt;()
+&nbsp;    private val closeHandlers = ConcurrentLinkedDeque&lt;() -&gt; Unit&gt;()
 &nbsp;
-&nbsp;val scheduledExecutorService: ScheduledExecutorService = Executors.newScheduledThreadPool(5)
-&nbsp;
-&nbsp;fun String.escapeEcma() = StringEscapeUtils.escapeEcmaScript(this)!!
-&nbsp;
-&nbsp;fun &lt;T&gt; warnIfBlocking(maxTimeMs: Long, onBlock: (Thread) -&gt; Unit, f: () -&gt; T): T {
-&nbsp;    val runningThread = Thread.currentThread()
-&nbsp;    val watcher = scheduledExecutorService.schedule({ onBlock(runningThread) }, maxTimeMs, TimeUnit.MILLISECONDS)
-&nbsp;    val r = f()
-&nbsp;    watcher.cancel(false)
-&nbsp;    return r
-&nbsp;}
-&nbsp;
-&nbsp;/**
-&nbsp; * Dump a stacktrace generated by a user-supplied lambda, but attempt to remove irrelevant lines to the
-&nbsp; * trace.  This is a little ugly but seems to work well, there may be a better approach.
-&nbsp; */
-&nbsp;fun Array&lt;StackTraceElement&gt;.pruneAndDumpStackTo(logStatementBuilder: StringBuilder) {
-&nbsp;    val disregardClassPrefixes = listOf(&quot;org.jetbrains.ktor&quot;, &quot;io.netty&quot;, &quot;java.lang&quot;, &quot;kotlin&quot;, &quot;kotlinx&quot;)
-&nbsp;    this.filter { ste -&gt; ste.lineNumber &gt;= 0 &amp;&amp; !disregardClassPrefixes.any { ste.className.startsWith(it) } }.forEach { stackTraceElement -&gt;
-&nbsp;        logStatementBuilder.appendLine(&quot;        at ${stackTraceElement.className}.${stackTraceElement.methodName}(${stackTraceElement.fileName}:${stackTraceElement.lineNumber})&quot;)
-&nbsp;    }
-&nbsp;}
-&nbsp;
-&nbsp;val &lt;T : Any&gt; KClass&lt;T&gt;.pkg: String
-&nbsp;    get() {
-&nbsp;        val packageName = qualifiedName
-&nbsp;        val className = simpleName
-&nbsp;        return if (packageName != null &amp;&amp; className != null) {
-&nbsp;            val endIndex = packageName.length - className.length - 1
-&nbsp;            packageName.substring(0, endIndex)
-&nbsp;        } else {
-&nbsp;            error(&quot;Cannot determine package for $this because it may be local or an anonymous object literal&quot;)
-&nbsp;        }
+&nbsp;    /**
+&nbsp;     * Add a listener to this KVar. The listener will be called whenever the [value] property changes.
+&nbsp;     */
+&nbsp;    fun addListener(listener: (T, T) -&gt; Unit): Long {
+&nbsp;        verifyNotClosed(&quot;add a listener&quot;)
+&nbsp;        val handle = random.nextLong()
+&nbsp;        listeners[handle] = listener
+&nbsp;        return handle
 &nbsp;    }
 &nbsp;
-<b class="nc">&nbsp;data class NotFoundException(override val message: String) : Exception(message)</b>
+&nbsp;    @Volatile
+&nbsp;    private var pValue: T = value
 &nbsp;
-&nbsp;val URL.pathQueryFragment: String
-&nbsp;    get() {
-&nbsp;        val sb = StringBuilder()
-&nbsp;        if (path() != null) {
-&nbsp;            sb.append(path())
+&nbsp;    /**
+&nbsp;     * The current value of this KVal, this can be read but not modified - but it may change if this [KVal] was
+&nbsp;     * created by mapping another [KVal] or using [KVal.map]. If you want to modify this value then you should
+&nbsp;     * be using a [KVar] instead.
+&nbsp;     */
+&nbsp;    open val value: T
+&nbsp;        get() {
+&nbsp;            verifyNotClosed(&quot;retrieve KVal.value&quot;)
+&nbsp;            return pValue
 &nbsp;        }
-&nbsp;        if (query() != null) {
-&nbsp;            sb.append(&#39;?&#39;).append(query())
-&nbsp;        }
-&nbsp;        if (fragment() != null) {
-&nbsp;            sb.append(&#39;#&#39;).append(fragment())
-&nbsp;        }
-&nbsp;        return sb.toString()
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Remove a listener from this KVar.  The listener will no longer be called when the [value] property
+&nbsp;     * changes.
+&nbsp;     */
+&nbsp;    fun removeListener(handle: Long) {
+&nbsp;        listeners.remove(handle)
 &nbsp;    }
 &nbsp;
-&nbsp;@DslMarker
-&nbsp;annotation class KWebDSL
+&nbsp;    /**
+&nbsp;     * Create another KVal that is a mapping of this KVal.  The mapping function will be called whenever this KVal
+&nbsp;     * changes, and the new KVal will be updated with the result of the mapping function.
+&nbsp;     *
+&nbsp;     * For bi-directional mappings, see [KVar.map].
+&nbsp;     */
+&nbsp;    fun &lt;O : Any?&gt; map(mapper: (T) -&gt; O): KVal&lt;O&gt; {
+&nbsp;        if (isClosed) {
+&nbsp;            error(&quot;Can&#39;t map this var because it was closed due to $closeReason&quot;)
+&nbsp;        }
+&nbsp;        val mappedKVal = KVal(mapper(value))
+&nbsp;        val handle = addListener { old, new -&gt;
+&nbsp;            if (!isClosed &amp;&amp; !mappedKVal.isClosed) {
+&nbsp;                if (old != new) {
+&nbsp;                    logger.debug(&quot;Updating mapped $value to $new&quot;)
+&nbsp;                    val mappedValue = mapper(new)
+&nbsp;                    mappedKVal.pValue = mappedValue
+&nbsp;                    mappedKVal.listeners.values.forEach { listener -&gt;
+&nbsp;                        try {
+&nbsp;                            val mappedOld = mapper(old)
+&nbsp;                            if (mappedOld != mappedValue) {
+&nbsp;                                listener(mappedOld, mappedValue)
+&nbsp;                            }
+&nbsp;                        } catch (e: Exception) {
+&nbsp;                            mappedKVal.close(CloseReason(&quot;Closed because mapper threw an exception&quot;, e))
+&nbsp;                        }
+&nbsp;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            } else {
+&nbsp;                error(&quot;Not propagating change to mapped variable because this or the other observable are closed, old: $old, new: $new&quot;)
+&nbsp;            }
+&nbsp;        }
+&nbsp;        mappedKVal.onClose { removeListener(handle) }
+&nbsp;        this.onClose {
+&nbsp;            mappedKVal.close(CloseReason(&quot;KVar this was mapped from was closed&quot;))
+&nbsp;        }
+&nbsp;        return mappedKVal
+&nbsp;    }
+&nbsp;
+&nbsp;    override fun close() {
+&nbsp;        close(CloseReason(&quot;Kval.close() was called&quot;))
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Close this KVal, and notify all handlers that it has been closed.
+&nbsp;     */
+&nbsp;    fun close(reason: CloseReason) {
+&nbsp;        if (!isClosed) {
+&nbsp;            closeReason = reason
+&nbsp;            closeHandlers.forEach { it.invoke() }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Add a handler to be called when this KVal is closed.
+&nbsp;     */
+&nbsp;    fun onClose(handler: () -&gt; Unit) {
+&nbsp;        verifyNotClosed(&quot;add a close handler&quot;)
+&nbsp;        closeHandlers += handler
+&nbsp;    }
+&nbsp;
+&nbsp;    override fun toString(): String {
+&nbsp;        verifyNotClosed(&quot;call KVal.toString()&quot;)
+&nbsp;        return &quot;KVal($value)&quot;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Throw an exception if this KVal is closed.
+&nbsp;     */
+&nbsp;    protected fun verifyNotClosed(triedTo: String) {
+&nbsp;        closeReason.let { closeReason -&gt;
+&nbsp;            if (closeReason != null) {
+&nbsp;                if (closeReason.cause == null) {
+&nbsp;                    throw IllegalStateException(&quot;Can&#39;t $triedTo as it was closed due to ${closeReason.explanation}&quot;)
+&nbsp;                } else {
+&nbsp;                    throw IllegalStateException(&quot;Can&#39;t $triedTo as it was closed due to ${closeReason.explanation}&quot;, closeReason.cause)
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    protected fun finalize() {
+&nbsp;        this.close(CloseReason(&quot;Garbage Collected&quot;))
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;operator fun &lt;O : Any&gt; KVal&lt;List&lt;O&gt;&gt;.plus(other : KVal&lt;List&lt;O&gt;&gt;) : KVal&lt;List&lt;O&gt;&gt; {
+<b class="fc">&nbsp;    val newKVar = KVar(this.value + other.value)</b>
+<b class="fc">&nbsp;    this.addListener { _, new -&gt; newKVar.value = new + other.value }</b>
+<b class="fc">&nbsp;    other.addListener { _, new -&gt; newKVar.value = this.value + new }</b>
+<b class="fc">&nbsp;    return newKVar</b>
+&nbsp;}
+&nbsp;
+&nbsp;data class CloseReason(val explanation: String, val cause: Throwable? = null)
 </code>
 </pre>
 </div>
@@ -193,7 +357,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-19 16:27</div>
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
 </div>
 </body>
 </html>

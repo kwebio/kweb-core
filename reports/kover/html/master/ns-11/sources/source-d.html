@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > UrlToPathSegmentsRF</title>
+  <title>Coverage Report > ReversibleFunction</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,10 +18,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">kweb.routing</a>
+    <a href="../index.html">kweb.state</a>
 </div>
 
-<h1>Coverage Summary for Class: UrlToPathSegmentsRF (kweb.routing)</h1>
+<h1>Coverage Summary for Class: ReversibleFunction (kweb.state)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -48,7 +48,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">UrlToPathSegmentsRF</td>
+  <td class="name">ReversibleFunction</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -62,7 +62,16 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (3/3)
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
@@ -70,23 +79,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (2/2)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (4/4)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (63/63)
+    (7/7)
   </span>
 </td>
 </tr>
@@ -98,19 +91,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package kweb.routing
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.state
 &nbsp;
-&nbsp;import kweb.state.ReversibleFunction
+&nbsp;/**
+&nbsp; * Defines a reversible function, for use by [KVar.map].
+&nbsp; */
+<b class="fc">&nbsp;abstract class ReversibleFunction&lt;Input, Output&gt;(val label: String) {</b>
+&nbsp;    abstract operator fun invoke(from: Input): Output
 &nbsp;
-<b class="fc">&nbsp;internal object UrlToPathSegmentsRF : ReversibleFunction&lt;String, List&lt;String&gt;&gt;(label = &quot;UrlToPathSegmentsRF&quot;) {</b>
-&nbsp;    override fun invoke(from: String): List&lt;String&gt; {
-<b class="fc">&nbsp;        return from.substringBefore(&#39;?&#39;).split(&#39;/&#39;).drop(1)</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    override fun reverse(originalUrl: String, newPath: List&lt;String&gt;): String {
-<b class="fc">&nbsp;        val queryFragment = originalUrl.substringAfter(&#39;?&#39;, missingDelimiterValue = &quot;&quot;)</b>
-<b class="fc">&nbsp;        return &#39;/&#39; + newPath.joinToString(separator = &quot;/&quot;) + (if (queryFragment != &quot;&quot;) &quot;?$queryFragment&quot; else &quot;&quot;)</b>
-&nbsp;    }
+&nbsp;    abstract fun reverse(original: Input, change: Output): Input
 &nbsp;}
 </code>
 </pre>
@@ -135,7 +124,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-19 16:27</div>
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
 </div>
 </body>
 </html>

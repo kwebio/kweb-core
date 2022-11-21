@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > JQuerySUIReceiver</title>
+  <title>Coverage Report > JqueryExtensionsKt</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,15 +18,18 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">kweb.plugins.fomanticUI</a>
+    <a href="../index.html">kweb.plugins.jqueryCore</a>
 </div>
 
-<h1>Coverage Summary for Class: JQuerySUIReceiver (kweb.plugins.fomanticUI)</h1>
+<h1>Coverage Summary for Class: JqueryExtensionsKt (kweb.plugins.jqueryCore)</h1>
 
 <table class="coverageStats">
-
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -45,44 +48,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">JQuerySUIReceiver</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/2)
-  </span>
-</td>
-    <td class="coverageStat"/>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/2)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/18)
-  </span>
-</td>
-</tr>
-  <tr>
-    <td class="name">JQuerySUIReceiver$DimmerAction</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/1)
-  </span>
-</td>
-    <td class="coverageStat"/>
+  <td class="name">JqueryExtensionsKt</td>
 <td class="coverageStat">
   <span class="percent">
     0%
@@ -96,18 +62,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/14)
-  </span>
-</td>
-  </tr>
-<tr>
-  <td class="name"><strong>Total</strong></td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/3)
+    (0/1)
   </span>
 </td>
     <td class="coverageStat"/>
@@ -124,10 +79,11 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/32)
+    (0/30)
   </span>
 </td>
 </tr>
+
 </table>
 
 <br/>
@@ -135,23 +91,36 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.fomanticUI
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.jqueryCore
 &nbsp;
-&nbsp;import kweb.plugins.jqueryCore.JQueryReceiver
+&nbsp;import kotlinx.serialization.json.JsonPrimitive
+&nbsp;import kweb.Element
+&nbsp;import kweb.WebBrowser
+&nbsp;import kweb.util.KWebDSL
 &nbsp;
 &nbsp;/**
-&nbsp; * Created by ian on 4/1/17.
+&nbsp; * Created by ian on 2/22/17.
 &nbsp; */
 &nbsp;
-&nbsp;val JQueryReceiver.sUI get() = JQuerySUIReceiver(this)
 &nbsp;
-<b class="nc">&nbsp;class JQuerySUIReceiver(val jqueryReceiver: JQueryReceiver) {</b>
-&nbsp;    fun dimmer(action: DimmerAction) {
-<b class="nc">&nbsp;        jqueryReceiver.webBrowser.callJsFunction(&quot;${jqueryReceiver.selectorExpression}.${&quot;&quot;&quot;dimmer(&#39;$action&#39;)&quot;&quot;&quot;};&quot;)</b>
+&nbsp;// Support for $(...), since Kotlin doesn&#39;t allow methods called &#39;$&#39; (which is probably a good thing)
+&nbsp;// I just use jquery()
+<b class="nc">&nbsp;fun Element.jquery(selector: String = &quot;#${this.id}&quot;): JQueryReceiver {</b>
+<b class="nc">&nbsp;    assertPluginLoaded(JQueryCorePlugin::class)</b>
+<b class="nc">&nbsp;    return JQueryReceiver(this.browser, &quot;$(${JsonPrimitive(selector)})&quot;)</b>
+&nbsp;}
+&nbsp;
+&nbsp;// And here we can implement all of the useful JQuery functions
+&nbsp;@KWebDSL
+&nbsp;class JQueryReceiver(internal val webBrowser: WebBrowser, internal val selectorExpression: String) {
+&nbsp;    val on: JQueryOnReceiver get() = JQueryOnReceiver(this)
+&nbsp;
+&nbsp;    fun focus() {
+&nbsp;        webBrowser.callJsFunction(&quot;$selectorExpression.${&quot;focus()&quot;};&quot;)
 &nbsp;    }
 &nbsp;
-&nbsp;    enum class DimmerAction {
-<b class="nc">&nbsp;        show, hide</b>
+&nbsp;    fun remove() {
+&nbsp;        webBrowser.callJsFunction(&quot;$selectorExpression.${&quot;remove()&quot;};&quot;)
 &nbsp;    }
 &nbsp;}
 </code>
@@ -177,7 +146,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-19 16:27</div>
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
 </div>
 </body>
 </html>

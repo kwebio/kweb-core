@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > RouteReceiver</title>
+  <title>Coverage Report > ViewportPlugin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,15 +18,18 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">kweb.routing</a>
+    <a href="../index.html">kweb.plugins.viewport</a>
 </div>
 
-<h1>Coverage Summary for Class: RouteReceiver (kweb.routing)</h1>
+<h1>Coverage Summary for Class: ViewportPlugin (kweb.plugins.viewport)</h1>
 
 <table class="coverageStats">
-
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -45,44 +48,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">RouteReceiver</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (3/3)
-  </span>
-</td>
-    <td class="coverageStat"/>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (6/6)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (47/47)
-  </span>
-</td>
-</tr>
-  <tr>
-    <td class="name">RouteReceiver$notFoundReceiver$1</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/1)
-  </span>
-</td>
-    <td class="coverageStat"/>
+  <td class="name">ViewportPlugin</td>
 <td class="coverageStat">
   <span class="percent">
     0%
@@ -96,66 +62,28 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/10)
-  </span>
-</td>
-  </tr>
-  <tr>
-    <td class="name">RouteReceiver$path$1</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (1/1)
+    (0/2)
   </span>
 </td>
     <td class="coverageStat"/>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    0%
   </span>
   <span class="absValue">
-    (1/1)
+    (0/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    100%
+    0%
   </span>
   <span class="absValue">
-    (4/4)
-  </span>
-</td>
-  </tr>
-<tr>
-  <td class="name"><strong>Total</strong></td>
-<td class="coverageStat">
-  <span class="percent">
-    80%
-  </span>
-  <span class="absValue">
-    (4/5)
-  </span>
-</td>
-    <td class="coverageStat"/>
-<td class="coverageStat">
-  <span class="percent">
-    87.5%
-  </span>
-  <span class="absValue">
-    (7/8)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    83.6%
-  </span>
-  <span class="absValue">
-    (51/61)
+    (0/47)
   </span>
 </td>
 </tr>
+
 </table>
 
 <br/>
@@ -163,26 +91,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package kweb.routing
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.viewport
 &nbsp;
-&nbsp;import io.ktor.server.routing.RoutingPath
-&nbsp;import kweb.h1
+&nbsp;import kweb.plugins.KwebPlugin
+&nbsp;import kweb.plugins.viewport.ViewportWidth.DeviceWidth
+&nbsp;import org.jsoup.nodes.Document
 &nbsp;
-<b class="fc">&nbsp;class RouteReceiver internal constructor() {</b>
-<b class="fc">&nbsp;    internal val templatesByLength = HashMap&lt;Int, MutableMap&lt;PathTemplate, PathReceiver&gt;&gt;()</b>
-&nbsp;
-<b class="fc">&nbsp;    internal var notFoundReceiver: NotFoundReceiver = { path -&gt;</b>
-<b class="nc">&nbsp;        h1().text(&quot;Not Found: $path&quot;)</b>
+<b class="nc">&nbsp;class ViewportPlugin(val width: ViewportWidth = DeviceWidth, val initialScale: Double = 1.0) : KwebPlugin() {</b>
+&nbsp;    override fun decorate(doc: Document) {
+<b class="nc">&nbsp;        doc.head().appendElement(&quot;meta&quot;)</b>
+<b class="nc">&nbsp;                .attr(&quot;name&quot;, &quot;viewport&quot;)</b>
+<b class="nc">&nbsp;                .attr(&quot;content&quot;, &quot;width=${width.text}, initial-scale=$initialScale&quot;)</b>
 &nbsp;    }
+&nbsp;}
 &nbsp;
-&nbsp;    fun path(template: String, pathReceiver: PathReceiver) {
-<b class="fc">&nbsp;        val routingPath = RoutingPath.parse(template).parts</b>
-<b class="fc">&nbsp;        templatesByLength.computeIfAbsent(routingPath.size) { HashMap() }[routingPath] = pathReceiver</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    fun notFound(receiver: NotFoundReceiver) {
-<b class="fc">&nbsp;        notFoundReceiver = receiver</b>
-&nbsp;    }
+&nbsp;enum class ViewportWidth(val text: String) {
+&nbsp;    DeviceWidth(&quot;device-width&quot;)
 &nbsp;}
 </code>
 </pre>
@@ -207,7 +131,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-19 16:27</div>
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
 </div>
 </body>
 </html>

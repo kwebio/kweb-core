@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > ViewportPlugin</title>
+  <title>Coverage Report > ResourceFolder</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,10 +18,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">kweb.plugins.viewport</a>
+    <a href="../index.html">kweb.plugins.staticFiles</a>
 </div>
 
-<h1>Coverage Summary for Class: ViewportPlugin (kweb.plugins.viewport)</h1>
+<h1>Coverage Summary for Class: ResourceFolder (kweb.plugins.staticFiles)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -48,38 +48,38 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">ViewportPlugin</td>
+  <td class="name">ResourceFolder</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/2)
+    (1/1)
   </span>
 </td>
     <td class="coverageStat"/>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/4)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/47)
+    (7/7)
   </span>
 </td>
 </tr>
@@ -91,23 +91,65 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.viewport
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.staticFiles
 &nbsp;
+&nbsp;import io.ktor.server.application.install
+&nbsp;import io.ktor.server.plugins.cachingheaders.*
+&nbsp;import io.ktor.http.CacheControl
+&nbsp;import io.ktor.http.content.*
+&nbsp;import io.ktor.server.http.content.*
+&nbsp;import io.ktor.server.routing.Route
+&nbsp;import io.ktor.server.routing.Routing
 &nbsp;import kweb.plugins.KwebPlugin
-&nbsp;import kweb.plugins.viewport.ViewportWidth.DeviceWidth
-&nbsp;import org.jsoup.nodes.Document
+&nbsp;import java.io.File
 &nbsp;
-<b class="nc">&nbsp;class ViewportPlugin(val width: ViewportWidth = DeviceWidth, val initialScale: Double = 1.0) : KwebPlugin() {</b>
-&nbsp;    override fun decorate(doc: Document) {
-<b class="nc">&nbsp;        doc.head().appendElement(&quot;meta&quot;)</b>
-<b class="nc">&nbsp;                .attr(&quot;name&quot;, &quot;viewport&quot;)</b>
-<b class="nc">&nbsp;                .attr(&quot;content&quot;, &quot;width=${width.text}, initial-scale=$initialScale&quot;)</b>
+&nbsp;/**
+&nbsp; * @author rpanic
+&nbsp; *
+&nbsp; * This Plugin serves static files to be used in the frontend
+&nbsp; *
+&nbsp; * @property rootFolder The root folder, where the static assets are saved
+&nbsp; * @property resourceFolder For serving resources, the path to the folder which will be served
+&nbsp; * @property servedRoute The route where these assets are being served
+&nbsp; */
+&nbsp;class StaticFilesPlugin private constructor(private val servedRoute: String, private val maxCacheAgeSeconds: Int = 60 * 60) : KwebPlugin() {
+&nbsp;
+&nbsp;    private lateinit var datasource: (Route) -&gt; Unit
+&nbsp;
+&nbsp;    constructor(rootFolder: File, servedRoute: String) : this(servedRoute) {
+&nbsp;        datasource = {
+&nbsp;            it.staticRootFolder = rootFolder
+&nbsp;        }
 &nbsp;    }
+&nbsp;
+&nbsp;    constructor(resourceFolder: ResourceFolder, servedRoute: String) : this(servedRoute) {
+&nbsp;        datasource = {
+&nbsp;            it.resources(resourceFolder.resourceFolder)
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    override fun appServerConfigurator(routeHandler: Routing) {
+&nbsp;        routeHandler.static(servedRoute) {
+&nbsp;            install(CachingHeaders) {
+&nbsp;                /*
+&nbsp;                TODO: Ideally the asset path would contain a hash of the file content
+&nbsp;                TODO: so that we can set a very long cache time (&gt; 1 year).  For now it defaults
+&nbsp;                TODO: to one hour.
+&nbsp;                 */
+&nbsp;                options { call, content -&gt;
+&nbsp;                    CachingOptions(CacheControl.MaxAge(maxAgeSeconds = maxCacheAgeSeconds))
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            datasource(this)
+&nbsp;            files(&quot;.&quot;)
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
 &nbsp;}
 &nbsp;
-&nbsp;enum class ViewportWidth(val text: String) {
-&nbsp;    DeviceWidth(&quot;device-width&quot;)
-&nbsp;}
+<b class="fc">&nbsp;data class ResourceFolder(val resourceFolder: String)</b>
 </code>
 </pre>
 </div>
@@ -131,7 +173,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-19 16:27</div>
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
 </div>
 </body>
 </html>

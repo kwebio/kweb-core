@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > SpecificKeyUpKt</title>
+  <title>Coverage Report > JQueryCorePlugin</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,10 +18,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">kweb.plugins.specificKeyUp</a>
+    <a href="../index.html">kweb.plugins.jqueryCore</a>
 </div>
 
-<h1>Coverage Summary for Class: SpecificKeyUpKt (kweb.plugins.specificKeyUp)</h1>
+<h1>Coverage Summary for Class: JQueryCorePlugin (kweb.plugins.jqueryCore)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -48,45 +48,38 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">SpecificKeyUpKt</td>
+  <td class="name">JQueryCorePlugin</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/3)
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/14)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/9)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/114)
+    (16/16)
   </span>
 </td>
 </tr>
@@ -98,60 +91,32 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.specificKeyUp
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.jqueryCore
 &nbsp;
-&nbsp;import kotlinx.serialization.json.JsonPrimitive
 &nbsp;import kweb.Element
-&nbsp;import kweb.InputElement
-&nbsp;import kweb.html.events.KeyboardEvent
-&nbsp;import kweb.html.events.OnImmediateReceiver
-&nbsp;import kweb.html.events.OnReceiver
 &nbsp;import kweb.plugins.KwebPlugin
 &nbsp;import kweb.util.json
+&nbsp;import org.jsoup.nodes.Document
+&nbsp;
 &nbsp;
 &nbsp;/**
-&nbsp; * @author sanity
-&nbsp; *
-&nbsp; * This plugin allows registering a listener on a specific key to avoid sending all `keyup` events
-&nbsp; * to the backend.
+&nbsp; * Created by ian on 1/9/17.
 &nbsp; */
-&nbsp;object SpecificKeyUpPlugin : KwebPlugin()
-&nbsp;
-&nbsp;private const val ENTER_PRESSED_EVENT_ATTACHED_FLAG = &quot;enterPressedEventAttached&quot;
-&nbsp;
-&nbsp;fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
-<b class="nc">&nbsp;    require(keys.isNotEmpty()) { &quot;You must supply at least one key&quot; }</b>
-<b class="nc">&nbsp;    require(ENTER_PRESSED_EVENT_ATTACHED_FLAG !in flags) { &quot;KeySpecificKeyupEvent may only be attached once per element&quot; }</b>
-<b class="nc">&nbsp;    flags += ENTER_PRESSED_EVENT_ATTACHED_FLAG</b>
-&nbsp;    // language=JavaScript
-<b class="nc">&nbsp;    this.browser.callJsFunction(</b>
-&nbsp;        &quot;&quot;&quot;
-&nbsp;    let id = {};
-&nbsp;    var keys = {};
-&nbsp;    let element = document.getElementById(id);
-&nbsp;    element.addEventListener(&quot;keyup&quot;, function(origEvent) {
-&nbsp;        if (keys.includes(origEvent.key)) {
-&nbsp;                if (window.CustomEvent) {
-&nbsp;                  var keySpecificKeyUpEvent = new CustomEvent(&#39;keySpecificKeyUpEvent&#39;);
-&nbsp;                } else {
-&nbsp;                var keySpecificKeyUpEvent = document.createEvent(&#39;keySpecificKeyUpEvent&#39;);
-&nbsp;                enterPressedEvent.initCustomEvent(&#39;keySpecificKeyUpEvent&#39;, true, true, origEvent);
-&nbsp;                }
-&nbsp;            element.dispatchEvent(keySpecificKeyUpEvent);
-&nbsp;        }
-&nbsp;    });
-<b class="nc">&nbsp;&quot;&quot;&quot;.trimIndent(), id.json, JsonPrimitive(keys.joinToString(separator = &quot;,&quot;))</b>
-&nbsp;    )
+<b class="fc">&nbsp;class JQueryCorePlugin : KwebPlugin() {</b>
+&nbsp;    override fun decorate(doc: Document) {
+<b class="fc">&nbsp;        doc.head().appendElement(&quot;script&quot;)</b>
+<b class="fc">&nbsp;            .attr(&quot;src&quot;, &quot;/kweb_static/plugins/jquery/jquery-3.6.1.min.js&quot;)</b>
+<b class="fc">&nbsp;            .attr(&quot;crossorigin&quot;, &quot;anonymous&quot;)</b>
+&nbsp;    }
 &nbsp;}
 &nbsp;
-&nbsp;fun OnReceiver&lt;Element&gt;.keySpecificKeyup(callback: (event: KeyboardEvent) -&gt; Unit): Element {
-<b class="nc">&nbsp;    require(source.flags.contains(ENTER_PRESSED_EVENT_ATTACHED_FLAG)) { &quot;InputElement.attachKeySpecificKeyupEvent() must be called before listening for keySpecificKeyup&quot; }</b>
-<b class="nc">&nbsp;    return this.event(&quot;keySpecificKeyUpEvent&quot;, callback = callback)</b>
-&nbsp;}
+&nbsp;val jqueryCore = JQueryCorePlugin()
 &nbsp;
-&nbsp;fun OnImmediateReceiver&lt;Element&gt;.keySpecificKeyup(callback: () -&gt; Unit): Element {
-<b class="nc">&nbsp;    require(source.flags.contains(ENTER_PRESSED_EVENT_ATTACHED_FLAG)) { &quot;InputElement.attachKeySpecificKeyupEvent() must be called before listening for keySpecificKeyup&quot; }</b>
-<b class="nc">&nbsp;    return event(&quot;keySpecificKeyUpEvent&quot;, callback = callback)</b>
+&nbsp;/**
+&nbsp; * Selects the element based on id, then executes the provided js
+&nbsp; */
+&nbsp;fun Element.executeOnSelf(js: String) {
+&nbsp;    browser.callJsFunction(&quot;$(&#39;#&#39; + {})$js&quot;, id.json)
 &nbsp;}
 </code>
 </pre>
@@ -176,7 +141,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-19 16:27</div>
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
 </div>
 </body>
 </html>

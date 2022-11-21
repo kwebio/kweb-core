@@ -1,0 +1,244 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > JQueryOnReceiver</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb.plugins.jqueryCore</a>
+</div>
+
+<h1>Coverage Summary for Class: JQueryOnReceiver (kweb.plugins.jqueryCore)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">JQueryOnReceiver</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/214)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">JQueryOnReceiver$event$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">JQueryOnReceiver$event$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/231)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.jqueryCore
+&nbsp;
+&nbsp;import kotlinx.serialization.json.Json
+&nbsp;import kotlinx.serialization.json.JsonElement
+&nbsp;import kotlinx.serialization.json.JsonPrimitive
+&nbsp;import kotlinx.serialization.serializer
+&nbsp;import kweb.html.events.MouseEvent
+&nbsp;import kweb.util.random
+&nbsp;import java.util.*
+&nbsp;import kotlin.reflect.full.memberProperties
+&nbsp;
+&nbsp;/**
+&nbsp; * Created by ian on 2/22/17.
+&nbsp; */
+&nbsp;
+<b class="nc">&nbsp;open class JQueryOnReceiver(val parent: JQueryReceiver) {</b>
+<b class="nc">&nbsp;    fun event(event: String, returnEventFields: Set&lt;String&gt; = Collections.emptySet(), callback: (JsonElement) -&gt; Unit): JQueryReceiver {</b>
+<b class="nc">&nbsp;        val callbackId = Math.abs(random.nextInt())</b>
+<b class="nc">&nbsp;        val eventObject = &quot;{&quot; + returnEventFields.map { &quot;\&quot;$it\&quot; : event.$it&quot; }.joinToString(separator = &quot;, &quot;) + &quot;}&quot;</b>
+<b class="nc">&nbsp;        val js = &quot;${parent.selectorExpression}.on(${JsonPrimitive(event)}, function(event) {callbackWs({}, $eventObject);})&quot;</b>
+<b class="nc">&nbsp;        parent.webBrowser.callJsFunctionWithCallback(js, callbackId, callback = { payload -&gt;</b>
+<b class="nc">&nbsp;            callback.invoke(payload)</b>
+<b class="nc">&nbsp;        }, JsonPrimitive(callbackId))</b>
+<b class="nc">&nbsp;        return parent</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    inline fun &lt;reified T : Any&gt; event(eventName: String, crossinline callback: (T) -&gt; Unit): JQueryReceiver {
+&nbsp;        // TODO: Should probably cache this rather than do the reflection every time
+<b class="nc">&nbsp;        val eventPropertyNames = T::class.memberProperties.map { it.name }.toSet()</b>
+&nbsp;
+<b class="nc">&nbsp;        val deserializer = serializer&lt;T&gt;()</b>
+<b class="nc">&nbsp;        event(eventName, eventPropertyNames) { propertiesAsElement -&gt;</b>
+<b class="nc">&nbsp;            val props: T = Json.decodeFromJsonElement(deserializer, propertiesAsElement)</b>
+<b class="nc">&nbsp;            callback(props)</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return parent</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // From http://www.w3schools.com/jquery/jquery_ref_events.asp, incomplete
+<b class="nc">&nbsp;    fun blur(callback: (MouseEvent) -&gt; Unit) = event(&quot;blur&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun click(callback: (MouseEvent) -&gt; Unit) = event(&quot;click&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun dblclick(callback: (MouseEvent) -&gt; Unit) = event(&quot;dblclick&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun focus(callback: (MouseEvent) -&gt; Unit) = event(&quot;focus&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun focusin(callback: (MouseEvent) -&gt; Unit) = event(&quot;focusin&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun focusout(callback: (MouseEvent) -&gt; Unit) = event(&quot;focusout&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun hover(callback: (MouseEvent) -&gt; Unit) = event(&quot;hover&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun mouseup(callback: (MouseEvent) -&gt; Unit) = event(&quot;mouseup&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun mousedown(callback: (MouseEvent) -&gt; Unit) = event(&quot;mousedown&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun mouseenter(callback: (MouseEvent) -&gt; Unit) = event(&quot;mouseenter&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun mouseleave(callback: (MouseEvent) -&gt; Unit) = event(&quot;mouseleave&quot;, callback = callback)</b>
+<b class="nc">&nbsp;    fun mousemove(callback: (MouseEvent) -&gt; Unit) = event(&quot;mousemove&quot;, callback = callback)</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
+</div>
+</body>
+</html>

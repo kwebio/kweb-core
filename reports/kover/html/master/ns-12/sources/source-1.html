@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > JqueryKt</title>
+  <title>Coverage Report > JsonKt</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -18,10 +18,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">kweb.plugins.fomanticUI</a>
+    <a href="../index.html">kweb.util</a>
 </div>
 
-<h1>Coverage Summary for Class: JqueryKt (kweb.plugins.fomanticUI)</h1>
+<h1>Coverage Summary for Class: JsonKt (kweb.util)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -48,38 +48,38 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">JqueryKt</td>
+  <td class="name">JsonKt</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    66.7%
   </span>
   <span class="absValue">
-    (0/1)
+    (2/3)
   </span>
 </td>
     <td class="coverageStat"/>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    66.7%
   </span>
   <span class="absValue">
-    (0/1)
+    (2/3)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    57.1%
   </span>
   <span class="absValue">
-    (0/4)
+    (4/7)
   </span>
 </td>
 </tr>
@@ -91,25 +91,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package kweb.plugins.fomanticUI
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb.util
 &nbsp;
-&nbsp;import kweb.plugins.jqueryCore.JQueryReceiver
+&nbsp;import kotlinx.serialization.json.JsonPrimitive
 &nbsp;
-&nbsp;/**
-&nbsp; * Created by ian on 4/1/17.
-&nbsp; */
-&nbsp;
-<b class="nc">&nbsp;val JQueryReceiver.sUI get() = JQuerySUIReceiver(this)</b>
-&nbsp;
-&nbsp;class JQuerySUIReceiver(val jqueryReceiver: JQueryReceiver) {
-&nbsp;    fun dimmer(action: DimmerAction) {
-&nbsp;        jqueryReceiver.webBrowser.callJsFunction(&quot;${jqueryReceiver.selectorExpression}.${&quot;&quot;&quot;dimmer(&#39;$action&#39;)&quot;&quot;&quot;};&quot;)
-&nbsp;    }
-&nbsp;
-&nbsp;    enum class DimmerAction {
-&nbsp;        show, hide
-&nbsp;    }
-&nbsp;}
+<b class="fc">&nbsp;val String.json get() = JsonPrimitive(this)</b>
+<b class="fc">&nbsp;val Number.json get() = JsonPrimitive(this)</b>
+<b class="nc">&nbsp;val Boolean.json get() = JsonPrimitive(this)</b>
 </code>
 </pre>
 </div>
@@ -133,7 +121,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-19 16:27</div>
+    <div style="float:right;">generated on 2022-11-21 16:33</div>
 </div>
 </body>
 </html>
