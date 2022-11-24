@@ -218,44 +218,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;}
 &nbsp;
 &nbsp;/**
-&nbsp; * Render the value of a [KVar] into DOM elements, and automatically re-render those
-&nbsp; * elements whenever the value changes.
+&nbsp; * Typealias for [ElementCreator] to simply create and manage components using an
+&nbsp; * extension function
 &nbsp; */
-&nbsp;fun &lt;PARENT_ELEMENT_TYPE : Element, RETURN_TYPE&gt; ElementCreator&lt;PARENT_ELEMENT_TYPE&gt;.render(
-&nbsp;    component: AdvancedComponent&lt;PARENT_ELEMENT_TYPE, RETURN_TYPE&gt;
-&nbsp;) : RETURN_TYPE {
-&nbsp;    return component.render(this)
-&nbsp;}
-&nbsp;
-&nbsp;// ANCHOR: component_definition
-&nbsp;/**
-&nbsp; * [AdvancedComponent]s can be rendered into DOM elements by calling [AdvancedComponent.render].
-&nbsp; *
-&nbsp; * Unlike [Component], [AdvancedComponent]s allows the parent element type to be configured, and a return
-&nbsp; * type to be specified.
-&nbsp; */
-&nbsp;interface AdvancedComponent&lt;in PARENT_ELEMENT_TYPE : Element, out RETURN_TYPE&gt; {
-&nbsp;
-&nbsp;    /**
-&nbsp;     * Render this [Component] into DOM elements, returning an arbitrary
-&nbsp;     * value of type [RETURN_TYPE].
-&nbsp;     */
-&nbsp;    fun render(elementCreator: ElementCreator&lt;PARENT_ELEMENT_TYPE&gt;) : RETURN_TYPE
-&nbsp;}
-&nbsp;// ANCHOR_END: component_definition
-&nbsp;
-&nbsp;/**
-&nbsp; * [Component]s can be rendered into DOM elements by calling [Component.render].
-&nbsp; *
-&nbsp; * For more flexibility, see [AdvancedComponent].
-&nbsp; */
-&nbsp;interface Component : AdvancedComponent&lt;Element, Unit&gt; {
-&nbsp;
-&nbsp;    /**
-&nbsp;     * Render this [Component] into DOM elements
-&nbsp;     */
-&nbsp;    override fun render(elementCreator: ElementCreator&lt;Element&gt;)
-&nbsp;}
+&nbsp;typealias Component = ElementCreator&lt;*&gt;
 &nbsp;
 &nbsp;class RenderFragment(val startId: String, val endId: String) {
 &nbsp;    private val deletionListeners = ArrayList&lt;() -&gt; Unit&gt;()
@@ -301,7 +267,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-11-21 16:40</div>
+    <div style="float:right;">generated on 2022-11-24 22:22</div>
 </div>
 </body>
 </html>
