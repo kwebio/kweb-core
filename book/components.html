@@ -154,45 +154,28 @@ reusability, testability, and the ability to reason about a system in isolation.
 <h2 id="the-component-interface"><a class="header" href="#the-component-interface">The Component Interface</a></h2>
 <p><strong>Component</strong> (<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E">api</a>) 
 is a simple but powerful abstraction to create reusable UI components in Kweb:</p>
-<pre><code class="language-kotlin">/**
- * [AdvancedComponent]s can be rendered into DOM elements by calling [AdvancedComponent.render].
- *
- * Unlike [Component], [AdvancedComponent]s allows the parent element type to be configured, and a return
- * type to be specified.
- */
-interface AdvancedComponent&lt;in PARENT_ELEMENT_TYPE : Element, out RETURN_TYPE&gt; {
-
-    /**
-     * Render this [Component] into DOM elements, returning an arbitrary
-     * value of type [RETURN_TYPE].
-     */
-    fun render(elementCreator: ElementCreator&lt;PARENT_ELEMENT_TYPE&gt;) : RETURN_TYPE
-}
+<pre><code class="language-kotlin">
 </code></pre>
 <h2 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h2>
-<pre><code class="language-kotlin">class SimpleComponent(
-    val prompt: String = &quot;Enter Your Name&quot;,
-    val name: KVar&lt;String&gt;
-) : Component {
-    override fun render(elementCreator: ElementCreator&lt;Element&gt;) {
-        with(elementCreator) {
-            div {
-                h1().text(prompt)
-                input(type = text).value = name
-            }
-            div {
-                span().text(name.map { &quot;Hello, $it&quot; })
-            }
-        }
+<pre><code class="language-kotlin">fun Component.simple(
+    prompt: String = &quot;Enter Your Name&quot;,
+    name: KVar&lt;String&gt;
+) {
+    div {
+        h1().text(prompt)
+        input(type = text).value = name
+    }
+    div {
+        span().text(name.map { &quot;Hello, $it&quot; })
     }
 }
 </code></pre>
 <p>This component can then be passed to <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">ElementCreator.render</a>:</p>
-<pre><code class="language-kotlin">Kweb(port = 16097) {
-    doc.body {
-        render(SimpleComponent(name = kvar(&quot;World&quot;)))
+<pre><code class="language-kotlin">    Kweb(port = 16097) {
+        doc.body {
+            simple(name = kvar(&quot;World&quot;))
+        }
     }
-}
 </code></pre>
 <p>Components are configured through constructor parameters, typically through
 a mixture of:</p>
@@ -209,95 +192,90 @@ a generically typed value (or <strong>Unit</strong> if no value is returned).</p
 <h2 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h2>
 <p>In this example we create a <strong>Component</strong> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
 styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
-<pre><code class="language-kotlin">class BulmaInput(
-    val type : InputType,
-    val color: KVal&lt;BulmaColor&gt;? = null,
-    val size: KVal&lt;BulmaSize&gt;? = null,
-    val style: KVal&lt;BulmaStyle&gt;? = null,
-    val state: KVal&lt;BulmaState&gt;? = null,
-    val disabled: KVal&lt;Boolean&gt;? = null,
-    val value: KVar&lt;String&gt;
-) : Component {
+<pre><code class="language-kotlin">enum class BulmaColor(val cssClassName: String) {
+    PRIMARY(&quot;is-primary&quot;),
+    LINK(&quot;is-link&quot;),
+    INFO(&quot;is-info&quot;),
+    SUCCESS(&quot;is-success&quot;),
+    WARNING(&quot;is-warning&quot;),
+    DANGER(&quot;is-danger&quot;)
+}
 
-    override fun render(elementCreator: ElementCreator&lt;*&gt;) {
-        with(elementCreator) {
-            input(type = type) { inputElement -&gt;
-                var inputClassList: KVal&lt;List&lt;String&gt;&gt; = kval(listOf(&quot;input&quot;))
-                with(inputElement) {
+enum class BulmaSize(val cssClassName: String) {
+    SMALL(&quot;is-small&quot;),
+    NORMAL(&quot;is-normal&quot;),
+    MEDIUM(&quot;is-medium&quot;),
+    LARGE(&quot;is-large&quot;)
+}
 
-                    if (color != null) {
-                        inputClassList += color.map { listOf(it.cssClassName) }
-                    }
-                    if (size != null) {
-                        inputClassList += size.map { listOf(it.cssClassName) }
-                    }
-                    if (this@BulmaInput.style != null) {
-                        inputClassList += this@BulmaInput.style.map { listOf(it.cssClassName) }
-                    }
-                    if (state != null) {
-                        inputClassList += state.map { listOf(it.cssClassName) }
-                    }
+enum class BulmaStyle(val cssClassName: String) {
+    ROUNDED(&quot;is-rounded&quot;),
+    FOCUSED(&quot;is-focused&quot;)
+}
 
-                    if (disabled != null) {
-                        this[&quot;disabled&quot;] = disabled.map { it.json }
-                    }
+enum class BulmaState(val cssClassName: String) {
+    NORMAL(&quot;is-normal&quot;),
+    HOVER(&quot;is-hovered&quot;),
+    FOCUS(&quot;is-focused&quot;),
+    LOADING(&quot;is-loading&quot;),
+}
 
-                    classes(inputClassList.map { it.joinToString(&quot; &quot;) })
+fun Component.bulmaInput(
+    type: InputType,
+    color: KVal&lt;BulmaColor&gt;? = null,
+    size: KVal&lt;BulmaSize&gt;? = null,
+    style: KVal&lt;BulmaStyle&gt;? = null,
+    state: KVal&lt;BulmaState&gt;? = null,
+    disabled: KVal&lt;Boolean&gt;? = null,
+    value: KVar&lt;String&gt;
+) {
+    input(type = type) { inputElement -&gt;
+        var inputClassList: KVal&lt;List&lt;String&gt;&gt; = kval(listOf(&quot;input&quot;))
+        with(inputElement) {
 
-                    this.value = this@BulmaInput.value
-
-                }
+            if (color != null) {
+                inputClassList += color.map { listOf(it.cssClassName) }
             }
+            if (size != null) {
+                inputClassList += size.map { listOf(it.cssClassName) }
+            }
+            if (style != null) {
+                inputClassList += style.map { listOf(it.cssClassName) }
+            }
+            if (state != null) {
+                inputClassList += state.map { listOf(it.cssClassName) }
+            }
+
+            if (disabled != null) {
+                this[&quot;disabled&quot;] = disabled.map { it.json }
+            }
+
+            classes(inputClassList.map { it.joinToString(&quot; &quot;) })
+
+            this.value = value
+
         }
-    }
-
-    enum class BulmaColor(val cssClassName: String) {
-        PRIMARY(&quot;is-primary&quot;),
-        LINK(&quot;is-link&quot;),
-        INFO(&quot;is-info&quot;),
-        SUCCESS(&quot;is-success&quot;),
-        WARNING(&quot;is-warning&quot;),
-        DANGER(&quot;is-danger&quot;)
-    }
-
-    enum class BulmaSize(val cssClassName: String) {
-        SMALL(&quot;is-small&quot;),
-        NORMAL(&quot;is-normal&quot;),
-        MEDIUM(&quot;is-medium&quot;),
-        LARGE(&quot;is-large&quot;)
-    }
-
-    enum class BulmaStyle(val cssClassName: String) {
-        ROUNDED(&quot;is-rounded&quot;),
-        FOCUSED(&quot;is-focused&quot;)
-    }
-
-    enum class BulmaState(val cssClassName: String) {
-        NORMAL(&quot;is-normal&quot;),
-        HOVER(&quot;is-hovered&quot;),
-        FOCUS(&quot;is-focused&quot;),
-        LOADING(&quot;is-loading&quot;),
     }
 }
 </code></pre>
 <p>This component can then be used like this:</p>
-<pre><code class="language-kotlin">Kweb(port = 12354) {
-    doc.head {
-        element(&quot;link&quot;,
-            attributes = mapOf(
-                &quot;rel&quot; to &quot;stylesheet&quot;.json,
-                &quot;href&quot; to &quot;https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css&quot;.json
+<pre><code class="language-kotlin">    Kweb(port = 12354) {
+        doc.head {
+            element(
+                &quot;link&quot;,
+                attributes = mapOf(
+                    &quot;rel&quot; to &quot;stylesheet&quot;.json,
+                    &quot;href&quot; to &quot;https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css&quot;.json
+                )
             )
-        )
-    }
-
-    doc.body {
-        val username = kvar(&quot;&quot;)
-        val color = username.map { if (it.length &lt; 5) { WARNING } else { SUCCESS }
         }
-        render(BulmaInput(type = text, value = username, color = color))
+
+        doc.body {
+            val username = kvar(&quot;&quot;)
+            val color = username.map { if (it.length &lt; 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
+            bulmaInput(type = text, value = username, color = color)
+        }
     }
-}
 </code></pre>
 
                     </main>
