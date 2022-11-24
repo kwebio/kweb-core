@@ -629,16 +629,11 @@ $dokka.location:kweb.state//notNull/kweb.state.KVar[TypeParam(bounds=[kotlin.Any
 $dokka.location:kweb.state//plus/kweb.state.KVal[kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]]#kweb.state.KVal[kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]]/PointingToDeclaration/kweb-core/kweb.state/plus.html
 $dokka.location:kweb.state//property/kweb.state.KVar[TypeParam(bounds=[kotlin.Any?])]#kotlin.reflect.KProperty1[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kweb-core/kweb.state/property.html
 $dokka.location:kweb.state//render/kweb.ElementCreator[*]#kweb.state.KVal[TypeParam(bounds=[kotlin.Any?])]#kotlin.Function2[kweb.ElementCreator[kweb.Element],TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/render.html
-$dokka.location:kweb.state//render/kweb.ElementCreator[TypeParam(bounds=[kweb.Element])]#kweb.state.AdvancedComponent[TypeParam(bounds=[kweb.Element]),TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kweb-core/kweb.state/render.html
 $dokka.location:kweb.state//renderEach/kweb.ElementCreator[TypeParam(bounds=[kweb.Element])]#kweb.state.ObservableList[TypeParam(bounds=[kotlin.Any])]#kotlin.Function2[kweb.ElementCreator[kweb.Element],TypeParam(bounds=[kotlin.Any]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/render-each.html
-$dokka.location:kweb.state/AdvancedComponent///PointingToDeclaration/kweb-core/kweb.state/-advanced-component/index.html
-$dokka.location:kweb.state/AdvancedComponent/render/#kweb.ElementCreator[TypeParam(bounds=[kweb.Element])]/PointingToDeclaration/kweb-core/kweb.state/-advanced-component/render.html
 $dokka.location:kweb.state/CloseReason///PointingToDeclaration/kweb-core/kweb.state/-close-reason/index.html
 $dokka.location:kweb.state/CloseReason/CloseReason/#kotlin.String#kotlin.Throwable?/PointingToDeclaration/kweb-core/kweb.state/-close-reason/-close-reason.html
 $dokka.location:kweb.state/CloseReason/cause/#/PointingToDeclaration/kweb-core/kweb.state/-close-reason/cause.html
 $dokka.location:kweb.state/CloseReason/explanation/#/PointingToDeclaration/kweb-core/kweb.state/-close-reason/explanation.html
-$dokka.location:kweb.state/Component///PointingToDeclaration/kweb-core/kweb.state/-component/index.html
-$dokka.location:kweb.state/Component/render/#kweb.ElementCreator[kweb.Element]/PointingToDeclaration/kweb-core/kweb.state/-component/render.html
 $dokka.location:kweb.state/KVal///PointingToDeclaration/kweb-core/kweb.state/-k-val/index.html
 $dokka.location:kweb.state/KVal/KVal/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/kweb-core/kweb.state/-k-val/-k-val.html
 $dokka.location:kweb.state/KVal/addListener/#kotlin.Function2[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.state/-k-val/add-listener.html
