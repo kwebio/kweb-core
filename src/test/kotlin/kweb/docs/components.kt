@@ -22,11 +22,11 @@ fun Component.simple(
 
 fun simple_component() {
     // ANCHOR: component_usage
-Kweb(port = 16097) {
-    doc.body {
-        simple(name = kvar("World"))
+    Kweb(port = 16097) {
+        doc.body {
+            simple(name = kvar("World"))
+        }
     }
-}
     // ANCHOR_END: component_usage
 }
 
@@ -61,7 +61,7 @@ enum class BulmaState(val cssClassName: String) {
 }
 
 fun Component.bulmaInput(
-    type : InputType,
+    type: InputType,
     color: KVal<BulmaColor>? = null,
     size: KVal<BulmaSize>? = null,
     style: KVal<BulmaStyle>? = null,
@@ -101,21 +101,22 @@ fun Component.bulmaInput(
 
 fun bulmaComponentUsageExample() {
     // ANCHOR: bulma_component_usage
-Kweb(port = 12354) {
-    doc.head {
-        element("link",
-            attributes = mapOf(
-                "rel" to "stylesheet".json,
-                "href" to "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css".json
+    Kweb(port = 12354) {
+        doc.head {
+            element(
+                "link",
+                attributes = mapOf(
+                    "rel" to "stylesheet".json,
+                    "href" to "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css".json
+                )
             )
-        )
-    }
+        }
 
-    doc.body {
-        val username = kvar("")
-        val color = username.map { if (it.length < 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
-        bulmaInput(type = text, value = username, color = color)
+        doc.body {
+            val username = kvar("")
+            val color = username.map { if (it.length < 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
+            bulmaInput(type = text, value = username, color = color)
+        }
     }
-}
     // ANCHOR_END: bulma_component_usage
 }
