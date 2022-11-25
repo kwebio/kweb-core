@@ -8,7 +8,7 @@ Composable components help manage software complexity by allowing developers to 
 a complex problem into smaller, more manageable pieces. Other benefits include
 reusability, testability, and the ability to reason about a system in isolation.
 
-## The kweb.state.Component typealias
+## The Component typealias
 
 We rely on a small amount of syntactic sugar defined in [kweb.components.Component](https://docs.kweb.io/api/kweb-core/kweb.components.html#7274344%2FClasslikes%2F769193423):
 
