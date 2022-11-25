@@ -125,10 +125,46 @@ fun ElementCreator<*>.closeOnElementCreatorCleanup(kv: KVal<*>) {
 }
 
 /**
- * Typealias for [ElementCreator] to simply create and manage components using an
- * extension function
+ * Render the value of a [KVar] into DOM elements, and automatically re-render those
+ * elements whenever the value changes.
  */
-typealias Component = ElementCreator<*>
+@Deprecated("Use kweb.components.Component instead, see: https://docs.kweb.io/book/components.html")
+fun <PARENT_ELEMENT_TYPE : Element, RETURN_TYPE> ElementCreator<PARENT_ELEMENT_TYPE>.render(
+    component: AdvancedComponent<PARENT_ELEMENT_TYPE, RETURN_TYPE>
+) : RETURN_TYPE {
+    return component.render(this)
+}
+
+
+/**
+ * [AdvancedComponent]s can be rendered into DOM elements by calling [AdvancedComponent.render].
+ *
+ * Unlike [Component], [AdvancedComponent]s allows the parent element type to be configured, and a return
+ * type to be specified.
+ */
+@Deprecated("Use kweb.components.Component instead, see: https://docs.kweb.io/book/components.html")
+interface AdvancedComponent<in PARENT_ELEMENT_TYPE : Element, out RETURN_TYPE> {
+
+    /**
+     * Render this [Component] into DOM elements, returning an arbitrary
+     * value of type [RETURN_TYPE].
+     */
+    fun render(elementCreator: ElementCreator<PARENT_ELEMENT_TYPE>) : RETURN_TYPE
+}
+
+/**
+ * [Component]s can be rendered into DOM elements by calling [Component.render].
+ *
+ * For more flexibility, see [AdvancedComponent].
+ */
+@Deprecated("Use kweb.components.Component instead, see: https://docs.kweb.io/book/components.html")
+interface Component : AdvancedComponent<Element, Unit> {
+
+    /**
+     * Render this [Component] into DOM elements
+     */
+    override fun render(elementCreator: ElementCreator<Element>)
+}
 
 class RenderFragment(val startId: String, val endId: String) {
     private val deletionListeners = ArrayList<() -> Unit>()

@@ -2,6 +2,7 @@ package kweb.docs
 
 import kweb.*
 import kweb.InputType.text
+import kweb.components.Component
 import kweb.state.*
 import kweb.util.json
 
