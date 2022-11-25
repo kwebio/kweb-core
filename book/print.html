@@ -860,20 +860,18 @@ HTML head tag, for example:</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="components"><a class="header" href="#components">Components</a></h1>
 <ul>
 <li><a href="components.html#managing-complexity">Managing Complexity</a></li>
-<li><a href="components.html#the-component-interface">The Component Interface</a></li>
-<li><a href="components.html#a-simple-example">A Simple Example</a></li>
+<li><a href="components.html#the-kwebstatecomponent-typealias">The kweb.state.Component typealias</a></li>
 <li><a href="components.html#a-more-complex-example">A more complex example</a></li>
 </ul>
 <h2 id="managing-complexity"><a class="header" href="#managing-complexity">Managing Complexity</a></h2>
 <p>Composable components help manage software complexity by allowing developers to break down
 a complex problem into smaller, more manageable pieces. Other benefits include
 reusability, testability, and the ability to reason about a system in isolation.</p>
-<h2 id="the-component-interface"><a class="header" href="#the-component-interface">The Component Interface</a></h2>
-<p><strong>Component</strong> (<a href="https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E">api</a>) 
-is a simple but powerful abstraction to create reusable UI components in Kweb:</p>
-<pre><code class="language-kotlin">
+<h2 id="the-kwebstatecomponent-typealias"><a class="header" href="#the-kwebstatecomponent-typealias">The kweb.state.Component typealias</a></h2>
+<p>We rely on a small amount of syntactic sugar:</p>
+<pre><code class="language-kotlin">typealias Component = ElementCreator&lt;*&gt;
 </code></pre>
-<h2 id="a-simple-example-1"><a class="header" href="#a-simple-example-1">A Simple Example</a></h2>
+<p>And then we can use an extension function on this to create a component:</p>
 <pre><code class="language-kotlin">fun Component.simple(
     prompt: String = &quot;Enter Your Name&quot;,
     name: KVar&lt;String&gt;
@@ -887,7 +885,7 @@ is a simple but powerful abstraction to create reusable UI components in Kweb:</
     }
 }
 </code></pre>
-<p>This component can then be passed to <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">ElementCreator.render</a>:</p>
+<p>And we use the component like this:</p>
 <pre><code class="language-kotlin">    Kweb(port = 16097) {
         doc.body {
             simple(name = kvar(&quot;World&quot;))
