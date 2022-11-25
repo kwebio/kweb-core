@@ -8,22 +8,21 @@ Composable components help manage software complexity by allowing developers to 
 a complex problem into smaller, more manageable pieces. Other benefits include
 reusability, testability, and the ability to reason about a system in isolation.
 
-## The Component Interface
+## The kweb.state.Component typealias
 
-**Component** ([api](https://docs.kweb.io/api/kweb-core/kweb.state/-component/index.html?query=interface%20Component%3CR%3E)) 
-is a simple but powerful abstraction to create reusable UI components in Kweb:
+We rely on a small amount of syntactic sugar:
 
 ```kotlin
-{{#include ../../src/main/kotlin/kweb/state/render.kt:component_definition}}
+typealias Component = ElementCreator<*>
 ```
 
-## A Simple Example
+And then we can use an extension function on this to create a component:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:simple_component}}
 ```
 
-This component can then be passed to [ElementCreator.render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html):
+And we use the component like this:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:component_usage}}
