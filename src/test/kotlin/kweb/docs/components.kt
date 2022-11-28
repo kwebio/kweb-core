@@ -33,63 +33,44 @@ fun simple_component() {
 
 
 // ANCHOR: bulma_component_example
-enum class BulmaColor(val cssClassName: String) {
-    PRIMARY("is-primary"),
-    LINK("is-link"),
-    INFO("is-info"),
-    SUCCESS("is-success"),
-    WARNING("is-warning"),
-    DANGER("is-danger")
+interface BulmaClass {
+    val cssClassName: String
 }
 
-enum class BulmaSize(val cssClassName: String) {
-    SMALL("is-small"),
-    NORMAL("is-normal"),
-    MEDIUM("is-medium"),
-    LARGE("is-large")
+enum class BulmaColor(override val cssClassName: String) : BulmaClass {
+    PRIMARY("is-primary"), LINK("is-link"),
+    INFO("is-info"), SUCCESS("is-success"),
+    WARNING("is-warning"), DANGER("is-danger")
 }
 
-enum class BulmaStyle(val cssClassName: String) {
-    ROUNDED("is-rounded"),
-    FOCUSED("is-focused")
+enum class BulmaSize(override val cssClassName: String) : BulmaClass {
+    SMALL("is-small"), NORMAL("is-normal"),
+    MEDIUM("is-medium"), LARGE("is-large")
 }
 
-enum class BulmaState(val cssClassName: String) {
-    NORMAL("is-normal"),
-    HOVER("is-hovered"),
-    FOCUS("is-focused"),
-    LOADING("is-loading"),
+enum class BulmaStyle(override val cssClassName: String) : BulmaClass {
+    ROUNDED("is-rounded"), FOCUSED("is-focused")
+}
+
+enum class BulmaState(override val cssClassName: String) : BulmaClass {
+    NORMAL("is-normal"), HOVER("is-hovered"),
+    FOCUS("is-focused"), LOADING("is-loading"),
 }
 
 fun Component.bulmaInput(
     type: InputType,
-    color: KVal<BulmaColor>? = null,
-    size: KVal<BulmaSize>? = null,
-    style: KVal<BulmaStyle>? = null,
-    state: KVal<BulmaState>? = null,
-    disabled: KVal<Boolean>? = null,
-    value: KVar<String>
+    value: KVar<String>,
+    vararg classes : KVal<out BulmaClass> = arrayOf(),
+
 ) {
     input(type = type) { inputElement ->
         var inputClassList: KVal<List<String>> = kval(listOf("input"))
+
+        for (c in classes) {
+            inputClassList += c.map { listOf(it.cssClassName) }
+        }
+
         with(inputElement) {
-
-            if (color != null) {
-                inputClassList += color.map { listOf(it.cssClassName) }
-            }
-            if (size != null) {
-                inputClassList += size.map { listOf(it.cssClassName) }
-            }
-            if (style != null) {
-                inputClassList += style.map { listOf(it.cssClassName) }
-            }
-            if (state != null) {
-                inputClassList += state.map { listOf(it.cssClassName) }
-            }
-
-            if (disabled != null) {
-                this["disabled"] = disabled.map { it.json }
-            }
 
             classes(inputClassList.map { it.joinToString(" ") })
 
@@ -116,7 +97,7 @@ fun bulmaComponentUsageExample() {
         doc.body {
             val username = kvar("")
             val color = username.map { if (it.length < 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
-            bulmaInput(type = text, value = username, color = color)
+            bulmaInput(type = text, value = username, color)
         }
     }
     // ANCHOR_END: bulma_component_usage
