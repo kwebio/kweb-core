@@ -175,7 +175,7 @@ reusability, testability, and the ability to reason about a system in isolation.
         }
     }
 </code></pre>
-<p>Components are configured through constructor parameters, typically through
+<p>Components are configured through the extension fuunction parameters, typically through
 a mixture of:</p>
 <ul>
 <li><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>s for values that can change</li>
@@ -183,10 +183,8 @@ a mixture of:</p>
 <li><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html">ObservableList</a>s for lists of values that can change</li>
 <li>Other normal classes like <strong>String</strong> for immutable values</li>
 </ul>
-<p>The simplest Component's may have no constructor at all, or just one or two, 
-parameters, while the most complex might use a <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
-<p><strong>Component</strong>'s can be rendered by calling their <strong>render()</strong> method, which can return
-a generically typed value (or <strong>Unit</strong> if no value is returned).</p>
+<p>The simplest Component's may have no parameters at all, or just one or two, while the most complex might use 
+a <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
 <h2 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h2>
 <p>In this example we create a <strong>Component</strong> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
 styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
