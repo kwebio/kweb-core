@@ -28,7 +28,7 @@ And we use the component like this:
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:component_usage}}
 ```
 
-Components are configured through constructor parameters, typically through
+Components are configured through the extension fuunction parameters, typically through
 a mixture of:
 
 * [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s for values that can change
@@ -36,11 +36,8 @@ a mixture of:
 * [ObservableList](https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html)s for lists of values that can change
 * Other normal classes like **String** for immutable values
 
-The simplest Component's may have no constructor at all, or just one or two, 
-parameters, while the most complex might use a [DSL builder](https://in-kotlin.com/design-patterns/builder-pattern/dsl/).
-
-**Component**'s can be rendered by calling their **render()** method, which can return
-a generically typed value (or **Unit** if no value is returned).
+The simplest Component's may have no parameters at all, or just one or two, while the most complex might use 
+a [DSL builder](https://in-kotlin.com/design-patterns/builder-pattern/dsl/).
 
 ## A more complex example
 
