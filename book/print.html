@@ -6,7 +6,6 @@
         <title>The Kweb User Manual</title>
         <meta name="robots" content="noindex" />
         <!-- Custom HTML head -->
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="User manual for the Kweb web framework">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -29,13 +28,13 @@
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -51,7 +50,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -63,7 +62,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -94,7 +93,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -128,7 +127,7 @@
                     </div>
                 </div>
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -905,63 +904,44 @@ a <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL build
 <h2 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h2>
 <p>In this example we create a <strong>Component</strong> that wraps an <a href="https://bulma.io/documentation/form/input/">&lt;input&gt; element</a>
 styled using the <a href="https://bulma.io/">Bulma CSS framework</a>:</p>
-<pre><code class="language-kotlin">enum class BulmaColor(val cssClassName: String) {
-    PRIMARY(&quot;is-primary&quot;),
-    LINK(&quot;is-link&quot;),
-    INFO(&quot;is-info&quot;),
-    SUCCESS(&quot;is-success&quot;),
-    WARNING(&quot;is-warning&quot;),
-    DANGER(&quot;is-danger&quot;)
+<pre><code class="language-kotlin">interface BulmaClass {
+    val cssClassName: String
 }
 
-enum class BulmaSize(val cssClassName: String) {
-    SMALL(&quot;is-small&quot;),
-    NORMAL(&quot;is-normal&quot;),
-    MEDIUM(&quot;is-medium&quot;),
-    LARGE(&quot;is-large&quot;)
+enum class BulmaColor(override val cssClassName: String) : BulmaClass {
+    PRIMARY(&quot;is-primary&quot;), LINK(&quot;is-link&quot;),
+    INFO(&quot;is-info&quot;), SUCCESS(&quot;is-success&quot;),
+    WARNING(&quot;is-warning&quot;), DANGER(&quot;is-danger&quot;)
 }
 
-enum class BulmaStyle(val cssClassName: String) {
-    ROUNDED(&quot;is-rounded&quot;),
-    FOCUSED(&quot;is-focused&quot;)
+enum class BulmaSize(override val cssClassName: String) : BulmaClass {
+    SMALL(&quot;is-small&quot;), NORMAL(&quot;is-normal&quot;),
+    MEDIUM(&quot;is-medium&quot;), LARGE(&quot;is-large&quot;)
 }
 
-enum class BulmaState(val cssClassName: String) {
-    NORMAL(&quot;is-normal&quot;),
-    HOVER(&quot;is-hovered&quot;),
-    FOCUS(&quot;is-focused&quot;),
-    LOADING(&quot;is-loading&quot;),
+enum class BulmaStyle(override val cssClassName: String) : BulmaClass {
+    ROUNDED(&quot;is-rounded&quot;), FOCUSED(&quot;is-focused&quot;)
+}
+
+enum class BulmaState(override val cssClassName: String) : BulmaClass {
+    NORMAL(&quot;is-normal&quot;), HOVER(&quot;is-hovered&quot;),
+    FOCUS(&quot;is-focused&quot;), LOADING(&quot;is-loading&quot;),
 }
 
 fun Component.bulmaInput(
     type: InputType,
-    color: KVal&lt;BulmaColor&gt;? = null,
-    size: KVal&lt;BulmaSize&gt;? = null,
-    style: KVal&lt;BulmaStyle&gt;? = null,
-    state: KVal&lt;BulmaState&gt;? = null,
-    disabled: KVal&lt;Boolean&gt;? = null,
-    value: KVar&lt;String&gt;
+    value: KVar&lt;String&gt;,
+    vararg classes : KVal&lt;out BulmaClass&gt; = arrayOf(),
+
 ) {
     input(type = type) { inputElement -&gt;
         var inputClassList: KVal&lt;List&lt;String&gt;&gt; = kval(listOf(&quot;input&quot;))
+
+        for (c in classes) {
+            inputClassList += c.map { listOf(it.cssClassName) }
+        }
+
         with(inputElement) {
-
-            if (color != null) {
-                inputClassList += color.map { listOf(it.cssClassName) }
-            }
-            if (size != null) {
-                inputClassList += size.map { listOf(it.cssClassName) }
-            }
-            if (style != null) {
-                inputClassList += style.map { listOf(it.cssClassName) }
-            }
-            if (state != null) {
-                inputClassList += state.map { listOf(it.cssClassName) }
-            }
-
-            if (disabled != null) {
-                this[&quot;disabled&quot;] = disabled.map { it.json }
-            }
 
             classes(inputClassList.map { it.joinToString(&quot; &quot;) })
 
@@ -986,7 +966,7 @@ fun Component.bulmaInput(
         doc.body {
             val username = kvar(&quot;&quot;)
             val color = username.map { if (it.length &lt; 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
-            bulmaInput(type = text, value = username, color = color)
+            bulmaInput(type = text, value = username, color)
         }
     }
 </code></pre>
@@ -1200,18 +1180,18 @@ a more realtime experience you can also chat with us on
 
         </div>
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
