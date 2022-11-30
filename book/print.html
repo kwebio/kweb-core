@@ -920,7 +920,7 @@ enum class BulmaSize(override val cssClassName: String) : BulmaClass {
 }
 
 enum class BulmaStyle(override val cssClassName: String) : BulmaClass {
-    ROUNDED(&quot;is-rounded&quot;), FOCUSED(&quot;is-focused&quot;)
+    ROUNDED(&quot;is-rounded&quot;),
 }
 
 enum class BulmaState(override val cssClassName: String) : BulmaClass {
@@ -952,23 +952,23 @@ fun Component.bulmaInput(
 }
 </code></pre>
 <p>This component can then be used like this:</p>
-<pre><code class="language-kotlin">    Kweb(port = 12354) {
-        doc.head {
-            element(
-                &quot;link&quot;,
-                attributes = mapOf(
-                    &quot;rel&quot; to &quot;stylesheet&quot;.json,
-                    &quot;href&quot; to &quot;https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css&quot;.json
-                )
+<pre><code class="language-kotlin">Kweb(port = 12354) {
+    doc.head {
+        element(
+            &quot;link&quot;,
+            attributes = mapOf(
+                &quot;rel&quot; to &quot;stylesheet&quot;.json,
+                &quot;href&quot; to &quot;https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css&quot;.json
             )
-        }
-
-        doc.body {
-            val username = kvar(&quot;&quot;)
-            val color = username.map { if (it.length &lt; 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
-            bulmaInput(type = text, value = username, color)
-        }
+        )
     }
+
+    doc.body {
+        val username = kvar(&quot;&quot;)
+        val color = username.map { if (it.length &lt; 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
+        bulmaInput(type = text, value = username, color)
+    }
+}
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="javascript-interop"><a class="header" href="#javascript-interop">JavaScript Interop</a></h1>
 <ul>
