@@ -56,7 +56,7 @@ This simple example already illustrates some important features of Kweb:
 
 -   Getting a kwebsite up and running is a breeze, no messing around
     with servlets, or third party webservers
--   Your Kweb code will loosely mirror the structure of the HTML it
+-   Your kotlin code will loosely mirror the structure of the HTML it
     generates
 
 ## Hello world²

@@ -1,4 +1,4 @@
-https://ktor.io/# Introduction
+# Introduction
 
 ## Why another web framework?
 
