@@ -49,7 +49,7 @@ enum class BulmaSize(override val cssClassName: String) : BulmaClass {
 }
 
 enum class BulmaStyle(override val cssClassName: String) : BulmaClass {
-    ROUNDED("is-rounded"), FOCUSED("is-focused")
+    ROUNDED("is-rounded"),
 }
 
 enum class BulmaState(override val cssClassName: String) : BulmaClass {
@@ -83,22 +83,22 @@ fun Component.bulmaInput(
 
 fun bulmaComponentUsageExample() {
     // ANCHOR: bulma_component_usage
-    Kweb(port = 12354) {
-        doc.head {
-            element(
-                "link",
-                attributes = mapOf(
-                    "rel" to "stylesheet".json,
-                    "href" to "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css".json
-                )
+Kweb(port = 12354) {
+    doc.head {
+        element(
+            "link",
+            attributes = mapOf(
+                "rel" to "stylesheet".json,
+                "href" to "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css".json
             )
-        }
-
-        doc.body {
-            val username = kvar("")
-            val color = username.map { if (it.length < 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
-            bulmaInput(type = text, value = username, color)
-        }
+        )
     }
+
+    doc.body {
+        val username = kvar("")
+        val color = username.map { if (it.length < 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
+        bulmaInput(type = text, value = username, color)
+    }
+}
     // ANCHOR_END: bulma_component_usage
 }
