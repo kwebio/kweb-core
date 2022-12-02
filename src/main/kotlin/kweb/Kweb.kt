@@ -137,7 +137,13 @@ class Kweb private constructor(
         }
     }
 
-    private val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
+    /**
+     * The state of "clients", each representing a webbrowser session.
+     *
+     * **Note:** This is public to support some advanced use cases where you may want to access the state of a client,
+     *           but it's more likely to change than other parts of the public API, so use with caution.
+     */
+    val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
         .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
         .removalListener<String, RemoteClientState> { rl ->

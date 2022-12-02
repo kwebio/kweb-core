@@ -306,6 +306,7 @@ public final class kweb/Kweb : java/io/Closeable {
 	public static synthetic fun callJs$default (Lkweb/Kweb;Ljava/lang/String;Lkweb/client/FunctionCall;Lkweb/DebugInfo;ILjava/lang/Object;)V
 	public fun close ()V
 	public final fun determineClientPrefix (Lio/ktor/server/application/ApplicationCall;)Ljava/lang/String;
+	public final fun getClientState ()Lcom/google/common/cache/Cache;
 	public final fun getDebug ()Z
 	public final fun getKwebConfig ()Lkweb/config/KwebConfiguration;
 	public final fun getPlugins ()Ljava/util/List;
