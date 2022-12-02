@@ -28,10 +28,10 @@ And we use the component like this:
 {{#include ../../src/test/kotlin/kweb/docs/components.kt:component_usage}}
 ```
 
-Components are configured through the extension fuunction parameters, typically through
+Components are configured through the extension function parameters, typically through
 a mixture of:
 
-* [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s for values that can change
+* [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s for values that can not change
 * [KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)s for values that can change or be changed by the Component
 * [ObservableList](https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html)s for lists of values that can change
 * Other normal classes like **String** for immutable values
