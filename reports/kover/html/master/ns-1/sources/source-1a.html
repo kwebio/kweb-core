@@ -75,7 +75,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     71%
   </span>
   <span class="absValue">
-    (854/1203)
+    (856/1205)
   </span>
 </td>
 </tr>
@@ -1000,10 +1000,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    65.7%
+    65.8%
   </span>
   <span class="absValue">
-    (1082/1646)
+    (1084/1648)
   </span>
 </td>
 </tr>
@@ -1153,7 +1153,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
-<b class="fc">&nbsp;    private val clientState: Cache&lt;String, RemoteClientState&gt; = CacheBuilder.newBuilder()</b>
+&nbsp;    /**
+&nbsp;     * The state of &quot;clients&quot;, each representing a webbrowser session.
+&nbsp;     *
+&nbsp;     * **Note:** This is public to support some advanced use cases where you may want to access the state of a client,
+&nbsp;     *           but it&#39;s more likely to change than other parts of the public API, so use with caution.
+&nbsp;     */
+<b class="fc">&nbsp;    val clientState: Cache&lt;String, RemoteClientState&gt; = CacheBuilder.newBuilder()</b>
 <b class="fc">&nbsp;        .expireAfterAccess(kwebConfig.clientStateTimeout)</b>
 <b class="pc">&nbsp;        .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }</b>
 <b class="fc">&nbsp;        .removalListener&lt;String, RemoteClientState&gt; { rl -&gt;</b>
@@ -1517,7 +1523,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-12-03 16:16</div>
+    <div style="float:right;">generated on 2022-12-03 16:40</div>
 </div>
 </body>
 </html>
