@@ -109,7 +109,7 @@ class Kweb private constructor(
      *
      */
     companion object Feature : BaseApplicationPlugin<Application, Feature.Configuration, Kweb> {
-        // Note that this is not KwebConfiguration, which is a different thing
+        // Careful not to confuse this with KwebConfiguration
         class Configuration {
             var debug: Boolean = true
             var plugins: List<KwebPlugin> = Collections.emptyList()
