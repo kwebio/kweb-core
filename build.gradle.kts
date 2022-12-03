@@ -65,8 +65,8 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.4.5")
 
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
-    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.6.0")
-    testImplementation("org.seleniumhq.selenium:selenium-java:4.6.0")
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.7.0")
+    testImplementation("org.seleniumhq.selenium:selenium-java:4.7.0")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
