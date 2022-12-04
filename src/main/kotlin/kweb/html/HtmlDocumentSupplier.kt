@@ -24,11 +24,6 @@ internal object HtmlDocumentSupplier {
 
             html.appendElement("head").let { head: Element ->
 
-                head.appendElement("meta")
-                    .attr("id", "K_head")
-                    .attr("name", "viewport")
-                    .attr("content", "width=device-width, initial-scale=1.0")
-
                 //these css ids denote spans used in render() and renderEach()
                 head.appendElement("style")
                     .html(""".rMStart {display: none;}
