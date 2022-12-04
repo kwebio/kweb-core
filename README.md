@@ -1,4 +1,4 @@
-# Kweb - The Kotlin web framework for backend developers
+# Kweb - A Kotlin web framework
 
 <div align="center">
   <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
