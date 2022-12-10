@@ -409,18 +409,75 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;fun ElementCreator&lt;Element&gt;.meta(
 &nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
-&nbsp;    name: String, content: String, httpEquiv: String? = null, charset: String? = null,
+&nbsp;    name: String? = null, content: String? = null, httpEquiv: String? = null, charset: String? = null,
 &nbsp;    new: (ElementCreator&lt;MetaElement&gt;.(MetaElement) -&gt; Unit)? = null
 &nbsp;): MetaElement {
 &nbsp;    return MetaElement(
 &nbsp;        element(
-&nbsp;            &quot;meta&quot;, attributes.set(&quot;name&quot;, name.json)
-&nbsp;                .set(&quot;content&quot;, content.json)
+&nbsp;            &quot;meta&quot;, attributes.set(&quot;name&quot;, JsonPrimitive(name))
+&nbsp;                .set(&quot;content&quot;, JsonPrimitive(content))
 &nbsp;                .set(&quot;http-equiv&quot;, JsonPrimitive(httpEquiv))
 &nbsp;                .set(&quot;charset&quot;, JsonPrimitive(charset))
 &nbsp;        )
 &nbsp;    ).also {
 &nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/********************************
+&nbsp; * Viewport and related classes *
+&nbsp; ********************************/
+&nbsp;
+&nbsp;fun ElementCreator&lt;HeadElement&gt;.viewport(
+&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),
+&nbsp;    width : ViewportWidth = ViewportWidth.DeviceWidth,
+&nbsp;    height : ViewportHeight = ViewportHeight.DeviceHeight,
+&nbsp;    initialScale : Double = 1.0,
+&nbsp;    minimumScale : Double = 0.1,
+&nbsp;    maximumScale : Double = 10.0,
+&nbsp;    userScalable : UserScalable = UserScalable.Yes,
+&nbsp;    new: (ElementCreator&lt;MetaElement&gt;.(MetaElement) -&gt; Unit)? = null
+&nbsp;): MetaElement {
+&nbsp;    return MetaElement(
+&nbsp;        element(
+&nbsp;            &quot;meta&quot;, attributes.set(&quot;name&quot;, &quot;viewport&quot;.json)
+&nbsp;                .set(&quot;content&quot;, JsonPrimitive(
+&nbsp;                    &quot;width=${width.asString}, height=${height.value}, initial-scale=$initialScale, minimum-scale=$minimumScale, maximum-scale=$maximumScale, user-scalable=${userScalable.value}&quot;
+&nbsp;                ))
+&nbsp;        )
+&nbsp;    ).also {
+&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;sealed class UserScalable(val value: String) {
+&nbsp;    object Yes : UserScalable(&quot;yes&quot;)
+&nbsp;    object No : UserScalable(&quot;no&quot;)
+&nbsp;}
+&nbsp;
+&nbsp;sealed class ViewportWidth {
+&nbsp;    abstract val asString : String
+&nbsp;
+&nbsp;    object DeviceWidth : ViewportWidth() {
+&nbsp;        override val asString: String
+&nbsp;            get() = &quot;device-width&quot;
+&nbsp;    }
+&nbsp;    data class Width(val width: Int) : ViewportWidth() {
+&nbsp;        override val asString: String
+&nbsp;            get() = &quot;$width&quot;
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;sealed class ViewportHeight {
+&nbsp;    abstract val value : String
+&nbsp;
+&nbsp;    object DeviceHeight : ViewportHeight() {
+&nbsp;        override val value: String
+&nbsp;            get() = &quot;device-height&quot;
+&nbsp;    }
+&nbsp;    data class Height(val height: Int) : ViewportHeight() {
+&nbsp;        override val value: String
+&nbsp;            get() = &quot;$height&quot;
 &nbsp;    }
 &nbsp;}
 &nbsp;
@@ -979,7 +1036,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-12-10 18:10</div>
+    <div style="float:right;">generated on 2022-12-10 19:31</div>
 </div>
 </body>
 </html>

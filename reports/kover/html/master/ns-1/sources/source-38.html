@@ -1,0 +1,351 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ElementCreatorKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">kweb</a>
+</div>
+
+<h1>Coverage Summary for Class: ElementCreatorKt (kweb)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+</tr>
+<tr>
+  <td class="name">ElementCreatorKt</td>
+    <td class="coverageStat"/>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package kweb
+&nbsp;
+&nbsp;import kotlinx.coroutines.CoroutineScope
+&nbsp;import kotlinx.coroutines.Dispatchers
+&nbsp;import kotlinx.coroutines.cancel
+&nbsp;import kotlinx.serialization.json.JsonObject
+&nbsp;import kotlinx.serialization.json.JsonPrimitive
+&nbsp;import kweb.html.BodyElement
+&nbsp;import kweb.html.HeadElement
+&nbsp;import kweb.plugins.KwebPlugin
+&nbsp;import kweb.state.CloseReason
+&nbsp;import kweb.state.KVal
+&nbsp;import kweb.state.KVar
+&nbsp;import kweb.util.KWebDSL
+&nbsp;import kweb.util.json
+&nbsp;import mu.KLogging
+&nbsp;import java.util.*
+&nbsp;import java.util.concurrent.ConcurrentLinkedQueue
+&nbsp;import java.util.concurrent.atomic.AtomicInteger
+&nbsp;import kotlin.reflect.KClass
+&nbsp;
+&nbsp;typealias Cleaner = () -&gt; Unit
+&nbsp;
+&nbsp;/**
+&nbsp; * Responsible for creating new DOM elements, and cleaning up [Cleaner]s, [KVar]s, and other
+&nbsp; * related objects when DOM elements are deleted.
+&nbsp; *
+&nbsp; * [ElementCreator] is typically used as a [receiver](https://stackoverflow.com/a/45875492)
+&nbsp; * for element creation functions like [p] or [element].
+&nbsp; */
+&nbsp;@KWebDSL
+&nbsp;open class ElementCreator&lt;out PARENT_TYPE : Element&gt;(
+&nbsp;    val element: PARENT_TYPE,
+&nbsp;    val parentCreator: ElementCreator&lt;*&gt;? = element.creator,
+&nbsp;    val insertBefore: String? = null
+&nbsp;)  {
+&nbsp;
+&nbsp;    companion object : KLogging()
+&nbsp;
+&nbsp;    @Volatile
+&nbsp;    private var cleanupListeners: MutableCollection&lt;Cleaner&gt;? = null
+&nbsp;
+&nbsp;    @Volatile
+&nbsp;    private var isCleanedUp = false
+&nbsp;
+&nbsp;    val elementsCreatedCount: Int get() = elementsCreatedCountAtomic.get()
+&nbsp;    private val elementsCreatedCountAtomic = AtomicInteger(0)
+&nbsp;
+&nbsp;    val browser: WebBrowser get() = element.browser
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Create a new element, specifying its [tag](https://www.javatpoint.com/html-tags) and
+&nbsp;     * [attributes](https://www.javatpoint.com/html-attributes).
+&nbsp;     *
+&nbsp;     * Tag-specific functions like [p], [select], and others call this function and should
+&nbsp;     * be used in preference to it if available.
+&nbsp;     *
+&nbsp;     * @param tag The HTML tag, eg. &quot;p&quot;, &quot;select&quot;, &quot;a&quot;, etc
+&nbsp;     * @param attributes The HTML element&#39;s attributes
+&nbsp;     * @param namespace If non-null elements will be created with [Document.createElementNS()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)
+&nbsp;     *                  with the specified namespace. If null then Kweb will use [Document.createElement](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement).
+&nbsp;     */
+&nbsp;    fun element(tag: String, attributes: Map&lt;String, JsonPrimitive&gt; = attr, namespace: String? = null, new: (ElementCreator&lt;*&gt;.(Element) -&gt; Unit)? = null): Element {
+&nbsp;
+&nbsp;        val mutAttributes = HashMap(attributes)
+&nbsp;
+&nbsp;        val id: String = mutAttributes.computeIfAbsent(&quot;id&quot;) { JsonPrimitive(&quot;K&quot; + browser.generateId()) }.content
+&nbsp;        val htmlDoc = browser.htmlDocument.get()
+&nbsp;        val createElementStatement = when (namespace) {
+&nbsp;            null -&gt; &quot;document.createElement(tag);&quot;
+&nbsp;            else -&gt; &quot;document.createElementNS(\&quot;${namespace}\&quot;, tag);&quot;
+&nbsp;        }
+&nbsp;        when {
+&nbsp;            htmlDoc != null -&gt; {
+&nbsp;                val parentElement = when (element) {
+&nbsp;                    is HeadElement -&gt; htmlDoc.head()
+&nbsp;                    is BodyElement -&gt; htmlDoc.body()
+&nbsp;                    else -&gt; htmlDoc.getElementById(element.id)
+&nbsp;                } ?: error(&quot;Can&#39;t find element with id ${element.id}&quot;)
+&nbsp;                val jsElement =
+&nbsp;                    if (insertBefore != null) {
+&nbsp;                        val ne = htmlDoc.createElement(tag)
+&nbsp;                        htmlDoc.getElementById(insertBefore)!!.before(ne)
+&nbsp;                        ne
+&nbsp;                    } else {
+&nbsp;                        parentElement.appendElement(tag)
+&nbsp;                    }
+&nbsp;                for ((k, v) in mutAttributes) {
+&nbsp;                    jsElement.attr(k, v.content)
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            element.browser.isCatchingOutbound() != null -&gt; {
+&nbsp;                //language=JavaScript
+&nbsp;                val createElementJs = &quot;&quot;&quot;
+&nbsp;                    console.log(&quot;Creating new element&quot;)
+&nbsp;                    let tag = {};
+&nbsp;                    let attributes = {};
+&nbsp;                    let myId = {};
+&nbsp;                    let parentId = {};
+&nbsp;                    let insertBefore = {};
+&nbsp;                    console.log(&quot;insertBefore = &quot; + insertBefore)
+&nbsp;                    let newEl = $createElementStatement
+&nbsp;                    newEl.setAttribute(&quot;id&quot;, myId);
+&nbsp;                    for (const key in attributes) {
+&nbsp;                        if ( key !== &quot;id&quot;) {
+&nbsp;                            newEl.setAttribute(key, attributes[key]);
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                    let parentElement = document.getElementById(parentId);
+&nbsp;                    let startNode = document.getElementById(insertBefore)
+&nbsp;                    
+&nbsp;                    if (insertBefore !== undefined) {
+&nbsp;                        parentElement.insertBefore(newEl, startNode)
+&nbsp;                    } else {
+&nbsp;                        parentElement.appendChild(newEl);
+&nbsp;                    }
+&nbsp;                &quot;&quot;&quot;.trimIndent()
+&nbsp;                browser.callJsFunction(
+&nbsp;                    createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
+&nbsp;                    JsonPrimitive(element.id), JsonPrimitive(insertBefore ?: &quot;&quot;), JsonPrimitive(elementsCreatedCount)
+&nbsp;                )
+&nbsp;            }
+&nbsp;
+&nbsp;            else -&gt; {
+&nbsp;                //The way I have written this function, instead of attributes.get(), we now use attributes[].
+&nbsp;                //language=JavaScript
+&nbsp;                val createElementJs = &quot;&quot;&quot;
+&nbsp;                    console.log(&quot;Creating new element in other place&quot;)
+&nbsp;                    let tag = {};
+&nbsp;                    let attributes = {};
+&nbsp;                    let myId = {};
+&nbsp;                    let parentId = {};
+&nbsp;                    let insertBefore = {};
+&nbsp;                    let newEl = document.createElement(tag);
+&nbsp;                    if (attributes[&quot;id&quot;] === undefined) {
+&nbsp;                        newEl.setAttribute(&quot;id&quot;, myId);
+&nbsp;                    }
+&nbsp;                    for (const key in attributes) {
+&nbsp;                            newEl.setAttribute(key, attributes[key]);
+&nbsp;                    }
+&nbsp;                    let parentElement = document.getElementById(parentId);
+&nbsp;                    let startNode = document.getElementById(insertBefore)
+&nbsp;                    
+&nbsp;                    if (insertBefore !== undefined) {
+&nbsp;                        parentElement.insertBefore(newEl, startNode)
+&nbsp;                    } else {
+&nbsp;                        parentElement.appendChild(newEl);
+&nbsp;                    }
+&nbsp;                &quot;&quot;&quot;.trimIndent()
+&nbsp;                element.browser.callJsFunction(
+&nbsp;                    createElementJs, tag.json, JsonObject(mutAttributes), id.json,
+&nbsp;                    element.id.json, JsonPrimitive(insertBefore ?: &quot;&quot;), JsonPrimitive(elementsCreatedCount)
+&nbsp;                )
+&nbsp;            }
+&nbsp;        }
+&nbsp;        val newElement = Element(element.browser, this, tag = tag, id = id)
+&nbsp;        elementsCreatedCountAtomic.incrementAndGet()
+&nbsp;        for (plugin in element.browser.kweb.plugins) {
+&nbsp;            plugin.elementCreationHook(newElement)
+&nbsp;        }
+&nbsp;        onCleanup(withParent = false) {
+&nbsp;            logger.debug { &quot;Deleting element ${newElement.id}&quot; }
+&nbsp;            newElement.deleteIfExists()
+&nbsp;        }
+&nbsp;
+&nbsp;        if (new != null) {
+&nbsp;            newElement.new { new(newElement) }
+&nbsp;        }
+&nbsp;
+&nbsp;        return newElement
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Specify that a specific plugin be provided in [Kweb.plugins], throws an exception if not.
+&nbsp;     */
+&nbsp;    fun require(vararg plugins: KClass&lt;out KwebPlugin&gt;) = element.browser.require(*plugins)
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Specify a listener to be called when this element is removed from the DOM.
+&nbsp;     *
+&nbsp;     * @param withParent If `true` this cleaner will be called if this element is cleaned up, or if
+&nbsp;     *                   any ancestor element of this ElementCreator is cleaned up.  Otherwise it will
+&nbsp;     *                   only be cleaned up if this ElementCreator is cleaned up specifically.
+&nbsp;     *
+&nbsp;     *                   As a rule-of-thumb, use &#39;true&#39; for anything except deleting DOM elements.
+&nbsp;     */
+&nbsp;    fun onCleanup(withParent: Boolean, f: Cleaner) {
+&nbsp;        if (withParent) {
+&nbsp;            parentCreator?.onCleanup(true, f)
+&nbsp;        }
+&nbsp;        if (cleanupListeners == null)
+&nbsp;            cleanupListeners = ConcurrentLinkedQueue()
+&nbsp;
+&nbsp;        cleanupListeners?.add(f)
+&nbsp;    }
+&nbsp;
+&nbsp;    fun cleanup() {
+&nbsp;        // TODO: Warn if called twice?
+&nbsp;        if (!isCleanedUp) {
+&nbsp;            isCleanedUp = true
+&nbsp;            try {
+&nbsp;                cleanupListeners?.forEach { it() }
+&nbsp;            } catch (e: Exception) {
+&nbsp;                logger.warn(e) { &quot;Error while cleaning up ElementCreator&quot; }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Close this AutoCloseable when this ElementCreator is cleaned up.
+&nbsp;     */
+&nbsp;    fun closeOnCleanup(closeable: AutoCloseable) {
+&nbsp;        onCleanup(withParent = true) {
+&nbsp;            closeable.close()
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // text() Deprecated because these may create confusion about whether element properties
+&nbsp;    // are set on the Element or the ElementCreator
+&nbsp;    @Deprecated(&quot;Use element.text() instead&quot;, ReplaceWith(&quot;element.text(text)&quot;))
+&nbsp;    fun text(text: String) {
+&nbsp;        this.element.text(text)
+&nbsp;    }
+&nbsp;
+&nbsp;    @Deprecated(&quot;Use element.text() instead&quot;, ReplaceWith(&quot;element.text(text)&quot;))
+&nbsp;    fun text(text: KVal&lt;String&gt;) {
+&nbsp;        this.element.text(text)
+&nbsp;    }
+&nbsp;
+&nbsp;    @Deprecated(&quot;Use element {} instead (as of v0.12.8)&quot;, ReplaceWith(&quot;element(receiver)&quot;, &quot;kweb.ElementCreator.element&quot;))
+&nbsp;    fun attr(receiver : (PARENT_TYPE).() -&gt; Unit) {
+&nbsp;        receiver(element)
+&nbsp;    }
+&nbsp;
+&nbsp;    @Deprecated(&quot;Use element instead (as of v0.12.8)&quot;, ReplaceWith(&quot;element&quot;, &quot;kweb.ElementCreator.element&quot;))
+&nbsp;    val parent get() = element
+&nbsp;
+&nbsp;    @Deprecated(&quot;div { element { set(\&quot;foo\&quot;, \&quot;bar\&quot;)} } ===&gt; div { it.set(\&quot;foo\&quot;, \&quot;bar\&quot;) }&quot;,
+&nbsp;        ReplaceWith(&quot;receiver(element)&quot;)
+&nbsp;    )
+&nbsp;    fun element(receiver : (PARENT_TYPE).() -&gt; Unit) {
+&nbsp;        receiver(element)
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Create a new [KVar], and call [KVar.close()] when this ElementCreator is cleaned up.
+&nbsp;     */
+&nbsp;    fun &lt;T&gt; kvar(initialValue: T): KVar&lt;T&gt; {
+&nbsp;        val kv = KVar(initialValue)
+&nbsp;        onCleanup(withParent = true) {
+&nbsp;            kv.close(CloseReason(&quot;ElementCreator cleaned up&quot;))
+&nbsp;        }
+&nbsp;        return kv
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Create a new [KVar], and call [KVar.close()] when this ElementCreator is cleaned up.
+&nbsp;     */
+&nbsp;    fun &lt;T&gt; kval(initialValue: T): KVal&lt;T&gt; {
+&nbsp;        val kv = KVal(initialValue)
+&nbsp;        onCleanup(withParent = true) {
+&nbsp;            kv.close(CloseReason(&quot;ElementCreator cleaned up&quot;))
+&nbsp;        }
+&nbsp;        return kv
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a CoroutineScope that will be cancelled when this ElementCreator is cleaned up.
+&nbsp;     */
+&nbsp;    @SinceKotlin(&quot;1.1.1&quot;)
+&nbsp;    fun elementScope(): CoroutineScope {
+&nbsp;        val scope = CoroutineScope(Dispatchers.IO)
+&nbsp;        onCleanup(withParent = true) {
+&nbsp;            scope.cancel()
+&nbsp;        }
+&nbsp;        return scope
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-10 19:31</div>
+</div>
+</body>
+</html>
