@@ -45,7 +45,7 @@ dependencies {
     api("io.ktor:ktor-server-jetty:2.1.3")
     api("io.ktor:ktor-server-websockets:2.1.3")
     api("io.ktor:ktor-server-default-headers:2.1.3")
-    api("io.ktor:ktor-server-compression:2.1.3")
+    api("io.ktor:ktor-server-compression:2.2.1")
     api("io.ktor:ktor-server-caching-headers:2.2.1")
     api("io.ktor:ktor-network-tls-certificates:2.1.3")
 
