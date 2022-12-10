@@ -4,6 +4,7 @@ import kweb.plugins.KwebPlugin
 import kweb.plugins.viewport.ViewportWidth.DeviceWidth
 import org.jsoup.nodes.Document
 
+@Deprecated("Please use kweb.viewport extension function instead")
 class ViewportPlugin(val width: ViewportWidth = DeviceWidth, val initialScale: Double = 1.0) : KwebPlugin() {
     override fun decorate(doc: Document) {
         doc.head().appendElement("meta")

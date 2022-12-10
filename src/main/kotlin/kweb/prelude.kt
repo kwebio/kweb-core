@@ -316,18 +316,75 @@ open class MetaElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.meta(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
-    name: String, content: String, httpEquiv: String? = null, charset: String? = null,
+    name: String? = null, content: String? = null, httpEquiv: String? = null, charset: String? = null,
     new: (ElementCreator<MetaElement>.(MetaElement) -> Unit)? = null
 ): MetaElement {
     return MetaElement(
         element(
-            "meta", attributes.set("name", name.json)
-                .set("content", content.json)
+            "meta", attributes.set("name", JsonPrimitive(name))
+                .set("content", JsonPrimitive(content))
                 .set("http-equiv", JsonPrimitive(httpEquiv))
                 .set("charset", JsonPrimitive(charset))
         )
     ).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+    }
+}
+
+/********************************
+ * Viewport and related classes *
+ ********************************/
+
+fun ElementCreator<HeadElement>.viewport(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    width : ViewportWidth = ViewportWidth.DeviceWidth,
+    height : ViewportHeight = ViewportHeight.DeviceHeight,
+    initialScale : Double = 1.0,
+    minimumScale : Double = 0.1,
+    maximumScale : Double = 10.0,
+    userScalable : UserScalable = UserScalable.Yes,
+    new: (ElementCreator<MetaElement>.(MetaElement) -> Unit)? = null
+): MetaElement {
+    return MetaElement(
+        element(
+            "meta", attributes.set("name", "viewport".json)
+                .set("content", JsonPrimitive(
+                    "width=${width.asString}, height=${height.value}, initial-scale=$initialScale, minimum-scale=$minimumScale, maximum-scale=$maximumScale, user-scalable=${userScalable.value}"
+                ))
+        )
+    ).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+    }
+}
+
+sealed class UserScalable(val value: String) {
+    object Yes : UserScalable("yes")
+    object No : UserScalable("no")
+}
+
+sealed class ViewportWidth {
+    abstract val asString : String
+
+    object DeviceWidth : ViewportWidth() {
+        override val asString: String
+            get() = "device-width"
+    }
+    data class Width(val width: Int) : ViewportWidth() {
+        override val asString: String
+            get() = "$width"
+    }
+}
+
+sealed class ViewportHeight {
+    abstract val value : String
+
+    object DeviceHeight : ViewportHeight() {
+        override val value: String
+            get() = "device-height"
+    }
+    data class Height(val height: Int) : ViewportHeight() {
+        override val value: String
+            get() = "$height"
     }
 }
 

@@ -476,6 +476,8 @@ public final class kweb/PreludeKt {
 	public static synthetic fun tr$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TrElement;
 	public static final fun ul (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ULElement;
 	public static synthetic fun ul$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ULElement;
+	public static final fun viewport (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ViewportWidth;Lkweb/ViewportHeight;DDDLkweb/UserScalable;Lkotlin/jvm/functions/Function2;)Lkweb/MetaElement;
+	public static synthetic fun viewport$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ViewportWidth;Lkweb/ViewportHeight;DDDLkweb/UserScalable;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/MetaElement;
 }
 
 public final class kweb/Scheme : java/lang/Enum {
@@ -531,6 +533,19 @@ public class kweb/ULElement : kweb/Element {
 	public fun <init> (Lkweb/Element;)V
 }
 
+public abstract class kweb/UserScalable {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValue ()Ljava/lang/String;
+}
+
+public final class kweb/UserScalable$No : kweb/UserScalable {
+	public static final field INSTANCE Lkweb/UserScalable$No;
+}
+
+public final class kweb/UserScalable$Yes : kweb/UserScalable {
+	public static final field INSTANCE Lkweb/UserScalable$Yes;
+}
+
 public abstract class kweb/ValueElement : kweb/Element {
 	public fun <init> (Lkweb/Element;Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Lkweb/Element;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -577,6 +592,48 @@ public final class kweb/ValueElement$DiffData$$serializer : kotlinx/serializatio
 
 public final class kweb/ValueElement$DiffData$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class kweb/ViewportHeight {
+	public abstract fun getValue ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportHeight$DeviceHeight : kweb/ViewportHeight {
+	public static final field INSTANCE Lkweb/ViewportHeight$DeviceHeight;
+	public fun getValue ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportHeight$Height : kweb/ViewportHeight {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lkweb/ViewportHeight$Height;
+	public static synthetic fun copy$default (Lkweb/ViewportHeight$Height;IILjava/lang/Object;)Lkweb/ViewportHeight$Height;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeight ()I
+	public fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class kweb/ViewportWidth {
+	public abstract fun getAsString ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportWidth$DeviceWidth : kweb/ViewportWidth {
+	public static final field INSTANCE Lkweb/ViewportWidth$DeviceWidth;
+	public fun getAsString ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportWidth$Width : kweb/ViewportWidth {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lkweb/ViewportWidth$Width;
+	public static synthetic fun copy$default (Lkweb/ViewportWidth$Width;IILjava/lang/Object;)Lkweb/ViewportWidth$Width;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAsString ()Ljava/lang/String;
+	public final fun getWidth ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class kweb/WebBrowser {
