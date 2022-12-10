@@ -320,7 +320,8 @@ $dokka.location:kweb.html/Window/onImmediate/#/PointingToDeclaration/kweb-core/
 $dokka.location:kweb.https////PointingToDeclaration/kweb-core/kweb.https/index.html
 $dokka.location:kweb.https//defaultKeyStore/#/PointingToDeclaration/kweb-core/kweb.https/default-key-store.html
 $dokka.location:kweb.https/SSLConfig///PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/index.html
-$dokka.location:kweb.https/SSLConfig/SSLConfig/#kotlin.Int#kotlin.String#java.security.KeyStore#java.io.File?#kotlin.String#kotlin.Function0[kotlin.CharArray]#kotlin.Function0[kotlin.CharArray]#java.security.KeyStore?#java.io.File?/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/-s-s-l-config.html
+$dokka.location:kweb.https/SSLConfig/SSLConfig/#kotlin.Int#kotlin.String#java.security.KeyStore#java.io.File?#kotlin.String#kotlin.Function0[kotlin.CharArray]#kotlin.Function0[kotlin.CharArray]#java.security.KeyStore?#java.io.File?#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/-s-s-l-config.html
+$dokka.location:kweb.https/SSLConfig/enabledProtocols/#/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/enabled-protocols.html
 $dokka.location:kweb.https/SSLConfig/host/#/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/host.html
 $dokka.location:kweb.https/SSLConfig/keyAlias/#/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/key-alias.html
 $dokka.location:kweb.https/SSLConfig/keyStore/#/PointingToDeclaration/kweb-core/kweb.https/-s-s-l-config/key-store.html
