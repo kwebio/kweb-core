@@ -202,6 +202,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import java.security.KeyStore
 &nbsp;import kotlin.text.toCharArray
 &nbsp;
+&nbsp;@Deprecated(&quot;Obsolete, this class will be deleted in a future release&quot;)
 <b class="nc">&nbsp;val defaultKeyStore by lazy {</b>
 <b class="nc">&nbsp;    buildKeyStore {</b>
 <b class="nc">&nbsp;        certificate(&quot;test&quot;) {</b>
@@ -212,16 +213,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;}
 &nbsp;
+&nbsp;@Deprecated(&quot;Obsolete, this class will be deleted in a future release&quot;)
 &nbsp;data class SSLConfig constructor(
-&nbsp;        override val port: Int = 9091,
-&nbsp;        override val host: String = &quot;0.0.0.0&quot;,
-&nbsp;        override val keyStore: KeyStore = defaultKeyStore,
-&nbsp;        override val keyStorePath: File? = null,
-&nbsp;        override val keyAlias: String = &quot;mykey&quot;,
-&nbsp;        override val keyStorePassword: () -&gt; CharArray = { &quot;changeit&quot;.toCharArray() },
-&nbsp;        override val privateKeyPassword: () -&gt; CharArray = { &quot;changeit&quot;.toCharArray() },
-&nbsp;        override val trustStore: KeyStore? = null,
-&nbsp;        override val trustStorePath: File? = null
+&nbsp;    override val port: Int = 9091,
+&nbsp;    override val host: String = &quot;0.0.0.0&quot;,
+&nbsp;    override val keyStore: KeyStore = defaultKeyStore,
+&nbsp;    override val keyStorePath: File? = null,
+&nbsp;    override val keyAlias: String = &quot;mykey&quot;,
+&nbsp;    override val keyStorePassword: () -&gt; CharArray = { &quot;changeit&quot;.toCharArray() },
+&nbsp;    override val privateKeyPassword: () -&gt; CharArray = { &quot;changeit&quot;.toCharArray() },
+&nbsp;    override val trustStore: KeyStore? = null,
+&nbsp;    override val trustStorePath: File? = null,
+&nbsp;    override val enabledProtocols: List&lt;String&gt;? = null,
 &nbsp;) : EngineSSLConnectorConfig {
 &nbsp;    override val type: ConnectorType = ConnectorType.HTTPS
 &nbsp;}
@@ -248,7 +251,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-12-10 16:14</div>
+    <div style="float:right;">generated on 2022-12-10 16:44</div>
 </div>
 </body>
 </html>
