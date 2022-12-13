@@ -893,11 +893,11 @@ reusability, testability, and the ability to reason about a system in isolation.
 </code></pre>
 <p>Components are configured through the extension function parameters, typically through
 a mixture of:</p>
-<div class="table-wrapper"><table><thead><tr><th>Parameter Type</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>s</td><td>for values that can change but not be modified by the component</td></tr>
-<tr><td><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html">KVar</a>s</td><td>for values that can change or be modified by the component</td></tr>
-<tr><td><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html">ObservableList</a>s</td><td>for lists of values that can change or be modified by the component</td></tr>
-<tr><td>Double, String, etc</td><td>for those that don't change</td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Parameter Type</th><th>For</th></tr></thead><tbody>
+<tr><td><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>s</td><td>Values that can change but not be modified by the component</td></tr>
+<tr><td><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html">KVar</a>s</td><td>Values that can change or be modified by the component</td></tr>
+<tr><td><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html">ObservableList</a>s</td><td>Lists of values that can change or be modified by the component</td></tr>
+<tr><td>Double, String, etc</td><td>Values that don't change</td></tr>
 </tbody></table>
 </div>
 <p>The simplest Component's may have no parameters at all, or just one or two, while the most complex might use 
