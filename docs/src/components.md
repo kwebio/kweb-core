@@ -33,9 +33,9 @@ a mixture of:
 
 | Parameter Type                                                                               | For                                                             |
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
-| [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s                     | Values that can change but not be modified by the component     |
-| [KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)s                     | Values that can change or be modified by the component          |
-| [ObservableList](https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html)s | Lists of values that can change or be modified by the component |
+| [KVals](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s                    | Values that can change but not be modified by the component     |
+| [KVars](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)                     | Values that can change or be modified by the component          |
+| [ObservableLists](https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html) | Lists of values that can change or be modified by the component |
 | Double, String, etc                                                                          | Values that don't change                                        |
 
 The simplest Component's may have no parameters at all, or just one or two, while the most complex might use 
