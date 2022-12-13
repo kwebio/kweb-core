@@ -952,20 +952,28 @@ fun Component.bulmaInput(
 }
 </code></pre>
 <p>This component can then be used like this:</p>
-<pre><code class="language-kotlin">Kweb(port = 12354) {
+<pre><code class="language-kotlin">val bulmaUrl = &quot;https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css&quot;.json
+
+fun shouldWarn(username : String) =
+    if (username.length &lt; 5)
+        BulmaColor.WARNING
+    else
+        BulmaColor.SUCCESS
+
+Kweb(port = 12354) {
     doc.head {
         element(
             &quot;link&quot;,
             attributes = mapOf(
                 &quot;rel&quot; to &quot;stylesheet&quot;.json,
-                &quot;href&quot; to &quot;https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css&quot;.json
+                &quot;href&quot; to bulmaUrl
             )
         )
     }
 
     doc.body {
         val username = kvar(&quot;&quot;)
-        val color = username.map { if (it.length &lt; 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
+        val color = username.map { shouldWarn(it) }
         bulmaInput(type = text, value = username, color)
     }
 }
