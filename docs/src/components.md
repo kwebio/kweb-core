@@ -31,7 +31,7 @@ And we use the component like this:
 Components are configured through the extension function parameters, typically through
 a mixture of:
 
-| Parameter Type                                                                               | Description                                                         |
+| Parameter Type                                                                               | Purpose                                                             |
 |----------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
 | [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s                     | for values that can change but not be modified by the component     |
 | [KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)s                     | for values that can change or be modified by the component          |
