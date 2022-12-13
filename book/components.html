@@ -176,12 +176,10 @@ reusability, testability, and the ability to reason about a system in isolation.
 </code></pre>
 <p>Components are configured through the extension function parameters, typically through
 a mixture of:</p>
-<ul>
-<li><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>s for values that can change but not be modified by the component</li>
-<li><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html">KVar</a>s for values that can change or be changed by the component</li>
-<li><a href="https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html">ObservableList</a>s for lists of values that can change</li>
-<li>Other normal classes like <strong>String</strong> for those that don't change</li>
-</ul>
+<p>| <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>s | for values that can change but not be modified by the component |
+| <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html">KVar</a>s | for values that can change or be modified by the component |
+| <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html">ObservableList</a>s | for lists of values that can change or be modified by the component |
+| Other normal classes like <strong>String</strong> | for those that don't change |</p>
 <p>The simplest Component's may have no parameters at all, or just one or two, while the most complex might use 
 a <a href="https://in-kotlin.com/design-patterns/builder-pattern/dsl/">DSL builder</a>.</p>
 <h2 id="a-more-complex-example"><a class="header" href="#a-more-complex-example">A more complex example</a></h2>
