@@ -82,21 +82,30 @@ fun Component.bulmaInput(
 // ANCHOR_END: bulma_component_example
 
 fun bulmaComponentUsageExample() {
+
     // ANCHOR: bulma_component_usage
+val bulmaUrl = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css".json
+
+fun shouldWarn(username : String) =
+    if (username.length < 5)
+        BulmaColor.WARNING
+    else
+        BulmaColor.SUCCESS
+
 Kweb(port = 12354) {
     doc.head {
         element(
             "link",
             attributes = mapOf(
                 "rel" to "stylesheet".json,
-                "href" to "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css".json
+                "href" to bulmaUrl
             )
         )
     }
 
     doc.body {
         val username = kvar("")
-        val color = username.map { if (it.length < 5) BulmaColor.WARNING else BulmaColor.SUCCESS }
+        val color = username.map { shouldWarn(it) }
         bulmaInput(type = text, value = username, color)
     }
 }
