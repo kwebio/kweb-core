@@ -34,7 +34,7 @@ a mixture of:
 * [KVal](https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html)s for values that can change but not be modified by the component
 * [KVar](https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html)s for values that can change or be changed by the component
 * [ObservableList](https://docs.kweb.io/api/kweb-core/kweb.state/-observable-list/index.html)s for lists of values that can change
-* Other normal classes like **String** for immutable values
+* Other normal classes like **String** for those that don't change
 
 The simplest Component's may have no parameters at all, or just one or two, while the most complex might use 
 a [DSL builder](https://in-kotlin.com/design-patterns/builder-pattern/dsl/).
