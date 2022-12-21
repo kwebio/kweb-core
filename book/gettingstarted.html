@@ -161,12 +161,11 @@
 <li><a href="#template-repository">Template Repository</a></li>
 </ul>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
-<p>Some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> is assumed, as
-is familiarity with <a href="https://gradle.org/">Gradle</a>. You should also have
-some familiarity with HTML.</p>
+<p>To get started with Kweb, you should have some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> and 
+<a href="https://gradle.org/">Gradle</a>. It is also helpful to have a basic understanding of HTML.</p>
 <h2 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h2>
-<p>Add these to your dependencies in your <code>build.gradle</code> or <code>build.gradle.kt</code> files, ensure <code>mavenCentral()</code> 
-is added to your <code>repositories</code> block.</p>
+<p>To add Kweb to your Gradle project, you will need to include the following dependencies in your 
+<code>build.gradle</code> or <code>build.gradle.kt</code> files:</p>
 <h3 id="groovy"><a class="header" href="#groovy">Groovy</a></h3>
 <pre><code class="language-kotlin">dependencies {
   implementation 'io.kweb:kweb-core:1.3.1'
@@ -184,7 +183,8 @@ is added to your <code>repositories</code> block.</p>
 }
 </code></pre>
 <h2 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h2>
-<p>Create a new Kotlin file and type this:</p>
+<p>To create a simple &quot;Hello World&quot; example with Kweb, create a new Kotlin file 
+and enter the following code:</p>
 <pre><code class="language-kotlin">import kweb.*
 
 fun main() {
@@ -195,28 +195,26 @@ fun main() {
     }
 }
 </code></pre>
-<p>Run it, and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to
-see the traditional greeting, translating to the following HTML body:</p>
+<p>Run the file and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to see the 
+output. This should display the following HTML body:</p>
 <pre><code class="language-html">&lt;body&gt;
   &lt;h1&gt;Hello World!&lt;/h1&gt;
 &lt;/body&gt;
 </code></pre>
-<p>This simple example already illustrates some important features of Kweb:</p>
+<p>This example demonstrates two important features of Kweb:</p>
 <ul>
-<li>Getting a kwebsite up and running is a breeze, no messing around
-with servlets, or third party webservers</li>
-<li>Your kotlin code will loosely mirror the structure of the HTML it
-generates</li>
+<li>Setting up a kwebsite is easy and does not require servlets or third-party web servers.</li>
+<li>The structure of your Kotlin code will closely match the structure of the HTML it generates.</li>
 </ul>
 <h2 id="hello-world²"><a class="header" href="#hello-world²">Hello world²</a></h2>
 <p>One way to think of Kweb is as a <a href="https://en.wikipedia.org/wiki/Domain-specific_language">domain-specific language
 (DSL)</a> for
 building and manipulating a
 <a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> in a remote
-web browser, while also listening for and handing DOM events.</p>
-<p>Importantly, this DSL can also do anything Kotlin can do, including
+web browser, while also listening for and handing DOM events. It's important to note
+that this DSL can also do anything that Kotlin can do, including
 features like for loops, functions, coroutines, and classes.</p>
-<p>Here is a simple example using an ordinary Kotlin <em>for loop</em>:</p>
+<p>Here is a simple example using a Kotlin <em>for loop</em>:</p>
 <pre><code class="language-kotlin">Kweb(port = 16097) {
     doc.body {
         ul {
@@ -227,7 +225,7 @@ features like for loops, functions, coroutines, and classes.</p>
     }
 }
 </code></pre>
-<p>To produce...</p>
+<p>This will produce the following HTML:</p>
 <pre><code class="language-html">&lt;body&gt;
   &lt;ul&gt;
       &lt;li&gt;Hello World 1!&lt;/li&gt;
