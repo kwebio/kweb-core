@@ -14,9 +14,9 @@ focus on building your website or user interface, not on the plumbing.
 ## What is Kweb?
 
 Kweb is a remote interface to a web browser's DOM. With Kweb, you can create 
-and manipulate DOM elements, and bind mutable values to DOM elements, and listen for 
-and handle events. All of this can be done using an intuitive and convenient domain-specific 
-language that mirrors the structure of the HTML being created. 
+and manipulate DOM elements, and listen for and handle events. All of this 
+can be done using an intuitive and convenient domain-specific language that 
+irrors the structure of the HTML being created. 
 
 Kweb is very efficient, using many [optimizations](speed.md) to minimize latency and resource 
 usage both on the server and in the browser. Kweb is built on the [Ktor](https://ktor.io/) 
