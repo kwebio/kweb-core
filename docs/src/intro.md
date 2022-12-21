@@ -2,42 +2,31 @@
 
 ## Why another web framework?
 
-Modern websites consist of at least two [tightly
-coupled](https://en.wikipedia.org/wiki/Coupling_(computer_programming))
-components, one runs in the browser, the other on the server. These are
-often written in different programming languages and must communicate
-with each other over an HTTP(S) connection.
-
-Kweb's goal is to eliminate this server/browser separation so you can
-focus on building your website or user interface, not on the plumbing.
+Modern websites typically have two components that are tightly coupled - one running in the browser 
+and the other on the server. These components are often written in different programming languages 
+and must communicate through an HTTP(S) connection. Kweb aims to eliminate this separation between the 
+server and browser so you can focus on building your website or user interface without worrying about the 
+underlying details.
 
 ## What is Kweb?
 
-Kweb is a remote interface to a web browser's DOM. With Kweb, you can create 
-and manipulate DOM elements, and listen for and handle events. All of this 
-can be done using an intuitive and convenient domain-specific language that 
-irrors the structure of the HTML being created. 
-
-Kweb is very efficient, using many [optimizations](speed.md) to minimize latency and resource 
-usage both on the server and in the browser. Kweb is built on the [Ktor](https://ktor.io/) 
-framework, which handles HTTP, HTTPS, and WebSocket transport.
+Kweb is a remote interface for a web browser's DOM (Document Object Model). With Kweb, you can create 
+and manipulate DOM elements, and listen for and handle events, all using an intuitive domain-specific 
+language that mirrors the structure of the HTML being created. Kweb is built on the Ktor framework, 
+which handles HTTP, HTTPS, and WebSocket transport, and is optimized to minimize latency and resource 
+usage on both the server and browser.
 
 ## Features
 
-* End-to-end Kotlin - write your entire web site or user interface in Kotlin, without needing to communicate between a browser and server ([Why
-    Kotlin?](https://steve-yegge.blogspot.com/2017/05/why-kotlin-is-better-than-whatever-dumb.html?m=1))
-    
-* Realtime synchronization of your back-end data with your web page - Kweb takes care of all the plumbing for you
-
-* Server-side HTML rendering with [hydration](https://en.wikipedia.org/wiki/Hydration_(web_development)), Kweb can render your HTML on the server before sending it to the browser, so that the browser doesn't have to do any rendering
-
-* Efficient instruction preloading - Kweb can avoid unnecessary server communication by preloading instructions
-
-* Very lightweight - Kweb is less than 5,000 lines of code
+* End-to-end Kotlin - Write your entire web site or user interface in Kotlin, without needing to communicate between a browser and server.
+* Real-time synchronization of your back-end data with your web page - Kweb takes care of all the plumbing for you.
+* Server-side HTML rendering with hydration - Kweb can render your HTML on the server before sending it to the browser, so the browser doesn't have to do any rendering.
+* Efficient instruction preloading - Kweb can avoid unnecessary server communication by preloading instructions.
+* Very lightweight - Kweb is less than 5,000 lines of code.
 
 ## Relevant Links
 
-* [Github repository](https://github.com/kwebio/kweb-core)
+* [GitHub repository](https://github.com/kwebio/kweb-core)
 * [API documentation](https://docs.kweb.io/api/)
 * [Example Google Cloud Project](https://github.com/freenet/freenetorg-website/)
 * [Questions/Feedback/Bugs](https://github.com/kwebio/kweb-core/issues)
