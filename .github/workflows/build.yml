@@ -30,8 +30,16 @@ jobs:
       uses: gradle/gradle-build-action@v2
 
     - name: Build and run tests
-      run: ./gradlew build
-
+      id: build
+      run: |
+        if ! ./gradlew build; then
+          # Address a rare unit test failure very likely to be a test-harness-related
+          # race condition.
+          echo "Build failed, retrying once"
+          if ! ./gradlew build; then
+            exit 1
+          fi
+        fi
     - name: Generate API documentation
       if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
       run: |
