@@ -4,14 +4,13 @@
 
 ## Requirements
 
-Some familiarity with [Kotlin](https://kotlinlang.org/) is assumed, as
-is familiarity with [Gradle](https://gradle.org/). You should also have
-some familiarity with HTML.
+To get started with Kweb, you should have some familiarity with [Kotlin](https://kotlinlang.org/) and 
+[Gradle](https://gradle.org/). It is also helpful to have a basic understanding of HTML.
 
 ## Adding Kweb to your Gradle project
 
-Add these to your dependencies in your `build.gradle` or `build.gradle.kt` files, ensure `mavenCentral()` 
-is added to your `repositories` block.
+To add Kweb to your Gradle project, you will need to include the following dependencies in your 
+`build.gradle` or `build.gradle.kt` files:
 
 ### Groovy
 
@@ -37,14 +36,15 @@ dependencies {
 
 ## Hello world
 
-Create a new Kotlin file and type this:
+To create a simple "Hello World" example with Kweb, create a new Kotlin file 
+and enter the following code:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/gettingstarted.kt:hello_world}}
 ```
 
-Run it, and then visit <http://localhost:16097/> in your web browser to
-see the traditional greeting, translating to the following HTML body:
+Run the file and then visit <http://localhost:16097/> in your web browser to see the 
+output. This should display the following HTML body:
 
 ```html
 <body>
@@ -52,12 +52,10 @@ see the traditional greeting, translating to the following HTML body:
 </body>
 ```
 
-This simple example already illustrates some important features of Kweb:
+This example demonstrates two important features of Kweb:
 
--   Getting a kwebsite up and running is a breeze, no messing around
-    with servlets, or third party webservers
--   Your kotlin code will loosely mirror the structure of the HTML it
-    generates
+ * Setting up a kwebsite is easy and does not require servlets or third-party web servers.
+ * The structure of your Kotlin code will closely match the structure of the HTML it generates.
 
 ## Hello world²
 
@@ -65,18 +63,17 @@ One way to think of Kweb is as a [domain-specific language
 (DSL)](https://en.wikipedia.org/wiki/Domain-specific_language) for
 building and manipulating a
 [DOM](https://en.wikipedia.org/wiki/Document_Object_Model) in a remote
-web browser, while also listening for and handing DOM events.
-
-Importantly, this DSL can also do anything Kotlin can do, including
+web browser, while also listening for and handing DOM events. It's important to note
+that this DSL can also do anything that Kotlin can do, including
 features like for loops, functions, coroutines, and classes.
 
-Here is a simple example using an ordinary Kotlin *for loop*:
+Here is a simple example using a Kotlin *for loop*:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/gettingstarted.kt:hello_world_2}}
 ```
 
-To produce\...
+This will produce the following HTML:
 
 ```html
 <body>
