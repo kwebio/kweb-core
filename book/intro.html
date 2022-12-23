@@ -149,43 +149,28 @@
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <h2 id="why-another-web-framework"><a class="header" href="#why-another-web-framework">Why another web framework?</a></h2>
-<p>Modern websites consist of at least two <a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)">tightly
-coupled</a>
-components, one runs in the browser, the other on the server. These are
-often written in different programming languages and must communicate
-with each other over an HTTP(S) connection.</p>
-<p>Kweb's goal is to eliminate this server/browser separation so you can
-focus on building your website or user interface, not on the plumbing.</p>
+<p>Modern websites typically have two components that are tightly coupled - one running in the browser 
+and the other on the server. These components are often written in different programming languages 
+and must communicate through an HTTP(S) connection. Kweb aims to eliminate this separation between the 
+server and browser so you can focus on building your website or user interface without worrying about the 
+underlying details.</p>
 <h2 id="what-is-kweb"><a class="header" href="#what-is-kweb">What is Kweb?</a></h2>
-<p>Kweb is a remote interface to a web browser's DOM. With Kweb, you can create 
-and manipulate DOM elements, and listen for and handle events. All of this 
-can be done using an intuitive and convenient domain-specific language that 
-irrors the structure of the HTML being created. </p>
-<p>Kweb is very efficient, using many <a href="speed.html">optimizations</a> to minimize latency and resource 
-usage both on the server and in the browser. Kweb is built on the <a href="https://ktor.io/">Ktor</a> 
-framework, which handles HTTP, HTTPS, and WebSocket transport.</p>
+<p>Kweb is a remote interface for a web browser's DOM (Document Object Model). With Kweb, you can create 
+and manipulate DOM elements, and listen for and handle events, all using an intuitive domain-specific 
+language that mirrors the structure of the HTML being created. Kweb is built on the Ktor framework, 
+which handles HTTP, HTTPS, and WebSocket transport, and is optimized to minimize latency and resource 
+usage on both the server and browser.</p>
 <h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
-<li>
-<p>End-to-end Kotlin - write your entire web site or user interface in Kotlin, without needing to communicate between a browser and server (<a href="https://steve-yegge.blogspot.com/2017/05/why-kotlin-is-better-than-whatever-dumb.html?m=1">Why
-Kotlin?</a>)</p>
-</li>
-<li>
-<p>Realtime synchronization of your back-end data with your web page - Kweb takes care of all the plumbing for you</p>
-</li>
-<li>
-<p>Server-side HTML rendering with <a href="https://en.wikipedia.org/wiki/Hydration_(web_development)">hydration</a>, Kweb can render your HTML on the server before sending it to the browser, so that the browser doesn't have to do any rendering</p>
-</li>
-<li>
-<p>Efficient instruction preloading - Kweb can avoid unnecessary server communication by preloading instructions</p>
-</li>
-<li>
-<p>Very lightweight - Kweb is less than 5,000 lines of code</p>
-</li>
+<li>End-to-end Kotlin - Write your entire web site or user interface in Kotlin, without needing to communicate between a browser and server.</li>
+<li>Real-time synchronization of your back-end data with your web page - Kweb takes care of all the plumbing for you.</li>
+<li>Server-side HTML rendering with hydration - Kweb can render your HTML on the server before sending it to the browser, so the browser doesn't have to do any rendering.</li>
+<li>Efficient instruction preloading - Kweb can avoid unnecessary server communication by preloading instructions.</li>
+<li>Very lightweight - Kweb is less than 5,000 lines of code.</li>
 </ul>
 <h2 id="relevant-links"><a class="header" href="#relevant-links">Relevant Links</a></h2>
 <ul>
-<li><a href="https://github.com/kwebio/kweb-core">Github repository</a></li>
+<li><a href="https://github.com/kwebio/kweb-core">GitHub repository</a></li>
 <li><a href="https://docs.kweb.io/api/">API documentation</a></li>
 <li><a href="https://github.com/freenet/freenetorg-website/">Example Google Cloud Project</a></li>
 <li><a href="https://github.com/kwebio/kweb-core/issues">Questions/Feedback/Bugs</a></li>
