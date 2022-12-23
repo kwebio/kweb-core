@@ -604,6 +604,7 @@ abstract class ValueElement(
                     this.creator?.onCleanup(true) {
                         value.close(CloseReason("Parent element closed"))
                     }
+                    attachListeners(value)
                 }
             }
             return _valueKvar!!
@@ -611,9 +612,19 @@ abstract class ValueElement(
         set(v) {
             if (_valueKvar != null) error("`value` may only be set once, and cannot be set after it has been retrieved")
             updateKVar(v, updateOn = kvarUpdateEvent)
+            attachListeners(v)
+            setValue(v.value)
             _valueKvar = v
         }
 
+    private fun attachListeners(kv : KVar<String>) {
+        val handle = kv.addListener { _, newValue ->
+            setValue(newValue)
+        }
+        element.creator?.onCleanup(true) {
+            kv.removeListener(handle)
+        }
+    }
 
     /**
      * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
