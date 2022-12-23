@@ -48,37 +48,93 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">ValueElement</td>
 <td class="coverageStat">
   <span class="percent">
-    70%
+    72.7%
   </span>
   <span class="absValue">
-    (7/10)
+    (8/11)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    61.1%
+    60%
   </span>
   <span class="absValue">
-    (11/18)
+    (12/20)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    76.2%
+    78.7%
   </span>
   <span class="absValue">
-    (32/42)
+    (37/47)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    65.4%
+    68.9%
   </span>
   <span class="absValue">
-    (185/283)
+    (219/318)
   </span>
 </td>
 </tr>
+  <tr>
+    <td class="name">ValueElement$attachListeners$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ValueElement$attachListeners$handle$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+  </tr>
   <tr>
     <td class="name">ValueElement$DiffData</td>
 <td class="coverageStat">
@@ -302,34 +358,34 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    70.6%
+    75%
   </span>
   <span class="absValue">
-    (12/17)
+    (15/20)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    69.2%
+    67.9%
   </span>
   <span class="absValue">
-    (18/26)
+    (19/28)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    75.5%
+    78.6%
   </span>
   <span class="absValue">
-    (37/49)
+    (44/56)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    71.5%
+    73.6%
   </span>
   <span class="absValue">
-    (351/491)
+    (394/535)
   </span>
 </td>
 </tr>
@@ -946,6 +1002,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="pc">&nbsp;                    this.creator?.onCleanup(true) {</b>
 <b class="fc">&nbsp;                        value.close(CloseReason(&quot;Parent element closed&quot;))</b>
 &nbsp;                    }
+<b class="fc">&nbsp;                    attachListeners(value)</b>
 &nbsp;                }
 <b class="fc">&nbsp;            }</b>
 <b class="fc">&nbsp;            return _valueKvar!!</b>
@@ -953,9 +1010,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        set(v) {
 <b class="pc">&nbsp;            if (_valueKvar != null) error(&quot;`value` may only be set once, and cannot be set after it has been retrieved&quot;)</b>
 <b class="fc">&nbsp;            updateKVar(v, updateOn = kvarUpdateEvent)</b>
+<b class="fc">&nbsp;            attachListeners(v)</b>
+<b class="fc">&nbsp;            setValue(v.value)</b>
 <b class="fc">&nbsp;            _valueKvar = v</b>
 &nbsp;        }
 &nbsp;
+&nbsp;    private fun attachListeners(kv : KVar&lt;String&gt;) {
+<b class="fc">&nbsp;        val handle = kv.addListener { _, newValue -&gt;</b>
+<b class="fc">&nbsp;            setValue(newValue)</b>
+&nbsp;        }
+<b class="pc">&nbsp;        element.creator?.onCleanup(true) {</b>
+<b class="fc">&nbsp;            kv.removeListener(handle)</b>
+&nbsp;        }
+&nbsp;    }
 &nbsp;
 &nbsp;    /**
 &nbsp;     * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
@@ -1285,7 +1352,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-12-23 20:11</div>
+    <div style="float:right;">generated on 2022-12-23 21:26</div>
 </div>
 </body>
 </html>

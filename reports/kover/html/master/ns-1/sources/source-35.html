@@ -769,6 +769,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;                    this.creator?.onCleanup(true) {
 &nbsp;                        value.close(CloseReason(&quot;Parent element closed&quot;))
 &nbsp;                    }
+&nbsp;                    attachListeners(value)
 &nbsp;                }
 &nbsp;            }
 &nbsp;            return _valueKvar!!
@@ -776,9 +777,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        set(v) {
 &nbsp;            if (_valueKvar != null) error(&quot;`value` may only be set once, and cannot be set after it has been retrieved&quot;)
 &nbsp;            updateKVar(v, updateOn = kvarUpdateEvent)
+&nbsp;            attachListeners(v)
+&nbsp;            setValue(v.value)
 &nbsp;            _valueKvar = v
 &nbsp;        }
 &nbsp;
+&nbsp;    private fun attachListeners(kv : KVar&lt;String&gt;) {
+&nbsp;        val handle = kv.addListener { _, newValue -&gt;
+&nbsp;            setValue(newValue)
+&nbsp;        }
+&nbsp;        element.creator?.onCleanup(true) {
+&nbsp;            kv.removeListener(handle)
+&nbsp;        }
+&nbsp;    }
 &nbsp;
 &nbsp;    /**
 &nbsp;     * Automatically update `toBind` with the value of this INPUT element when `updateOn` event occurs.
@@ -1108,7 +1119,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-12-23 20:11</div>
+    <div style="float:right;">generated on 2022-12-23 21:26</div>
 </div>
 </body>
 </html>
