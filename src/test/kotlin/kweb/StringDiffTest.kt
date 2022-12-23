@@ -96,10 +96,12 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     fun modifyTextOnServerAndVerifyChangeInBrowser() {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
+        val currentValue = stringDiffTestApp.inputString.value
         stringDiffTestApp.inputString.value = "Super Fox"
         await().pollInSameThread().untilAsserted {
             inputField.getAttribute("value") shouldBe "Super Fox"
         }
+        stringDiffTestApp.inputString.value = currentValue
     }
 }
 
