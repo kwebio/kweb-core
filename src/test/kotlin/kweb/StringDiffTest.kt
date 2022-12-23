@@ -5,6 +5,8 @@ import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
+import org.awaitility.Awaitility
+import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -20,7 +22,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
     //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
     //This should make this test thread safe.
-    val driver : WebDriver = ThreadGuard.protect(unprotectedDriver)
+    val driver: WebDriver = ThreadGuard.protect(unprotectedDriver)
 
     companion object {
         private lateinit var stringDiffTestApp: StringDiffTestApp
@@ -89,10 +91,22 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         inputField.sendKeys(Keys.ENTER)
         inputField.getAttribute("value") shouldBe "Lazy Brown"
     }
+
+    @Test
+    fun modifyTextOnServerAndVerifyChangeInBrowser() {
+        driver.get("http://localhost:7660/")
+        val inputField = driver.findElement(By.tagName("input"))
+        val currentValue = stringDiffTestApp.inputString.value
+        stringDiffTestApp.inputString.value = "Super Fox"
+        await().pollInSameThread().untilAsserted {
+            inputField.getAttribute("value") shouldBe "Super Fox"
+        }
+        stringDiffTestApp.inputString.value = currentValue
+    }
 }
 
 class StringDiffTestApp {
-    var inputString = KVar("")
+    var inputString = KVar("Initial")
 
     val server: Kweb = Kweb(port = 7660) {
         doc.body {
