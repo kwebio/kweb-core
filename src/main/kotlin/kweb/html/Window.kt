@@ -1,7 +1,7 @@
 package kweb.html
 
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonObject
 import kweb.*
 import kweb.html.events.Event
 import kweb.html.events.EventGenerator
@@ -37,9 +37,12 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
                 ${if (preventDefault) "event.preventDefault();" else ""}
                 callbackWs({}, $eventObject);
             });
-        """
+            return true;
+        """.trimIndent()
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
-            callback.invoke(payload)
+            if (payload is JsonObject) {
+                callback.invoke(payload)
+            }
         }, eventName.json, callbackId.json)
         return this
     }
