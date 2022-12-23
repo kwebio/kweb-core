@@ -39,11 +39,9 @@ jobs:
           curl --proto '=https' --tlsv1.2 -sSf https://rossmacarthur.github.io/install/crate.sh | bash -s -- --repo "rust-lang/mdBook" --bin mdbook --to ~/.cargo/bin
       - name: Determine current mdbook-toc version
         id: mdbook-toc-version
-        uses: pozetroninc/github-action-get-latest-release@06da55dc399d06375d2d1fe57542398d5bd989c6
-        with:
-          owner: badboy
-          repo: mdbook-toc
-          excludes: prerelease, draft
+        run: |
+          tag=$(curl -s https://api.github.com/repos/badboy/mdbook-toc/releases/latest | jq -r .tag_name)
+          echo "::set-output name=tag::$tag"
       - name: Cache mdbook-toc
         id: cache-mdbook-toc
         uses: actions/cache@v3
