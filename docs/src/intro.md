@@ -11,10 +11,9 @@ underlying details.
 ## What is Kweb?
 
 Kweb is a remote interface for a web browser's DOM (Document Object Model). With Kweb, you can create 
-and manipulate DOM elements, and listen for and handle events, all using an intuitive domain-specific 
-language that mirrors the structure of the HTML being created. Kweb is built on the Ktor framework, 
-which handles HTTP, HTTPS, and WebSocket transport, and is optimized to minimize latency and resource 
-usage on both the server and browser.
+and manipulate DOM elements, and listen for and handle events, all using an intuitive Kotlin DSL that mirrors 
+the structure of the HTML being created. Kweb is built on the Ktor framework, which handles HTTP, HTTPS, and 
+WebSocket transport, and is optimized to minimize latency and resource usage on both the server and browser.
 
 ## Features
 
