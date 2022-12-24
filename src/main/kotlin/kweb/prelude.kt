@@ -129,11 +129,11 @@ fun ElementCreator<Element>.form(
     }
 }
 
-open class AElement(parent: Element) : Element(parent) {
+open class AElement(parent: Element, val preventDefault: Boolean = true) : Element(parent) {
     /**
-     * A convenience property to set the href attribute of this anchor element. If the value begins with
-     * "/" (a relative URL) then this will override the default click behavior and set the [WebBrowser.url]
-     * to the appropriate value, avoiding a page refresh.
+     * A convenience property to set the href attribute of this anchor element. If [preventDefault] is enabled
+     * and the value begins with "/" (a relative URL) then this will override the default click behavior and
+     * set the [WebBrowser.url] to the appropriate value, avoiding a page refresh.
      *
      * *Note:* This property may only be set, attempting to read this property will throw an error.
      *
@@ -146,7 +146,7 @@ open class AElement(parent: Element) : Element(parent) {
         set(hrefValue) {
             if (hrefValue != null) {
                 set("href", hrefValue)
-                if (hrefValue.startsWith('/')) {
+                if (preventDefault && hrefValue.startsWith('/')) {
                     this.on(preventDefault = true).click {
                         this.browser.url.value = hrefValue
                     }
@@ -158,14 +158,19 @@ open class AElement(parent: Element) : Element(parent) {
 /**
  * Create an anchor element.
  *
+ * By default, following a href does not lead to a full page load, just to a `window.url` change,
+ * that will trigger a page update. You can override this behavior for each AElement by setting the
+ * [preventDefault] parameter to false, which will lead to the "standard" href behavior of full page loads.
+ *
  * @param href @see [AElement.href]
  */
 fun ElementCreator<Element>.a(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     href: String? = null,
+    preventDefault : Boolean = true,
     new: (ElementCreator<AElement>.(AElement) -> Unit)? = null
 ): AElement {
-    return AElement(element("a")).also {
+    return AElement(element("a"), preventDefault = preventDefault).also {
         if (href != null) it.href = href
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
         attributes.forEach { (k, v) -> it[k] = v }
