@@ -7,9 +7,7 @@ import kweb.*
 import kweb.state.KVar
 import org.awaitility.Awaitility
 import org.awaitility.Awaitility.await
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
@@ -24,20 +22,16 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     //This should make this test thread safe.
     val driver: WebDriver = ThreadGuard.protect(unprotectedDriver)
 
-    companion object {
-        private lateinit var stringDiffTestApp: StringDiffTestApp
+    private lateinit var stringDiffTestApp: StringDiffTestApp
 
-        @JvmStatic
-        @BeforeAll
-        fun setupServer() {
-            stringDiffTestApp = StringDiffTestApp()
-        }
+    @BeforeEach
+    fun setupServer() {
+        stringDiffTestApp = StringDiffTestApp()
+    }
 
-        @JvmStatic
-        @AfterAll
-        fun tearDownServer() {
-            stringDiffTestApp.server.close()
-        }
+    @AfterEach
+    fun tearDownServer() {
+        stringDiffTestApp.server.close()
     }
 
     @Test
