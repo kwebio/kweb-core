@@ -64,18 +64,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    48.4%
+    48.6%
   </span>
   <span class="absValue">
-    (133/275)
+    (134/276)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    37%
+    37.1%
   </span>
   <span class="absValue">
-    (626/1693)
+    (629/1696)
   </span>
 </td>
 </tr>
@@ -554,10 +554,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    49.2%
+    49.4%
   </span>
   <span class="absValue">
-    (164/333)
+    (165/334)
   </span>
 </td>
 <td class="coverageStat">
@@ -565,7 +565,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     41%
   </span>
   <span class="absValue">
-    (845/2063)
+    (848/2066)
   </span>
 </td>
 </tr>
@@ -707,11 +707,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;    }</b>
 &nbsp;}
 &nbsp;
-&nbsp;open class AElement(parent: Element) : Element(parent) {
+&nbsp;open class AElement(parent: Element, val preventDefault: Boolean = true) : Element(parent) {
 &nbsp;    /**
-&nbsp;     * A convenience property to set the href attribute of this anchor element. If the value begins with
-&nbsp;     * &quot;/&quot; (a relative URL) then this will override the default click behavior and set the [WebBrowser.url]
-&nbsp;     * to the appropriate value, avoiding a page refresh.
+&nbsp;     * A convenience property to set the href attribute of this anchor element. If [preventDefault] is enabled
+&nbsp;     * and the value begins with &quot;/&quot; (a relative URL) then this will override the default click behavior and
+&nbsp;     * set the [WebBrowser.url] to the appropriate value, avoiding a page refresh.
 &nbsp;     *
 &nbsp;     * *Note:* This property may only be set, attempting to read this property will throw an error.
 &nbsp;     *
@@ -724,7 +724,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        set(hrefValue) {
 &nbsp;            if (hrefValue != null) {
 &nbsp;                set(&quot;href&quot;, hrefValue)
-&nbsp;                if (hrefValue.startsWith(&#39;/&#39;)) {
+&nbsp;                if (preventDefault &amp;&amp; hrefValue.startsWith(&#39;/&#39;)) {
 &nbsp;                    this.on(preventDefault = true).click {
 &nbsp;                        this.browser.url.value = hrefValue
 &nbsp;                    }
@@ -736,14 +736,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;/**
 &nbsp; * Create an anchor element.
 &nbsp; *
+&nbsp; * By default, following a href does not lead to a full page load, just to a `window.url` change,
+&nbsp; * that will trigger a page update. You can override this behavior for each AElement by setting the
+&nbsp; * [preventDefault] parameter to false, which will lead to the &quot;standard&quot; href behavior of full page loads.
+&nbsp; *
 &nbsp; * @param href @see [AElement.href]
 &nbsp; */
 &nbsp;fun ElementCreator&lt;Element&gt;.a(
 <b class="fc">&nbsp;    attributes: Map&lt;String, JsonPrimitive&gt; = emptyMap(),</b>
 <b class="fc">&nbsp;    href: String? = null,</b>
+<b class="fc">&nbsp;    preventDefault : Boolean = true,</b>
 <b class="fc">&nbsp;    new: (ElementCreator&lt;AElement&gt;.(AElement) -&gt; Unit)? = null</b>
 &nbsp;): AElement {
-<b class="fc">&nbsp;    return AElement(element(&quot;a&quot;)).also {</b>
+<b class="fc">&nbsp;    return AElement(element(&quot;a&quot;), preventDefault = preventDefault).also {</b>
 <b class="pc">&nbsp;        if (href != null) it.href = href</b>
 <b class="fc">&nbsp;        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)</b>
 <b class="fc">&nbsp;        attributes.forEach { (k, v) -&gt; it[k] = v }</b>
@@ -1532,7 +1537,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-12-23 21:26</div>
+    <div style="float:right;">generated on 2022-12-25 02:30</div>
 </div>
 </body>
 </html>
