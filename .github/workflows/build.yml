@@ -1,4 +1,4 @@
-name: Build, test, and deploy API a2112docs
+name: Build, test, and deploy API docs
 
 on:
   push:
