@@ -2,11 +2,12 @@
 
 ## Why another web framework?
 
-Modern websites typically have two components that are tightly coupled - one running in the browser 
-and the other on the server. These components are often written in different programming languages 
-and must communicate through an HTTP(S) connection. Kweb aims to eliminate this separation between the 
-server and browser so you can focus on building your website or user interface without worrying about the 
-underlying details.
+Kweb aims to simplify the process of building modern websites by eliminating the separation between the 
+server and the browser. With Kweb, you can write your entire website in a single programming language, 
+without having to worry about the complexities of communication between the browser and server. This 
+allows you to focus on creating an intuitive and user-friendly interface, rather than spending time on 
+technical details. By streamlining the development process, Kweb makes it easier to build beautiful, 
+functional websites that meet the needs of your users.
 
 ## What is Kweb?
 
