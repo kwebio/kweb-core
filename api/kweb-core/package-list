@@ -749,7 +749,7 @@ $dokka.location:kweb.util/Template///PointingToDeclaration/kweb-core/kweb.util/
 $dokka.location:kweb.util/Template/Template/#kotlin.String#kotlin.Array[kotlin.String]/PointingToDeclaration/kweb-core/kweb.util/-template/-template.html
 $dokka.location:kweb.util/Template/apply/#kotlin.Array[kotlin.String?]/PointingToDeclaration/kweb-core/kweb.util/-template/apply.html
 $dokka.location:kweb////PointingToDeclaration/kweb-core/kweb/index.html
-$dokka.location:kweb//a/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.String?#kotlin.Function2[kweb.ElementCreator[kweb.AElement],kweb.AElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/a.html
+$dokka.location:kweb//a/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.String?#kotlin.Boolean#kotlin.Function2[kweb.ElementCreator[kweb.AElement],kweb.AElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/a.html
 $dokka.location:kweb//attr/#/PointingToDeclaration/kweb-core/kweb/attr.html
 $dokka.location:kweb//attr/kotlin.String#kweb.state.KVar[kotlin.String]/PointingToDeclaration/kweb-core/kweb/attr.html
 $dokka.location:kweb//attr/kweb.state.KVar[kotlin.String]#kotlin.String/PointingToDeclaration/kweb-core/kweb/attr.html
@@ -811,8 +811,9 @@ $dokka.location:kweb//tr/kweb.ElementCreator[kweb.Element]#kotlin.collections.Ma
 $dokka.location:kweb//ul/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.ULElement],kweb.ULElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/ul.html
 $dokka.location:kweb//viewport/kweb.ElementCreator[kweb.html.HeadElement]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kweb.ViewportWidth#kweb.ViewportHeight#kotlin.Double#kotlin.Double#kotlin.Double#kweb.UserScalable#kotlin.Function2[kweb.ElementCreator[kweb.MetaElement],kweb.MetaElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/viewport.html
 $dokka.location:kweb/AElement///PointingToDeclaration/kweb-core/kweb/-a-element/index.html
-$dokka.location:kweb/AElement/AElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-a-element/-a-element.html
+$dokka.location:kweb/AElement/AElement/#kweb.Element#kotlin.Boolean/PointingToDeclaration/kweb-core/kweb/-a-element/-a-element.html
 $dokka.location:kweb/AElement/href/#/PointingToDeclaration/kweb-core/kweb/-a-element/href.html
+$dokka.location:kweb/AElement/preventDefault/#/PointingToDeclaration/kweb-core/kweb/-a-element/prevent-default.html
 $dokka.location:kweb/AttributeBuilder///PointingToDeclaration/kweb-core/kweb/-attribute-builder/index.html
 $dokka.location:kweb/AttributeBuilder/AttributeBuilder/#/PointingToDeclaration/kweb-core/kweb/-attribute-builder/-attribute-builder.html
 $dokka.location:kweb/BootstrapJs///PointingToDeclaration/kweb-core/kweb/-bootstrap-js/index.html
