@@ -113,7 +113,7 @@ fun <A, B> Pair<KVar<A>, KVar<B>>.combine(): KVar<Pair<A, B>> {
     val listener1 = this.first.addListener { _, n -> newKVar.value = n to this.second.value }
     val listener2 = this.second.addListener { _, n -> newKVar.value = this.first.value to n }
 
-    newKVar.addListener { o, n ->
+    newKVar.addListener { _, n ->
         this.first.value = n.first
         this.second.value = n.second
     }

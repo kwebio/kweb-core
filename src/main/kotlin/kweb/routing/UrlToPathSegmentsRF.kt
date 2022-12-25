@@ -7,8 +7,8 @@ internal object UrlToPathSegmentsRF : ReversibleFunction<String, List<String>>(l
         return from.substringBefore('?').split('/').drop(1)
     }
 
-    override fun reverse(originalUrl: String, newPath: List<String>): String {
-        val queryFragment = originalUrl.substringAfter('?', missingDelimiterValue = "")
-        return '/' + newPath.joinToString(separator = "/") + (if (queryFragment != "") "?$queryFragment" else "")
+    override fun reverse(original: String, change: List<String>): String {
+        val queryFragment = original.substringAfter('?', missingDelimiterValue = "")
+        return '/' + change.joinToString(separator = "/") + (if (queryFragment != "") "?$queryFragment" else "")
     }
 }

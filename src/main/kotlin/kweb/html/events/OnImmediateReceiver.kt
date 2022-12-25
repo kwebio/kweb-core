@@ -129,7 +129,7 @@ class OnImmediateReceiver<T: EventGenerator<T>>(internal val source: T) {
 }
 
 fun main() {
-    val server: Kweb = Kweb(port= 7660) {
+    Kweb(port= 7660) {
         doc.body {
             div(fomantic.content) {
                 val label = h1(fomantic.ui)

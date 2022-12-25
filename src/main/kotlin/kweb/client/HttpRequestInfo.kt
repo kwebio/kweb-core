@@ -16,7 +16,7 @@ data class HttpRequestInfo(val request: ApplicationRequest) {
 
     val requestedUrl: String by lazy {
         with(request.origin) {
-            "$scheme://$host:$port$uri"
+            "$scheme://$serverHost:$serverPort$uri"
         }
     }
 
