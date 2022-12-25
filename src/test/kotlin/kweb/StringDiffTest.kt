@@ -39,7 +39,9 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}Super ")
-        inputField.getAttribute("value") shouldBe "Super Lazy Brown Fox"
+        await().pollInSameThread().untilAsserted {
+            inputField.getAttribute("value") shouldBe "Super Lazy Brown Fox"
+        }
     }
 
     @Test
@@ -47,7 +49,9 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.LEFT}1234")
-        inputField.getAttribute("value") shouldBe "Lazy Brown F1234ox"
+        await().pollInSameThread().untilAsserted {
+            inputField.getAttribute("value") shouldBe "Lazy Brown F1234ox"
+        }
     }
 
     @Test
@@ -63,7 +67,9 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}")
-        inputField.getAttribute("value") shouldBe "Brown Fox"
+        await().pollInSameThread().untilAsserted {
+            inputField.getAttribute("value") shouldBe "Brown Fox"
+        }
     }
 
     @Test
@@ -71,7 +77,9 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.BACK_SPACE}${Keys.BACK_SPACE}")
-        inputField.getAttribute("value") shouldBe "Lazy Brown x"
+        await().pollInSameThread().untilAsserted {
+            inputField.getAttribute("value") shouldBe "Lazy Brown x"
+        }
     }
 
     @Test
@@ -83,7 +91,9 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
             inputField.sendKeys(Keys.BACK_SPACE)
         }
         inputField.sendKeys(Keys.ENTER)
-        inputField.getAttribute("value") shouldBe "Lazy Brown"
+        await().pollInSameThread().untilAsserted {
+            inputField.getAttribute("value") shouldBe "Lazy Brown"
+        }
     }
 
     @Test
