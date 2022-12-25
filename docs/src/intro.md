@@ -2,14 +2,13 @@
 
 ## Why another web framework?
 
-Kweb aims to simplify the process of building modern websites by eliminating the separation between the 
-server and the browser. With Kweb, you can write your entire website in a single programming language, 
-without having to worry about the complexities of communication between the browser and server. This 
-allows you to focus on creating an intuitive and user-friendly interface, rather than spending time on 
-technical details. By streamlining the development process, Kweb makes it easier to build beautiful, 
-functional websites that meet the needs of your users.
+Kweb is designed to make it easy for developers to create modern websites without having to worry about 
+the complexities of communication between the server and the browser. With a unified codebase, you can 
+focus on creating an intuitive and user-friendly interface, rather than spending time on technical details. 
+By streamlining the development process, Kweb makes it easier to build functional and beautiful websites 
+that meet the needs of your users.
 
-## What is Kweb?
+## How doees it work?
 
 Kweb is a remote interface for a web browser's DOM (Document Object Model). With Kweb, you can create 
 and manipulate DOM elements, and listen for and handle events, all using an intuitive Kotlin DSL that mirrors 
