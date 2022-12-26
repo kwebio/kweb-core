@@ -1078,6 +1078,15 @@ $dokka.location:kweb/ValueElement.DiffData/DiffData/#kotlin.Int#kotlin.Int#kotli
 $dokka.location:kweb/ValueElement.DiffData/diffString/#/PointingToDeclaration/kweb-core/kweb/-value-element/-diff-data/diff-string.html
 $dokka.location:kweb/ValueElement.DiffData/postfixOffset/#/PointingToDeclaration/kweb-core/kweb/-value-element/-diff-data/postfix-offset.html
 $dokka.location:kweb/ValueElement.DiffData/prefixEndIndex/#/PointingToDeclaration/kweb-core/kweb/-value-element/-diff-data/prefix-end-index.html
+$dokka.location:kweb/ValueElement.LastModificationSource.Browser///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-value-element/-last-modification-source/-browser/index.html
+$dokka.location:kweb/ValueElement.LastModificationSource.Server///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}kweb-core/kweb/-value-element/-last-modification-source/-server/index.html
+$dokka.location:kweb/ValueElement.LastModificationSource///PointingToDeclaration/kweb-core/kweb/-value-element/-last-modification-source/index.html
+$dokka.location:kweb/ValueElement.LastModificationSource/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-value-element/-last-modification-source/value-of.html
+$dokka.location:kweb/ValueElement.LastModificationSource/values/#/PointingToDeclaration/kweb-core/kweb/-value-element/-last-modification-source/values.html
+$dokka.location:kweb/ValueElement.Value///PointingToDeclaration/kweb-core/kweb/-value-element/-value/index.html
+$dokka.location:kweb/ValueElement.Value/Value/#kotlin.String#kweb.ValueElement.LastModificationSource/PointingToDeclaration/kweb-core/kweb/-value-element/-value/-value.html
+$dokka.location:kweb/ValueElement.Value/lastModificationSource/#/PointingToDeclaration/kweb-core/kweb/-value-element/-value/last-modification-source.html
+$dokka.location:kweb/ValueElement.Value/value/#/PointingToDeclaration/kweb-core/kweb/-value-element/-value/value.html
 $dokka.location:kweb/ValueElement///PointingToDeclaration/kweb-core/kweb/-value-element/index.html
 $dokka.location:kweb/ValueElement/ValueElement/#kweb.Element#kotlin.String#kotlin.String?/PointingToDeclaration/kweb-core/kweb/-value-element/-value-element.html
 $dokka.location:kweb/ValueElement/element/#/PointingToDeclaration/kweb-core/kweb/-value-element/element.html
