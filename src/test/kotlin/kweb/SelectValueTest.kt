@@ -63,9 +63,6 @@ class SelectValueTestApp {
                 option().set("value", "cat").text("Cat")
             }
             selectValue = select.value
-            selectValue.addListener { old, new ->
-                println("$old -> $new")
-            }
         }
     }
 }

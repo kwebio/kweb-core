@@ -59,7 +59,9 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys(" Jumped")
-        inputField.getAttribute("value") shouldBe "Lazy Brown Fox Jumped"
+        await().pollInSameThread().untilAsserted {
+            inputField.getAttribute("value") shouldBe "Lazy Brown Fox Jumped"
+        }
     }
 
     @Test
