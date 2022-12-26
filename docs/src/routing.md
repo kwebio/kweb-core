@@ -84,8 +84,10 @@ You can obtain **and modify** the URL of the current page using
 
 This returns a `KVar<String>` which contains the URL relative to the
 origin - so for the page `http://foo/bar/z` the `url` would be `/bar/z`.
+This KVar will update accordingly if the URL changes, and can also be
+modified itself, which will change the URL.
 
-Here is a more realistic example:
+Here is a more realistic example which demonstrates this:
 
 ```kotlin
 import kweb.Kweb
@@ -119,7 +121,9 @@ see a hyperlink with text `Number 1`. If you click on this link you'll
 see that the number increments (both in the URL and in the link text),
 also without a page refresh.
 
-`num.value++` is worthy of additional attention. `num` is a `KVar<Int>`, 
-and so it can be incremented via its `value` property. This will cause the 
-page URL to update, which will in-turn cause the DOM to update to reflect 
-the new URL. All of this is handled for you automatically by Kweb.
+`num.value++` is worthy of additional attention. `num` is a `KVar<Int>`
+converted from the `KVar<String>` supplied as a parameter. Because of this
+it can be incremented via its `value` property. 
+
+This change will propagate back causing the URL to update, which will in-turn cause the 
+DOM to update to reflect the new URL. All of this is handled for you automatically.
