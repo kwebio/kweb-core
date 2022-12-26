@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import java.net.URL
 
 plugins {
@@ -73,6 +74,20 @@ dependencies {
 
     testImplementation("org.awaitility:awaitility:4.2.0")
 }
+
+tasks.test {
+    testLogging {
+        events("passed", "skipped", "failed") //, "standardOut", "standardError"
+
+        showExceptions = true
+        exceptionFormat = FULL
+        showCauses = true
+        showStackTraces = true
+
+        showStandardStreams = false
+    }
+}
+
 
 tasks.dokkaHtml {
     dokkaSourceSets {
