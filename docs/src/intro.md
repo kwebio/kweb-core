@@ -8,7 +8,7 @@ focus on creating an intuitive and user-friendly interface, rather than spending
 By streamlining the development process, Kweb makes it easier to build functional and beautiful websites 
 that meet the needs of your users.
 
-## How doees it work?
+## How does it work?
 
 Kweb is a remote interface for a web browser's DOM (Document Object Model). With Kweb, you can create 
 and manipulate DOM elements, and listen for and handle events, all using an intuitive Kotlin DSL that mirrors 
