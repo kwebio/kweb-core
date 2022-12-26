@@ -596,6 +596,26 @@ public final class kweb/ValueElement$DiffData$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class kweb/ValueElement$LastModificationSource : java/lang/Enum {
+	public static final field Browser Lkweb/ValueElement$LastModificationSource;
+	public static final field Server Lkweb/ValueElement$LastModificationSource;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/ValueElement$LastModificationSource;
+	public static fun values ()[Lkweb/ValueElement$LastModificationSource;
+}
+
+public final class kweb/ValueElement$Value {
+	public fun <init> (Ljava/lang/String;Lkweb/ValueElement$LastModificationSource;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkweb/ValueElement$LastModificationSource;
+	public final fun copy (Ljava/lang/String;Lkweb/ValueElement$LastModificationSource;)Lkweb/ValueElement$Value;
+	public static synthetic fun copy$default (Lkweb/ValueElement$Value;Ljava/lang/String;Lkweb/ValueElement$LastModificationSource;ILjava/lang/Object;)Lkweb/ValueElement$Value;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLastModificationSource ()Lkweb/ValueElement$LastModificationSource;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract class kweb/ViewportHeight {
 	public abstract fun getValue ()Ljava/lang/String;
 }

@@ -77,7 +77,7 @@ dependencies {
 
 tasks.test {
     testLogging {
-        events("passed", "skipped", "failed") //, "standardOut", "standardError"
+        events("passed", "skipped", "failed")
 
         showExceptions = true
         exceptionFormat = FULL

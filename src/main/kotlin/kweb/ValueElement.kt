@@ -4,10 +4,13 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
+import kweb.ValueElement.LastModificationSource.Browser
+import kweb.ValueElement.LastModificationSource.Server
 import kweb.html.events.Event
 import kweb.state.CloseReason
 import kweb.state.KVal
 import kweb.state.KVar
+import kweb.state.ReversibleFunction
 import kweb.util.json
 
 /**
@@ -52,8 +55,15 @@ abstract class ValueElement(
         }
     }
 
-    @Volatile
-    private var _valueKvar: KVar<String>? = null
+    data class Value(val value: String, val lastModificationSource: LastModificationSource)
+    enum class LastModificationSource {
+        Server, Browser
+    }
+
+    private var _valueKvar: KVar<Value>? = null
+
+    private lateinit var _stringValueKvar: KVar<String>
+
 
     /**
      * A KVar bidirectionally synchronized with the [value of a select element](https://www.w3schools.com/jsref/prop_select_value.asp).
@@ -65,28 +75,48 @@ abstract class ValueElement(
      */
     var value: KVar<String>
         get() {
-            synchronized(this) {
-                if (_valueKvar == null) {
-                    value = KVar(initialValue ?: "")
+            if (_valueKvar == null) {
+                synchronized(this) {
+                    _valueKvar = KVar(Value(initialValue ?: "", Server))
+                    _stringValueKvar =
+                        _valueKvar!!.map(object : ReversibleFunction<Value, String>("ValueElement.value") {
+                            override fun invoke(from: Value): String = from.value
+
+                            override fun reverse(original: Value, change: String): Value =
+                                Value(change, Server)
+
+                        })
                     this.creator?.onCleanup(true) {
                         value.close(CloseReason("Parent element closed"))
                     }
-                    attachListeners(value)
+                    attachListeners(_valueKvar!!)
+                    updateKVar(_valueKvar!!, updateOn = kvarUpdateEvent)
                 }
             }
-            return _valueKvar!!
+            return _stringValueKvar
         }
         set(v) {
             if (_valueKvar != null) error("`value` may only be set once, and cannot be set after it has been retrieved")
-            updateKVar(v, updateOn = kvarUpdateEvent)
-            attachListeners(v)
-            setValue(v.value)
-            _valueKvar = v
+            synchronized(this) {
+                setValue(v.value)
+                _stringValueKvar = v
+                _valueKvar = _stringValueKvar.map(object : ReversibleFunction<String, Value>("ValueElement.value") {
+                    override fun invoke(from: String): Value = Value(from, Server)
+
+                    override fun reverse(original: String, change: Value): String = change.value
+
+                })
+                attachListeners(_valueKvar!!)
+                updateKVar(_valueKvar!!, updateOn = kvarUpdateEvent)
+            }
         }
 
-    private fun attachListeners(kv : KVar<String>) {
-        val handle = kv.addListener { _, newValue ->
-            setValue(newValue)
+    private fun attachListeners(kv: KVar<Value>) {
+        val handle = kv.addListener { _, value ->
+            // Only update the DOM element if the source of the change was the server
+            if (value.lastModificationSource == Server) {
+                setValue(value.value)
+            }
         }
         element.creator?.onCleanup(true) {
             kv.removeListener(handle)
@@ -120,7 +150,7 @@ abstract class ValueElement(
         return newString
     }
 
-    private fun updateKVar(toBind: KVar<String>, updateOn: String = "input") {
+    private fun updateKVar(toBind: KVar<Value>, updateOn: String = "input") {
         on(
             //language=JavaScript
             retrieveJs = "get_diff_changes(document.getElementById(\"${element.id}\"))"
@@ -131,7 +161,7 @@ abstract class ValueElement(
                 if (it.retrieved != JsonNull) {
                     val diffDataJson = it.retrieved
                     val diffData = Json.decodeFromJsonElement(DiffData.serializer(), diffDataJson)
-                    toBind.value = applyDiff(toBind.value, diffData)
+                    toBind.value = Value(applyDiff(toBind.value.value, diffData), Browser)
                 }
             }
     }
