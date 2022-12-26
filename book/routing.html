@@ -216,8 +216,10 @@ with the style of your overall website:</p>
 <p>You can obtain <strong>and modify</strong> the URL of the current page using
 <a href="https://github.com/kwebio/kweb-core/blob/master/src/main/kotlin/kweb/WebBrowser.kt#L98">WebBrowser.url</a>.</p>
 <p>This returns a <code>KVar&lt;String&gt;</code> which contains the URL relative to the
-origin - so for the page <code>http://foo/bar/z</code> the <code>url</code> would be <code>/bar/z</code>.</p>
-<p>Here is a more realistic example:</p>
+origin - so for the page <code>http://foo/bar/z</code> the <code>url</code> would be <code>/bar/z</code>.
+This KVar will update accordingly if the URL changes, and can also be
+modified itself, which will change the URL.</p>
+<p>Here is a more realistic example which demonstrates this:</p>
 <pre><code class="language-kotlin">import kweb.Kweb
 import kweb.dom.element.creation.tags.a
 import kweb.dom.element.new
@@ -247,10 +249,11 @@ to <code>http://localhost:16097/number/1</code> without a page refresh, and you'
 see a hyperlink with text <code>Number 1</code>. If you click on this link you'll
 see that the number increments (both in the URL and in the link text),
 also without a page refresh.</p>
-<p><code>num.value++</code> is worthy of additional attention. <code>num</code> is a <code>KVar&lt;Int&gt;</code>, 
-and so it can be incremented via its <code>value</code> property. This will cause the 
-page URL to update, which will in-turn cause the DOM to update to reflect 
-the new URL. All of this is handled for you automatically by Kweb.</p>
+<p><code>num.value++</code> is worthy of additional attention. <code>num</code> is a <code>KVar&lt;Int&gt;</code>
+converted from the <code>KVar&lt;String&gt;</code> supplied as a parameter. Because of this
+it can be incremented via its <code>value</code> property. </p>
+<p>This change will propagate back causing the URL to update, which will in-turn cause the 
+DOM to update to reflect the new URL. All of this is handled for you automatically.</p>
 
                     </main>
 
