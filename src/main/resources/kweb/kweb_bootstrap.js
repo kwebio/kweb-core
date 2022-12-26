@@ -228,7 +228,7 @@ function get_diff_changes(htmlInputElement) {
 
     savePreviousInput(newString, htmlInputElement)//put the newString into the data attribute so it can be used as the oldString the next time this method is run
 
-    if (oldString == undefined) {//the first time this is run previous-input should be undefined so we just return the new string
+    if (oldString === undefined) {//the first time this is run previous-input should be undefined so we just return the new string
         return new DiffPatchData(0, 0, newString);
     }
     let commonPrefixEnd = 0;
