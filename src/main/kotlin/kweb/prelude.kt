@@ -574,7 +574,11 @@ abstract class ValueElement(
     //language=JavaScript
     fun setValue(newValue: String) {
         element.browser.callJsFunction(
-            "document.getElementById({}).value = {};",
+            """
+                const element = document.getElementById({});
+                element.value = {};
+                delete element.dataset.previousInput;
+                """.trimIndent(),
             element.id.json, newValue.json
         )
     }
