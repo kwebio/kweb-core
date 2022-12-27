@@ -20,7 +20,7 @@ function handleInboundMessage(msg) {
     for (let i = 0; i < funcCalls.length; i++) {
         const funcCall = funcCalls[i];
         const debugToken = funcCall["debugToken"];
-        if (kwebClientId != yourId) {
+        if (kwebClientId !== yourId) {
             console.error(
                 "Received message from incorrect clientId, was " +
                 yourId +
@@ -81,10 +81,6 @@ function handleInboundMessage(msg) {
 function debugErr(debugToken, err, errMsg) {
     if (debugToken !== undefined) {
         console.error(errMsg);
-        const error = {
-            debugToken: debugToken,
-            error: {name: err.name, message: err.message}
-        };
         const message = {id: kwebClientId, error: err};
         sendMessage(JSON.stringify(message));
     } else {
@@ -113,21 +109,21 @@ function connectWs() {
             reconnectTimeout = 2000
         };
         socket.onmessage = function (event) {
-            var msg = JSON.parse(event.data);
+            const msg = JSON.parse(event.data);
             console.debug("Message received from socket: ", event.data);
             handleInboundMessage(msg);
         };
 
         socket.onclose = function (evt) {
             console.debug("Socket closed");
-            var explanation = "";
+            let explanation = "";
             if (evt.reason && evt.reason.length > 0) {
                 explanation = "reason: " + evt.reason;
             } else {
                 explanation = "without a reason specified";
             }
 
-            if(evt.code == 1007){ //Server did restart or load balancer shifted session to other backend
+            if(evt.code === 1007){ //Server did restart or load balancer shifted session to other backend
                 location.reload(true);
             }
 
@@ -150,7 +146,7 @@ function reconnectLoopWs() {
     showReconnectToast();
 
     setTimeout(function() {
-        if (websocketEstablished == false) {
+        if (websocketEstablished === false) {
             if (reconnectTimeout < 600_000) {
                 console.log("Attempting to reconnect")
                 connectWs();
@@ -265,7 +261,7 @@ function removeElementByIdIfExists(id) {
     }
 }
 
-var docCookies = {
+const docCookies = {
     getItem: function (sKey) {
         if (!sKey || !this.hasItem(sKey)) {
             return "__COOKIE_NOT_FOUND_TOKEN__";
@@ -286,7 +282,7 @@ var docCookies = {
         if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/.test(sKey)) {
             return;
         }
-        var sExpires = "";
+        let sExpires = "";
         if (vEnd) {
             switch (typeof vEnd) {
                 case "number":
@@ -303,9 +299,9 @@ var docCookies = {
             }
         }
         document.cookie =
-            escape(sKey) +
+            encodeURIComponent(sKey) +
             "=" +
-            escape(sValue) +
+            encodeURIComponent(sValue) +
             sExpires +
             (sDomain ? "; domain=" + sDomain : "") +
             (sPath ? "; path=" + sPath : "") +
