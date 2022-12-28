@@ -182,8 +182,12 @@ event data like which key was pressed:</p>
 short but sometimes noticeable delay before the page updates in response
 to an event.</p>
 <p>Fortunately, Kweb has a solution:</p>
-<pre><code class="language-kotlin">inputButton.on(retrieveJs = &quot;(new Date()).getTime()&quot;).click { event -&gt;
-    label.text(&quot;Clicked at ${event.retrieved.jsonPrimitive.content}&quot;)
+<pre><code class="language-kotlin">doc.body {
+    val input = button(type = ButtonType.button)
+    val label = span().text(&quot;Not clicked&quot;)
+    input.onImmediate.click {
+        label.text(&quot;Clicked!&quot;)
+    }
 }
 </code></pre>
 <p>Kweb executes this event handler <em>on page render</em> and records the
