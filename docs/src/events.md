@@ -26,7 +26,7 @@ to an event.
 Fortunately, Kweb has a solution:
 
 ```kotlin
-{{#include ../../src/test/kotlin/kweb/docs/events.kt:retrieveJs}}
+{{#include ../../src/test/kotlin/kweb/docs/events.kt:immediate}}
 ```
 
 Kweb executes this event handler *on page render* and records the
