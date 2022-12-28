@@ -266,11 +266,11 @@ const docCookies = {
         if (!sKey || !this.hasItem(sKey)) {
             return "__COOKIE_NOT_FOUND_TOKEN__";
         }
-        return unescape(
+        return decodeURIComponent(
             document.cookie.replace(
                 new RegExp(
                     "(?:^|.*;\\s*)" +
-                    escape(sKey).replace(/[\-\.\+\*]/g, "\\$&") +
+                    encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") +
                     "\\s*\\=\\s*((?:[^;](?!;))*[^;]?).*"
                 ),
                 "$1"
@@ -311,7 +311,7 @@ const docCookies = {
         if (!sKey || !this.hasItem(sKey)) {
             return;
         }
-        var oExpDate = new Date();
+        const oExpDate = new Date();
         oExpDate.setDate(oExpDate.getDate() - 1);
         document.cookie =
             encodeURIComponent(sKey) + "=; expires=" + oExpDate.toGMTString() + "; path=/";
