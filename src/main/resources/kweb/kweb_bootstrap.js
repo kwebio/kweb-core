@@ -124,7 +124,7 @@ function connectWs() {
             }
 
             if(evt.code === 1007){ //Server did restart or load balancer shifted session to other backend
-                location.reload(true);
+                location.reload();
             }
 
             console.error("WebSocket was closed", explanation, evt);
