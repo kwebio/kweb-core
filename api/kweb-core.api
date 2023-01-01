@@ -582,7 +582,6 @@ public final class kweb/ValueElement$DiffData {
 
 public final class kweb/ValueElement$DiffData$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/ValueElement$DiffData$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/ValueElement$DiffData;
@@ -742,7 +741,6 @@ public final class kweb/client/Client2ServerMessage {
 
 public final class kweb/client/Client2ServerMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/client/Client2ServerMessage$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage;
@@ -771,7 +769,6 @@ public final class kweb/client/Client2ServerMessage$C2SCallback {
 
 public final class kweb/client/Client2ServerMessage$C2SCallback$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/client/Client2ServerMessage$C2SCallback$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage$C2SCallback;
@@ -807,7 +804,6 @@ public final class kweb/client/Client2ServerMessage$ErrorMessage {
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/client/Client2ServerMessage$ErrorMessage$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage$ErrorMessage;
@@ -839,7 +835,6 @@ public final class kweb/client/Client2ServerMessage$ErrorMessage$Error {
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage$Error$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/client/Client2ServerMessage$ErrorMessage$Error$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
@@ -900,7 +895,6 @@ public final class kweb/client/FunctionCall {
 
 public final class kweb/client/FunctionCall$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/client/FunctionCall$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/FunctionCall;
@@ -976,7 +970,6 @@ public final class kweb/client/Server2ClientMessage {
 
 public final class kweb/client/Server2ClientMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/client/Server2ClientMessage$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Server2ClientMessage;
@@ -1108,7 +1101,6 @@ public final class kweb/html/events/Event {
 
 public final class kweb/html/events/Event$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/html/events/Event$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/events/Event;
@@ -1171,7 +1163,6 @@ public final class kweb/html/events/KeyboardEvent {
 
 public final class kweb/html/events/KeyboardEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/html/events/KeyboardEvent$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/events/KeyboardEvent;
@@ -1236,7 +1227,6 @@ public final class kweb/html/events/MouseEvent {
 
 public final class kweb/html/events/MouseEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/html/events/MouseEvent$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/events/MouseEvent;
@@ -1397,7 +1387,6 @@ public final class kweb/html/fileUpload/FileUpload {
 
 public final class kweb/html/fileUpload/FileUpload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lkweb/html/fileUpload/FileUpload$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/fileUpload/FileUpload;
