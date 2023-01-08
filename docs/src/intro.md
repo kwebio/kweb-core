@@ -15,10 +15,10 @@ WebSocket transport, and is optimized to minimize latency and resource usage on 
 ## Features
 
 * End-to-end Kotlin - Write your entire web site or user interface in Kotlin, Kweb takes care of browser-server communication
-* Real-time synchronization of your back-end data with your web page - Kweb takes care of all the plumbing for you.
-* Server-side HTML rendering with hydration - Kweb renders your HTML on the server before sending it to the browser, so the browser doesn't have to do any rendering.
-* Efficient instruction preloading - Kweb avoids unnecessary server communication by preloading instructions.
-* Very lightweight - Kweb is less than 5,000 lines of code.
+* Real-time synchronization of your back-end data with your web page - Kweb takes care of all the plumbing for you
+* Server-side HTML rendering with hydration - Kweb renders your HTML on the server before sending it to the browser
+* Efficient instruction preloading - Kweb avoids unnecessary server communication by preloading instructions
+* Very lightweight - Kweb is just 5k lines of code
 
 ## Relevant Links
 
