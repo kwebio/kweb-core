@@ -181,9 +181,8 @@ This JavaScript is parsed using <a href="https://developer.mozilla.org/en-US/doc
 (which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>), 
 and then cached in the browser for future use.</p>
 <h2 id="input-field-diffing"><a class="header" href="#input-field-diffing">Input field diffing</a></h2>
-<p>When an <code>&lt;input&gt;</code> or <code>&lt;textarea&gt;</code> field is modified, Kweb only sends the change to the browser rather than the
-entire field. This is essential for performance when the field is large, or when its being synchronised on
-every keypress.</p>
+<p>When an <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, or <code>&lt;textarea&gt;</code> element <a href="https://www.w3schools.com/tags/att_input_value.asp">value</a>` 
+is modified, Kweb only sends the change to the browser rather than the entire field.</p>
 
                     </main>
 
