@@ -1118,7 +1118,12 @@ which is in-turn running on Google Cloud Platform with FireStore as a database.<
 <a href="https://github.com/kwebio/kweb-demos/tree/master/">kwebio/kweb-demos</a></p>
 <h2 id="how-do-i-enable-https"><a class="header" href="#how-do-i-enable-https">How do I enable HTTPS?</a></h2>
 <p>Very easily, please see <a href="https://github.com/kwebio/kweb-demos/blob/master/https/src/HttpsApp.kt">this
-example</a>.</p>
+example</a>. You can
+also rely on a load-balancer to translate between HTTPS and HTTP so that this is handled
+external to Kweb.</p>
+<p><strong>Note:</strong> It is highly recommended that you use HTTPS as plain HTTP is vulnerable to
+<a href="https://en.wikipedia.org/wiki/Session_hijacking">session hijacking</a>, and Kweb does not
+yet (Jan 2023) implement mitigation measures against this.</p>
 <h2 id="can-i-embed-kweb-within-an-android-app"><a class="header" href="#can-i-embed-kweb-within-an-android-app">Can I embed Kweb within an Android app?</a></h2>
 <p>Yes! Please see
 <a href="https://github.com/kwebio/kweb-demos/tree/master/android">kweb-demos/tree/master/android</a>
