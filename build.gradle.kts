@@ -57,7 +57,7 @@ dependencies {
     // Dependencies for testing
     ///////////////////////////
     testApi(platform("io.kotest:kotest-bom:5.5.4"))
-    testApi(platform("org.junit:junit-bom:5.9.1"))
+    testApi(platform("org.junit:junit-bom:5.9.2"))
 
     testImplementation("io.kotest:kotest-runner-junit5")
     testImplementation("io.kotest:kotest-assertions-core")
