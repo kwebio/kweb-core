@@ -56,7 +56,14 @@ You can see a number of other example Kweb projects here:
 ## How do I enable HTTPS?
 
 Very easily, please see [this
-example](https://github.com/kwebio/kweb-demos/blob/master/https/src/HttpsApp.kt).
+example](https://github.com/kwebio/kweb-demos/blob/master/https/src/HttpsApp.kt). You can
+also rely on a load-balancer to translate between HTTPS and HTTP so that this is handled
+external to Kweb.
+
+**Note:** It is highly recommended that you use HTTPS as plain HTTP is vulnerable to
+[session hijacking](https://en.wikipedia.org/wiki/Session_hijacking), and Kweb does not
+yet (Jan 2023) implement mitigation measures against this. This is a common shortcoming
+for may web frameworks.
 
 ## Can I embed Kweb within an Android app?
 

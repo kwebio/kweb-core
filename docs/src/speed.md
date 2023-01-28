@@ -39,6 +39,5 @@ and then cached in the browser for future use.
 
 ## Input field diffing
 
-When an `<input>` or `<textarea>` field is modified, Kweb only sends the change to the browser rather than the
-entire field. This is essential for performance when the field is large, or when its being synchronised on
-every keypress.
+When an `<input>`, `<select>`, or `<textarea>` element [value](https://www.w3schools.com/tags/att_input_value.asp)` 
+is modified, Kweb only sends the change to the browser rather than the entire field.
