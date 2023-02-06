@@ -46,12 +46,12 @@ dependencies {
     api("io.ktor:ktor-server-websockets:2.2.2")
     api("io.ktor:ktor-server-default-headers:2.2.3")
     api("io.ktor:ktor-server-compression:2.2.2")
-    api("io.ktor:ktor-server-caching-headers:2.2.2")
+    api("io.ktor:ktor-server-caching-headers:2.2.3")
     api("io.ktor:ktor-network-tls-certificates:2.2.2")
 
     api("io.mola.galimatias:galimatias:0.2.1")
 
-    implementation("io.github.microutils:kotlin-logging:3.0.4")
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     ///////////////////////////
     // Dependencies for testing
