@@ -5,7 +5,7 @@ plugins {
     buildsrc.conventions.`kotlin-jvm`
     buildsrc.conventions.`maven-publish`
     id("org.jetbrains.dokka") version "1.7.20"
-    id("com.github.ben-manes.versions") version "0.44.0"
+    id("com.github.ben-manes.versions") version "0.45.0"
     kotlin("plugin.serialization")
 
     // See api/API_README.md for details
@@ -42,7 +42,7 @@ dependencies {
     ////////////////////
     // Ktor dependencvies
     ////////////////////
-    api("io.ktor:ktor-server-jetty:2.2.2")
+    api("io.ktor:ktor-server-jetty:2.2.3")
     api("io.ktor:ktor-server-websockets:2.2.2")
     api("io.ktor:ktor-server-default-headers:2.2.3")
     api("io.ktor:ktor-server-compression:2.2.2")
