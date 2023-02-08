@@ -35,8 +35,8 @@ class Template(template: String, vararg replaceables: String) : Stack("") {
      * Applies the current template to the supplied arguments.
      *
      */
-    override fun apply(vararg args: String?): String {
-        return super.apply(*args)
+    override fun apply(vararg values: String?): String {
+        return super.apply(*values)
     }
 
     /**

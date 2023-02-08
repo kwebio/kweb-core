@@ -43,7 +43,7 @@ class StaticFilesPlugin private constructor(private val servedRoute: String, pri
                 TODO: so that we can set a very long cache time (> 1 year).  For now it defaults
                 TODO: to one hour.
                  */
-                options { call, content ->
+                options { _, _ ->
                     CachingOptions(CacheControl.MaxAge(maxAgeSeconds = maxCacheAgeSeconds))
                 }
             }
