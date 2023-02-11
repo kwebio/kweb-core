@@ -18,7 +18,7 @@ dependencies {
     // This should be the only place that Gradle plugin versions are defined, so they are aligned across all build scripts
 
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
-    implementation("org.jetbrains.kotlin:kotlin-serialization:1.8.0")
+    implementation("org.jetbrains.kotlin:kotlin-serialization:1.8.10")
 }
 
 val gradleJvmTarget = 11
