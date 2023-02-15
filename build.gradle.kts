@@ -45,7 +45,7 @@ dependencies {
     api("io.ktor:ktor-server-jetty:2.2.3")
     api("io.ktor:ktor-server-websockets:2.2.3")
     api("io.ktor:ktor-server-default-headers:2.2.3")
-    api("io.ktor:ktor-server-compression:2.2.2")
+    api("io.ktor:ktor-server-compression:2.2.3")
     api("io.ktor:ktor-server-caching-headers:2.2.3")
     api("io.ktor:ktor-network-tls-certificates:2.2.2")
 
@@ -56,7 +56,7 @@ dependencies {
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    testApi(platform("io.kotest:kotest-bom:5.5.4"))
+    testApi(platform("io.kotest:kotest-bom:5.5.5"))
     testApi(platform("org.junit:junit-bom:5.9.2"))
 
     testImplementation("io.kotest:kotest-runner-junit5")
