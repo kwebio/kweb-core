@@ -9,7 +9,7 @@ plugins {
     kotlin("plugin.serialization")
 
     // See api/API_README.md for details
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.12.1"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.0"
 
     // Coverage
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
