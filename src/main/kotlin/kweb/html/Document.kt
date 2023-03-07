@@ -23,6 +23,10 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     fun getElementById(id: String) = Element(receiver, null, "return document.getElementById(\"$id\")", id = id)
 
+    /**
+     * Returns a [CookieReceiver] which can be used to read and write [cookies](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie),
+     * note that [localStorage] is a more modern alternative to this mechanism.
+     */
     val cookie = CookieReceiver(receiver)
 
     val body = BodyElement(receiver, "K_body")
@@ -61,13 +65,13 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     }
 
     /**
-     * Allows data to be stored in and retrieved from the browser's [local storage](https://www.w3schools.com/html/html5_webstorage.as).
+     * Allows data to be stored in and retrieved from the browser's [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
      */
     val localStorage get() = StorageReceiver(receiver, StorageType.local)
 
 
     /**
-     * Allows data to be stored in and retrieved from the browser's [session storage](https://www.w3schools.com/html/html5_webstorage.as).
+     * Allows data to be stored in and retrieved from the browser's [session storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage).
      */
     val sessionStorage get() = StorageReceiver(receiver, StorageType.session)
 

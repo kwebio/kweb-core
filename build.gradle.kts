@@ -47,7 +47,7 @@ dependencies {
     api("io.ktor:ktor-server-default-headers:2.2.3")
     api("io.ktor:ktor-server-compression:2.2.3")
     api("io.ktor:ktor-server-caching-headers:2.2.3")
-    api("io.ktor:ktor-network-tls-certificates:2.2.2")
+    api("io.ktor:ktor-network-tls-certificates:2.2.4")
 
     api("io.mola.galimatias:galimatias:0.2.1")
 
@@ -65,7 +65,7 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.4.5")
 
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
-    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.8.0")
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.8.1")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.8.0")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.3")
 
