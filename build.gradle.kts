@@ -26,7 +26,7 @@ tasks.test {
 }
 
 dependencies {
-    api("org.jsoup:jsoup:1.15.3")
+    api("org.jsoup:jsoup:1.15.4")
     implementation("org.apache.commons:commons-text:1.10.0")
     implementation("com.google.guava:guava:31.1-jre")
     api("dev.forkhandles:result4k:2.3.0.0")
@@ -44,7 +44,7 @@ dependencies {
     ////////////////////
     api("io.ktor:ktor-server-jetty:2.2.3")
     api("io.ktor:ktor-server-websockets:2.2.3")
-    api("io.ktor:ktor-server-default-headers:2.2.3")
+    api("io.ktor:ktor-server-default-headers:2.2.4")
     api("io.ktor:ktor-server-compression:2.2.3")
     api("io.ktor:ktor-server-caching-headers:2.2.3")
     api("io.ktor:ktor-network-tls-certificates:2.2.4")
