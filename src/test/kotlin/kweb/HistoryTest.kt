@@ -1,34 +1,40 @@
 package kweb
 
 import io.github.bonigarcia.seljup.Arguments
+import io.github.bonigarcia.seljup.DriverCapabilities
+import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
+import io.github.bonigarcia.wdm.WebDriverManager
 import io.kotest.matchers.shouldBe
 import kweb.*
 import kweb.state.KVar
 import kweb.state.render
+import org.awaitility.Awaitility.*
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
+import org.openqa.selenium.Capabilities
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
-import org.awaitility.Awaitility.*
-import java.time.Duration
+
 
 @ExtendWith(SeleniumJupiter::class)
-class HistoryTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
-
-    val driver: WebDriver
-
-    init {
-        //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(unprotectedDriver)
-    }
+class HistoryTest {
 
     companion object {
+        init {
+            System.setProperty("webdriver.http.factory", "jdk-http-client")
+        }
+
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            addArguments("--headless=new")
+        }
+
         private lateinit var historyTestApp: HistoryTestApp
 
         @JvmStatic
@@ -45,7 +51,9 @@ class HistoryTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun testBackButton() {
+    fun testBackButton(@Arguments("--headless") driver : WebDriver) {
+        WebDriverManager.chromedriver().setup()
+
         historyTestApp.reloadCount.value shouldBe 0
         driver.get("http://localhost:7665/0")
 
@@ -55,8 +63,6 @@ class HistoryTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
         await().untilAsserted { historyTestApp.url.value shouldBe "/1" }
 
         await().pollInSameThread().untilAsserted {
-            // For some reason was getting a StaleElementReferenceException intermittently, so put this
-            // inside an await()
             driver.findElement(By.tagName("a")).click()
         }
 
@@ -97,12 +103,10 @@ class HistoryTestApp {
                                 href = "/${num + 1}"
                                 text("Next ($num)")
                             }
-
                         }
                     }
                 }
             }
-
         }
     }
 }

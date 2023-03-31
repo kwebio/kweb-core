@@ -1,6 +1,7 @@
 package kweb
 
 import io.github.bonigarcia.seljup.Arguments
+import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
@@ -12,18 +13,18 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class ImmediateEventTest(@Arguments("--headless") private var unprotectedDriver: ChromeDriver) {
-
-    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
-    //This should make this test thread safe
-    val driver : WebDriver = ThreadGuard.protect(unprotectedDriver)
-
+class ImmediateEventTest {
 
     companion object {
         private lateinit var immediateEventTestApp: ImmediateEventTestApp
+
+        init {
+            System.setProperty("ChromeDriver.http.factory", "jdk-http-client")
+        }
 
         @JvmStatic
         @BeforeAll
@@ -36,10 +37,16 @@ class ImmediateEventTest(@Arguments("--headless") private var unprotectedDriver:
         fun tearDownServer() {
             immediateEventTestApp.server.close()
         }
+
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            addArguments("--headless=new")
+        }
+
     }
 
     @Test
-    fun checkBeforeAndAfterClick() {
+    fun checkBeforeAndAfterClick(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val label = driver.findElement(By.tagName("h1"))
         label.text shouldBe ("Click Me")

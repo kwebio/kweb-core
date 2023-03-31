@@ -6,9 +6,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.ktor.util.*
 import org.awaitility.Awaitility.await
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
@@ -22,8 +21,14 @@ import org.openqa.selenium.support.PageFactory
  * Test for the todoApp demo
  */
 @ExtendWith(SeleniumJupiter::class)
+@TestMethodOrder(OrderAnnotation::class)
 class TodoDemoTest {
     companion object {
+
+        init {
+            System.setProperty("webdriver.http.factory", "jdk-http-client")
+        }
+
         private lateinit var todoKweb: TodoApp
 
         @JvmStatic
@@ -38,16 +43,9 @@ class TodoDemoTest {
             todoKweb.server.close()
         }
 
-        //selenium-jupiter will automatically fall back if the first browser it tries doesn't work
-        //https://bonigarcia.github.io/selenium-jupiter/#generic-driver
         @Options
         var chromeOptions = ChromeOptions().apply {
-            setHeadless(true)
-        }
-
-        @Options
-        var firefoxOptions = FirefoxOptions().apply {
-            setHeadless(true)
+            addArguments("--headless=new")
         }
     }
 
@@ -61,6 +59,7 @@ class TodoDemoTest {
     }*/
 
     @Test
+    @Order(1)
     fun enterNewItem(driver: ChromeDriver) {
         val todoItem = "Right eyelids closed, both feet behind"
         val site = TodoSite(driver)
@@ -71,6 +70,7 @@ class TodoDemoTest {
     }
 
     @Test
+    @Order(2)
     fun multipleUsers(driver1: ChromeDriver, driver2: ChromeDriver) {
 
         val todoItem = "I aim for tomorrow, work on my mind"
@@ -90,6 +90,7 @@ class TodoDemoTest {
     }
 
     @Test
+    @Order(3)
     fun deleteItems(driver: ChromeDriver) {
         val firstItem = "We'll be all right"
         val secondItem = "Stay here some time"
@@ -111,6 +112,7 @@ class TodoDemoTest {
     }
 
     @Test
+    @Order(4)
     fun navigateToNewSite(driver: ChromeDriver) {
         driver.get("http://localhost:7659")
         val firstSiteUrl = driver.currentUrl

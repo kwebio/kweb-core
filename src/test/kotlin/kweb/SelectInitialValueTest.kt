@@ -1,6 +1,7 @@
 package kweb
 
 import io.github.bonigarcia.seljup.Arguments
+import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
@@ -11,18 +12,18 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
 class SelectInitialValueTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
-
-    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
-    //This should make this test thread safe.
-    val driver = ThreadGuard.protect(unprotectedDriver)
-
     companion object {
         private lateinit var selectInitialValueTestApp: SelectInitialValueTestApp
+
+        init {
+            System.setProperty("ChromeDriver.http.factory", "jdk-http-client")
+        }
 
         @JvmStatic
         @BeforeAll
@@ -35,10 +36,16 @@ class SelectInitialValueTest(@Arguments("--headless") unprotectedDriver: ChromeD
         fun tearDownServer() {
             selectInitialValueTestApp.server.close()
         }
+
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            addArguments("--headless=new")
+        }
+
     }
 
     @Test
-    fun mainTest() {
+    fun mainTest(driver : ChromeDriver) {
         driver.get("http://localhost:7668/")
         Awaitility.await().untilAsserted { selectInitialValueTestApp.selectValue.value shouldBe "cat" }
     }

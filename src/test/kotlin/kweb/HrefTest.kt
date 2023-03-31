@@ -1,6 +1,7 @@
 package kweb
 
 import io.github.bonigarcia.seljup.Arguments
+import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
@@ -14,18 +15,11 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class HrefTest(@Arguments("--headless") private var unprotectedDriver: ChromeDriver) {
-
-    val driver : WebDriver
-
-    init {
-        //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
-        //This should make this test thread safe.
-        driver = ThreadGuard.protect(unprotectedDriver)
-    }
+class HrefTest {
 
     companion object {
         private lateinit var hrefTestApp: HrefTestApp
@@ -41,10 +35,16 @@ class HrefTest(@Arguments("--headless") private var unprotectedDriver: ChromeDri
         fun tearDownServer() {
             hrefTestApp.server.close()
         }
+
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            addArguments("--headless=new")
+        }
+
     }
 
     @Test
-    fun testClick() {
+    fun testClick(driver : ChromeDriver) {
         driver.get("http://localhost:7665/")
         val aElement = driver.findElement(By.tagName("a"))
         hrefTestApp.appUrl.value shouldBe "/"

@@ -1,6 +1,7 @@
 package kweb
 
 import io.github.bonigarcia.seljup.Arguments
+import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
@@ -11,16 +12,27 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
 class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
 
+    companion object {
+        init {
+            System.setProperty("ChromeDriver.http.factory", "jdk-http-client")
+        }
+
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            addArguments("--headless=new")
+        }
+    }
+
     //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
     //This should make this test thread safe.
-    val driver: WebDriver = ThreadGuard.protect(unprotectedDriver)
+    //val driver: ChromeDriver = ThreadGuard.protect(unprotectedDriver)
 
     private lateinit var stringDiffTestApp: StringDiffTestApp
 
@@ -35,7 +47,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun appendTextToBeginning() {
+    fun appendTextToBeginning(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}Super ")
@@ -45,7 +57,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun appendTextToMiddle() {
+    fun appendTextToMiddle(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.LEFT}1234")
@@ -55,7 +67,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun appendTextToEnd() {
+    fun appendTextToEnd(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys(" Jumped")
@@ -65,7 +77,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun removeTextFromBeginning() {
+    fun removeTextFromBeginning(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.HOME}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}${Keys.DELETE}")
@@ -75,7 +87,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun removeTextFromMiddle() {
+    fun removeTextFromMiddle(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys("${Keys.LEFT}${Keys.BACK_SPACE}${Keys.BACK_SPACE}")
@@ -85,7 +97,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun removeTextFromEnd() {
+    fun removeTextFromEnd(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         inputField.sendKeys(Keys.END)
@@ -99,7 +111,7 @@ class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun modifyTextOnServerAndVerifyChangeInBrowser() {
+    fun modifyTextOnServerAndVerifyChangeInBrowser(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
         val currentValue = stringDiffTestApp.inputString.value
