@@ -17,7 +17,7 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class StringDiffTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
+class StringDiffTest {
 
     companion object {
         init {

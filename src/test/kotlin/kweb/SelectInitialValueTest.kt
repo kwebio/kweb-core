@@ -16,7 +16,7 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class SelectInitialValueTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
+class SelectInitialValueTest {
 
     companion object {
         private lateinit var selectInitialValueTestApp: SelectInitialValueTestApp

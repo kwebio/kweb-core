@@ -19,7 +19,7 @@ import org.openqa.selenium.support.ThreadGuard
 import org.openqa.selenium.support.ui.Select
 
 @ExtendWith(SeleniumJupiter::class)
-class SelectValueTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
+class SelectValueTest {
     companion object {
         private lateinit var selectValueTestApp: SelectValueTestApp
 

@@ -24,6 +24,10 @@ class HrefTest {
     companion object {
         private lateinit var hrefTestApp: HrefTestApp
 
+        init {
+            System.setProperty("webdriver.http.factory", "jdk-http-client")
+        }
+
         @JvmStatic
         @BeforeAll
         fun setupServer() {

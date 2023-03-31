@@ -20,7 +20,7 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class InputCheckedTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
+class InputCheckedTest {
 
     companion object {
         private lateinit var inputCheckedTestApp: InputCheckedTestApp

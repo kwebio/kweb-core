@@ -1,6 +1,7 @@
 package kweb.state.render
 
 import io.github.bonigarcia.seljup.Arguments
+import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
@@ -13,15 +14,22 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ThreadGuard
 
 @ExtendWith(SeleniumJupiter::class)
-class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
+class RenderEachTest {
 
-    //ThreadGuard.protect ensures that the ChromeDriver can only be called by the thread that created it
-    //This should make this test thread safe.
-    val driver = ThreadGuard.protect(unprotectedDriver)
+    companion object {
+        init {
+            System.setProperty("webdriver.http.factory", "jdk-http-client")
+        }
 
+        @Options
+        var chromeOptions = ChromeOptions().apply {
+            addArguments("--headless=new")
+        }
+    }
 
     /*NOTE: Thread.sleep(50) is used throughout these tests. I had success with values as small as Thread.sleep(1)
     But for consistent success, I left it at 50.
@@ -30,7 +38,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     It's an issue with Selenium, the client, clicking a button, and then giving the server literally 0 time to respond. */
 
     @Test
-    fun prependItemTest() {
+    fun prependItemTest(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
         val server = Kweb(port = 1240, buildPage = {
@@ -63,7 +71,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun appendItemTest() {
+    fun appendItemTest(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
         val server = Kweb(port = 1241, buildPage = {
@@ -96,7 +104,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun insertItemTest() {
+    fun insertItemTest(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Horse"))
 
         val server = Kweb(port = 1242, buildPage = {
@@ -129,7 +137,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun changeItemTest() {
+    fun changeItemTest(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear"))
 
         val server = Kweb(port = 1243, buildPage = {
@@ -157,7 +165,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun deleteItemTest() {
+    fun deleteItemTest(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Aardvark", "Bear", "Cow", "Dog", "Elephant"))
 
         val server = Kweb(port = 1244, buildPage = {
@@ -215,7 +223,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun moveItemFromEndToCenterTest() {
+    fun moveItemFromEndToCenterTest(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1245, buildPage = {
@@ -248,7 +256,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun moveItemFromStartToEnd() {
+    fun moveItemFromStartToEnd(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1246, buildPage = {
@@ -281,7 +289,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun moveItemFromEndToStart() {
+    fun moveItemFromEndToStart(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1247, buildPage = {
@@ -314,7 +322,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun ClearItemsTest() {
+    fun ClearItemsTest(driver : ChromeDriver) {
         val animals = ObservableList(mutableListOf("Dog", "Cat", "Bear", "Moose", "Horse"))
 
         val server = Kweb(port = 1248, buildPage = {
@@ -343,7 +351,7 @@ class RenderEachTest(@Arguments("--headless") unprotectedDriver: ChromeDriver) {
     }
 
     @Test
-    fun nestedRenderEachTest() {
+    fun nestedRenderEachTest(driver : ChromeDriver) {
         val planets = ObservableList(mutableListOf())
         val jupiter = ObservableList(mutableListOf("Io", "Europa", "Ganymede", "Callisto"))
         val saturn = ObservableList(mutableListOf("Titan", "Rhea", "Enceladus", "Mimas", "Phoebe"))

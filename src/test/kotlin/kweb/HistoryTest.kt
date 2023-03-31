@@ -51,9 +51,7 @@ class HistoryTest {
     }
 
     @Test
-    fun testBackButton(@Arguments("--headless") driver : WebDriver) {
-        WebDriverManager.chromedriver().setup()
-
+    fun testBackButton(driver : ChromeDriver) {
         historyTestApp.reloadCount.value shouldBe 0
         driver.get("http://localhost:7665/0")
 
