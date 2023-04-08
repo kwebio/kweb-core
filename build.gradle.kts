@@ -69,7 +69,7 @@ dependencies {
     testImplementation("org.seleniumhq.selenium:selenium-java:4.8.3")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.3")
     testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.8.3")
-    testImplementation("com.codeborne:selenide:6.12.4")
+    testImplementation("com.codeborne:selenide:6.13.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
