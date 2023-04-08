@@ -1,11 +1,9 @@
 # Kweb - A Kotlin web framework
 
 <div align="center">
-<!--
   <a href="https://github.com/kwebio/kweb-core/actions/workflows/build.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/kwebio/kweb-core/build.yml?branch=master&label=tests&style=flat-square&logo=github%20actions" alt="continuous integration status" >
   </a>
-  -->
   <a href="https://matrix.to/#/#kweb:matrix.org">
     <img src="https://img.shields.io/badge/chat-matrix-blue?style=flat-square&logo=matrix&color=0B9CD6" alt="matrix" >
   </a>
