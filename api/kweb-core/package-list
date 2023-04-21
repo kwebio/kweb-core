@@ -73,9 +73,7 @@ $dokka.location:kweb.config/KwebConfiguration/buildpageTimeout/#/PointingToDecla
 $dokka.location:kweb.config/KwebConfiguration/clientOfflineToastTextTemplate/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-offline-toast-text-template.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateStatsEnabled/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-stats-enabled.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-timeout.html
-$dokka.location:kweb.config/KwebConfiguration/faviconIco/#io.ktor.server.application.ApplicationCall/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/favicon-ico.html
 $dokka.location:kweb.config/KwebConfiguration/onWebsocketMessageHandlingFailure/#java.lang.Exception/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/on-websocket-message-handling-failure.html
-$dokka.location:kweb.config/KwebConfiguration/robotsTxt/#io.ktor.server.application.ApplicationCall/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/robots-txt.html
 $dokka.location:kweb.config/KwebConfiguration/urlPathPrefix/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/url-path-prefix.html
 $dokka.location:kweb.config/KwebConfiguration/validate/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/validate.html
 $dokka.location:kweb.config/KwebDefaultConfiguration///PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/index.html
@@ -613,6 +611,11 @@ $dokka.location:kweb.plugins.viewport/ViewportWidth/text/#/PointingToDeclaration
 $dokka.location:kweb.plugins.viewport/ViewportWidth/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-width/value-of.html
 $dokka.location:kweb.plugins.viewport/ViewportWidth/values/#/PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-width/values.html
 $dokka.location:kweb.plugins////PointingToDeclaration/kweb-core/kweb.plugins/index.html
+$dokka.location:kweb.plugins/FaviconPlugin.Companion///PointingToDeclaration/kweb-core/kweb.plugins/-favicon-plugin/-companion/index.html
+$dokka.location:kweb.plugins/FaviconPlugin.Companion/notFound/#/PointingToDeclaration/kweb-core/kweb.plugins/-favicon-plugin/-companion/not-found.html
+$dokka.location:kweb.plugins/FaviconPlugin///PointingToDeclaration/kweb-core/kweb.plugins/-favicon-plugin/index.html
+$dokka.location:kweb.plugins/FaviconPlugin/FaviconPlugin/#kotlin.coroutines.SuspendFunction1[io.ktor.server.application.ApplicationCall,kotlin.Unit]/PointingToDeclaration/kweb-core/kweb.plugins/-favicon-plugin/-favicon-plugin.html
+$dokka.location:kweb.plugins/FaviconPlugin/appServerConfigurator/#io.ktor.server.routing.Routing/PointingToDeclaration/kweb-core/kweb.plugins/-favicon-plugin/app-server-configurator.html
 $dokka.location:kweb.plugins/KwebPlugin///PointingToDeclaration/kweb-core/kweb.plugins/-kweb-plugin/index.html
 $dokka.location:kweb.plugins/KwebPlugin/KwebPlugin/#kotlin.collections.Set[kweb.plugins.KwebPlugin]/PointingToDeclaration/kweb-core/kweb.plugins/-kweb-plugin/-kweb-plugin.html
 $dokka.location:kweb.plugins/KwebPlugin/appServerConfigurator/#io.ktor.server.routing.Routing/PointingToDeclaration/kweb-core/kweb.plugins/-kweb-plugin/app-server-configurator.html
