@@ -1181,6 +1181,11 @@ Kweb(port = 16097, plugins = listOf(faviconPlugin)) {
     }
 }
 </code></pre>
+<p>If you don't provide a FaviconPlugin and KwebConfiguration.handleFavicon is true, Kweb will
+automatically use the FaviconPlugin.notFound(), which will return a 404 response for any favicon
+requests.</p>
+<p>If you need to handle favicon requests yourself, you can set KwebConfiguration.handleFavicon
+to false and add your own handler for favicon requests.</p>
 <h2 id="how-do-i-enable-auto-reloading"><a class="header" href="#how-do-i-enable-auto-reloading">How do I enable auto-reloading?</a></h2>
 <p>See Ktor's <a href="https://ktor.io/docs/auto-reload.html">auto-reloading</a> documentation.</p>
 <h2 id="i-have-a-question-not-answered-here"><a class="header" href="#i-have-a-question-not-answered-here">I have a question not answered here</a></h2>
