@@ -162,6 +162,7 @@
 <li><a href="#why-risk-my-project-on-a-framework-i-just-heard-of">Why risk my project on a framework I just heard of?</a></li>
 <li><a href="#how-is-kweb-pronounced">How is &quot;Kweb&quot; pronounced?</a></li>
 <li><a href="#can-kweb-be-embedded-in-an-existing-ktor-app">Can Kweb be embedded in an existing Ktor app?</a></li>
+<li><a href="#how-do-i-add-a-favicon">How do I add a favicon?</a></li>
 <li><a href="#how-do-i-enable-auto-reloading">How do I enable auto-reloading?</a></li>
 <li><a href="#i-have-a-question-not-answered-here">I have a question not answered here</a></li>
 </ul>
@@ -257,6 +258,22 @@ frequent.</p>
 <h2 id="can-kweb-be-embedded-in-an-existing-ktor-app"><a class="header" href="#can-kweb-be-embedded-in-an-existing-ktor-app">Can Kweb be embedded in an existing Ktor app?</a></h2>
 <p>Yes! Please see <a href="https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt">this
 example</a>.</p>
+<h2 id="how-do-i-add-a-favicon"><a class="header" href="#how-do-i-add-a-favicon">How do I add a favicon?</a></h2>
+<p>The easiest way is using the <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/plugins">FaviconPlugin</a>:</p>
+<pre><code class="language-kotlin">val faviconPlugin = FaviconPlugin {
+    respondBytes(getFaviconAsBytes(), ContentType.Image.Any)
+}
+Kweb(port = 16097, plugins = listOf(faviconPlugin)) {
+    doc.body {
+        // ...
+    }
+}
+</code></pre>
+<p>If you just want to get rid of the annoying not found error you can use:</p>
+<pre><code class="language-kotlin">Kweb(port = 7660, plugins = listOf(FaviconPlugin.notFound())) {
+    // ...
+}
+</code></pre>
 <h2 id="how-do-i-enable-auto-reloading"><a class="header" href="#how-do-i-enable-auto-reloading">How do I enable auto-reloading?</a></h2>
 <p>See Ktor's <a href="https://ktor.io/docs/auto-reload.html">auto-reloading</a> documentation.</p>
 <h2 id="i-have-a-question-not-answered-here"><a class="header" href="#i-have-a-question-not-answered-here">I have a question not answered here</a></h2>
