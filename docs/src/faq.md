@@ -123,6 +123,22 @@ One syllable, like **qu** from **qu**ick - **qu**-**web**.
 Yes! Please see [this
 example](https://github.com/kwebio/kweb-demos/blob/master/ktorFeature/src/FeatureApp.kt).
 
+## How do I add a favicon?
+
+The easiest way is using the [FaviconPlugin](https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/plugins):
+
+```kotlin
+{{#include ../../src/main/kotlin/kweb/plugins/FaviconPlugin.kt:favicon}}
+```
+
+If you just want to get rid of the annoying not found error you can use:
+
+```kotlin
+Kweb(port = 7660, plugins = listOf(FaviconPlugin.notFound())) {
+    // ...
+}
+```
+
 ## How do I enable auto-reloading?
 
 See Ktor's [auto-reloading](https://ktor.io/docs/auto-reload.html) documentation.

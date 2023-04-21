@@ -985,14 +985,12 @@ public final class kweb/client/Server2ClientMessage$Companion {
 
 public abstract class kweb/config/KwebConfiguration {
 	public fun <init> ()V
-	public fun faviconIco (Lio/ktor/server/application/ApplicationCall;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getBuildpageTimeout ()Ljava/time/Duration;
 	public fun getClientOfflineToastTextTemplate ()Ljava/lang/String;
 	public abstract fun getClientStateStatsEnabled ()Z
 	public abstract fun getClientStateTimeout ()Ljava/time/Duration;
 	public fun getUrlPathPrefix ()Ljava/lang/String;
 	public fun onWebsocketMessageHandlingFailure (Ljava/lang/Exception;)V
-	public fun robotsTxt (Lio/ktor/server/application/ApplicationCall;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun validate ()V
 }
 
@@ -1448,6 +1446,16 @@ public final class kweb/https/SSLConfig : io/ktor/server/engine/EngineSSLConnect
 
 public final class kweb/https/SSLConfigKt {
 	public static final fun getDefaultKeyStore ()Ljava/security/KeyStore;
+}
+
+public final class kweb/plugins/FaviconPlugin : kweb/plugins/KwebPlugin {
+	public static final field Companion Lkweb/plugins/FaviconPlugin$Companion;
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public fun appServerConfigurator (Lio/ktor/server/routing/Routing;)V
+}
+
+public final class kweb/plugins/FaviconPlugin$Companion {
+	public final fun notFound ()Lkweb/plugins/FaviconPlugin;
 }
 
 public abstract class kweb/plugins/KwebPlugin {

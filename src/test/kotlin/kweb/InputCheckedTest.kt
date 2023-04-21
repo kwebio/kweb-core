@@ -5,6 +5,7 @@ import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
+import kweb.plugins.FaviconPlugin
 import kweb.state.KVar
 import org.awaitility.Awaitility
 import org.awaitility.Awaitility.await
@@ -72,7 +73,7 @@ class InputCheckedTestApp {
 
     internal lateinit var checkKVar: KVar<Boolean>
 
-    val server: Kweb = Kweb(port = 7660) {
+    val server: Kweb = Kweb(port = 7660, plugins = listOf(FaviconPlugin.notFound())) {
         doc.body {
             val i = input(type = InputType.checkbox)
             checkKVar = i.checked()

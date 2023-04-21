@@ -5,6 +5,7 @@ import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
+import kweb.plugins.FaviconPlugin
 import kweb.state.KVar
 import org.awaitility.Awaitility
 import org.junit.jupiter.api.AfterAll
@@ -72,7 +73,7 @@ class HrefTestApp {
 
     val renderCount = KVar(0)
 
-    val server: Kweb = Kweb(port = 7665) {
+    val server: Kweb = Kweb(port = 7665, plugins = listOf(FaviconPlugin.notFound())) {
         appUrl = this.url
         doc.body {
             renderCount.value++

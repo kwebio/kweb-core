@@ -220,15 +220,6 @@ class Kweb private constructor(
     private fun setupKweb(application: Application, buildPage: WebBrowser.() -> Unit) {
 
         application.routing {
-
-            get("/robots.txt") {
-                kwebConfig.robotsTxt(call)
-            }
-
-            get("/favicon.ico") {
-                kwebConfig.faviconIco(call)
-            }
-
             get("${kwebConfig.urlPathPrefix}/{visitedUrl...}") {
                 respondKweb(call, buildPage)
             }

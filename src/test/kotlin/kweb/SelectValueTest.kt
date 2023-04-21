@@ -5,6 +5,7 @@ import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.kotest.matchers.shouldBe
 import kweb.*
+import kweb.plugins.FaviconPlugin
 import kweb.state.KVar
 import org.awaitility.Awaitility
 import org.junit.jupiter.api.AfterAll
@@ -24,7 +25,8 @@ class SelectValueTest {
         private lateinit var selectValueTestApp: SelectValueTestApp
 
         init {
-            System.setProperty("ChromeDriver.http.factory", "jdk-http-client")
+            System.setProperty("ChromeDr" +
+                    "iver.http.factory", "jdk-http-client")
         }
 
         @JvmStatic
@@ -62,7 +64,7 @@ class SelectValueTestApp {
 
     internal lateinit var selectValue: KVar<String>
 
-    val server: Kweb = Kweb(port = 7668) {
+    val server: Kweb = Kweb(port = 7668, plugins = listOf(FaviconPlugin.notFound())) {
         doc.body {
             val select = select(name = "pets") {
                 option().set("value", "dog").text("Dog")

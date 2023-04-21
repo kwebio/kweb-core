@@ -7,6 +7,7 @@ import io.github.bonigarcia.seljup.SeleniumJupiter
 import io.github.bonigarcia.wdm.WebDriverManager
 import io.kotest.matchers.shouldBe
 import kweb.*
+import kweb.plugins.FaviconPlugin
 import kweb.state.KVar
 import kweb.state.render
 import org.awaitility.Awaitility.*
@@ -89,7 +90,7 @@ class HistoryTestApp {
 
     val reloadCount = KVar(0)
 
-    val server: Kweb = Kweb(port = 7665) {
+    val server: Kweb = Kweb(port = 7665, plugins = listOf(FaviconPlugin.notFound())) {
         reloadCount.value++
         this@HistoryTestApp.url = this.url
         doc.body {
