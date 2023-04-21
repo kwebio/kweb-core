@@ -127,7 +127,7 @@ class StringDiffTest {
 class StringDiffTestApp {
     var inputString = KVar("Initial")
 
-    val server: Kweb = Kweb(port = 7660, plugins = listOf(FaviconPlugin.notFound())) {
+    val server: Kweb = Kweb(port = 7660) {
         doc.body {
             val input = input(initialValue = "Lazy Brown Fox")
             inputString = input.value

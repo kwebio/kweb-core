@@ -8,7 +8,9 @@ import kweb.Kweb
 import kweb.h1
 
 /**
- * A Kweb plugin that adds a favicon.ico route to the Ktor server
+ * A Kweb plugin that adds a favicon.ico route to the Ktor server. Note that
+ * the [Kweb] constructor will automatically add FaviconPlugin.notFound() to
+ * the list of plugins if no favicon plugin is provided.
  */
 class FaviconPlugin(private val response : suspend (ApplicationCall).() -> Unit) : KwebPlugin() {
     companion object {

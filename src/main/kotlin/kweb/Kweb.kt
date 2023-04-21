@@ -25,6 +25,7 @@ import kweb.client.ClientConnection.Caching
 import kweb.config.KwebConfiguration
 import kweb.config.KwebDefaultConfiguration
 import kweb.html.HtmlDocumentSupplier
+import kweb.plugins.FaviconPlugin
 import kweb.plugins.KwebPlugin
 import kweb.plugins.staticFiles.ResourceFolder
 import kweb.plugins.staticFiles.StaticFilesPlugin
@@ -35,6 +36,7 @@ import org.jsoup.nodes.DataNode
 import java.io.Closeable
 import java.time.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.abs
 
 private val logger = KotlinLogging.logger {}
@@ -47,7 +49,14 @@ class Kweb private constructor(
 
     // This StaticFilesPlugin is used to serve static files required by Kweb and bundled plugins, it's
     // added to the plugin list implicitly.
-    val plugins = plugins + StaticFilesPlugin(ResourceFolder("kweb.static"), "/kweb_static")
+    val plugins = run {
+        val additionalPlugins = ArrayList<KwebPlugin>()
+        additionalPlugins += StaticFilesPlugin(ResourceFolder("kweb.static"), "/kweb_static")
+        if (plugins.none { it is FaviconPlugin }) {
+            additionalPlugins += FaviconPlugin.notFound()
+        }
+        plugins + additionalPlugins
+    }
 
     /**
      *

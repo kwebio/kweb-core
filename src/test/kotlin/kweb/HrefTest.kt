@@ -73,7 +73,7 @@ class HrefTestApp {
 
     val renderCount = KVar(0)
 
-    val server: Kweb = Kweb(port = 7665, plugins = listOf(FaviconPlugin.notFound())) {
+    val server: Kweb = Kweb(port = 7665) {
         appUrl = this.url
         doc.body {
             renderCount.value++

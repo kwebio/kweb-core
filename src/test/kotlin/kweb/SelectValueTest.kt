@@ -64,7 +64,7 @@ class SelectValueTestApp {
 
     internal lateinit var selectValue: KVar<String>
 
-    val server: Kweb = Kweb(port = 7668, plugins = listOf(FaviconPlugin.notFound())) {
+    val server: Kweb = Kweb(port = 7668) {
         doc.body {
             val select = select(name = "pets") {
                 option().set("value", "dog").text("Dog")

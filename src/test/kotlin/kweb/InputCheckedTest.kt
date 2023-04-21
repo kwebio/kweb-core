@@ -73,7 +73,7 @@ class InputCheckedTestApp {
 
     internal lateinit var checkKVar: KVar<Boolean>
 
-    val server: Kweb = Kweb(port = 7660, plugins = listOf(FaviconPlugin.notFound())) {
+    val server: Kweb = Kweb(port = 7660) {
         doc.body {
             val i = input(type = InputType.checkbox)
             checkKVar = i.checked()

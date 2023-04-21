@@ -131,14 +131,6 @@ The easiest way is using the [FaviconPlugin](https://github.com/kwebio/kweb-core
 {{#include ../../src/main/kotlin/kweb/plugins/FaviconPlugin.kt:favicon}}
 ```
 
-If you just want to get rid of the annoying not found error you can use:
-
-```kotlin
-Kweb(port = 7660, plugins = listOf(FaviconPlugin.notFound())) {
-    // ...
-}
-```
-
 ## How do I enable auto-reloading?
 
 See Ktor's [auto-reloading](https://ktor.io/docs/auto-reload.html) documentation.
