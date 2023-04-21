@@ -989,6 +989,7 @@ public abstract class kweb/config/KwebConfiguration {
 	public fun getClientOfflineToastTextTemplate ()Ljava/lang/String;
 	public abstract fun getClientStateStatsEnabled ()Z
 	public abstract fun getClientStateTimeout ()Ljava/time/Duration;
+	public fun getHandleFavicon ()Z
 	public fun getUrlPathPrefix ()Ljava/lang/String;
 	public fun onWebsocketMessageHandlingFailure (Ljava/lang/Exception;)V
 	public final fun validate ()V

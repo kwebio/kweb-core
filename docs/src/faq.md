@@ -131,6 +131,13 @@ The easiest way is using the [FaviconPlugin](https://github.com/kwebio/kweb-core
 {{#include ../../src/main/kotlin/kweb/plugins/FaviconPlugin.kt:favicon}}
 ```
 
+If you don't provide a FaviconPlugin and KwebConfiguration.handleFavicon is true, Kweb will
+automatically use the FaviconPlugin.notFound(), which will return a 404 response for any favicon
+requests.
+
+If you need to handle favicon requests yourself, you can set KwebConfiguration.handleFavicon
+to false and add your own handler for favicon requests.
+
 ## How do I enable auto-reloading?
 
 See Ktor's [auto-reloading](https://ktor.io/docs/auto-reload.html) documentation.

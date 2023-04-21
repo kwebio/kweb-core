@@ -1,8 +1,5 @@
 package kweb.config
 
-import io.ktor.server.application.*
-import io.ktor.http.*
-import io.ktor.server.response.*
 import kweb.Kweb
 import mu.KotlinLogging
 import java.time.Duration
@@ -107,4 +104,11 @@ abstract class KwebConfiguration {
         fun getProperty(key: String): String? =
             System.getProperty(key, env[key] ?: env[key.uppercase(Locale.getDefault()).replace('.', '_')])
     }
+
+    /**
+     * If true, Kweb will handle favicon requests via a default plugin added if and only if no existing FaviconPlugin
+     * is found in the list of plugins. If false the user should add their own FaviconPlugin or handle favicon requests
+     * some other way (perhaps directly with Ktor).
+     */
+    open val handleFavicon : Boolean = true
 }

@@ -52,7 +52,7 @@ class Kweb private constructor(
     val plugins = run {
         val additionalPlugins = ArrayList<KwebPlugin>()
         additionalPlugins += StaticFilesPlugin(ResourceFolder("kweb.static"), "/kweb_static")
-        if (plugins.none { it is FaviconPlugin }) {
+        if (kwebConfig.handleFavicon && plugins.none { it is FaviconPlugin }) {
             additionalPlugins += FaviconPlugin.notFound()
         }
         plugins + additionalPlugins
