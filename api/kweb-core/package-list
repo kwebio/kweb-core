@@ -73,6 +73,7 @@ $dokka.location:kweb.config/KwebConfiguration/buildpageTimeout/#/PointingToDecla
 $dokka.location:kweb.config/KwebConfiguration/clientOfflineToastTextTemplate/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-offline-toast-text-template.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateStatsEnabled/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-stats-enabled.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-timeout.html
+$dokka.location:kweb.config/KwebConfiguration/handleFavicon/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/handle-favicon.html
 $dokka.location:kweb.config/KwebConfiguration/onWebsocketMessageHandlingFailure/#java.lang.Exception/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/on-websocket-message-handling-failure.html
 $dokka.location:kweb.config/KwebConfiguration/urlPathPrefix/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/url-path-prefix.html
 $dokka.location:kweb.config/KwebConfiguration/validate/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/validate.html
