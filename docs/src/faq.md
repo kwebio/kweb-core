@@ -132,7 +132,7 @@ The easiest way is using the [FaviconPlugin](https://github.com/kwebio/kweb-core
 ```
 
 If you don't provide a FaviconPlugin and KwebConfiguration.handleFavicon is true, Kweb will
-automatically use the FaviconPlugin.notFound(), which will return a 404 response for any favicon
+automatically use FaviconPlugin.notFound(), which will return a 404 response for any favicon
 requests.
 
 If you need to handle favicon requests yourself, you can set KwebConfiguration.handleFavicon
