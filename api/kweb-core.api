@@ -221,6 +221,10 @@ public final class kweb/ElementKt {
 	public static synthetic fun new$default (Lkweb/Element;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
+public class kweb/FooterElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
 public class kweb/FormElement : kweb/Element {
 	public fun <init> (Lkweb/Element;)V
 }
@@ -407,6 +411,8 @@ public final class kweb/PreludeKt {
 	public static synthetic fun div$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/DivElement;
 	public static final fun fileInput (Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/Map;)Lkweb/html/fileUpload/FileFormInput;
 	public static synthetic fun fileInput$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lkweb/html/fileUpload/FileFormInput;
+	public static final fun footer (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/FooterElement;
+	public static synthetic fun footer$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/FooterElement;
 	public static final fun form (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/FormElement;
 	public static synthetic fun form$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/FormElement;
 	public static final fun get (Lkweb/state/KVar;I)Lkweb/state/KVar;
