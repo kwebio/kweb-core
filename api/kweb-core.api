@@ -467,6 +467,8 @@ public final class kweb/PreludeKt {
 	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
 	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
 	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
+	public static final fun tfoot (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TfootElement;
+	public static synthetic fun tfoot$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TfootElement;
 	public static final fun th (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ThElement;
 	public static synthetic fun th$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ThElement;
 	public static final fun thead (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TheadElement;
@@ -517,6 +519,10 @@ public final class kweb/TdElement : kweb/Element {
 public final class kweb/TextAreaElement : kweb/ValueElement {
 	public fun <init> (Lkweb/Element;Ljava/lang/String;)V
 	public synthetic fun <init> (Lkweb/Element;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public class kweb/TfootElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
 }
 
 public class kweb/ThElement : kweb/Element {
