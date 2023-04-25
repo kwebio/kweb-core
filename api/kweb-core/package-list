@@ -807,6 +807,7 @@ $dokka.location:kweb//tbody/kweb.ElementCreator[kweb.Element]#kotlin.collections
 $dokka.location:kweb//td/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.TdElement],kweb.TdElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/td.html
 $dokka.location:kweb//textArea/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.TextAreaElement],kweb.TextAreaElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/text-area.html
 $dokka.location:kweb//textArea/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Int?#kotlin.Int?#kotlin.Boolean?#kotlin.String?#kotlin.Function2[kweb.ElementCreator[kweb.TextAreaElement],kweb.TextAreaElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/text-area.html
+$dokka.location:kweb//tfoot/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.TfootElement],kweb.TfootElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/tfoot.html
 $dokka.location:kweb//th/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.ThElement],kweb.ThElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/th.html
 $dokka.location:kweb//thead/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.TheadElement],kweb.TheadElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/thead.html
 $dokka.location:kweb//title/kweb.ElementCreator[kweb.html.HeadElement]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.html.TitleElement],kweb.html.TitleElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/title.html
@@ -1065,6 +1066,8 @@ $dokka.location:kweb/TdElement///PointingToDeclaration/kweb-core/kweb/-td-eleme
 $dokka.location:kweb/TdElement/TdElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-td-element/-td-element.html
 $dokka.location:kweb/TextAreaElement///PointingToDeclaration/kweb-core/kweb/-text-area-element/index.html
 $dokka.location:kweb/TextAreaElement/TextAreaElement/#kweb.Element#kotlin.String?/PointingToDeclaration/kweb-core/kweb/-text-area-element/-text-area-element.html
+$dokka.location:kweb/TfootElement///PointingToDeclaration/kweb-core/kweb/-tfoot-element/index.html
+$dokka.location:kweb/TfootElement/TfootElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-tfoot-element/-tfoot-element.html
 $dokka.location:kweb/ThElement///PointingToDeclaration/kweb-core/kweb/-th-element/index.html
 $dokka.location:kweb/ThElement/ThElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-th-element/-th-element.html
 $dokka.location:kweb/TheadElement///PointingToDeclaration/kweb-core/kweb/-thead-element/index.html
