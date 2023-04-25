@@ -770,6 +770,20 @@ fun ElementCreator<Element>.thead(
 
 open class TheadElement(parent: Element) : Element(parent)
 
+fun ElementCreator<Element>.tfoot(attributes: Map<String, JsonPrimitive> = emptyMap(),
+                                  new: (ElementCreator<TfootElement>.(TfootElement) -> Unit)? = null): TfootElement {
+    return TfootElement(element(tag = "tfoot",
+                                attributes = attributes)).also {
+        if (new != null) {
+            new(ElementCreator(element = it,
+                               insertBefore = null),
+                it)
+        }
+    }
+}
+
+open class TfootElement(parent: Element) : Element(element = parent)
+
 fun ElementCreator<Element>.th(
     attributes: Map<String, JsonPrimitive> = emptyMap(),
     new: (ElementCreator<ThElement>.(ThElement) -> Unit)? = null
