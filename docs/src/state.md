@@ -102,9 +102,7 @@ See also:
 But what if you want to do more than just modify a single element based
 on a KVar, what if you want to modify a whole tree of elements?
 
-This is where the [render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html)
-
-function comes in:
+This is where the [render](https://docs.kweb.io/api/kweb-core/kweb.state/render.html) function comes in:
 
 ```kotlin
 {{#include ../../src/test/kotlin/kweb/docs/state.kt:render1}}
