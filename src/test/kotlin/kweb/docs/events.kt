@@ -2,7 +2,7 @@ package kweb.docs
 
 import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 
 /*
  * NOTE: Indentation is weird in this file because it's used to generate the documentation, don't fix it!

@@ -31,7 +31,7 @@ import kweb.plugins.staticFiles.ResourceFolder
 import kweb.plugins.staticFiles.StaticFilesPlugin
 import kweb.util.*
 import kweb.util.NotFoundException
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import org.jsoup.nodes.DataNode
 import java.io.Closeable
 import java.time.*

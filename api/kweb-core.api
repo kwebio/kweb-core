@@ -213,7 +213,7 @@ public class kweb/ElementCreator {
 	public final fun text (Lkweb/state/KVal;)V
 }
 
-public final class kweb/ElementCreator$Companion : mu/KLogging {
+public final class kweb/ElementCreator$Companion : mu/two/KLogging {
 }
 
 public final class kweb/ElementKt {
@@ -583,7 +583,7 @@ public final class kweb/ValueElement$DiffData {
 	public final fun getPrefixEndIndex ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/ValueElement$DiffData;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/ValueElement$DiffData;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/ValueElement$DiffData$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -742,7 +742,7 @@ public final class kweb/client/Client2ServerMessage {
 	public final fun getKeepalive ()Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/client/Client2ServerMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -770,7 +770,7 @@ public final class kweb/client/Client2ServerMessage$C2SCallback {
 	public final fun getData ()Lkotlinx/serialization/json/JsonElement;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$C2SCallback$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -805,7 +805,7 @@ public final class kweb/client/Client2ServerMessage$ErrorMessage {
 	public final fun getError ()Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/client/Client2ServerMessage$ErrorMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage$ErrorMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -836,7 +836,7 @@ public final class kweb/client/Client2ServerMessage$ErrorMessage$Error {
 	public final fun getName ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/client/Client2ServerMessage$ErrorMessage$Error;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage$ErrorMessage$Error;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage$Error$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -896,7 +896,7 @@ public final class kweb/client/FunctionCall {
 	public final fun getParameters ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/client/FunctionCall;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/client/FunctionCall;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/FunctionCall$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -971,7 +971,7 @@ public final class kweb/client/Server2ClientMessage {
 	public final fun getYourId ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/client/Server2ClientMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/client/Server2ClientMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Server2ClientMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1101,7 +1101,7 @@ public final class kweb/html/events/Event {
 	public final fun getType ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/html/events/Event;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/html/events/Event;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/events/Event$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1163,7 +1163,7 @@ public final class kweb/html/events/KeyboardEvent {
 	public fun hashCode ()I
 	public final fun isComposing ()Z
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/html/events/KeyboardEvent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/html/events/KeyboardEvent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/events/KeyboardEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1227,7 +1227,7 @@ public final class kweb/html/events/MouseEvent {
 	public final fun getY ()F
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lkweb/html/events/MouseEvent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/html/events/MouseEvent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/events/MouseEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1367,7 +1367,7 @@ public final class kweb/html/events/OnReceiver$Companion {
 }
 
 public final class kweb/html/events/OnReceiverKt {
-	public static final fun getLogger ()Lmu/KLogger;
+	public static final fun getLogger ()Lmu/two/KLogger;
 }
 
 public final class kweb/html/fileUpload/FileFormInput {
@@ -1387,7 +1387,7 @@ public final class kweb/html/fileUpload/FileUpload {
 	public final fun getBase64Content ()Ljava/lang/String;
 	public final fun getFileName ()Ljava/lang/String;
 	public final fun getFileSize ()I
-	public static final fun write$Self (Lkweb/html/fileUpload/FileUpload;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+	public static final synthetic fun write$Self (Lkweb/html/fileUpload/FileUpload;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/fileUpload/FileUpload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {

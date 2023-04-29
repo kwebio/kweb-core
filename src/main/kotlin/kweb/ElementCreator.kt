@@ -13,7 +13,7 @@ import kweb.state.KVal
 import kweb.state.KVar
 import kweb.util.KWebDSL
 import kweb.util.json
-import mu.KLogging
+import mu.two.KLogging
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger

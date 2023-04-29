@@ -1,7 +1,7 @@
 package kweb.config
 
 import kweb.Kweb
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import java.time.Duration
 import java.util.*
 

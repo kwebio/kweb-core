@@ -5,7 +5,7 @@ import io.ktor.websocket.Frame.Text
 import io.ktor.websocket.WebSocketSession
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
 
 private val logger = KotlinLogging.logger {}

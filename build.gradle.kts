@@ -4,15 +4,15 @@ import java.net.URL
 plugins {
     buildsrc.conventions.`kotlin-jvm`
     buildsrc.conventions.`maven-publish`
-    id("org.jetbrains.dokka") version "1.7.20"
-    id("com.github.ben-manes.versions") version "0.45.0"
+    id("org.jetbrains.dokka") version "1.8.10"
+    id("com.github.ben-manes.versions") version "0.46.0"
     kotlin("plugin.serialization")
 
     // See api/API_README.md for details
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.0"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.1"
 
     // Coverage
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    id("org.jetbrains.kotlinx.kover") version "0.7.0-Beta"
 }
 
 // This is overridden by the maven release process
@@ -26,7 +26,7 @@ tasks.test {
 }
 
 dependencies {
-    api("org.jsoup:jsoup:1.15.4")
+    api("org.jsoup:jsoup:1.16.1")
     implementation("org.apache.commons:commons-text:1.10.0")
     implementation("com.google.guava:guava:31.1-jre")
     api("dev.forkhandles:result4k:2.4.0.0")
@@ -35,29 +35,29 @@ dependencies {
     // Kotlin library dependencies
     //////////////////////////////
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-RC")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.0-RC")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     ////////////////////
     // Ktor dependencvies
     ////////////////////
     api("io.ktor:ktor-server-jetty:2.3.0")
-    api("io.ktor:ktor-server-websockets:2.2.3")
-    api("io.ktor:ktor-server-default-headers:2.2.4")
+    api("io.ktor:ktor-server-websockets:2.3.0")
+    api("io.ktor:ktor-server-default-headers:2.3.0")
     api("io.ktor:ktor-server-compression:2.3.0")
-    api("io.ktor:ktor-server-caching-headers:2.2.4")
-    api("io.ktor:ktor-network-tls-certificates:2.2.4")
+    api("io.ktor:ktor-server-caching-headers:2.3.0")
+    api("io.ktor:ktor-network-tls-certificates:2.3.0")
 
     api("io.mola.galimatias:galimatias:0.2.1")
 
-    implementation("io.github.microutils:kotlin-logging:3.0.5")
+    implementation("io.github.microutils:kotlin-logging:4.0.0-beta-2")
 
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
     testApi(platform("io.kotest:kotest-bom:5.6.1"))
-    testApi(platform("org.junit:junit-bom:5.9.2"))
+    testApi(platform("org.junit:junit-bom:5.9.3"))
 
     testImplementation("io.kotest:kotest-runner-junit5")
     testImplementation("io.kotest:kotest-assertions-core")
@@ -65,11 +65,11 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.4.7")
 
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
-    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.8.3")
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.9.0")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.9.0")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.3")
-    testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.8.3")
-    testImplementation("com.codeborne:selenide:6.13.0")
+    testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.0")
+    testImplementation("com.codeborne:selenide:6.13.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 

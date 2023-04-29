@@ -5,7 +5,7 @@ import kotlinx.serialization.json.*
 import kotlinx.serialization.serializer
 import kweb.WebBrowser
 import kweb.util.KWebDSL
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import java.util.Collections.emptySet
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass

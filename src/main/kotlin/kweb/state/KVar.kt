@@ -1,6 +1,6 @@
 package kweb.state
 
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract

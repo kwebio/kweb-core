@@ -6,7 +6,7 @@ import kweb.plugins.fomanticUI.fomanticUIPlugin
 import kweb.state.*
 import kweb.util.NotFoundException
 import kweb.util.random
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 
 fun main() {
     TodoApp()

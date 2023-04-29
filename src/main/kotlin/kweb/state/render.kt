@@ -5,7 +5,7 @@ import kweb.ElementCreator
 import kweb.WebBrowser
 import kweb.span
 import kweb.state.RenderState.*
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.ArrayList
 import kotlin.collections.forEach

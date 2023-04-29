@@ -16,7 +16,7 @@ import kweb.state.KVar
 import kweb.state.ReversibleFunction
 import kweb.util.pathQueryFragment
 import kweb.util.random
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger

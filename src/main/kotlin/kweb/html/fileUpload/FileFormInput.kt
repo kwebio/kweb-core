@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kweb.Element
 import kweb.util.random
-import mu.KotlinLogging
+import mu.two.KotlinLogging
 import kotlin.math.abs
 
 private val logger = KotlinLogging.logger {}
