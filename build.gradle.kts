@@ -35,7 +35,7 @@ dependencies {
     // Kotlin library dependencies
     //////////////////////////////
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-RC")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.0-RC")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
