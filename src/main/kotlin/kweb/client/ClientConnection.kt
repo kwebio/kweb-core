@@ -1,10 +1,10 @@
 package kweb.client
 
-import io.ktor.websocket.Frame
+import io.ktor.websocket.*
 import io.ktor.websocket.Frame.Text
-import io.ktor.websocket.WebSocketSession
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kweb.state.CloseReason
 import mu.two.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -35,6 +35,13 @@ sealed class ClientConnection {
                 sendBuffer.send(Text(message))
             }
             sendCount++
+        }
+
+        fun close(reason : io.ktor.websocket.CloseReason) {
+            runBlocking {
+                channel.close(reason)
+                sendBuffer.close()
+            }
         }
     }
 
