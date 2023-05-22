@@ -28,6 +28,7 @@ $dokka.location:kweb.client/ClientConnection.Caching/send/#kotlin.String/Pointin
 $dokka.location:kweb.client/ClientConnection.Caching/size/#/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-caching/size.html
 $dokka.location:kweb.client/ClientConnection.WebSocket///PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/index.html
 $dokka.location:kweb.client/ClientConnection.WebSocket/WebSocket/#io.ktor.websocket.WebSocketSession/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/-web-socket.html
+$dokka.location:kweb.client/ClientConnection.WebSocket/close/#io.ktor.websocket.CloseReason/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/close.html
 $dokka.location:kweb.client/ClientConnection.WebSocket/send/#kotlin.String/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/send.html
 $dokka.location:kweb.client/ClientConnection.WebSocket/sendCount/#/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/send-count.html
 $dokka.location:kweb.client/ClientConnection///PointingToDeclaration/kweb-core/kweb.client/-client-connection/index.html
@@ -71,6 +72,7 @@ $dokka.location:kweb.config/KwebConfiguration///PointingToDeclaration/kweb-core
 $dokka.location:kweb.config/KwebConfiguration/KwebConfiguration/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/-kweb-configuration.html
 $dokka.location:kweb.config/KwebConfiguration/buildpageTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/buildpage-timeout.html
 $dokka.location:kweb.config/KwebConfiguration/clientOfflineToastTextTemplate/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-offline-toast-text-template.html
+$dokka.location:kweb.config/KwebConfiguration/clientStateMaxSize/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-max-size.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateStatsEnabled/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-stats-enabled.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-timeout.html
 $dokka.location:kweb.config/KwebConfiguration/handleFavicon/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/handle-favicon.html
@@ -80,6 +82,7 @@ $dokka.location:kweb.config/KwebConfiguration/validate/#/PointingToDeclaration/
 $dokka.location:kweb.config/KwebDefaultConfiguration///PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/index.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/KwebDefaultConfiguration/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/-kweb-default-configuration.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/buildpageTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/buildpage-timeout.html
+$dokka.location:kweb.config/KwebDefaultConfiguration/clientStateMaxSize/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-max-size.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/clientStateStatsEnabled/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-stats-enabled.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/clientStateTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-timeout.html
 $dokka.location:kweb.html.events////PointingToDeclaration/kweb-core/kweb.html.events/index.html
@@ -597,8 +600,8 @@ $dokka.location:kweb.plugins.staticFiles/ResourceFolder///PointingToDeclaration/
 $dokka.location:kweb.plugins.staticFiles/ResourceFolder/ResourceFolder/#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-resource-folder/-resource-folder.html
 $dokka.location:kweb.plugins.staticFiles/ResourceFolder/resourceFolder/#/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-resource-folder/resource-folder.html
 $dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin///PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/index.html
-$dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/StaticFilesPlugin/#java.io.File#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/-static-files-plugin.html
-$dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/StaticFilesPlugin/#kweb.plugins.staticFiles.ResourceFolder#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/-static-files-plugin.html
+$dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/StaticFilesPlugin/#java.io.File#kotlin.String#kotlin.Int/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/-static-files-plugin.html
+$dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/StaticFilesPlugin/#kweb.plugins.staticFiles.ResourceFolder#kotlin.String#kotlin.Int/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/-static-files-plugin.html
 $dokka.location:kweb.plugins.staticFiles/StaticFilesPlugin/appServerConfigurator/#io.ktor.server.routing.Routing/PointingToDeclaration/kweb-core/kweb.plugins.staticFiles/-static-files-plugin/app-server-configurator.html
 $dokka.location:kweb.plugins.viewport////PointingToDeclaration/kweb-core/kweb.plugins.viewport/index.html
 $dokka.location:kweb.plugins.viewport/ViewportPlugin///PointingToDeclaration/kweb-core/kweb.plugins.viewport/-viewport-plugin/index.html
@@ -766,6 +769,7 @@ $dokka.location:kweb//classes/kotlin.collections.Map[kotlin.String,kotlinx.seria
 $dokka.location:kweb//disabled/kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#/PointingToDeclaration/kweb-core/kweb/disabled.html
 $dokka.location:kweb//div/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.DivElement],kweb.DivElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/div.html
 $dokka.location:kweb//fileInput/kweb.ElementCreator[*]#kotlin.String?#kotlin.String?#kotlin.Int?#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]/PointingToDeclaration/kweb-core/kweb/file-input.html
+$dokka.location:kweb//footer/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.FooterElement],kweb.FooterElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/footer.html
 $dokka.location:kweb//form/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.FormElement],kweb.FormElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/form.html
 $dokka.location:kweb//get/kweb.state.KVar[kotlin.collections.List[TypeParam(bounds=[kotlin.Any])]]#kotlin.Int/PointingToDeclaration/kweb-core/kweb/get.html
 $dokka.location:kweb//get/kweb.state.KVar[kotlin.collections.Map[TypeParam(bounds=[kotlin.Any]),TypeParam(bounds=[kotlin.Any])]]#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/kweb-core/kweb/get.html
@@ -782,6 +786,7 @@ $dokka.location:kweb//installKwebOnRemainingRoutes/io.ktor.server.application.Ap
 $dokka.location:kweb//label/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.LabelElement],kweb.LabelElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/label.html
 $dokka.location:kweb//li/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.LIElement],kweb.LIElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/li.html
 $dokka.location:kweb//link/kweb.ElementCreator[kweb.Element]#kweb.LinkRelationship#java.net.URL#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]/PointingToDeclaration/kweb-core/kweb/link.html
+$dokka.location:kweb//main/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.MainElement],kweb.MainElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/main.html
 $dokka.location:kweb//meta/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.Function2[kweb.ElementCreator[kweb.MetaElement],kweb.MetaElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/meta.html
 $dokka.location:kweb//nav/kweb.ElementCreator[kweb.Element]#kotlin.collections.Map[kotlin.String,kotlinx.serialization.json.JsonPrimitive]#kotlin.Function2[kweb.ElementCreator[kweb.NavElement],kweb.NavElement,kotlin.Unit]?/PointingToDeclaration/kweb-core/kweb/nav.html
 $dokka.location:kweb//new/TypeParam(bounds=[kweb.Element])#kotlin.String?#kotlin.Function2[kweb.ElementCreator[TypeParam(bounds=[kweb.Element])],TypeParam(bounds=[kweb.Element]),TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/kweb-core/kweb/new.html
@@ -938,6 +943,8 @@ $dokka.location:kweb/ElementCreator/parentCreator/#/PointingToDeclaration/kweb-
 $dokka.location:kweb/ElementCreator/require/#kotlin.Array[kotlin.reflect.KClass[kweb.plugins.KwebPlugin]]/PointingToDeclaration/kweb-core/kweb/-element-creator/require.html
 $dokka.location:kweb/ElementCreator/text/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-element-creator/text.html
 $dokka.location:kweb/ElementCreator/text/#kweb.state.KVal[kotlin.String]/PointingToDeclaration/kweb-core/kweb/-element-creator/text.html
+$dokka.location:kweb/FooterElement///PointingToDeclaration/kweb-core/kweb/-footer-element/index.html
+$dokka.location:kweb/FooterElement/FooterElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-footer-element/-footer-element.html
 $dokka.location:kweb/FormElement///PointingToDeclaration/kweb-core/kweb/-form-element/index.html
 $dokka.location:kweb/FormElement/FormElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-form-element/-form-element.html
 $dokka.location:kweb/H1Element///PointingToDeclaration/kweb-core/kweb/-h1-element/index.html
@@ -1037,6 +1044,8 @@ $dokka.location:kweb/LinkRelationship.tag///PointingToDeclaration/{"org.jetbrain
 $dokka.location:kweb/LinkRelationship///PointingToDeclaration/kweb-core/kweb/-link-relationship/index.html
 $dokka.location:kweb/LinkRelationship/valueOf/#kotlin.String/PointingToDeclaration/kweb-core/kweb/-link-relationship/value-of.html
 $dokka.location:kweb/LinkRelationship/values/#/PointingToDeclaration/kweb-core/kweb/-link-relationship/values.html
+$dokka.location:kweb/MainElement///PointingToDeclaration/kweb-core/kweb/-main-element/index.html
+$dokka.location:kweb/MainElement/MainElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-main-element/-main-element.html
 $dokka.location:kweb/MetaElement///PointingToDeclaration/kweb-core/kweb/-meta-element/index.html
 $dokka.location:kweb/MetaElement/MetaElement/#kweb.Element/PointingToDeclaration/kweb-core/kweb/-meta-element/-meta-element.html
 $dokka.location:kweb/NavElement///PointingToDeclaration/kweb-core/kweb/-nav-element/index.html
