@@ -35,7 +35,8 @@ open class ElementCreator<out PARENT_TYPE : Element>(
     val insertBefore: String? = null
 )  {
 
-    companion object : KLogging()
+    companion object :
+        KLogging()
 
     @Volatile
     private var cleanupListeners: MutableCollection<Cleaner>? = null

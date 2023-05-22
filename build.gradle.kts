@@ -29,7 +29,7 @@ dependencies {
     api("org.jsoup:jsoup:1.16.1")
     implementation("org.apache.commons:commons-text:1.10.0")
     implementation("com.google.guava:guava:31.1-jre")
-    api("dev.forkhandles:result4k:2.4.0.0")
+    api("dev.forkhandles:result4k:2.5.0.0")
 
     //////////////////////////////
     // Kotlin library dependencies
@@ -65,7 +65,7 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.4.7")
 
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
-    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.9.0")
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.9.1")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.9.0")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.3")
     testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.0")

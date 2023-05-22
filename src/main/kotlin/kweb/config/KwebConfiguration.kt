@@ -13,6 +13,9 @@ import java.util.*
  * Please note this is not [Kweb.Feature.Configuration], which is a Ktor specific config block
  */
 abstract class KwebConfiguration {
+
+    abstract val clientStateMaxSize: Long
+
     private val logger = KotlinLogging.logger {}
 
     /**

@@ -20,7 +20,7 @@ function handleInboundMessage(msg) {
     for (let i = 0; i < funcCalls.length; i++) {
         const funcCall = funcCalls[i];
         const debugToken = funcCall["debugToken"];
-        if (kwebClientId != yourId) {
+        if (kwebClientId !== yourId) {
             console.error(
                 "Received message from incorrect clientId, was " +
                 yourId +
