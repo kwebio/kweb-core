@@ -119,6 +119,17 @@ fun ElementCreator<Element>.i(
     }
 }
 
+open class FooterElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.footer(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<FooterElement>.(FooterElement) -> Unit)? = null
+): FooterElement {
+    return FooterElement(element("footer", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+    }
+}
+
 open class FormElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.form(
@@ -252,6 +263,17 @@ fun ElementCreator<Element>.p(
     new: (ElementCreator<PElement>.(PElement) -> Unit)? = null
 ): PElement {
     return PElement(element("p", attributes)).also {
+        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
+    }
+}
+
+open class MainElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.main(
+    attributes: Map<String, JsonPrimitive> = emptyMap(),
+    new: (ElementCreator<MainElement>.(MainElement) -> Unit)? = null
+): MainElement {
+    return MainElement(element("main", attributes)).also {
         if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
     }
 }
