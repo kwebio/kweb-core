@@ -154,6 +154,7 @@ class Kweb private constructor(
      */
     val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
+        .maximumSize(kwebConfig.clientStateMaxSize)
         .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
         .removalListener<String, RemoteClientState> { rl ->
             rl.value?.triggerCloseListeners()
@@ -249,8 +250,11 @@ class Kweb private constructor(
         }
     }
 
-    private suspend fun RemoteClientState?.ensureSessionExists(sock: DefaultWebSocketSession, sessionId: String) : RemoteClientState{
-        if(this == null) {
+    private suspend fun RemoteClientState?.ensureSessionExists(
+        sock: DefaultWebSocketSession,
+        sessionId: String
+    ): RemoteClientState {
+        if (this == null) {
             sock.close(CloseReason(CloseReason.Codes.NOT_CONSISTENT, "Session not found. Please reload"))
             error("Unable to find server state corresponding to client id ${sessionId}")
         }
@@ -266,14 +270,28 @@ class Kweb private constructor(
 
         val remoteClientState = clientState.getIfPresent(hello.id).ensureSessionExists(this, hello.id)
 
-        assert(remoteClientState.clientConnection is Caching)
-        logger.debug { "Received message from remoteClient ${remoteClientState.id}, flushing outbound message cache" }
-        val cachedConnection = remoteClientState.clientConnection as Caching
-        val webSocketClientConnection = ClientConnection.WebSocket(this)
-        remoteClientState.clientConnection = webSocketClientConnection
-        logger.debug { "Set clientConnection for ${remoteClientState.id} to WebSocket, sending ${cachedConnection.size} cached messages" }
-        cachedConnection.read().forEach { webSocketClientConnection.send(it) }
+        val currentCC = remoteClientState.clientConnection
+        remoteClientState.clientConnection = when (currentCC) {
+            is Caching -> {
+                val webSocketClientConnection = ClientConnection.WebSocket(this)
+                currentCC.read().forEach {
+                    webSocketClientConnection.send(it)
+                }
+                remoteClientState.addCloseHandler {
+                    webSocketClientConnection.close(CloseReason(4002, "RemoteClientState closed by server, likely due to cache expiry"))
+                }
+                webSocketClientConnection
+            }
 
+            is ClientConnection.WebSocket -> {
+                currentCC.close(CloseReason(4001, "Client reconnected via another connection"))
+                val ws = ClientConnection.WebSocket(this)
+                remoteClientState.addCloseHandler {
+                    ws.close(CloseReason(4002, "RemoteClientState closed by server, likely due to cache expiry"))
+                }
+                ws
+            }
+        }
 
         try {
             for (frame in incoming) {
@@ -301,6 +319,7 @@ class Kweb private constructor(
                                         ?: error("No resultHandler for $resultId, for client ${remoteClientState.id}")
                                     resultHandler(result)
                                 }
+
                                 message.keepalive -> {
                                     logger.debug { "keepalive received from client ${hello.id}" }
                                 }
@@ -319,13 +338,12 @@ class Kweb private constructor(
         }
     }
 
-    fun determineClientPrefix(call:ApplicationCall) : String{
+    fun determineClientPrefix(call: ApplicationCall): String {
         val kwClientPrefixCookieName = "kwebClientPrefix"
         val currentPrefix = call.request.cookies.get(kwClientPrefixCookieName)
-        return if(currentPrefix != null) {
+        return if (currentPrefix != null) {
             currentPrefix
-        }
-        else {
+        } else {
             val newClientPrefix = createNonce(6)
             call.response.cookies.append(kwClientPrefixCookieName, newClientPrefix)
             newClientPrefix

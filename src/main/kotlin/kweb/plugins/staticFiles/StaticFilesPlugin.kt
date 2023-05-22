@@ -19,17 +19,20 @@ import java.io.File
  * @property resourceFolder For serving resources, the path to the folder which will be served
  * @property servedRoute The route where these assets are being served
  */
-class StaticFilesPlugin private constructor(private val servedRoute: String, private val maxCacheAgeSeconds: Int = 60 * 60) : KwebPlugin() {
+
+// TODO: Should set cache age to 0 if Kweb debug param is true - but currently that isn't exposed to plugins
+
+class StaticFilesPlugin private constructor(private val servedRoute: String, private val maxCacheAgeSeconds: Int) : KwebPlugin() {
 
     private lateinit var datasource: (Route) -> Unit
 
-    constructor(rootFolder: File, servedRoute: String) : this(servedRoute) {
+    constructor(rootFolder: File, servedRoute: String, maxCacheAgeSeconds: Int = 60 * 60) : this(servedRoute, maxCacheAgeSeconds) {
         datasource = {
             it.staticRootFolder = rootFolder
         }
     }
 
-    constructor(resourceFolder: ResourceFolder, servedRoute: String) : this(servedRoute) {
+    constructor(resourceFolder: ResourceFolder, servedRoute: String, maxCacheAgeSeconds: Int = 60 * 60) : this(servedRoute, maxCacheAgeSeconds) {
         datasource = {
             it.resources(resourceFolder.resourceFolder)
         }
