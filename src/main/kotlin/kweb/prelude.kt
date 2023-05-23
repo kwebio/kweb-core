@@ -849,3 +849,17 @@ fun ElementCreator<Element>.td(
 }
 
 class TdElement(parent: Element) : Element(parent)
+
+fun ElementCreator<Element>.footer(attributes: Map<String, JsonPrimitive> = emptyMap(),
+                                   new: (ElementCreator<FooterElement>.(FooterElement) -> Unit)? = null): FooterElement {
+    return FooterElement(element(tag = "footer",
+                                 attributes = attributes)).also {
+        if (new != null) {
+            new(ElementCreator(element = it,
+                               insertBefore = null),
+                it)
+        }
+    }
+}
+
+open class FooterElement(parent: Element) : Element(element = parent)
