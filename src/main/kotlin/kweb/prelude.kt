@@ -119,17 +119,6 @@ fun ElementCreator<Element>.i(
     }
 }
 
-open class FooterElement(parent: Element) : Element(parent)
-
-fun ElementCreator<Element>.footer(
-    attributes: Map<String, JsonPrimitive> = emptyMap(),
-    new: (ElementCreator<FooterElement>.(FooterElement) -> Unit)? = null
-): FooterElement {
-    return FooterElement(element("footer", attributes)).also {
-        if (new != null) new(ElementCreator(element = it, insertBefore = null), it)
-    }
-}
-
 open class FormElement(parent: Element) : Element(parent)
 
 fun ElementCreator<Element>.form(
