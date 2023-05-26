@@ -28,7 +28,7 @@ class KVar<T : Any?>(initialValue: T) : KVal<T>(initialValue) {
     override var value: T by Delegates.observable(initialValue) { _, old, new ->
         if (old != new) {
             verifyNotClosed("modify KVar.value")
-            listeners.asMap().values.forEach { listener ->
+            listeners.values.forEach { listener ->
                 try {
                     listener(old, new)
                 } catch (e: Exception) {
