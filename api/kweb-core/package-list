@@ -72,7 +72,6 @@ $dokka.location:kweb.config/KwebConfiguration///PointingToDeclaration/kweb-core
 $dokka.location:kweb.config/KwebConfiguration/KwebConfiguration/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/-kweb-configuration.html
 $dokka.location:kweb.config/KwebConfiguration/buildpageTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/buildpage-timeout.html
 $dokka.location:kweb.config/KwebConfiguration/clientOfflineToastTextTemplate/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-offline-toast-text-template.html
-$dokka.location:kweb.config/KwebConfiguration/clientStateMaxSize/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-max-size.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateStatsEnabled/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-stats-enabled.html
 $dokka.location:kweb.config/KwebConfiguration/clientStateTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/client-state-timeout.html
 $dokka.location:kweb.config/KwebConfiguration/handleFavicon/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-configuration/handle-favicon.html
@@ -82,7 +81,6 @@ $dokka.location:kweb.config/KwebConfiguration/validate/#/PointingToDeclaration/
 $dokka.location:kweb.config/KwebDefaultConfiguration///PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/index.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/KwebDefaultConfiguration/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/-kweb-default-configuration.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/buildpageTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/buildpage-timeout.html
-$dokka.location:kweb.config/KwebDefaultConfiguration/clientStateMaxSize/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-max-size.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/clientStateStatsEnabled/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-stats-enabled.html
 $dokka.location:kweb.config/KwebDefaultConfiguration/clientStateTimeout/#/PointingToDeclaration/kweb-core/kweb.config/-kweb-default-configuration/client-state-timeout.html
 $dokka.location:kweb.html.events////PointingToDeclaration/kweb-core/kweb.html.events/index.html
