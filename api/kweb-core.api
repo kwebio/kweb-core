@@ -1006,7 +1006,6 @@ public abstract class kweb/config/KwebConfiguration {
 	public fun <init> ()V
 	public abstract fun getBuildpageTimeout ()Ljava/time/Duration;
 	public fun getClientOfflineToastTextTemplate ()Ljava/lang/String;
-	public abstract fun getClientStateMaxSize ()J
 	public abstract fun getClientStateStatsEnabled ()Z
 	public abstract fun getClientStateTimeout ()Ljava/time/Duration;
 	public fun getHandleFavicon ()Z
@@ -1023,7 +1022,6 @@ protected final class kweb/config/KwebConfiguration$Accessor {
 public class kweb/config/KwebDefaultConfiguration : kweb/config/KwebConfiguration {
 	public fun <init> ()V
 	public fun getBuildpageTimeout ()Ljava/time/Duration;
-	public fun getClientStateMaxSize ()J
 	public fun getClientStateStatsEnabled ()Z
 	public fun getClientStateTimeout ()Ljava/time/Duration;
 }

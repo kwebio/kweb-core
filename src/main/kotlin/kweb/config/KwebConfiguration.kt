@@ -14,8 +14,6 @@ import java.util.*
  */
 abstract class KwebConfiguration {
 
-    abstract val clientStateMaxSize: Long
-
     private val logger = KotlinLogging.logger {}
 
     /**

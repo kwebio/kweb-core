@@ -154,7 +154,9 @@ class Kweb private constructor(
      */
     val clientState: Cache<String, RemoteClientState> = CacheBuilder.newBuilder()
         .expireAfterAccess(kwebConfig.clientStateTimeout)
-        .maximumSize(kwebConfig.clientStateMaxSize)
+        // Use soft values so older cached states will be deleted if we're running out of memory.
+        // Has some disadvantages - like unpredictable behavior, but better than crashing due to OOM.
+        .softValues()
         .apply { if (kwebConfig.clientStateStatsEnabled) recordStats() }
         .removalListener<String, RemoteClientState> { rl ->
             rl.value?.triggerCloseListeners()

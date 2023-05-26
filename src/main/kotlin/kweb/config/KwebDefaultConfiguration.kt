@@ -17,10 +17,5 @@ open class KwebDefaultConfiguration : KwebConfiguration() {
 
     override val clientStateTimeout: Duration =
             Accessor.getProperty("kweb.client.state.timeout")?.let { Duration.parse(it) }
-                    ?: Duration.ofMinutes(5)
-
-    private val estimatedMemoryPerClient = 102_400L // 100KB
-    override val clientStateMaxSize: Long =
-        Accessor.getProperty("kweb.client.state.max.size")?.toLongOrNull()
-            ?: (Runtime.getRuntime().maxMemory() / estimatedMemoryPerClient)
+                    ?: Duration.ofHours(1)
 }
