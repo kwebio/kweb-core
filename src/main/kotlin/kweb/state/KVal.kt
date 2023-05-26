@@ -1,5 +1,7 @@
 package kweb.state
 
+import com.google.common.cache.Cache
+import com.google.common.cache.CacheBuilder
 import kweb.util.random
 import mu.two.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
@@ -18,7 +20,11 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
 
     internal val isClosed get() = closeReason != null
 
-    protected val listeners = ConcurrentHashMap<Long, (T, T) -> Unit>()
+    protected val listeners : Cache<Long, (T, T) -> Unit> = CacheBuilder.newBuilder()
+        // A listener shouldn't cause data to be retained that wouldn't otherwise be
+        // retained
+        .softValues()
+        .build()
     private val closeHandlers = ConcurrentLinkedDeque<() -> Unit>()
 
     /**
@@ -27,7 +33,7 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
     fun addListener(listener: (T, T) -> Unit): Long {
         verifyNotClosed("add a listener")
         val handle = random.nextLong()
-        listeners[handle] = listener
+        listeners.put(handle, listener)
         return handle
     }
 
@@ -50,7 +56,7 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
      * changes.
      */
     fun removeListener(handle: Long) {
-        listeners.remove(handle)
+        listeners.invalidate(handle)
     }
 
     /**
@@ -70,7 +76,7 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
                     logger.debug("Updating mapped $value to $new")
                     val mappedValue = mapper(new)
                     mappedKVal.pValue = mappedValue
-                    mappedKVal.listeners.values.forEach { listener ->
+                    mappedKVal.listeners.asMap().values.forEach { listener ->
                         try {
                             val mappedOld = mapper(old)
                             if (mappedOld != mappedValue) {
