@@ -61,6 +61,7 @@ class StringDiffTest {
     fun appendTextToMiddle(driver : ChromeDriver) {
         driver.get("http://localhost:7660/")
         val inputField = driver.findElement(By.tagName("input"))
+        Thread.sleep(50)
         inputField.sendKeys("${Keys.LEFT}${Keys.LEFT}1234")
         await().pollInSameThread().untilAsserted {
             inputField.getAttribute("value") shouldBe "Lazy Brown F1234ox"
