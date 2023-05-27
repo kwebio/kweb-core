@@ -67,10 +67,6 @@ open class ElementCreator<out PARENT_TYPE : Element>(
 
         val id: String = mutAttributes.computeIfAbsent("id") { JsonPrimitive("K" + browser.generateId()) }.content
         val htmlDoc = browser.htmlDocument.get()
-        val createElementStatement = when (namespace) {
-            null -> "document.createElement(tag);"
-            else -> "document.createElementNS(\"${namespace}\", tag);"
-        }
         when {
             htmlDoc != null -> {
                 val parentElement = when (element) {
@@ -92,6 +88,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             }
 
             element.browser.isCatchingOutbound() != null -> {
+
                 //language=JavaScript
                 val createElementJs = """
 let tag = {};
@@ -99,7 +96,8 @@ let attributes = {};
 let myId = {};
 let parentId = {};
 let insertBefore = {};
-let newEl = $createElementStatement
+let namespace = {};
+let newEl = namespace ? document.createElementNS(namespace, tag) : document.createElement(tag);
 newEl.setAttribute("id", myId);
 for (const key in attributes) {
     if ( key !== "id") {
@@ -114,10 +112,11 @@ if (insertBefore !== undefined) {
 } else {
     parentElement.appendChild(newEl);
 }
-                """
+"""
+
                 browser.callJsFunction(
-                    createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
-                    JsonPrimitive(element.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                    createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), JsonPrimitive(id),
+                    JsonPrimitive(element.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount), JsonPrimitive(namespace ?: "")
                 )
             }
 
@@ -130,12 +129,13 @@ let attributes = {};
 let myId = {};
 let parentId = {};
 let insertBefore = {};
-let newEl = document.createElement(tag);
-if (attributes["id"] === undefined) {
+let namespace = {};
+let newEl = namespace ? document.createElementNS(namespace, tag) : document.createElement(tag);
+if (!attributes["id"]) {
     newEl.setAttribute("id", myId);
 }
 for (const key in attributes) {
-        newEl.setAttribute(key, attributes[key]);
+    newEl.setAttribute(key, attributes[key]);
 }
 let parentElement = document.getElementById(parentId);
 let startNode = document.getElementById(insertBefore)
@@ -145,10 +145,10 @@ if (insertBefore !== undefined) {
 } else {
     parentElement.appendChild(newEl);
 }
-                """
+"""
                 element.browser.callJsFunction(
                     createElementJs, tag.json, JsonObject(mutAttributes), id.json,
-                    element.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
+                    element.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount), JsonPrimitive(namespace ?: "")
                 )
             }
         }
