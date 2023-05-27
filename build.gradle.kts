@@ -12,7 +12,7 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.1"
 
     // Coverage
-    id("org.jetbrains.kotlinx.kover") version "0.7.0-Beta"
+    id("org.jetbrains.kotlinx.kover") version "0.7.0"
 }
 
 // This is overridden by the maven release process
