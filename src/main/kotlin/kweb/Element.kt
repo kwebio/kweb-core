@@ -264,12 +264,12 @@ open class Element(
                         //language=JavaScript
                         browser.callJsFunction(
                             """
-                                    let id = {};
-                                    let className = {};
-                                    let el = document.getElementById(id);
-                                    if (el.classList) el.classList.add(className);
-                                    else if (!hasClass(el, className)) el.className += " " + className;
-                                """.trimIndent(), id.json, JsonPrimitive(class_)
+let id = {};
+let className = {};
+let el = document.getElementById(id);
+if (el.classList) el.classList.add(className);
+else if (!hasClass(el, className)) el.className += " " + className;
+                                """, id.json, JsonPrimitive(class_)
                         )
                     }
                 }
@@ -294,15 +294,15 @@ open class Element(
                 //language=JavaScript
                 browser.callJsFunction(
                     """
-                            let id = {};
-                            let className = {};
-                            let el = document.getElementById(id);
-                            if (el.classList) el.classList.remove(className);
-                            else if (hasClass(el, className)) {
-                                var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
-                                el.className = el.className.replace(reg, " ");
-                            }
-                        """.trimIndent(), id.json, JsonPrimitive(class_)
+let id = {};
+let className = {};
+let el = document.getElementById(id);
+if (el.classList) el.classList.remove(className);
+else if (hasClass(el, className)) {
+    var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
+    el.className = el.className.replace(reg, " ");
+}
+                        """, id.json, JsonPrimitive(class_)
                 )
             }
         }
@@ -341,14 +341,14 @@ open class Element(
                 //language=JavaScript
                 browser.callJsFunction(
                     """
-                            let id = {};
-                            if (document.getElementById(id) != null) {
-                                let element = document.getElementById(id);
-                                while (element.firstChild) {
-                                    element.removeChild(element.firstChild);
-                                }
-                            }
-                        """.trimIndent(), id.json
+let id = {};
+if (document.getElementById(id) != null) {
+    let element = document.getElementById(id);
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+                        """, id.json
                 )
             }
         }
@@ -376,14 +376,14 @@ open class Element(
                 //language=JavaScript
                 browser.callJsFunction(
                     """
-                            let startSpan = document.getElementById({});
-                            let endSpan = document.getElementById({});
-                            let nextSibling = startSpan.nextSibling;
-                            while(nextSibling != endSpan) {
-                                startSpan.parentNode.removeChild(startSpan.nextSibling);
-                                nextSibling = startSpan.nextSibling;
-                            }
-                        """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId)
+let startSpan = document.getElementById({});
+let endSpan = document.getElementById({});
+let nextSibling = startSpan.nextSibling;
+while(nextSibling !== endSpan) {
+    startSpan.parentNode.removeChild(startSpan.nextSibling);
+    nextSibling = startSpan.nextSibling;
+}
+                        """, JsonPrimitive(startSpanId), JsonPrimitive(endSpanId)
                 )
             }
         }
@@ -403,9 +403,9 @@ open class Element(
             else -> {
                 browser.callJsFunction(
                     """
-                                let element = document.getElementById({});
-                                element.removeChild(element.children[{}]);
-                        """.trimIndent(), id.json, position.json
+let element = document.getElementById({});
+element.removeChild(element.children[{}]);"""
+                    , id.json, position.json
                 )
             }
         }
@@ -419,7 +419,7 @@ open class Element(
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
         //language=JavaScript
-        val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
+        val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 val element = jsoupDoc.getElementById(this.id)
@@ -462,9 +462,9 @@ open class Element(
         val jsoupDoc = browser.htmlDocument.get()
         //language=JavaScript
         val createTextNodeJs = """
-            var ntn = document.createTextNode({});
-            document.getElementById({}).appendChild(ntn);
-        """.trimIndent()
+var ntn = document.createTextNode({});
+document.getElementById({}).appendChild(ntn);
+        """
         when {
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 val element = jsoupDoc.getElementById(this.id)
@@ -480,10 +480,8 @@ open class Element(
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         //language=JavaScript
-        val wrappedJS = """
-            return document.getElementById({}).addEventListener({}, function(event) {
-                $jsCode
-            });""".trimIndent()
+        val wrappedJS =
+            """return document.getElementById({}).addEventListener({}, function(event) {$jsCode});"""
         browser.callJsFunction(wrappedJS, id.json, JsonPrimitive(eventName))
     }
 
@@ -505,12 +503,12 @@ open class Element(
             formatted JavaScript directly in the code sent to the client.
         */
         val addEventJs = """
-            document.getElementById({}).addEventListener({}, function(event) {
-                ${if (preventDefault) "event.preventDefault();" else ""}
-                callbackWs({}, $eventObject);
-            });
-            return true;
-        """.trimIndent()
+document.getElementById({}).addEventListener({}, function(event) {
+    ${if (preventDefault) "event.preventDefault();" else ""}
+    callbackWs({}, $eventObject);
+});
+return true;
+        """
         //Adding event listener was causing the client to send a Client2ServerMessage with a null data field. This caused an error
         //We make the client return true to avoid that issue.
         //Then on the server we only invoke our callback on eventObjects, by checking that payload is a JsonObject.
@@ -587,9 +585,9 @@ open class Element(
         //language=JavaScript
         browser.callJsFunction(
             """
-            let element = document.getElementById({});
-            element.parentNode.removeChild(element);
-        """.trimIndent(), id.json
+let element = document.getElementById({});
+element.parentNode.removeChild(element);"""
+            , id.json
         )
     }
 
@@ -602,12 +600,12 @@ open class Element(
             //language=JavaScript
             browser.callJsFunction(
                 """
-                let id = {}
-                if (document.getElementById(id)) {
-                    let element = document.getElementById(id);
-                    element.parentNode.removeChild(element);
-                }
-            """.trimIndent(), id.json
+let id = {}
+if (document.getElementById(id)) {
+    let element = document.getElementById(id);
+    element.parentNode.removeChild(element);
+}"""
+                , id.json
             )
         } catch (e: IllegalStateException) {
 

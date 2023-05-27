@@ -43,18 +43,18 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
     fun <ITEM : Any> deleteItem(position: Int, renderHandles: ArrayList<RenderHandle<ITEM>>) {
         val renderHandleToRemove = renderHandles[position].renderFragment
         renderHandles.removeAt(position)
-        browser.callJsFunction("""
-            var start_id = {};
-            var end_id = {};
-            var start_element = document.getElementById(start_id);
-            var end_element = document.getElementById(end_id);
-            var parent = start_element.parentNode;
-            while (start_element.nextSibling != end_element) {
-                parent.removeChild(start_element.nextSibling);
-            }
-            parent.removeChild(start_element);
-            parent.removeChild(end_element);
-            """.trimIndent(), JsonPrimitive(renderHandleToRemove.startId),
+        browser.callJsFunction(/* language=JavaScript */ """
+var start_id = {};
+var end_id = {};
+var start_element = document.getElementById(start_id);
+var end_element = document.getElementById(end_id);
+var parent = start_element.parentNode;
+while (start_element.nextSibling != end_element) {
+    parent.removeChild(start_element.nextSibling);
+}
+parent.removeChild(start_element);
+parent.removeChild(end_element);
+            """, JsonPrimitive(renderHandleToRemove.startId),
             JsonPrimitive(renderHandleToRemove.endId)
         )
         renderHandleToRemove.delete()
@@ -64,23 +64,22 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
         //This JavaScript takes all elements from one start span to another, denoted by startMarker and endMarker,
         //and inserts them before the element that's ID is passed to the 'newPos' variable.
         //language=JavaScript
-        val moveItemCode = """
-            var startMarker = document.getElementById({});
-            var endMarker = document.getElementById({});
-            var elementsToMove = [];
-            var currentElement = startMarker.nextSibling;
-            while(currentElement !== endMarker) {
-                elementsToMove.push(currentElement);
-                currentElement = currentElement.nextSibling;
-            }
-            var newPos = document.getElementById({});
-            var listParent = startMarker.parentNode;
-            listParent.insertBefore(startMarker, newPos);
-            listParent.insertBefore(endMarker, newPos);
-            elementsToMove.forEach(function (item){
-                listParent.insertBefore(item, endMarker);
-            });
-            """.trimIndent()
+val moveItemCode = """
+var startMarker = document.getElementById({});
+var endMarker = document.getElementById({});
+var elementsToMove = [];
+var currentElement = startMarker.nextSibling;
+while(currentElement !== endMarker) {
+    elementsToMove.push(currentElement);
+    currentElement = currentElement.nextSibling;
+}
+var newPos = document.getElementById({});
+var listParent = startMarker.parentNode;
+listParent.insertBefore(startMarker, newPos);
+listParent.insertBefore(endMarker, newPos);
+elementsToMove.forEach(function (item){
+    listParent.insertBefore(item, endMarker);
+});"""
         browser.callJsFunction(moveItemCode, JsonPrimitive(itemStartMarker),
             JsonPrimitive(itemEndMarker), JsonPrimitive(newPosMarker)
         )

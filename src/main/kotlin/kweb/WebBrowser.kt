@@ -364,8 +364,8 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         //as a variable using Kweb's template syntax
         //language=JavaScript
         callJsFunction("""
-        history.pushState({ }, "", {});
-        """.trimIndent(), JsonPrimitive(url))
+history.pushState({ }, "", {});
+        """, JsonPrimitive(url))
     }
 
     /**
