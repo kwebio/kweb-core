@@ -21,10 +21,10 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = """
-return window.addEventListener({}, function(event) {
-    $jsCode
-});
-        """
+            return window.addEventListener({}, function(event) {
+                $jsCode
+            });
+        """.trimIndent()
         browser.callJsFunction(wrappedJS, eventName.json)
     }
 
@@ -33,12 +33,12 @@ return window.addEventListener({}, function(event) {
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
-window.addEventListener({}, function(event) {
-    ${if (preventDefault) "event.preventDefault();" else ""}
-    callbackWs({}, $eventObject);
-});
-return true;
-        """
+            window.addEventListener({}, function(event) {
+                ${if (preventDefault) "event.preventDefault();" else ""}
+                callbackWs({}, $eventObject);
+            });
+            return true;
+        """.trimIndent()
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             if (payload is JsonObject) {
                 callback.invoke(payload)

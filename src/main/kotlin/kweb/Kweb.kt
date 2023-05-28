@@ -461,10 +461,10 @@ class Kweb private constructor(
             call.response.status(HttpStatusCode.InternalServerError)
             call.respondText(
                 """
-Internal Server Error.
+                        Internal Server Error.
 
-Please include code $logToken in any error report to help us track it down.
-"""
+                        Please include code $logToken in any error report to help us track it down.
+""".trimIndent()
             )
         }
     }

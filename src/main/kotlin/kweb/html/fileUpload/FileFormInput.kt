@@ -46,13 +46,13 @@ class FileFormInput {
         val callbackId = abs(random.nextInt())
 
         val js = """
-let fd = document.getElementById({}).files[0]
-let fr = new FileReader()
-fr.readAsDataURL(fd)
-fr.onload = function(){
-    callbackWs({}, {base64Content: fr.result, fileSize: fd.size, fileName: fd.name});
-}
-            """
+                let fd = document.getElementById({}).files[0]
+                let fr = new FileReader()
+                fr.readAsDataURL(fd)
+                fr.onload = function(){
+                    callbackWs({}, {base64Content: fr.result, fileSize: fd.size, fileName: fd.name});
+                }
+            """.trimIndent()
 
         inputElement.browser.callJsFunctionWithCallback(js, callbackId, callback = { result ->
             logger.info("Result is $result")

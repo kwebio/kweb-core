@@ -36,10 +36,10 @@ abstract class ValueElement(
     fun setValue(newValue: String) {
         element.browser.callJsFunction(
             """
-const element = document.getElementById({});
-element.value = {};
-delete element.dataset.previousInput;
-                """,
+                const element = document.getElementById({});
+                element.value = {};
+                delete element.dataset.previousInput;
+                """.trimIndent(),
             element.id.json, newValue.json
         )
     }

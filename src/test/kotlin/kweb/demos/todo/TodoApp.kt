@@ -91,14 +91,15 @@ class TodoApp {
                     div(fomantic.ui.message) {
                         p().innerHTML(
                             """
-A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
-to do list.
-<p/>
-Try visiting this URL in another browser window and make some changes.
-<p/>
-You may find the source code for this app
-<a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
+                            A simple demo of <a href="https://docs.kweb.io/">Kweb</a>, add and delete items from a
+                            to do list.
+                            <p/>
+                            Try visiting this URL in another browser window and make some changes.
+                            <p/>
+                            You may find the source code for this app
+                            <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
                             """
+                                .trimIndent()
                         )
                     }
                 }

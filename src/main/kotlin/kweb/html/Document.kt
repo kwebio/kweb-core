@@ -79,9 +79,10 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
         val wrappedJS = """
-return document.addEventListener({}, function(event) {
-    $jsCode
-});"""
+            return document.addEventListener({}, function(event) {
+                $jsCode
+            });
+        """.trimIndent()
         documentScope.launch {
             receiver.callJsFunctionWithResult(wrappedJS, JsonPrimitive(eventName))
         }

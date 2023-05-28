@@ -26,22 +26,21 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
     // language=JavaScript
     this.browser.callJsFunction(
         """
-let id = {};
-let keys = {};
-let element = document.getElementById(id);
-
-element.addEventListener("keyup", function(origEvent) {
-    if (keys.includes(origEvent.key)) {
-        let keySpecificKeyUpEvent = new CustomEvent('keySpecificKeyUpEvent', {
-            bubbles: true,
-            cancelable: true,
-            detail: origEvent
-        });
-
-        element.dispatchEvent(keySpecificKeyUpEvent);
-    }
-});
-""", id.json, JsonPrimitive(keys.joinToString( ","))
+    let id = {};
+    var keys = {};
+    let element = document.getElementById(id);
+    element.addEventListener("keyup", function(origEvent) {
+        if (keys.includes(origEvent.key)) {
+                if (window.CustomEvent) {
+                  var keySpecificKeyUpEvent = new CustomEvent('keySpecificKeyUpEvent');
+                } else {
+                var keySpecificKeyUpEvent = document.createEvent('keySpecificKeyUpEvent');
+                enterPressedEvent.initCustomEvent('keySpecificKeyUpEvent', true, true, origEvent);
+                }
+            element.dispatchEvent(keySpecificKeyUpEvent);
+        }
+    });
+""".trimIndent(), id.json, JsonPrimitive(keys.joinToString(separator = ","))
     )
 }
 
