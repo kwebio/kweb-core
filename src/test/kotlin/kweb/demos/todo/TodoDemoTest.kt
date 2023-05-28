@@ -2,8 +2,6 @@ package kweb.demos.todo
 
 import io.github.bonigarcia.seljup.Options
 import io.github.bonigarcia.seljup.SeleniumJupiter
-import io.kotest.matchers.ints.shouldBeExactly
-import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.ktor.util.*
@@ -66,10 +64,8 @@ class TodoDemoTest {
         val todoItem = "Right eyelids closed, both feet behind"
         val site = TodoSite(driver)
         site.addTodoItem(todoItem)
-        await().untilAsserted {
-            val matchingCount = site.driver.findElements(By.xpath("//div[@class='content']"))
-                .count { it.text.contains(todoItem) }
-            matchingCount shouldBeExactly 1
+        await().pollInSameThread().untilAsserted {
+            site.driver.findElement(By.xpath("//${"div"}[text()='$todoItem']")).isDisplayed shouldBe true
         }
     }
 
@@ -88,10 +84,9 @@ class TodoDemoTest {
         site.addTodoItem(todoItem)
 
         //make sure it appears for second driver
-        await().untilAsserted {
-            val matchingCount = site.driver.findElements(By.xpath("//div[@class='content']"))
-                .count { it.text.contains(todoItem) }
-            matchingCount shouldBeExactly 1        }
+        await().pollInSameThread().untilAsserted {
+            site2.driver.findElement(By.xpath("//${"div"}[text()='$todoItem']")).isDisplayed shouldBe true
+        }
     }
 
     @Test

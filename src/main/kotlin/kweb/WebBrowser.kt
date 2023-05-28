@@ -177,7 +177,7 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         if (outboundMessageCatcher == null) {
             kweb.callJs(sessionId, functionCall, debugInfo)
         } else {
-            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher type ${outboundMessageCatcher.catcherType}")
+            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.functionList.add(functionCall)
             //If we are collecting calls for an immediate event, we run the risk of the client calling JS code that has yet to be cached
             //A functionCall object having a non null js parameter, means the function has not been cached.
@@ -220,7 +220,7 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         if (outboundMessageCatcher == null) {
             kweb.callJs(sessionId, functionCall, debugInfo)
         } else {
-            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher type ${outboundMessageCatcher.catcherType}")
+            logger.debug("Temporarily storing message for $sessionId in threadlocal outboundMessageCatcher")
             outboundMessageCatcher.functionList.add(functionCall)
             if (outboundMessageCatcher.catcherType == CatcherType.IMMEDIATE_EVENT) {
                 if (functionCall.js != null) {
