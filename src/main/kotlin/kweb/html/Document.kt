@@ -78,11 +78,9 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
     override val browser = receiver
 
     override fun addImmediateEventCode(eventName: String, jsCode: String) {
-        val wrappedJS = """
-            return document.addEventListener({}, function(event) {
+        val wrappedJS = """return document.addEventListener({}, function(event) {
                 $jsCode
-            });
-        """
+            });"""
         documentScope.launch {
             receiver.callJsFunctionWithResult(wrappedJS, JsonPrimitive(eventName))
         }
@@ -96,12 +94,11 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
 
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
-        val js = """
-            document.addEventListener({}, function(event) {
-                ${if (preventDefault) "event.preventDefault();" else ""}
-                callbackWs({}, $eventObject);
-            });
-        """
+        val js =
+            """document.addEventListener({}, function(event) {
+    ${if (preventDefault) "event.preventDefault();" else ""}
+    callbackWs({}, $eventObject);
+});"""
         receiver.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             callback.invoke(payload)
         }, JsonPrimitive(eventName), JsonPrimitive(callbackId))

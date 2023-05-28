@@ -35,11 +35,9 @@ abstract class ValueElement(
     //language=JavaScript
     fun setValue(newValue: String) {
         element.browser.callJsFunction(
-            """
-                const element = document.getElementById({});
-                element.value = {};
-                delete element.dataset.previousInput;
-                """,
+"""const element = document.getElementById({});
+element.value = {};
+delete element.dataset.previousInput;""",
             element.id.json, newValue.json
         )
     }

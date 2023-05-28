@@ -363,9 +363,7 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         //{ } is used to initialize an empty map here. Without the space, it would be treated
         //as a variable using Kweb's template syntax
         //language=JavaScript
-        callJsFunction("""
-        history.pushState({ }, "", {});
-        """, JsonPrimitive(url))
+        callJsFunction("""history.pushState({ }, "", {});""", JsonPrimitive(url))
     }
 
     /**

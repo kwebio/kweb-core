@@ -24,22 +24,22 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
     require(ENTER_PRESSED_EVENT_ATTACHED_FLAG !in flags) { "KeySpecificKeyupEvent may only be attached once per element" }
     flags += ENTER_PRESSED_EVENT_ATTACHED_FLAG
     // language=JavaScript
-    this.browser.callJsFunction(
-        """
-    let id = {};
-    var keys = {};
-    let element = document.getElementById(id);
-    element.addEventListener("keyup", function(origEvent) {
-        if (keys.includes(origEvent.key)) {
-                if (window.CustomEvent) {
-                  var keySpecificKeyUpEvent = new CustomEvent('keySpecificKeyUpEvent');
-                } else {
-                var keySpecificKeyUpEvent = document.createEvent('keySpecificKeyUpEvent');
-                enterPressedEvent.initCustomEvent('keySpecificKeyUpEvent', true, true, origEvent);
-                }
-            element.dispatchEvent(keySpecificKeyUpEvent);
-        }
-    });
+this.browser.callJsFunction(
+    """
+let id = {};
+var keys = {};
+let element = document.getElementById(id);
+element.addEventListener("keyup", function(origEvent) {
+    if (keys.includes(origEvent.key)) {
+            if (window.CustomEvent) {
+              var keySpecificKeyUpEvent = new CustomEvent('keySpecificKeyUpEvent');
+            } else {
+            var keySpecificKeyUpEvent = document.createEvent('keySpecificKeyUpEvent');
+            enterPressedEvent.initCustomEvent('keySpecificKeyUpEvent', true, true, origEvent);
+            }
+        element.dispatchEvent(keySpecificKeyUpEvent);
+    }
+});
 """, id.json, JsonPrimitive(keys.joinToString(separator = ","))
     )
 }

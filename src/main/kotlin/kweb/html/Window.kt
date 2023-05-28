@@ -33,11 +33,11 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
         val retrieveJs = if (retrieveJs != null) ", \"retrieved\" : ($retrieveJs)" else ""
         val eventObject = "{" + returnEventFields.joinToString(separator = ", ") { "\"$it\" : event.$it" } + retrieveJs + "}"
         val js = """
-            window.addEventListener({}, function(event) {
-                ${if (preventDefault) "event.preventDefault();" else ""}
-                callbackWs({}, $eventObject);
-            });
-            return true;
+window.addEventListener({}, function(event) {
+    ${if (preventDefault) "event.preventDefault();" else ""}
+    callbackWs({}, $eventObject);
+});
+return true;
         """
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             if (payload is JsonObject) {

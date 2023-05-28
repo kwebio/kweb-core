@@ -56,11 +56,11 @@ suspend fun ApplicationCall.respondKwebRender(pathReceiver: PathReceiver) =
  * Use this if you are on Ktor and migrating out of the deprecated buildPage design
  */
 const val buildPageReplacementCode = """
-    routing {
-        get("/{visitedUrl...}") {
-            call.respondKwebRender { 
-                buildPage
-            }
+routing {
+    get("/{visitedUrl...}") {
+        call.respondKwebRender { 
+            buildPage
         }
     }
+}
     """

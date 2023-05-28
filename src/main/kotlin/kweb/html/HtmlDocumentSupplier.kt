@@ -27,11 +27,11 @@ internal object HtmlDocumentSupplier {
                 //these css ids denote spans used in render() and renderEach()
                 head.appendElement("style")
                     .html(""".rMStart {display: none;}
-                            .${RenderSpanNames.startMarkerClassName} {display: none;}
-                            .${RenderSpanNames.endMarkerClassName} {display: none;}
-                            .${RenderSpanNames.listStartMarkerClassName} {display: none}
-                            .${RenderSpanNames.listEndMarkerClassName} {display: none}
-                        """.trimMargin())
+.${RenderSpanNames.startMarkerClassName} {display: none;}
+.${RenderSpanNames.endMarkerClassName} {display: none;}
+.${RenderSpanNames.listStartMarkerClassName} {display: none}
+.${RenderSpanNames.listEndMarkerClassName} {display: none}
+""")
 
 
                 head.appendElement("link")
@@ -47,8 +47,8 @@ internal object HtmlDocumentSupplier {
                 body.appendElement("noscript")
                     .html(
                         """
-                            | This page is built with <a href="https://kweb.io/">Kweb</a>, which 
-                            | requires JavaScript to be enabled.""".trimMargin())
+This page is built with <a href="https://kweb.io/">Kweb</a>, which 
+requires JavaScript to be enabled.""")
                 body.appendElement("script")
                     .attr("src", "/kweb_static/toastify/toastify.js")
             }
