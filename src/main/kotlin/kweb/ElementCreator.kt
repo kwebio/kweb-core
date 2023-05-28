@@ -94,27 +94,29 @@ open class ElementCreator<out PARENT_TYPE : Element>(
             element.browser.isCatchingOutbound() != null -> {
                 //language=JavaScript
                 val createElementJs = """
-let tag = {};
-let attributes = {};
-let myId = {};
-let parentId = {};
-let insertBefore = {};
-let newEl = $createElementStatement
-newEl.setAttribute("id", myId);
-for (const key in attributes) {
-    if ( key !== "id") {
-        newEl.setAttribute(key, attributes[key]);
-    }
-}
-let parentElement = document.getElementById(parentId);
-let startNode = document.getElementById(insertBefore)
-
-if (insertBefore !== undefined) {
-    parentElement.insertBefore(newEl, startNode)
-} else {
-    parentElement.appendChild(newEl);
-}
-                """
+                    console.log("Creating new element")
+                    let tag = {};
+                    let attributes = {};
+                    let myId = {};
+                    let parentId = {};
+                    let insertBefore = {};
+                    console.log("insertBefore = " + insertBefore)
+                    let newEl = $createElementStatement
+                    newEl.setAttribute("id", myId);
+                    for (const key in attributes) {
+                        if ( key !== "id") {
+                            newEl.setAttribute(key, attributes[key]);
+                        }
+                    }
+                    let parentElement = document.getElementById(parentId);
+                    let startNode = document.getElementById(insertBefore)
+                    
+                    if (insertBefore !== undefined) {
+                        parentElement.insertBefore(newEl, startNode)
+                    } else {
+                        parentElement.appendChild(newEl);
+                    }
+                """.trimIndent()
                 browser.callJsFunction(
                     createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
                     JsonPrimitive(element.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
@@ -125,27 +127,28 @@ if (insertBefore !== undefined) {
                 //The way I have written this function, instead of attributes.get(), we now use attributes[].
                 //language=JavaScript
                 val createElementJs = """
-let tag = {};
-let attributes = {};
-let myId = {};
-let parentId = {};
-let insertBefore = {};
-let newEl = document.createElement(tag);
-if (attributes["id"] === undefined) {
-    newEl.setAttribute("id", myId);
-}
-for (const key in attributes) {
-        newEl.setAttribute(key, attributes[key]);
-}
-let parentElement = document.getElementById(parentId);
-let startNode = document.getElementById(insertBefore)
-
-if (insertBefore !== undefined) {
-    parentElement.insertBefore(newEl, startNode)
-} else {
-    parentElement.appendChild(newEl);
-}
-                """
+                    console.log("Creating new element in other place")
+                    let tag = {};
+                    let attributes = {};
+                    let myId = {};
+                    let parentId = {};
+                    let insertBefore = {};
+                    let newEl = document.createElement(tag);
+                    if (attributes["id"] === undefined) {
+                        newEl.setAttribute("id", myId);
+                    }
+                    for (const key in attributes) {
+                            newEl.setAttribute(key, attributes[key]);
+                    }
+                    let parentElement = document.getElementById(parentId);
+                    let startNode = document.getElementById(insertBefore)
+                    
+                    if (insertBefore !== undefined) {
+                        parentElement.insertBefore(newEl, startNode)
+                    } else {
+                        parentElement.appendChild(newEl);
+                    }
+                """.trimIndent()
                 element.browser.callJsFunction(
                     createElementJs, tag.json, JsonObject(mutAttributes), id.json,
                     element.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
