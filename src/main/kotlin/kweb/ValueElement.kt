@@ -39,7 +39,7 @@ abstract class ValueElement(
                 const element = document.getElementById({});
                 element.value = {};
                 delete element.dataset.previousInput;
-                """.trimIndent(),
+                """,
             element.id.json, newValue.json
         )
     }

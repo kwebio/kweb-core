@@ -82,7 +82,7 @@ class Document(val receiver: WebBrowser) : EventGenerator<Document> {
             return document.addEventListener({}, function(event) {
                 $jsCode
             });
-        """.trimIndent()
+        """
         documentScope.launch {
             receiver.callJsFunctionWithResult(wrappedJS, JsonPrimitive(eventName))
         }

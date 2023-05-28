@@ -40,7 +40,7 @@ fun InputElement.attachKeySpecificKeyupEvent(vararg keys: String) {
             element.dispatchEvent(keySpecificKeyUpEvent);
         }
     });
-""".trimIndent(), id.json, JsonPrimitive(keys.joinToString(separator = ","))
+""", id.json, JsonPrimitive(keys.joinToString(separator = ","))
     )
 }
 

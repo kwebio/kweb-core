@@ -99,7 +99,7 @@ class TodoApp {
                             You may find the source code for this app
                             <a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/demos/todo">here</a>.
                             """
-                                .trimIndent()
+                                
                         )
                     }
                 }

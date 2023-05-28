@@ -464,7 +464,7 @@ class Kweb private constructor(
                         Internal Server Error.
 
                         Please include code $logToken in any error report to help us track it down.
-""".trimIndent()
+"""
             )
         }
     }

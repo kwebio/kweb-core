@@ -52,7 +52,7 @@ class FileFormInput {
                 fr.onload = function(){
                     callbackWs({}, {base64Content: fr.result, fileSize: fd.size, fileName: fd.name});
                 }
-            """.trimIndent()
+            """
 
         inputElement.browser.callJsFunctionWithCallback(js, callbackId, callback = { result ->
             logger.info("Result is $result")

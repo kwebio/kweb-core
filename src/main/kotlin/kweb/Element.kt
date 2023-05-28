@@ -269,7 +269,7 @@ open class Element(
                                     let el = document.getElementById(id);
                                     if (el.classList) el.classList.add(className);
                                     else if (!hasClass(el, className)) el.className += " " + className;
-                                """.trimIndent(), id.json, JsonPrimitive(class_)
+                                """, id.json, JsonPrimitive(class_)
                         )
                     }
                 }
@@ -302,7 +302,7 @@ open class Element(
                                 var reg = new RegExp("(\\s|^)" + className + "(\\s|${'$'})");
                                 el.className = el.className.replace(reg, " ");
                             }
-                        """.trimIndent(), id.json, JsonPrimitive(class_)
+                        """, id.json, JsonPrimitive(class_)
                 )
             }
         }
@@ -348,7 +348,7 @@ open class Element(
                                     element.removeChild(element.firstChild);
                                 }
                             }
-                        """.trimIndent(), id.json
+                        """, id.json
                 )
             }
         }
@@ -383,7 +383,7 @@ open class Element(
                                 startSpan.parentNode.removeChild(startSpan.nextSibling);
                                 nextSibling = startSpan.nextSibling;
                             }
-                        """.trimIndent(), JsonPrimitive(startSpanId), JsonPrimitive(endSpanId)
+                        """, JsonPrimitive(startSpanId), JsonPrimitive(endSpanId)
                 )
             }
         }
@@ -405,7 +405,7 @@ open class Element(
                     """
                                 let element = document.getElementById({});
                                 element.removeChild(element.children[{}]);
-                        """.trimIndent(), id.json, position.json
+                        """, id.json, position.json
                 )
             }
         }
@@ -419,7 +419,7 @@ open class Element(
     fun text(value: String): Element {
         val jsoupDoc = browser.htmlDocument.get()
         //language=JavaScript
-        val setTextJS = """document.getElementById({}).textContent = {};""".trimIndent()
+        val setTextJS = """document.getElementById({}).textContent = {};"""
         when {
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 val element = jsoupDoc.getElementById(this.id)
@@ -464,7 +464,7 @@ open class Element(
         val createTextNodeJs = """
             var ntn = document.createTextNode({});
             document.getElementById({}).appendChild(ntn);
-        """.trimIndent()
+        """
         when {
             jsoupDoc != null && (browser.isCatchingOutbound() == null || browser.isCatchingOutbound() == RENDER) -> {
                 val element = jsoupDoc.getElementById(this.id)
@@ -483,7 +483,7 @@ open class Element(
         val wrappedJS = """
             return document.getElementById({}).addEventListener({}, function(event) {
                 $jsCode
-            });""".trimIndent()
+            });"""
         browser.callJsFunction(wrappedJS, id.json, JsonPrimitive(eventName))
     }
 
@@ -510,7 +510,7 @@ open class Element(
                 callbackWs({}, $eventObject);
             });
             return true;
-        """.trimIndent()
+        """
         //Adding event listener was causing the client to send a Client2ServerMessage with a null data field. This caused an error
         //We make the client return true to avoid that issue.
         //Then on the server we only invoke our callback on eventObjects, by checking that payload is a JsonObject.
@@ -589,7 +589,7 @@ open class Element(
             """
             let element = document.getElementById({});
             element.parentNode.removeChild(element);
-        """.trimIndent(), id.json
+        """, id.json
         )
     }
 
@@ -607,7 +607,7 @@ open class Element(
                     let element = document.getElementById(id);
                     element.parentNode.removeChild(element);
                 }
-            """.trimIndent(), id.json
+            """, id.json
             )
         } catch (e: IllegalStateException) {
 

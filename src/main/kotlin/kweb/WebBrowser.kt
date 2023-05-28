@@ -365,7 +365,7 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         //language=JavaScript
         callJsFunction("""
         history.pushState({ }, "", {});
-        """.trimIndent(), JsonPrimitive(url))
+        """, JsonPrimitive(url))
     }
 
     /**

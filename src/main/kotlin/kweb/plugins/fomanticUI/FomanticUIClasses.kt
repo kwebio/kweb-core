@@ -1203,7 +1203,7 @@ class FomanticUIClasses : AttributeBuilder() {
                 error("""
             The .ui getter has already been used on this SematicUIClasses object.  Please ensure you are creating a
             fresh FomanticUIClasses object (using the 'fomantic' getter for every element).
-""".trimIndent())
+""")
             }
             classes("ui")
             uiClassAlreadyPresent = true

@@ -24,7 +24,7 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
             return window.addEventListener({}, function(event) {
                 $jsCode
             });
-        """.trimIndent()
+        """
         browser.callJsFunction(wrappedJS, eventName.json)
     }
 
@@ -38,7 +38,7 @@ class Window(override val browser: WebBrowser) : EventGenerator<Window> {
                 callbackWs({}, $eventObject);
             });
             return true;
-        """.trimIndent()
+        """
         browser.callJsFunctionWithCallback(js, callbackId, callback = { payload ->
             if (payload is JsonObject) {
                 callback.invoke(payload)

@@ -116,7 +116,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     } else {
                         parentElement.appendChild(newEl);
                     }
-                """.trimIndent()
+                """
                 browser.callJsFunction(
                     createElementJs, JsonPrimitive(tag), JsonObject(mutAttributes), id.json,
                     JsonPrimitive(element.id), JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)
@@ -148,7 +148,7 @@ open class ElementCreator<out PARENT_TYPE : Element>(
                     } else {
                         parentElement.appendChild(newEl);
                     }
-                """.trimIndent()
+                """
                 element.browser.callJsFunction(
                     createElementJs, tag.json, JsonObject(mutAttributes), id.json,
                     element.id.json, JsonPrimitive(insertBefore ?: ""), JsonPrimitive(elementsCreatedCount)

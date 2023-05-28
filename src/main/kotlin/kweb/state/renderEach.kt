@@ -54,7 +54,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
             }
             parent.removeChild(start_element);
             parent.removeChild(end_element);
-            """.trimIndent(), JsonPrimitive(renderHandleToRemove.startId),
+            """, JsonPrimitive(renderHandleToRemove.startId),
             JsonPrimitive(renderHandleToRemove.endId)
         )
         renderHandleToRemove.delete()
@@ -80,7 +80,7 @@ fun <ITEM : Any, EL : Element> ElementCreator<EL>.renderEach(
             elementsToMove.forEach(function (item){
                 listParent.insertBefore(item, endMarker);
             });
-            """.trimIndent()
+            """
         browser.callJsFunction(moveItemCode, JsonPrimitive(itemStartMarker),
             JsonPrimitive(itemEndMarker), JsonPrimitive(newPosMarker)
         )
