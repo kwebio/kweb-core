@@ -1820,10 +1820,6 @@ public final class kweb/routing/RouteReceiver {
 	public final fun path (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)V
 }
 
-public abstract interface class kweb/state/AdvancedComponent {
-	public abstract fun render (Lkweb/ElementCreator;)Ljava/lang/Object;
-}
-
 public final class kweb/state/CloseReason {
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -1836,10 +1832,6 @@ public final class kweb/state/CloseReason {
 	public final fun getExplanation ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public abstract interface class kweb/state/Component : kweb/state/AdvancedComponent {
-	public abstract fun render (Lkweb/ElementCreator;)V
 }
 
 public class kweb/state/KVal : java/lang/AutoCloseable {
@@ -1961,7 +1953,6 @@ public final class kweb/state/RenderHandle {
 
 public final class kweb/state/RenderKt {
 	public static final fun closeOnElementCreatorCleanup (Lkweb/ElementCreator;Lkweb/state/KVal;)V
-	public static final fun render (Lkweb/ElementCreator;Lkweb/state/AdvancedComponent;)Ljava/lang/Object;
 	public static final fun render (Lkweb/ElementCreator;Lkweb/state/KVal;Lkotlin/jvm/functions/Function2;)Lkweb/state/RenderFragment;
 }
 
