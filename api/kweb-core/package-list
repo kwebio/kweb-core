@@ -25,7 +25,6 @@ $dokka.location:kweb.client/ClientConnection.Caching/Caching/#/PointingToDeclara
 $dokka.location:kweb.client/ClientConnection.Caching/queueSize/#/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-caching/queue-size.html
 $dokka.location:kweb.client/ClientConnection.Caching/read/#/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-caching/read.html
 $dokka.location:kweb.client/ClientConnection.Caching/send/#kotlin.String/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-caching/send.html
-$dokka.location:kweb.client/ClientConnection.Caching/size/#/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-caching/size.html
 $dokka.location:kweb.client/ClientConnection.WebSocket///PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/index.html
 $dokka.location:kweb.client/ClientConnection.WebSocket/WebSocket/#io.ktor.websocket.WebSocketSession/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/-web-socket.html
 $dokka.location:kweb.client/ClientConnection.WebSocket/close/#io.ktor.websocket.CloseReason/PointingToDeclaration/kweb-core/kweb.client/-client-connection/-web-socket/close.html
