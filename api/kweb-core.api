@@ -872,8 +872,7 @@ public abstract class kweb/client/ClientConnection {
 
 public final class kweb/client/ClientConnection$Caching : kweb/client/ClientConnection {
 	public fun <init> ()V
-	public final fun getSize ()I
-	public final fun queueSize ()Ljava/lang/Integer;
+	public final fun queueSize ()I
 	public final fun read ()Ljava/util/List;
 	public fun send (Ljava/lang/String;)V
 }

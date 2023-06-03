@@ -7,6 +7,9 @@ import kotlinx.coroutines.channels.Channel
 import kweb.state.CloseReason
 import mu.two.KotlinLogging
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 private val logger = KotlinLogging.logger {}
 
@@ -46,30 +49,40 @@ sealed class ClientConnection {
     }
 
     class Caching : ClientConnection() {
-        private @Volatile
-        var queue: ConcurrentLinkedQueue<String>? = ConcurrentLinkedQueue()
+        private val queue = ConcurrentLinkedQueue<String>()
+        private val lock = ReentrantLock()
+        private val isRead = AtomicBoolean(false)
 
         override fun send(message: String) {
-            logger.debug("Caching '$message' as websocket isn't yet available")
-            queue.let {
-                it?.add(message) ?: error("Can't write to queue after it has been read")
-            }
-        }
-
-        val size = queue?.size ?: 0
-
-        fun read(): List<String> {
-            queue.let {
-                if (it == null) error("Queue can only be read once")
-                else {
-                    val r = it.toList()
-                    queue = null
-                    return r
+            lock.withLock {
+                if (isRead.get()) {
+                    error("Can't write to queue after it has been read")
+                } else {
+                    logger.debug("Caching '$message' as websocket isn't yet available")
+                    queue.add(message)
                 }
             }
         }
 
-        fun queueSize() = queue?.size
+        fun read(): List<String> {
+            lock.withLock {
+                if (isRead.get()) {
+                    error("Queue can only be read once")
+                } else {
+                    isRead.set(true)
+                    return ArrayList<String>(queue).also {
+                        queue.clear()
+                    }
+                }
+            }
+        }
+
+        fun queueSize(): Int {
+            lock.withLock {
+                return queue.size
+            }
+        }
     }
+
 
 }
