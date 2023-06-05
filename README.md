@@ -71,3 +71,9 @@ This example illustrates [creating DOM elements](https://docs.kweb.io/book/dom.h
 * [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
 * [Chat with us](https://matrix.to/#/#kweb:matrix.org)
 * [Frequently Asked Questions](https://docs.kweb.io/book/faq.html)
+
+## Thanks
+  
+YourKit supports open source projects with innovative and intelligent tools for monitoring and profiling Java and .NET applications.
+
+YourKit is the creator of [YourKit Java Profiler](https://www.yourkit.com/java/profiler/), [YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/), and [YourKit YouMonitor](https://www.yourkit.com/youmonitor/).
