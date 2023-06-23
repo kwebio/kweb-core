@@ -186,6 +186,14 @@ function sendMessage(msg) {
     }
 }
 
+function sendCustomMessage(data) {
+    const msg = JSON.stringify({
+        id: kwebClientId,
+        customMessage: data
+    });
+    sendMessage(msg);
+}
+
 function callbackWs(callbackId, data) {
     const msg = JSON.stringify({
         id: kwebClientId,
