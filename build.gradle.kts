@@ -28,7 +28,7 @@ tasks.test {
 dependencies {
     api("org.jsoup:jsoup:1.16.1")
     implementation("org.apache.commons:commons-text:1.10.0")
-    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.google.guava:guava:32.0.1-jre")
     api("dev.forkhandles:result4k:2.5.0.0")
 
     //////////////////////////////
