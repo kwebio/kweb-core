@@ -67,7 +67,7 @@ dependencies {
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.9.1")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.9.0")
-    testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.3")
+    testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.5")
     testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.1")
     testImplementation("com.codeborne:selenide:6.13.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
