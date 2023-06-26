@@ -326,6 +326,11 @@ class Kweb private constructor(
                                     logger.debug { "keepalive received from client ${hello.id}" }
                                 }
 
+                                message.customMessage != null -> {
+                                    val data = message.customMessage
+                                    remoteClientState.browser.invokeCustomMsgFunction(data)
+                                }
+
                             }
                         }
                     }
@@ -359,11 +364,12 @@ class Kweb private constructor(
         val clientPrefix = determineClientPrefix(call)
         val kwebSessionId = clientPrefix + ":" + createNonce()
 
+        val httpRequestInfo = HttpRequestInfo(call.request)
+
         val remoteClientState = clientState.get(kwebSessionId) {
-            RemoteClientState(id = kwebSessionId, clientConnection = Caching())
+            RemoteClientState(id = kwebSessionId, clientConnection = Caching(), browser = WebBrowser(kwebSessionId, httpRequestInfo, this))
         }
 
-        val httpRequestInfo = HttpRequestInfo(call.request)
 
         try {
             val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)

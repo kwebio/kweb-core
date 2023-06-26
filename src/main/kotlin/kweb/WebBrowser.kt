@@ -232,6 +232,16 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         kweb.addCallback(sessionId, functionCall.callbackId!!, callback)
     }
 
+    var onCustomMsgFunction: ((data: JsonElement?) -> Unit)? = null
+
+    fun onCustomMsg(customFunction: (data: JsonElement?) -> Unit) {
+        this.onCustomMsgFunction = customFunction
+    }
+
+    fun invokeCustomMsgFunction(data: JsonElement?) {
+        onCustomMsgFunction?.invoke(data)
+    }
+
     fun addCloseListener(listener: () -> Unit) : Int {
         val id = random.nextInt()
         this.closeListeners[id] = listener
