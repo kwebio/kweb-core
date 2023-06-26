@@ -232,6 +232,8 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         kweb.addCallback(sessionId, functionCall.callbackId!!, callback)
     }
 
+
+    //ChatGPT recommended I use the Observer pattern here. I'm not sure if this is quite the implementation you were looking for.
     var onCustomMsgFunction: ((data: JsonElement?) -> Unit)? = null
 
     fun onCustomMsg(customFunction: (data: JsonElement?) -> Unit) {
