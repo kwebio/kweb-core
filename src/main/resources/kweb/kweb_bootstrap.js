@@ -186,6 +186,10 @@ function sendMessage(msg) {
     }
 }
 
+//You suggested we name this sendAsyncMessage. I like the name customMessage. But, only a bit more.
+//I think async is an implementation detail on our end and sounds confusing to people who would use it in their code.
+//The right thing to do is probably simplify it, by having it be WebBrowser.onMessage and and sendMessage(), and then we
+// rename the existing sendMessage() to something else.
 function sendCustomMessage(data) {
     const msg = JSON.stringify({
         id: kwebClientId,

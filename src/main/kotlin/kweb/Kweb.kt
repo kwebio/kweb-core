@@ -366,6 +366,9 @@ class Kweb private constructor(
 
         val httpRequestInfo = HttpRequestInfo(call.request)
 
+
+        //this doesn't work. I get this error when running the todo Demo
+        //Caused by: java.lang.IllegalStateException: Client id Nb9_U7:eJ5dw4 not found
         val remoteClientState = clientState.get(kwebSessionId) {
             RemoteClientState(id = kwebSessionId, clientConnection = Caching(), browser = WebBrowser(kwebSessionId, httpRequestInfo, this))
         }
