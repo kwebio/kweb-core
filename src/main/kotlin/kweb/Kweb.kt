@@ -328,7 +328,7 @@ class Kweb private constructor(
 
                                 message.customMessage != null -> {
                                     val data = message.customMessage
-                                    remoteClientState.browser.invokeCustomMsgFunction(data)
+                                    remoteClientState.webBrowser.invokeCustomMsgFunction(data)
                                 }
 
                             }
@@ -369,13 +369,14 @@ class Kweb private constructor(
 
         //this doesn't work. I get this error when running the todo Demo
         //Caused by: java.lang.IllegalStateException: Client id Nb9_U7:eJ5dw4 not found
+        //The debugger says that the remoteClientState ID here matches the clientPrefix and the kwebSessionID from a few lines ago.
         val remoteClientState = clientState.get(kwebSessionId) {
-            RemoteClientState(id = kwebSessionId, clientConnection = Caching(), browser = WebBrowser(kwebSessionId, httpRequestInfo, this))
+            RemoteClientState(id = kwebSessionId, clientConnection = Caching(), webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this))
         }
 
 
         try {
-            val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
+            val webBrowser = remoteClientState.webBrowser
 
             remoteClientState.addCloseHandler { webBrowser.close() }
 
