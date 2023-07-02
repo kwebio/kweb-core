@@ -165,6 +165,7 @@ You may find the source code for this app
         button().text("send message").apply {
             on().click {event ->
                 browser.callJsFunction("console.log(\"shouldBePrintlning\");")
+                //Two different ways to invoke the customMsg from Kotlin.
                 browser.callJsFunction("""sendCustomMessage({});""", JsonPrimitive("Hola Mundo!!!"))
                 browser.sendCustomMsg(JsonPrimitive("Ni Hao"))
             }
