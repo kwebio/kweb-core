@@ -1,9 +1,13 @@
 package kweb.demos.todo
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
-import kweb.state.*
+import kweb.state.ObservableList
+import kweb.state.render
+import kweb.state.renderEach
 import kweb.util.NotFoundException
 import kweb.util.random
 import mu.two.KotlinLogging
@@ -149,6 +153,18 @@ You may find the source code for this app
                 on(retrieveJs = input.valueJsExpression).click { event ->
                     handleAddItem(activeListKey, input, event.retrieved.jsonPrimitive.content)
                 }
+            }
+        }
+
+        browser.onCustomMsg { data ->
+            println(data!!)
+        }
+
+        button().text("send message").apply {
+            on().click {event ->
+                browser.callJsFunction("console.log(\"shouldBePrintlning\");")
+                browser.callJsFunction("""sendCustomMessage({});""", JsonPrimitive("Hola Mundo!!!"))
+                browser.sendCustomMsg(JsonPrimitive("Ni Hao"))
             }
         }
     }

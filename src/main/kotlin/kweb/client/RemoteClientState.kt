@@ -13,7 +13,7 @@ data class RemoteClientState(val id: String, @Volatile var clientConnection: Cli
                              val handlers: MutableMap<Int, (JsonElement) -> Unit> = HashMap(),
                              val onCloseHandlers : ConcurrentHashMap<Int, () -> Unit> = ConcurrentHashMap(),
                              val debugTokens: MutableMap<String, DebugInfo> = HashMap(), var lastModified: Instant = Instant.now(),
-                             val webBrowser: WebBrowser) {
+                             var onCustomMsgFunction: ((data: JsonElement?) -> Unit)? = null) {
     fun send(message: Server2ClientMessage) {
         clientConnection.send(Json.encodeToString(message))
     }

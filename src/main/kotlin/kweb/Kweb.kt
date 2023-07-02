@@ -327,8 +327,9 @@ class Kweb private constructor(
                                 }
 
                                 message.customMessage != null -> {
+                                    println("PUSHING ------------------------------------------------")
                                     val data = message.customMessage
-                                    remoteClientState.webBrowser.invokeCustomMsgFunction(data)
+                                    remoteClientState.onCustomMsgFunction!!.invoke(data)
                                 }
 
                             }
@@ -371,12 +372,12 @@ class Kweb private constructor(
         //Caused by: java.lang.IllegalStateException: Client id Nb9_U7:eJ5dw4 not found
         //The debugger says that the remoteClientState ID here matches the clientPrefix and the kwebSessionID from a few lines ago.
         val remoteClientState = clientState.get(kwebSessionId) {
-            RemoteClientState(id = kwebSessionId, clientConnection = Caching(), webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this))
+            RemoteClientState(id = kwebSessionId, clientConnection = Caching())
         }
 
 
         try {
-            val webBrowser = remoteClientState.webBrowser
+            val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)
 
             remoteClientState.addCloseHandler { webBrowser.close() }
 

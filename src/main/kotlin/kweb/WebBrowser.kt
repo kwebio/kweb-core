@@ -232,16 +232,27 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
         kweb.addCallback(sessionId, functionCall.callbackId!!, callback)
     }
 
-
-    //ChatGPT recommended I use the Observer pattern here. I'm not sure if this is quite the implementation you were looking for.
-    var onCustomMsgFunction: ((data: JsonElement?) -> Unit)? = null
-
+    //attaches the user supplied function to the remoteClientState, to be invoked in Kweb.listenForWebSocketConnection()
     fun onCustomMsg(customFunction: (data: JsonElement?) -> Unit) {
-        this.onCustomMsgFunction = customFunction
+        val remoteClientState = kweb.clientState.getIfPresent(sessionId)
+        try {
+            if (remoteClientState!!.onCustomMsgFunction == null) {
+                remoteClientState!!.onCustomMsgFunction = customFunction
+            } else {
+                error("You can only have one onCustomMsg per WebBrowser")//TODO add clarity to this error message
+            }
+
+        } catch (e: NullPointerException) {
+            //TODO it should be impossible for remoteClientState to ever be null here, but maybe we need to add something to handle it anyway
+        }
     }
 
-    fun invokeCustomMsgFunction(data: JsonElement?) {
-        onCustomMsgFunction?.invoke(data)
+    //helper function to allow invoking the custom message without writing Javascript.
+    fun sendCustomMsg(data: JsonElement? = null) {
+        val remoteClientState = kweb.clientState.getIfPresent(sessionId)
+        remoteClientState?.let {
+            it.onCustomMsgFunction!!.invoke(data)
+        }
     }
 
     fun addCloseListener(listener: () -> Unit) : Int {
