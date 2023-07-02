@@ -3,7 +3,6 @@ package kweb
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import io.ktor.server.application.*
-import io.ktor.server.plugins.*
 import io.ktor.http.*
 import io.ktor.websocket.*
 import io.ktor.websocket.Frame.*
@@ -189,11 +188,11 @@ class Kweb private constructor(
         val wsClientData = clientState.getIfPresent(sessionId)
             ?: error("Can not add callback because: Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
-        wsClientData.handlers[callbackId] = callback
+        wsClientData.eventHandlers[callbackId] = callback
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
-        clientState.getIfPresent(clientId)?.handlers?.remove(callbackId)
+        clientState.getIfPresent(clientId)?.eventHandlers?.remove(callbackId)
     }
 
     override fun close() {
@@ -317,7 +316,7 @@ class Kweb private constructor(
                             when {
                                 message.callback != null -> {
                                     val (resultId, result) = message.callback
-                                    val resultHandler = remoteClientState.handlers[resultId]
+                                    val resultHandler = remoteClientState.eventHandlers[resultId]
                                         ?: error("No resultHandler for $resultId, for client ${remoteClientState.id}")
                                     resultHandler(result)
                                 }

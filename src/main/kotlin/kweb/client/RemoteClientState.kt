@@ -4,13 +4,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kweb.DebugInfo
-import kweb.WebBrowser
 import kweb.util.random
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 
 data class RemoteClientState(val id: String, @Volatile var clientConnection: ClientConnection,
-                             val handlers: MutableMap<Int, (JsonElement) -> Unit> = HashMap(),
+                             val eventHandlers: MutableMap<Int, (JsonElement) -> Unit> = HashMap(),
                              val onCloseHandlers : ConcurrentHashMap<Int, () -> Unit> = ConcurrentHashMap(),
                              val debugTokens: MutableMap<String, DebugInfo> = HashMap(), var lastModified: Instant = Instant.now(),
                              var onCustomMsgFunction: ((data: JsonElement?) -> Unit)? = null) {
