@@ -156,6 +156,8 @@ You may find the source code for this app
             }
         }
 
+
+        //Todo remove this code that let me test custom messages from client side.
         browser.onCustomMsg { data ->
             println(data!!)
         }
