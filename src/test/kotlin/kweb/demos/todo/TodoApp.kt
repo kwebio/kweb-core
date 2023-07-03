@@ -156,20 +156,6 @@ You may find the source code for this app
             }
         }
 
-
-        //Todo remove this code that let me test custom messages from client side.
-        browser.onCustomMsg { data ->
-            println(data!!)
-        }
-
-        button().text("send message").apply {
-            on().click {event ->
-                browser.callJsFunction("console.log(\"shouldBePrintlning\");")
-                //Two different ways to invoke the customMsg from Kotlin.
-                browser.callJsFunction("""sendCustomMessage({});""", JsonPrimitive("Hola Mundo!!!"))
-                browser.sendCustomMsg(JsonPrimitive("Ni Hao"))
-            }
-        }
     }
 
     private fun handleAddItem(activeListKey: String, input: InputElement, newItemText: String) {
