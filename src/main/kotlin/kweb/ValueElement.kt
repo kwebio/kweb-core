@@ -22,7 +22,7 @@ abstract class ValueElement(
     open val element: Element, val kvarUpdateEvent: String = "input",
     val initialValue: String? = null
 ) : Element(element) {
-    val valueJsExpression: String by lazy { "document.getElementById(\"$id\").value" }
+    val valueJsExpression: String get() = "document.getElementById(\"$id\").value"
 
     suspend fun getValue(): String {
         return when (val result =

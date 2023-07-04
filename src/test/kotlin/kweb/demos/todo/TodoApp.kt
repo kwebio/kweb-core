@@ -1,9 +1,13 @@
 package kweb.demos.todo
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import kweb.*
 import kweb.plugins.fomanticUI.fomantic
 import kweb.plugins.fomanticUI.fomanticUIPlugin
-import kweb.state.*
+import kweb.state.ObservableList
+import kweb.state.render
+import kweb.state.renderEach
 import kweb.util.NotFoundException
 import kweb.util.random
 import mu.two.KotlinLogging
@@ -151,6 +155,7 @@ You may find the source code for this app
                 }
             }
         }
+
     }
 
     private fun handleAddItem(activeListKey: String, input: InputElement, newItemText: String) {
