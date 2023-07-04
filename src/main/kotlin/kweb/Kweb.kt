@@ -328,7 +328,7 @@ class Kweb private constructor(
                                 message.customMessage != null -> {
                                     println("PUSHING ------------------------------------------------")
                                     val data = message.customMessage
-                                    remoteClientState.onCustomMsgFunction!!.invoke(data)
+                                    remoteClientState.onMessageFunction!!.invoke(data)
                                 }
 
                             }
