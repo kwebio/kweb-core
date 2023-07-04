@@ -325,9 +325,9 @@ class Kweb private constructor(
                                     logger.debug { "keepalive received from client ${hello.id}" }
                                 }
 
-                                message.customMessage != null -> {
+                                message.onMessageData != null -> {
                                     println("PUSHING ------------------------------------------------")
-                                    val data = message.customMessage
+                                    val data = message.onMessageData
                                     remoteClientState.onMessageFunction!!.invoke(data)
                                 }
 

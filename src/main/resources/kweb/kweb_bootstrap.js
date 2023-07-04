@@ -193,7 +193,7 @@ function sendClientMessage(msg) {
 function sendMessage(data) {
     const msg = JSON.stringify({
         id: kwebClientId,
-        customMessage: data
+        onMessageData: data
     });
     sendClientMessage(msg);
 }
