@@ -63,7 +63,7 @@ function handleInboundMessage(msg) {
                 console.debug("Evaluated [ " + func.toString() + "]", data);
                 const callback = {callbackId: callbackId, data: data};
                 const message = {id: kwebClientId, callback: callback};
-                sendMessage(JSON.stringify(message));
+                sendClientMessage(JSON.stringify(message));
             } catch (err) {
                 debugErr(debugToken, err, "Error Evaluating `" + func.toString() + "`: " + err);
             }
@@ -86,7 +86,7 @@ function debugErr(debugToken, err, errMsg) {
             error: {name: err.name, message: err.message}
         };
         const message = {id: kwebClientId, error: err};
-        sendMessage(JSON.stringify(message));
+        sendClientMessage(JSON.stringify(message));
     } else {
         console.error(errMsg)
     }
@@ -106,9 +106,9 @@ function connectWs() {
             websocketEstablished = true;
             console.debug("Websocket established", wsURL);
             removeElementByIdIfExists(bannerId);
-            sendMessage(JSON.stringify({id: kwebClientId, hello: true}));
+            sendClientMessage(JSON.stringify({id: kwebClientId, hello: true}));
             while (preWSMsgQueue.length > 0) {
-                sendMessage(preWSMsgQueue.shift());
+                sendClientMessage(preWSMsgQueue.shift());
             }
             reconnectTimeout = 2000
         };
@@ -177,7 +177,10 @@ function showReconnectToast() {
     }).showToast();
 }
 
-function sendMessage(msg) {
+/* Sends websocket message from the client to the server. This is a lower-level function used by Kweb.
+   Developers using Kweb should use sendMessage() instead
+*/
+function sendClientMessage(msg) {
     if (websocketEstablished) {
         console.debug("Sending WebSocket message", msg);
         socket.send(msg);
@@ -186,16 +189,13 @@ function sendMessage(msg) {
     }
 }
 
-//You suggested we name this sendAsyncMessage. I like the name customMessage. But, only a bit more.
-//I think async is an implementation detail on our end and sounds confusing to people who would use it in their code.
-//The right thing to do is probably simplify it, by having it be WebBrowser.onMessage and and sendMessage(), and then we
-// rename the existing sendMessage() to something else.
-function sendCustomMessage(data) {
+//Allows Kweb users to send messages from the client to the Server
+function sendMessage(data) {
     const msg = JSON.stringify({
         id: kwebClientId,
         customMessage: data
     });
-    sendMessage(msg);
+    sendClientMessage(msg);
 }
 
 function callbackWs(callbackId, data) {
@@ -203,7 +203,7 @@ function callbackWs(callbackId, data) {
         id: kwebClientId,
         callback: {callbackId: callbackId, data: data}
     });
-    sendMessage(msg);
+    sendClientMessage(msg);
 }
 
 function sendKeepalive() {
@@ -211,7 +211,7 @@ function sendKeepalive() {
         id: kwebClientId,
         keepalive: true
     });
-    sendMessage(msg);
+    sendClientMessage(msg);
 }
 
 setInterval(sendKeepalive, 60*1000);
