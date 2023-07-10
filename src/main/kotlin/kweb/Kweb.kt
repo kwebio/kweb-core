@@ -326,7 +326,6 @@ class Kweb private constructor(
                                 }
 
                                 message.onMessageData != null -> {
-                                    println("PUSHING ------------------------------------------------")
                                     val data = message.onMessageData
                                     remoteClientState.onMessageFunction!!.invoke(data)
                                 }
