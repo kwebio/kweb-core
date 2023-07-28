@@ -46,8 +46,8 @@ dependencies {
     api("io.ktor:ktor-server-websockets:2.3.0")
     api("io.ktor:ktor-server-default-headers:2.3.0")
     api("io.ktor:ktor-server-compression:2.3.2")
-    api("io.ktor:ktor-server-caching-headers:2.3.0")
-    api("io.ktor:ktor-network-tls-certificates:2.3.0")
+    api("io.ktor:ktor-server-caching-headers:2.3.2")
+    api("io.ktor:ktor-network-tls-certificates:2.3.2")
 
     api("io.mola.galimatias:galimatias:0.2.1")
 
@@ -68,7 +68,7 @@ dependencies {
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.10.0")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.10.0")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.5")
-    testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.9.1")
+    testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.10.0")
     testImplementation("com.codeborne:selenide:6.13.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
