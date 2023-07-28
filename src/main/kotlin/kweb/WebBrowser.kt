@@ -21,7 +21,6 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.contracts.ExperimentalContracts
 import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
@@ -230,6 +229,29 @@ class WebBrowser(val sessionId: String, val httpRequestInfo: HttpRequestInfo, va
             }
         }
         kweb.addCallback(sessionId, functionCall.callbackId!!, callback)
+    }
+
+    //attaches the user supplied function to the remoteClientState, to be invoked in Kweb.listenForWebSocketConnection()
+    fun onMessage(customFunction: (data: JsonElement?) -> Unit) {
+        val remoteClientState = kweb.clientState.getIfPresent(sessionId)
+        try {
+            if (remoteClientState!!.onMessageFunction == null) {
+                remoteClientState!!.onMessageFunction = customFunction
+            } else {
+                error("You can only register one message handler per WebBrowser, it should handle any messages you're expecting")
+            }
+
+        } catch (e: NullPointerException) {
+            //TODO it should be impossible for remoteClientState to ever be null here, but maybe we need to add something to handle it anyway
+        }
+    }
+
+    //helper function to allow invoking the custom message without writing Javascript.
+    fun sendMessage(data: JsonElement? = null) {
+        val remoteClientState = kweb.clientState.getIfPresent(sessionId)
+        remoteClientState?.let {
+            it.onMessageFunction!!.invoke(data)
+        }
     }
 
     fun addCloseListener(listener: () -> Unit) : Int {

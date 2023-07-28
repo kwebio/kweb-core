@@ -3,7 +3,6 @@ package kweb
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import io.ktor.server.application.*
-import io.ktor.server.plugins.*
 import io.ktor.http.*
 import io.ktor.websocket.*
 import io.ktor.websocket.Frame.*
@@ -189,11 +188,11 @@ class Kweb private constructor(
         val wsClientData = clientState.getIfPresent(sessionId)
             ?: error("Can not add callback because: Client id $sessionId not found")
         wsClientData.lastModified = Instant.now()
-        wsClientData.handlers[callbackId] = callback
+        wsClientData.eventHandlers[callbackId] = callback
     }
 
     fun removeCallback(clientId: String, callbackId: Int) {
-        clientState.getIfPresent(clientId)?.handlers?.remove(callbackId)
+        clientState.getIfPresent(clientId)?.eventHandlers?.remove(callbackId)
     }
 
     override fun close() {
@@ -317,13 +316,18 @@ class Kweb private constructor(
                             when {
                                 message.callback != null -> {
                                     val (resultId, result) = message.callback
-                                    val resultHandler = remoteClientState.handlers[resultId]
+                                    val resultHandler = remoteClientState.eventHandlers[resultId]
                                         ?: error("No resultHandler for $resultId, for client ${remoteClientState.id}")
                                     resultHandler(result)
                                 }
 
                                 message.keepalive -> {
                                     logger.debug { "keepalive received from client ${hello.id}" }
+                                }
+
+                                message.onMessageData != null -> {
+                                    val data = message.onMessageData
+                                    remoteClientState.onMessageFunction!!.invoke(data)
                                 }
 
                             }
@@ -359,11 +363,16 @@ class Kweb private constructor(
         val clientPrefix = determineClientPrefix(call)
         val kwebSessionId = clientPrefix + ":" + createNonce()
 
+        val httpRequestInfo = HttpRequestInfo(call.request)
+
+
+        //this doesn't work. I get this error when running the todo Demo
+        //Caused by: java.lang.IllegalStateException: Client id Nb9_U7:eJ5dw4 not found
+        //The debugger says that the remoteClientState ID here matches the clientPrefix and the kwebSessionID from a few lines ago.
         val remoteClientState = clientState.get(kwebSessionId) {
             RemoteClientState(id = kwebSessionId, clientConnection = Caching())
         }
 
-        val httpRequestInfo = HttpRequestInfo(call.request)
 
         try {
             val webBrowser = WebBrowser(kwebSessionId, httpRequestInfo, this)

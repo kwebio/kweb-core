@@ -695,8 +695,11 @@ public final class kweb/WebBrowser {
 	public final fun getUrl ()Lkweb/state/KVar;
 	public final fun getWindow ()Lkweb/html/Window;
 	public final fun isCatchingOutbound ()Lkweb/WebBrowser$CatcherType;
+	public final fun onMessage (Lkotlin/jvm/functions/Function1;)V
 	public final fun removeCallback (I)V
 	public final fun removeCloseListener (I)V
+	public final fun sendMessage (Lkotlinx/serialization/json/JsonElement;)V
+	public static synthetic fun sendMessage$default (Lkweb/WebBrowser;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)V
 }
 
 public final class kweb/WebBrowser$CatcherType : java/lang/Enum {
@@ -736,22 +739,24 @@ public final class kweb/WebBrowser$OutboundMessageCatcher {
 
 public final class kweb/client/Client2ServerMessage {
 	public static final field Companion Lkweb/client/Client2ServerMessage$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;ZLkotlinx/serialization/internal/SerializationConstructorMarker;)V
-	public fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Z)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;ZLkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/Boolean;
 	public final fun component3 ()Lkweb/client/Client2ServerMessage$ErrorMessage;
 	public final fun component4 ()Lkweb/client/Client2ServerMessage$C2SCallback;
-	public final fun component5 ()Z
-	public final fun copy (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Z)Lkweb/client/Client2ServerMessage;
-	public static synthetic fun copy$default (Lkweb/client/Client2ServerMessage;Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;ZILjava/lang/Object;)Lkweb/client/Client2ServerMessage;
+	public final fun component5 ()Lkotlinx/serialization/json/JsonElement;
+	public final fun component6 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;Z)Lkweb/client/Client2ServerMessage;
+	public static synthetic fun copy$default (Lkweb/client/Client2ServerMessage;Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;ZILjava/lang/Object;)Lkweb/client/Client2ServerMessage;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCallback ()Lkweb/client/Client2ServerMessage$C2SCallback;
 	public final fun getError ()Lkweb/client/Client2ServerMessage$ErrorMessage;
 	public final fun getHello ()Ljava/lang/Boolean;
 	public final fun getId ()Ljava/lang/String;
 	public final fun getKeepalive ()Z
+	public final fun getOnMessageData ()Lkotlinx/serialization/json/JsonElement;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -942,8 +947,8 @@ public final class kweb/client/HttpRequestInfo {
 }
 
 public final class kweb/client/RemoteClientState {
-	public fun <init> (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;)V
-	public synthetic fun <init> (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addCloseHandler (Lkotlin/jvm/functions/Function0;)I
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Lkweb/client/ClientConnection;
@@ -951,20 +956,23 @@ public final class kweb/client/RemoteClientState {
 	public final fun component4 ()Ljava/util/concurrent/ConcurrentHashMap;
 	public final fun component5 ()Ljava/util/Map;
 	public final fun component6 ()Ljava/time/Instant;
-	public final fun copy (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;)Lkweb/client/RemoteClientState;
-	public static synthetic fun copy$default (Lkweb/client/RemoteClientState;Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;ILjava/lang/Object;)Lkweb/client/RemoteClientState;
+	public final fun component7 ()Lkotlin/jvm/functions/Function1;
+	public final fun copy (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;)Lkweb/client/RemoteClientState;
+	public static synthetic fun copy$default (Lkweb/client/RemoteClientState;Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/client/RemoteClientState;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getClientConnection ()Lkweb/client/ClientConnection;
 	public final fun getDebugTokens ()Ljava/util/Map;
-	public final fun getHandlers ()Ljava/util/Map;
+	public final fun getEventHandlers ()Ljava/util/Map;
 	public final fun getId ()Ljava/lang/String;
 	public final fun getLastModified ()Ljava/time/Instant;
 	public final fun getOnCloseHandlers ()Ljava/util/concurrent/ConcurrentHashMap;
+	public final fun getOnMessageFunction ()Lkotlin/jvm/functions/Function1;
 	public fun hashCode ()I
 	public final fun removeCloseHandler (I)V
 	public final fun send (Lkweb/client/Server2ClientMessage;)V
 	public final fun setClientConnection (Lkweb/client/ClientConnection;)V
 	public final fun setLastModified (Ljava/time/Instant;)V
+	public final fun setOnMessageFunction (Lkotlin/jvm/functions/Function1;)V
 	public fun toString ()Ljava/lang/String;
 	public final fun triggerCloseListeners ()V
 }
