@@ -16,7 +16,7 @@ dependencies {
     // files in the project.
     // Use their Maven coordinates (plus versions), not Gradle plugin IDs!
     // This should be the only place that Gradle plugin versions are defined, so they are aligned across all build scripts
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
     implementation("org.jetbrains.kotlin:kotlin-serialization:1.8.21")
 }
 
