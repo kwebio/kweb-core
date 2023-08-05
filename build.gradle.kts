@@ -4,7 +4,7 @@ import java.net.URL
 plugins {
     buildsrc.conventions.`kotlin-jvm`
     buildsrc.conventions.`maven-publish`
-    id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jetbrains.dokka") version "1.8.20"
     id("com.github.ben-manes.versions") version "0.46.0"
     kotlin("plugin.serialization")
 
