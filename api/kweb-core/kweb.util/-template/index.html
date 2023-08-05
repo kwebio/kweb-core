@@ -61,7 +61,7 @@
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Template</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">template<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">replaceables<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="../-stack/index.html">Stack</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/util/Template.kt#L32">source</a>)</span></span></div><p class="paragraph">A fast, lightweight string templating system with zero dependencies.</p><p class="paragraph">You supply a template String and an array of tokens to replace when calling .apply. The order of tokens supplied in the constructor corresponds to the order of strings supplied in apply().</p><p class="paragraph">The io.kweb.util.Template will compile your string into an executable stack, which generates output with extreme efficiency; the only string-matching performed is during io.kweb.util.Template compile, and it processes all tokens in a single, efficient iteration of the template String.</p><p class="paragraph">This ensures an absolute minimum of processing, and allows large templates with a large number of replacements to scale nicely.</p><p class="paragraph">Usage:</p><p class="paragraph">assert new Template(&quot;$1, $2!&quot;, &quot;$1&quot;, &quot;$2&quot;) .apply(&quot;Hello&quot;, &quot;World&quot;) .equals(&quot;Hello, World!&quot;);</p><p class="paragraph">assert new Template(&quot;(<>[])$.toArray(new Object$.size())&quot;, &quot;<>&quot;, &quot;$&quot;) .apply(&quot;String&quot;, &quot;myList&quot;) .equals(&quot;(String[])myList.toArray(new ObjectmyList.size())&quot;);</p><span class="kdoc-tag"><h4 class="">Author</h4><p class="paragraph">&quot;James X. Nelson (james@wetheinter.net)&quot;</p></span></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
@@ -101,40 +101,6 @@
           </div>
         </div>
       </div>
-      <div data-togglable="FUNCTION">
-        <h2 class="">Functions</h2>
-        <div class="table"><a data-name="608721199%2FFunctions%2F769193423" anchor-label="apply" id="608721199%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="apply.html"><span><span>apply</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="608721199%2FFunctions%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="apply.html"><span class="token function">apply</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Applies the current template to the supplied arguments.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="120736234%2FFunctions%2F769193423" anchor-label="push" id="120736234%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../-stack/push.html"><span><span>push</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="120736234%2FFunctions%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-stack/push.html"><span class="token function">push</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">prefix<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">pos<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-stack/index.html">Stack</a></div><div class="brief "><p class="paragraph">Pushes a string constant and a pointer to a token's replacement position onto stack.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
         <div class="table"><a data-name="1443195003%2FProperties%2F769193423" anchor-label="next" id="1443195003%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
@@ -163,6 +129,40 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="../-stack/prefix.html">prefix</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="608721199%2FFunctions%2F769193423" anchor-label="apply" id="608721199%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="apply.html"><span><span>apply</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="608721199%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="apply.html"><span class="token function">apply</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Applies the current template to the supplied arguments.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="120736234%2FFunctions%2F769193423" anchor-label="push" id="120736234%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-stack/push.html"><span><span>push</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="120736234%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="../-stack/push.html"><span class="token function">push</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">prefix<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">pos<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-stack/index.html">Stack</a></div><div class="brief "><p class="paragraph">Pushes a string constant and a pointer to a token's replacement position onto stack.</p></div></div></div>
                 </div>
               </div>
             </div>

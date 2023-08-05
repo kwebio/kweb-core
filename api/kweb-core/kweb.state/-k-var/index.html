@@ -61,7 +61,7 @@
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">initialValue<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span> : <a href="../-k-val/index.html">KVal</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">T</a><span class="token operator">&gt; </span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/state/KVar.kt#L22">source</a>)</span></span></div><p class="paragraph">A KVar is an observable container for a value of type T.  It must be initialized with initialValue, and this can then be modified by setting the <a href="value.html">KVar.value</a> property. Listeners may be added using <span data-unresolved-link="kweb.state/KVar/addListener/#kotlin.Function2[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/">KVar.addListener</span>, and these will be called whenever the value is changed.</p><p class="paragraph">From within Kweb's DSL, you can use the ElementCreator.kvar function to create a KVar without needing to import KVar, and which will also call <span data-unresolved-link="kweb.state/KVar/close/#/PointingToDeclaration/">KVar.close</span> when this part of the DOM is cleaned up.</p></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="">Constructors</h2>
@@ -76,6 +76,85 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">initialValue<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="641284203%2FProperties%2F769193423" anchor-label="path" id="641284203%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../kweb/path.html"><span><span>path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="641284203%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/path.html">path</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="304107943%2FProperties%2F769193423" anchor-label="pathQueryFragment" id="304107943%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../kweb/path-query-fragment.html"><span>path</span><wbr></wbr><span>Query</span><wbr></wbr><span><span>Fragment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="304107943%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/path-query-fragment.html">pathQueryFragment</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Given the URI specification:</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-59722197%2FProperties%2F769193423" anchor-label="pathSegments" id="-59722197%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../kweb/path-segments.html"><span>path</span><wbr></wbr><span><span>Segments</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-59722197%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/path-segments.html">pathSegments</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1064334812%2FProperties%2F769193423" anchor-label="query" id="1064334812%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../kweb/query.html"><span><span>query</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1064334812%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/query.html">query</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="405302748%2FProperties%2F769193423" anchor-label="value" id="405302748%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="value.html"><span><span>value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="405302748%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="value.html">value</a><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The current value of this KVar.  Setting this property to a different value will notify all listeners, but if the new value is the same as the old value then it will be ignored.</p></div></div></div>
                 </div>
               </div>
             </div>
@@ -275,85 +354,6 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="to-string.html"><span class="token function">toString</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div data-togglable="PROPERTY">
-        <h2 class="">Properties</h2>
-        <div class="table"><a data-name="641284203%2FProperties%2F769193423" anchor-label="path" id="641284203%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../../kweb/path.html"><span><span>path</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="641284203%2FProperties%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/path.html">path</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="304107943%2FProperties%2F769193423" anchor-label="pathQueryFragment" id="304107943%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../../kweb/path-query-fragment.html"><span>path</span><wbr></wbr><span>Query</span><wbr></wbr><span><span>Fragment</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="304107943%2FProperties%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/path-query-fragment.html">pathQueryFragment</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Given the URI specification:</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-59722197%2FProperties%2F769193423" anchor-label="pathSegments" id="-59722197%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../../kweb/path-segments.html"><span>path</span><wbr></wbr><span><span>Segments</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-59722197%2FProperties%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/path-segments.html">pathSegments</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1064334812%2FProperties%2F769193423" anchor-label="query" id="1064334812%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../../kweb/query.html"><span><span>query</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1064334812%2FProperties%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.mola.galimatias/URL///PointingToDeclaration/">URL</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="../../kweb/query.html">query</a><span class="token operator">: </span><a href="index.html">KVar</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="405302748%2FProperties%2F769193423" anchor-label="value" id="405302748%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="value.html"><span><span>value</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="405302748%2FProperties%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">var </span><a href="value.html">value</a><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">The current value of this KVar.  Setting this property to a different value will notify all listeners, but if the new value is the same as the old value then it will be ignored.</p></div></div></div>
                 </div>
               </div>
             </div>

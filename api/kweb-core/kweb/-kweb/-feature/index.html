@@ -61,7 +61,7 @@
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">Feature</a> : <span data-unresolved-link="io.ktor.server.application/BaseApplicationPlugin///PointingToDeclaration/">BaseApplicationPlugin</span><span class="token operator">&lt;</span><span class="token keyword"></span><span data-unresolved-link="io.ktor.server.application/Application///PointingToDeclaration/">Application</span><span class="token punctuation">, </span><span class="token keyword"></span><a href="-configuration/index.html">Kweb.Feature.Configuration</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="../index.html">Kweb</a><span class="token operator">&gt; </span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin/kweb/Kweb.kt#L119">source</a>)</span></span></div><p class="paragraph">If you have an existing Ktor server, you can use the Kweb class as a feature. Adding this to your code is easy:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">    install(DefaultHeaders)<br>    install(Compression)<br>    install(WebSockets) {<br>        pingPeriod = Duration.ofSeconds(10)<br>        timeout = Duration.ofSeconds(30)<br>    }<br><br>    install(Kweb) {<br>        // Set debug or plugins here, if you'd like<br>        buildPage = {<br>            // Your app goes here as it would using the Ktor constructor<br>        }<br>    }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="TYPE">
         <h2 class="">Types</h2>
@@ -82,25 +82,6 @@
           </div>
         </div>
       </div>
-      <div data-togglable="FUNCTION">
-        <h2 class="">Functions</h2>
-        <div class="table"><a data-name="1853780115%2FFunctions%2F769193423" anchor-label="install" id="1853780115%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="install.html"><span><span>install</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1853780115%2FFunctions%2F769193423"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="install.html"><span class="token function">install</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pipeline<span class="token operator">: </span><span data-unresolved-link="io.ktor.server.application/Application///PointingToDeclaration/">Application</span><span class="token punctuation">, </span></span><span class="parameter ">configure<span class="token operator">: </span><span class="token keyword"></span><a href="-configuration/index.html">Kweb.Feature.Configuration</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">Kweb</a></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
         <div class="table"><a data-name="-1382244618%2FProperties%2F769193423" anchor-label="key" id="-1382244618%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
@@ -114,6 +95,25 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="key.html">key</a><span class="token operator">: </span><span data-unresolved-link="io.ktor.util/AttributeKey///PointingToDeclaration/">AttributeKey</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../index.html">Kweb</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="1853780115%2FFunctions%2F769193423" anchor-label="install" id="1853780115%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="install.html"><span><span>install</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1853780115%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="install.html"><span class="token function">install</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pipeline<span class="token operator">: </span><span data-unresolved-link="io.ktor.server.application/Application///PointingToDeclaration/">Application</span><span class="token punctuation">, </span></span><span class="parameter ">configure<span class="token operator">: </span><span class="token keyword"></span><a href="-configuration/index.html">Kweb.Feature.Configuration</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../index.html">Kweb</a></div></div></div>
                 </div>
               </div>
             </div>
