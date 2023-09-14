@@ -46,7 +46,7 @@ dependencies {
     api("io.ktor:ktor-server-websockets:2.3.0")
     api("io.ktor:ktor-server-default-headers:2.3.3")
     api("io.ktor:ktor-server-compression:2.3.4")
-    api("io.ktor:ktor-server-caching-headers:2.3.2")
+    api("io.ktor:ktor-server-caching-headers:2.3.4")
     api("io.ktor:ktor-network-tls-certificates:2.3.2")
 
     api("io.mola.galimatias:galimatias:0.2.1")
