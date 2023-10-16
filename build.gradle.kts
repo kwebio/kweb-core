@@ -47,7 +47,7 @@ dependencies {
     api("io.ktor:ktor-server-default-headers:2.3.3")
     api("io.ktor:ktor-server-compression:2.3.4")
     api("io.ktor:ktor-server-caching-headers:2.3.5")
-    api("io.ktor:ktor-network-tls-certificates:2.3.2")
+    api("io.ktor:ktor-network-tls-certificates:2.3.5")
 
     api("io.mola.galimatias:galimatias:0.2.1")
 
@@ -56,7 +56,7 @@ dependencies {
     ///////////////////////////
     // Dependencies for testing
     ///////////////////////////
-    testApi(platform("io.kotest:kotest-bom:5.6.2"))
+    testApi(platform("io.kotest:kotest-bom:5.7.2"))
     testApi(platform("org.junit:junit-bom:5.9.3"))
 
     testImplementation("io.kotest:kotest-runner-junit5")
@@ -67,7 +67,7 @@ dependencies {
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.10.0")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.10.0")
-    testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.5")
+    testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.7")
     testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.12.1")
     testImplementation("com.codeborne:selenide:6.13.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
