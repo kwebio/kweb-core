@@ -109,7 +109,7 @@ $dokka.location:kweb.html.events/KeyboardEvent/retrieved/#/PointingToDeclaration
 $dokka.location:kweb.html.events/KeyboardEvent/shiftKey/#/PointingToDeclaration/kweb-core/kweb.html.events/-keyboard-event/shift-key.html
 $dokka.location:kweb.html.events/KeyboardEvent/type/#/PointingToDeclaration/kweb-core/kweb.html.events/-keyboard-event/type.html
 $dokka.location:kweb.html.events/MouseEvent///PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/index.html
-$dokka.location:kweb.html.events/MouseEvent/MouseEvent/#kotlin.String#kotlin.Long#kotlin.Boolean#kotlin.Int#kotlin.Int#kotlin.Float#kotlin.Float#kotlin.Boolean#kotlin.Boolean#kotlin.Int?#kotlin.Int?#kotlin.String?#kotlin.Int#kotlin.Int#kotlin.Boolean#kotlin.Float#kotlin.Float#kotlinx.serialization.json.JsonElement/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/-mouse-event.html
+$dokka.location:kweb.html.events/MouseEvent/MouseEvent/#kotlin.String#kotlin.Long#kotlin.Boolean#kotlin.Int#kotlin.Int#kotlin.Float#kotlin.Float#kotlin.Boolean#kotlin.Boolean#kotlin.Int?#kotlin.Int?#kotlin.String?#kotlin.Int#kotlin.Int#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Boolean#kotlin.Float#kotlin.Float#kotlinx.serialization.json.JsonElement/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/-mouse-event.html
 $dokka.location:kweb.html.events/MouseEvent/altKey/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/alt-key.html
 $dokka.location:kweb.html.events/MouseEvent/button/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/button.html
 $dokka.location:kweb.html.events/MouseEvent/buttons/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/buttons.html
@@ -120,6 +120,10 @@ $dokka.location:kweb.html.events/MouseEvent/detail/#/PointingToDeclaration/kweb
 $dokka.location:kweb.html.events/MouseEvent/metaKey/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/meta-key.html
 $dokka.location:kweb.html.events/MouseEvent/movementX/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/movement-x.html
 $dokka.location:kweb.html.events/MouseEvent/movementY/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/movement-y.html
+$dokka.location:kweb.html.events/MouseEvent/offsetX/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/offset-x.html
+$dokka.location:kweb.html.events/MouseEvent/offsetY/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/offset-y.html
+$dokka.location:kweb.html.events/MouseEvent/pageX/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/page-x.html
+$dokka.location:kweb.html.events/MouseEvent/pageY/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/page-y.html
 $dokka.location:kweb.html.events/MouseEvent/region/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/region.html
 $dokka.location:kweb.html.events/MouseEvent/retrieved/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/retrieved.html
 $dokka.location:kweb.html.events/MouseEvent/screenX/#/PointingToDeclaration/kweb-core/kweb.html.events/-mouse-event/screen-x.html
@@ -560,6 +564,19 @@ $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver///PointingToDeclaratio
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver/JQuerySUIReceiver/#kweb.plugins.jqueryCore.JQueryReceiver/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/-j-query-s-u-i-receiver.html
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver/dimmer/#kweb.plugins.fomanticUI.JQuerySUIReceiver.DimmerAction/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/dimmer.html
 $dokka.location:kweb.plugins.fomanticUI/JQuerySUIReceiver/jqueryReceiver/#/PointingToDeclaration/kweb-core/kweb.plugins.fomanticUI/-j-query-s-u-i-receiver/jquery-receiver.html
+$dokka.location:kweb.plugins.image////PointingToDeclaration/kweb-core/kweb.plugins.image/index.html
+$dokka.location:kweb.plugins.image//toByteArray/#java.awt.image.BufferedImage#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.image/to-byte-array.html
+$dokka.location:kweb.plugins.image/DynamicImagePlugin///PointingToDeclaration/kweb-core/kweb.plugins.image/-dynamic-image-plugin/index.html
+$dokka.location:kweb.plugins.image/DynamicImagePlugin/DynamicImagePlugin/#kotlin.String#kotlin.String#kotlin.coroutines.SuspendFunction0[java.awt.image.BufferedImage]#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.image/-dynamic-image-plugin/-dynamic-image-plugin.html
+$dokka.location:kweb.plugins.image/DynamicImagePlugin/DynamicImagePlugin/#kotlin.String#kotlin.String#kotlin.coroutines.SuspendFunction0[kotlin.ByteArray]/PointingToDeclaration/kweb-core/kweb.plugins.image/-dynamic-image-plugin/-dynamic-image-plugin.html
+$dokka.location:kweb.plugins.image/DynamicImagePlugin/DynamicImagePlugin/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.coroutines.SuspendFunction0[java.awt.image.BufferedImage]]#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.image/-dynamic-image-plugin/-dynamic-image-plugin.html
+$dokka.location:kweb.plugins.image/DynamicImagePlugin/DynamicImagePlugin/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.coroutines.SuspendFunction0[kotlin.ByteArray]]/PointingToDeclaration/kweb-core/kweb.plugins.image/-dynamic-image-plugin/-dynamic-image-plugin.html
+$dokka.location:kweb.plugins.image/DynamicImagePlugin/appServerConfigurator/#io.ktor.server.routing.Routing/PointingToDeclaration/kweb-core/kweb.plugins.image/-dynamic-image-plugin/app-server-configurator.html
+$dokka.location:kweb.plugins.javascript////PointingToDeclaration/kweb-core/kweb.plugins.javascript/index.html
+$dokka.location:kweb.plugins.javascript/JavascriptPlugin///PointingToDeclaration/kweb-core/kweb.plugins.javascript/-javascript-plugin/index.html
+$dokka.location:kweb.plugins.javascript/JavascriptPlugin/JavascriptPlugin/#kotlin.String#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.javascript/-javascript-plugin/-javascript-plugin.html
+$dokka.location:kweb.plugins.javascript/JavascriptPlugin/JavascriptPlugin/#kotlin.String#kotlin.collections.Set[kotlin.String]/PointingToDeclaration/kweb-core/kweb.plugins.javascript/-javascript-plugin/-javascript-plugin.html
+$dokka.location:kweb.plugins.javascript/JavascriptPlugin/decorate/#org.jsoup.nodes.Document/PointingToDeclaration/kweb-core/kweb.plugins.javascript/-javascript-plugin/decorate.html
 $dokka.location:kweb.plugins.jqueryCore////PointingToDeclaration/kweb-core/kweb.plugins.jqueryCore/index.html
 $dokka.location:kweb.plugins.jqueryCore//executeOnSelf/kweb.Element#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.jqueryCore/execute-on-self.html
 $dokka.location:kweb.plugins.jqueryCore//jquery/kweb.Element#kotlin.String/PointingToDeclaration/kweb-core/kweb.plugins.jqueryCore/jquery.html
@@ -1173,6 +1190,8 @@ kweb.https
 kweb.plugins
 kweb.plugins.css
 kweb.plugins.fomanticUI
+kweb.plugins.image
+kweb.plugins.javascript
 kweb.plugins.jqueryCore
 kweb.plugins.specificKeyUp
 kweb.plugins.staticFiles
