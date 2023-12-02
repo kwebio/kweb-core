@@ -90,7 +90,9 @@
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="gettingstarted.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="dom.html"><strong aria-hidden="true">3.</strong> DOM Basics</a></li><li class="chapter-item expanded "><a href="events.html"><strong aria-hidden="true">4.</strong> Event Handling</a></li><li class="chapter-item expanded "><a href="state.html"><strong aria-hidden="true">5.</strong> Observer Pattern & State</a></li><li class="chapter-item expanded "><a href="routing.html"><strong aria-hidden="true">6.</strong> URL Routing</a></li><li class="chapter-item expanded "><a href="style.html"><strong aria-hidden="true">7.</strong> CSS & Style</a></li><li class="chapter-item expanded "><a href="components.html"><strong aria-hidden="true">8.</strong> Components</a></li><li class="chapter-item expanded "><a href="js.html" class="active"><strong aria-hidden="true">9.</strong> JavaScript Interop</a></li><li class="chapter-item expanded "><a href="speed.html"><strong aria-hidden="true">10.</strong> Speed & Efficiency</a></li><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">11.</strong> FAQ</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
 
         <!-- Track and set sidebar scroll position -->
@@ -184,6 +186,7 @@
 <li><a href="#calling-with-parameters">Calling with parameters</a></li>
 <li><a href="#function-caching-and-preloading">Function caching and preloading</a></li>
 <li><a href="#calling-a-javascript-function-with-a-result">Calling a JavaScript function with a result</a></li>
+<li><a href="#including-static-javascript-files">Including static JavaScript files</a></li>
 </ul>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p>Kweb's DOM interaction functionality is build on top of two functions that allow you to interact
@@ -226,6 +229,28 @@ Note that the last line of the <code>jsBody</code> parameter must be a <code>ret
 <p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>. 
 You can create one within Kweb's DSL using <strong>elementScope()</strong>. This scope will be cancelled automatically
 when this part of the DOM is no-longer needed.</p>
+<h2 id="including-static-javascript-files"><a class="header" href="#including-static-javascript-files">Including static JavaScript files</a></h2>
+<p>The <a href="https://docs.kweb.io/api/kweb-core/kweb.plugins.javascript/-javascript-plugin/index.html">JavascriptPlugin</a> can be
+used to conveniently add multiple static JavaScript files to your website, just add it to your resources folder as
+follows:</p>
+<pre><code>├── src
+│  └─── main
+│      └─── resources
+│          └─── script
+│              └── test.js
+</code></pre>
+<p>Next add the plugin via the <a href="https://docs.kweb.io/api/kweb-core/kweb/-kweb/index.html">plugins</a> constructor
+parameter.</p>
+<pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(JavascriptPlugin(&quot;script&quot;, &quot;test.js&quot;))) {
+    // ...
+}
+</code></pre>
+<p>Specify the relative path to the folder inside src/main/resources
+and the files to include (either a single file name or a list of file names).</p>
+<p>The files will be served under /kweb_static/js and linked from the websites
+HTML head tag, for example:</p>
+<pre><code class="language-html">&lt;script type=&quot;text/javascript&quot; src=&quot;/kweb_static/js/test.js&quot;&gt;&lt;/script&gt;
+</code></pre>
 
                     </main>
 
