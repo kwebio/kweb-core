@@ -37,7 +37,7 @@ dependencies {
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.3")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0-RC")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
     ////////////////////
     // Ktor dependencvies
@@ -62,14 +62,14 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5")
     testImplementation("io.kotest:kotest-assertions-core")
 
-    testImplementation("ch.qos.logback:logback-classic:1.4.9")
+    testImplementation("ch.qos.logback:logback-classic:1.4.14")
 
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.10.0")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.10.0")
     testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.7")
     testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.12.1")
-    testImplementation("com.codeborne:selenide:6.13.1")
+    testImplementation("com.codeborne:selenide:7.0.3")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
