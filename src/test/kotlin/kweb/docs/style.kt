@@ -5,6 +5,7 @@ import kweb.plugins.css.CSSPlugin
 // ANCHOR: fomanticUIPlugin
 import kweb.*
 import kweb.plugins.fomanticUI.*
+import kweb.plugins.javascript.JavascriptPlugin
 
 fun main() {
     Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
@@ -33,4 +34,12 @@ Kweb(port = 16097, plugins = listOf(CSSPlugin("css", "test.css"))) {
     // ...
 }
     // ANCHOR_END: CSSPlugin
+}
+
+fun main4() {
+    // ANCHOR: JavascriptPlugin
+Kweb(port = 16097, plugins = listOf(JavascriptPlugin("script", "test.js"))) {
+    // ...
+}
+    // ANCHOR_END: JavascriptPlugin
 }
