@@ -1192,6 +1192,10 @@ public final class kweb/html/events/KeyboardEvent$Companion {
 
 public final class kweb/html/events/MouseEvent {
 	public static final field Companion Lkweb/html/events/MouseEvent$Companion;
+<<<<<<< HEAD
+=======
+	public synthetic fun <init> (ILjava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+>>>>>>> a756018ed614c7ceb393a48fee22d86a580c56f5
 	public fun <init> (Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;)V
 	public synthetic fun <init> (Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;

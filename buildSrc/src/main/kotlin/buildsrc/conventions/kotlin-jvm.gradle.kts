@@ -7,15 +7,7 @@ plugins {
     kotlin("jvm")
 }
 
-val projectJvmVersion = 11
-
-kotlin {
-    jvmToolchain(projectJvmVersion)
-}
-
-java {
-    withSourcesJar()
-}
+val projectJvmVersion = 17
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
