@@ -1,0 +1,2045 @@
+public class kweb/AElement : kweb/Element {
+	public fun <init> (Lkweb/Element;Z)V
+	public synthetic fun <init> (Lkweb/Element;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getHref ()Ljava/lang/String;
+	public final fun getPreventDefault ()Z
+	public final fun setHref (Ljava/lang/String;)V
+}
+
+public class kweb/AttributeBuilder : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
+	public fun <init> ()V
+	public fun clear ()V
+	public final fun containsKey (Ljava/lang/Object;)Z
+	public fun containsKey (Ljava/lang/String;)Z
+	public final fun containsValue (Ljava/lang/Object;)Z
+	public fun containsValue (Lkotlinx/serialization/json/JsonPrimitive;)Z
+	public final fun entrySet ()Ljava/util/Set;
+	public final synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun get (Ljava/lang/Object;)Lkotlinx/serialization/json/JsonPrimitive;
+	public fun get (Ljava/lang/String;)Lkotlinx/serialization/json/JsonPrimitive;
+	public fun getEntries ()Ljava/util/Set;
+	public fun getKeys ()Ljava/util/Set;
+	public fun getSize ()I
+	public fun getValues ()Ljava/util/Collection;
+	public fun isEmpty ()Z
+	public final fun keySet ()Ljava/util/Set;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun put (Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;)Lkotlinx/serialization/json/JsonPrimitive;
+	public fun putAll (Ljava/util/Map;)V
+	public final synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun remove (Ljava/lang/Object;)Lkotlinx/serialization/json/JsonPrimitive;
+	public fun remove (Ljava/lang/String;)Lkotlinx/serialization/json/JsonPrimitive;
+	public final fun size ()I
+	public final fun values ()Ljava/util/Collection;
+}
+
+public final class kweb/AttributesKt {
+	public static final fun classes (Ljava/util/Map;Ljava/lang/Iterable;Z)Ljava/util/Map;
+	public static final fun classes (Ljava/util/Map;[Ljava/lang/String;Z)Ljava/util/Map;
+	public static synthetic fun classes$default (Ljava/util/Map;Ljava/lang/Iterable;ZILjava/lang/Object;)Ljava/util/Map;
+	public static synthetic fun classes$default (Ljava/util/Map;[Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/Map;
+	public static final fun getAttr ()Ljava/util/Map;
+	public static final fun getDisabled (Ljava/util/Map;)Ljava/util/Map;
+	public static final fun id (Ljava/util/Map;Ljava/lang/String;)Ljava/util/Map;
+	public static final fun set (Ljava/util/Map;Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;)Ljava/util/Map;
+}
+
+public final class kweb/BootstrapJs {
+	public static final field INSTANCE Lkweb/BootstrapJs;
+	public final fun hydrate (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+}
+
+public class kweb/BrElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/ButtonElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+	public final fun getWrapped ()Lkweb/Element;
+}
+
+public final class kweb/ButtonType : java/lang/Enum {
+	public static final field button Lkweb/ButtonType;
+	public static final field reset Lkweb/ButtonType;
+	public static final field submit Lkweb/ButtonType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/ButtonType;
+	public static fun values ()[Lkweb/ButtonType;
+}
+
+public class kweb/CanvasElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/CookieReceiver {
+	public fun <init> (Lkweb/WebBrowser;)V
+	public final fun getReceiver ()Lkweb/WebBrowser;
+	public final fun getString (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun remove (Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;BLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;CLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;DLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;FLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;ILjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;JLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;Ljava/lang/String;Ljava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Ljava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;SLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;ZLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;BLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;CLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;DLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;FLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;ILjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;JLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;Ljava/lang/String;Ljava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;Ljava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;SLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun set$default (Lkweb/CookieReceiver;Ljava/lang/String;ZLjava/time/Duration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class kweb/DebugInfo {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/Throwable;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)Lkweb/DebugInfo;
+	public static synthetic fun copy$default (Lkweb/DebugInfo;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)Lkweb/DebugInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAction ()Ljava/lang/String;
+	public final fun getJs ()Ljava/lang/String;
+	public final fun getThrowable ()Ljava/lang/Throwable;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public class kweb/DivElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/Element : kweb/html/events/EventGenerator {
+	public fun <init> (Lkweb/Element;)V
+	public fun <init> (Lkweb/WebBrowser;Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkweb/WebBrowser;Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun activate ()Lkweb/Element;
+	public final fun addClasses ([Ljava/lang/String;Z)Lkweb/Element;
+	public static synthetic fun addClasses$default (Lkweb/Element;[Ljava/lang/String;ZILjava/lang/Object;)Lkweb/Element;
+	public synthetic fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Lkweb/Element;
+	public fun addImmediateEventCode (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun addText (Ljava/lang/String;)Lkweb/Element;
+	public final fun assertPluginLoaded ([Lkotlin/reflect/KClass;)V
+	public final fun bind (Lkotlin/jvm/functions/Function1;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkweb/state/KVar;
+	public final fun bind (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkweb/state/KVar;
+	public static synthetic fun bind$default (Lkweb/Element;Lkotlin/jvm/functions/Function1;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/state/KVar;
+	public static synthetic fun bind$default (Lkweb/Element;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/state/KVar;
+	public final fun blur ()Lkweb/Element;
+	public final fun classes (Lkweb/state/KVal;)Lkweb/Element;
+	public final fun classes ([Ljava/lang/String;)Lkweb/Element;
+	public final fun deactivate ()Lkweb/Element;
+	public final fun delete ()V
+	public final fun deleteIfExists ()V
+	public final fun disable ()Lkweb/Element;
+	public final fun enable ()Lkweb/Element;
+	public final fun focus ()Lkweb/Element;
+	public fun getBrowser ()Lkweb/WebBrowser;
+	public final fun getCreator ()Lkweb/ElementCreator;
+	public final fun getFlags ()Ljava/util/concurrent/ConcurrentSkipListSet;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getOn ()Lkweb/html/events/OnReceiver;
+	public final fun getOnImmediate ()Lkweb/html/events/OnImmediateReceiver;
+	public final fun getStyle ()Lkweb/html/style/StyleReceiver;
+	public final fun getTag ()Ljava/lang/String;
+	public final fun getText ()Lkweb/state/KVar;
+	public final fun innerHTML (Ljava/lang/String;)Lkweb/Element;
+	public final fun innerHTML (Lkweb/state/KVal;)Lkweb/Element;
+	public final fun on (Ljava/lang/String;Z)Lkweb/html/events/OnReceiver;
+	public static synthetic fun on$default (Lkweb/Element;Ljava/lang/String;ZILjava/lang/Object;)Lkweb/html/events/OnReceiver;
+	public final fun plugin (Lkotlin/reflect/KClass;)Lkweb/plugins/KwebPlugin;
+	public final fun removeAttribute (Ljava/lang/String;)Lkweb/Element;
+	public final fun removeChildAt (I)Lkweb/Element;
+	public final fun removeChildren ()Lkweb/Element;
+	public final fun removeChildrenBetweenSpans (Ljava/lang/String;Ljava/lang/String;)Lkweb/Element;
+	public final fun removeClasses ([Ljava/lang/String;Z)Lkweb/Element;
+	public static synthetic fun removeClasses$default (Lkweb/Element;[Ljava/lang/String;ZILjava/lang/Object;)Lkweb/Element;
+	public final fun set (Ljava/lang/String;Ljava/lang/Number;)Lkweb/Element;
+	public final fun set (Ljava/lang/String;Ljava/lang/String;)Lkweb/Element;
+	public final fun set (Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;)Lkweb/Element;
+	public final fun set (Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;Ljava/lang/String;)Lkweb/Element;
+	public final fun set (Ljava/lang/String;Lkweb/state/KVal;)Lkweb/Element;
+	public final fun set (Ljava/lang/String;Z)Lkweb/Element;
+	public static synthetic fun set$default (Lkweb/Element;Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;Ljava/lang/String;ILjava/lang/Object;)Lkweb/Element;
+	public final fun setAttribute (Ljava/lang/String;Ljava/lang/Number;)Lkweb/Element;
+	public final fun setAttribute (Ljava/lang/String;Ljava/lang/String;)Lkweb/Element;
+	public final fun setAttribute (Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;Ljava/lang/String;)Lkweb/Element;
+	public final fun setAttribute (Ljava/lang/String;Lkweb/state/KVal;)Lkweb/Element;
+	public final fun setAttribute (Ljava/lang/String;Z)Lkweb/Element;
+	public static synthetic fun setAttribute$default (Lkweb/Element;Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;Ljava/lang/String;ILjava/lang/Object;)Lkweb/Element;
+	public final fun setAttributeRaw (Ljava/lang/String;Ljava/lang/Number;)Lkweb/Element;
+	public final fun setAttributeRaw (Ljava/lang/String;Ljava/lang/String;)Lkweb/Element;
+	public final fun setAttributeRaw (Ljava/lang/String;Lkotlinx/serialization/json/JsonPrimitive;)Lkweb/Element;
+	public final fun setAttributeRaw (Ljava/lang/String;Z)Lkweb/Element;
+	public final fun setAttributes ([Lkotlin/Pair;)Lkweb/Element;
+	public final fun setClasses ([Ljava/lang/String;)Lkweb/Element;
+	public final fun setId (Ljava/lang/String;)V
+	public final fun setText (Lkweb/state/KVar;)V
+	public final fun spellcheck (Z)Lkweb/Element;
+	public static synthetic fun spellcheck$default (Lkweb/Element;ZILjava/lang/Object;)Lkweb/Element;
+	public final fun text (Ljava/lang/String;)Lkweb/Element;
+	public final fun text (Lkweb/state/KVal;)Lkweb/Element;
+}
+
+public class kweb/ElementCreator {
+	public static final field Companion Lkweb/ElementCreator$Companion;
+	public fun <init> (Lkweb/Element;Lkweb/ElementCreator;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkweb/Element;Lkweb/ElementCreator;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun attr (Lkotlin/jvm/functions/Function1;)V
+	public final fun cleanup ()V
+	public final fun closeOnCleanup (Ljava/lang/AutoCloseable;)V
+	public final fun element (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/Element;
+	public final fun element (Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun element$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/Element;
+	public final fun elementScope ()Lkotlinx/coroutines/CoroutineScope;
+	public final fun getBrowser ()Lkweb/WebBrowser;
+	public final fun getElement ()Lkweb/Element;
+	public final fun getElementsCreatedCount ()I
+	public final fun getInsertBefore ()Ljava/lang/String;
+	public final fun getParent ()Lkweb/Element;
+	public final fun getParentCreator ()Lkweb/ElementCreator;
+	public final fun kval (Ljava/lang/Object;)Lkweb/state/KVal;
+	public final fun kvar (Ljava/lang/Object;)Lkweb/state/KVar;
+	public final fun onCleanup (ZLkotlin/jvm/functions/Function0;)V
+	public final fun require ([Lkotlin/reflect/KClass;)V
+	public final fun text (Ljava/lang/String;)V
+	public final fun text (Lkweb/state/KVal;)V
+}
+
+public final class kweb/ElementCreator$Companion : mu/two/KLogging {
+}
+
+public final class kweb/ElementKt {
+	public static final fun new (Lkweb/Element;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public static synthetic fun new$default (Lkweb/Element;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public class kweb/FooterElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/FormElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/H1Element : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/H2Element : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/H3Element : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/H4Element : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/H5Element : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/IElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/ImageElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/InputElement : kweb/ValueElement {
+	public fun <init> (Lkweb/Element;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkweb/Element;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun checked (Z)Lkweb/state/KVar;
+	public static synthetic fun checked$default (Lkweb/InputElement;ZILjava/lang/Object;)Lkweb/state/KVar;
+	public fun getElement ()Lkweb/Element;
+	public final fun select ()V
+	public final fun setReadOnly (Z)V
+	public final fun setSelectionRange (II)V
+}
+
+public final class kweb/InputType : java/lang/Enum {
+	public static final field button Lkweb/InputType;
+	public static final field checkbox Lkweb/InputType;
+	public static final field color Lkweb/InputType;
+	public static final field date Lkweb/InputType;
+	public static final field datetime Lkweb/InputType;
+	public static final field email Lkweb/InputType;
+	public static final field file Lkweb/InputType;
+	public static final field hidden Lkweb/InputType;
+	public static final field image Lkweb/InputType;
+	public static final field month Lkweb/InputType;
+	public static final field number Lkweb/InputType;
+	public static final field password Lkweb/InputType;
+	public static final field radio Lkweb/InputType;
+	public static final field range Lkweb/InputType;
+	public static final field reset Lkweb/InputType;
+	public static final field search Lkweb/InputType;
+	public static final field submit Lkweb/InputType;
+	public static final field tel Lkweb/InputType;
+	public static final field text Lkweb/InputType;
+	public static final field time Lkweb/InputType;
+	public static final field url Lkweb/InputType;
+	public static final field week Lkweb/InputType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/InputType;
+	public static fun values ()[Lkweb/InputType;
+}
+
+public final class kweb/KtorFeatureKt {
+	public static final field buildPageReplacementCode Ljava/lang/String;
+	public static final fun installKwebOnRemainingRoutes (Lio/ktor/server/application/Application;Lkotlin/jvm/functions/Function1;)V
+	public static final fun respondKweb (Lio/ktor/server/application/ApplicationCall;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun respondKwebRender (Lio/ktor/server/application/ApplicationCall;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class kweb/Kweb : java/io/Closeable {
+	public static final field Feature Lkweb/Kweb$Feature;
+	public fun <init> (IZLjava/util/List;Lio/ktor/server/engine/EngineSSLConnectorConfig;Lkweb/config/KwebConfiguration;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (IZLjava/util/List;Lio/ktor/server/engine/EngineSSLConnectorConfig;Lkweb/config/KwebConfiguration;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (ZLjava/util/List;Lkweb/config/KwebConfiguration;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addCallback (Ljava/lang/String;ILkotlin/jvm/functions/Function1;)V
+	public final fun callJs (Ljava/lang/String;Lkweb/client/FunctionCall;Lkweb/DebugInfo;)V
+	public static synthetic fun callJs$default (Lkweb/Kweb;Ljava/lang/String;Lkweb/client/FunctionCall;Lkweb/DebugInfo;ILjava/lang/Object;)V
+	public fun close ()V
+	public final fun determineClientPrefix (Lio/ktor/server/application/ApplicationCall;)Ljava/lang/String;
+	public final fun getClientState ()Lcom/google/common/cache/Cache;
+	public final fun getDebug ()Z
+	public final fun getKwebConfig ()Lkweb/config/KwebConfiguration;
+	public final fun getPlugins ()Ljava/util/List;
+	public final fun refreshAllPages ()V
+	public final fun removeCallback (Ljava/lang/String;I)V
+	public final fun respondKweb (Lio/ktor/server/application/ApplicationCall;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun sendMessage (Ljava/lang/String;Lkweb/client/Server2ClientMessage;)V
+}
+
+public final class kweb/Kweb$Feature : io/ktor/server/application/BaseApplicationPlugin {
+	public fun getKey ()Lio/ktor/util/AttributeKey;
+	public fun install (Lio/ktor/server/application/Application;Lkotlin/jvm/functions/Function1;)Lkweb/Kweb;
+	public synthetic fun install (Lio/ktor/util/pipeline/Pipeline;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class kweb/Kweb$Feature$Configuration {
+	public fun <init> ()V
+	public final fun getBuildPage ()Lkotlin/jvm/functions/Function1;
+	public final fun getDebug ()Z
+	public final fun getKwebConfig ()Lkweb/config/KwebConfiguration;
+	public final fun getPlugins ()Ljava/util/List;
+	public final fun setBuildPage (Lkotlin/jvm/functions/Function1;)V
+	public final fun setDebug (Z)V
+	public final fun setKwebConfig (Lkweb/config/KwebConfiguration;)V
+	public final fun setPlugins (Ljava/util/List;)V
+}
+
+public class kweb/LIElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/LabelElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+	public final fun setFor (Ljava/lang/String;)Lkweb/Element;
+	public final fun setFor (Lkweb/state/KVal;)Lkweb/Element;
+}
+
+public final class kweb/LinkElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/LinkRelationship : java/lang/Enum {
+	public static final field alternate Lkweb/LinkRelationship;
+	public static final field author Lkweb/LinkRelationship;
+	public static final field bookmark Lkweb/LinkRelationship;
+	public static final field dns-prefetch Lkweb/LinkRelationship;
+	public static final field help Lkweb/LinkRelationship;
+	public static final field icon Lkweb/LinkRelationship;
+	public static final field license Lkweb/LinkRelationship;
+	public static final field next Lkweb/LinkRelationship;
+	public static final field nofollow Lkweb/LinkRelationship;
+	public static final field noreferrer Lkweb/LinkRelationship;
+	public static final field preconnect Lkweb/LinkRelationship;
+	public static final field prefetch Lkweb/LinkRelationship;
+	public static final field preload Lkweb/LinkRelationship;
+	public static final field prev Lkweb/LinkRelationship;
+	public static final field search Lkweb/LinkRelationship;
+	public static final field stylesheet Lkweb/LinkRelationship;
+	public static final field tag Lkweb/LinkRelationship;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/LinkRelationship;
+	public static fun values ()[Lkweb/LinkRelationship;
+}
+
+public class kweb/MainElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/MetaElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/NavElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/OLElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/OptionElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/PElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/PreludeKt {
+	public static final fun a (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;ZLkotlin/jvm/functions/Function2;)Lkweb/AElement;
+	public static synthetic fun a$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;ZLkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/AElement;
+	public static final fun attr (Ljava/lang/String;Lkweb/state/KVar;)Lkweb/state/KVal;
+	public static final fun attr (Lkweb/state/KVar;Ljava/lang/String;)Lkweb/state/KVal;
+	public static final fun br (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/BrElement;
+	public static synthetic fun br$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/BrElement;
+	public static final fun button (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ButtonType;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/ButtonElement;
+	public static synthetic fun button$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ButtonType;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ButtonElement;
+	public static final fun canvas (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function2;)Lkweb/CanvasElement;
+	public static synthetic fun canvas$default (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/CanvasElement;
+	public static final fun div (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/DivElement;
+	public static synthetic fun div$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/DivElement;
+	public static final fun fileInput (Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/Map;)Lkweb/html/fileUpload/FileFormInput;
+	public static synthetic fun fileInput$default (Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lkweb/html/fileUpload/FileFormInput;
+	public static final fun footer (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/FooterElement;
+	public static synthetic fun footer$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/FooterElement;
+	public static final fun form (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/FormElement;
+	public static synthetic fun form$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/FormElement;
+	public static final fun get (Lkweb/state/KVar;I)Lkweb/state/KVar;
+	public static final fun get (Lkweb/state/KVar;Ljava/lang/Object;)Lkweb/state/KVar;
+	public static final fun getPath (Lkweb/state/KVar;)Lkweb/state/KVar;
+	public static final fun getPathQueryFragment (Lkweb/state/KVar;)Lkweb/state/KVar;
+	public static final fun getPathSegments (Lkweb/state/KVar;)Lkweb/state/KVar;
+	public static final fun getQuery (Lkweb/state/KVar;)Lkweb/state/KVar;
+	public static final fun h1 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H1Element;
+	public static synthetic fun h1$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H1Element;
+	public static final fun h2 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H2Element;
+	public static synthetic fun h2$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H2Element;
+	public static final fun h3 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H3Element;
+	public static synthetic fun h3$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H3Element;
+	public static final fun h4 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H4Element;
+	public static synthetic fun h4$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H4Element;
+	public static final fun h5 (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/H5Element;
+	public static synthetic fun h5$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/H5Element;
+	public static final fun i (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/IElement;
+	public static synthetic fun i$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/IElement;
+	public static final fun img (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ImageElement;
+	public static synthetic fun img$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ImageElement;
+	public static final fun input (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;)Lkweb/InputElement;
+	public static synthetic fun input$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/InputType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/InputElement;
+	public static final fun label (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LabelElement;
+	public static synthetic fun label$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LabelElement;
+	public static final fun li (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/LIElement;
+	public static synthetic fun li$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/LIElement;
+	public static final fun link (Lkweb/ElementCreator;Lkweb/LinkRelationship;Ljava/net/URL;Ljava/lang/String;Ljava/util/Map;)Lkweb/Element;
+	public static synthetic fun link$default (Lkweb/ElementCreator;Lkweb/LinkRelationship;Ljava/net/URL;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lkweb/Element;
+	public static final fun main (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/MainElement;
+	public static synthetic fun main$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/MainElement;
+	public static final fun meta (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/MetaElement;
+	public static synthetic fun meta$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/MetaElement;
+	public static final fun nav (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/NavElement;
+	public static synthetic fun nav$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/NavElement;
+	public static final fun ol (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/OLElement;
+	public static synthetic fun ol$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/OLElement;
+	public static final fun option (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/OptionElement;
+	public static synthetic fun option$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/OptionElement;
+	public static final fun p (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/PElement;
+	public static synthetic fun p$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/PElement;
+	public static final fun renderEach (Lkweb/ElementCreator;Lkweb/state/KVar;Lkotlin/jvm/functions/Function2;)V
+	public static final fun route (Lkweb/ElementCreator;Lkotlin/jvm/functions/Function1;)V
+	public static final fun section (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/SectionElement;
+	public static synthetic fun section$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SectionElement;
+	public static final fun select (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/SelectElement;
+	public static synthetic fun select$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SelectElement;
+	public static final fun span (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/SpanElement;
+	public static synthetic fun span$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SpanElement;
+	public static final fun subList (Lkweb/state/KVal;II)Lkweb/state/KVal;
+	public static final fun subList (Lkweb/state/KVar;II)Lkweb/state/KVar;
+	public static final fun table (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TableElement;
+	public static synthetic fun table$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TableElement;
+	public static final fun tbody (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TbodyElement;
+	public static synthetic fun tbody$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TbodyElement;
+	public static final fun td (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TdElement;
+	public static synthetic fun td$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TdElement;
+	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
+	public static final fun textArea (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TextAreaElement;
+	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
+	public static synthetic fun textArea$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TextAreaElement;
+	public static final fun tfoot (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TfootElement;
+	public static synthetic fun tfoot$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TfootElement;
+	public static final fun th (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ThElement;
+	public static synthetic fun th$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ThElement;
+	public static final fun thead (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TheadElement;
+	public static synthetic fun thead$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TheadElement;
+	public static final fun title (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/html/TitleElement;
+	public static synthetic fun title$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/html/TitleElement;
+	public static final fun toInt (Lkweb/state/KVar;)Lkweb/state/KVar;
+	public static final fun tr (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/TrElement;
+	public static synthetic fun tr$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/TrElement;
+	public static final fun ul (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/ULElement;
+	public static synthetic fun ul$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ULElement;
+	public static final fun viewport (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ViewportWidth;Lkweb/ViewportHeight;DDDLkweb/UserScalable;Lkotlin/jvm/functions/Function2;)Lkweb/MetaElement;
+	public static synthetic fun viewport$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ViewportWidth;Lkweb/ViewportHeight;DDDLkweb/UserScalable;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/MetaElement;
+}
+
+public final class kweb/Scheme : java/lang/Enum {
+	public static final field http Lkweb/Scheme;
+	public static final field https Lkweb/Scheme;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/Scheme;
+	public static fun values ()[Lkweb/Scheme;
+}
+
+public class kweb/SectionElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/SelectElement : kweb/ValueElement {
+	public fun <init> (Lkweb/Element;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkweb/Element;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public class kweb/SpanElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/TableElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/TbodyElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/TdElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/TextAreaElement : kweb/ValueElement {
+	public fun <init> (Lkweb/Element;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkweb/Element;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public class kweb/TfootElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/ThElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/TheadElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/TrElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public class kweb/ULElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public abstract class kweb/UserScalable {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValue ()Ljava/lang/String;
+}
+
+public final class kweb/UserScalable$No : kweb/UserScalable {
+	public static final field INSTANCE Lkweb/UserScalable$No;
+}
+
+public final class kweb/UserScalable$Yes : kweb/UserScalable {
+	public static final field INSTANCE Lkweb/UserScalable$Yes;
+}
+
+public abstract class kweb/ValueElement : kweb/Element {
+	public fun <init> (Lkweb/Element;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lkweb/Element;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getElement ()Lkweb/Element;
+	public final fun getInitialValue ()Ljava/lang/String;
+	public final fun getKvarUpdateEvent ()Ljava/lang/String;
+	public final fun getValue ()Lkweb/state/KVar;
+	public final fun getValue (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getValueJsExpression ()Ljava/lang/String;
+	public final fun setValue (Ljava/lang/String;)V
+	public final fun setValue (Lkweb/state/KVal;)V
+	public final fun setValue (Lkweb/state/KVar;)V
+}
+
+public final class kweb/ValueElement$DiffData {
+	public static final field Companion Lkweb/ValueElement$DiffData$Companion;
+	public fun <init> (IILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (IILjava/lang/String;)Lkweb/ValueElement$DiffData;
+	public static synthetic fun copy$default (Lkweb/ValueElement$DiffData;IILjava/lang/String;ILjava/lang/Object;)Lkweb/ValueElement$DiffData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDiffString ()Ljava/lang/String;
+	public final fun getPostfixOffset ()I
+	public final fun getPrefixEndIndex ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/ValueElement$DiffData$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/ValueElement$DiffData$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/ValueElement$DiffData;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/ValueElement$DiffData;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/ValueElement$DiffData$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/ValueElement$LastModificationSource : java/lang/Enum {
+	public static final field Browser Lkweb/ValueElement$LastModificationSource;
+	public static final field Server Lkweb/ValueElement$LastModificationSource;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/ValueElement$LastModificationSource;
+	public static fun values ()[Lkweb/ValueElement$LastModificationSource;
+}
+
+public final class kweb/ValueElement$Value {
+	public fun <init> (Ljava/lang/String;Lkweb/ValueElement$LastModificationSource;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkweb/ValueElement$LastModificationSource;
+	public final fun copy (Ljava/lang/String;Lkweb/ValueElement$LastModificationSource;)Lkweb/ValueElement$Value;
+	public static synthetic fun copy$default (Lkweb/ValueElement$Value;Ljava/lang/String;Lkweb/ValueElement$LastModificationSource;ILjava/lang/Object;)Lkweb/ValueElement$Value;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLastModificationSource ()Lkweb/ValueElement$LastModificationSource;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class kweb/ViewportHeight {
+	public abstract fun getValue ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportHeight$DeviceHeight : kweb/ViewportHeight {
+	public static final field INSTANCE Lkweb/ViewportHeight$DeviceHeight;
+	public fun getValue ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportHeight$Height : kweb/ViewportHeight {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lkweb/ViewportHeight$Height;
+	public static synthetic fun copy$default (Lkweb/ViewportHeight$Height;IILjava/lang/Object;)Lkweb/ViewportHeight$Height;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeight ()I
+	public fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class kweb/ViewportWidth {
+	public abstract fun getAsString ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportWidth$DeviceWidth : kweb/ViewportWidth {
+	public static final field INSTANCE Lkweb/ViewportWidth$DeviceWidth;
+	public fun getAsString ()Ljava/lang/String;
+}
+
+public final class kweb/ViewportWidth$Width : kweb/ViewportWidth {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lkweb/ViewportWidth$Width;
+	public static synthetic fun copy$default (Lkweb/ViewportWidth$Width;IILjava/lang/Object;)Lkweb/ViewportWidth$Width;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getAsString ()Ljava/lang/String;
+	public final fun getWidth ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/WebBrowser {
+	public fun <init> (Ljava/lang/String;Lkweb/client/HttpRequestInfo;Lkweb/Kweb;)V
+	public final fun addCloseListener (Lkotlin/jvm/functions/Function0;)I
+	public final fun batch (Lkweb/WebBrowser$CatcherType;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public final fun callJsFunction (Ljava/lang/String;[Lkotlinx/serialization/json/JsonElement;)V
+	public final fun callJsFunctionWithCallback (Ljava/lang/String;ILkotlin/jvm/functions/Function1;[Lkotlinx/serialization/json/JsonElement;)V
+	public final fun callJsFunctionWithResult (Ljava/lang/String;[Lkotlinx/serialization/json/JsonElement;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun catchOutbound (Lkweb/WebBrowser$CatcherType;Lkotlin/jvm/functions/Function0;)Lkotlin/Pair;
+	public final fun close ()V
+	public final fun generateId ()Ljava/lang/String;
+	public final fun getDoc ()Lkweb/html/Document;
+	public final fun getGurl ()Lkweb/state/KVar;
+	public final fun getHtmlDocument ()Ljava/util/concurrent/atomic/AtomicReference;
+	public final fun getHttpRequestInfo ()Lkweb/client/HttpRequestInfo;
+	public final fun getKweb ()Lkweb/Kweb;
+	public final fun getOutboundMessageCatcher ()Ljava/lang/ThreadLocal;
+	public final fun getSessionId ()Ljava/lang/String;
+	public final fun getUrl ()Lkweb/state/KVar;
+	public final fun getWindow ()Lkweb/html/Window;
+	public final fun isCatchingOutbound ()Lkweb/WebBrowser$CatcherType;
+	public final fun onMessage (Lkotlin/jvm/functions/Function1;)V
+	public final fun removeCallback (I)V
+	public final fun removeCloseListener (I)V
+	public final fun sendMessage (Lkotlinx/serialization/json/JsonElement;)V
+	public static synthetic fun sendMessage$default (Lkweb/WebBrowser;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)V
+}
+
+public final class kweb/WebBrowser$CatcherType : java/lang/Enum {
+	public static final field EVENT Lkweb/WebBrowser$CatcherType;
+	public static final field IMMEDIATE_EVENT Lkweb/WebBrowser$CatcherType;
+	public static final field RENDER Lkweb/WebBrowser$CatcherType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/WebBrowser$CatcherType;
+	public static fun values ()[Lkweb/WebBrowser$CatcherType;
+}
+
+public final class kweb/WebBrowser$FuncDeclaration {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lkweb/WebBrowser$FuncDeclaration;
+	public static synthetic fun copy$default (Lkweb/WebBrowser$FuncDeclaration;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lkweb/WebBrowser$FuncDeclaration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getJs ()Ljava/lang/String;
+	public final fun getParams ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/WebBrowser$OutboundMessageCatcher {
+	public fun <init> (Lkweb/WebBrowser$CatcherType;Ljava/util/List;)V
+	public final fun component1 ()Lkweb/WebBrowser$CatcherType;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Lkweb/WebBrowser$CatcherType;Ljava/util/List;)Lkweb/WebBrowser$OutboundMessageCatcher;
+	public static synthetic fun copy$default (Lkweb/WebBrowser$OutboundMessageCatcher;Lkweb/WebBrowser$CatcherType;Ljava/util/List;ILjava/lang/Object;)Lkweb/WebBrowser$OutboundMessageCatcher;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCatcherType ()Lkweb/WebBrowser$CatcherType;
+	public final fun getFunctionList ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun setCatcherType (Lkweb/WebBrowser$CatcherType;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/Client2ServerMessage {
+	public static final field Companion Lkweb/client/Client2ServerMessage$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Boolean;
+	public final fun component3 ()Lkweb/client/Client2ServerMessage$ErrorMessage;
+	public final fun component4 ()Lkweb/client/Client2ServerMessage$C2SCallback;
+	public final fun component5 ()Lkotlinx/serialization/json/JsonElement;
+	public final fun component6 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;Z)Lkweb/client/Client2ServerMessage;
+	public static synthetic fun copy$default (Lkweb/client/Client2ServerMessage;Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;ZILjava/lang/Object;)Lkweb/client/Client2ServerMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCallback ()Lkweb/client/Client2ServerMessage$C2SCallback;
+	public final fun getError ()Lkweb/client/Client2ServerMessage$ErrorMessage;
+	public final fun getHello ()Ljava/lang/Boolean;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getKeepalive ()Z
+	public final fun getOnMessageData ()Lkotlinx/serialization/json/JsonElement;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/Client2ServerMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/client/Client2ServerMessage$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/client/Client2ServerMessage;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Client2ServerMessage$C2SCallback {
+	public static final field Companion Lkweb/client/Client2ServerMessage$C2SCallback$Companion;
+	public fun <init> (ILkotlinx/serialization/json/JsonElement;)V
+	public synthetic fun <init> (ILkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()Lkotlinx/serialization/json/JsonElement;
+	public final fun copy (ILkotlinx/serialization/json/JsonElement;)Lkweb/client/Client2ServerMessage$C2SCallback;
+	public static synthetic fun copy$default (Lkweb/client/Client2ServerMessage$C2SCallback;ILkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/client/Client2ServerMessage$C2SCallback;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCallbackId ()I
+	public final fun getData ()Lkotlinx/serialization/json/JsonElement;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/Client2ServerMessage$C2SCallback$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/client/Client2ServerMessage$C2SCallback$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage$C2SCallback;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/client/Client2ServerMessage$C2SCallback;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Client2ServerMessage$C2SCallback$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Client2ServerMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Client2ServerMessage$ErrorMessage {
+	public static final field Companion Lkweb/client/Client2ServerMessage$ErrorMessage$Companion;
+	public fun <init> (Ljava/lang/String;Lkweb/client/Client2ServerMessage$ErrorMessage$Error;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
+	public final fun copy (Ljava/lang/String;Lkweb/client/Client2ServerMessage$ErrorMessage$Error;)Lkweb/client/Client2ServerMessage$ErrorMessage;
+	public static synthetic fun copy$default (Lkweb/client/Client2ServerMessage$ErrorMessage;Ljava/lang/String;Lkweb/client/Client2ServerMessage$ErrorMessage$Error;ILjava/lang/Object;)Lkweb/client/Client2ServerMessage$ErrorMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDebugToken ()Ljava/lang/String;
+	public final fun getError ()Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/Client2ServerMessage$ErrorMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/client/Client2ServerMessage$ErrorMessage$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage$ErrorMessage;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/client/Client2ServerMessage$ErrorMessage;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Client2ServerMessage$ErrorMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Client2ServerMessage$ErrorMessage$Error {
+	public static final field Companion Lkweb/client/Client2ServerMessage$ErrorMessage$Error$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
+	public static synthetic fun copy$default (Lkweb/client/Client2ServerMessage$ErrorMessage$Error;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/Client2ServerMessage$ErrorMessage$Error$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/client/Client2ServerMessage$ErrorMessage$Error$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/client/Client2ServerMessage$ErrorMessage$Error;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Client2ServerMessage$ErrorMessage$Error$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class kweb/client/ClientConnection {
+	public abstract fun send (Ljava/lang/String;)V
+}
+
+public final class kweb/client/ClientConnection$Caching : kweb/client/ClientConnection {
+	public fun <init> ()V
+	public final fun queueSize ()I
+	public final fun read ()Ljava/util/List;
+	public fun send (Ljava/lang/String;)V
+}
+
+public final class kweb/client/ClientConnection$WebSocket : kweb/client/ClientConnection {
+	public fun <init> (Lio/ktor/websocket/WebSocketSession;)V
+	public final fun close (Lio/ktor/websocket/CloseReason;)V
+	public final fun getSendCount ()I
+	public fun send (Ljava/lang/String;)V
+	public final fun setSendCount (I)V
+}
+
+public final class kweb/client/FunctionCall {
+	public static final field Companion Lkweb/client/FunctionCall$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun component6 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;)Lkweb/client/FunctionCall;
+	public static synthetic fun copy$default (Lkweb/client/FunctionCall;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;ILjava/lang/Object;)Lkweb/client/FunctionCall;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getArguments ()Ljava/util/List;
+	public final fun getCallbackId ()Ljava/lang/Integer;
+	public final fun getDebugToken ()Ljava/lang/String;
+	public final fun getJs ()Ljava/lang/String;
+	public final fun getJsId ()Ljava/lang/Integer;
+	public final fun getParameters ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/FunctionCall$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/client/FunctionCall$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/FunctionCall;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/client/FunctionCall;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/FunctionCall$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/HttpRequestInfo {
+	public fun <init> (Lio/ktor/server/request/ApplicationRequest;)V
+	public final fun component1 ()Lio/ktor/server/request/ApplicationRequest;
+	public final fun copy (Lio/ktor/server/request/ApplicationRequest;)Lkweb/client/HttpRequestInfo;
+	public static synthetic fun copy$default (Lkweb/client/HttpRequestInfo;Lio/ktor/server/request/ApplicationRequest;ILjava/lang/Object;)Lkweb/client/HttpRequestInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCookies ()Lio/ktor/server/request/RequestCookies;
+	public final fun getRemoteHost ()Ljava/lang/String;
+	public final fun getRequest ()Lio/ktor/server/request/ApplicationRequest;
+	public final fun getRequestedUrl ()Ljava/lang/String;
+	public final fun getUserAgent ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/RemoteClientState {
+	public fun <init> (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addCloseHandler (Lkotlin/jvm/functions/Function0;)I
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkweb/client/ClientConnection;
+	public final fun component3 ()Ljava/util/Map;
+	public final fun component4 ()Ljava/util/concurrent/ConcurrentHashMap;
+	public final fun component5 ()Ljava/util/Map;
+	public final fun component6 ()Ljava/time/Instant;
+	public final fun component7 ()Lkotlin/jvm/functions/Function1;
+	public final fun copy (Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;)Lkweb/client/RemoteClientState;
+	public static synthetic fun copy$default (Lkweb/client/RemoteClientState;Ljava/lang/String;Lkweb/client/ClientConnection;Ljava/util/Map;Ljava/util/concurrent/ConcurrentHashMap;Ljava/util/Map;Ljava/time/Instant;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/client/RemoteClientState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getClientConnection ()Lkweb/client/ClientConnection;
+	public final fun getDebugTokens ()Ljava/util/Map;
+	public final fun getEventHandlers ()Ljava/util/Map;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLastModified ()Ljava/time/Instant;
+	public final fun getOnCloseHandlers ()Ljava/util/concurrent/ConcurrentHashMap;
+	public final fun getOnMessageFunction ()Lkotlin/jvm/functions/Function1;
+	public fun hashCode ()I
+	public final fun removeCloseHandler (I)V
+	public final fun send (Lkweb/client/Server2ClientMessage;)V
+	public final fun setClientConnection (Lkweb/client/ClientConnection;)V
+	public final fun setLastModified (Ljava/time/Instant;)V
+	public final fun setOnMessageFunction (Lkotlin/jvm/functions/Function1;)V
+	public fun toString ()Ljava/lang/String;
+	public final fun triggerCloseListeners ()V
+}
+
+public final class kweb/client/Server2ClientMessage {
+	public static final field Companion Lkweb/client/Server2ClientMessage$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public fun <init> (Ljava/lang/String;Lkweb/client/FunctionCall;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;)Lkweb/client/Server2ClientMessage;
+	public static synthetic fun copy$default (Lkweb/client/Server2ClientMessage;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lkweb/client/Server2ClientMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFunctionCalls ()Ljava/util/List;
+	public final fun getYourId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/client/Server2ClientMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/client/Server2ClientMessage$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/client/Server2ClientMessage;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/client/Server2ClientMessage;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/client/Server2ClientMessage$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class kweb/config/KwebConfiguration {
+	public fun <init> ()V
+	public abstract fun getBuildpageTimeout ()Ljava/time/Duration;
+	public fun getClientOfflineToastTextTemplate ()Ljava/lang/String;
+	public abstract fun getClientStateStatsEnabled ()Z
+	public abstract fun getClientStateTimeout ()Ljava/time/Duration;
+	public fun getHandleFavicon ()Z
+	public fun getUrlPathPrefix ()Ljava/lang/String;
+	public fun onWebsocketMessageHandlingFailure (Ljava/lang/Exception;)V
+	public final fun validate ()V
+}
+
+protected final class kweb/config/KwebConfiguration$Accessor {
+	public static final field INSTANCE Lkweb/config/KwebConfiguration$Accessor;
+	public final fun getProperty (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public class kweb/config/KwebDefaultConfiguration : kweb/config/KwebConfiguration {
+	public fun <init> ()V
+	public fun getBuildpageTimeout ()Ljava/time/Duration;
+	public fun getClientStateStatsEnabled ()Z
+	public fun getClientStateTimeout ()Ljava/time/Duration;
+}
+
+public final class kweb/html/BodyElement : kweb/Element {
+	public fun <init> (Lkweb/WebBrowser;Ljava/lang/String;)V
+}
+
+public final class kweb/html/Document : kweb/html/events/EventGenerator {
+	public fun <init> (Lkweb/WebBrowser;)V
+	public synthetic fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Lkweb/html/Document;
+	public fun addImmediateEventCode (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun body (Lkotlin/jvm/functions/Function2;)Lkweb/html/BodyElement;
+	public static synthetic fun body$default (Lkweb/html/Document;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/html/BodyElement;
+	public final fun execCommand (Ljava/lang/String;)V
+	public final fun getBody ()Lkweb/html/BodyElement;
+	public fun getBrowser ()Lkweb/WebBrowser;
+	public final fun getCookie ()Lkweb/CookieReceiver;
+	public final fun getElementById (Ljava/lang/String;)Lkweb/Element;
+	public final fun getHead ()Lkweb/html/HeadElement;
+	public final fun getLocalStorage ()Lkweb/html/StorageReceiver;
+	public final fun getOn ()Lkweb/html/events/OnReceiver;
+	public final fun getOnImmediate ()Lkweb/html/events/OnImmediateReceiver;
+	public final fun getOrigin (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getReceiver ()Lkweb/WebBrowser;
+	public final fun getSessionStorage ()Lkweb/html/StorageReceiver;
+	public final fun head (Lkotlin/jvm/functions/Function2;)Lkweb/html/HeadElement;
+	public static synthetic fun head$default (Lkweb/html/Document;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/html/HeadElement;
+	public final fun on (Ljava/lang/String;Z)Lkweb/html/events/OnReceiver;
+	public static synthetic fun on$default (Lkweb/html/Document;Ljava/lang/String;ZILjava/lang/Object;)Lkweb/html/events/OnReceiver;
+}
+
+public final class kweb/html/HeadElement : kweb/Element {
+	public fun <init> (Lkweb/WebBrowser;Ljava/lang/String;)V
+}
+
+public final class kweb/html/StorageReceiver {
+	public fun <init> (Lkweb/WebBrowser;Lkweb/html/StorageType;)V
+	public final fun getReceiver ()Lkweb/WebBrowser;
+	public final fun getString (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getType ()Lkweb/html/StorageType;
+	public final fun remove (Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;B)V
+	public final fun set (Ljava/lang/String;C)V
+	public final fun set (Ljava/lang/String;D)V
+	public final fun set (Ljava/lang/String;F)V
+	public final fun set (Ljava/lang/String;I)V
+	public final fun set (Ljava/lang/String;J)V
+	public final fun set (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun set (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)V
+	public final fun set (Ljava/lang/String;S)V
+	public final fun set (Ljava/lang/String;Z)V
+}
+
+public final class kweb/html/StorageType : java/lang/Enum {
+	public static final field local Lkweb/html/StorageType;
+	public static final field session Lkweb/html/StorageType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/html/StorageType;
+	public static fun values ()[Lkweb/html/StorageType;
+}
+
+public class kweb/html/TitleElement : kweb/Element {
+	public fun <init> (Lkweb/Element;)V
+}
+
+public final class kweb/html/Window : kweb/html/events/EventGenerator {
+	public fun <init> (Lkweb/WebBrowser;)V
+	public synthetic fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Lkweb/html/Window;
+	public fun addImmediateEventCode (Ljava/lang/String;Ljava/lang/String;)V
+	public fun getBrowser ()Lkweb/WebBrowser;
+	public final fun getOn ()Lkweb/html/events/OnReceiver;
+	public final fun getOnImmediate ()Lkweb/html/events/OnImmediateReceiver;
+	public final fun on (Ljava/lang/String;Z)Lkweb/html/events/OnReceiver;
+	public static synthetic fun on$default (Lkweb/html/Window;Ljava/lang/String;ZILjava/lang/Object;)Lkweb/html/events/OnReceiver;
+}
+
+public final class kweb/html/events/Event {
+	public static final field Companion Lkweb/html/events/Event$Companion;
+	public fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonElement;
+	public final fun copy (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Lkweb/html/events/Event;
+	public static synthetic fun copy$default (Lkweb/html/events/Event;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/html/events/Event;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRetrieved ()Lkotlinx/serialization/json/JsonElement;
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/html/events/Event$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/html/events/Event$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/events/Event;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/html/events/Event;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/html/events/Event$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class kweb/html/events/EventGenerator {
+	public abstract fun addEventListener (Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public abstract fun addImmediateEventCode (Ljava/lang/String;Ljava/lang/String;)V
+	public abstract fun getBrowser ()Lkweb/WebBrowser;
+}
+
+public final class kweb/html/events/EventGenerator$DefaultImpls {
+	public static synthetic fun addEventListener$default (Lkweb/html/events/EventGenerator;Ljava/lang/String;Ljava/util/Set;Ljava/lang/String;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class kweb/html/events/KeyboardEvent {
+	public static final field Companion Lkweb/html/events/KeyboardEvent$Companion;
+	public fun <init> (Ljava/lang/String;JLjava/lang/String;ZZLjava/lang/String;IZZLjava/lang/String;ZLkotlinx/serialization/json/JsonElement;)V
+	public synthetic fun <init> (Ljava/lang/String;JLjava/lang/String;ZZLjava/lang/String;IZZLjava/lang/String;ZLkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/String;
+	public final fun component11 ()Z
+	public final fun component12 ()Lkotlinx/serialization/json/JsonElement;
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()I
+	public final fun component8 ()Z
+	public final fun component9 ()Z
+	public final fun copy (Ljava/lang/String;JLjava/lang/String;ZZLjava/lang/String;IZZLjava/lang/String;ZLkotlinx/serialization/json/JsonElement;)Lkweb/html/events/KeyboardEvent;
+	public static synthetic fun copy$default (Lkweb/html/events/KeyboardEvent;Ljava/lang/String;JLjava/lang/String;ZZLjava/lang/String;IZZLjava/lang/String;ZLkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/html/events/KeyboardEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAltKey ()Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getCtrlKey ()Z
+	public final fun getDetail ()J
+	public final fun getKey ()Ljava/lang/String;
+	public final fun getLocale ()Ljava/lang/String;
+	public final fun getLocation ()I
+	public final fun getMetaKey ()Z
+	public final fun getRetrieved ()Lkotlinx/serialization/json/JsonElement;
+	public final fun getShiftKey ()Z
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isComposing ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/html/events/KeyboardEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/html/events/KeyboardEvent$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/events/KeyboardEvent;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/html/events/KeyboardEvent;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/html/events/KeyboardEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/html/events/MouseEvent {
+	public static final field Companion Lkweb/html/events/MouseEvent$Companion;
+	public fun <init> (Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;)V
+	public synthetic fun <init> (Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/Integer;
+	public final fun component11 ()Ljava/lang/Integer;
+	public final fun component12 ()Ljava/lang/String;
+	public final fun component13 ()I
+	public final fun component14 ()I
+	public final fun component15 ()F
+	public final fun component16 ()F
+	public final fun component17 ()F
+	public final fun component18 ()F
+	public final fun component19 ()Z
+	public final fun component2 ()J
+	public final fun component20 ()F
+	public final fun component21 ()F
+	public final fun component22 ()Lkotlinx/serialization/json/JsonElement;
+	public final fun component3 ()Z
+	public final fun component4 ()I
+	public final fun component5 ()I
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()Z
+	public final fun component9 ()Z
+	public final fun copy (Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;)Lkweb/html/events/MouseEvent;
+	public static synthetic fun copy$default (Lkweb/html/events/MouseEvent;Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Lkweb/html/events/MouseEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAltKey ()Z
+	public final fun getButton ()I
+	public final fun getButtons ()I
+	public final fun getClientX ()F
+	public final fun getClientY ()F
+	public final fun getCtrlKey ()Z
+	public final fun getDetail ()J
+	public final fun getMetaKey ()Z
+	public final fun getMovementX ()Ljava/lang/Integer;
+	public final fun getMovementY ()Ljava/lang/Integer;
+	public final fun getOffsetX ()F
+	public final fun getOffsetY ()F
+	public final fun getPageX ()F
+	public final fun getPageY ()F
+	public final fun getRegion ()Ljava/lang/String;
+	public final fun getRetrieved ()Lkotlinx/serialization/json/JsonElement;
+	public final fun getScreenX ()I
+	public final fun getScreenY ()I
+	public final fun getShiftKey ()Z
+	public final fun getType ()Ljava/lang/String;
+	public final fun getX ()F
+	public final fun getY ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/html/events/MouseEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/html/events/MouseEvent$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/events/MouseEvent;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/html/events/MouseEvent;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/html/events/MouseEvent$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/html/events/OnImmediateReceiver {
+	public fun <init> (Lkweb/html/events/EventGenerator;)V
+	public final fun abort (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun afterprint (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun beforeprint (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun beforeunload (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun blur (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun change (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun click (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun contextmenu (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun copy (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun cut (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun dblclick (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun drag (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun dragend (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun dragenter (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun dragleave (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun dragover (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun dragstart (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun drop (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun error (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun event (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun focus (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun focusin (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun focusout (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun hashchange (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun input (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun invalid (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun keydown (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun keypress (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun keyup (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun load (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun mousedown (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun mouseenter (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun mouseleave (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun mousemove (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun mouseout (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun mouseover (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun mouseup (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun pagehide (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun pageshow (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun paste (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun reset (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun resize (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun scroll (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun search (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun select (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun selectionchange (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun selectstart (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun submit (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+	public final fun unload (Lkotlin/jvm/functions/Function0;)Lkweb/html/events/EventGenerator;
+}
+
+public final class kweb/html/events/OnImmediateReceiverKt {
+	public static final fun main ()V
+	public static synthetic fun main ([Ljava/lang/String;)V
+}
+
+public final class kweb/html/events/OnReceiver {
+	public static final field Companion Lkweb/html/events/OnReceiver$Companion;
+	public fun <init> (Lkweb/html/events/EventGenerator;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Lkweb/html/events/EventGenerator;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun abort (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun afterprint (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun beforeprint (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun beforeunload (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun blur (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun change (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun click (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun contextmenu (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun copy (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun cut (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun dblclick (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun drag (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun dragend (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun dragenter (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun dragleave (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun dragover (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun dragstart (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun drop (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun error (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun event (Ljava/lang/String;Ljava/util/Set;Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public static synthetic fun event$default (Lkweb/html/events/OnReceiver;Ljava/lang/String;Ljava/util/Set;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/html/events/EventGenerator;
+	public final fun focus (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun focusin (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun focusout (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun getPreventDefault ()Z
+	public final fun getSource ()Lkweb/html/events/EventGenerator;
+	public final fun hashchange (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun input (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun invalid (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun keydown (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun keypress (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun keyup (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun load (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun mousedown (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun mouseenter (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun mouseleave (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun mousemove (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun mouseout (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun mouseover (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun mouseup (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun pagehide (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun pageshow (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun paste (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun popstate (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun reset (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun resize (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun scroll (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun search (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun select (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun selectionchange (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun selectstart (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun submit (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+	public final fun unload (Lkotlin/jvm/functions/Function1;)Lkweb/html/events/EventGenerator;
+}
+
+public final class kweb/html/events/OnReceiver$Companion {
+	public final fun getMemberPropertiesCache ()Ljava/util/concurrent/ConcurrentHashMap;
+}
+
+public final class kweb/html/events/OnReceiverKt {
+	public static final fun getLogger ()Lmu/two/KLogger;
+}
+
+public final class kweb/html/fileUpload/FileFormInput {
+	public fun <init> ()V
+	public final fun getInputElement ()Lkweb/Element;
+	public final fun isMultiSelect (Z)V
+	public final fun onFileSelect (Lkotlin/jvm/functions/Function0;)V
+	public final fun retrieveFile (Lkotlin/jvm/functions/Function1;)V
+	public final fun setAccept (Ljava/lang/String;)V
+	public final fun setInputElement (Lkweb/Element;)V
+}
+
+public final class kweb/html/fileUpload/FileUpload {
+	public static final field Companion Lkweb/html/fileUpload/FileUpload$Companion;
+	public fun <init> (Ljava/lang/String;ILjava/lang/String;)V
+	public final fun getBase64Content ()Ljava/lang/String;
+	public final fun getFileName ()Ljava/lang/String;
+	public final fun getFileSize ()I
+}
+
+public final class kweb/html/fileUpload/FileUpload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lkweb/html/fileUpload/FileUpload$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lkweb/html/fileUpload/FileUpload;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lkweb/html/fileUpload/FileUpload;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/html/fileUpload/FileUpload$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class kweb/html/style/StyleReceiver {
+	public fun <init> (Lkweb/Element;)V
+	public final fun remove ()V
+	public final fun setDisplay (Lkweb/html/style/StyleReceiver$DisplayValues;)V
+	public final fun setWidth (Ljava/lang/String;)V
+}
+
+public final class kweb/html/style/StyleReceiver$DisplayValues : java/lang/Enum {
+	public static final field block Lkweb/html/style/StyleReceiver$DisplayValues;
+	public static final field none Lkweb/html/style/StyleReceiver$DisplayValues;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/html/style/StyleReceiver$DisplayValues;
+	public static fun values ()[Lkweb/html/style/StyleReceiver$DisplayValues;
+}
+
+public final class kweb/https/SSLConfig : io/ktor/server/engine/EngineSSLConnectorConfig {
+	public fun <init> ()V
+	public fun <init> (ILjava/lang/String;Ljava/security/KeyStore;Ljava/io/File;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Ljava/security/KeyStore;Ljava/io/File;Ljava/util/List;)V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/security/KeyStore;Ljava/io/File;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Ljava/security/KeyStore;Ljava/io/File;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component10 ()Ljava/util/List;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/security/KeyStore;
+	public final fun component4 ()Ljava/io/File;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lkotlin/jvm/functions/Function0;
+	public final fun component7 ()Lkotlin/jvm/functions/Function0;
+	public final fun component8 ()Ljava/security/KeyStore;
+	public final fun component9 ()Ljava/io/File;
+	public final fun copy (ILjava/lang/String;Ljava/security/KeyStore;Ljava/io/File;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Ljava/security/KeyStore;Ljava/io/File;Ljava/util/List;)Lkweb/https/SSLConfig;
+	public static synthetic fun copy$default (Lkweb/https/SSLConfig;ILjava/lang/String;Ljava/security/KeyStore;Ljava/io/File;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;Ljava/security/KeyStore;Ljava/io/File;Ljava/util/List;ILjava/lang/Object;)Lkweb/https/SSLConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getEnabledProtocols ()Ljava/util/List;
+	public fun getHost ()Ljava/lang/String;
+	public fun getKeyAlias ()Ljava/lang/String;
+	public fun getKeyStore ()Ljava/security/KeyStore;
+	public fun getKeyStorePassword ()Lkotlin/jvm/functions/Function0;
+	public fun getKeyStorePath ()Ljava/io/File;
+	public fun getPort ()I
+	public fun getPrivateKeyPassword ()Lkotlin/jvm/functions/Function0;
+	public fun getTrustStore ()Ljava/security/KeyStore;
+	public fun getTrustStorePath ()Ljava/io/File;
+	public fun getType ()Lio/ktor/server/engine/ConnectorType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/https/SSLConfigKt {
+	public static final fun getDefaultKeyStore ()Ljava/security/KeyStore;
+}
+
+public final class kweb/plugins/FaviconPlugin : kweb/plugins/KwebPlugin {
+	public static final field Companion Lkweb/plugins/FaviconPlugin$Companion;
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public fun appServerConfigurator (Lio/ktor/server/routing/Routing;)V
+}
+
+public final class kweb/plugins/FaviconPlugin$Companion {
+	public final fun notFound ()Lkweb/plugins/FaviconPlugin;
+}
+
+public abstract class kweb/plugins/KwebPlugin {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Set;)V
+	public synthetic fun <init> (Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun appServerConfigurator (Lio/ktor/server/routing/Routing;)V
+	public fun decorate (Lorg/jsoup/nodes/Document;)V
+	public fun elementCreationHook (Lkweb/Element;)V
+	public fun executeAfterPageCreation ()Ljava/lang/String;
+	public final fun getDependsOn ()Ljava/util/Set;
+}
+
+public final class kweb/plugins/css/CSSPlugin : kweb/plugins/KwebPlugin {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Set;)V
+	public fun decorate (Lorg/jsoup/nodes/Document;)V
+}
+
+public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBuilder {
+	public fun <init> ()V
+	public final fun getAccordion ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAction ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getActions ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getActive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAd ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAdd ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAddress ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAligned ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAngle ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAnimated ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getArrow ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAttached ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getAuthor ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBalance ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBanner ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBar ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBasic ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBig ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBlack ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBlue ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBlurring ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBottom ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBreadcrumb ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBrown ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBulleted ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getButton ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getButtons ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCard ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCards ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCelled ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCenter ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCentered ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCheck ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCheckbox ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getChecked ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCheckmark ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getChevron ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCinema ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCircle ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCircular ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getClock ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getClose ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getColumn ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getComment ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getComments ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCompact ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getContainer ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getContent ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getCopy ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDate ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDeny ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDescription ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDimmer ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDisabled ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDivided ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDivider ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDividing ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDouble ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getDropdown ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getEdit ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getEight ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getElastic ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getEleven ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getEqual ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getError ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getExtra ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFade ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getField ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFields ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFifteen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFixed ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFlag ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFloated ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFloating ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFluid ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getForm ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFour ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFourteen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFullscreen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getGreen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getGrey ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getGrid ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getGrouped ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getHeader ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getHeart ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getHidden ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getHorizontal ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getHuge ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getIcon ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getImage ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getIndeterminate ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getIndicating ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getInfo ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getInline ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getInput ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getInstant ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getInternally ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getInverted ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getItem ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getItems ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLabel ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLabeled ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLarge ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLeaderboard ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLeft ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLightbulb ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getList ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLoader ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLoading ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMain ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMassive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMasthead ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMedium ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMenu ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMessage ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMeta ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMetadata ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMiddle ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMini ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMinus ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getModal ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMove ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getMultiple ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getNegative ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getNine ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getNotched ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getOlive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getOne ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getOutline ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getOverlay ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPadded ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPlaceholder ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPlay ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPlus ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPointing ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPositive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPrimary ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getProgress ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPurple ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPushable ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPusher ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRadio ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRaised ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRange ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRed ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRelaxed ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRemove ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getReveal ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRight ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRotate ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getRow ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getScale ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSearch ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSecondary ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSection ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSegment ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSegments ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSelection ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSeven ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSidebar ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSix ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSixteen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSlider ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSlow ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSmall ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSmile ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSortable ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSpaced ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getStackable ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getStatistic ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getStatistics ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getStriped ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getStyled ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSubmit ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSuccess ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTab ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTable ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTabular ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTeal ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getText ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getThirteen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getThree ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTiny ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTitle ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getToggle ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTop ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTransition ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTransparent ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTrash ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTwelve ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTwo ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getUi ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getUnstackable ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getUser ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getUsers ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getValue ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getVertical ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getVery ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getVisible ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getWarning ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getWide ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getYellow ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+}
+
+public final class kweb/plugins/fomanticUI/FomanticUIPlugin : kweb/plugins/KwebPlugin {
+	public fun <init> ()V
+	public fun decorate (Lorg/jsoup/nodes/Document;)V
+}
+
+public final class kweb/plugins/fomanticUI/FomanticUIPluginKt {
+	public static final fun getFomantic ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public static final fun getFomanticUIPlugin ()Lkweb/plugins/fomanticUI/FomanticUIPlugin;
+}
+
+public final class kweb/plugins/fomanticUI/JQuerySUIReceiver {
+	public fun <init> (Lkweb/plugins/jqueryCore/JQueryReceiver;)V
+	public final fun dimmer (Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;)V
+	public final fun getJqueryReceiver ()Lkweb/plugins/jqueryCore/JQueryReceiver;
+}
+
+public final class kweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction : java/lang/Enum {
+	public static final field hide Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
+	public static final field show Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
+	public static fun values ()[Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
+}
+
+public final class kweb/plugins/fomanticUI/JqueryKt {
+	public static final fun getSUI (Lkweb/plugins/jqueryCore/JQueryReceiver;)Lkweb/plugins/fomanticUI/JQuerySUIReceiver;
+}
+
+public final class kweb/plugins/image/DynamicImagePlugin : kweb/plugins/KwebPlugin {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;)V
+	public fun appServerConfigurator (Lio/ktor/server/routing/Routing;)V
+}
+
+public final class kweb/plugins/image/DynamicImagePluginKt {
+	public static final fun toByteArray (Ljava/awt/image/BufferedImage;Ljava/lang/String;)[B
+}
+
+public final class kweb/plugins/javascript/JavascriptPlugin : kweb/plugins/KwebPlugin {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Set;)V
+	public fun decorate (Lorg/jsoup/nodes/Document;)V
+}
+
+public final class kweb/plugins/jqueryCore/JQueryCorePlugin : kweb/plugins/KwebPlugin {
+	public fun <init> ()V
+	public fun decorate (Lorg/jsoup/nodes/Document;)V
+}
+
+public final class kweb/plugins/jqueryCore/JQueryCorePluginKt {
+	public static final fun executeOnSelf (Lkweb/Element;Ljava/lang/String;)V
+	public static final fun getJqueryCore ()Lkweb/plugins/jqueryCore/JQueryCorePlugin;
+}
+
+public class kweb/plugins/jqueryCore/JQueryOnReceiver {
+	public fun <init> (Lkweb/plugins/jqueryCore/JQueryReceiver;)V
+	public final fun blur (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun click (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun dblclick (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun event (Ljava/lang/String;Ljava/util/Set;Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public static synthetic fun event$default (Lkweb/plugins/jqueryCore/JQueryOnReceiver;Ljava/lang/String;Ljava/util/Set;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun focus (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun focusin (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun focusout (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun getParent ()Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun hover (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun mousedown (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun mouseenter (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun mouseleave (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun mousemove (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public final fun mouseup (Lkotlin/jvm/functions/Function1;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+}
+
+public final class kweb/plugins/jqueryCore/JQueryReceiver {
+	public fun <init> (Lkweb/WebBrowser;Ljava/lang/String;)V
+	public final fun focus ()V
+	public final fun getOn ()Lkweb/plugins/jqueryCore/JQueryOnReceiver;
+	public final fun remove ()V
+}
+
+public final class kweb/plugins/jqueryCore/JqueryExtensionsKt {
+	public static final fun jquery (Lkweb/Element;Ljava/lang/String;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+	public static synthetic fun jquery$default (Lkweb/Element;Ljava/lang/String;ILjava/lang/Object;)Lkweb/plugins/jqueryCore/JQueryReceiver;
+}
+
+public final class kweb/plugins/specificKeyUp/SpecificKeyUpKt {
+	public static final fun attachKeySpecificKeyupEvent (Lkweb/InputElement;[Ljava/lang/String;)V
+	public static final fun keySpecificKeyup (Lkweb/html/events/OnImmediateReceiver;Lkotlin/jvm/functions/Function0;)Lkweb/Element;
+	public static final fun keySpecificKeyup (Lkweb/html/events/OnReceiver;Lkotlin/jvm/functions/Function1;)Lkweb/Element;
+}
+
+public final class kweb/plugins/specificKeyUp/SpecificKeyUpPlugin : kweb/plugins/KwebPlugin {
+	public static final field INSTANCE Lkweb/plugins/specificKeyUp/SpecificKeyUpPlugin;
+}
+
+public final class kweb/plugins/staticFiles/ResourceFolder {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lkweb/plugins/staticFiles/ResourceFolder;
+	public static synthetic fun copy$default (Lkweb/plugins/staticFiles/ResourceFolder;Ljava/lang/String;ILjava/lang/Object;)Lkweb/plugins/staticFiles/ResourceFolder;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getResourceFolder ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/plugins/staticFiles/StaticFilesPlugin : kweb/plugins/KwebPlugin {
+	public fun <init> (Ljava/io/File;Ljava/lang/String;I)V
+	public synthetic fun <init> (Ljava/io/File;Ljava/lang/String;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lkweb/plugins/staticFiles/ResourceFolder;Ljava/lang/String;I)V
+	public synthetic fun <init> (Lkweb/plugins/staticFiles/ResourceFolder;Ljava/lang/String;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun appServerConfigurator (Lio/ktor/server/routing/Routing;)V
+}
+
+public final class kweb/plugins/viewport/ViewportPlugin : kweb/plugins/KwebPlugin {
+	public fun <init> ()V
+	public fun <init> (Lkweb/plugins/viewport/ViewportWidth;D)V
+	public synthetic fun <init> (Lkweb/plugins/viewport/ViewportWidth;DILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun decorate (Lorg/jsoup/nodes/Document;)V
+	public final fun getInitialScale ()D
+	public final fun getWidth ()Lkweb/plugins/viewport/ViewportWidth;
+}
+
+public final class kweb/plugins/viewport/ViewportWidth : java/lang/Enum {
+	public static final field DeviceWidth Lkweb/plugins/viewport/ViewportWidth;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getText ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lkweb/plugins/viewport/ViewportWidth;
+	public static fun values ()[Lkweb/plugins/viewport/ViewportWidth;
+}
+
+public final class kweb/routing/RouteReceiver {
+	public final fun notFound (Lkotlin/jvm/functions/Function2;)V
+	public final fun path (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)V
+}
+
+public final class kweb/state/CloseReason {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Throwable;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Throwable;)Lkweb/state/CloseReason;
+	public static synthetic fun copy$default (Lkweb/state/CloseReason;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)Lkweb/state/CloseReason;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCause ()Ljava/lang/Throwable;
+	public final fun getExplanation ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public class kweb/state/KVal : java/lang/AutoCloseable {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun addListener (Lkotlin/jvm/functions/Function2;)J
+	public fun close ()V
+	public final fun close (Lkweb/state/CloseReason;)V
+	protected final fun finalize ()V
+	protected final fun getCloseReason ()Lkweb/state/CloseReason;
+	protected final fun getListeners ()Ljava/util/concurrent/ConcurrentHashMap;
+	public fun getValue ()Ljava/lang/Object;
+	public final fun map (Lkotlin/jvm/functions/Function1;)Lkweb/state/KVal;
+	public final fun onClose (Lkotlin/jvm/functions/Function0;)V
+	public final fun removeListener (J)V
+	protected final fun setCloseReason (Lkweb/state/CloseReason;)V
+	public fun toString ()Ljava/lang/String;
+	protected final fun verifyNotClosed (Ljava/lang/String;)V
+}
+
+public final class kweb/state/KValKt {
+	public static final fun plus (Lkweb/state/KVal;Lkweb/state/KVal;)Lkweb/state/KVal;
+}
+
+public final class kweb/state/KVar : kweb/state/KVal {
+	public fun <init> (Ljava/lang/Object;)V
+	public fun getValue ()Ljava/lang/Object;
+	public final fun map (Lkweb/state/ReversibleFunction;)Lkweb/state/KVar;
+	public fun setValue (Ljava/lang/Object;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class kweb/state/KVarKt {
+	public static final fun combine (Lkotlin/Pair;)Lkweb/state/KVar;
+	public static final fun notNull (Lkweb/state/KVar;Ljava/lang/Object;Z)Lkweb/state/KVar;
+	public static synthetic fun notNull$default (Lkweb/state/KVar;Ljava/lang/Object;ZILjava/lang/Object;)Lkweb/state/KVar;
+}
+
+public final class kweb/state/ObservableList : java/lang/AutoCloseable, java/util/List, kotlin/jvm/internal/markers/KMutableList {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun add (ILjava/lang/Object;)V
+	public fun add (Ljava/lang/Object;)Z
+	public fun addAll (ILjava/util/Collection;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public final fun addCloseListener (Lkotlin/jvm/functions/Function0;)J
+	public final fun addListener (Lkotlin/jvm/functions/Function1;)J
+	public final fun applyModifications (Ljava/lang/Iterable;)V
+	public fun clear ()V
+	public fun close ()V
+	public fun contains (Ljava/lang/Object;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public fun get (I)Ljava/lang/Object;
+	public final fun getItems ()Ljava/util/ArrayList;
+	public fun getSize ()I
+	public fun indexOf (Ljava/lang/Object;)I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public fun lastIndexOf (Ljava/lang/Object;)I
+	public fun listIterator ()Ljava/util/ListIterator;
+	public fun listIterator (I)Ljava/util/ListIterator;
+	public final fun move (II)V
+	public final fun remove (I)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun removeAt (I)Ljava/lang/Object;
+	public final fun removeCloseListener (J)V
+	public final fun removeListener (J)V
+	public fun retainAll (Ljava/util/Collection;)Z
+	public fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun size ()I
+	public fun subList (II)Ljava/util/List;
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
+}
+
+public abstract class kweb/state/ObservableList$Modification {
+}
+
+public final class kweb/state/ObservableList$Modification$Change : kweb/state/ObservableList$Modification {
+	public fun <init> (ILjava/lang/Object;)V
+	public final fun getNewItem ()Ljava/lang/Object;
+	public final fun getPosition ()I
+}
+
+public final class kweb/state/ObservableList$Modification$Deletion : kweb/state/ObservableList$Modification {
+	public fun <init> (I)V
+	public final fun getPosition ()I
+}
+
+public final class kweb/state/ObservableList$Modification$Insertion : kweb/state/ObservableList$Modification {
+	public fun <init> (ILjava/lang/Object;)V
+	public final fun getItem ()Ljava/lang/Object;
+	public final fun getPosition ()I
+}
+
+public final class kweb/state/ObservableList$Modification$Move : kweb/state/ObservableList$Modification {
+	public fun <init> (II)V
+	public final fun getNewPosition ()I
+	public final fun getOldPosition ()I
+}
+
+public final class kweb/state/RenderEachKt {
+	public static final fun renderEach (Lkweb/ElementCreator;Lkweb/state/ObservableList;Lkotlin/jvm/functions/Function2;)V
+}
+
+public final class kweb/state/RenderFragment {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun delete ()V
+	public final fun getEndId ()Ljava/lang/String;
+	public final fun getStartId ()Ljava/lang/String;
+}
+
+public final class kweb/state/RenderHandle {
+	public fun <init> (Lkweb/state/RenderFragment;Lkweb/state/KVar;)V
+	public final fun getKvar ()Lkweb/state/KVar;
+	public final fun getRenderFragment ()Lkweb/state/RenderFragment;
+}
+
+public final class kweb/state/RenderKt {
+	public static final fun closeOnElementCreatorCleanup (Lkweb/ElementCreator;Lkweb/state/KVal;)V
+	public static final fun render (Lkweb/ElementCreator;Lkweb/state/KVal;Lkotlin/jvm/functions/Function2;)Lkweb/state/RenderFragment;
+}
+
+public final class kweb/state/RenderSpanNames {
+	public static final field INSTANCE Lkweb/state/RenderSpanNames;
+	public static final field endMarkerClassName Ljava/lang/String;
+	public static final field listEndMarkerClassName Ljava/lang/String;
+	public static final field listStartMarkerClassName Ljava/lang/String;
+	public static final field startMarkerClassName Ljava/lang/String;
+}
+
+public abstract class kweb/state/ReversibleFunction {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getLabel ()Ljava/lang/String;
+	public abstract fun invoke (Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun reverse (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class kweb/util/JsonKt {
+	public static final fun getJson (Ljava/lang/Number;)Lkotlinx/serialization/json/JsonPrimitive;
+	public static final fun getJson (Ljava/lang/String;)Lkotlinx/serialization/json/JsonPrimitive;
+	public static final fun getJson (Z)Lkotlinx/serialization/json/JsonPrimitive;
+}
+
+public abstract interface annotation class kweb/util/KWebDSL : java/lang/annotation/Annotation {
+}
+
+public final class kweb/util/MiscKt {
+	public static final fun createNonce (I)Ljava/lang/String;
+	public static synthetic fun createNonce$default (IILjava/lang/Object;)Ljava/lang/String;
+	public static final fun escapeEcma (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun getPathQueryFragment (Lio/mola/galimatias/URL;)Ljava/lang/String;
+	public static final fun getPkg (Lkotlin/reflect/KClass;)Ljava/lang/String;
+	public static final fun getRandom ()Ljava/util/Random;
+	public static final fun getScheduledExecutorService ()Ljava/util/concurrent/ScheduledExecutorService;
+	public static final fun pruneAndDumpStackTo ([Ljava/lang/StackTraceElement;Ljava/lang/StringBuilder;)V
+	public static final fun warnIfBlocking (JLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+}
+
+public final class kweb/util/NotFoundException : java/lang/Exception {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lkweb/util/NotFoundException;
+	public static synthetic fun copy$default (Lkweb/util/NotFoundException;Ljava/lang/String;ILjava/lang/Object;)Lkweb/util/NotFoundException;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public class kweb/util/Stack {
+	public fun <init> (Ljava/lang/String;)V
+	public fun apply ([Ljava/lang/String;)Ljava/lang/String;
+	public final fun getNext ()Lkweb/util/Stack;
+	public final fun getPrefix ()Ljava/lang/String;
+	public final fun push (Ljava/lang/String;I)Lkweb/util/Stack;
+	public final fun setNext (Lkweb/util/Stack;)V
+}
+
+public final class kweb/util/Template : kweb/util/Stack {
+	public static final field Companion Lkweb/util/Template$Companion;
+	public fun <init> (Ljava/lang/String;[Ljava/lang/String;)V
+	public fun apply ([Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class kweb/util/Template$Companion {
+}
+
