@@ -62,6 +62,7 @@ public final class kweb/ButtonType : java/lang/Enum {
 	public static final field button Lkweb/ButtonType;
 	public static final field reset Lkweb/ButtonType;
 	public static final field submit Lkweb/ButtonType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/ButtonType;
 	public static fun values ()[Lkweb/ButtonType;
 }
@@ -291,6 +292,7 @@ public final class kweb/InputType : java/lang/Enum {
 	public static final field time Lkweb/InputType;
 	public static final field url Lkweb/InputType;
 	public static final field week Lkweb/InputType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/InputType;
 	public static fun values ()[Lkweb/InputType;
 }
@@ -372,6 +374,7 @@ public final class kweb/LinkRelationship : java/lang/Enum {
 	public static final field search Lkweb/LinkRelationship;
 	public static final field stylesheet Lkweb/LinkRelationship;
 	public static final field tag Lkweb/LinkRelationship;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/LinkRelationship;
 	public static fun values ()[Lkweb/LinkRelationship;
 }
@@ -499,6 +502,7 @@ public final class kweb/PreludeKt {
 public final class kweb/Scheme : java/lang/Enum {
 	public static final field http Lkweb/Scheme;
 	public static final field https Lkweb/Scheme;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/Scheme;
 	public static fun values ()[Lkweb/Scheme;
 }
@@ -582,7 +586,6 @@ public abstract class kweb/ValueElement : kweb/Element {
 
 public final class kweb/ValueElement$DiffData {
 	public static final field Companion Lkweb/ValueElement$DiffData$Companion;
-	public synthetic fun <init> (IIILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (IILjava/lang/String;)V
 	public final fun component1 ()I
 	public final fun component2 ()I
@@ -595,7 +598,6 @@ public final class kweb/ValueElement$DiffData {
 	public final fun getPrefixEndIndex ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/ValueElement$DiffData;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/ValueElement$DiffData$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -616,6 +618,7 @@ public final class kweb/ValueElement$DiffData$Companion {
 public final class kweb/ValueElement$LastModificationSource : java/lang/Enum {
 	public static final field Browser Lkweb/ValueElement$LastModificationSource;
 	public static final field Server Lkweb/ValueElement$LastModificationSource;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/ValueElement$LastModificationSource;
 	public static fun values ()[Lkweb/ValueElement$LastModificationSource;
 }
@@ -706,6 +709,7 @@ public final class kweb/WebBrowser$CatcherType : java/lang/Enum {
 	public static final field EVENT Lkweb/WebBrowser$CatcherType;
 	public static final field IMMEDIATE_EVENT Lkweb/WebBrowser$CatcherType;
 	public static final field RENDER Lkweb/WebBrowser$CatcherType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/WebBrowser$CatcherType;
 	public static fun values ()[Lkweb/WebBrowser$CatcherType;
 }
@@ -739,7 +743,6 @@ public final class kweb/WebBrowser$OutboundMessageCatcher {
 
 public final class kweb/client/Client2ServerMessage {
 	public static final field Companion Lkweb/client/Client2ServerMessage$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;ZLkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;Z)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Lkweb/client/Client2ServerMessage$ErrorMessage;Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/json/JsonElement;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -759,7 +762,6 @@ public final class kweb/client/Client2ServerMessage {
 	public final fun getOnMessageData ()Lkotlinx/serialization/json/JsonElement;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -775,7 +777,6 @@ public final class kweb/client/Client2ServerMessage$$serializer : kotlinx/serial
 
 public final class kweb/client/Client2ServerMessage$C2SCallback {
 	public static final field Companion Lkweb/client/Client2ServerMessage$C2SCallback$Companion;
-	public synthetic fun <init> (IILkotlinx/serialization/json/JsonElement;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (ILkotlinx/serialization/json/JsonElement;)V
 	public synthetic fun <init> (ILkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()I
@@ -787,7 +788,6 @@ public final class kweb/client/Client2ServerMessage$C2SCallback {
 	public final fun getData ()Lkotlinx/serialization/json/JsonElement;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage$C2SCallback;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$C2SCallback$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -811,7 +811,6 @@ public final class kweb/client/Client2ServerMessage$Companion {
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage {
 	public static final field Companion Lkweb/client/Client2ServerMessage$ErrorMessage$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Lkweb/client/Client2ServerMessage$ErrorMessage$Error;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Lkweb/client/Client2ServerMessage$ErrorMessage$Error;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
@@ -822,7 +821,6 @@ public final class kweb/client/Client2ServerMessage$ErrorMessage {
 	public final fun getError ()Lkweb/client/Client2ServerMessage$ErrorMessage$Error;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage$ErrorMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -842,7 +840,6 @@ public final class kweb/client/Client2ServerMessage$ErrorMessage$Companion {
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage$Error {
 	public static final field Companion Lkweb/client/Client2ServerMessage$ErrorMessage$Error$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public final fun component1 ()Ljava/lang/String;
 	public final fun component2 ()Ljava/lang/String;
@@ -853,7 +850,6 @@ public final class kweb/client/Client2ServerMessage$ErrorMessage$Error {
 	public final fun getName ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/client/Client2ServerMessage$ErrorMessage$Error;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Client2ServerMessage$ErrorMessage$Error$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -893,7 +889,6 @@ public final class kweb/client/ClientConnection$WebSocket : kweb/client/ClientCo
 public final class kweb/client/FunctionCall {
 	public static final field Companion Lkweb/client/FunctionCall$Companion;
 	public fun <init> ()V
-	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -913,7 +908,6 @@ public final class kweb/client/FunctionCall {
 	public final fun getParameters ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/client/FunctionCall;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/FunctionCall$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -979,7 +973,6 @@ public final class kweb/client/RemoteClientState {
 
 public final class kweb/client/Server2ClientMessage {
 	public static final field Companion Lkweb/client/Server2ClientMessage$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
 	public fun <init> (Ljava/lang/String;Lkweb/client/FunctionCall;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -991,7 +984,6 @@ public final class kweb/client/Server2ClientMessage {
 	public final fun getYourId ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/client/Server2ClientMessage;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/client/Server2ClientMessage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1087,6 +1079,7 @@ public final class kweb/html/StorageReceiver {
 public final class kweb/html/StorageType : java/lang/Enum {
 	public static final field local Lkweb/html/StorageType;
 	public static final field session Lkweb/html/StorageType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/html/StorageType;
 	public static fun values ()[Lkweb/html/StorageType;
 }
@@ -1109,7 +1102,6 @@ public final class kweb/html/Window : kweb/html/events/EventGenerator {
 
 public final class kweb/html/events/Event {
 	public static final field Companion Lkweb/html/events/Event$Companion;
-	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/json/JsonElement;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)V
 	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -1121,7 +1113,6 @@ public final class kweb/html/events/Event {
 	public final fun getType ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/html/events/Event;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/events/Event$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1151,7 +1142,6 @@ public final class kweb/html/events/EventGenerator$DefaultImpls {
 
 public final class kweb/html/events/KeyboardEvent {
 	public static final field Companion Lkweb/html/events/KeyboardEvent$Companion;
-	public synthetic fun <init> (ILjava/lang/String;JLjava/lang/String;ZZLjava/lang/String;IZZLjava/lang/String;ZLkotlinx/serialization/json/JsonElement;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;JLjava/lang/String;ZZLjava/lang/String;IZZLjava/lang/String;ZLkotlinx/serialization/json/JsonElement;)V
 	public synthetic fun <init> (Ljava/lang/String;JLjava/lang/String;ZZLjava/lang/String;IZZLjava/lang/String;ZLkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -1183,7 +1173,6 @@ public final class kweb/html/events/KeyboardEvent {
 	public fun hashCode ()I
 	public final fun isComposing ()Z
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/html/events/KeyboardEvent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/events/KeyboardEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1203,7 +1192,6 @@ public final class kweb/html/events/KeyboardEvent$Companion {
 
 public final class kweb/html/events/MouseEvent {
 	public static final field Companion Lkweb/html/events/MouseEvent$Companion;
-	public synthetic fun <init> (ILjava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;)V
 	public synthetic fun <init> (Ljava/lang/String;JZIIFFZZLjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;IIFFFFZFFLkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -1255,7 +1243,6 @@ public final class kweb/html/events/MouseEvent {
 	public final fun getY ()F
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-	public static final synthetic fun write$Self (Lkweb/html/events/MouseEvent;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/events/MouseEvent$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1410,12 +1397,10 @@ public final class kweb/html/fileUpload/FileFormInput {
 
 public final class kweb/html/fileUpload/FileUpload {
 	public static final field Companion Lkweb/html/fileUpload/FileUpload$Companion;
-	public synthetic fun <init> (ILjava/lang/String;ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;ILjava/lang/String;)V
 	public final fun getBase64Content ()Ljava/lang/String;
 	public final fun getFileName ()Ljava/lang/String;
 	public final fun getFileSize ()I
-	public static final synthetic fun write$Self (Lkweb/html/fileUpload/FileUpload;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class kweb/html/fileUpload/FileUpload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
@@ -1443,6 +1428,7 @@ public final class kweb/html/style/StyleReceiver {
 public final class kweb/html/style/StyleReceiver$DisplayValues : java/lang/Enum {
 	public static final field block Lkweb/html/style/StyleReceiver$DisplayValues;
 	public static final field none Lkweb/html/style/StyleReceiver$DisplayValues;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/html/style/StyleReceiver$DisplayValues;
 	public static fun values ()[Lkweb/html/style/StyleReceiver$DisplayValues;
 }
@@ -1737,6 +1723,7 @@ public final class kweb/plugins/fomanticUI/JQuerySUIReceiver {
 public final class kweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction : java/lang/Enum {
 	public static final field hide Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
 	public static final field show Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
 	public static fun values ()[Lkweb/plugins/fomanticUI/JQuerySUIReceiver$DimmerAction;
 }
@@ -1844,6 +1831,7 @@ public final class kweb/plugins/viewport/ViewportPlugin : kweb/plugins/KwebPlugi
 
 public final class kweb/plugins/viewport/ViewportWidth : java/lang/Enum {
 	public static final field DeviceWidth Lkweb/plugins/viewport/ViewportWidth;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public final fun getText ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Lkweb/plugins/viewport/ViewportWidth;
 	public static fun values ()[Lkweb/plugins/viewport/ViewportWidth;
