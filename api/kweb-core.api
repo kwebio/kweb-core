@@ -1745,6 +1745,24 @@ public final class kweb/plugins/fomanticUI/JqueryKt {
 	public static final fun getSUI (Lkweb/plugins/jqueryCore/JQueryReceiver;)Lkweb/plugins/fomanticUI/JQuerySUIReceiver;
 }
 
+public final class kweb/plugins/image/DynamicImagePlugin : kweb/plugins/KwebPlugin {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;)V
+	public fun appServerConfigurator (Lio/ktor/server/routing/Routing;)V
+}
+
+public final class kweb/plugins/image/DynamicImagePluginKt {
+	public static final fun toByteArray (Ljava/awt/image/BufferedImage;Ljava/lang/String;)[B
+}
+
+public final class kweb/plugins/javascript/JavascriptPlugin : kweb/plugins/KwebPlugin {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Set;)V
+	public fun decorate (Lorg/jsoup/nodes/Document;)V
+}
+
 public final class kweb/plugins/jqueryCore/JQueryCorePlugin : kweb/plugins/KwebPlugin {
 	public fun <init> ()V
 	public fun decorate (Lorg/jsoup/nodes/Document;)V
