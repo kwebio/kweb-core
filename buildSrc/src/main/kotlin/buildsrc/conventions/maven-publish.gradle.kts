@@ -33,6 +33,13 @@ val javadocJarStub by tasks.creating(Jar::class) {
     archiveClassifier.set("javadoc")
 }
 
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    // Accessing sourceSets within the Java plugin's scope
+    project.plugins.withType<JavaPlugin>().configureEach {
+        from(project.the<JavaPluginExtension>().sourceSets["main"].allSource)
+    }
+}
 
 publishing {
     publications.withType<MavenPublication>().configureEach {
@@ -41,6 +48,10 @@ publishing {
         version = project.version.toString()
 
         artifact(javadocJarStub)
+
+        // Added 2023-12-02 to fix "Missing: no sources jar found in folder
+        // '/io/kweb/kweb-core/1.4.9'" encountered when publishing to Maven Central
+        artifact(sourcesJar)
 
         // apply default configs for all Maven publications
         pom {
