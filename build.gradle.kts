@@ -15,6 +15,19 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.7.4"
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+
 // This is overridden by the maven release process
 group = "com.github.kwebio"
 

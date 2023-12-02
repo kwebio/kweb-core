@@ -38,12 +38,12 @@ class RenderTest {
         //https://bonigarcia.github.io/selenium-jupiter/#generic-driver
         @Options
         var chromeOptions = ChromeOptions().apply {
-            setHeadless(true)
+            addArguments("-headless")
         }
 
         @Options
         var firefoxOptions = FirefoxOptions().apply {
-            setHeadless(true)
+            addArguments("-headless")
         }
     }
 

@@ -20,7 +20,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-serialization:1.9.21")
 }
 
-val gradleJvmTarget = 11
+val gradleJvmTarget = 17
 
 kotlin {
     jvmToolchain {
