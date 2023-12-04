@@ -1,11 +1,9 @@
 package kweb.plugins.image
 
+import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kweb.plugins.KwebPlugin
-import java.awt.image.BufferedImage
-import java.io.ByteArrayOutputStream
-import javax.imageio.ImageIO
 
 /**
  * Add multiple dynamically generated images files to your Kweb app routing using ByteArray generator functions.
@@ -17,32 +15,18 @@ import javax.imageio.ImageIO
  */
 class DynamicImagePlugin(
     private val resourceFolder: String,
-    private val fileNames: Map<String,
-    suspend () -> ByteArray>
+    private val fileNames: Map<String, suspend (Parameters) -> ByteArray>,
 ): KwebPlugin() {
-    constructor(resourceFolder: String, fileName: String, byteProvider: suspend () -> ByteArray):
+    constructor(resourceFolder: String, fileName: String, byteProvider: suspend (Parameters) -> ByteArray):
             this(resourceFolder, mapOf(fileName to byteProvider))
-
-    constructor(resourceFolder: String, fileNames: Map<String, suspend () -> BufferedImage>, format: String):
-            this(resourceFolder, fileNames
-                .mapValues { (_, value) -> suspend { toByteArray(value(), format) }})
-
-    constructor(resourceFolder: String, fileName: String, bufferedImageProvider: suspend () -> BufferedImage, format: String):
-            this(resourceFolder, mapOf(fileName to bufferedImageProvider), format)
 
     override fun appServerConfigurator(routeHandler: Routing) {
         fileNames.forEach { (fileName, byteProvider) ->
             routeHandler.get("$resourceFolder/$fileName") { _ ->
                 context.respondBytes {
-                    byteProvider()
+                    byteProvider(context.parameters)
                 }
             }
         }
     }
-}
-
-fun toByteArray(bufferedImage: BufferedImage, format: String): ByteArray {
-    val byteArrayOutputStream = ByteArrayOutputStream()
-    ImageIO.write(bufferedImage, format, byteArrayOutputStream)
-    return byteArrayOutputStream.toByteArray()
 }
