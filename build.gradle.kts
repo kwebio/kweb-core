@@ -29,7 +29,7 @@ dependencies {
     api("org.jsoup:jsoup:1.16.2")
     implementation("org.apache.commons:commons-text:1.10.0")
     implementation("com.google.guava:guava:32.1.1-jre")
-    api("dev.forkhandles:result4k:2.7.1.0")
+    api("dev.forkhandles:result4k:2.10.2.0")
 
     //////////////////////////////
     // Kotlin library dependencies
