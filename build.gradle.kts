@@ -93,20 +93,17 @@ tasks.test {
 }
 
 
-tasks.dokkaHtml {
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
     dokkaSourceSets {
         configureEach {
             includes.from("src/main/kotlin/packages.md")
         }
 
-        named("main") {
-            // Convert this to Kotlin
+        getByName("main") {
             sourceLink {
                 localDirectory.set(file("src/main/kotlin"))
                 remoteUrl.set(URL("https://github.com/kwebio/kweb-core/tree/master/src/main/kotlin"))
             }
         }
-        // Converted
-
     }
 }
