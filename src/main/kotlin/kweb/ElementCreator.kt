@@ -204,6 +204,8 @@ if (insertBefore !== undefined) {
             } catch (e: Exception) {
                 logger.warn(e) { "Error while cleaning up ElementCreator" }
             }
+            // Reduce likelihood of memory leaks
+            this.cleanupListeners?.clear()
         }
     }
 

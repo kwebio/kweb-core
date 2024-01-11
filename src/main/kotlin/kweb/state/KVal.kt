@@ -137,10 +137,6 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
         }
     }
 
-    protected fun finalize() {
-        this.close(CloseReason("Garbage Collected"))
-    }
-
 }
 
 operator fun <O : Any> KVal<List<O>>.plus(other : KVal<List<O>>) : KVal<List<O>> {
