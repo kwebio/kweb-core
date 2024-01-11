@@ -28,8 +28,8 @@ tasks.test {
 dependencies {
     api("org.jsoup:jsoup:1.16.2")
     implementation("org.apache.commons:commons-text:1.10.0")
-    implementation("com.google.guava:guava:32.1.1-jre")
-    api("dev.forkhandles:result4k:2.7.1.0")
+    implementation("com.google.guava:guava:33.0.0-jre")
+    api("dev.forkhandles:result4k:2.12.2.0")
 
     //////////////////////////////
     // Kotlin library dependencies
@@ -44,7 +44,7 @@ dependencies {
     ////////////////////
     api("io.ktor:ktor-server-jetty:2.3.5")
     api("io.ktor:ktor-server-websockets:2.3.0")
-    api("io.ktor:ktor-server-default-headers:2.3.5")
+    api("io.ktor:ktor-server-default-headers:2.3.7")
     api("io.ktor:ktor-server-compression:2.3.5")
     api("io.ktor:ktor-server-caching-headers:2.3.5")
     api("io.ktor:ktor-network-tls-certificates:2.3.5")
@@ -67,7 +67,7 @@ dependencies {
     testImplementation("org.seleniumhq.selenium:selenium-opera-driver:4.4.0")
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.15.0")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.10.0")
-    testImplementation("io.github.bonigarcia:selenium-jupiter:4.3.7")
+    testImplementation("io.github.bonigarcia:selenium-jupiter:5.0.1")
     testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.12.1")
     testImplementation("com.codeborne:selenide:7.0.3")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
