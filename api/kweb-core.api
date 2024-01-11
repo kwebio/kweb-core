@@ -1855,7 +1855,6 @@ public class kweb/state/KVal : java/lang/AutoCloseable {
 	public final fun addListener (Lkotlin/jvm/functions/Function2;)J
 	public fun close ()V
 	public final fun close (Lkweb/state/CloseReason;)V
-	protected final fun finalize ()V
 	protected final fun getCloseReason ()Lkweb/state/CloseReason;
 	protected final fun getListeners ()Ljava/util/concurrent/ConcurrentHashMap;
 	public fun getValue ()Ljava/lang/Object;
