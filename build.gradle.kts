@@ -68,7 +68,7 @@ dependencies {
     testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.16.1")
     testImplementation("org.seleniumhq.selenium:selenium-java:4.10.0")
     testImplementation("io.github.bonigarcia:selenium-jupiter:5.0.1")
-    testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.12.1")
+    testImplementation("org.seleniumhq.selenium:selenium-http-jdk-client:4.13.0")
     testImplementation("com.codeborne:selenide:7.0.4")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
