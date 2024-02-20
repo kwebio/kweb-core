@@ -55,6 +55,12 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val alternate: FomanticUIClasses
+        get() {
+            classes("alternate")
+            return this
+        }
+
     val angle: FomanticUIClasses
         get() {
             classes("angle")
@@ -73,9 +79,21 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val arrows: FomanticUIClasses
+        get() {
+            classes("arrows")
+            return this
+        }
+
     val attached: FomanticUIClasses
         get() {
             classes("attached")
+            return this
+        }
+
+    val astronaut: FomanticUIClasses
+        get() {
+            classes("astronaut")
             return this
         }
 
@@ -85,9 +103,21 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val avatar: FomanticUIClasses
+        get() {
+            classes("avatar")
+            return this
+        }
+
     val balance: FomanticUIClasses
         get() {
             classes("balance")
+            return this
+        }
+
+    val ban: FomanticUIClasses
+        get() {
+            classes("ban")
             return this
         }
 
@@ -103,9 +133,27 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val bars: FomanticUIClasses
+        get() {
+            classes("bars")
+            return this
+        }
+
     val basic: FomanticUIClasses
         get() {
             classes("basic")
+            return this
+        }
+
+    val bed: FomanticUIClasses
+        get() {
+            classes("bed")
+            return this
+        }
+
+    val bell: FomanticUIClasses
+        get() {
+            classes("bell")
             return this
         }
 
@@ -118,6 +166,12 @@ class FomanticUIClasses : AttributeBuilder() {
     val black: FomanticUIClasses
         get() {
             classes("black")
+            return this
+        }
+
+    val block: FomanticUIClasses
+        get() {
+            classes("block")
             return this
         }
 
@@ -136,6 +190,18 @@ class FomanticUIClasses : AttributeBuilder() {
     val bottom: FomanticUIClasses
         get() {
             classes("bottom")
+            return this
+        }
+
+    val brain: FomanticUIClasses
+        get() {
+            classes("brain")
+            return this
+        }
+
+    val branch: FomanticUIClasses
+        get() {
+            classes("branch")
             return this
         }
 
@@ -166,6 +232,18 @@ class FomanticUIClasses : AttributeBuilder() {
     val breadcrumb: FomanticUIClasses
         get() {
             classes("breadcrumb")
+            return this
+        }
+
+    val calendar: FomanticUIClasses
+        get() {
+            classes("calendar")
+            return this
+        }
+
+    val car: FomanticUIClasses
+        get() {
+            classes("car")
             return this
         }
 
@@ -229,6 +307,18 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val child: FomanticUIClasses
+        get() {
+            classes("child")
+            return this
+        }
+
+    val chair: FomanticUIClasses
+        get() {
+            classes("chair")
+            return this
+        }
+
     val cinema: FomanticUIClasses
         get() {
             classes("cinema")
@@ -256,6 +346,24 @@ class FomanticUIClasses : AttributeBuilder() {
     val close: FomanticUIClasses
         get() {
             classes("close")
+            return this
+        }
+
+    val closed: FomanticUIClasses
+        get() {
+            classes("closed")
+            return this
+        }
+
+    val code: FomanticUIClasses
+        get() {
+            classes("code")
+            return this
+        }
+
+    val cogs: FomanticUIClasses
+        get() {
+            classes("cogs")
             return this
         }
 
@@ -289,6 +397,18 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val completed: FomanticUIClasses
+        get() {
+            classes("completed")
+            return this
+        }
+
+    val computer: FomanticUIClasses
+        get() {
+            classes("computer")
+            return this
+        }
+
     val container: FomanticUIClasses
         get() {
             classes("container")
@@ -301,9 +421,21 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val couch: FomanticUIClasses
+        get() {
+            classes("couch")
+            return this
+        }
+
     val date: FomanticUIClasses
         get() {
             classes("date")
+            return this
+        }
+
+    val definition: FomanticUIClasses
+        get() {
+            classes("definition")
             return this
         }
 
@@ -319,6 +451,18 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val desktop: FomanticUIClasses
+        get() {
+            classes("desktop")
+            return this
+        }
+
+    val diagram: FomanticUIClasses
+        get() {
+            classes("diagram")
+            return this
+        }
+
     val dimmer: FomanticUIClasses
         get() {
             classes("dimmer")
@@ -328,6 +472,12 @@ class FomanticUIClasses : AttributeBuilder() {
     val disabled: FomanticUIClasses
         get() {
             classes("disabled")
+            return this
+        }
+
+    val dish: FomanticUIClasses
+        get() {
+            classes("dish")
             return this
         }
 
@@ -349,9 +499,27 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val door: FomanticUIClasses
+        get() {
+            classes("door")
+            return this
+        }
+
     val double: FomanticUIClasses
         get() {
             classes("double")
+            return this
+        }
+
+    val doubling: FomanticUIClasses
+        get() {
+            classes("doubling")
+            return this
+        }
+
+    val down: FomanticUIClasses
+        get() {
+            classes("down")
             return this
         }
 
@@ -395,6 +563,12 @@ class FomanticUIClasses : AttributeBuilder() {
     val equal: FomanticUIClasses
         get() {
             classes("equal")
+            return this
+        }
+
+    val exclamation: FomanticUIClasses
+        get() {
+            classes("exclamation")
             return this
         }
 
@@ -464,6 +638,18 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val footer: FomanticUIClasses
+        get() {
+            classes("footer")
+            return this
+        }
+
+    val forward: FomanticUIClasses
+        get() {
+            classes("forward")
+            return this
+        }
+
     val form: FomanticUIClasses
         get() {
             classes("form")
@@ -485,6 +671,24 @@ class FomanticUIClasses : AttributeBuilder() {
     val fullscreen: FomanticUIClasses
         get() {
             classes("fullscreen")
+            return this
+        }
+
+    val gamepad: FomanticUIClasses
+        get() {
+            classes("gamepad")
+            return this
+        }
+
+    val gas: FomanticUIClasses
+        get() {
+            classes("gas")
+            return this
+        }
+
+    val globe: FomanticUIClasses
+        get() {
+            classes("globe")
             return this
         }
 
@@ -512,6 +716,18 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val half: FomanticUIClasses
+        get() {
+            classes("half")
+            return this
+        }
+
+    val hdd: FomanticUIClasses
+        get() {
+            classes("hdd")
+            return this
+        }
+
     val header: FomanticUIClasses
         get() {
             classes("header")
@@ -530,9 +746,27 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val home: FomanticUIClasses
+        get() {
+            classes("home")
+            return this
+        }
+
     val horizontal: FomanticUIClasses
         get() {
             classes("horizontal")
+            return this
+        }
+
+    val hourglass: FomanticUIClasses
+        get() {
+            classes("hourglass")
+            return this
+        }
+
+    val house: FomanticUIClasses
+        get() {
+            classes("house")
             return this
         }
 
@@ -627,10 +861,21 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val laptop: FomanticUIClasses
+        get() {
+            classes("laptop")
+            return this
+        }
 
     val large: FomanticUIClasses
         get() {
             classes("large")
+            return this
+        }
+
+    val launch: FomanticUIClasses
+        get() {
+            classes("launch")
             return this
         }
 
@@ -677,6 +922,24 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val map: FomanticUIClasses
+        get() {
+            classes("map")
+            return this
+        }
+
+    val marked: FomanticUIClasses
+        get() {
+            classes("marked")
+            return this
+        }
+
+    val marker: FomanticUIClasses
+        get() {
+            classes("marker")
+            return this
+        }
+
     val massive: FomanticUIClasses
         get() {
             classes("massive")
@@ -692,6 +955,12 @@ class FomanticUIClasses : AttributeBuilder() {
     val medium: FomanticUIClasses
         get() {
             classes("medium")
+            return this
+        }
+
+    val memory: FomanticUIClasses
+        get() {
+            classes("memory")
             return this
         }
 
@@ -720,6 +989,12 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val microchip: FomanticUIClasses
+        get() {
+            classes("microchip")
+            return this
+        }
+
     val middle: FomanticUIClasses
         get() {
             classes("middle")
@@ -735,6 +1010,12 @@ class FomanticUIClasses : AttributeBuilder() {
     val minus: FomanticUIClasses
         get() {
             classes("minus")
+            return this
+        }
+
+    val mobile: FomanticUIClasses
+        get() {
+            classes("mobile")
             return this
         }
 
@@ -756,6 +1037,12 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val mute: FomanticUIClasses
+        get() {
+            classes("mute")
+            return this
+        }
+
     val negative: FomanticUIClasses
         get() {
             classes("negative")
@@ -774,6 +1061,11 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val off: FomanticUIClasses
+        get() {
+            classes("off")
+            return this
+        }
 
     val olive: FomanticUIClasses
         get() {
@@ -787,10 +1079,39 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val only: FomanticUIClasses
+        get() {
+            classes("only")
+            return this
+        }
 
     val outline: FomanticUIClasses
         get() {
             classes("outline")
+            return this
+        }
+
+    val FomanticUIClasses.open: FomanticUIClasses
+        get() {
+            classes("open")
+            return this
+        }
+
+    val or: FomanticUIClasses
+        get() {
+            classes("or")
+            return this
+        }
+
+    val orange: FomanticUIClasses
+        get() {
+            classes("orange")
+            return this
+        }
+
+    val ordered: FomanticUIClasses
+        get() {
+            classes("ordered")
             return this
         }
 
@@ -806,6 +1127,12 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val pause: FomanticUIClasses
+        get() {
+            classes("pause")
+            return this
+        }
+
     val placeholder: FomanticUIClasses
         get() {
             classes("placeholder")
@@ -816,6 +1143,12 @@ class FomanticUIClasses : AttributeBuilder() {
     val play: FomanticUIClasses
         get() {
             classes("play")
+            return this
+        }
+
+    val plug: FomanticUIClasses
+        get() {
+            classes("plug")
             return this
         }
 
@@ -850,6 +1183,18 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val project: FomanticUIClasses
+        get() {
+            classes("project")
+            return this
+        }
+
+    val pump: FomanticUIClasses
+        get() {
+            classes("pump")
+            return this
+        }
+
     val purple: FomanticUIClasses
         get() {
             classes("purple")
@@ -868,6 +1213,12 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val question: FomanticUIClasses
+        get() {
+            classes("question")
+            return this
+        }
+
     val raised: FomanticUIClasses
         get() {
             classes("raised")
@@ -877,6 +1228,18 @@ class FomanticUIClasses : AttributeBuilder() {
     val range: FomanticUIClasses
         get() {
             classes("range")
+            return this
+        }
+
+    val rating: FomanticUIClasses
+        get() {
+            classes("rating")
+            return this
+        }
+
+    val retweet: FomanticUIClasses
+        get() {
+            classes("retweet")
             return this
         }
 
@@ -892,6 +1255,41 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val robot: FomanticUIClasses
+        get() {
+            classes("robot")
+            return this
+        }
+
+    val rolling: FomanticUIClasses
+        get() {
+            classes("rolling")
+            return this
+        }
+
+    val rounded: FomanticUIClasses
+        get() {
+            classes("rounded")
+            return this
+        }
+
+    val route: FomanticUIClasses
+        get() {
+            classes("route")
+            return this
+        }
+
+    val satellite: FomanticUIClasses
+        get() {
+            classes("satellite")
+            return this
+        }
+
+    val save: FomanticUIClasses
+        get() {
+            classes("save")
+            return this
+        }
 
     val scale: FomanticUIClasses
         get() {
@@ -917,9 +1315,57 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val side: FomanticUIClasses
+        get() {
+            classes("side")
+            return this
+        }
+
+    val sitemap: FomanticUIClasses
+        get() {
+            classes("sitemap")
+            return this
+        }
+
+    val sliders: FomanticUIClasses
+        get() {
+            classes("sliders")
+            return this
+        }
+
+    val sort: FomanticUIClasses
+        get() {
+            classes("sort")
+            return this
+        }
+
     val sortable: FomanticUIClasses
         get() {
             classes("sortable")
+            return this
+        }
+
+    val spinner: FomanticUIClasses
+        get() {
+            classes("spinner")
+            return this
+        }
+
+    val star: FomanticUIClasses
+        get() {
+            classes("star")
+            return this
+        }
+
+    val step: FomanticUIClasses
+        get() {
+            classes("step")
+            return this
+        }
+
+    val steps: FomanticUIClasses
+        get() {
+            classes("step")
             return this
         }
 
@@ -929,9 +1375,57 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val sub: FomanticUIClasses
+        get() {
+            classes("sub")
+            return this
+        }
+
     val success: FomanticUIClasses
         get() {
             classes("success")
+            return this
+        }
+
+    val suitcase: FomanticUIClasses
+        get() {
+            classes("suitcase")
+            return this
+        }
+
+    val sync: FomanticUIClasses
+        get() {
+            classes("sync")
+            return this
+        }
+
+    val tablet: FomanticUIClasses
+        get() {
+            classes("tablet")
+            return this
+        }
+
+    val tachometer: FomanticUIClasses
+        get() {
+            classes("tachometer")
+            return this
+        }
+
+    val tag: FomanticUIClasses
+        get() {
+            classes("tag")
+            return this
+        }
+
+    val tasks: FomanticUIClasses
+        get() {
+            classes("tasks")
+            return this
+        }
+
+    val taxi: FomanticUIClasses
+        get() {
+            classes("taxi")
             return this
         }
 
@@ -953,15 +1447,57 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val ticked: FomanticUIClasses
+        get() {
+            classes("ticked")
+            return this
+        }
+
+    val times: FomanticUIClasses
+        get() {
+            classes("times")
+            return this
+        }
+
     val title: FomanticUIClasses
         get() {
             classes("title")
             return this
         }
 
+    val tools: FomanticUIClasses
+        get() {
+            classes("tools")
+            return this
+        }
+
+    val triangle: FomanticUIClasses
+        get() {
+            classes("triangle")
+            return this
+        }
+
+    val tv: FomanticUIClasses
+        get() {
+            classes("tv")
+            return this
+        }
+
+    val undo: FomanticUIClasses
+        get() {
+            classes("undo")
+            return this
+        }
+
     val unstackable: FomanticUIClasses
         get() {
             classes("unstackable")
+            return this
+        }
+
+    val up: FomanticUIClasses
+        get() {
+            classes("up")
             return this
         }
 
@@ -1242,6 +1778,12 @@ class FomanticUIClasses : AttributeBuilder() {
             return this
         }
 
+    val volume: FomanticUIClasses
+        get() {
+            classes("volume")
+            return this
+        }
+
     val warning: FomanticUIClasses
         get() {
             classes("warning")
@@ -1251,6 +1793,30 @@ class FomanticUIClasses : AttributeBuilder() {
     val wide: FomanticUIClasses
         get() {
             classes("wide")
+            return this
+        }
+
+    val wind: FomanticUIClasses
+        get() {
+            classes("wind")
+            return this
+        }
+
+    val windows: FomanticUIClasses
+        get() {
+            classes("windows")
+            return this
+        }
+
+    val wrapping: FomanticUIClasses
+        get() {
+            classes("wrapping")
+            return this
+        }
+
+    val wrench: FomanticUIClasses
+        get() {
+            classes("wrench")
             return this
         }
 }
