@@ -181,7 +181,7 @@
                     <main>
                         <h1 id="css--style"><a class="header" href="#css--style">CSS &amp; Style</a></h1>
 <p>Kweb can integrate easily with most CSS frameworks, particularly those
-that don't have a heavy reliance on JavaScript. Injecting custom CSS files 
+that don't have a heavy reliance on JavaScript. Injecting custom CSS files
 is also supported by using the CSSPlugin.</p>
 <ul>
 <li><a href="#css-frameworks">CSS Frameworks</a>
@@ -218,16 +218,16 @@ fun main() {
 website automatically.</p>
 <p>Let's look at one of the simple examples from the <a href="https://Fomantic-ui.com/elements/input.html">Fomantic
 UI</a> documentation:</p>
-<pre><code class="language-html">&lt;div class=&quot;ui icon input&quot;&gt;
-  &lt;input type=&quot;text&quot; placeholder=&quot;Search...&quot;&gt;
-  &lt;i class=&quot;search icon&quot;&gt;&lt;/i&gt;
+<pre><code class="language-html">&lt;div class="ui icon input"&gt;
+  &lt;input type="text" placeholder="Search..."&gt;
+  &lt;i class="search icon"&gt;&lt;/i&gt;
 &lt;/div&gt;
 </code></pre>
 <p>This translates to the Kotlin:</p>
 <pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(fomanticUIPlugin)) {
     doc.body {
         div(fomantic.ui.icon.input) {
-            input(type = InputType.text, placeholder = &quot;Search...&quot;)
+            input(type = InputType.text, placeholder = "Search...")
             i(fomantic.search.icon)
         }
     }
@@ -246,7 +246,7 @@ A Kweb website built on Google Cloud Platform with Fomantic styling.</li>
 <li><a href="https://bulma.io/">Bulma</a></li>
 </ul>
 <h2 id="custom-css-files"><a class="header" href="#custom-css-files">Custom CSS files</a></h2>
-<p>The <a href="https://docs.kweb.io/api/kweb-core/kweb.plugins.css/-c-s-s-plugin/index.html">CSSPlugin</a> can be used to 
+<p>The <a href="https://docs.kweb.io/api/kweb-core/kweb.plugins.css/-c-s-s-plugin/index.html">CSSPlugin</a> can be used to
 conveniently add multiple CSS files to your website, just add it to your resources folder as follows:</p>
 <pre><code>├── src
 │  └─── main
@@ -256,15 +256,15 @@ conveniently add multiple CSS files to your website, just add it to your resourc
 </code></pre>
 <p>Next add the plugin via the <a href="https://docs.kweb.io/api/kweb-core/kweb/-kweb/index.html">plugins</a> constructor
 parameter.</p>
-<pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(CSSPlugin(&quot;css&quot;, &quot;test.css&quot;))) {
+<pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(CSSPlugin("css", "test.css"))) {
     // ...
 }
 </code></pre>
 <p>Specify the relative path to the folder inside src/main/resources
-and the files to include (either a single file name or a list of file names). </p>
-<p>The files will be served under /kweb_static/css and linked from the websites 
+and the files to include (either a single file name or a list of file names).</p>
+<p>The files will be served under /kweb_static/css and linked from the websites
 HTML head tag, for example:</p>
-<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/kweb_static/css/test.css&quot;&gt;
+<pre><code class="language-html">&lt;link rel="stylesheet" type="text/css" href="/kweb_static/css/test.css"&gt;
 </code></pre>
 
                     </main>

@@ -192,7 +192,7 @@ of the techniques Kweb uses to achieve this.</p>
 </ul>
 <h2 id="server-side-rendering"><a class="header" href="#server-side-rendering">Server-side rendering</a></h2>
 <p>Kweb uses the excellent <a href="https://jsoup.org/">JSoup</a> library to render the initial HTML page, which is supplied to
-the browser when the page first loads. This leads to a faster initial page load, and allows search engines to index 
+the browser when the page first loads. This leads to a faster initial page load, and allows search engines to index
 the page even if they aren't JavaScript aware.</p>
 <h2 id="hydration"><a class="header" href="#hydration">Hydration</a></h2>
 <p>Kweb uses a technique called <a href="https://en.wikipedia.org/wiki/Hydration_(web_development)">hydration</a> to add
@@ -204,16 +204,16 @@ between messages.</p>
 <h2 id="immediate-events"><a class="header" href="#immediate-events">Immediate events</a></h2>
 <p>Normal DOM events are reported to the Kweb server which then decides how to handle them. In some situations this
 can cause a short but noticeable delay. <a href="events.html#immediate-events">Immediate events</a> address this by allowing
-the event handler's DOM changes to be &quot;recorded&quot; by Kweb and sent to the browser in advance so it can be executed
+the event handler's DOM changes to be "recorded" by Kweb and sent to the browser in advance so it can be executed
 immediately.</p>
 <h2 id="javascript-caching"><a class="header" href="#javascript-caching">JavaScript caching</a></h2>
 <p>After the initial page load, Kweb modifies the DOM by sending JavaScript to the browser. Much of this JavaScript
 is sent as part of the initial page load, but some is sent dynamically as the user interacts with the page.
 This JavaScript is parsed using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a>
-(which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>), 
+(which is more efficient than <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">eval</a>),
 and then cached in the browser for future use.</p>
 <h2 id="input-field-diffing"><a class="header" href="#input-field-diffing">Input field diffing</a></h2>
-<p>When an <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, or <code>&lt;textarea&gt;</code> element <a href="https://www.w3schools.com/tags/att_input_value.asp">value</a>` 
+<p>When an <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, or <code>&lt;textarea&gt;</code> element <a href="https://www.w3schools.com/tags/att_input_value.asp">value</a>`
 is modified, Kweb only sends the change to the browser rather than the entire field.</p>
 
                     </main>

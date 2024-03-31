@@ -193,10 +193,10 @@
 <li><a href="#template-repository">Template Repository</a></li>
 </ul>
 <h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
-<p>To get started with Kweb, you should have some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> and 
+<p>To get started with Kweb, you should have some familiarity with <a href="https://kotlinlang.org/">Kotlin</a> and
 <a href="https://gradle.org/">Gradle</a>. It is also helpful to have a basic understanding of HTML.</p>
 <h2 id="adding-kweb-to-your-gradle-project"><a class="header" href="#adding-kweb-to-your-gradle-project">Adding Kweb to your Gradle project</a></h2>
-<p>To add Kweb to your Gradle project, you will need to include the following dependencies in your 
+<p>To add Kweb to your Gradle project, you will need to include the following dependencies in your
 <code>build.gradle</code> or <code>build.gradle.kt</code> files:</p>
 <h3 id="groovy"><a class="header" href="#groovy">Groovy</a></h3>
 <pre><code class="language-kotlin">dependencies {
@@ -208,26 +208,26 @@
 </code></pre>
 <h3 id="kotlin"><a class="header" href="#kotlin">Kotlin</a></h3>
 <pre><code class="language-kotlin">dependencies {
-  implementation(&quot;io.kweb:kweb-core:1.4.11&quot;)
+  implementation("io.kweb:kweb-core:1.4.11")
 
   // This (or another SLF4J binding) is required for Kweb to log errors
-  implementation(&quot;org.slf4j:slf4j-simple:2.0.3&quot;)
+  implementation("org.slf4j:slf4j-simple:2.0.3")
 }
 </code></pre>
 <h2 id="hello-world"><a class="header" href="#hello-world">Hello world</a></h2>
-<p>To create a simple &quot;Hello World&quot; example with Kweb, create a new Kotlin file 
+<p>To create a simple "Hello World" example with Kweb, create a new Kotlin file
 and enter the following code:</p>
 <pre><code class="language-kotlin">import kweb.*
 
 fun main() {
     Kweb(port = 16097) {
         doc.body {
-            h1().text(&quot;Hello World!&quot;)
+            h1().text("Hello World!")
         }
     }
 }
 </code></pre>
-<p>Run the file and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to see the 
+<p>Run the file and then visit <a href="http://localhost:16097/">http://localhost:16097/</a> in your web browser to see the
 output. This should display the following HTML body:</p>
 <pre><code class="language-html">&lt;body&gt;
   &lt;h1&gt;Hello World!&lt;/h1&gt;
@@ -251,7 +251,7 @@ features like for loops, functions, coroutines, and classes.</p>
     doc.body {
         ul {
             for (x in 1..5) {
-                li().text(&quot;Hello World $x!&quot;)
+                li().text("Hello World $x!")
             }
         }
     }

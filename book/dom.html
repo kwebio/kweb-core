@@ -194,7 +194,7 @@
 <pre><code class="language-kotlin">fun main() {
     Kweb(port = 16097) {
         doc.body {
-            button().text(&quot;Click Me!&quot;)
+            button().text("Click Me!")
         }
     }
 }
@@ -204,16 +204,16 @@
     doc.body {
         table {
             tr {
-                th().text(&quot;Name&quot;)
-                th().text(&quot;Age&quot;)
+                th().text("Name")
+                th().text("Age")
             }
             tr {
-                td().text(&quot;Alice&quot;)
-                td().text(&quot;21&quot;)
+                td().text("Alice")
+                td().text("21")
             }
             tr {
-                td().text(&quot;Bob&quot;)
-                td().text(&quot;22&quot;)
+                td().text("Bob")
+                td().text("22")
             }
         }
     }
@@ -223,9 +223,9 @@
 <p>If you assign the button element to a val then you can also <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/set.html">set its
 attributes</a>:</p>
 <pre><code class="language-kotlin">val button = button()
-button.text(&quot;Click Me!&quot;)
-button.classes(&quot;bigbutton&quot;)
-button[&quot;autofocus&quot;] = true
+button.text("Click Me!")
+button.classes("bigbutton")
+button["autofocus"] = true
 </code></pre>
 <p>Or delete it:</p>
 <pre><code class="language-kotlin">button.delete()
@@ -234,8 +234,8 @@ button[&quot;autofocus&quot;] = true
 <p>The DSL syntax makes it very easy to create elements and their children
 together:</p>
 <pre><code class="language-kotlin">ul {
-    li().text(&quot;One&quot;)
-    li().text(&quot;Two&quot;)
+    li().text("One")
+    li().text("Two")
 }
 </code></pre>
 <p>The created
@@ -244,17 +244,17 @@ together:</p>
 listeners, or set the element's <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/text.html">text</a> or <a href="https://docs.kweb.io/api/kweb-core/kweb/-element/inner-h-t-m-l.html">innerHtml</a>:</p>
 <pre><code class="language-kotlin">button { btnEl -&gt;
     with(btnEl) {
-        classes(&quot;bigbutton&quot;)
-        this[&quot;autofocus&quot;] = true
-        text(&quot;Click Me!&quot;)
+        classes("bigbutton")
+        this["autofocus"] = true
+        text("Click Me!")
     }
 }
 </code></pre>
 <p>We can also use the <code>new {}</code> function to add children to a pre-existing Element:</p>
 <pre><code class="language-kotlin">val unorderedList : ULElement = ul()
 unorderedList.new {
-    li().text(&quot;One&quot;)
-    li().text(&quot;Two&quot;)
+    li().text("One")
+    li().text("Two")
 }
 </code></pre>
 <h2 id="reading-from-the-dom"><a class="header" href="#reading-from-the-dom">Reading from the DOM</a></h2>
@@ -264,7 +264,7 @@ element:</p>
 // A KVar is a mutable value to which you can add listeners
 val inputKVar = input.value
 inputKVar.addListener { old, new -&gt;
-    println(&quot;Input changed from $old to $new&quot;)
+    println("Input changed from $old to $new")
 }
 </code></pre>
 <p>Events can evaluate a JavaScript expression and send the result to the
@@ -282,8 +282,8 @@ statically-typed HTML DSL, fully integrated with the Kotlin language.</p>
 <p>If a tag doesn't have explicit support in Kweb that's not a problem.
 For example, here is how you might use the infamous and now-obsolete
 &lt;blink&gt; tag:</p>
-<pre><code class="language-kotlin">element(&quot;blink&quot;) {
-    span().text(&quot;Blinking Text&quot;)
+<pre><code class="language-kotlin">element("blink") {
+    span().text("Blinking Text")
 }
 </code></pre>
 <h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>

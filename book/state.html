@@ -191,12 +191,12 @@
 <li><a href="#reversible-mapping">Reversible mapping</a></li>
 </ul>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>A Kweb app is a function that maps state on the server to the DOM in the user's web browser. Once this 
+<p>A Kweb app is a function that maps state on the server to the DOM in the user's web browser. Once this
 mapping is defined, you can change the state and the browser will update automatically.</p>
 <h2 id="the-kvar-class"><a class="header" href="#the-kvar-class">The KVar Class</a></h2>
 <p>A <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/index.html">KVar</a>
-is an observable container. It contains a single typed object, which can change over time, similar to an 
-<a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a>. 
+is an observable container. It contains a single typed object, which can change over time, similar to an
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a>.
 You can add listeners to a KVar to be notified immediately when it changes.</p>
 <p>For example:</p>
 <pre><code class="language-kotlin">val counter = KVar(0)
@@ -204,11 +204,11 @@ You can add listeners to a KVar to be notified immediately when it changes.</p>
 <p>Here we create a counter of type <em>KVar&lt;Int&gt;</em> initialized with the
 value 0.</p>
 <p>We can also read and modify the value of a KVar:</p>
-<pre><code class="language-kotlin">println(&quot;Counter value ${counter.value}&quot;)
+<pre><code class="language-kotlin">println("Counter value ${counter.value}")
 counter.value = 1
-println(&quot;Counter value ${counter.value}&quot;)
+println("Counter value ${counter.value}")
 counter.value++
-println(&quot;Counter value ${counter.value}&quot;)
+println("Counter value ${counter.value}")
 </code></pre>
 <p>Will print:</p>
 <pre><code class="language-text">Counter value 0
@@ -218,33 +218,33 @@ Counter value 2
 <p>KVars support powerful mapping semantics to create new KVars:</p>
 <pre><code class="language-kotlin">val counterDoubled = counter.map { it * 2 }
 counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 counter.value = 6
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 </code></pre>
 <p>Will print:</p>
 <pre><code class="language-text">counter: 5, doubled: 10
 counter: 6, doubled: 12
 </code></pre>
 <p>Note that <code>counterDoubled</code> updates automatically, because mapped KVars listen to the original for changes.</p>
-<p>The <code>KVar</code> class is a subclass of <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>, 
+<p>The <code>KVar</code> class is a subclass of <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-val/index.html">KVal</a>,
 which is a read-only version of <code>KVar</code>.</p>
-<p><strong>Note:</strong> KVars should only be used to store values that are themselves immutable, such as an Int, String, or a 
+<p><strong>Note:</strong> KVars should only be used to store values that are themselves immutable, such as an Int, String, or a
 Kotlin <a href="https://kotlinlang.org/docs/reference/data-classes.html">data class</a> with immutable parameters.</p>
 <h2 id="kvars-and-the-dom"><a class="header" href="#kvars-and-the-dom">KVars and the DOM</a></h2>
 <p>Within the Kotlin DSL you can use the <code>kvar()</code> function to create a <code>KVar</code>. This has the advantage of calling
-<code>KVar.close()</code> when this DOM fragment is cleaned up which will free up resources, and avoids having to import 
+<code>KVar.close()</code> when this DOM fragment is cleaned up which will free up resources, and avoids having to import
 the <code>KVar</code> class.</p>
 <pre><code class="language-kotlin">Kweb(port = 2135) {
     doc.body {
-        val name = kvar(&quot;John&quot;)
+        val name = kvar("John")
         li().text(name)
     }
 }
 </code></pre>
 <p>The neat part is that if the value of <em>name</em> changes, the DOM element
 text will update automatically. It may help to think of this as a way of
-&quot;unwrapping&quot; a KVar.</p>
+"unwrapping" a KVar.</p>
 <p>Numerous other functions on
 <a href="https://jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.dom.element/-element/index.html">Elements</a>
 support KVars in a similar manner, including
@@ -259,10 +259,10 @@ and similarly any changes in the browser by the user will be reflected
 immediately in the KVar, for example:</p>
 <pre><code class="language-kotlin">Kweb(port = 2395) {
     doc.body {
-        p().text(&quot;What is your name?&quot;)
+        p().text("What is your name?")
         val input = input(type = InputType.text)
-        input.value = KVar(&quot;Peter Pan&quot;)
-        val greeting = input.value.map { name -&gt; &quot;Hi $name!&quot; }
+        input.value = KVar("Peter Pan")
+        val greeting = input.value.map { name -&gt; "Hi $name!" }
         p().text(greeting)
     }
 }
@@ -274,7 +274,7 @@ immediately in the KVar, for example:</p>
 <p>But what if you want to do more than just modify a single element based
 on a KVar, what if you want to modify a whole tree of elements?</p>
 <p>This is where the <a href="https://docs.kweb.io/api/kweb-core/kweb.state/render.html">render</a> function comes in:</p>
-<pre><code class="language-kotlin">val list = KVar(listOf(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
+<pre><code class="language-kotlin">val list = KVar(listOf("one", "two", "three"))
 
 Kweb(port = 16097) {
     doc.body {
@@ -289,7 +289,7 @@ Kweb(port = 16097) {
 }
 </code></pre>
 <p>Here, if we were to change the list:</p>
-<pre><code class="language-kotlin">list.value = listOf(&quot;four&quot;, &quot;five&quot;, &quot;six&quot;)
+<pre><code class="language-kotlin">list.value = listOf("four", "five", "six")
 </code></pre>
 <p>Then the relevant part of the DOM will be redrawn instantly.</p>
 <p>The simplicity of this mechanism may disguise how powerful it is, since
@@ -297,25 +297,25 @@ render {} blocks can be nested, it's possible to be very selective
 about what parts of the DOM must be modified in response to changes in
 state.</p>
 <p><strong>Note:</strong> Kweb will only re-render a DOM fragment if the value of the KVar
-actually changes so you should avoid &quot;unwrapping&quot; KVars with a
+actually changes so you should avoid "unwrapping" KVars with a
 <em>render()</em> or <em>.text()</em> call before you need to.</p>
 <p>The <a href="https://javadoc.jitpack.io/com/github/kwebio/core/0.3.15/javadoc/io.kweb.state/-k-val/map.html">KVal.map {}</a>
 function is a powerful tool for manipulating KVals and KVars without unwrapping them.</p>
 <h2 id="rendering-lists-with-rendereach"><a class="header" href="#rendering-lists-with-rendereach">Rendering lists with renderEach</a></h2>
-<p>The <code>renderEach()</code> function allows you to render a list of items, while 
-automatically updating the rendered DOM in response to changes in the list. </p>
+<p>The <code>renderEach()</code> function allows you to render a list of items, while
+automatically updating the rendered DOM in response to changes in the list.</p>
 <p>While a <code>KVar&lt;List&lt;FooBar&gt;&gt;</code> could be passed to <code>render()</code>, it would be
 very inefficient because the entire list would be re-rendered every time.
 <code>renderEach()</code> will only re-render the elements that have changed.</p>
-<p>The items are provided in an <a href="https://docs.kweb.io/api/kweb-core/kweb.state/index.html#183886605%2FClasslikes%2F769193423">ObservableList</a>, which implements the 
+<p>The items are provided in an <a href="https://docs.kweb.io/api/kweb-core/kweb.state/index.html#183886605%2FClasslikes%2F769193423">ObservableList</a>, which implements the
 <code>MutableList</code> interface.</p>
 <pre><code class="language-kotlin">doc.body {
     data class Pet(val name : String, val age : Int)
 
     val obsList = ObservableList(listOf(
-        Pet(&quot;Sammy&quot;, 7),
-        Pet(&quot;Halley&quot;, 5),
-        Pet(&quot;Buddy&quot;, 3)
+        Pet("Sammy", 7),
+        Pet("Halley", 5),
+        Pet("Buddy", 3)
     ))
     table {
         renderEach(obsList) { item -&gt;
@@ -325,10 +325,10 @@ very inefficient because the entire list would be re-rendered every time.
             }
         }
     }
-    obsList.add(1, Pet(&quot;Bella&quot;, 2))
+    obsList.add(1, Pet("Bella", 2))
     obsList.removeAt(2)
     obsList.move(0, 1)
-    obsList[0] = Pet(&quot;Joe&quot;, 1)
+    obsList[0] = Pet("Joe", 1)
 }
 </code></pre>
 <h2 id="extracting-data-class-properties"><a class="header" href="#extracting-data-class-properties">Extracting data class properties</a></h2>
@@ -338,15 +338,15 @@ can use Kvar.property() to create a KVar from one of its properties
 which will update the original KVar if changed:</p>
 <pre><code class="language-kotlin">data class User(val name: String)
 
-val user = KVar(User(&quot;Ian&quot;))
+val user = KVar(User("Ian"))
 val name = user.property(User::name)
-name.value = &quot;John&quot;
-println(user) // Will print: KVar(User(name = &quot;John&quot;))
+name.value = "John"
+println(user) // Will print: KVar(User(name = "John"))
 </code></pre>
 <h2 id="reversible-mapping"><a class="header" href="#reversible-mapping">Reversible mapping</a></h2>
 <p>If you check the type of <em>counterDoubled</em>, you'll notice that it's a
 <em>KVal</em> rather than a <em>KVar</em>, meaning it cannot be modified directly, only by
-changing the <em>KVar</em> it was mapped from. </p>
+changing the <em>KVar</em> it was mapped from.</p>
 <p>So this will result in a compilation error:</p>
 <pre><code class="language-kotlin">val counter = KVar(0)
 val counterDoubled = counter.map { it * 2 }
@@ -356,16 +356,16 @@ counterDoubled.value = 20 // &lt;--- This won't compile
 <a href="https://docs.kweb.io/api/kweb-core/kweb.state/-k-var/map.html">map()</a>
 function which takes a <em>ReversibleFunction</em> implementation. This version
 of <em>map</em> will produce a KVar which can be modified, as follows:</p>
-<pre><code class="language-kotlin">val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;(&quot;doubledCounter&quot;) {
+<pre><code class="language-kotlin">val counterDoubled = counter.map(object : ReversibleFunction&lt;Int, Int&gt;("doubledCounter") {
     override fun invoke(from: Int) = from * 2
     override fun reverse(original: Int, change: Int) = change / 2
 })
 counter.value = 5
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 // output: counter: 5, doubled: 10
 
 counterDoubled.value = 12 // &lt;-- Couldn't do this with a KVal
-println(&quot;counter: ${counter.value}, doubled: ${counterDoubled.value}&quot;)
+println("counter: ${counter.value}, doubled: ${counterDoubled.value}")
 // output: counter: 6, doubled: 12
 </code></pre>
 <p>If the mapped <em>Kvar</em> is changed the original KVar it was mapped from will also

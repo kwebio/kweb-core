@@ -198,35 +198,35 @@ directly with the browser's JavaScript interpreter:</p>
 <p>Note that this is unrelated to Kotlin's ability to <a href="https://kotlinlang.org/docs/js-overview.html">compile to JavaScript</a>.</p>
 <h2 id="calling-a-javascript-function"><a class="header" href="#calling-a-javascript-function">Calling a JavaScript function</a></h2>
 <pre><code class="language-kotlin">doc.body {
-    browser.callJsFunction(&quot;&quot;&quot;alert(&quot;Hello World!&quot;)&quot;&quot;&quot;)
+    browser.callJsFunction("""alert("Hello World!")""")
 }
 </code></pre>
 <h2 id="calling-with-parameters"><a class="header" href="#calling-with-parameters">Calling with parameters</a></h2>
 <p>You can pass parameters to a JavaScript function by passing them as arguments to the <code>callJsFunction()</code> function,
 using <code>{}</code> for substitution:</p>
 <pre><code class="language-kotlin">doc.body {
-    val greeting = &quot;Hello&quot;.json
-    val name = &quot;World&quot;.json
-    browser.callJsFunction(&quot;&quot;&quot;alert({} + &quot; &quot; + {} + &quot;!&quot;)&quot;&quot;&quot;, greeting, name)
+    val greeting = "Hello".json
+    val name = "World".json
+    browser.callJsFunction("""alert({} + " " + {} + "!")""", greeting, name)
 }
 </code></pre>
 <p>Parameters must be converted to a <a href="https://kotlinlang.org/api/kotlinx.serialization/kotlinx-serialization-json/kotlinx.serialization.json/-json-element/">JsonElement</a>,
 for example by using the <a href="https://docs.kweb.io/api/kweb-core/kweb.util/json.html">json</a> extension property. Within
-the JavaScript code the <code>{}</code> should be treated like a variable, so <code>alert({})</code> is ok but <code>alert(&quot;{}&quot;)</code> will not work.</p>
+the JavaScript code the <code>{}</code> should be treated like a variable, so <code>alert({})</code> is ok but <code>alert("{}")</code> will not work.</p>
 <h2 id="function-caching-and-preloading"><a class="header" href="#function-caching-and-preloading">Function caching and preloading</a></h2>
-<p>Kotlin automatically caches JavaScript functions in the browser for efficiency. If the function is 
+<p>Kotlin automatically caches JavaScript functions in the browser for efficiency. If the function is
 first called during initial page render, it will be parsed and cached as part of the initial page load.</p>
 <h2 id="calling-a-javascript-function-with-a-result"><a class="header" href="#calling-a-javascript-function-with-a-result">Calling a JavaScript function with a result</a></h2>
 <p>You can also retrieve a result from a function call using <a href="https://docs.kweb.io/api/kweb-core/kweb/-web-browser/call-js-function-with-result.html">callJsFunctionWithResult()</a>.
 Note that the last line of the <code>jsBody</code> parameter must be a <code>return</code> statement:</p>
 <pre><code class="language-kotlin">doc.body {
     elementScope().launch {
-        val result : JsonElement = browser.callJsFunctionWithResult(&quot;return Date.now()&quot;)
-        println(&quot;Result: ${result.jsonPrimitive.intOrNull}&quot;)
+        val result : JsonElement = browser.callJsFunctionWithResult("return Date.now()")
+        println("Result: ${result.jsonPrimitive.intOrNull}")
     }
 }
 </code></pre>
-<p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>. 
+<p><code>callJsFunctionWithResult()</code> is a suspend function so it must be called inside a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/">CoroutineScope</a>.
 You can create one within Kweb's DSL using <strong>elementScope()</strong>. This scope will be cancelled automatically
 when this part of the DOM is no-longer needed.</p>
 <h2 id="including-static-javascript-files"><a class="header" href="#including-static-javascript-files">Including static JavaScript files</a></h2>
@@ -241,7 +241,7 @@ follows:</p>
 </code></pre>
 <p>Next add the plugin via the <a href="https://docs.kweb.io/api/kweb-core/kweb/-kweb/index.html">plugins</a> constructor
 parameter.</p>
-<pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(JavascriptPlugin(&quot;script&quot;, &quot;test.js&quot;))) {
+<pre><code class="language-kotlin">Kweb(port = 16097, plugins = listOf(JavascriptPlugin("script", "test.js"))) {
     // ...
 }
 </code></pre>
@@ -249,7 +249,7 @@ parameter.</p>
 and the files to include (either a single file name or a list of file names).</p>
 <p>The files will be served under /kweb_static/js and linked from the websites
 HTML head tag, for example:</p>
-<pre><code class="language-html">&lt;script type=&quot;text/javascript&quot; src=&quot;/kweb_static/js/test.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script type="text/javascript" src="/kweb_static/js/test.js"&gt;&lt;/script&gt;
 </code></pre>
 
                     </main>
