@@ -5,7 +5,7 @@ plugins {
     buildsrc.conventions.`kotlin-jvm`
     buildsrc.conventions.`maven-publish`
     id("org.jetbrains.dokka") version "1.9.10"
-    id("com.github.ben-manes.versions") version "0.50.0"
+    id("com.github.ben-manes.versions") version "0.51.0"
     kotlin("plugin.serialization")
 
     // See api/API_README.md for details
