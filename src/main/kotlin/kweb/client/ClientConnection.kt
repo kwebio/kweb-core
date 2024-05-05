@@ -46,9 +46,13 @@ sealed class ClientConnection {
                 sendBuffer.close()
             }
         }
+
+        override fun toString(): String {
+            return "WebSocket()"
+        }
     }
 
-    class Caching : ClientConnection() {
+    class Caching(val description : String) : ClientConnection() {
         private val queue = ConcurrentLinkedQueue<String>()
         private val lock = ReentrantLock()
         private val isRead = AtomicBoolean(false)
@@ -58,7 +62,7 @@ sealed class ClientConnection {
                 if (isRead.get()) {
                     error("Can't write to queue after it has been read")
                 } else {
-                    logger.debug("Caching '$message' as websocket isn't yet available")
+                    logger.debug("Caching \"${message.take(20)}...\" in $description")
                     queue.add(message)
                 }
             }
@@ -82,7 +86,10 @@ sealed class ClientConnection {
                 return queue.size
             }
         }
-    }
 
+        override fun toString(): String {
+            return "Caching($description)"
+        }
+    }
 
 }

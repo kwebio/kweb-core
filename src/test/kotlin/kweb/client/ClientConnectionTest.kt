@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
 class ClientConnectionTest : FunSpec({
-  val caching = ClientConnection.Caching()
+  val caching = ClientConnection.Caching("test")
 
   test("Adding elements to the queue") {
     caching.send("Message 1")
