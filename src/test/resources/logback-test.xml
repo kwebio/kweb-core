@@ -8,7 +8,7 @@
         </layout>
     </appender>
 
-    <logger name="kweb" level="debug">
+    <logger name="kweb.Kweb" level="debug">
         <appender-ref ref="CONSOLE"/>
     </logger>
 

@@ -1,5 +1,6 @@
 package kweb.state
 
+import kweb.util.CallbackOwner
 import kweb.util.random
 import mu.two.KotlinLogging
 import java.util.concurrent.ConcurrentHashMap
@@ -11,7 +12,7 @@ private val logger = KotlinLogging.logger {}
  * A KVal is a **read-only** observable container for a value of type T. These are typically created by
  * [KVal.map] or [KVar.map], but can also be created directly.
  */
-open class KVal<T : Any?>(value: T) : AutoCloseable{
+open class KVal<T : Any?>(private val kvalOwner : CallbackOwner, value: T) : AutoCloseable{
 
     @Volatile
     protected var closeReason: CloseReason? = null
@@ -24,10 +25,11 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
     /**
      * Add a listener to this KVar. The listener will be called whenever the [value] property changes.
      */
-    fun addListener(listener: (T, T) -> Unit): Long {
+    fun addListener(owner : CallbackOwner = kvalOwner, listener: (T, T) -> Unit) : Long {
         verifyNotClosed("add a listener")
         val handle = random.nextLong()
         listeners[handle] = listener
+        owner.onClose(listeners, handle)
         return handle
     }
 
@@ -59,11 +61,11 @@ open class KVal<T : Any?>(value: T) : AutoCloseable{
      *
      * For bi-directional mappings, see [KVar.map].
      */
-    fun <O : Any?> map(mapper: (T) -> O): KVal<O> {
+    fun <O : Any?> map(owner: CallbackOwner = kvalOwner, mapper: (T) -> O): KVal<O> {
         if (isClosed) {
             error("Can't map this var because it was closed due to $closeReason")
         }
-        val mappedKVal = KVal(mapper(value))
+        val mappedKVal = KVal(owner.child("map"), mapper(value))
         val handle = addListener { old, new ->
             if (!isClosed && !mappedKVal.isClosed) {
                 if (old != new) {

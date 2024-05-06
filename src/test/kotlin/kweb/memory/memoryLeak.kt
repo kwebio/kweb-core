@@ -22,7 +22,7 @@ class MemoryTestSever(private val port: Int = 8080) : AutoCloseable {
         val runtime = Runtime.getRuntime()
 
         var counter = 0
-        val randomDataList = (0..100).map { KVar(initialValue = "") }
+        val randomDataList = (0..10).map { KVar(initialValue = "") }
         randomDataJob = scope.launch {
             while (isActive) {
                 randomDataList.forEach { randomData ->
@@ -39,7 +39,7 @@ class MemoryTestSever(private val port: Int = 8080) : AutoCloseable {
                     ).printMemoryLoad()
 
                 System.gc()
-                delay(duration = 100.milliseconds)
+                delay(duration = 5.seconds)
             }
         }
 
