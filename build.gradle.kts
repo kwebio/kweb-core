@@ -43,7 +43,7 @@ dependencies {
     // Ktor dependencvies
     ////////////////////
     api("io.ktor:ktor-server-jetty:2.3.10")
-    api("io.ktor:ktor-server-websockets:2.3.0")
+    api("io.ktor:ktor-server-websockets:2.3.11")
     api("io.ktor:ktor-server-default-headers:2.3.9")
     api("io.ktor:ktor-server-compression:2.3.9")
     api("io.ktor:ktor-server-caching-headers:2.3.9")
