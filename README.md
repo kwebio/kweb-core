@@ -31,7 +31,7 @@ Kweb is designed to make it easy for developers to create modern websites withou
 
 Kweb is a remote interface for a web browser's DOM (Document Object Model). With Kweb, you can create and manipulate DOM elements, and listen for and handle events, all using an intuitive Kotlin DSL that mirrors the structure of the HTML being created. Kweb is built on the Ktor framework, which handles HTTP, HTTPS, and WebSocket transport, and is optimized to minimize latency and resource usage on both the server and browser.
 
-## Note on Memory Leak Issue
+### Note on Memory Leak Issue
 
 We have identified a memory leak issue that may affect users when using the `InputElement` class, we're working on a [fix](https://github.com/kwebio/kweb-core/pull/611). We recommend that you run a memory profiler to see if you're affected.
 
