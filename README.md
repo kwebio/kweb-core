@@ -31,12 +31,15 @@ Kweb is designed to make it easy for developers to create modern websites withou
 
 Kweb is a remote interface for a web browser's DOM (Document Object Model). With Kweb, you can create and manipulate DOM elements, and listen for and handle events, all using an intuitive Kotlin DSL that mirrors the structure of the HTML being created. Kweb is built on the Ktor framework, which handles HTTP, HTTPS, and WebSocket transport, and is optimized to minimize latency and resource usage on both the server and browser.
 
+### Note on Memory Leak Issue
+
+We have identified a memory leak issue that may affect users when using the `InputElement` class, we're working on a [fix](https://github.com/kwebio/kweb-core/pull/611). We recommend that you run a memory profiler to see if you're affected.
+
 ## Example
   
 ```kotlin
 import kweb.*
 import kweb.InputType.text
-
 
 fun main() {
     Kweb(port = 16097) {
@@ -52,32 +55,3 @@ fun main() {
         }
     }
 }
-```
-
-This example illustrates [creating DOM elements](https://docs.kweb.io/book/dom.html#creating-dom-elements-and-fragments),
-[modifying elements](https://docs.kweb.io/book/dom.html#adding-attributes), 
-[KVars](https://docs.kweb.io/book/state.html#building-blocks), and binding 
-[input elements](https://docs.kweb.io/book/dom.html#input-elements).
-
-  <kbd>
-<img src="https://user-images.githubusercontent.com/23075/197428328-9a42d5e2-f6c9-43f8-9d7c-62fe1a445dab.gif" />
-  </kbd>
-  
-## Learn More
-
-* [User Manual](http://docs.kweb.io/book)
-* [API Documentation](https://docs.kweb.io/api)
-* [Example Project](https://github.com/freenet/freenetorg-website/)
-* [Questions, Feedback, Bugs](https://github.com/kwebio/kweb-core/issues)
-* [Chat with us](https://matrix.to/#/#kweb:matrix.org)
-* [Frequently Asked Questions](https://docs.kweb.io/book/faq.html)
-  
-## Friends of Kweb
-  
-YourKit supports open source projects with innovative and intelligent tools for monitoring and profiling Java and .NET
-applications. YourKit is the creator of [YourKit Java Profiler](https://www.yourkit.com/java/profiler/),
-[YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/),
-and [YourKit YouMonitor](https://www.yourkit.com/youmonitor/).
-
-[![YourKit Logo](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/)
-
