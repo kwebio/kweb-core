@@ -19,9 +19,9 @@
 
 ## Notice of Project Status (June 2024)
 
-Due to recent [changes](https://www.reddit.com/r/java/comments/1dkgh85/psa_maven_central_publishing_requires_token_now/) in Sonatype's deployment requirements, persistent [headaches](https://www.reddit.com/r/Kotlin/comments/y042g1/rant_gradle_is_an_embarrassment_to_the_javakotlin/) with JVM ecosystem tooling, and unresolved memory leak problems, I regret to inform you that I am no longer able to actively support Kweb. The last straw was Sonatype breaking my automatic deployment process by changing how it's authenticated, and [apparently](https://help.sonatype.com/en/user-tokens.html) requiring a paid upgrade to their Pro service to fix it. 
+Due to recent [changes](https://www.reddit.com/r/java/comments/1dkgh85/psa_maven_central_publishing_requires_token_now/) in Sonatype's deployment requirements, persistent [headaches](https://www.reddit.com/r/Kotlin/comments/y042g1/rant_gradle_is_an_embarrassment_to_the_javakotlin/) with JVM ecosystem tooling, and unresolved memory leak problems, I'm no longer able to actively support Kweb. 
 
-Over the past two years, most of the time I've spent on Kweb has been dealing with tooling regressions rather than improving the software. Additionally, most of my [current work](https://freenet.org/) involves Rust, and so I've been moving away from the JVM ecosystem entirely. 
+The last straw was Sonatype breaking my automatic deployment process by changing how it's authenticated, and [apparently](https://help.sonatype.com/en/user-tokens.html) requiring a paid upgrade to their Pro service to fix it. Over the past two years, most of the time I've spent on Kweb has been dealing with tooling regressions rather than improving the software. Additionally, most of my [current work](https://freenet.org/) involves Rust, and so I've been moving away from the JVM ecosystem entirely. 
 
 This decision wasn't easy, but it’s become untenable for me to continue maintaining the framework given these challenges.
 
