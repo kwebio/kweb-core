@@ -19,7 +19,7 @@
 
 ## Notice of Project Status
 
-**Important:** Due to recent changes in Sonatype's deployment requirements, persistent [headaches](https://www.reddit.com/r/Kotlin/comments/y042g1/rant_gradle_is_an_embarrassment_to_the_javakotlin/) with JVM ecosystem tooling, and unresolved memory leak problems, I regret to inform you that I am no longer able to actively support Kweb. The last straw was Sonatype breaking the automatic deployment process by requiring a token for authentication, and apparently requiring a paid upgrade to their Pro service to fix it. About 80% of my time over the past year spent on Kweb has been wrestling with tooling issues rather than improving the software. This, combined with the other challenges, has made it untenable for me to continue maintaining this framework.
+Due to recent changes in Sonatype's deployment requirements, persistent [headaches](https://www.reddit.com/r/Kotlin/comments/y042g1/rant_gradle_is_an_embarrassment_to_the_javakotlin/) with JVM ecosystem tooling, and unresolved memory leak problems, I regret to inform you that I am no longer able to actively support Kweb. The last straw was Sonatype breaking the automatic deployment process by requiring a token for authentication, and apparently requiring a paid upgrade to their Pro service to fix it. About 80% of my time over the past year spent on Kweb has been wrestling with tooling issues rather than improving the software. This, combined with the other challenges, has made it untenable for me to continue maintaining this framework.
 
 If you are interested in taking over the project or contributing to its development, please feel free to fork the repository. If you need to contact me I'm @sanity on X and Reddit.
 
@@ -39,7 +39,7 @@ Kweb is a remote interface for a web browser's DOM (Document Object Model). With
 
 ### Note on Memory Leak Issue
 
-We have identified a memory leak issue that may affect users when using the `InputElement` class, we're working on a [fix](https://github.com/kwebio/kweb-core/pull/611). We recommend that you run a memory profiler to see if you're affected.
+We have identified a memory leak issue that may affect users when using the `InputElement` class, we're working on a [fix](https://github.com/kwebio/kweb-core/pull/611) but can't make any promises if/when it will be completed. We recommend that you run a memory profiler to see if you're affected.
 
 ## Example
   
