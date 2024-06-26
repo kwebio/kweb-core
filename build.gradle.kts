@@ -5,14 +5,14 @@ plugins {
     buildsrc.conventions.`kotlin-jvm`
     buildsrc.conventions.`maven-publish`
     id("org.jetbrains.dokka") version "1.9.10"
-    id("com.github.ben-manes.versions") version "0.50.0"
+    id("com.github.ben-manes.versions") version "0.51.0"
     kotlin("plugin.serialization")
 
     // See api/API_README.md for details
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
 
     // Coverage
-    id("org.jetbrains.kotlinx.kover") version "0.7.5"
+    id("org.jetbrains.kotlinx.kover") version "0.7.6"
 }
 
 // This is overridden by the maven release process
@@ -26,7 +26,7 @@ tasks.test {
 }
 
 dependencies {
-    api("org.jsoup:jsoup:1.16.2")
+    api("org.jsoup:jsoup:1.17.2")
     implementation("org.apache.commons:commons-text:1.11.0")
     implementation("com.google.guava:guava:33.0.0-jre")
     api("dev.forkhandles:result4k:2.12.2.0")
@@ -42,7 +42,7 @@ dependencies {
     ////////////////////
     // Ktor dependencvies
     ////////////////////
-    api("io.ktor:ktor-server-jetty:2.3.7")
+    api("io.ktor:ktor-server-jetty:2.3.10")
     api("io.ktor:ktor-server-websockets:2.3.0")
     api("io.ktor:ktor-server-default-headers:2.3.9")
     api("io.ktor:ktor-server-compression:2.3.9")
@@ -73,7 +73,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
-    testImplementation("org.awaitility:awaitility:4.2.0")
+    testImplementation("org.awaitility:awaitility:4.2.1")
 }
 repositories {
     mavenCentral()
