@@ -23,7 +23,7 @@ Due to recent [changes](https://www.reddit.com/r/java/comments/1dkgh85/psa_maven
 
 Almost all of my time over the past year spent on Kweb has been wrestling with tooling regressions like this rather than improving the software.
 
-Additionally, most of my [current work](https://freenet.org/) involves Rust, and I'm moving away from the JVM ecosystem entirely. This decision wasn't easy, but it’s become untenable for me to continue maintaining the framework given these challenges.
+Additionally, most of my [current work](https://freenet.org/) involves Rust, and so I've been moving away from the JVM ecosystem entirely. This decision wasn't easy, but it’s become untenable for me to continue maintaining the framework given these challenges.
 
 If you are interested in taking over the project or contributing to its development, please feel free to fork the repository, and I'll do what I can to help. If you need to contact me I'm @sanity on [X](https://x.com/sanity) and [Reddit](https://reddit.com/u/sanity).
 
