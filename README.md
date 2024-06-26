@@ -19,9 +19,9 @@
 
 ## Notice of Project Status
 
-**Important:** Due to recent changes in Sonatype's deployment requirements, persistent issues with JVM ecosystem tooling, and unresolved memory leak problems, I regret to inform you that I am no longer able to actively support the Kweb project and future releases are unlikely. The last straw was Sonatype breaking the automatic deployment process by requiring a token for authentication, and apparently requiring a paid upgrade to their Pro service to fix it. This situation, combined with the ongoing challenges, has made it untenable for me to continue maintaining this framework.
+**Important:** Due to recent changes in Sonatype's deployment requirements, persistent [issues](https://www.reddit.com/r/Kotlin/comments/y042g1/rant_gradle_is_an_embarrassment_to_the_javakotlin/) with JVM ecosystem tooling, and unresolved memory leak problems, I regret to inform you that I am no longer able to actively support Kweb. The last straw was Sonatype breaking the automatic deployment process by requiring a token for authentication, and apparently requiring a paid upgrade to their Pro service to fix it. About 80% of my time over the past year spent on Kweb has been wrestling with tooling issues rather than improving the software. This, combined with the other challenges, has made it untenable for me to continue maintaining this framework.
 
-Additionally, most of my work now involves Rust, and I am moving away from the JVM ecosystem entirely. If you are interested in taking over the project or contributing to its development, please feel free to fork the repository. If you need to contact me I'm @sanity on X and Reddit.
+If you are interested in taking over the project or contributing to its development, please feel free to fork the repository. If you need to contact me I'm @sanity on X and Reddit.
 
 ## Quick Start
 
