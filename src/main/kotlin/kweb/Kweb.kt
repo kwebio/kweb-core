@@ -251,17 +251,6 @@ class Kweb private constructor(
         }
     }
 
-    private suspend fun RemoteClientState?.ensureSessionExists(
-        sock: DefaultWebSocketSession,
-        sessionId: String
-    ): RemoteClientState {
-        if (this == null) {
-            sock.close(CloseReason(CloseReason.Codes.NOT_CONSISTENT, "Session not found. Please reload"))
-            error("Unable to find server state corresponding to client id ${sessionId}")
-        }
-        return this
-    }
-
     private suspend fun DefaultWebSocketSession.listenForWebsocketConnection() {
         val hello = Json.decodeFromString<Client2ServerMessage>((incoming.receive() as Text).readText())
 
@@ -269,78 +258,89 @@ class Kweb private constructor(
             error("First message from client isn't 'hello'")
         }
 
-        val remoteClientState = clientState.getIfPresent(hello.id).ensureSessionExists(this, hello.id)
+        val remoteClientState = clientState.getIfPresent(hello.id)
 
-        val currentCC = remoteClientState.clientConnection
-        remoteClientState.clientConnection = when (currentCC) {
-            is Caching -> {
-                val webSocketClientConnection = ClientConnection.WebSocket(this)
-                currentCC.read().forEach {
-                    webSocketClientConnection.send(it)
+        if (remoteClientState == null) {
+            logger.warn("Client id ${hello.id} not found, closing connection")
+            this.close(CloseReason(4000, "Client id ${hello.id} not found"))
+        } else {
+
+            val newClientConnection = when (val currentCC = remoteClientState.getClientConnection()) {
+                is Caching -> {
+                    val webSocketClientConnection = ClientConnection.WebSocket(this)
+                    currentCC.read().forEach {
+                        webSocketClientConnection.send(it)
+                    }
+                    remoteClientState.addCloseHandler {
+                        webSocketClientConnection.close(
+                            CloseReason(
+                                4002,
+                                "RemoteClientState closed by server, likely due to cache expiry"
+                            )
+                        )
+                    }
+                    webSocketClientConnection
                 }
-                remoteClientState.addCloseHandler {
-                    webSocketClientConnection.close(CloseReason(4002, "RemoteClientState closed by server, likely due to cache expiry"))
+
+                is ClientConnection.WebSocket -> {
+                    currentCC.close(CloseReason(4001, "Client reconnected via another connection"))
+                    val ws = ClientConnection.WebSocket(this)
+                    remoteClientState.addCloseHandler {
+                        ws.close(CloseReason(4002, "RemoteClientState closed by server, likely due to cache expiry"))
+                    }
+                    ws
                 }
-                webSocketClientConnection
             }
+            remoteClientState.updateClientConnection(newClientConnection)
 
-            is ClientConnection.WebSocket -> {
-                currentCC.close(CloseReason(4001, "Client reconnected via another connection"))
-                val ws = ClientConnection.WebSocket(this)
-                remoteClientState.addCloseHandler {
-                    ws.close(CloseReason(4002, "RemoteClientState closed by server, likely due to cache expiry"))
-                }
-                ws
-            }
-        }
+            try {
+                for (frame in incoming) {
 
-        try {
-            for (frame in incoming) {
+                    logger.debug { "WebSocket frame of type ${frame.frameType} received" }
 
-                logger.debug { "WebSocket frame of type ${frame.frameType} received" }
+                    // Retrieve the clientState so that it doesn't expire, replace it if it
+                    // has expired.
+                    clientState.get(hello.id) { remoteClientState }
 
-                // Retrieve the clientState so that it doesn't expire, replace it if it
-                // has expired.
-                clientState.get(hello.id) { remoteClientState }
+                    try {
+                        logger.debug { "Message received from client" }
 
-                try {
-                    logger.debug { "Message received from client" }
+                        if (frame is Text) {
+                            val message = Json.decodeFromString<Client2ServerMessage>(frame.readText())
 
-                    if (frame is Text) {
-                        val message = Json.decodeFromString<Client2ServerMessage>(frame.readText())
+                            logger.debug { "Message received: $message" }
+                            if (message.error != null) {
+                                handleError(message.error, remoteClientState)
+                            } else {
+                                when {
+                                    message.callback != null -> {
+                                        val (resultId, result) = message.callback
+                                        val resultHandler = remoteClientState.eventHandlers[resultId]
+                                            ?: error("No resultHandler for $resultId, for client ${remoteClientState.id}")
+                                        resultHandler(result)
+                                    }
 
-                        logger.debug { "Message received: $message" }
-                        if (message.error != null) {
-                            handleError(message.error, remoteClientState)
-                        } else {
-                            when {
-                                message.callback != null -> {
-                                    val (resultId, result) = message.callback
-                                    val resultHandler = remoteClientState.eventHandlers[resultId]
-                                        ?: error("No resultHandler for $resultId, for client ${remoteClientState.id}")
-                                    resultHandler(result)
+                                    message.keepalive -> {
+                                        logger.debug { "keepalive received from client ${hello.id}" }
+                                    }
+
+                                    message.onMessageData != null -> {
+                                        val data = message.onMessageData
+                                        remoteClientState.onMessageFunction!!.invoke(data)
+                                    }
+
                                 }
-
-                                message.keepalive -> {
-                                    logger.debug { "keepalive received from client ${hello.id}" }
-                                }
-
-                                message.onMessageData != null -> {
-                                    val data = message.onMessageData
-                                    remoteClientState.onMessageFunction!!.invoke(data)
-                                }
-
                             }
                         }
+                    } catch (e: Exception) {
+                        logger.error("Exception while receiving websocket message", e)
+                        kwebConfig.onWebsocketMessageHandlingFailure(e)
                     }
-                } catch (e: Exception) {
-                    logger.error("Exception while receiving websocket message", e)
-                    kwebConfig.onWebsocketMessageHandlingFailure(e)
                 }
+            } finally {
+                logger.info("WS session disconnected for client id: ${remoteClientState.id}")
+                remoteClientState.updateClientConnection(Caching("After WS disconnection"))
             }
-        } finally {
-            logger.info("WS session disconnected for client id: ${remoteClientState.id}")
-            remoteClientState.clientConnection = Caching()
         }
     }
 
@@ -365,12 +365,8 @@ class Kweb private constructor(
 
         val httpRequestInfo = HttpRequestInfo(call.request)
 
-
-        //this doesn't work. I get this error when running the todo Demo
-        //Caused by: java.lang.IllegalStateException: Client id Nb9_U7:eJ5dw4 not found
-        //The debugger says that the remoteClientState ID here matches the clientPrefix and the kwebSessionID from a few lines ago.
         val remoteClientState = clientState.get(kwebSessionId) {
-            RemoteClientState(id = kwebSessionId, clientConnection = Caching())
+            RemoteClientState(id = kwebSessionId, initialClientConnection = Caching("Initial render"))
         }
 
 
@@ -396,7 +392,7 @@ class Kweb private constructor(
                     } catch (e: Exception) {
                         logger.error("Exception thrown building page", e)
                     }
-                    logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
+                    logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.getClientConnection() as Caching).queueSize()}" }
                 }
             } else {
                 try {
@@ -404,7 +400,7 @@ class Kweb private constructor(
                 } catch (e: Exception) {
                     logger.error("Exception thrown building page", e)
                 }
-                logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.clientConnection as Caching).queueSize()}" }
+                logger.debug { "Outbound message queue size after buildPage is ${(remoteClientState.getClientConnection() as Caching).queueSize()}" }
             }
             for (plugin in plugins) {
                 //this code block looks a little funny now, but I still think moving the message creation out of Kweb.callJs() was the right move
@@ -418,11 +414,12 @@ class Kweb private constructor(
 
             webBrowser.htmlDocument.set(null) // Don't think this webBrowser will be used again, but not going to risk it
 
-            val initialCachedMessages = remoteClientState.clientConnection as Caching
+            val initialCachedMessages = remoteClientState.getClientConnection() as Caching
 
-            remoteClientState.clientConnection = Caching()
+            // TODO: Verify that this is correct
+            remoteClientState.updateClientConnection(Caching("Awaiting WS connection cache"))
 
-            val initialMessages = initialCachedMessages.read()//the initialCachedMessages queue can only be read once
+            val initialMessages = initialCachedMessages.read()
 
             val cachedFunctions = mutableListOf<String>()
             val cachedIds = mutableListOf<Int>()
@@ -504,7 +501,7 @@ class Kweb private constructor(
             for (client in clientState.asMap().values) {
                 val refreshCall = FunctionCall(js = "window.location.reload(true);")
                 val message = Server2ClientMessage(client.id, refreshCall)
-                client.clientConnection.send(Json.encodeToString(message))
+                client.getClientConnection().send(Json.encodeToString(message))
             }
         }
     }

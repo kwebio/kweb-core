@@ -101,10 +101,10 @@ fun <T : Any?> ElementCreator<*>.render(
     renderLoop()
 
     this.onCleanup(true) {
+        value.removeListener(listenerHandle)
         previousElementCreatorLock.withLock {
             previousElementCreator.getAndSet(null)?.cleanup()
         }
-        value.removeListener(listenerHandle)
     }
 
     return renderFragment
