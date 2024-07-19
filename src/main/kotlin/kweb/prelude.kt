@@ -852,3 +852,27 @@ fun ElementCreator<Element>.footer(attributes: Map<String, JsonPrimitive> = empt
 }
 
 open class FooterElement(parent: Element) : Element(element = parent)
+
+fun ThElement.colspan(value: Int): ThElement {
+    setAttributes("colspan" to JsonPrimitive(value = value))
+
+    return this
+}
+
+fun ThElement.rowspan(value: Int): ThElement {
+    setAttributes("rowspan" to JsonPrimitive(value = value))
+
+    return this
+}
+
+fun TdElement.colspan(value: Int): TdElement {
+    setAttributes("colspan" to JsonPrimitive(value = value))
+
+    return this
+}
+
+fun TdElement.rowspan(value: Int): TdElement {
+    setAttributes("rowspan" to JsonPrimitive(value = value))
+
+    return this
+}

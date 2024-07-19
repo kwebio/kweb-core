@@ -414,6 +414,8 @@ public final class kweb/PreludeKt {
 	public static synthetic fun button$default (Lkweb/ElementCreator;Ljava/util/Map;Lkweb/ButtonType;Ljava/lang/Boolean;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/ButtonElement;
 	public static final fun canvas (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function2;)Lkweb/CanvasElement;
 	public static synthetic fun canvas$default (Lkweb/ElementCreator;Ljava/util/Map;IILkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/CanvasElement;
+	public static final fun colspan (Lkweb/TdElement;I)Lkweb/TdElement;
+	public static final fun colspan (Lkweb/ThElement;I)Lkweb/ThElement;
 	public static final fun div (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/DivElement;
 	public static synthetic fun div$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/DivElement;
 	public static final fun fileInput (Lkweb/ElementCreator;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/util/Map;)Lkweb/html/fileUpload/FileFormInput;
@@ -464,6 +466,8 @@ public final class kweb/PreludeKt {
 	public static synthetic fun p$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/PElement;
 	public static final fun renderEach (Lkweb/ElementCreator;Lkweb/state/KVar;Lkotlin/jvm/functions/Function2;)V
 	public static final fun route (Lkweb/ElementCreator;Lkotlin/jvm/functions/Function1;)V
+	public static final fun rowspan (Lkweb/TdElement;I)Lkweb/TdElement;
+	public static final fun rowspan (Lkweb/ThElement;I)Lkweb/ThElement;
 	public static final fun section (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;)Lkweb/SectionElement;
 	public static synthetic fun section$default (Lkweb/ElementCreator;Ljava/util/Map;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkweb/SectionElement;
 	public static final fun select (Lkweb/ElementCreator;Ljava/util/Map;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lkweb/SelectElement;
@@ -1515,6 +1519,7 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getAttached ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getAuthor ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getAvatar ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBackward ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getBalance ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getBan ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getBanner ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1532,7 +1537,9 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getBrain ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getBranch ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getBreadcrumb ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBroom ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getBrown ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getBug ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getBulleted ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getButton ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getButtons ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1553,6 +1560,7 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getCinema ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getCircle ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getCircular ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getClipboard ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getClock ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getClose ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getClosed ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1594,9 +1602,11 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getExclamation ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getExtra ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getFade ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFast ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getField ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getFields ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getFifteen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getFile ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getFive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getFixed ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getFlag ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1617,10 +1627,12 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getGrid ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getGrouped ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHalf ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getHandshake ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHdd ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHeader ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHeart ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHidden ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getHigh ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHome ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHorizontal ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getHourglass ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1649,6 +1661,7 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getList ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getLoader ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getLoading ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getLow ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getMain ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getMap ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getMarked ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1677,7 +1690,7 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getOlive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getOne ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getOnly ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
-	public final fun getOpen (Lkweb/plugins/fomanticUI/FomanticUIClasses;)Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getOpen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getOr ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getOrange ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getOrdered ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1691,6 +1704,7 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getPlus ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getPointing ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getPositive ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getPower ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getPrimary ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getProgress ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getProject ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1706,6 +1720,7 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getRed ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getRelaxed ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getRemove ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getResizable ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getRetweet ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getReveal ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getRight ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1718,13 +1733,16 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getSatellite ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSave ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getScale ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getScrolling ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSearch ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSecondary ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getSecret ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSection ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSegment ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSegments ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSelection ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSeven ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getShort ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSide ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSidebar ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSitemap ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1745,7 +1763,9 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getStatistics ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getStep ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSteps ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getStop ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getStriped ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getStructured ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getStyled ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSub ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getSubmit ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
@@ -1761,6 +1781,7 @@ public final class kweb/plugins/fomanticUI/FomanticUIClasses : kweb/AttributeBui
 	public final fun getTasks ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getTaxi ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getTeal ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
+	public final fun getTemperature ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getTen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getText ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
 	public final fun getThirteen ()Lkweb/plugins/fomanticUI/FomanticUIClasses;
