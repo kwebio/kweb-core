@@ -36,7 +36,7 @@ dependencies {
     //////////////////////////////
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.3")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
     ////////////////////
